@@ -3,33 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ޒާދް އެކަޑެމީ ބްލޮގް - Zaad Academy</title>
+    <title>ޒާދް އެކަޑެމީ ބްލޮގް - Zaad Academy Blog</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thaana&family=Amiri:wght@400;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
     
     <style>
-        /* --- CSS STYLES (Embedded) --- */
+        /* --- 1. ACADEMY THEME PALETTE --- */
         :root {
-            --academy-blue: #0C2D48;
-            --academy-light: #2E8BC0;
-            --academy-gold: #B49658;
+            /* Academy Colors */
+            --academy-blue: #0C2D48;  /* Deep Navy */
+            --academy-light: #2E8BC0; /* Lighter Blue */
+            --academy-gold: #B49658;  /* Elegant Gold */
             --silver-bg: #e9ecef;
             --white: #ffffff;
             --off-white: #f4f6f8;
+            
+            /* Text Colors */
             --text-dark: #1a1a1a;
+            --text-gray: #555;
+
+            /* Effects */
             --shadow-card: 0 5px 20px rgba(12, 45, 72, 0.1);
             --shadow-hover: 0 15px 30px rgba(12, 45, 72, 0.2);
-            /* Fonts: Using Google Fonts as backup if local font fails */
+            
+            /* Fonts */
             --font-dv: 'Faruma', 'Noto Sans Thaana', sans-serif; 
             --font-en: 'Playfair Display', serif;
-        }
-
-        /* Local Font Face */
-        @font-face {
-            font-family: 'Faruma';
-            src: url('fonts/Faruma.ttf') format('truetype');
-            font-weight: normal;
-            font-style: normal;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -47,37 +46,55 @@
         a { text-decoration: none; transition: all 0.3s ease; }
         ul { list-style: none; padding: 0; margin: 0; }
 
-        /* HEADER */
+        /* --- 2. HEADER AREA --- */
         .top-bar {
-            background-color: #051626; color: #ccc; padding: 10px 5%;
-            display: flex; justify-content: space-between; align-items: center;
-            font-size: 0.85em; font-family: var(--font-en);
+            background-color: #051626; /* Darker than academy blue */
+            color: #ccc;
+            padding: 10px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.85em;
             border-bottom: 1px solid rgba(255,255,255,0.1);
+            font-family: var(--font-en);
         }
         .lang-switch a { color: #bbb; margin-right: 15px; font-weight: bold; }
-        .lang-switch a:hover { color: var(--academy-gold); }
+        .lang-switch a:hover, .lang-switch a.active { color: var(--academy-gold); }
 
+        /* Academy Header Design */
         header {
-            background-color: var(--academy-blue); color: white; padding: 35px 5%;
-            border-bottom: 5px solid var(--academy-gold); position: relative; overflow: hidden;
+            background-color: var(--academy-blue);
+            color: white;
+            padding: 35px 5%;
+            border-bottom: 5px solid var(--academy-gold);
+            position: relative;
+            overflow: hidden;
         }
+        /* Geometric Pattern Overlay */
         header::before {
             content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background-image: linear-gradient(30deg, #0C2D48 12%, transparent 12.5%, transparent 87%, #0C2D48 87.5%, #0C2D48);
-            background-size: 80px 140px; z-index: 0;
+            background-image: 
+                linear-gradient(30deg, #0C2D48 12%, transparent 12.5%, transparent 87%, #0C2D48 87.5%, #0C2D48),
+                linear-gradient(150deg, #0C2D48 12%, transparent 12.5%, transparent 87%, #0C2D48 87.5%, #0C2D48),
+                linear-gradient(60deg, rgba(180, 150, 88, 0.05) 25%, transparent 25.5%, transparent 75%, rgba(180, 150, 88, 0.05) 75%, rgba(180, 150, 88, 0.05));
+            background-size: 80px 140px;
+            z-index: 0;
         }
         
         .header-container { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; position: relative; z-index: 1; }
         .logo-section { display: flex; align-items: center; gap: 20px; }
         
         .logo-img {
-            height: 90px; width: auto; border: 2px solid var(--academy-gold);
-            border-radius: 50%; background: white; padding: 5px;
+            height: 90px; width: auto;
+            border: 2px solid var(--academy-gold);
+            border-radius: 50%;
+            background: white; padding: 5px;
             box-shadow: 0 0 15px rgba(180, 150, 88, 0.5);
         }
 
         .site-logo h1 {
-            font-size: 3.5em; color: var(--white); margin: 0; line-height: 1;
+            font-size: 3.5em; color: var(--white);
+            font-family: var(--font-dv); margin: 0; line-height: 1;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
         }
         .site-logo span { 
@@ -89,75 +106,146 @@
         .main-ad-slider {
             height: 90px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.2);
             backdrop-filter: blur(5px); display: flex; align-items: center; justify-content: center;
-            color: #fff; font-weight:bold; border-radius: 8px;
+            color: #fff; font-weight:bold; border-radius: 8px; margin-bottom: 5px;
         }
+        .small-ads-grid { display: flex; gap: 5px; }
+        .small-ad { flex: 1; height: 40px; background: rgba(255,255,255,0.1); border: 1px dashed rgba(255,255,255,0.3); border-radius: 4px; }
 
-        /* TICKER */
-        .ticker-wrap { width: 100%; background: var(--silver-bg); overflow: hidden; height: 40px; line-height: 40px; border-bottom: 1px solid #ccc; }
+        /* --- 3. TICKER --- */
+        .ticker-wrap {
+            width: 100%; background: var(--silver-bg); overflow: hidden; height: 40px; line-height: 40px; border-bottom: 1px solid #ccc;
+        }
         .ticker { display: inline-block; white-space: nowrap; padding-right: 100%; animation: ticker 35s linear infinite; }
         .ticker-item { display: inline-block; padding: 0 2rem; color: #333; font-weight: bold; font-size: 1.1em; }
         @keyframes ticker { 0% { transform: translate3d(0, 0, 0); } 100% { transform: translate3d(100%, 0, 0); } }
 
-        /* NAVIGATION */
-        nav { background-color: var(--white); box-shadow: 0 4px 15px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 1000; }
+        /* --- 4. NAVIGATION --- */
+        nav {
+            background-color: var(--white);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
         .main-menu { display: flex; justify-content: center; flex-wrap: wrap; padding: 0 2%; border-bottom: 1px solid #eee; }
-        .main-menu li a { display: block; padding: 16px 20px; color: var(--academy-blue); font-weight: bold; font-size: 1.1em; position: relative; }
+        .main-menu li a { 
+            display: block; padding: 16px 20px; 
+            color: var(--academy-blue); font-weight: bold; font-size: 1.1em; 
+            position: relative; 
+        }
         .main-menu li a:hover { color: var(--academy-gold); background: #f9f9f9; }
-        .main-menu li a::after { content: ''; position: absolute; bottom: 0; left: 0; width: 0%; height: 3px; background: var(--academy-gold); transition: 0.3s; }
+        .main-menu li a::after { 
+            content: ''; position: absolute; bottom: 0; left: 0; width: 0%; height: 3px; 
+            background: var(--academy-gold); transition: 0.3s; 
+        }
         .main-menu li a:hover::after { width: 100%; }
 
         .search-container { position: absolute; left: 3%; top: 16px; }
         .search-btn { background: none; border: none; cursor: pointer; color: var(--academy-blue); font-size: 1.2em; }
         #search-input { display: none; padding: 5px 10px; border: 1px solid var(--academy-blue); border-radius: 20px; outline: none; margin-left: 5px; }
 
-        /* SUB MENU */
-        .sub-menu { background-color: #f0f4f8; border-bottom: 1px solid #ddd; display: flex; justify-content: center; flex-wrap: wrap; }
-        .sub-menu li a { display: block; padding: 12px 20px; color: #444; font-size: 0.95em; font-weight: bold; border-left: 1px solid #e0e0e0; transition: 0.2s; }
+        /* SUB MENU (AI & TECH FOCUSED) */
+        .sub-menu {
+            background-color: #f0f4f8;
+            border-bottom: 1px solid #ddd;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            padding: 0;
+            margin: 0;
+            list-style: none;
+        }
+        .sub-menu li a {
+            display: block;
+            padding: 12px 20px;
+            color: #444;
+            font-size: 0.95em;
+            font-weight: bold;
+            border-left: 1px solid #e0e0e0;
+            transition: 0.2s;
+        }
         .sub-menu li a:hover { color: var(--academy-blue); background-color: #e9ecef; }
         .sub-menu li:first-child a { border-right: 1px solid #e0e0e0; }
 
-        /* LAYOUT */
+        /* --- 5. LAYOUT & COMPONENTS --- */
         .container { display: grid; grid-template-columns: 3fr 1fr; gap: 40px; padding: 50px 5%; max-width: 1500px; margin: 0 auto; }
-        
-        .category-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 25px; border-bottom: 3px solid var(--academy-blue); padding-bottom: 10px; }
+
+        .category-header {
+            display: flex; align-items: center; justify-content: space-between;
+            margin-bottom: 25px; border-bottom: 3px solid var(--academy-blue); padding-bottom: 10px;
+        }
         .category-header h2 { color: var(--academy-blue); font-size: 1.8em; background: var(--off-white); padding-left: 20px; z-index: 2; }
         .read-more-btn { border: 2px solid var(--academy-blue); padding: 5px 15px; border-radius: 30px; color: var(--academy-blue); font-weight: bold; }
 
-        /* CARDS */
-        .card { background: white; border-radius: 10px; overflow: hidden; box-shadow: var(--shadow-card); transition: 0.3s; border: 1px solid #eee; }
+        /* Card Styles */
+        .card { 
+            background: white; border-radius: 10px; overflow: hidden; 
+            box-shadow: var(--shadow-card); transition: 0.3s; 
+            border: 1px solid #eee; 
+        }
         .card:hover { transform: translateY(-5px); box-shadow: var(--shadow-hover); border-color: var(--academy-gold); }
+        
         .card-img-wrap { position: relative; overflow: hidden; }
         .card-img { width: 100%; object-fit: cover; transition: 0.5s; display: block; }
         .card:hover .card-img { transform: scale(1.05); }
-        .thumb-icon { position: absolute; bottom: 10px; right: 10px; width: 45px; height: 45px; background: var(--academy-blue); color: var(--academy-gold); border: 2px solid var(--academy-gold); border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 10px rgba(0,0,0,0.3); font-size: 1.3em; }
+        
+        .thumb-icon {
+            position: absolute; bottom: 10px; right: 10px;
+            width: 45px; height: 45px; background: var(--academy-blue);
+            color: var(--academy-gold); border: 2px solid var(--academy-gold); border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3); font-size: 1.3em;
+        }
+
         .card-content { padding: 20px; }
-        .card-tag { display: inline-block; padding: 4px 10px; margin-bottom: 10px; font-size: 0.75em; font-weight: bold; border-radius: 4px; background: var(--academy-gold); color: white; }
+        .card-tag { 
+            display: inline-block; padding: 4px 10px; margin-bottom: 10px;
+            font-size: 0.75em; font-weight: bold; border-radius: 4px; 
+            background: var(--academy-gold); color: white;
+        }
         .card-title { font-size: 1.3em; margin-bottom: 10px; color: var(--academy-blue); font-weight: bold; line-height: 1.4; }
         .card-excerpt { color: #666; font-size: 0.95em; }
 
-        /* SECTIONS */
+        /* HERO SECTION */
         .hero-section { display: grid; grid-template-columns: 2fr 1fr; gap: 25px; margin-bottom: 60px; }
         .hero-main { position: relative; border-radius: 12px; overflow: hidden; height: 500px; box-shadow: var(--shadow-card); }
         .hero-main img { width: 100%; height: 100%; object-fit: cover; }
-        .hero-overlay { position: absolute; bottom: 0; left: 0; right: 0; padding: 40px; background: linear-gradient(to top, var(--academy-blue), transparent); color: white; }
+        .hero-overlay { 
+            position: absolute; bottom: 0; left: 0; right: 0; padding: 40px; 
+            background: linear-gradient(to top, var(--academy-blue), transparent); color: white; 
+        }
+        .hero-title { font-size: 2.2em; margin-bottom: 10px; text-shadow: 1px 1px 3px rgba(0,0,0,0.5); }
+        
         .hero-side { display: flex; flex-direction: column; gap: 20px; }
         .side-card { display: flex; align-items: center; background: white; border-radius: 8px; overflow: hidden; height: 100%; box-shadow: var(--shadow-card); border-right: 4px solid var(--academy-gold); }
         .side-card img { width: 130px; height: 100%; object-fit: cover; }
         .side-content { padding: 15px; width: 100%; }
         .side-content h4 { margin: 0; font-size: 1em; color: var(--academy-blue); }
 
-        .tech-section { background: linear-gradient(180deg, #051626 0%, var(--academy-blue) 100%); padding: 30px; border-radius: 20px; color: white; margin-bottom: 50px; box-shadow: 0 15px 40px rgba(12, 45, 72, 0.4); border: 2px solid var(--academy-gold); }
+        /* SECTION: MODERN EDUCATION (Replaced Sports) */
+        .tech-section {
+            background: linear-gradient(180deg, #051626 0%, var(--academy-blue) 100%);
+            padding: 30px; border-radius: 20px; color: white; margin-bottom: 50px;
+            box-shadow: 0 15px 40px rgba(12, 45, 72, 0.4); border: 2px solid var(--academy-gold);
+        }
         .tech-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
         .tech-card { background: transparent; border: none; color: white; }
         .tech-card .card-title { color: white; margin-top: 10px; }
         .tech-badge { background: #145DA0; color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.8em; margin-bottom: 5px; display: inline-block; }
 
-        .biz-strip { display: flex; gap: 20px; overflow-x: auto; padding: 20px; background: white; border-radius: 15px; border-top: 5px solid var(--academy-blue); box-shadow: var(--shadow-card); margin-bottom: 50px; }
+        /* SECTION: ISLAMIC ECONOMY (Replaced Business) */
+        .biz-strip { 
+            display: flex; gap: 20px; overflow-x: auto; padding: 20px; 
+            background: white; border-radius: 15px; border-top: 5px solid var(--academy-blue); 
+            box-shadow: var(--shadow-card); margin-bottom: 50px;
+        }
         .biz-item { min-width: 150px; text-align: center; border-right: 1px dashed #ddd; }
         .biz-val { font-size: 1.4em; font-weight: bold; color: var(--academy-blue); display: block; }
         .biz-label { color: #666; font-size: 0.9em; }
 
+        /* SECTION: UPBRINGING & WELLNESS (Replaced Lifestyle) */
         .content-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; }
+        
         .lifestyle-grid { display: grid; grid-template-columns: repeat(4, 1fr); grid-template-rows: repeat(2, 220px); gap: 15px; }
         .life-card { position: relative; border-radius: 12px; overflow: hidden; }
         .life-card img { width: 100%; height: 100%; object-fit: cover; }
@@ -165,13 +253,21 @@
         .life-card.big { grid-column: span 2; grid-row: span 2; }
 
         /* SIDEBAR */
-        .sidebar-widget { background: white; border-radius: 8px; padding: 25px; margin-bottom: 30px; box-shadow: var(--shadow-card); border-top: 4px solid var(--academy-blue); }
+        .sidebar-widget { 
+            background: white; border-radius: 8px; padding: 25px; margin-bottom: 30px; 
+            box-shadow: var(--shadow-card); border-top: 4px solid var(--academy-blue); 
+        }
         .sidebar-title { font-size: 1.2em; margin-bottom: 20px; color: var(--academy-blue); border-bottom: 2px solid #eee; padding-bottom: 10px; font-weight: bold; }
+        
         .link-list li { margin-bottom: 12px; border-bottom: 1px dashed #eee; padding-bottom: 8px; }
         .link-list a { display: flex; align-items: center; color: #555; transition: 0.2s; text-decoration: none; }
         .link-list a:hover { color: var(--academy-blue); font-weight: bold; }
-        .link-list a span.icon { background: #f0f4f8; color: var(--academy-blue); width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-left: 10px; flex-shrink: 0; }
+        .link-list a span.icon { 
+            background: #f0f4f8; color: var(--academy-blue); width: 30px; height: 30px; 
+            border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-left: 10px; flex-shrink: 0;
+        }
 
+        /* Widgets */
         .prayer-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px dashed #eee; color: #555; }
         .prayer-row span:last-child { font-weight: bold; color: var(--academy-blue); font-family: var(--font-en); }
         .hotlines-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
@@ -189,7 +285,13 @@
         .copyright { text-align: center; margin-top: 50px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); font-size: 0.9em; }
         .social-circle { display: inline-flex; width: 40px; height: 40px; background: rgba(255,255,255,0.1); border-radius: 50%; justify-content: center; align-items: center; margin-left: 10px; }
 
-        @media (max-width: 992px) { .container, .hero-section { grid-template-columns: 1fr; } .tech-grid, .lifestyle-grid { grid-template-columns: 1fr; } .lifestyle-grid { grid-template-rows: auto; } }
+        @media (max-width: 992px) { 
+            .container { grid-template-columns: 1fr; } 
+            .hero-section { grid-template-columns: 1fr; } 
+            .tech-grid, .lifestyle-grid { grid-template-columns: 1fr; } 
+            .lifestyle-grid { grid-template-rows: auto; }
+            .ad-banner-area { display: none; }
+        }
     </style>
 </head>
 <body>
@@ -201,7 +303,7 @@
     <header>
         <div class="header-container">
             <div class="logo-section">
-                <img src="images/logo.png" alt="Zaad Academy" class="logo-img" onerror="this.src='https://via.placeholder.com/90/B49658/FFFFFF?text=Z'">
+                <img src="images/logo.png" alt="Zaad Academy" class="logo-img" onerror="this.style.display='none'">
                 <div class="site-logo">
                     <h1>ޒާދް އެކަޑެމީ</h1>
                     <span>Zaad Academy Blog</span>
@@ -223,19 +325,19 @@
     <nav>
         <div class="search-container"><button onclick="toggleSearch()" style="background:none; border:none; color:#0C2D48; font-size:1.2em;">🔍</button><input type="text" id="search-input" placeholder="ހޯއްދަވާ..."></div>
         <ul class="main-menu">
-            <li><a href="index.html">ހޯމް</a></li>
-            <li><a href="courses.html">ކޯސްތައް</a></li>
-            <li><a href="modern-education.html">ޒަމާނީ ތަޢުލީމް</a></li>
-            <li><a href="co-curricular.html">ކޯ-ކަރިކިއުލަރ</a></li>
-            <li><a href="islamic-economy.html">އިސްލާމީ އިޤްތިޞާދު</a></li>
-            <li><a href="tarbiyah.html">ތަރުބިއްޔަތު</a></li>
-            <li><a href="library.html">ޑިޖިޓަލް ލައިބްރަރީ</a></li>
-            <li><a href="contact.html">ގުޅިލައްވާ</a></li>
+            <li><a href="#">ހޯމް</a></li>
+            <li><a href="#">ކޯސްތައް</a></li>
+            <li><a href="#">ޒަމާނީ ތަޢުލީމް</a></li>
+            <li><a href="#">ކޯ-ކަރިކިއުލަރ</a></li>
+            <li><a href="#">އިސްލާމީ އިޤްތިޞާދު</a></li>
+            <li><a href="#">ތަރުބިއްޔަތު</a></li>
+            <li><a href="#">ޑިޖިޓަލް</a></li>
+            <li><a href="#">ގުޅިލައްވާ</a></li>
         </ul>
     </nav>
 
     <ul class="sub-menu">
-        <li><a href="#">އާޓިފިޝަލް އިންޓެލިޖެންސް</a></li>
+        <li><a href="#">އާޓިފިޝަލް އިންޓެލިޖެންސް (AI)</a></li>
         <li><a href="#">ކިޔަވައިދިނުމުގައި އޭ.އައި</a></li>
         <li><a href="#">ދިރާސާކުރުމަށް އޭ.އައި</a></li>
         <li><a href="#">އެޑިއުކޭޝަނަލް ޓެކްނޮލޮޖީ</a></li>
@@ -311,20 +413,24 @@
             <div class="category-header"><h2>އިސްލާމީ އިޤްތިޞާދު</h2></div>
             <div class="biz-strip">
                 <div class="biz-item">
-                    <span class="biz-label" style="display:block;color:#666;font-size:0.9em;">ރަނުގެ ނިޞާބު</span>
+                    <span class="biz-label">ރަނުގެ ނިޞާބު</span>
                     <span class="biz-val">MVR 135,420</span>
                 </div>
                 <div class="biz-item">
-                    <span class="biz-label" style="display:block;color:#666;font-size:0.9em;">ރިހީގެ ނިޞާބު</span>
+                    <span class="biz-label">ރިހީގެ ނިޞާބު</span>
                     <span class="biz-val">MVR 10,800</span>
                 </div>
                 <div class="biz-item">
-                    <span class="biz-label" style="display:block;color:#666;font-size:0.9em;">ފިތުރު ޒަކާތް</span>
+                    <span class="biz-label">ފިތުރު ޒަކާތް</span>
                     <span class="biz-val">ހަނޑޫ / ފައިސާ</span>
                 </div>
                 <div class="biz-item">
-                    <span class="biz-label" style="display:block;color:#666;font-size:0.9em;">ޞަދަޤާތް</span>
+                    <span class="biz-label">ޞަދަޤާތް</span>
                     <span class="biz-val">އެހީތެރިވޭ</span>
+                </div>
+                <div class="biz-item">
+                    <span class="biz-label">ޙަލާލް ޓޫރިޒަމް</span>
+                    <span class="biz-val">ކުރިއެރުން</span>
                 </div>
             </div>
 
@@ -354,7 +460,7 @@
             </div>
 
             <div class="category-header" style="margin-top:40px;"><h2>ކޯ-ކަރިކިއުލަރ ޙަރަކާތްތައް</h2></div>
-            <div class="content-grid" style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:25px;">
+            <div class="content-grid">
                 <div class="card">
                     <div class="card-img-wrap">
                         <img src="https://images.unsplash.com/photo-1526976668912-1a811878dd37?auto=format&fit=crop&w=400&q=60" class="card-img">
@@ -402,8 +508,8 @@
             
             <div class="sidebar-widget" style="padding:0; overflow:hidden; border:none;">
                 <div style="text-align:center; background:linear-gradient(to right, #2E8BC0, #145DA0); color:white; padding:20px; border-radius:8px;">
-                    <p style="font-size:1.2em; font-family:'Playfair Display', serif;" id="current-date">--</p>
-                    <div style="font-size:3em; font-weight:bold; font-family:'Playfair Display', serif;">30°C</div>
+                    <p style="font-size:1.2em; font-family:var(--font-en);" id="current-date">--</p>
+                    <div style="font-size:3em; font-weight:bold; font-family:var(--font-en);">30°C</div>
                     <p>🌤️ މާލެ، ދިވެހިރާއްޖެ</p>
                 </div>
             </div>
@@ -422,7 +528,7 @@
             </div>
 
             <div class="sidebar-widget">
-                <h3 class="sidebar-title">ގުޅުންހުރި މުއައްސަސާތައް</h3>
+                <h3 class="sidebar-title">އެކަޑެމިކް މުއައްސަސާތައް</h3>
                 <ul class="link-list">
                     <li><a href="https://www.moe.gov.mv" target="_blank"><span class="icon">🇲🇻</span> އެޑިއުކޭޝަން މިނިސްޓްރީ</a></li>
                     <li><a href="https://www.mqa.gov.mv" target="_blank"><span class="icon">📜</span> ކޮލިފިކޭޝަން އޮތޯރިޓީ</a></li>
