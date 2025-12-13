@@ -8,12 +8,21 @@
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thaana&family=Amiri:wght@400;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
     
     <style>
-        /* --- 1. ACADEMY THEME PALETTE --- */
+        /* --- 1. FONT SETUP (CHANGED TO MV GALAN) --- */
+        @font-face {
+            font-family: 'Mv Galan';
+            /* Ensure the file is named "Mv Galan.ttf" and inside "fonts" folder */
+            src: url('fonts/Mv Galan.ttf') format('truetype'); 
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        /* --- 2. ACADEMY THEME PALETTE --- */
         :root {
             /* Academy Colors */
-            --academy-blue: #0C2D48;  /* Deep Navy */
-            --academy-light: #2E8BC0; /* Lighter Blue */
-            --academy-gold: #B49658;  /* Elegant Gold */
+            --academy-blue: #0C2D48;
+            --academy-light: #2E8BC0;
+            --academy-gold: #B49658;
             --silver-bg: #e9ecef;
             --white: #ffffff;
             --off-white: #f4f6f8;
@@ -26,8 +35,8 @@
             --shadow-card: 0 5px 20px rgba(12, 45, 72, 0.1);
             --shadow-hover: 0 15px 30px rgba(12, 45, 72, 0.2);
             
-            /* Fonts */
-            --font-dv: 'Faruma', 'Noto Sans Thaana', sans-serif; 
+            /* Fonts Updated */
+            --font-dv: 'Mv Galan', 'Faruma', 'Noto Sans Thaana', sans-serif; 
             --font-en: 'Playfair Display', serif;
         }
 
@@ -285,13 +294,7 @@
         .copyright { text-align: center; margin-top: 50px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); font-size: 0.9em; }
         .social-circle { display: inline-flex; width: 40px; height: 40px; background: rgba(255,255,255,0.1); border-radius: 50%; justify-content: center; align-items: center; margin-left: 10px; }
 
-        @media (max-width: 992px) { 
-            .container { grid-template-columns: 1fr; } 
-            .hero-section { grid-template-columns: 1fr; } 
-            .tech-grid, .lifestyle-grid { grid-template-columns: 1fr; } 
-            .lifestyle-grid { grid-template-rows: auto; }
-            .ad-banner-area { display: none; }
-        }
+        @media (max-width: 992px) { .container { grid-template-columns: 1fr; } .hero-section { grid-template-columns: 1fr; } .tech-grid, .lifestyle-grid { grid-template-columns: 1fr; } .lifestyle-grid { grid-template-rows: auto; } }
     </style>
 </head>
 <body>
@@ -303,7 +306,7 @@
     <header>
         <div class="header-container">
             <div class="logo-section">
-                <img src="images/logo.png" alt="Zaad Academy" class="logo-img" onerror="this.style.display='none'">
+                <img src="images/logo.png" alt="Zaad Academy" class="logo-img" onerror="this.src='https://via.placeholder.com/90/B49658/FFFFFF?text=Z'">
                 <div class="site-logo">
                     <h1>ޒާދް އެކަޑެމީ</h1>
                     <span>Zaad Academy Blog</span>
@@ -325,19 +328,19 @@
     <nav>
         <div class="search-container"><button onclick="toggleSearch()" style="background:none; border:none; color:#0C2D48; font-size:1.2em;">🔍</button><input type="text" id="search-input" placeholder="ހޯއްދަވާ..."></div>
         <ul class="main-menu">
-            <li><a href="#">ހޯމް</a></li>
-            <li><a href="#">ކޯސްތައް</a></li>
-            <li><a href="#">ޒަމާނީ ތަޢުލީމް</a></li>
-            <li><a href="#">ކޯ-ކަރިކިއުލަރ</a></li>
-            <li><a href="#">އިސްލާމީ އިޤްތިޞާދު</a></li>
-            <li><a href="#">ތަރުބިއްޔަތު</a></li>
-            <li><a href="#">ޑިޖިޓަލް</a></li>
-            <li><a href="#">ގުޅިލައްވާ</a></li>
+            <li><a href="index.html">ހޯމް</a></li>
+            <li><a href="courses.html">ކޯސްތައް</a></li>
+            <li><a href="modern-education.html">ޒަމާނީ ތަޢުލީމް</a></li>
+            <li><a href="co-curricular.html">ކޯ-ކަރިކިއުލަރ</a></li>
+            <li><a href="islamic-economy.html">އިސްލާމީ އިޤްތިޞާދު</a></li>
+            <li><a href="tarbiyah.html">ތަރުބިއްޔަތު</a></li>
+            <li><a href="library.html">ޑިޖިޓަލް ލައިބްރަރީ</a></li>
+            <li><a href="contact.html">ގުޅިލައްވާ</a></li>
         </ul>
     </nav>
 
     <ul class="sub-menu">
-        <li><a href="#">އާޓިފިޝަލް އިންޓެލިޖެންސް (AI)</a></li>
+        <li><a href="#">އާޓިފިޝަލް އިންޓެލިޖެންސް</a></li>
         <li><a href="#">ކިޔަވައިދިނުމުގައި އޭ.އައި</a></li>
         <li><a href="#">ދިރާސާކުރުމަށް އޭ.އައި</a></li>
         <li><a href="#">އެޑިއުކޭޝަނަލް ޓެކްނޮލޮޖީ</a></li>
@@ -528,7 +531,7 @@
             </div>
 
             <div class="sidebar-widget">
-                <h3 class="sidebar-title">އެކަޑެމިކް މުއައްސަސާތައް</h3>
+                <h3 class="sidebar-title">ގުޅުންހުރި މުއައްސަސާތައް</h3>
                 <ul class="link-list">
                     <li><a href="https://www.moe.gov.mv" target="_blank"><span class="icon">🇲🇻</span> އެޑިއުކޭޝަން މިނިސްޓްރީ</a></li>
                     <li><a href="https://www.mqa.gov.mv" target="_blank"><span class="icon">📜</span> ކޮލިފިކޭޝަން އޮތޯރިޓީ</a></li>
