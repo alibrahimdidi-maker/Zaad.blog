@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ގުޅިލައްވާ - ޒާދް އެކަޑެމީ</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thaana&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thaana&family=Amiri:wght@400;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <style>
@@ -17,6 +17,7 @@
             --white: #ffffff;
             --off-white: #f4f6f8;
             --font-dv: 'Faruma', 'Noto Sans Thaana', sans-serif;
+            --font-en: 'Playfair Display', serif;
         }
 
         @font-face { font-family: 'Faruma'; src: url('fonts/Faruma.ttf') format('truetype'); font-weight: normal; }
@@ -26,11 +27,36 @@
         a { text-decoration: none; color: inherit; }
         ul { list-style: none; padding: 0; margin: 0; }
 
-        /* HEADER & NAV (Simple Version) */
-        .top-bar { background: #051626; color: #ccc; padding: 10px 5%; font-size: 0.9em; text-align: left; }
-        header { background: var(--academy-blue); padding: 20px; text-align: center; border-bottom: 4px solid var(--academy-gold); }
-        .site-logo h1 { color: white; margin: 0; font-size: 2.5em; }
+        /* HEADER */
+        .top-bar { background: #051626; color: #ccc; padding: 10px 5%; font-size: 0.9em; text-align: left; font-family: var(--font-en); }
         
+        header { 
+            background: var(--academy-blue); 
+            padding: 20px; 
+            text-align: center; 
+            border-bottom: 4px solid var(--academy-gold); 
+        }
+        
+        .site-logo h1 { 
+            color: white; 
+            margin: 0; 
+            font-size: 2.5em; 
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        /* --- CHANGE: ENGLISH NAME TO WHITE --- */
+        .site-logo span { 
+            font-family: var(--font-en); 
+            color: white; /* Changed from Gold to White */
+            letter-spacing: 2px; 
+            text-transform: uppercase; 
+            display: block; 
+            font-size: 0.9em; 
+            margin-top: 5px; 
+            font-weight: bold;
+        }
+        
+        /* NAV */
         nav { background: white; box-shadow: 0 4px 10px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 1000; }
         .main-menu { display: flex; justify-content: center; flex-wrap: wrap; }
         .main-menu li a { display: block; padding: 15px 20px; color: var(--academy-blue); font-weight: bold; }
@@ -70,7 +96,6 @@
             overflow: hidden;
         }
         
-        /* Decoration Circle */
         .contact-info::before {
             content: ''; position: absolute; bottom: -50px; right: -50px;
             width: 150px; height: 150px; background: var(--academy-gold);
@@ -88,7 +113,7 @@
             margin-left: 15px; font-size: 1.2em; color: var(--academy-gold);
         }
         .info-text span { display: block; font-size: 0.8em; opacity: 0.7; }
-        .info-text p { margin: 0; font-weight: bold; font-family: sans-serif; /* Numbers look better in sans-serif */ }
+        .info-text p { margin: 0; font-weight: bold; font-family: sans-serif; }
 
         .social-icons { display: flex; gap: 15px; margin-top: auto; }
         .social-icons a { 
@@ -137,10 +162,14 @@
             .contact-form { padding: 30px; }
         }
         
-        footer { background: var(--academy-blue); color: #ccc; text-align: center; padding: 20px; margin-top: 0; }
+        footer { background: var(--academy-blue); color: #ccc; text-align: center; padding: 20px; margin-top: 0; border-top: 5px solid var(--academy-gold); }
     </style>
 </head>
 <body>
+
+    <div class="top-bar">
+        <div>📞 +960 9901550 | ✉️ academyzaad@gmail.com</div>
+    </div>
 
     <header>
         <div class="site-logo">
