@@ -1,78 +1,397 @@
-<!DOCTYPE html>
-<html lang="dv" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ޒާދް އެކަޑެމީ - ހޯމް</title>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thaana&family=Amiri:wght@400;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/style.css">
-</head>
-<body>
+/* =========================================
+   1. FONTS & VARIABLES
+   ========================================= */
 
-    <div class="top-bar">
-        <div class="contact-info">📞 +960 9901550 | ✉️ academyzaa@gmail.com</div>
-        
-        <div class="lang-switch">
-            <a href="index.html" class="active">
-                <img src="https://flagcdn.com/w40/mv.png" class="flag-icon" alt="DV"> ދިވެހި
-            </a>
-            <a href="index-ar.html">
-                <img src="https://flagcdn.com/w40/sa.png" class="flag-icon" alt="AR"> عربي
-            </a>
-            <a href="index-en.html">
-                <img src="https://flagcdn.com/w40/gb.png" class="flag-icon" alt="EN"> English
-            </a>
-        </div>
-    </div>
+/* Local Dhivehi Font */
+@font-face {
+    font-family: 'Faruma';
+    src: url('../fonts/Faruma.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
 
-    <header>
-        <div class="header-container">
-            <div class="logo-section">
-                <img src="images/logo.png" class="logo-img" alt="Logo">
-                <div class="site-logo">
-                    <h1>ޒާދް އެކަޑެމީ</h1>
-                    <span>Zaad Academy Blog</span>
-                </div>
-            </div>
-            <div class="ad-banner-area"><div class="main-ad-slider"><span>🎓 ޢިލްމު ހޯދުމަކީ ކޮންމެ މުސްލިމެއްގެ މައްޗަށް ވާޖިބެކެވެ</span></div></div>
-        </div>
-    </header>
+:root {
+    /* -- Colors -- */
+    --academy-blue: #0C2D48;   /* Primary Dark Blue */
+    --academy-light: #2E8BC0;  /* Secondary Light Blue */
+    --academy-gold: #B49658;   /* Accent Gold */
+    --silver-bg: #e9ecef;      /* Light Gray Backgrounds */
+    --white: #ffffff;
+    --off-white: #f4f6f8;      /* Main Body Background */
+    --text-dark: #1a1a1a;      /* Main Text */
+    --text-gray: #555555;      /* Subtitles */
 
-    <nav>
-        <ul class="main-menu">
-            <li><a href="#">ހޯމް</a></li>
-            <li><a href="#">ކޯސްތައް</a></li>
-            <li><a href="#">ޒަމާނީ ތަޢުލީމް</a></li>
-            <li><a href="#">ކޯ-ކަރިކިއުލަރ</a></li>
-            <li><a href="#">އިސްލާމީ އިޤްތިޞާދު</a></li>
-            <li><a href="#">ތަރުބިއްޔަތު</a></li>
-            <li><a href="#">ޑިޖިޓަލް ލައިބްރަރީ</a></li>
-            <li><a href="#">ގުޅިލައްވާ</a></li>
-        </ul>
-    </nav>
+    /* -- Effects -- */
+    --shadow-card: 0 5px 20px rgba(12, 45, 72, 0.1);
+    --shadow-hover: 0 15px 30px rgba(12, 45, 72, 0.2);
+    
+    /* -- Fonts -- */
+    --font-dv: 'Faruma', 'Noto Sans Thaana', sans-serif; 
+    --font-ar: 'Traditional Arabic', 'Amiri', serif;
+    --font-en: 'Playfair Display', serif;
+    --font-en-body: 'Segoe UI', sans-serif;
+}
 
-    <div class="container">
-        <main class="content">
-            <div class="hero-section">
-                <div class="hero-main">
-                    <span class="card-tag">މުހިންމު</span>
-                    <img src="https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&w=800&q=80">
-                    <div class="hero-overlay">
-                        <h2 class="hero-title">ޒާދް އެކަޑެމީގެ އައު ކޯސްތަކަށް ހުޅުވާލައިފި</h2>
-                    </div>
-                </div>
-                </div>
-        </main>
-        
-        <aside class="sidebar">
-            <div class="sidebar-widget">
-                 <h3 class="sidebar-title">ނަމާދު ވަގުތު (މާލެ)</h3>
-                 <div id="prayer-content-dv">
-                    </div>
-            </div>
-        </aside>
-    </div>
+/* =========================================
+   2. GLOBAL RESET & BODY
+   ========================================= */
+* { box-sizing: border-box; margin: 0; padding: 0; }
 
-    <script src="js/script.js"></script>
-</body>
-</html>
+body {
+    background-color: var(--off-white);
+    color: var(--text-dark);
+    line-height: 1.8;
+    overflow-x: hidden;
+    /* Subtle Pattern Background */
+    background-image: radial-gradient(#dbeafe 1px, transparent 1px);
+    background-size: 30px 30px;
+    font-family: var(--font-dv); /* Default to Dhivehi */
+}
+
+a { text-decoration: none; transition: all 0.3s ease; color: inherit; }
+ul { list-style: none; padding: 0; margin: 0; }
+img { max-width: 100%; display: block; }
+
+/* Language Specific Overrides */
+html[lang="en"] body { font-family: var(--font-en-body); }
+html[lang="ar"] body { font-family: var(--font-ar); font-size: 1.1em; }
+html[lang="en"] { direction: ltr; }
+
+/* =========================================
+   3. HEADER SECTION
+   ========================================= */
+.top-bar {
+    background-color: #051626;
+    color: #ccc;
+    padding: 10px 5%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.85em;
+    font-family: var(--font-en);
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+/* Language Switcher */
+.lang-switch { display: flex; align-items: center; gap: 15px; }
+.lang-switch a { 
+    color: #bbb; display: flex; align-items: center; gap: 5px; font-weight: bold; 
+}
+.lang-switch a:hover, .lang-switch a.active { color: var(--academy-gold); }
+.flag-icon { width: 20px; height: 14px; border-radius: 2px; }
+
+header {
+    background-color: var(--academy-blue);
+    color: var(--white);
+    padding: 35px 5%;
+    border-bottom: 5px solid var(--academy-gold);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Header Geometric Pattern */
+header::before {
+    content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    background-image: 
+        linear-gradient(30deg, #0C2D48 12%, transparent 12.5%, transparent 87%, #0C2D48 87.5%, #0C2D48),
+        linear-gradient(150deg, #0C2D48 12%, transparent 12.5%, transparent 87%, #0C2D48 87.5%, #0C2D48),
+        linear-gradient(60deg, rgba(180, 150, 88, 0.05) 25%, transparent 25.5%, transparent 75%, rgba(180, 150, 88, 0.05) 75%, rgba(180, 150, 88, 0.05));
+    background-size: 80px 140px;
+    z-index: 0;
+}
+
+.header-container {
+    display: flex; justify-content: space-between; align-items: center; 
+    flex-wrap: wrap; position: relative; z-index: 1; 
+}
+
+.logo-section { display: flex; align-items: center; gap: 20px; }
+
+.logo-img {
+    height: 90px; width: auto;
+    border: 2px solid var(--academy-gold);
+    border-radius: 50%;
+    background: white; padding: 5px;
+    box-shadow: 0 0 15px rgba(180, 150, 88, 0.5);
+}
+
+.site-logo h1 {
+    font-size: 3.5em; color: var(--white); margin: 0; line-height: 1;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+}
+
+.site-logo span {
+    font-family: var(--font-en); letter-spacing: 2px; color: var(--academy-gold);
+    font-size: 0.9em; text-transform: uppercase; display: block; margin-top: 5px; font-weight: bold;
+}
+
+.ad-banner-area { width: 100%; max-width: 600px; margin-top: 15px; }
+
+.main-ad-slider {
+    height: 90px; background: rgba(255,255,255,0.05); 
+    border: 1px solid rgba(255,255,255,0.2);
+    backdrop-filter: blur(5px); display: flex; align-items: center; justify-content: center;
+    color: #fff; font-weight: bold; border-radius: 8px; margin-bottom: 5px;
+}
+
+/* =========================================
+   4. NAVIGATION & TICKER
+   ========================================= */
+.ticker-wrap {
+    width: 100%; background: var(--silver-bg); overflow: hidden; 
+    height: 40px; line-height: 40px; border-bottom: 1px solid #ccc;
+}
+
+.ticker { display: inline-block; white-space: nowrap; padding-right: 100%; animation: ticker 40s linear infinite; }
+.ticker-item { display: inline-block; padding: 0 2rem; color: #333; font-weight: bold; font-size: 1.1em; }
+.ticker-item span { margin-left: 8px; }
+
+@keyframes ticker { 
+    0% { transform: translate3d(0, 0, 0); } 
+    100% { transform: translate3d(100%, 0, 0); } 
+}
+
+/* LTR Ticker adjustment */
+html[lang="en"] .ticker { animation: ticker-ltr 40s linear infinite; padding-left: 100%; padding-right: 0; }
+@keyframes ticker-ltr { 
+    0% { transform: translate3d(0, 0, 0); } 
+    100% { transform: translate3d(-100%, 0, 0); } 
+}
+
+/* Main Navbar */
+nav {
+    background-color: var(--white);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    position: sticky; top: 0; z-index: 1000;
+}
+
+.main-menu { 
+    display: flex; justify-content: center; flex-wrap: wrap; 
+    padding: 0 2%; border-bottom: 1px solid #eee; 
+}
+
+.main-menu li a {
+    display: block; padding: 16px 20px;
+    color: var(--academy-blue); font-weight: bold; font-size: 1.1em;
+    position: relative;
+}
+
+.main-menu li a:hover { color: var(--academy-gold); background: #f9f9f9; }
+
+.main-menu li a::after {
+    content: ''; position: absolute; bottom: 0; left: 0; width: 0%; height: 3px;
+    background: var(--academy-gold); transition: 0.3s;
+}
+.main-menu li a:hover::after { width: 100%; }
+
+/* Search Bar */
+.search-container { position: absolute; left: 3%; top: 16px; display: flex; align-items: center; }
+/* Flip search for English */
+html[lang="en"] .search-container { left: auto; right: 3%; }
+
+.search-btn { background: none; border: none; cursor: pointer; color: var(--academy-blue); font-size: 1.2em; }
+#search-input { 
+    display: none; padding: 5px 10px; 
+    border: 1px solid var(--academy-blue); border-radius: 20px; 
+    outline: none; margin-left: 5px; 
+}
+
+/* Sub Menu */
+.sub-menu {
+    background-color: #f0f4f8; border-bottom: 1px solid #ddd;
+    display: flex; justify-content: center; flex-wrap: wrap;
+    padding: 0; margin: 0;
+}
+.sub-menu li a {
+    display: block; padding: 12px 20px; color: #444; font-size: 0.95em;
+    font-weight: bold; border-left: 1px solid #e0e0e0; transition: 0.2s;
+}
+.sub-menu li a:hover { color: var(--academy-blue); background-color: #e9ecef; }
+.sub-menu li:first-child a { border-right: 1px solid #e0e0e0; }
+
+/* =========================================
+   5. LAYOUT GRID
+   ========================================= */
+.container {
+    display: grid;
+    /* 3 parts Content, 1 part Sidebar */
+    grid-template-columns: 3fr 1fr; 
+    gap: 40px; padding: 50px 5%; 
+    max-width: 1500px; margin: 0 auto;
+}
+
+/* =========================================
+   6. CARDS & SECTIONS
+   ========================================= */
+.category-header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 25px; border-bottom: 3px solid var(--academy-blue); padding-bottom: 10px;
+}
+.category-header h2 { 
+    color: var(--academy-blue); font-size: 1.8em; 
+    background: var(--off-white); padding-left: 20px; z-index: 2; 
+}
+.read-more-btn { 
+    border: 2px solid var(--academy-blue); padding: 5px 15px; 
+    border-radius: 30px; color: var(--academy-blue); font-weight: bold; 
+}
+
+/* Card Styling */
+.card {
+    background: var(--white); border-radius: 10px; overflow: hidden;
+    box-shadow: var(--shadow-card); transition: 0.3s; border: 1px solid #eee;
+    position: relative;
+}
+.card:hover { transform: translateY(-5px); box-shadow: var(--shadow-hover); border-color: var(--academy-gold); }
+
+.card-img-wrap { position: relative; overflow: hidden; }
+.card-img { width: 100%; object-fit: cover; transition: 0.5s; display: block; height: 220px; }
+.card:hover .card-img { transform: scale(1.05); }
+
+/* Thumb Icon */
+.thumb-icon {
+    position: absolute; bottom: 10px; right: 10px;
+    width: 45px; height: 45px; background: var(--academy-blue);
+    color: var(--academy-gold); border: 2px solid var(--academy-gold); border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3); font-size: 1.3em; z-index: 5;
+}
+/* Flip icon for LTR */
+html[lang="en"] .thumb-icon { right: auto; left: 10px; }
+
+.card-content { padding: 20px; }
+.card-tag {
+    display: inline-block; padding: 4px 10px; margin-bottom: 10px;
+    font-size: 0.75em; font-weight: bold; border-radius: 4px;
+    background: var(--academy-gold); color: white;
+}
+.card-title { font-size: 1.3em; margin-bottom: 10px; color: var(--academy-blue); font-weight: bold; line-height: 1.4; }
+.card-excerpt { color: #666; font-size: 0.95em; }
+
+/* Hero Section */
+.hero-section { display: grid; grid-template-columns: 2fr 1fr; gap: 25px; margin-bottom: 60px; }
+.hero-main { position: relative; border-radius: 12px; overflow: hidden; height: 500px; box-shadow: var(--shadow-card); }
+.hero-main img { width: 100%; height: 100%; object-fit: cover; }
+.hero-overlay {
+    position: absolute; bottom: 0; left: 0; right: 0; padding: 40px;
+    background: linear-gradient(to top, var(--academy-blue), transparent); color: white;
+}
+.hero-title { font-size: 2.2em; margin-bottom: 10px; text-shadow: 1px 1px 3px rgba(0,0,0,0.5); }
+
+.hero-side { display: flex; flex-direction: column; gap: 20px; }
+.side-card { 
+    display: flex; align-items: center; background: white; border-radius: 8px; 
+    overflow: hidden; height: 100%; box-shadow: var(--shadow-card); 
+    border-right: 4px solid var(--academy-gold); 
+}
+/* Flip Border for LTR */
+html[lang="en"] .side-card { border-right: none; border-left: 4px solid var(--academy-gold); }
+.side-card img { width: 130px; height: 100%; object-fit: cover; }
+.side-content { padding: 15px; width: 100%; }
+.side-content h4 { margin: 0; font-size: 1em; color: var(--academy-blue); }
+
+/* Tech Section */
+.tech-section {
+    background: linear-gradient(180deg, #051626 0%, var(--academy-blue) 100%);
+    padding: 30px; border-radius: 20px; color: white; margin-bottom: 50px;
+    box-shadow: 0 15px 40px rgba(12, 45, 72, 0.4); border: 2px solid var(--academy-gold);
+}
+.tech-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
+.tech-card { background: transparent; border: none; color: white; }
+.tech-card .card-title { color: white; margin-top: 10px; }
+.tech-badge { background: #145DA0; color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.8em; margin-bottom: 5px; display: inline-block; }
+
+/* Business Strip */
+.biz-strip {
+    display: flex; gap: 20px; overflow-x: auto; padding: 20px;
+    background: white; border-radius: 15px; border-top: 5px solid var(--academy-blue);
+    box-shadow: var(--shadow-card); margin-bottom: 50px;
+}
+.biz-item { min-width: 150px; text-align: center; border-right: 1px dashed #ddd; }
+html[lang="en"] .biz-item { border-right: none; border-left: 1px dashed #ddd; }
+.biz-val { font-size: 1.4em; font-weight: bold; color: var(--academy-blue); display: block; }
+.biz-label { color: #666; font-size: 0.9em; }
+
+/* Grids */
+.content-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; }
+.lifestyle-grid { display: grid; grid-template-columns: repeat(4, 1fr); grid-template-rows: repeat(2, 220px); gap: 15px; }
+
+.life-card { position: relative; border-radius: 12px; overflow: hidden; }
+.life-card img { width: 100%; height: 100%; object-fit: cover; }
+.life-info { position: absolute; bottom: 0; background: rgba(12, 45, 72, 0.9); color: white; width: 100%; padding: 10px; }
+.life-card.big { grid-column: span 2; grid-row: span 2; }
+
+/* =========================================
+   7. SIDEBAR & WIDGETS
+   ========================================= */
+.sidebar-widget {
+    background: white; border-radius: 8px; padding: 25px; margin-bottom: 30px;
+    box-shadow: var(--shadow-card); border-top: 4px solid var(--academy-blue);
+}
+.sidebar-title {
+    font-size: 1.2em; margin-bottom: 20px; color: var(--academy-blue);
+    border-bottom: 2px solid #eee; padding-bottom: 10px; font-weight: bold;
+}
+
+.link-list li { margin-bottom: 12px; border-bottom: 1px dashed #eee; padding-bottom: 8px; }
+.link-list a { display: flex; align-items: center; color: #555; transition: 0.2s; }
+.link-list a:hover { color: var(--academy-blue); font-weight: bold; padding-right: 5px; }
+html[lang="en"] .link-list a:hover { padding-right: 0; padding-left: 5px; }
+.link-list a span.icon {
+    background: #f0f4f8; color: var(--academy-blue); width: 30px; height: 30px;
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    margin-left: 10px; flex-shrink: 0;
+}
+html[lang="en"] .link-list a span.icon { margin-left: 0; margin-right: 10px; }
+
+.prayer-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px dashed #eee; color: #555; }
+.prayer-row span:last-child { font-weight: bold; color: var(--academy-blue); font-family: var(--font-en); }
+
+.hotlines-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.hotline-item {
+    background: #f0f4f8; padding: 10px; border-radius: 8px;
+    text-align: center; font-weight: bold; color: var(--academy-blue); font-family: var(--font-en);
+}
+
+/* =========================================
+   8. FOOTER
+   ========================================= */
+footer {
+    background-color: var(--academy-blue); color: #ccc;
+    padding: 60px 5%; margin-top: 80px; border-top: 5px solid var(--academy-gold);
+}
+.footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 40px; }
+.footer-col h3 {
+    color: var(--academy-gold); margin-bottom: 20px; font-size: 1.3em;
+    border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;
+}
+.footer-col ul li { margin-bottom: 10px; }
+.footer-col a { color: #ccc; transition: 0.3s; }
+.footer-col a:hover { color: white; padding-right: 5px; }
+html[lang="en"] .footer-col a:hover { padding-right: 0; padding-left: 5px; }
+
+.footer-input { width: 100%; padding: 10px; border-radius: 4px; border: none; margin-bottom: 10px; font-family: var(--font-en); }
+.footer-btn { width: 100%; padding: 10px; background: var(--academy-gold); color: #0C2D48; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; }
+
+.copyright {
+    text-align: center; margin-top: 50px; padding-top: 20px;
+    border-top: 1px solid rgba(255,255,255,0.1); font-size: 0.9em;
+}
+.social-circle {
+    display: inline-flex; width: 40px; height: 40px; background: rgba(255,255,255,0.1);
+    border-radius: 50%; justify-content: center; align-items: center; margin-left: 10px;
+}
+html[lang="en"] .social-circle { margin-left: 0; margin-right: 10px; }
+
+/* =========================================
+   9. RESPONSIVE DESIGN
+   ========================================= */
+@media (max-width: 992px) {
+    .container { grid-template-columns: 1fr; }
+    .hero-section { grid-template-columns: 1fr; }
+    .tech-grid, .lifestyle-grid { grid-template-columns: 1fr; }
+    .lifestyle-grid { grid-template-rows: auto; }
+    .life-card.big { grid-column: span 1; grid-row: span 1; height: 300px; }
+    .life-card { height: 200px; }
+    .ad-banner-area { display: none; }
+}
