@@ -21,7 +21,6 @@
             --font-en: 'Playfair Display', serif;
         }
 
-        /* Local Font Fallback */
         @font-face { font-family: 'Faruma'; src: url('fonts/Mv Galan.ttf') format('truetype'); }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -54,12 +53,8 @@
         }
         
         .header-content { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; }
-        
         .logo-box { display: flex; align-items: center; gap: 20px; }
-        .logo-img { 
-            height: 90px; width: 90px; border-radius: 50%; 
-            border: 3px solid var(--gold); background: white; padding: 5px; 
-        }
+        .logo-img { height: 90px; width: 90px; border-radius: 50%; border: 3px solid var(--gold); background: white; padding: 5px; }
         
         .site-title h1 { color: white; margin: 0; font-size: 3em; line-height: 1; }
         .site-title span { 
@@ -96,7 +91,7 @@
         .sub-menu li a { display: block; padding: 5px 20px; color: #555; font-size: 0.95em; border-left: 1px solid #ddd; }
         .sub-menu li a:hover { color: var(--blue); font-weight: bold; }
 
-        /* --- LAYOUT GRID --- */
+        /* --- LAYOUT --- */
         .container { 
             display: grid; grid-template-columns: 3fr 1fr; gap: 40px; 
             padding: 40px 5%; max-width: 1500px; margin: 0 auto; 
@@ -161,8 +156,11 @@
         .hotline-item { background: #f0f4f8; padding: 10px; border-radius: 8px; text-align: center; font-weight: bold; color: var(--blue); font-family: var(--font-en); }
 
         /* --- FOOTER --- */
-        footer { background: var(--blue); color: #ccc; padding: 50px 5%; margin-top: 50px; border-top: 5px solid var(--gold); text-align: center; }
+        footer { background: var(--blue); color: #ccc; padding: 60px 5%; margin-top: 80px; border-top: 5px solid var(--gold); }
         .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 30px; text-align: right; }
+        .footer-col h3 { color: var(--gold); margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; }
+        .footer-col ul li { margin-bottom: 10px; border-bottom: 1px dashed rgba(255,255,255,0.1); padding-bottom: 5px; }
+        .footer-col a:hover { color: white; padding-right: 5px; }
         .footer-input { width: 100%; padding: 10px; border-radius: 4px; border: none; margin-bottom: 10px; }
         .footer-btn { width: 100%; padding: 10px; background: var(--gold); color: #0C2D48; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; }
 
@@ -172,11 +170,8 @@
             .hero { grid-template-columns: 1fr; }
             .hero-main { height: 250px; }
             .ad-banner { display: none; }
-            
             .header-content { justify-content: center; text-align: center; }
             .logo-box { flex-direction: column; gap: 10px; }
-            
-            /* Mobile Menu */
             .nav-container { justify-content: flex-start; height: 60px; align-items: center; }
             .menu-btn { display: block; }
             .main-menu { 
@@ -187,12 +182,10 @@
             .main-menu.active { display: flex; } 
             .main-menu li { width: 100%; text-align: center; border-bottom: 1px solid #eee; }
             .sub-menu { display: none; }
-            
             .card-grid, .lifestyle-grid, .biz-strip, .hotlines-grid, .footer-grid { grid-template-columns: 1fr; }
             .lifestyle-grid { grid-template-rows: auto; }
             .life-card.big { grid-column: span 1; grid-row: span 1; height: 250px; }
             .life-card { height: 200px; margin-bottom: 15px; }
-            
             aside { margin-top: 40px; }
         }
     </style>
@@ -201,41 +194,29 @@
 
     <div class="top-bar">
         <div>📞 +960 9901550 | ✉️ academyzaad@gmail.com</div>
-        <div class="lang-switch">
-            <a href="index.html" class="active">ދިވެހި</a> | 
-            <a href="index-ar.html">عربي</a> | 
-            <a href="index-en.html">English</a>
-        </div>
+        <div class="lang-switch"><a href="#">ދިވެހި</a> | <a href="#">عربي</a> | <a href="#">English</a></div>
     </div>
 
     <header>
         <div class="header-content">
             <div class="logo-box">
                 <img src="images/logo.png" class="logo-img" alt="Logo" onerror="this.src='https://via.placeholder.com/100/B49658/FFFFFF?text=Z'">
-                <div class="site-title">
-                    <h1>ޒާދް އެކަޑެމީ</h1>
-                    <span>Zaad Academy Blog</span>
-                </div>
+                <div class="site-title"><h1>ޒާދް އެކަޑެމީ</h1><span>Zaad Academy Blog</span></div>
             </div>
-            <div class="ad-banner">
-                🎓 ޢިލްމު ހޯދުމަކީ ކޮންމެ މުސްލިމެއްގެ މައްޗަށް ވާޖިބެކެވެ
-            </div>
+            <div class="ad-banner">🎓 ޢިލްމު ހޯދުމަކީ ކޮންމެ މުސްލިމެއްގެ މައްޗަށް ވާޖިބެކެވެ</div>
         </div>
     </header>
 
     <div class="ticker-wrap">
         <div class="ticker">
-            <div class="ticker-item">🔴 ޒާދް އެކަޑެމީގެ އައު ކޯސްތަކަށް ކުރިމަތިލުމުގެ ފުރުޞަތު ހުޅުވާލައިފި</div>
-            <div class="ticker-item">🤖 ކްލާސްރޫމްތަކުގައި އޭ.އައި ބޭނުންކުރުމާ ގުޅޭ ޚާއްޞަ ވޯކްޝޮޕެއް ފަށައިފި</div>
-            <div class="ticker-item">🏆 ޤައުމީ ޤުރުއާން މުބާރާތުގައި ޒާދް އެކަޑެމީގެ ދަރިވަރުން ރަން ވަނަތަކެއް ހޯދައިފި</div>
+            <div class="ticker-item">🔴 ޒާދް އެކަޑެމީގެ އައު ކޯސްތަކަށް ހުޅުވާލައިފި</div>
+            <div class="ticker-item">🏆 ޤައުމީ ޤުރުއާން މުބާރާތުގެ ނަތީޖާ</div>
         </div>
     </div>
 
     <nav>
         <div class="nav-container">
-            <div class="menu-btn" onclick="document.querySelector('.main-menu').classList.toggle('active')">
-                <i class="fas fa-bars"></i>
-            </div>
+            <div class="menu-btn" onclick="document.querySelector('.main-menu').classList.toggle('active')"><i class="fas fa-bars"></i></div>
             <ul class="main-menu">
                 <li><a href="index.html">ހޯމް</a></li>
                 <li><a href="courses.html">ކޯސްތައް</a></li>
@@ -262,10 +243,8 @@
         <main>
             <div class="hero">
                 <div class="hero-main">
-                    <img src="https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&w=800&q=80" alt="Hero">
-                    <div class="hero-text">
-                        <h2>ޒާދް އެކަޑެމީ: އުނގެނުމުގެ އައު މަންޒިލް</h2>
-                    </div>
+                    <img src="https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&w=800&q=80">
+                    <div class="hero-text"><h2>އޭ.އައި ގެ އެހީގައި ކިޔަވައިދިނުން</h2></div>
                 </div>
                 <div>
                     <div class="side-card"><img src="https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=200&q=60"><div class="side-info">އޮންލައިން ކޯސް</div></div>
@@ -276,27 +255,9 @@
 
             <div class="section-header"><h2>ޒަމާނީ ތަޢުލީމް & ޓެކްނޮލޮޖީ</h2></div>
             <div class="card-grid">
-                <div class="card">
-                    <img src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=400&q=60" class="card-img">
-                    <div class="card-body">
-                        <h3 class="card-title">ކްލާސްރޫމްގައި އޭ.އައި</h3>
-                        <span class="card-tag">އިނޮވޭޝަން</span>
-                    </div>
-                </div>
-                <div class="card">
-                    <img src="https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=400&q=60" class="card-img">
-                    <div class="card-body">
-                        <h3 class="card-title">ކޯޑިންގ ދަސްކުރުން</h3>
-                        <span class="card-tag">ސްކިލްސް</span>
-                    </div>
-                </div>
-                <div class="card">
-                    <img src="https://images.unsplash.com/photo-1555436169-20e93ea9a7ff?auto=format&fit=crop&w=400&q=60" class="card-img">
-                    <div class="card-body">
-                        <h3 class="card-title">ސައިންސް ލެބްތައް</h3>
-                        <span class="card-tag">ސައިންސް</span>
-                    </div>
-                </div>
+                <div class="card"><img src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=400&q=60" class="card-img"><div class="card-body"><h3 class="card-title">ކްލާސްރޫމްގައި އޭ.އައި</h3></div></div>
+                <div class="card"><img src="https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=400&q=60" class="card-img"><div class="card-body"><h3 class="card-title">ކޯޑިންގ ދަސްކުރުން</h3></div></div>
+                <div class="card"><img src="https://images.unsplash.com/photo-1555436169-20e93ea9a7ff?auto=format&fit=crop&w=400&q=60" class="card-img"><div class="card-body"><h3 class="card-title">ސައިންސް ލެބްތައް</h3></div></div>
             </div>
 
             <div style="margin-top:50px;"></div>
@@ -306,16 +267,12 @@
                 <div class="biz-item"><span class="biz-val">MVR 10,800</span><span class="biz-label">ރިހީގެ ނިޞާބު</span></div>
                 <div class="biz-item"><span class="biz-val">ހަނޑޫ</span><span class="biz-label">ފިތުރު ޒަކާތް</span></div>
                 <div class="biz-item"><span class="biz-val">އެހީތެރިވޭ</span><span class="biz-label">ޞަދަޤާތް</span></div>
-                <div class="biz-item"><span class="biz-val">ކުރިއެރުން</span><span class="biz-label">ޙަލާލް ޓޫރިޒަމް</span></div>
             </div>
 
             <div style="margin-top:50px;"></div>
             <div class="section-header"><h2>ތަރުބިއްޔަތާއި ދުޅަހެޔޮކަން</h2></div>
             <div class="lifestyle-grid">
-                <div class="life-card big">
-                    <img src="https://images.unsplash.com/photo-1544367563-121910aa6e8a?auto=format&fit=crop&w=600&q=60">
-                    <div class="life-info"><h3>ކުދިންގެ ނަފްސާނީ ދުޅަހެޔޮކަން</h3></div>
-                </div>
+                <div class="life-card big"><img src="https://images.unsplash.com/photo-1544367563-121910aa6e8a?auto=format&fit=crop&w=600&q=60"><div class="life-info"><h3>ކުދިންގެ ނަފްސާނީ ދުޅަހެޔޮކަން</h3></div></div>
                 <div class="life-card"><img src="https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&w=300&q=60"><div class="life-info"><h5>ޞިއްޙީ ކާނާ</h5></div></div>
                 <div class="life-card"><img src="https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?auto=format&fit=crop&w=300&q=60"><div class="life-info"><h5>އާއިލީ ގުޅުން</h5></div></div>
                 <div class="life-card"><img src="https://images.unsplash.com/photo-1543333995-a09abd7d36d9?auto=format&fit=crop&w=300&q=60"><div class="life-info"><h5>ކަސްރަތު</h5></div></div>
@@ -323,27 +280,18 @@
             </div>
 
             <div style="margin-top:50px;"></div>
-            <div class="section-header"><h2>ކޯ-ކަރިކިއުލަރ ޙަރަކާތްތައް</h2></div>
+            <div class="section-header"><h2>ކޯ-ކަރިކިއުލަރ</h2></div>
             <div class="card-grid">
-                <div class="card">
-                    <img src="https://images.unsplash.com/photo-1526976668912-1a811878dd37?auto=format&fit=crop&w=400&q=60" class="card-img">
-                    <div class="card-body"><span class="card-tag">ސްކައުޓް</span><h3 class="card-title">އަހަރީ ކޭމްޕް</h3></div>
-                </div>
-                <div class="card">
-                    <img src="https://images.unsplash.com/photo-1585829365295-ab7cd400c167?auto=format&fit=crop&w=400&q=60" class="card-img">
-                    <div class="card-body"><span class="card-tag">ޤުރުއާން</span><h3 class="card-title">މުބާރާތުގެ ނަތީޖާ</h3></div>
-                </div>
-                <div class="card">
-                    <img src="https://images.unsplash.com/photo-1577985051167-0d49eec21977?auto=format&fit=crop&w=400&q=60" class="card-img">
-                    <div class="card-body"><span class="card-tag">އަދަބީ</span><h3 class="card-title">ވާހަކަ ދެއްކުން</h3></div>
-                </div>
+                <div class="card"><img src="https://images.unsplash.com/photo-1526976668912-1a811878dd37?auto=format&fit=crop&w=400&q=60" class="card-img"><div class="card-body"><span class="card-tag">ސްކައުޓް</span><h3 class="card-title">އަހަރީ ކޭމްޕް</h3></div></div>
+                <div class="card"><img src="https://images.unsplash.com/photo-1585829365295-ab7cd400c167?auto=format&fit=crop&w=400&q=60" class="card-img"><div class="card-body"><span class="card-tag">ޤުރުއާން</span><h3 class="card-title">މުބާރާތުގެ ނަތީޖާ</h3></div></div>
+                <div class="card"><img src="https://images.unsplash.com/photo-1577985051167-0d49eec21977?auto=format&fit=crop&w=400&q=60" class="card-img"><div class="card-body"><span class="card-tag">އަދަބީ</span><h3 class="card-title">ވާހަކަ ދެއްކުން</h3></div></div>
             </div>
 
             <div class="sidebar-widget" style="margin-top:40px; border-color:var(--gold);">
                 <h3 class="sidebar-title">ޚިޔާލު ފޮނުއްވާ</h3>
                 <form action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
-                    <input type="text" name="name" placeholder="ނަން" style="width:100%; padding:10px; margin-bottom:10px; border:1px solid #ddd; border-radius:4px;" required>
-                    <textarea name="message" rows="3" placeholder="މެސެޖް" style="width:100%; padding:10px; margin-bottom:10px; border:1px solid #ddd; border-radius:4px;" required></textarea>
+                    <input type="text" name="name" placeholder="ނަން" style="width:100%; padding:10px; margin-bottom:10px; border:1px solid #ddd;" required>
+                    <textarea name="message" rows="3" placeholder="މެސެޖް" style="width:100%; padding:10px; margin-bottom:10px; border:1px solid #ddd;" required></textarea>
                     <button style="padding:10px 25px; background:var(--blue); color:white; border:none; cursor:pointer;">ފޮނުވާ</button>
                 </form>
             </div>
@@ -376,15 +324,20 @@
             </div>
 
             <div class="sidebar-widget">
-                <h3 class="sidebar-title">އެންމެ ފަހުގެ ލިޔުންތައް</h3>
-                <div class="recent-post">
-                    <img src="https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=100&q=60">
-                    <div><h4>ކުދިން ތަރުބިއްޔަތު</h4></div>
-                </div>
-                <div class="recent-post">
-                    <img src="https://images.unsplash.com/photo-1542810634-71277d95dcbb?auto=format&fit=crop&w=100&q=60">
-                    <div><h4>ރަމަޟާން މަހުގެ ތައްޔާރީ</h4></div>
-                </div>
+                <h3 class="sidebar-title">ދަރިވަރުންނަށް</h3>
+                <ul class="link-list">
+                    <li><a href="#">👨‍🎓 ސްޓޫޑެންޓް ޕޯޓަލް</a></li>
+                    <li><a href="#">📅 އިމްތިޙާނު ތާވަލު</a></li>
+                    <li><a href="#">📝 ނަތީޖާ</a></li>
+                </ul>
+            </div>
+
+            <div class="sidebar-widget">
+                <h3 class="sidebar-title">ޑައުންލޯޑްސް</h3>
+                <ul class="link-list">
+                    <li><a href="#">📄 އެޕްލިކޭޝަން ފޯމު</a></li>
+                    <li><a href="#">🗓️ އެކަޑެމިކް ކަލަންޑަރު</a></li>
+                </ul>
             </div>
 
             <div class="sidebar-widget">
@@ -393,23 +346,6 @@
                     <li><a href="https://www.moe.gov.mv">🏛️ އެޑިއުކޭޝަން މިނިސްޓްރީ</a></li>
                     <li><a href="https://mqa.gov.mv">📜 އެމް.ކިއު.އޭ</a></li>
                     <li><a href="https://ium.edu.mv">🎓 ޤައުމީ ޔުނިވަރސިޓީ</a></li>
-                </ul>
-            </div>
-
-            <div class="sidebar-widget">
-                <h3 class="sidebar-title">ދައުލަތުގެ ވުޒާރާތައް</h3>
-                <ul class="link-list">
-                    <li><a href="#">🏛️ ރައީސް އޮފީސް</a></li>
-                    <li><a href="#">🕌 އިސްލާމިކް މިނިސްޓްރީ</a></li>
-                </ul>
-            </div>
-
-            <div class="sidebar-widget">
-                <h3 class="sidebar-title">ޞިއްޙީ & މުވާޞަލާތީ</h3>
-                <ul class="link-list">
-                    <li><a href="#">🏥 އައި.ޖީ.އެމް.އެޗް</a></li>
-                    <li><a href="#">🩺 އޭ.ޑީ.ކޭ</a></li>
-                    <li><a href="#">📡 ދިރާގު / އުރީދޫ</a></li>
                 </ul>
             </div>
 
@@ -434,7 +370,19 @@
             </div>
             <div class="footer-col">
                 <h3>އަވަސް ލިންކު</h3>
-                <ul><li><a href="#">ކޯސްތައް</a></li><li><a href="#">ގުޅިލައްވާ</a></li></ul>
+                <ul>
+                    <li><a href="#">› ކޯސްތައް</a></li>
+                    <li><a href="#">› ގުޅިލައްވާ</a></li>
+                    <li><a href="#">› ވަޒީފާ</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h3>ވަސީލަތްތައް</h3>
+                <ul>
+                    <li><a href="#">› ލައިބްރަރީ</a></li>
+                    <li><a href="#">› ފޮޓޯ ގެލެރީ</a></li>
+                    <li><a href="#">› ސުވާލާއި ޖަވާބު</a></li>
+                </ul>
             </div>
             <div class="footer-col">
                 <h3>ނިއުސްލެޓަރ</h3>
@@ -448,7 +396,6 @@
     </footer>
 
     <script>
-        // Clock
         function updateClock() {
             const now = new Date();
             document.getElementById('live-clock').innerText = now.toLocaleTimeString('en-US', { hour12: true });
@@ -456,7 +403,6 @@
         }
         setInterval(updateClock, 1000); updateClock();
 
-        // Prayer Times API
         fetch('https://api.aladhan.com/v1/timingsByCity?city=Male&country=Maldives&method=1')
             .then(response => response.json())
             .then(data => {
