@@ -9,20 +9,27 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <style>
-        /* --- CSS VARIABLES --- */
+        /* --- 1. FONT SETUP (MV GALAN PRIMARY) --- */
+        @font-face {
+            font-family: 'Mv Galan';
+            src: url('fonts/Mv Galan.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        /* --- 2. CSS VARIABLES --- */
         :root {
             --blue: #0C2D48;
             --light-blue: #2E8BC0;
             --gold: #B49658;
-            --gold-light: #d4b06a;
             --white: #ffffff;
             --bg: #f4f6f8;
             --text: #1a1a1a;
-            --font-dv: 'Noto Sans Thaana', 'Faruma', sans-serif; 
+            
+            /* PRIMARY FONT IS MV GALAN */
+            --font-dv: 'Mv Galan', 'Faruma', 'Noto Sans Thaana', sans-serif; 
             --font-en: 'Playfair Display', serif;
         }
-
-        @font-face { font-family: 'Faruma'; src: url('fonts/Mv Galan.ttf') format('truetype'); }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
         
@@ -35,6 +42,16 @@
             overflow-x: hidden;
         }
 
+        /* Force Mv Galan on all text blocks */
+        h1, h2, h3, h4, h5, h6, p, a, li, span, button, input, textarea {
+            font-family: var(--font-dv);
+        }
+
+        /* Except specific English sections */
+        .en-text, .site-logo span, .live-clock, .biz-val, .prayer-time {
+            font-family: var(--font-en) !important;
+        }
+
         a { text-decoration: none; color: inherit; transition: 0.3s; }
         ul { list-style: none; padding: 0; margin: 0; }
         img { max-width: 100%; display: block; }
@@ -44,7 +61,7 @@
             background: #051626; color: #ccc; padding: 10px 5%;
             display: flex; justify-content: space-between; font-family: var(--font-en); font-size: 0.9em;
         }
-        .lang-switch a { margin-right: 15px; color: #aaa; font-weight: bold; }
+        .lang-switch a { margin-right: 15px; color: #aaa; font-weight: bold; font-family: var(--font-en); }
         .lang-switch a:hover { color: var(--gold); }
 
         header {
@@ -63,7 +80,7 @@
         
         .site-title h1 { color: white; margin: 0; font-size: 3em; line-height: 1; }
         .site-title span { 
-            font-family: var(--font-en); color: white !important; 
+            font-family: var(--font-en) !important; color: white; 
             font-size: 0.9em; text-transform: uppercase; display: block; 
             margin-top: 5px; font-weight: bold; letter-spacing: 2px;
         }
@@ -79,57 +96,22 @@
         .ticker-item { display: inline-block; padding: 0 2rem; color: #333; font-weight: bold; }
         @keyframes ticker { 0% { transform: translate3d(0, 0, 0); } 100% { transform: translate3d(100%, 0, 0); } }
 
-        /* --- NEW ROYAL NAV STYLE --- */
-        nav { 
-            background: white; 
-            box-shadow: 0 10px 20px rgba(0,0,0,0.05); 
-            position: sticky; top: 0; z-index: 1000; 
-            border-top: 4px solid var(--gold); /* Royal Gold Top Border */
-            border-bottom: 1px solid #eee;
-        }
-        
+        /* --- NAV --- */
+        nav { background: white; box-shadow: 0 4px 10px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 1000; }
         .nav-container { display: flex; justify-content: center; position: relative; padding: 0 5%; }
-        
         .menu-btn { display: none; font-size: 1.8em; padding: 15px; cursor: pointer; color: var(--blue); position: absolute; right: 10px; top: 0; }
 
         .main-menu { display: flex; flex-wrap: wrap; justify-content: center; width: 100%; }
-        
         .main-menu li a { 
-            display: block; padding: 18px 25px; 
-            color: var(--blue); font-weight: bold; font-size: 1.1em; 
-            border-bottom: 4px solid transparent; 
-            transition: all 0.3s ease;
+            display: block; padding: 15px 20px; color: var(--blue); 
+            font-weight: bold; font-size: 1.1em; border-bottom: 3px solid transparent; 
         }
-        
-        /* Hover Effect: Royal Blue Background with Gold Text */
-        .main-menu li a:hover { 
-            background: var(--blue); 
-            color: var(--gold); 
-            border-bottom: 4px solid var(--gold);
-        }
+        .main-menu li a:hover { color: var(--gold); border-bottom: 3px solid var(--gold); background: #f9f9f9; }
 
-        /* --- NEW ROYAL SUB MENU STYLE --- */
-        .sub-menu { 
-            background: var(--blue); /* Dark Blue Background */
-            border-bottom: 4px solid var(--gold); 
-            display: flex; justify-content: center; flex-wrap: wrap; 
-            padding: 10px 0; 
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-        }
-        
-        .sub-menu li a { 
-            display: block; padding: 8px 25px; 
-            color: var(--white); /* White Text */
-            font-size: 1em; font-weight: 500;
-            border-left: 1px solid rgba(255,255,255,0.1); 
-            transition: 0.3s; 
-        }
-        
-        /* Sub Menu Hover: Gold Text */
-        .sub-menu li a:hover { 
-            color: var(--gold); 
-            background: rgba(0,0,0,0.2); 
-        }
+        /* --- SUB MENU --- */
+        .sub-menu { background: #f0f4f8; border-bottom: 1px solid #ddd; display: flex; justify-content: center; flex-wrap: wrap; padding: 10px 0; }
+        .sub-menu li a { display: block; padding: 5px 20px; color: #555; font-size: 0.95em; border-left: 1px solid #ddd; }
+        .sub-menu li a:hover { color: var(--blue); font-weight: bold; }
 
         /* --- LAYOUT --- */
         .container { 
@@ -161,40 +143,44 @@
         .card-title { color: var(--blue); margin: 0 0 10px; font-weight: bold; font-size: 1.2em; }
         .card-tag { background: var(--gold); color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.8em; margin-bottom: 10px; display: inline-block; }
 
-        /* ECONOMY */
+        /* --- ECONOMY --- */
         .biz-strip { 
             display: flex; gap: 20px; overflow-x: auto; padding: 25px; 
             background: white; border-radius: 15px; border-top: 5px solid var(--blue); 
             box-shadow: 0 5px 15px rgba(0,0,0,0.05); margin-bottom: 50px; 
         }
         .biz-item { min-width: 160px; text-align: center; border-right: 1px dashed #ddd; }
-        .biz-val { font-size: 1.4em; font-weight: bold; color: var(--blue); display: block; font-family: var(--font-en); }
+        .biz-val { font-size: 1.4em; font-weight: bold; color: var(--blue); display: block; font-family: var(--font-en) !important; }
 
-        /* LIFESTYLE */
+        /* --- LIFESTYLE --- */
         .lifestyle-grid { display: grid; grid-template-columns: repeat(4, 1fr); grid-template-rows: repeat(2, 200px); gap: 15px; }
         .life-card { position: relative; border-radius: 10px; overflow: hidden; }
         .life-card img { width: 100%; height: 100%; object-fit: cover; }
         .life-card.big { grid-column: span 2; grid-row: span 2; }
         .life-info { position: absolute; bottom: 0; width: 100%; background: rgba(12, 45, 72, 0.85); color: white; padding: 10px; font-weight: bold; }
 
-        /* SIDEBAR */
+        /* --- SIDEBAR --- */
         .sidebar-widget { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); margin-bottom: 30px; border-top: 4px solid var(--blue); }
         .sidebar-title { font-size: 1.2em; margin-bottom: 15px; border-bottom: 2px solid #eee; padding-bottom: 10px; color: var(--blue); font-weight: bold; }
         .link-list li { margin-bottom: 10px; border-bottom: 1px dashed #eee; padding-bottom: 5px; }
         .link-list a:hover { color: var(--gold); font-weight: bold; }
 
-        /* CLOCK & PRAYER */
-        .weather-widget { text-align: center; background: linear-gradient(135deg, var(--light-blue), var(--blue)); color: white; padding: 25px; border-radius: 10px; margin-bottom: 25px; }
-        .live-clock { font-size: 2.5em; font-weight: bold; font-family: var(--font-en); margin-bottom: 5px; display: block; }
+        .recent-post { display: flex; gap: 10px; margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
+        .recent-post img { width: 60px; height: 60px; object-fit: cover; border-radius: 5px; }
+        .recent-post h4 { margin: 0; font-size: 0.95em; line-height: 1.3; }
+
         .prayer-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px dashed #eee; }
-        .prayer-time { font-family: var(--font-en); font-weight: bold; color: var(--blue); }
+        .prayer-time { font-family: var(--font-en) !important; font-weight: bold; color: var(--blue); }
+
+        .weather-widget { text-align: center; background: linear-gradient(135deg, var(--light-blue), var(--blue)); color: white; padding: 25px; border-radius: 10px; margin-bottom: 25px; }
+        .live-clock { font-size: 2.5em; font-weight: bold; font-family: var(--font-en) !important; margin-bottom: 5px; display: block; }
 
         .hotlines-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        .hotline-item { background: #f0f4f8; padding: 10px; border-radius: 8px; text-align: center; font-weight: bold; color: var(--blue); font-family: var(--font-en); }
+        .hotline-item { background: #f0f4f8; padding: 10px; border-radius: 8px; text-align: center; font-weight: bold; color: var(--blue); font-family: var(--font-en) !important; }
 
-        /* FOOTER */
+        /* --- FOOTER --- */
         footer { background: var(--blue); color: #ccc; padding: 60px 5%; margin-top: 80px; border-top: 5px solid var(--gold); }
-        .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 40px; text-align: right; }
+        .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 30px; text-align: right; }
         .footer-col h3 { color: var(--gold); margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; }
         .footer-col ul li { margin-bottom: 10px; border-bottom: 1px dashed rgba(255,255,255,0.1); padding-bottom: 5px; }
         .footer-col a:hover { color: white; padding-right: 5px; }
@@ -222,9 +208,8 @@
             }
             .main-menu.active { display: flex; } 
             .main-menu li { width: 100%; text-align: center; border-bottom: 1px solid #eee; }
-            .sub-menu { display: none; } /* Hide sub-menu on mobile */
+            .sub-menu { display: none; }
             
-            /* Stacking */
             .card-grid, .lifestyle-grid, .biz-strip, .hotlines-grid, .footer-grid { grid-template-columns: 1fr; }
             .lifestyle-grid { grid-template-rows: auto; }
             .life-card.big { grid-column: span 1; grid-row: span 1; height: 250px; }
@@ -311,6 +296,7 @@
                 <div class="biz-item"><span class="biz-val">MVR 10,800</span><span class="biz-label">ރިހީގެ ނިޞާބު</span></div>
                 <div class="biz-item"><span class="biz-val">ހަނޑޫ / ފައިސާ</span><span class="biz-label">ފިތުރު ޒަކާތް</span></div>
                 <div class="biz-item"><span class="biz-val">އެހީތެރިވޭ</span><span class="biz-label">ޞަދަޤާތް</span></div>
+                <div class="biz-item"><span class="biz-val">ކުރިއެރުން</span><span class="biz-label">ޙަލާލް ޓޫރިޒަމް</span></div>
             </div>
 
             <div style="margin-top:50px;"></div>
