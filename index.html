@@ -2,25 +2,33 @@
 <html lang="dv" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ޒާދް އެކަޑެމީ - Zaad Academy</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thaana:wght@400;700&family=Amiri:wght@400;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <style>
-        /* --- CSS VARIABLES --- */
+        /* --- 1. CSS VARIABLES --- */
         :root {
             --blue: #0C2D48;
             --gold: #B49658;
             --white: #ffffff;
             --bg: #f4f6f8;
             --text: #1a1a1a;
-            --font-dv: 'Mv Galan', 'Noto Sans Thaana', sans-serif; 
+            
+            /* FONT STACK: Priority to Mv Galan, fallback to Noto Sans */
+            --font-dv: 'Mv Galan', 'Noto Sans Thaana', 'Faruma', sans-serif;
             --font-en: 'Playfair Display', serif;
         }
 
-        @font-face { font-family: 'Mv Galan'; src: url('fonts/Mv Galan.ttf') format('truetype'); }
+        /* Load Local Font */
+        @font-face {
+            font-family: 'Mv Galan';
+            src: url('fonts/Mv Galan.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
         
@@ -31,7 +39,6 @@
             line-height: 1.8;
             margin: 0;
             overflow-x: hidden;
-            font-weight: normal; /* Fixes random bolding */
         }
 
         a { text-decoration: none; color: inherit; transition: 0.3s; }
@@ -47,9 +54,8 @@
         .lang-switch a:hover { color: var(--gold); }
 
         header {
-            background: var(--blue); padding: 20px 5%;
+            background: var(--blue); padding: 30px 5%;
             border-bottom: 5px solid var(--gold); text-align: center;
-            position: relative;
         }
         
         .header-content { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; }
@@ -60,14 +66,11 @@
             border: 3px solid var(--gold); background: white; padding: 5px; 
         }
         
-        .site-title h1 { 
-            color: white; margin: 0; font-size: 3em; line-height: 1.2; 
-            font-weight: normal; /* Prevent double bolding */
-        }
+        .site-title h1 { color: white; margin: 0; font-size: 3em; line-height: 1; }
         .site-title span { 
             font-family: var(--font-en); color: white !important; 
             font-size: 0.9em; text-transform: uppercase; display: block; 
-            margin-top: 5px; letter-spacing: 2px;
+            margin-top: 5px; font-weight: bold; letter-spacing: 2px;
         }
 
         .ad-banner {
@@ -75,10 +78,22 @@
             padding: 15px 30px; border-radius: 10px; color: white; font-weight: bold;
         }
 
+        /* --- TICKER --- */
+        .ticker-wrap { background: #e9ecef; overflow: hidden; height: 40px; line-height: 40px; border-bottom: 1px solid #ccc; }
+        .ticker { display: inline-block; white-space: nowrap; padding-right: 100%; animation: ticker 40s linear infinite; }
+        .ticker-item { display: inline-block; padding: 0 2rem; color: #333; font-weight: bold; }
+        @keyframes ticker { 0% { transform: translate3d(0, 0, 0); } 100% { transform: translate3d(100%, 0, 0); } }
+
         /* --- NAV --- */
         nav { background: white; box-shadow: 0 4px 10px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 1000; }
+        
         .nav-container { display: flex; justify-content: center; position: relative; padding: 0 5%; }
-        .menu-btn { display: none; font-size: 1.8em; padding: 15px; cursor: pointer; color: var(--blue); position: absolute; right: 10px; top: 0; }
+        
+        /* Mobile Menu Icon */
+        .menu-btn { 
+            display: none; font-size: 1.8em; padding: 15px; 
+            cursor: pointer; color: var(--blue); position: absolute; right: 10px; top: 0; 
+        }
 
         .main-menu { display: flex; flex-wrap: wrap; justify-content: center; width: 100%; }
         .main-menu li a { 
@@ -90,36 +105,57 @@
         /* --- SUB MENU --- */
         .sub-menu { background: #f0f4f8; border-bottom: 1px solid #ddd; display: flex; justify-content: center; flex-wrap: wrap; padding: 10px 0; }
         .sub-menu li a { display: block; padding: 5px 20px; color: #555; font-size: 0.95em; border-left: 1px solid #ddd; }
-        
-        /* --- LAYOUT --- */
+        .sub-menu li a:hover { color: var(--blue); font-weight: bold; }
+
+        /* --- MAIN LAYOUT GRID --- */
         .container { 
-            display: grid; grid-template-columns: 3fr 1fr; gap: 40px; 
-            padding: 40px 5%; max-width: 1500px; margin: 0 auto; 
+            display: grid; 
+            grid-template-columns: 3fr 1fr; /* Desktop: 75% Content, 25% Sidebar */
+            gap: 40px; 
+            padding: 40px 5%; 
+            max-width: 1500px; margin: 0 auto; 
         }
 
         .section-header { 
             display: flex; justify-content: space-between; border-bottom: 3px solid var(--blue); 
             margin-bottom: 25px; padding-bottom: 10px; 
         }
-        .section-header h2 { color: var(--blue); margin: 0; font-size: 1.8em; font-weight: bold; }
+        .section-header h2 { color: var(--blue); margin: 0; font-size: 1.8em; }
 
         /* --- HERO --- */
         .hero { display: grid; grid-template-columns: 2fr 1fr; gap: 25px; margin-bottom: 50px; }
-        .hero-main { position: relative; border-radius: 10px; overflow: hidden; height: 100%; min-height: 400px; }
+        
+        .hero-main { 
+            position: relative; border-radius: 10px; overflow: hidden; 
+            height: 100%; min-height: 400px; 
+        }
         .hero-main img { width: 100%; height: 100%; object-fit: cover; }
         .hero-text { position: absolute; bottom: 0; padding: 30px; background: linear-gradient(to top, var(--blue), transparent); color: white; width: 100%; }
         
-        .side-card { display: flex; align-items: center; background: white; border-radius: 8px; overflow: hidden; height: 100%; border-right: 4px solid var(--gold); box-shadow: 0 2px 5px rgba(0,0,0,0.1); margin-bottom: 10px; }
-        .side-card img { width: 110px; height: 100px; object-fit: cover; }
+        .hero-side { display: flex; flex-direction: column; gap: 20px; height: 100%; }
+        .side-card { 
+            display: flex; align-items: center; background: white; border-radius: 8px; 
+            overflow: hidden; flex: 1; 
+            border-right: 4px solid var(--gold); box-shadow: 0 2px 5px rgba(0,0,0,0.1); 
+        }
+        .side-card img { width: 110px; height: 100%; object-fit: cover; border-radius: 5px; margin-left: 15px; }
         .side-info { padding: 15px; font-weight: bold; color: var(--blue); }
 
         /* --- CARDS --- */
-        .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; }
-        .card { background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.05); transition: 0.3s; border: 1px solid #eee; display: flex; flex-direction: column; }
+        .card-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
+            gap: 25px; 
+        }
+        .card { 
+            background: white; border-radius: 10px; overflow: hidden; 
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05); transition: 0.3s; 
+            border: 1px solid #eee; display: flex; flex-direction: column;
+        }
+        .card:hover { transform: translateY(-5px); border-color: var(--gold); }
         .card-img { width: 100%; height: 200px; object-fit: cover; }
         .card-body { padding: 20px; flex-grow: 1; }
         .card-title { color: var(--blue); margin: 0 0 10px; font-weight: bold; font-size: 1.2em; }
-        .card-tag { background: var(--gold); color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.8em; margin-bottom: 10px; display: inline-block; }
 
         /* --- ECONOMY --- */
         .biz-strip { 
@@ -127,14 +163,24 @@
             background: white; border-radius: 15px; border-top: 5px solid var(--blue); 
             box-shadow: 0 5px 15px rgba(0,0,0,0.05); margin-bottom: 50px; 
         }
-        .biz-item { min-width: 160px; text-align: center; border-right: 1px dashed #ddd; }
+        .biz-item { min-width: 160px; text-align: center; border-right: 1px dashed #ddd; flex-shrink: 0; }
         .biz-val { font-size: 1.4em; font-weight: bold; color: var(--blue); display: block; font-family: var(--font-en) !important; }
 
         /* --- LIFESTYLE --- */
-        .lifestyle-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; }
-        .life-card { position: relative; border-radius: 10px; overflow: hidden; height: 250px; }
+        .lifestyle-grid { 
+            display: grid; 
+            grid-template-columns: repeat(4, 1fr); 
+            gap: 15px; 
+            /* Auto row height prevents overlap */
+            grid-auto-rows: minmax(220px, auto); 
+        }
+        .life-card { position: relative; border-radius: 10px; overflow: hidden; }
         .life-card img { width: 100%; height: 100%; object-fit: cover; }
-        .life-card.big { grid-column: span 2; grid-row: span 2; height: 515px; }
+        
+        .life-card.big { 
+            grid-column: span 2; 
+            grid-row: span 2; 
+        }
         .life-info { position: absolute; bottom: 0; width: 100%; background: rgba(12, 45, 72, 0.85); color: white; padding: 10px; font-weight: bold; }
 
         /* --- SIDEBAR --- */
@@ -142,6 +188,10 @@
         .sidebar-title { font-size: 1.2em; margin-bottom: 15px; border-bottom: 2px solid #eee; padding-bottom: 10px; color: var(--blue); font-weight: bold; }
         .link-list li { margin-bottom: 10px; border-bottom: 1px dashed #eee; padding-bottom: 5px; }
         .link-list a:hover { color: var(--gold); font-weight: bold; }
+
+        .recent-post { display: flex; gap: 15px; margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
+        .recent-post img { width: 70px; height: 70px; object-fit: cover; border-radius: 5px; flex-shrink: 0; }
+        .recent-post h4 { margin: 0; font-size: 0.95em; line-height: 1.4; }
 
         .prayer-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px dashed #eee; }
         .prayer-time { font-family: var(--font-en); font-weight: bold; color: var(--blue); }
@@ -162,15 +212,23 @@
         .footer-btn { width: 100%; padding: 10px; background: var(--gold); color: #0C2D48; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; }
         .copyright { text-align: center; margin-top: 50px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); width: 100%; display: block; font-family: var(--font-en); }
 
-        /* --- MOBILE RESPONSIVE FIXES (IMPORTANT) --- */
+        /* --- MOBILE RESPONSIVE FIXES --- */
         @media (max-width: 900px) {
-            /* 1. Header Overlap Fix */
-            .header-content { flex-direction: column; text-align: center; }
-            .logo-box { flex-direction: column; gap: 10px; margin-bottom: 15px; }
-            .site-title h1 { font-size: 2.2em; line-height: 1.1; } /* Fix overlap */
+            /* 1. Layout: 1 Column */
+            .container { grid-template-columns: 1fr; padding: 20px 4%; gap: 30px; }
+            .hero { grid-template-columns: 1fr; height: auto; }
+            
+            /* 2. Hero Adjustments */
+            .hero-main { height: 250px; min-height: 250px; margin-bottom: 15px; }
+            .hero-side { height: auto; gap: 10px; }
+            .side-card { height: auto; min-height: 100px; flex: none; }
+            
+            /* 3. Header */
+            .header-content { justify-content: center; text-align: center; }
+            .logo-box { flex-direction: column; gap: 10px; }
             .ad-banner { display: none; }
 
-            /* 2. Menu Fix */
+            /* 4. Menu */
             .nav-container { justify-content: flex-start; height: 60px; align-items: center; }
             .menu-btn { display: block; }
             .main-menu { 
@@ -180,22 +238,17 @@
             }
             .main-menu.active { display: flex; } 
             .main-menu li { width: 100%; text-align: center; border-bottom: 1px solid #eee; }
-            .sub-menu { display: none; }
-
-            /* 3. Grid Fixes (One Column) */
-            .container, .hero, .card-grid, .lifestyle-grid, .biz-strip, .hotlines-grid, .footer-grid { 
-                grid-template-columns: 1fr !important; 
-                padding-left: 15px; padding-right: 15px;
-            }
+            .sub-menu { display: none; } /* Hide sub-menu on mobile to save space */
             
-            .hero-main { height: 250px; min-height: 250px; margin-bottom: 20px; }
-            .hero-side { height: auto; gap: 15px; }
+            /* 5. Grid Stacking */
+            .card-grid, .lifestyle-grid, .biz-strip, .hotlines-grid, .footer-grid { grid-template-columns: 1fr; }
             
-            /* 4. Lifestyle Fix */
-            .life-card.big { grid-column: span 1 !important; grid-row: span 1 !important; height: 250px !important; }
-            .life-card { height: 200px !important; margin-bottom: 10px; }
+            /* 6. Lifestyle Fix */
+            .lifestyle-grid { grid-template-rows: auto; grid-auto-rows: auto; }
+            .life-card { height: 200px; margin-bottom: 15px; }
+            .life-card.big { grid-column: span 1; grid-row: span 1; height: 250px; }
             
-            /* 5. Sidebar Bottom */
+            /* 7. Sidebar Order */
             aside { margin-top: 40px; }
         }
     </style>
@@ -204,17 +257,14 @@
 
     <div class="top-bar">
         <div>📞 +960 9901550 | ✉️ academyzaad@gmail.com</div>
-        <div class="lang-switch"><a href="#">ދިވެހި</a> | <a href="#">English</a></div>
+        <div class="lang-switch"><a href="#">ދިވެހި</a> | <a href="#">عربي</a> | <a href="#">English</a></div>
     </div>
 
     <header>
         <div class="header-content">
             <div class="logo-box">
                 <img src="images/logo.png" class="logo-img" alt="Logo" onerror="this.src='https://via.placeholder.com/100/B49658/FFFFFF?text=Z'">
-                <div class="site-title">
-                    <h1>ޒާދް އެކަޑެމީ</h1>
-                    <span>Zaad Academy Blog</span>
-                </div>
+                <div class="site-title"><h1>ޒާދް އެކަޑެމީ</h1><span>Zaad Academy Blog</span></div>
             </div>
             <div class="ad-banner">🎓 ޢިލްމު ހޯދުމަކީ ކޮންމެ މުސްލިމެއްގެ މައްޗަށް ވާޖިބެކެވެ</div>
         </div>
@@ -268,19 +318,22 @@
 
             <div class="section-header"><h2>ޒަމާނީ ތަޢުލީމް & ޓެކްނޮލޮޖީ</h2></div>
             <div class="card-grid">
-                <div class="card"><img src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=400&q=60" class="card-img"><div class="card-body"><span class="card-tag">އިނޮވޭޝަން</span><h3 class="card-title">ކްލާސްރޫމްގައި އޭ.އައި</h3></div></div>
-                <div class="card"><img src="https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=400&q=60" class="card-img"><div class="card-body"><span class="card-tag">ސްކިލްސް</span><h3 class="card-title">ކޯޑިންގ ދަސްކުރުން</h3></div></div>
-                <div class="card"><img src="https://images.unsplash.com/photo-1555436169-20e93ea9a7ff?auto=format&fit=crop&w=400&q=60" class="card-img"><div class="card-body"><span class="card-tag">ސައިންސް</span><h3 class="card-title">ސައިންސް ލެބްތައް</h3></div></div>
+                <div class="card"><img src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=400&q=60" class="card-img"><div class="card-body"><h3 class="card-title">ކްލާސްރޫމްގައި އޭ.އައި</h3></div></div>
+                <div class="card"><img src="https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=400&q=60" class="card-img"><div class="card-body"><h3 class="card-title">ކޯޑިންގ ދަސްކުރުން</h3></div></div>
+                <div class="card"><img src="https://images.unsplash.com/photo-1555436169-20e93ea9a7ff?auto=format&fit=crop&w=400&q=60" class="card-img"><div class="card-body"><h3 class="card-title">ސައިންސް ލެބްތައް</h3></div></div>
             </div>
 
+            <div style="margin-top:50px;"></div>
             <div class="section-header"><h2>އިސްލާމީ އިޤްތިޞާދު</h2></div>
             <div class="biz-strip">
                 <div class="biz-item"><span class="biz-val">MVR 135,420</span><span class="biz-label">ރަނުގެ ނިޞާބު</span></div>
                 <div class="biz-item"><span class="biz-val">MVR 10,800</span><span class="biz-label">ރިހީގެ ނިޞާބު</span></div>
                 <div class="biz-item"><span class="biz-val">ހަނޑޫ / ފައިސާ</span><span class="biz-label">ފިތުރު ޒަކާތް</span></div>
                 <div class="biz-item"><span class="biz-val">އެހީތެރިވޭ</span><span class="biz-label">ޞަދަޤާތް</span></div>
+                <div class="biz-item"><span class="biz-val">ކުރިއެރުން</span><span class="biz-label">ޙަލާލް ޓޫރިޒަމް</span></div>
             </div>
 
+            <div style="margin-top:50px;"></div>
             <div class="section-header"><h2>ތަރުބިއްޔަތާއި ދުޅަހެޔޮކަން</h2></div>
             <div class="lifestyle-grid">
                 <div class="life-card big"><img src="https://images.unsplash.com/photo-1544367563-121910aa6e8a?auto=format&fit=crop&w=600&q=60"><div class="life-info"><h3>ކުދިންގެ ނަފްސާނީ ދުޅަހެޔޮކަން</h3></div></div>
@@ -290,6 +343,7 @@
                 <div class="life-card"><img src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=300&q=60"><div class="life-info"><h5>ފޮތް ކިޔުން</h5></div></div>
             </div>
 
+            <div style="margin-top:50px;"></div>
             <div class="section-header"><h2>ކޯ-ކަރިކިއުލަރ ޙަރަކާތްތައް</h2></div>
             <div class="card-grid">
                 <div class="card"><img src="https://images.unsplash.com/photo-1526976668912-1a811878dd37?auto=format&fit=crop&w=400&q=60" class="card-img"><div class="card-body"><span class="card-tag">ސްކައުޓް</span><h3 class="card-title">އަހަރީ ކޭމްޕް</h3></div></div>
@@ -308,6 +362,7 @@
         </main>
 
         <aside class="sidebar">
+            
             <div class="weather-widget">
                 <div id="live-clock" class="live-clock">--:--</div>
                 <div id="current-date">--</div>
@@ -329,6 +384,18 @@
                 <h3 class="sidebar-title">ވީޑިއޯ ދަރުސް</h3>
                 <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius:8px;">
                     <iframe style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" src="https://www.youtube.com/embed/zpOULjyy-n8" frameborder="0" allowfullscreen></iframe>
+                </div>
+            </div>
+
+            <div class="sidebar-widget">
+                <h3 class="sidebar-title">އެންމެ ފަހުގެ ލިޔުންތައް</h3>
+                <div class="recent-post">
+                    <img src="https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=100&q=60">
+                    <div><h4>ކުދިން ތަރުބިއްޔަތު</h4></div>
+                </div>
+                <div class="recent-post">
+                    <img src="https://images.unsplash.com/photo-1542810634-71277d95dcbb?auto=format&fit=crop&w=100&q=60">
+                    <div><h4>ރަމަޟާން މަހުގެ ތައްޔާރީ</h4></div>
                 </div>
             </div>
 
@@ -361,9 +428,21 @@
             <div class="sidebar-widget">
                 <h3 class="sidebar-title">އެޑްރެސް</h3>
                 <div style="font-size:0.95em; line-height:1.6;">
-                    <p><strong>ޒާދް އެކަޑެމީ</strong><br>މ. ނިޔަނދުރުމާގެ، 2 ވަނަ ފަންގިފިލާ<br>މަޖީދީމަގު، މާލެ<br>ދިވެހިރާއްޖެ</p>
+                    <p><strong>ޒާދް އެކަޑެމީ</strong><br>
+                    މ. ނިޔަނދުރުމާގެ، 2 ވަނަ ފަންގިފިލާ<br>
+                    މަޖީދީމަގު، މާލެ<br>
+                    ދިވެހިރާއްޖެ</p>
                     <a href="https://maps.google.com" target="_blank" style="display:block; margin-top:10px; color:var(--blue); font-weight:bold;">📍 ޗާޓުން ބައްލަވާ</a>
                 </div>
+            </div>
+
+            <div class="sidebar-widget">
+                <h3 class="sidebar-title">ގުޅުންހުރި ލިންކުތައް</h3>
+                <ul class="link-list">
+                    <li><a href="https://www.moe.gov.mv">🏛️ އެޑިއުކޭޝަން މިނިސްޓްރީ</a></li>
+                    <li><a href="https://mqa.gov.mv">📜 އެމް.ކިއު.އޭ</a></li>
+                    <li><a href="https://ium.edu.mv">🎓 ޤައުމީ ޔުނިވަރސިޓީ</a></li>
+                </ul>
             </div>
 
             <div class="sidebar-widget">
@@ -394,6 +473,14 @@
                 </ul>
             </div>
             <div class="footer-col">
+                <h3>ވަސީލަތްތައް</h3>
+                <ul>
+                    <li><a href="#">› ލައިބްރަރީ</a></li>
+                    <li><a href="#">› ފޮޓޯ ގެލެރީ</a></li>
+                    <li><a href="#">› ސުވާލާއި ޖަވާބު</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
                 <h3>ނިއުސްލެޓަރ</h3>
                 <form action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
                     <input type="email" name="subscriber_email" placeholder="Email Address" class="footer-input">
@@ -401,7 +488,9 @@
                 </form>
             </div>
         </div>
-        <div class="copyright">© 2025 Zaad Academy Blog. All Rights Reserved.</div>
+        <div class="copyright">
+            © 2025 Zaad Academy Blog. All Rights Reserved.
+        </div>
     </footer>
 
     <script>
@@ -423,17 +512,7 @@
                 document.getElementById('maghrib').innerText = timings.Maghrib;
                 document.getElementById('isha').innerText = timings.Isha;
             });
-            
-        function toggleMenu() {
-            var menu = document.querySelector('.main-menu');
-            if (menu.style.display === "flex") {
-                menu.style.display = "none";
-            } else {
-                menu.style.display = "flex";
-                menu.style.flexDirection = "column";
-            }
-        }
-        document.querySelector('.menu-btn').addEventListener('click', toggleMenu);
     </script>
+
 </body>
 </html>
