@@ -17,8 +17,7 @@
             --white: #ffffff;
             --bg: #f4f6f8;
             --text: #1a1a1a;
-            /* FONT STACK: Works on both Mobile & Desktop */
-            --font-dv: 'Mv Galan', 'Noto Sans Thaana', 'Faruma', sans-serif; 
+            --font-dv: 'Mv Galan', 'Faruma', 'Noto Sans Thaana', sans-serif; 
             --font-en: 'Playfair Display', serif;
         }
 
@@ -32,15 +31,12 @@
             color: var(--text);
             line-height: 1.8;
             margin: 0;
-            overflow-x: hidden;
+            overflow-x: hidden; /* Fix horizontal scroll */
         }
 
-        /* Force Headers to use Dhivehi Font */
-        h1, h2, h3, h4, h5, h6 { font-family: var(--font-dv); font-weight: bold; }
-        
         a { text-decoration: none; color: inherit; transition: 0.3s; }
         ul { list-style: none; padding: 0; margin: 0; }
-        img { max-width: 100%; display: block; height: auto; }
+        img { max-width: 100%; display: block; }
 
         /* --- HEADER --- */
         .top-bar {
@@ -53,9 +49,11 @@
         header {
             background: var(--blue); padding: 30px 5%;
             border-bottom: 5px solid var(--gold); text-align: center;
+            position: relative;
         }
         
         .header-content { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; }
+        
         .logo-box { display: flex; align-items: center; gap: 20px; }
         .logo-img { height: 90px; width: 90px; border-radius: 50%; border: 3px solid var(--gold); background: white; padding: 5px; }
         
@@ -74,29 +72,27 @@
         /* --- TICKER --- */
         .ticker-wrap { background: #e9ecef; overflow: hidden; height: 40px; line-height: 40px; border-bottom: 1px solid #ccc; }
         .ticker { display: inline-block; white-space: nowrap; padding-right: 100%; animation: ticker 40s linear infinite; }
-        .ticker-item { display: inline-block; padding: 0 2rem; color: #333; font-weight: bold; font-family: var(--font-dv); }
+        .ticker-item { display: inline-block; padding: 0 2rem; color: #333; font-weight: bold; }
         @keyframes ticker { 0% { transform: translate3d(0, 0, 0); } 100% { transform: translate3d(100%, 0, 0); } }
 
-        /* --- ROYAL NAV STYLE (Restored) --- */
-        nav { background: white; box-shadow: 0 4px 15px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 1000; border-top: 4px solid var(--gold); }
+        /* --- NAV --- */
+        nav { background: white; box-shadow: 0 4px 10px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 1000; }
         .nav-container { display: flex; justify-content: center; position: relative; padding: 0 5%; }
-        
         .menu-btn { display: none; font-size: 1.8em; padding: 15px; cursor: pointer; color: var(--blue); position: absolute; right: 10px; top: 0; }
 
         .main-menu { display: flex; flex-wrap: wrap; justify-content: center; width: 100%; }
         .main-menu li a { 
-            display: block; padding: 16px 22px; color: var(--blue); 
+            display: block; padding: 15px 20px; color: var(--blue); 
             font-weight: bold; font-size: 1.1em; border-bottom: 3px solid transparent; 
-            transition: all 0.3s ease;
         }
-        .main-menu li a:hover { color: var(--gold); border-bottom: 3px solid var(--gold); background: #fdfdfd; }
+        .main-menu li a:hover { color: var(--gold); border-bottom: 3px solid var(--gold); background: #f9f9f9; }
 
-        /* Royal Sub Menu */
-        .sub-menu { background: var(--blue); border-bottom: 4px solid var(--gold); display: flex; justify-content: center; flex-wrap: wrap; padding: 10px 0; }
-        .sub-menu li a { display: block; padding: 8px 20px; color: var(--white); font-size: 1em; border-left: 1px solid rgba(255,255,255,0.1); }
-        .sub-menu li a:hover { color: var(--gold); }
+        /* --- SUB MENU --- */
+        .sub-menu { background: #f0f4f8; border-bottom: 1px solid #ddd; display: flex; justify-content: center; flex-wrap: wrap; padding: 10px 0; }
+        .sub-menu li a { display: block; padding: 5px 20px; color: #555; font-size: 0.95em; border-left: 1px solid #ddd; }
+        .sub-menu li a:hover { color: var(--blue); font-weight: bold; }
 
-        /* --- LAYOUT GRID --- */
+        /* --- LAYOUT GRID (DESKTOP DEFAULT) --- */
         .container { 
             display: grid; grid-template-columns: 3fr 1fr; gap: 40px; 
             padding: 40px 5%; max-width: 1500px; margin: 0 auto; 
@@ -106,21 +102,21 @@
             display: flex; justify-content: space-between; border-bottom: 3px solid var(--blue); 
             margin-bottom: 25px; padding-bottom: 10px; 
         }
-        .section-header h2 { color: var(--blue); margin: 0; font-size: 1.8em; font-weight: bold; }
+        .section-header h2 { color: var(--blue); margin: 0; font-size: 1.8em; }
 
         /* --- HERO --- */
         .hero { display: grid; grid-template-columns: 2fr 1fr; gap: 25px; margin-bottom: 50px; }
-        .hero-main { position: relative; border-radius: 10px; overflow: hidden; height: 100%; min-height: 400px; }
+        .hero-main { position: relative; border-radius: 10px; overflow: hidden; height: 450px; }
         .hero-main img { width: 100%; height: 100%; object-fit: cover; }
         .hero-text { position: absolute; bottom: 0; padding: 30px; background: linear-gradient(to top, var(--blue), transparent); color: white; width: 100%; }
         
         .hero-side { display: flex; flex-direction: column; gap: 20px; height: 100%; }
-        .side-card { display: flex; align-items: center; background: white; border-radius: 8px; overflow: hidden; flex: 1; border-right: 4px solid var(--gold); box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        .side-card img { width: 110px; height: 100%; object-fit: cover; border-radius: 5px; margin-left: 15px; }
+        .side-card { display: flex; align-items: center; background: white; border-radius: 8px; overflow: hidden; border-right: 4px solid var(--gold); box-shadow: 0 2px 5px rgba(0,0,0,0.1); flex: 1; }
+        .side-card img { width: 110px; height: 100%; object-fit: cover; border-radius: 0; margin-left: 0; }
         .side-info { padding: 15px; font-weight: bold; color: var(--blue); }
 
         /* --- CARDS & GRIDS --- */
-        .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; }
+        .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 25px; }
         .card { background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.05); transition: 0.3s; border: 1px solid #eee; display: flex; flex-direction: column; }
         .card:hover { transform: translateY(-5px); border-color: var(--gold); }
         .card-img { width: 100%; height: 200px; object-fit: cover; }
@@ -138,10 +134,10 @@
         .biz-val { font-size: 1.4em; font-weight: bold; color: var(--blue); display: block; font-family: var(--font-en); }
 
         /* --- LIFESTYLE --- */
-        .lifestyle-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; }
-        .life-card { position: relative; border-radius: 10px; overflow: hidden; height: 250px; }
+        .lifestyle-grid { display: grid; grid-template-columns: repeat(4, 1fr); grid-template-rows: repeat(2, 200px); gap: 15px; }
+        .life-card { position: relative; border-radius: 10px; overflow: hidden; }
         .life-card img { width: 100%; height: 100%; object-fit: cover; }
-        .life-card.big { grid-column: span 2; grid-row: span 2; height: 515px; }
+        .life-card.big { grid-column: span 2; grid-row: span 2; }
         .life-info { position: absolute; bottom: 0; width: 100%; background: rgba(12, 45, 72, 0.85); color: white; padding: 10px; font-weight: bold; }
 
         /* --- SIDEBAR --- */
@@ -151,8 +147,8 @@
         .link-list a:hover { color: var(--gold); font-weight: bold; }
 
         .recent-post { display: flex; gap: 15px; margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
-        .recent-post img { width: 70px; height: 70px; object-fit: cover; border-radius: 5px; flex-shrink: 0; }
-        .recent-post h4 { margin: 0; font-size: 0.95em; line-height: 1.4; font-weight: bold; }
+        .recent-post img { width: 70px; height: 70px; object-fit: cover; border-radius: 5px; }
+        .recent-post h4 { margin: 0; font-size: 0.95em; line-height: 1.4; }
 
         .prayer-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px dashed #eee; }
         .prayer-time { font-family: var(--font-en); font-weight: bold; color: var(--blue); }
@@ -164,45 +160,60 @@
         .hotline-item { background: #f0f4f8; padding: 10px; border-radius: 8px; text-align: center; font-weight: bold; color: var(--blue); font-family: var(--font-en); }
 
         /* --- FOOTER --- */
-        footer { background: var(--blue); color: #ccc; padding: 60px 5%; margin-top: 50px; border-top: 5px solid var(--gold); }
+        footer { background: var(--blue); color: #ccc; padding: 60px 5%; margin-top: 80px; border-top: 5px solid var(--gold); }
         .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 30px; text-align: right; }
-        .footer-col h3 { color: var(--gold); margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; font-weight: bold; }
+        .footer-col h3 { color: var(--gold); margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; }
         .footer-col ul li { margin-bottom: 10px; border-bottom: 1px dashed rgba(255,255,255,0.1); padding-bottom: 5px; }
         .footer-col a:hover { color: white; padding-right: 5px; }
         .footer-input { width: 100%; padding: 10px; border-radius: 4px; border: none; margin-bottom: 10px; }
         .footer-btn { width: 100%; padding: 10px; background: var(--gold); color: #0C2D48; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; }
-        .copyright { text-align: center; margin-top: 50px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); width: 100%; display: block; font-family: var(--font-en); }
+        .copyright { text-align: center; margin-top: 50px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); width: 100%; display: block; }
 
-        /* --- MOBILE RESPONSIVE RULES --- */
+        /* --- MOBILE RESPONSIVE (CRITICAL FIXES) --- */
         @media (max-width: 900px) {
-            .container { grid-template-columns: 1fr; padding: 20px 5%; gap: 30px; }
-            .hero { grid-template-columns: 1fr; height: auto; }
-            .hero-main { height: 250px; min-height: 250px; margin-bottom: 20px; }
-            .hero-side { height: auto; gap: 15px; }
-            .side-card { height: auto; min-height: 100px; flex: none; }
+            /* Force Single Column Layout on Mobile */
+            .container, .hero, .card-grid, .lifestyle-grid, .biz-strip, .hotlines-grid, .footer-grid { 
+                grid-template-columns: 1fr !important; 
+            }
+            
+            /* Reset Rows for Lifestyle Grid */
+            .lifestyle-grid { grid-template-rows: auto !important; }
+            
+            /* Adjust Hero Section Height */
+            .hero-main { height: 250px !important; margin-bottom: 20px; }
+            .hero-side { height: auto !important; }
+            
+            /* Fix Side Cards Height */
+            .side-card { height: auto !important; min-height: 100px; padding: 5px 0; }
+            
+            /* Hide Ad Banner on Mobile */
             .ad-banner { display: none; }
             
+            /* Header Adjustments */
             .header-content { justify-content: center; text-align: center; }
             .logo-box { flex-direction: column; gap: 10px; }
             
+            /* Navigation Mobile Menu */
             .nav-container { justify-content: flex-start; height: 60px; align-items: center; }
             .menu-btn { display: block; }
             .main-menu { 
                 display: none; flex-direction: column; width: 100%; 
                 background: white; position: absolute; top: 60px; left: 0; 
-                box-shadow: 0 5px 10px rgba(0,0,0,0.2); border-top: 1px solid #eee; z-index: 2000;
+                box-shadow: 0 5px 10px rgba(0,0,0,0.1); border-top: 1px solid #eee; z-index: 2000;
             }
             .main-menu.active { display: flex; } 
             .main-menu li { width: 100%; text-align: center; border-bottom: 1px solid #eee; }
-            .sub-menu { display: none; }
+            .sub-menu { display: none; } /* Hide sub-menu on mobile to save space */
             
-            /* Unstacking Grids */
-            .card-grid, .lifestyle-grid, .biz-strip, .hotlines-grid, .footer-grid { grid-template-columns: 1fr; }
-            .lifestyle-grid { grid-template-rows: auto; grid-auto-rows: auto; }
-            .life-card.big { grid-column: span 1; grid-row: span 1; height: 250px; }
-            .life-card { height: 200px; margin-bottom: 15px; }
+            /* Reset Life Card sizes for mobile */
+            .life-card.big { grid-column: span 1 !important; grid-row: span 1 !important; height: 250px !important; }
+            .life-card { height: 200px !important; margin-bottom: 15px; }
             
+            /* Push Sidebar to bottom */
             aside { margin-top: 40px; }
+            
+            /* Adjust Container Padding */
+            .container { padding: 15px !important; }
         }
     </style>
 </head>
@@ -232,7 +243,7 @@
 
     <nav>
         <div class="nav-container">
-            <div class="menu-btn" onclick="toggleMenu()"><i class="fas fa-bars"></i></div>
+            <div class="menu-btn" onclick="document.querySelector('.main-menu').classList.toggle('active')"><i class="fas fa-bars"></i></div>
             <ul class="main-menu">
                 <li><a href="index.html">ހޯމް</a></li>
                 <li><a href="courses.html">ކޯސްތައް</a></li>
@@ -466,6 +477,7 @@
                 document.getElementById('isha').innerText = timings.Isha;
             });
             
+        // Toggle Mobile Menu
         function toggleMenu() {
             var menu = document.querySelector('.main-menu');
             if (menu.style.display === "flex") {
@@ -475,6 +487,8 @@
                 menu.style.flexDirection = "column";
             }
         }
+        
+        // Ensure menu click works
         document.querySelector('.menu-btn').addEventListener('click', toggleMenu);
     </script>
 
