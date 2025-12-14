@@ -428,11 +428,19 @@
             </div>
 
             <div class="card" style="margin-top:40px; padding:30px; border-top:4px solid var(--academy-gold);">
-                <h3 style="color:var(--academy-blue);">ޚިޔާލު / ސުވާލު ފޮނުއްވާ</h3>
-                <input type="text" placeholder="ނަން" class="footer-input">
-                <textarea rows="3" placeholder="ތިޔަބޭފުޅާގެ މެސެޖް ލިޔުއްވާ..." class="footer-input"></textarea>
-                <button class="footer-btn">ފޮނުވާ</button>
-            </div>
+    <h3 style="color:var(--academy-blue);">ޚިޔާލު / ސުވާލު ފޮނުއްވާ</h3>
+    
+    <form action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+        
+        <input type="text" name="name" placeholder="ނަން" style="width:100%; padding:10px; margin:10px 0; border:1px solid #ddd; border-radius:4px;" required>
+        
+        <input type="email" name="email" placeholder="އީމެއިލް (ޖަވާބު ބޭނުންފުޅުނަމަ)" style="width:100%; padding:10px; margin:10px 0; border:1px solid #ddd; border-radius:4px;" required>
+        
+        <textarea name="message" rows="3" placeholder="ތިޔަބޭފުޅާގެ މެސެޖް ލިޔުއްވާ..." style="width:100%; padding:10px; border:1px solid #ddd; border-radius:4px;" required></textarea>
+        
+        <button type="submit" style="padding:10px 25px; background:var(--academy-blue); color:white; border:none; cursor:pointer; margin-top:10px; border-radius:4px; font-weight:bold;">ފޮނުވާ</button>
+    </form>
+</div>
         </main>
 
         <aside class="sidebar">
@@ -608,3 +616,4 @@
     </script>
 </body>
 </html>
+
