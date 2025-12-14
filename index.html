@@ -17,6 +17,8 @@
             --white: #ffffff;
             --bg: #f4f6f8;
             --text: #1a1a1a;
+            
+            /* PRIMARY FONT IS NOTO SANS (Mobile Safe) */
             --font-dv: 'Noto Sans Thaana', 'Faruma', sans-serif; 
             --font-en: 'Playfair Display', serif;
         }
@@ -60,7 +62,7 @@
         
         .site-title h1 { color: white; margin: 0; font-size: 3em; line-height: 1; }
         .site-title span { 
-            font-family: var(--font-en); color: white; 
+            font-family: var(--font-en); color: white; /* English Name White */
             font-size: 0.9em; text-transform: uppercase; display: block; 
             margin-top: 5px; font-weight: bold; letter-spacing: 2px;
         }
@@ -80,6 +82,7 @@
         nav { background: white; box-shadow: 0 4px 10px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 1000; }
         
         .nav-container { display: flex; justify-content: center; position: relative; padding: 0 5%; }
+        
         .menu-btn { 
             display: none; font-size: 1.8em; padding: 15px; 
             cursor: pointer; color: var(--blue); position: absolute; right: 10px; top: 0; 
@@ -124,8 +127,9 @@
         .card-img { width: 100%; height: 200px; object-fit: cover; }
         .card-body { padding: 20px; }
         .card-title { color: var(--blue); margin: 0 0 10px; font-weight: bold; font-size: 1.2em; }
+        .card-tag { background: var(--gold); color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.8em; margin-bottom: 10px; display: inline-block; }
 
-        /* ISLAMIC ECONOMY */
+        /* ISLAMIC ECONOMY STRIP */
         .biz-strip { 
             display: flex; gap: 20px; overflow-x: auto; padding: 25px; 
             background: white; border-radius: 15px; border-top: 5px solid var(--blue); 
@@ -147,22 +151,13 @@
         .link-list li { margin-bottom: 10px; border-bottom: 1px dashed #eee; padding-bottom: 5px; }
         .link-list a:hover { color: var(--gold); font-weight: bold; }
 
-        .prayer-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px dashed #eee; }
-        .prayer-time { font-family: var(--font-en); font-weight: bold; color: var(--blue); }
-
-        /* NEW SIDEBAR STYLES (RECENT POSTS) */
+        /* NEW WIDGETS */
         .recent-post-item { display: flex; gap: 15px; margin-bottom: 15px; align-items: flex-start; border-bottom: 1px solid #f0f0f0; padding-bottom: 10px; }
-        .recent-post-item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
         .recent-thumb { width: 70px; height: 70px; object-fit: cover; border-radius: 5px; flex-shrink: 0; }
-        .recent-meta { font-size: 0.85em; color: #888; margin-top: 5px; display: block; }
-        .recent-title { font-size: 0.95em; font-weight: bold; color: #333; line-height: 1.4; transition: 0.2s; }
-        .recent-title:hover { color: var(--gold); }
-
-        /* Quote Box */
         .quote-box { background: #f9f9f9; padding: 15px; border-right: 4px solid var(--gold); font-style: italic; color: #555; position: relative; }
-        .quote-icon { font-size: 1.5em; color: #ddd; position: absolute; top: 10px; left: 10px; }
 
-        /* Clock */
+        /* CLOCK & PRAYER */
+        .prayer-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px dashed #eee; }
         .weather-widget { text-align: center; background: linear-gradient(135deg, var(--light-blue), var(--blue)); color: white; padding: 25px; border-radius: 10px; margin-bottom: 25px; }
         .live-clock { font-size: 2.5em; font-weight: bold; font-family: var(--font-en); margin-bottom: 5px; display: block; }
 
@@ -171,6 +166,7 @@
 
         /* FOOTER */
         footer { background: var(--blue); color: #ccc; padding: 50px 5%; margin-top: 50px; border-top: 5px solid var(--gold); text-align: center; }
+        .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 30px; text-align: right; }
         .footer-input { width: 100%; padding: 10px; border-radius: 4px; border: none; margin-bottom: 10px; }
         .footer-btn { width: 100%; padding: 10px; background: var(--gold); color: #0C2D48; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; }
 
@@ -180,12 +176,8 @@
             .hero { grid-template-columns: 1fr; }
             .hero-main { height: 250px; }
             .ad-banner { display: none; }
-            
-            /* Center Header on Mobile */
             .header-content { justify-content: center; text-align: center; }
             .logo-box { flex-direction: column; gap: 10px; }
-            
-            /* Mobile Menu Logic */
             .nav-container { justify-content: flex-start; height: 60px; align-items: center; }
             .menu-btn { display: block; }
             .main-menu { 
@@ -195,14 +187,11 @@
             }
             .main-menu.active { display: flex; } 
             .main-menu li { width: 100%; text-align: center; border-bottom: 1px solid #eee; }
-            .sub-menu { display: none; } /* Hide sub-menu on mobile */
-            
-            /* Stack Grids */
-            .card-grid, .lifestyle-grid, .biz-strip, .hotlines-grid { grid-template-columns: 1fr; }
+            .sub-menu { display: none; }
+            .card-grid, .lifestyle-grid, .biz-strip, .hotlines-grid, .footer-grid { grid-template-columns: 1fr; }
             .lifestyle-grid { grid-template-rows: auto; }
             .life-card.big { grid-column: span 1; grid-row: span 1; height: 250px; }
             .life-card { height: 200px; margin-bottom: 15px; }
-            
             aside { margin-top: 40px; }
         }
     </style>
@@ -210,42 +199,30 @@
 <body>
 
     <div class="top-bar">
-        <div>📞 +960 9901550</div>
-        <div class="lang-switch">
-            <a href="index.html" class="active">ދިވެހި</a> | 
-            <a href="index-ar.html">عربي</a> | 
-            <a href="index-en.html">English</a>
-        </div>
+        <div class="contact-info"><span>📞 +960 9901550</span><span style="margin-right:15px;">✉️ academyzaa@gmail.com</span></div>
+        <div class="lang-switch"><a href="#">ދިވެހި</a> | <a href="#">عربي</a> | <a href="#">English</a></div>
     </div>
 
     <header>
         <div class="header-content">
             <div class="logo-box">
-                <img src="images/logo.png" class="logo-img" alt="Logo" onerror="this.src='https://via.placeholder.com/100/B49658/FFFFFF?text=Z'">
-                <div class="site-title">
-                    <h1>ޒާދް އެކަޑެމީ</h1>
-                    <span>Zaad Academy Blog</span>
-                </div>
+                <img src="images/logo.png" class="logo-img" alt="Logo" onerror="this.src='https://via.placeholder.com/90/B49658/FFFFFF?text=Z'">
+                <div class="site-title"><h1>ޒާދް އެކަޑެމީ</h1><span>Zaad Academy Blog</span></div>
             </div>
-            <div class="ad-banner">
-                🎓 ޢިލްމު ހޯދުމަކީ ކޮންމެ މުސްލިމެއްގެ މައްޗަށް ވާޖިބެކެވެ
-            </div>
+            <div class="ad-banner">🎓 ޢިލްމު ހޯދުމަކީ ކޮންމެ މުސްލިމެއްގެ މައްޗަށް ވާޖިބެކެވެ</div>
         </div>
     </header>
 
     <div class="ticker-wrap">
         <div class="ticker">
             <div class="ticker-item">🔴 ޒާދް އެކަޑެމީގެ އައު ކޯސްތަކަށް ކުރިމަތިލުމުގެ ފުރުޞަތު ހުޅުވާލައިފި</div>
-            <div class="ticker-item"><span>🤖</span> ކްލާސްރޫމްތަކުގައި އޭ.އައި ބޭނުންކުރުމާ ގުޅޭ ޚާއްޞަ ވޯކްޝޮޕެއް ފަށައިފި</div>
-            <div class="ticker-item"><span>🏆</span> ޤައުމީ ޤުރުއާން މުބާރާތުގައި ޒާދް އެކަޑެމީގެ ދަރިވަރުން ރަން ވަނަތަކެއް ހޯދައިފި</div>
+            <div class="ticker-item">🏆 ޤައުމީ ޤުރުއާން މުބާރާތުގެ ނަތީޖާ</div>
         </div>
     </div>
 
     <nav>
         <div class="nav-container">
-            <div class="menu-btn" onclick="document.querySelector('.main-menu').classList.toggle('active')">
-                <i class="fas fa-bars"></i>
-            </div>
+            <div class="menu-btn" onclick="document.querySelector('.main-menu').classList.toggle('active')"><i class="fas fa-bars"></i></div>
             <ul class="main-menu">
                 <li><a href="index.html">ހޯމް</a></li>
                 <li><a href="courses.html">ކޯސްތައް</a></li>
@@ -268,14 +245,11 @@
     </ul>
 
     <div class="container">
-        
         <main>
             <div class="hero">
                 <div class="hero-main">
-                    <img src="https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&w=800&q=80" alt="Hero">
-                    <div class="hero-text">
-                        <h2>ޒާދް އެކަޑެމީ: އުނގެނުމުގެ އައު މަންޒިލް</h2>
-                    </div>
+                    <img src="https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&w=800&q=80">
+                    <div class="hero-text"><h2>އޭ.އައި ގެ އެހީގައި ކިޔަވައިދިނުން</h2></div>
                 </div>
                 <div>
                     <div class="side-card"><img src="https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=200&q=60"><div class="side-info">އޮންލައިން ކޯސް</div></div>
@@ -327,15 +301,15 @@
             <div class="card-grid">
                 <div class="card">
                     <img src="https://images.unsplash.com/photo-1526976668912-1a811878dd37?auto=format&fit=crop&w=400&q=60" class="card-img">
-                    <div class="card-body"><h3>ސްކައުޓް ކޭމްޕް</h3></div>
+                    <div class="card-body"><span class="card-tag">ސްކައުޓް</span><h3>އަހަރީ ކޭމްޕް</h3></div>
                 </div>
                 <div class="card">
                     <img src="https://images.unsplash.com/photo-1585829365295-ab7cd400c167?auto=format&fit=crop&w=400&q=60" class="card-img">
-                    <div class="card-body"><h3>ޤުރުއާން މުބާރާތް</h3></div>
+                    <div class="card-body"><span class="card-tag">ޤުރުއާން</span><h3>މުބާރާތުގެ ނަތީޖާ</h3></div>
                 </div>
                 <div class="card">
                     <img src="https://images.unsplash.com/photo-1577985051167-0d49eec21977?auto=format&fit=crop&w=400&q=60" class="card-img">
-                    <div class="card-body"><h3>އަދަބީ ހަރަކާތްތައް</h3></div>
+                    <div class="card-body"><span class="card-tag">އަދަބީ</span><h3>ވާހަކަ ދެއްކުން</h3></div>
                 </div>
             </div>
 
@@ -343,14 +317,13 @@
                 <h3 class="sidebar-title">ޚިޔާލު ފޮނުއްވާ</h3>
                 <form action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
                     <input type="text" name="name" placeholder="ނަން" style="width:100%; padding:10px; margin-bottom:10px; border:1px solid #ddd; border-radius:4px;" required>
-                    <textarea name="msg" rows="3" placeholder="މެސެޖް" style="width:100%; padding:10px; margin-bottom:10px; border:1px solid #ddd; border-radius:4px;" required></textarea>
-                    <button style="padding:10px 25px; background:var(--blue); color:white; border:none; cursor:pointer;">ފޮނުވާ</button>
+                    <textarea name="message" rows="3" placeholder="މެސެޖް" style="width:100%; padding:10px; margin-bottom:10px; border:1px solid #ddd; border-radius:4px;" required></textarea>
+                    <button style="padding:10px 25px; background:var(--blue); color:white; border:none; cursor:pointer; border-radius:4px;">ފޮނުވާ</button>
                 </form>
             </div>
         </main>
 
-        <aside class="sidebar">
-            
+        <aside>
             <div class="weather-widget">
                 <div id="live-clock" class="live-clock">--:--</div>
                 <div id="current-date">--</div>
@@ -370,29 +343,13 @@
 
             <div class="sidebar-widget">
                 <h3 class="sidebar-title">އެންމެ ފަހުގެ ލިޔުންތައް</h3>
-                
                 <div class="recent-post-item">
                     <img src="https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=100&q=60" alt="Thumb" class="recent-thumb">
-                    <div>
-                        <a href="#" class="recent-title">ކުދިން ތަރުބިއްޔަތު ކުރުމުގައި މައިންބަފައިންގެ ދައުރު</a>
-                        <span class="recent-meta">📅 12 ޑިސެމްބަރ 2024</span>
-                    </div>
+                    <div><a href="#" class="recent-title">ކުދިން ތަރުބިއްޔަތު</a></div>
                 </div>
-
                 <div class="recent-post-item">
                     <img src="https://images.unsplash.com/photo-1542810634-71277d95dcbb?auto=format&fit=crop&w=100&q=60" alt="Thumb" class="recent-thumb">
-                    <div>
-                        <a href="#" class="recent-title">ރަމަޟާން މަހަށް ތައްޔާރުވުން: ޚާއްޞަ ގައިޑް</a>
-                        <span class="recent-meta">📅 10 ޑިސެމްބަރ 2024</span>
-                    </div>
-                </div>
-
-                <div class="recent-post-item">
-                    <img src="https://images.unsplash.com/photo-1532012197267-da84d127e765?auto=format&fit=crop&w=100&q=60" alt="Thumb" class="recent-thumb">
-                    <div>
-                        <a href="#" class="recent-title">ޢިލްމު އުނގެނުމުގެ މާތްކަން</a>
-                        <span class="recent-meta">📅 08 ޑިސެމްބަރ 2024</span>
-                    </div>
+                    <div><a href="#" class="recent-title">ރަމަޟާން މަހަށް ތައްޔާރުވުން</a></div>
                 </div>
             </div>
 
@@ -400,15 +357,14 @@
                 <h3 class="sidebar-title">ދުވަހުގެ ނަސޭހަތް</h3>
                 <div class="quote-box">
                     <i class="fas fa-quote-right quote-icon"></i>
-                    <p>"ތިޔަބައިމީހުންގެ ތެރެއިން އެންމެ ހެޔޮކަން ބޮޑުވެގެންވާ މީހަކީ ޤުރުއާން އުނގެނި އަދި އެ އުނގަންނައިދޭ މީހާއެވެ."</p>
-                    <p style="text-align:left; font-weight:bold; font-size:0.9em; margin-top:10px;">— ޞަޙީޙުލް ބުޚާރީ</p>
+                    <p>"ހަމަކަށަވަރުން ޢިލްމުވެރިންނަކީ ނަބީބޭކަލުންގެ ވާރުތަވެރިންނެވެ."</p>
                 </div>
             </div>
 
             <div class="sidebar-widget">
                 <h3 class="sidebar-title">ވީޑިއޯ ދަރުސް</h3>
                 <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius:8px;">
-                    <iframe style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" src="https://www.youtube.com/embed/zpOULjyy-n8?si=your_video_id" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                    <iframe style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" src="https://www.youtube.com/embed/zpOULjyy-n8" frameborder="0" allowfullscreen></iframe>
                 </div>
             </div>
 
@@ -418,23 +374,6 @@
                     <li><a href="https://www.moe.gov.mv">🏛️ އެޑިއުކޭޝަން މިނިސްޓްރީ</a></li>
                     <li><a href="https://mqa.gov.mv">📜 އެމް.ކިއު.އޭ</a></li>
                     <li><a href="https://ium.edu.mv">🎓 ޤައުމީ ޔުނިވަރސިޓީ</a></li>
-                </ul>
-            </div>
-
-            <div class="sidebar-widget">
-                <h3 class="sidebar-title">ދައުލަތުގެ ވުޒާރާތައް</h3>
-                <ul class="link-list">
-                    <li><a href="#">🏛️ ރައީސް އޮފީސް</a></li>
-                    <li><a href="#">🕌 އިސްލާމިކް މިނިސްޓްރީ</a></li>
-                </ul>
-            </div>
-
-            <div class="sidebar-widget">
-                <h3 class="sidebar-title">ޞިއްޙީ & މުވާޞަލާތީ</h3>
-                <ul class="link-list">
-                    <li><a href="#">🏥 އައި.ޖީ.އެމް.އެޗް</a></li>
-                    <li><a href="#">🩺 އޭ.ޑީ.ކޭ</a></li>
-                    <li><a href="#">📡 ދިރާގު / އުރީދޫ</a></li>
                 </ul>
             </div>
 
@@ -458,13 +397,9 @@
                 <p>📧 academyzaa@gmail.com</p>
             </div>
             <div class="footer-col">
-                <h3>އަވަސް ލިންކު</h3>
-                <ul><li><a href="#">ކޯސްތައް</a></li><li><a href="#">ގުޅިލައްވާ</a></li></ul>
-            </div>
-            <div class="footer-col">
                 <h3>ނިއުސްލެޓަރ</h3>
                 <form action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
-                    <input type="email" name="subscriber_email" placeholder="Email Address" class="footer-input">
+                    <input type="email" placeholder="Email Address" class="footer-input">
                     <button class="footer-btn">Subscribe</button>
                 </form>
             </div>
@@ -473,7 +408,6 @@
     </footer>
 
     <script>
-        // Clock
         function updateClock() {
             const now = new Date();
             document.getElementById('live-clock').innerText = now.toLocaleTimeString('en-US', { hour12: true });
@@ -481,7 +415,6 @@
         }
         setInterval(updateClock, 1000); updateClock();
 
-        // Prayer Times API
         fetch('https://api.aladhan.com/v1/timingsByCity?city=Male&country=Maldives&method=1')
             .then(response => response.json())
             .then(data => {
