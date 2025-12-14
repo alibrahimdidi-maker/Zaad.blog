@@ -3,14 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ޒާދް އެކަޑެމީ ބްލޮގް - Zaad Academy</title>
+    <title>ޒާދް އެކަޑެމީ - Zaad Academy</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thaana&family=Amiri:wght@400;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <style>
-        /* --- CSS STYLES --- */
+        /* --- 1. FONT SETUP (MV GALAN) --- */
+        @font-face {
+            font-family: 'Mv Galan';
+            /* Ensure file is named "Mv Galan.ttf" inside "fonts" folder */
+            src: url('fonts/Mv Galan.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        /* --- 2. CSS VARIABLES --- */
         :root {
-            /* Theme Colors */
             --academy-blue: #0C2D48;
             --academy-light: #2E8BC0;
             --academy-gold: #B49658;
@@ -19,19 +28,12 @@
             --off-white: #f4f6f8;
             --text-dark: #1a1a1a;
             
-            /* Shadows */
             --shadow-card: 0 5px 20px rgba(12, 45, 72, 0.1);
             --shadow-hover: 0 15px 30px rgba(12, 45, 72, 0.2);
             
-            /* Fonts */
-            --font-dv: 'Faruma', 'Noto Sans Thaana', sans-serif; 
+            /* Main Font set to Mv Galan */
+            --font-dv: 'Mv Galan', 'Faruma', 'Noto Sans Thaana', sans-serif; 
             --font-en: 'Playfair Display', serif;
-        }
-
-        @font-face {
-            font-family: 'Faruma';
-            src: url('fonts/Faruma.ttf') format('truetype');
-            font-weight: normal;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -58,7 +60,6 @@
             border-bottom: 1px solid rgba(255,255,255,0.1);
         }
         
-        /* Language Switcher */
         .lang-switch { display: flex; gap: 15px; align-items: center; }
         .lang-switch a { display: flex; align-items: center; gap: 5px; color: #aaa; font-weight: bold; font-size: 0.9em; }
         .lang-switch a:hover, .lang-switch a.active { color: var(--academy-gold); }
@@ -86,37 +87,36 @@
         .site-logo h1 {
             font-size: 3.5em; color: var(--white); margin: 0; line-height: 1;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            font-family: var(--font-dv); /* Ensure logo uses new font */
         }
         
-        /* --- CHANGED TO WHITE HERE --- */
+        /* English Name in WHITE */
         .site-logo span { 
-            font-family: var(--font-en); 
-            letter-spacing: 2px; 
-            color: var(--white); /* Changed from Gold to White */
-            font-size: 0.9em; 
-            text-transform: uppercase; 
-            display: block; 
-            margin-top: 5px; 
-            font-weight: bold;
+            font-family: var(--font-en); letter-spacing: 2px; color: var(--white); 
+            font-size: 0.9em; text-transform: uppercase; display: block; margin-top: 5px; font-weight: bold;
         }
 
         .ad-banner-area { width: 100%; max-width: 600px; margin-top: 15px; }
         .main-ad-slider {
             height: 90px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.2);
             backdrop-filter: blur(5px); display: flex; align-items: center; justify-content: center;
-            color: #fff; font-weight:bold; border-radius: 8px;
+            color: #fff; font-weight:bold; border-radius: 8px; font-family: var(--font-dv);
         }
 
         /* TICKER */
         .ticker-wrap { width: 100%; background: var(--silver-bg); overflow: hidden; height: 40px; line-height: 40px; border-bottom: 1px solid #ccc; }
         .ticker { display: inline-block; white-space: nowrap; padding-right: 100%; animation: ticker 40s linear infinite; }
-        .ticker-item { display: inline-block; padding: 0 2rem; color: #333; font-weight: bold; font-size: 1.1em; }
+        .ticker-item { display: inline-block; padding: 0 2rem; color: #333; font-weight: bold; font-size: 1.1em; font-family: var(--font-dv); }
         @keyframes ticker { 0% { transform: translate3d(0, 0, 0); } 100% { transform: translate3d(100%, 0, 0); } }
 
         /* NAVIGATION */
         nav { background-color: var(--white); box-shadow: 0 4px 15px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 1000; }
         .main-menu { display: flex; justify-content: center; flex-wrap: wrap; padding: 0 2%; border-bottom: 1px solid #eee; }
-        .main-menu li a { display: block; padding: 16px 20px; color: var(--academy-blue); font-weight: bold; font-size: 1.1em; position: relative; }
+        .main-menu li a { 
+            display: block; padding: 16px 20px; 
+            color: var(--academy-blue); font-weight: bold; font-size: 1.1em; 
+            position: relative; font-family: var(--font-dv);
+        }
         .main-menu li a:hover { color: var(--academy-gold); background: #f9f9f9; }
         .main-menu li a::after { content: ''; position: absolute; bottom: 0; left: 0; width: 0%; height: 3px; background: var(--academy-gold); transition: 0.3s; }
         .main-menu li a:hover::after { width: 100%; }
@@ -127,7 +127,7 @@
 
         /* SUB MENU */
         .sub-menu { background-color: #f0f4f8; border-bottom: 1px solid #ddd; display: flex; justify-content: center; flex-wrap: wrap; }
-        .sub-menu li a { display: block; padding: 12px 20px; color: #444; font-size: 0.95em; font-weight: bold; border-left: 1px solid #e0e0e0; transition: 0.2s; }
+        .sub-menu li a { display: block; padding: 12px 20px; color: #444; font-size: 0.95em; font-weight: bold; border-left: 1px solid #e0e0e0; transition: 0.2s; font-family: var(--font-dv); }
         .sub-menu li a:hover { color: var(--academy-blue); background-color: #e9ecef; }
         .sub-menu li:first-child a { border-right: 1px solid #e0e0e0; }
 
@@ -135,9 +135,8 @@
         .container { display: grid; grid-template-columns: 3fr 1fr; gap: 40px; padding: 50px 5%; max-width: 1500px; margin: 0 auto; }
         
         .category-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 25px; border-bottom: 3px solid var(--academy-blue); padding-bottom: 10px; }
-        .category-header h2 { color: var(--academy-blue); font-size: 1.8em; background: var(--off-white); padding-left: 20px; z-index: 2; }
-        .read-more-btn { border: 2px solid var(--academy-blue); padding: 5px 15px; border-radius: 30px; color: var(--academy-blue); font-weight: bold; }
-
+        .category-header h2 { color: var(--academy-blue); font-size: 1.8em; background: var(--off-white); padding-left: 20px; z-index: 2; font-family: var(--font-dv); }
+        
         /* CARDS */
         .card { background: white; border-radius: 10px; overflow: hidden; box-shadow: var(--shadow-card); transition: 0.3s; border: 1px solid #eee; }
         .card:hover { transform: translateY(-5px); box-shadow: var(--shadow-hover); border-color: var(--academy-gold); }
@@ -147,62 +146,61 @@
         .thumb-icon { position: absolute; bottom: 10px; right: 10px; width: 45px; height: 45px; background: var(--academy-blue); color: var(--academy-gold); border: 2px solid var(--academy-gold); border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 10px rgba(0,0,0,0.3); font-size: 1.3em; z-index: 5; }
         .card-content { padding: 20px; }
         .card-tag { display: inline-block; padding: 4px 10px; margin-bottom: 10px; font-size: 0.75em; font-weight: bold; border-radius: 4px; background: var(--academy-gold); color: white; }
-        .card-title { font-size: 1.3em; margin-bottom: 10px; color: var(--academy-blue); font-weight: bold; line-height: 1.4; }
-        .card-excerpt { color: #666; font-size: 0.95em; }
+        .card-title { font-size: 1.3em; margin-bottom: 10px; color: var(--academy-blue); font-weight: bold; line-height: 1.4; font-family: var(--font-dv); }
+        .card-excerpt { color: #666; font-size: 0.95em; font-family: var(--font-dv); }
 
         /* SECTIONS */
         .hero-section { display: grid; grid-template-columns: 2fr 1fr; gap: 25px; margin-bottom: 60px; }
         .hero-main { position: relative; border-radius: 12px; overflow: hidden; height: 500px; box-shadow: var(--shadow-card); }
         .hero-main img { width: 100%; height: 100%; object-fit: cover; }
         .hero-overlay { position: absolute; bottom: 0; left: 0; right: 0; padding: 40px; background: linear-gradient(to top, var(--academy-blue), transparent); color: white; }
-        .hero-title { font-size: 2.2em; margin-bottom: 10px; text-shadow: 1px 1px 3px rgba(0,0,0,0.5); }
+        .hero-title { font-size: 2.2em; margin-bottom: 10px; text-shadow: 1px 1px 3px rgba(0,0,0,0.5); font-family: var(--font-dv); }
         .hero-side { display: flex; flex-direction: column; gap: 20px; }
         .side-card { display: flex; align-items: center; background: white; border-radius: 8px; overflow: hidden; height: 100%; box-shadow: var(--shadow-card); border-right: 4px solid var(--academy-gold); }
         .side-card img { width: 130px; height: 100%; object-fit: cover; }
         .side-content { padding: 15px; width: 100%; }
-        .side-content h4 { margin: 0; font-size: 1em; color: var(--academy-blue); }
+        .side-content h4 { margin: 0; font-size: 1em; color: var(--academy-blue); font-family: var(--font-dv); }
 
         .tech-section { background: linear-gradient(180deg, #051626 0%, var(--academy-blue) 100%); padding: 30px; border-radius: 20px; color: white; margin-bottom: 50px; box-shadow: 0 15px 40px rgba(12, 45, 72, 0.4); border: 2px solid var(--academy-gold); }
         .tech-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
         .tech-card { background: transparent; border: none; color: white; }
         .tech-card .card-title { color: white; margin-top: 10px; }
-        .tech-badge { background: #145DA0; color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.8em; margin-bottom: 5px; display: inline-block; }
 
         .biz-strip { display: flex; gap: 20px; overflow-x: auto; padding: 20px; background: white; border-radius: 15px; border-top: 5px solid var(--academy-blue); box-shadow: var(--shadow-card); margin-bottom: 50px; }
-        .biz-item { min-width: 150px; text-align: center; border-right: 1px dashed #ddd; }
-        .biz-val { font-size: 1.4em; font-weight: bold; color: var(--academy-blue); display: block; }
-        .biz-label { color: #666; font-size: 0.9em; }
+        .biz-item { min-width: 150px; text-align: center; border-right: 1px dashed #ddd; font-family: var(--font-dv); }
+        .biz-val { font-size: 1.4em; font-weight: bold; color: var(--academy-blue); display: block; font-family: var(--font-en); }
 
         .content-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; }
         .lifestyle-grid { display: grid; grid-template-columns: repeat(4, 1fr); grid-template-rows: repeat(2, 220px); gap: 15px; }
         .life-card { position: relative; border-radius: 12px; overflow: hidden; }
         .life-card img { width: 100%; height: 100%; object-fit: cover; }
-        .life-info { position: absolute; bottom: 0; background: rgba(12, 45, 72, 0.9); color: white; width: 100%; padding: 10px; }
+        .life-info { position: absolute; bottom: 0; background: rgba(12, 45, 72, 0.9); color: white; width: 100%; padding: 10px; font-family: var(--font-dv); }
         .life-card.big { grid-column: span 2; grid-row: span 2; }
 
         /* SIDEBAR */
         .sidebar-widget { background: white; border-radius: 8px; padding: 25px; margin-bottom: 30px; box-shadow: var(--shadow-card); border-top: 4px solid var(--academy-blue); }
-        .sidebar-title { font-size: 1.2em; margin-bottom: 20px; color: var(--academy-blue); border-bottom: 2px solid #eee; padding-bottom: 10px; font-weight: bold; }
-        .link-list li { margin-bottom: 12px; border-bottom: 1px dashed #eee; padding-bottom: 8px; }
+        .sidebar-title { font-size: 1.2em; margin-bottom: 20px; color: var(--academy-blue); border-bottom: 2px solid #eee; padding-bottom: 10px; font-weight: bold; font-family: var(--font-dv); }
+        .link-list li { margin-bottom: 12px; border-bottom: 1px dashed #eee; padding-bottom: 8px; font-family: var(--font-dv); }
         .link-list a { display: flex; align-items: center; color: #555; transition: 0.2s; text-decoration: none; }
         .link-list a:hover { color: var(--academy-blue); font-weight: bold; }
         .link-list a span.icon { background: #f0f4f8; color: var(--academy-blue); width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-left: 10px; flex-shrink: 0; }
 
-        .prayer-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px dashed #eee; color: #555; }
+        .prayer-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px dashed #eee; color: #555; font-family: var(--font-dv); }
         .prayer-row span:last-child { font-weight: bold; color: var(--academy-blue); font-family: var(--font-en); }
+        
         .hotlines-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
         .hotline-item { background: #f0f4f8; padding: 10px; border-radius: 8px; text-align: center; font-weight: bold; color: var(--academy-blue); font-family: var(--font-en); }
 
         /* FOOTER */
-        footer { background-color: var(--academy-blue); color: #ccc; padding: 60px 5%; margin-top: 80px; border-top: 5px solid var(--academy-gold); }
+        footer { background-color: var(--academy-blue); color: #ccc; padding: 60px 5%; margin-top: 80px; border-top: 5px solid var(--academy-gold); font-family: var(--font-dv); }
         .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 40px; }
         .footer-col h3 { color: var(--academy-gold); margin-bottom: 20px; font-size: 1.3em; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; }
         .footer-col ul li { margin-bottom: 10px; }
         .footer-col a { color: #ccc; transition: 0.3s; }
         .footer-col a:hover { color: white; padding-right: 5px; }
-        .footer-input { width: 100%; padding: 10px; border-radius: 4px; border: none; margin-bottom: 10px; font-family: var(--font-en); }
-        .footer-btn { width: 100%; padding: 10px; background: var(--academy-gold); color: #0C2D48; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; }
-        .copyright { text-align: center; margin-top: 50px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); font-size: 0.9em; }
+        .footer-input { width: 100%; padding: 10px; border-radius: 4px; border: none; margin-bottom: 10px; font-family: var(--font-dv); }
+        .footer-btn { width: 100%; padding: 10px; background: var(--academy-gold); color: #0C2D48; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; font-family: var(--font-en); }
+        .copyright { text-align: center; margin-top: 50px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); font-size: 0.9em; font-family: var(--font-en); }
         .social-circle { display: inline-flex; width: 40px; height: 40px; background: rgba(255,255,255,0.1); border-radius: 50%; justify-content: center; align-items: center; margin-left: 10px; }
 
         @media (max-width: 992px) { 
@@ -243,17 +241,16 @@
 
     <div class="ticker-wrap">
         <div class="ticker">
-            <div class="ticker-item"><span>🔴</span> ޒާދް އެކަޑެމީގެ އައު ކޯސްތަކަށް ކުރިމަތިލުމުގެ ފުރުޞަތު ހުޅުވާލައިފި...</div>
-            <div class="ticker-item"><span>🌤️</span> މޫސުން: ކުރިއަށް އޮތް 24 ގަޑިއިރު ރާއްޖޭގެ އެކި ހިސާބަށް ވިއްސާރަ ކުރާނެ...</div>
-            <div class="ticker-item"><span>🤖</span> އޭ.އައި ވޯކްޝޮޕް މިރޭ ފެށޭނެ...</div>
+            <div class="ticker-item"><span>🔴</span> ޒާދް އެކަޑެމީގެ އައު ކޯސްތަކަށް ކުރިމަތިލުމުގެ ފުރުޞަތު ހުޅުވާލައިފި</div>
+            <div class="ticker-item"><span>🤖</span> ކްލާސްރޫމްތަކުގައި އޭ.އައި ބޭނުންކުރުމާ ގުޅޭ ޚާއްޞަ ވޯކްޝޮޕެއް ފަށައިފި</div>
+            <div class="ticker-item"><span>🏆</span> ޤައުމީ ޤުރުއާން މުބާރާތުގައި ޒާދް އެކަޑެމީގެ ދަރިވަރުން ރަން ވަނަތަކެއް ހޯދައިފި</div>
+            <div class="ticker-item"><span>🎓</span> މަތީ ތަޢުލީމަށް ކިޔަވަން ބޭނުންވާ ދަރިވަރުންނަށް 50 ސްކޮލަރޝިޕް ދޫކުރަނީ</div>
+            <div class="ticker-item"><span>📚</span> ޒާދް އެކަޑެމީގެ އަހަރީ ފޮތް މައުރަޒު އަންނަ ހަފްތާގައި ފަށަނީ</div>
         </div>
     </div>
 
     <nav>
-        <div class="search-container">
-            <button onclick="toggleSearch()" style="background:none; border:none; color:#0C2D48; font-size:1.2em;">🔍</button>
-            <input type="text" id="search-input" placeholder="ހޯއްދަވާ...">
-        </div>
+        <div class="search-container"><button onclick="toggleSearch()" style="background:none; border:none; color:#0C2D48; font-size:1.2em;">🔍</button><input type="text" id="search-input" placeholder="ހޯއްދަވާ..."></div>
         <ul class="main-menu">
             <li><a href="index.html">ހޯމް</a></li>
             <li><a href="courses.html">ކޯސްތައް</a></li>
@@ -272,21 +269,19 @@
         <li><a href="ai-research.html">ދިރާސާކުރުމަށް އޭ.އައި</a></li>
         <li><a href="edtech.html">އެޑިއުކޭޝަނަލް ޓެކްނޮލޮޖީ</a></li>
         <li><a href="online-learning.html">އޮންލައިން ލާރނިންގ</a></li>
-        <li><a href="library.html">ޑިޖިޓަލް ލައިބްރަރީ</a></li>
     </ul>
 
     <div class="container">
-        
         <main class="content">
             
             <div class="hero-section">
                 <div class="hero-main">
-                    <span class="card-tag">މުހިންމު</span>
+                    <span class="card-tag" style="background:var(--academy-gold); color:white;">މުހިންމު</span>
                     <img src="https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&w=800&q=80" alt="Academy Hero">
                     <div class="thumb-icon">🎓</div> 
                     <div class="hero-overlay">
-                        <h2 class="hero-title">ޒާދް އެކަޑެމީގެ އައު ކޯސްތަކަށް ކުރިމަތިލުމުގެ ފުރުޞަތު ހުޅުވާލައިފި</h2>
-                        <p>ޤުރުއާނާއި، ޢަރަބި ބަސް އަދި އިސްލާމީ ތަރުބިއްޔަތުގެ ކޯސްތަކުގައި ބައިވެރިވުމަށް ދަރިވަރުންނަށް މަރުޙަބާ ކިޔަމެވެ.</p>
+                        <h2 class="hero-title">އޭ.އައި ގެ އެހީގައި ކިޔަވައިދިނުން: މުސްތަޤުބަލުގެ ފެށުން</h2>
+                        <p>ޒަމާނީ ޓެކްނޮލޮޖީ ބޭނުންކޮށްގެން ދަރިވަރުންނަށް އުނގަންނައިދިނުމުގެ އައު މަންހަޖު ތަޢާރަފްކޮށްފިއެވެ.</p>
                     </div>
                 </div>
                 <div class="hero-side">
@@ -296,11 +291,11 @@
                     </div>
                     <div class="side-card">
                         <img src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&w=200&q=60" alt="Thumb">
-                        <div class="side-content"><h4>ދަރިވަރުންގެ ފެންވަރު ބެލުމުގެ އިމްތިޙާނު ފެށިއްޖެ</h4></div>
+                        <div class="side-content"><h4>ދަރިވަރުންގެ ފެންވަރު ބެލުމަށް ޑިޖިޓަލް ނިޒާމެއް</h4></div>
                     </div>
                     <div class="side-card">
-                        <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=200&q=60" alt="Thumb">
-                        <div class="side-content"><h4>އައު ވެބްސައިޓް މެދުވެރިކޮށް ފަސޭހައިން ރަޖިސްޓްރީ ވެވޭނެ</h4></div>
+                        <img src="https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=200&q=60" alt="Thumb">
+                        <div class="side-content"><h4>ލައިބްރަރީގައި އީ-ބުކްސް ލިބެން ހުންނާނެ</h4></div>
                     </div>
                 </div>
             </div>
@@ -428,28 +423,23 @@
             </div>
 
             <div class="card" style="margin-top:40px; padding:30px; border-top:4px solid var(--academy-gold);">
-    <h3 style="color:var(--academy-blue);">ޚިޔާލު / ސުވާލު ފޮނުއްވާ</h3>
-    
-    <form action="https://formspree.io/f/mrbndeov" method="POST">
-        
-        <input type="text" name="name" placeholder="ނަން" style="width:100%; padding:10px; margin:10px 0; border:1px solid #ddd; border-radius:4px;" required>
-        
-        <input type="email" name="email" placeholder="އީމެއިލް (ޖަވާބު ބޭނުންފުޅުނަމަ)" style="width:100%; padding:10px; margin:10px 0; border:1px solid #ddd; border-radius:4px;" required>
-        
-        <textarea name="message" rows="3" placeholder="ތިޔަބޭފުޅާގެ މެސެޖް ލިޔުއްވާ..." style="width:100%; padding:10px; border:1px solid #ddd; border-radius:4px;" required></textarea>
-        
-        <button type="submit" style="padding:10px 25px; background:var(--academy-blue); color:white; border:none; cursor:pointer; margin-top:10px; border-radius:4px; font-weight:bold;">ފޮނުވާ</button>
-    </form>
-</div>
+                <h3 style="color:var(--academy-blue);">ޚިޔާލު / ސުވާލު ފޮނުއްވާ</h3>
+                <form action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+                    <input type="text" name="name" placeholder="ނަން" style="width:100%; padding:10px; margin:10px 0; border:1px solid #ddd; border-radius:4px;" required>
+                    <input type="email" name="email" placeholder="އީމެއިލް" style="width:100%; padding:10px; margin:10px 0; border:1px solid #ddd; border-radius:4px;" required>
+                    <textarea name="message" rows="3" placeholder="މެސެޖް..." style="width:100%; padding:10px; border:1px solid #ddd; border-radius:4px;" required></textarea>
+                    <button style="padding:10px 25px; background:var(--academy-blue); color:white; border:none; cursor:pointer; margin-top:10px; border-radius:4px;">ފޮނުވާ</button>
+                </form>
+            </div>
         </main>
 
         <aside class="sidebar">
             
             <div class="sidebar-widget" style="padding:0; overflow:hidden; border:none;">
                 <div style="text-align:center; background:linear-gradient(to right, #2E8BC0, #145DA0); color:white; padding:20px; border-radius:8px;">
-                    <div id="live-clock" style="font-size:2em; font-weight:bold; font-family:'Playfair Display'; margin-bottom:5px;">--:--</div>
-                    <p style="font-size:1.2em; font-family:'Playfair Display';" id="current-date">--</p>
-                    <div style="font-size:3em; font-weight:bold; font-family:'Playfair Display';">30°C</div>
+                    <div id="live-clock" style="font-size:2em; font-weight:bold; font-family:'Playfair Display', serif;">--:--</div>
+                    <p style="font-size:1.2em; font-family:'Playfair Display', serif;" id="current-date">--</p>
+                    <div style="font-size:3em; font-weight:bold; font-family:'Playfair Display', serif;">30°C</div>
                     <p>🌤️ މާލެ، ދިވެހިރާއްޖެ</p>
                 </div>
             </div>
@@ -470,7 +460,7 @@
             <div class="sidebar-widget">
                 <h3 class="sidebar-title">ގުޅުންހުރި މުއައްސަސާތައް</h3>
                 <ul class="link-list">
-                    <li><a href="https://www.moe.gov.mv" target="_blank"><span class="icon">🇲🇻</span> އެޑިއުކޭޝަން މިނިސްޓްރީ</a></li>
+                    <li><a href="https://www.moe.gov.mv" target="_blank"><span class="icon">🏛️</span> އެޑިއުކޭޝަން މިނިސްޓްރީ</a></li>
                     <li><a href="https://www.mqa.gov.mv" target="_blank"><span class="icon">📜</span> ކޮލިފިކޭޝަން އޮތޯރިޓީ</a></li>
                     <li><a href="https://ium.edu.mv" target="_blank"><span class="icon">🎓</span> އިސްލާމިކް ޔުނިވަރސިޓީ</a></li>
                     <li style="border-top: 1px solid #eee; margin-top: 10px; padding-top: 10px;">
@@ -519,8 +509,8 @@
             <div class="sidebar-widget">
                 <h3 class="sidebar-title">ގުޅިލައްވާ</h3>
                 <div style="display:flex; justify-content:center; gap:10px;">
-                    <a href="#" class="social-circle" style="background:#3b5998; color:white; width:40px; height:40px; display:flex; align-items:center; justify-content:center; border-radius:50%;">fb</a>
-                    <a href="#" class="social-circle" style="background:#1da1f2; color:white; width:40px; height:40px; display:flex; align-items:center; justify-content:center; border-radius:50%;">tw</a>
+                    <a href="#" style="background:#3b5998; color:white; width:40px; height:40px; display:flex; align-items:center; justify-content:center; border-radius:50%;">fb</a>
+                    <a href="#" style="background:#1da1f2; color:white; width:40px; height:40px; display:flex; align-items:center; justify-content:center; border-radius:50%;">tw</a>
                     <a href="#" style="background:#e1306c; color:white; width:40px; height:40px; display:flex; align-items:center; justify-content:center; border-radius:50%;">ig</a>
                 </div>
             </div>
@@ -559,14 +549,14 @@
             </div>
 
             <div class="footer-col">
-    <h3>ނިއުސްލެޓަރ</h3>
-    <p>އައު ކޯސްތަކުގެ މަޢުލޫމާތު ހޯއްދެވުމަށް އީމެއިލް ޖައްސަވާ.</p>
-    
-    <form action="https://formspree.io/f/mrbndeov" method="POST">
-        <input type="email" name="subscriber_email" placeholder="Email Address" class="footer-input" required>
-        <button type="submit" class="footer-btn">Subscribe</button>
-    </form>
-</div>
+                <h3>ނިއުސްލެޓަރ</h3>
+                <p>އައު ކޯސްތަކުގެ މަޢުލޫމާތު ހޯއްދެވުމަށް އީމެއިލް ޖައްސަވާ.</p>
+                <form action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+                    <input type="email" name="subscriber_email" placeholder="Email Address" class="footer-input" required>
+                    <button type="submit" class="footer-btn">Subscribe</button>
+                </form>
+            </div>
+        </div>
         
         <div class="copyright">
             &copy; 2025 Zaad Academy Blog. All Rights Reserved.
@@ -579,17 +569,14 @@
             x.style.display = (x.style.display === "none" || x.style.display === "") ? "inline-block" : "none";
         }
 
-        // Set Date
-        const dateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-        document.getElementById('current-date').textContent = new Date().toLocaleDateString('en-US', dateOptions);
-
-        // LIVE CLOCK
+        // Live Clock
         function updateClock() {
             const now = new Date();
             document.getElementById('live-clock').textContent = now.toLocaleTimeString('en-US', { hour12: true });
+            document.getElementById('current-date').textContent = now.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
         }
         setInterval(updateClock, 1000);
-        updateClock(); 
+        updateClock();
 
         // Fetch Prayer Times
         async function getPrayerTimes() {
@@ -618,7 +605,3 @@
     </script>
 </body>
 </html>
-
-
-
-
