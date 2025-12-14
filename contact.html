@@ -4,30 +4,241 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ގުޅިލައްވާ - ޒާދް އެކަޑެމީ</title>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thaana&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/style.css">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thaana&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        /* --- THEME VARIABLES --- */
+        :root {
+            --academy-blue: #0C2D48;
+            --academy-light: #2E8BC0;
+            --academy-gold: #B49658;
+            --white: #ffffff;
+            --off-white: #f4f6f8;
+            --font-dv: 'Faruma', 'Noto Sans Thaana', sans-serif;
+        }
+
+        @font-face { font-family: 'Faruma'; src: url('fonts/Faruma.ttf') format('truetype'); font-weight: normal; }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: var(--font-dv); background-color: var(--off-white); margin: 0; line-height: 1.6; }
+        a { text-decoration: none; color: inherit; }
+        ul { list-style: none; padding: 0; margin: 0; }
+
+        /* HEADER & NAV (Simple Version) */
+        .top-bar { background: #051626; color: #ccc; padding: 10px 5%; font-size: 0.9em; text-align: left; }
+        header { background: var(--academy-blue); padding: 20px; text-align: center; border-bottom: 4px solid var(--academy-gold); }
+        .site-logo h1 { color: white; margin: 0; font-size: 2.5em; }
+        
+        nav { background: white; box-shadow: 0 4px 10px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 1000; }
+        .main-menu { display: flex; justify-content: center; flex-wrap: wrap; }
+        .main-menu li a { display: block; padding: 15px 20px; color: var(--academy-blue); font-weight: bold; }
+        .main-menu li a:hover { color: var(--academy-gold); background: #f9f9f9; }
+
+        /* --- CONTACT SECTION STYLES --- */
+        .contact-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 60px 5%;
+            min-height: 80vh;
+            background-image: radial-gradient(#dbeafe 1px, transparent 1px);
+            background-size: 30px 30px;
+        }
+
+        .contact-card {
+            background: white;
+            width: 100%;
+            max-width: 1000px;
+            display: grid;
+            grid-template-columns: 1fr 1.5fr;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(12, 45, 72, 0.15);
+        }
+
+        /* Left Side (Info) */
+        .contact-info {
+            background: linear-gradient(135deg, var(--academy-blue), #051626);
+            color: white;
+            padding: 50px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* Decoration Circle */
+        .contact-info::before {
+            content: ''; position: absolute; bottom: -50px; right: -50px;
+            width: 150px; height: 150px; background: var(--academy-gold);
+            border-radius: 50%; opacity: 0.2;
+        }
+
+        .info-title h2 { font-size: 2em; margin-bottom: 10px; color: var(--academy-gold); }
+        .info-title p { opacity: 0.8; font-size: 0.95em; }
+
+        .info-details { margin-top: 30px; }
+        .info-item { display: flex; align-items: center; margin-bottom: 25px; }
+        .info-icon { 
+            width: 45px; height: 45px; background: rgba(255,255,255,0.1); 
+            border-radius: 50%; display: flex; align-items: center; justify-content: center; 
+            margin-left: 15px; font-size: 1.2em; color: var(--academy-gold);
+        }
+        .info-text span { display: block; font-size: 0.8em; opacity: 0.7; }
+        .info-text p { margin: 0; font-weight: bold; font-family: sans-serif; /* Numbers look better in sans-serif */ }
+
+        .social-icons { display: flex; gap: 15px; margin-top: auto; }
+        .social-icons a { 
+            width: 40px; height: 40px; border: 1px solid rgba(255,255,255,0.3); 
+            border-radius: 50%; display: flex; align-items: center; justify-content: center; 
+            transition: 0.3s; color: white;
+        }
+        .social-icons a:hover { background: var(--academy-gold); border-color: var(--academy-gold); color: var(--academy-blue); }
+
+        /* Right Side (Form) */
+        .contact-form { padding: 50px; }
+        .form-header { margin-bottom: 30px; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+        .form-header h3 { color: var(--academy-blue); font-size: 1.8em; margin: 0; }
+
+        .input-group { position: relative; margin-bottom: 25px; }
+        .input-field {
+            width: 100%; padding: 15px; border: 2px solid #eee;
+            border-radius: 8px; outline: none; font-family: var(--font-dv);
+            transition: 0.3s; font-size: 1em;
+        }
+        .input-field:focus { border-color: var(--academy-gold); }
+        
+        .input-label {
+            position: absolute; right: 15px; top: 15px;
+            color: #999; pointer-events: none; transition: 0.3s;
+            background: white; padding: 0 5px;
+        }
+        .input-field:focus ~ .input-label,
+        .input-field:not(:placeholder-shown) ~ .input-label {
+            top: -10px; font-size: 0.8em; color: var(--academy-gold); font-weight: bold;
+        }
+
+        .submit-btn {
+            background: var(--academy-blue); color: white;
+            padding: 15px 40px; border: none; border-radius: 30px;
+            font-weight: bold; cursor: pointer; transition: 0.3s;
+            display: flex; align-items: center; gap: 10px;
+            font-family: var(--font-dv); font-size: 1.1em;
+        }
+        .submit-btn:hover { background: var(--academy-gold); color: var(--academy-blue); transform: translateX(-5px); }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .contact-card { grid-template-columns: 1fr; }
+            .contact-info { padding: 40px; }
+            .contact-form { padding: 30px; }
+        }
+        
+        footer { background: var(--academy-blue); color: #ccc; text-align: center; padding: 20px; margin-top: 0; }
+    </style>
 </head>
 <body>
-    <div class="container">
-        <main class="content">
-            <div class="category-header"><h2>ގުޅިލައްވާ</h2></div>
-            <div class="card" style="padding:30px;">
-                <form>
-                    <label>ނަން:</label><input type="text" class="footer-input" style="border:1px solid #ddd;">
-                    <label>އީމެއިލް:</label><input type="email" class="footer-input" style="border:1px solid #ddd;">
-                    <label>މެސެޖް:</label><textarea rows="5" class="footer-input" style="border:1px solid #ddd;"></textarea>
-                    <button class="footer-btn">ފޮނުވާ</button>
-                </form>
-                <div style="margin-top:30px; border-top:1px solid #eee; padding-top:20px;">
-                    <p>📍 މާލެ، ދިވެހިރާއްޖެ</p>
-                    <p>📞 +960 9901550</p>
-                    <p>✉️ academyzaa@gmail.com</p>
+
+    <header>
+        <div class="site-logo">
+            <h1>ޒާދް އެކަޑެމީ</h1>
+            <span>Zaad Academy Blog</span>
+        </div>
+    </header>
+
+    <nav>
+        <ul class="main-menu">
+            <li><a href="index.html">ހޯމް</a></li>
+            <li><a href="courses.html">ކޯސްތައް</a></li>
+            <li><a href="library.html">ޑިޖިޓަލް ލައިބްރަރީ</a></li>
+            <li><a href="contact.html" style="color:var(--academy-gold);">ގުޅިލައްވާ</a></li>
+        </ul>
+    </nav>
+
+    <div class="contact-wrapper">
+        <div class="contact-card">
+            
+            <div class="contact-info">
+                <div class="info-title">
+                    <h2>ގުޅިލައްވާ</h2>
+                    <p>ތިޔަބޭފުޅުންގެ ސުވާލުތަކާއި ޚިޔާލުތައް އަޅުގަނޑުމެންނަށް ފޮނުއްވާ. 24 ގަޑިއިރު ތެރޭގައި ޖަވާބު އަރުވާނަމެވެ.</p>
+                </div>
+                
+                <div class="info-details">
+                    <div class="info-item">
+                        <div class="info-icon"><i class="fas fa-phone-alt"></i></div>
+                        <div class="info-text">
+                            <span>ފޯނު</span>
+                            <p>+960 9901550</p>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-icon"><i class="fas fa-envelope"></i></div>
+                        <div class="info-text">
+                            <span>އީމެއިލް</span>
+                            <p>academyzaad@gmail.com</p>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-icon"><i class="fas fa-map-marker-alt"></i></div>
+                        <div class="info-text">
+                            <span>އެޑްރެސް</span>
+                            <p>މާލެ، ދިވެހިރާއްޖެ</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="social-icons">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-youtube"></i></a>
                 </div>
             </div>
-        </main>
+
+            <div class="contact-form">
+                <div class="form-header">
+                    <h3>މެސެޖެއް ފޮނުއްވާ</h3>
+                </div>
+                
+                <form action="https://formspree.io/f/YOUR_FORM_ID_HERE" method="POST">
+                    
+                    <div class="input-group">
+                        <input type="text" name="name" class="input-field" placeholder=" " required>
+                        <label class="input-label">ނަން</label>
+                    </div>
+
+                    <div class="input-group">
+                        <input type="email" name="email" class="input-field" placeholder=" " required>
+                        <label class="input-label">އީމެއިލް</label>
+                    </div>
+
+                    <div class="input-group">
+                        <input type="text" name="subject" class="input-field" placeholder=" ">
+                        <label class="input-label">މައުޟޫޢު</label>
+                    </div>
+
+                    <div class="input-group">
+                        <textarea name="message" rows="4" class="input-field" placeholder=" " required></textarea>
+                        <label class="input-label">މެސެޖް</label>
+                    </div>
+
+                    <button type="submit" class="submit-btn">
+                        ފޮނުވާ <i class="fas fa-paper-plane"></i>
+                    </button>
+
+                </form>
+            </div>
+
         </div>
-    
-    <footer><div class="copyright">&copy; 2025 Zaad Academy.</div></footer>
-    <script src="js/script.js"></script>
+    </div>
+
+    <footer>
+        <div class="copyright">&copy; 2025 Zaad Academy Blog. All Rights Reserved.</div>
+    </footer>
+
 </body>
 </html>
