@@ -3,94 +3,294 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ޒާދް އެކަޑެމީ - ޞަފުޙާ</title>
+    <title>ކޯސްތައް - ޒާދް އެކަޑެމީ</title>
+    
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thaana&family=Amiri:wght@400;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
     
     <style>
-        /* CSS Should ideally be in style.css, but included here for single-file functionality */
-        :root { --academy-blue: #0C2D48; --academy-light: #2E8BC0; --academy-gold: #B49658; --silver-bg: #e9ecef; --white: #ffffff; --off-white: #f4f6f8; --text-dark: #1a1a1a; --shadow-card: 0 5px 20px rgba(12,45,72,0.1); --font-dv: 'Faruma', 'Noto Sans Thaana', sans-serif; --font-en: 'Playfair Display', serif; }
+        /* --- ACADEMY THEME --- */
+        :root {
+            --academy-blue: #0C2D48;
+            --academy-light: #2E8BC0;
+            --academy-gold: #B49658;
+            --off-white: #f4f6f8;
+            --text-dark: #1a1a1a;
+            --font-dv: 'Faruma', 'Noto Sans Thaana', sans-serif; 
+        }
+
         @font-face { font-family: 'Faruma'; src: url('fonts/Faruma.ttf') format('truetype'); font-weight: normal; }
-        * { box-sizing: border-box; margin: 0; padding: 0; } body { font-family: var(--font-dv); background: var(--off-white); color: var(--text-dark); } a { text-decoration: none; transition: 0.3s; } ul { list-style: none; padding: 0; margin: 0; }
-        .top-bar { background: #051626; color: #ccc; padding: 10px 5%; display: flex; justify-content: space-between; font-family: var(--font-en); font-size: 0.85em; }
-        header { background: var(--academy-blue); padding: 35px 5%; border-bottom: 5px solid var(--academy-gold); position: relative; overflow: hidden; }
-        header::before { content: ''; position: absolute; top:0; left:0; width:100%; height:100%; background: linear-gradient(30deg, #0C2D48 12%, transparent 12.5%, transparent 87%, #0C2D48 87.5%), linear-gradient(150deg, #0C2D48 12%, transparent 12.5%, transparent 87%, #0C2D48 87.5%); background-size: 80px 140px; z-index: 0; }
-        .header-container { display: flex; justify-content: space-between; align-items: center; position: relative; z-index: 1; }
-        .logo-section { display: flex; align-items: center; gap: 20px; } .logo-img { height: 90px; border: 2px solid var(--academy-gold); border-radius: 50%; background: white; padding: 5px; }
-        .site-logo h1 { font-size: 3.5em; color: white; margin: 0; line-height: 1; text-shadow: 2px 2px 4px black; } .site-logo span { font-family: var(--font-en); color: var(--academy-gold); letter-spacing: 2px; font-size: 0.9em; display: block; margin-top: 5px; font-weight: bold; }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: var(--font-dv); background-color: var(--off-white); color: var(--text-dark); line-height: 1.6; }
+        a { text-decoration: none; color: inherit; transition: 0.3s; }
+        ul { list-style: none; padding: 0; margin: 0; }
+
+        /* HEADER & NAV (Shared Styles) */
+        .top-bar { background: #051626; color: #ccc; padding: 10px 5%; display: flex; justify-content: space-between; font-family: 'Playfair Display'; font-size: 0.9em; }
+        header { background: var(--academy-blue); padding: 25px 5%; border-bottom: 5px solid var(--academy-gold); text-align: center; }
+        .site-logo h1 { color: white; margin: 0; font-size: 3em; }
+        .site-logo span { color: white; font-family: 'Playfair Display'; letter-spacing: 2px; text-transform: uppercase; font-weight:bold; }
+        
         nav { background: white; box-shadow: 0 4px 15px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 1000; }
-        .main-menu { display: flex; justify-content: center; flex-wrap: wrap; border-bottom: 1px solid #eee; } .main-menu li a { display: block; padding: 16px 20px; color: var(--academy-blue); font-weight: bold; } .main-menu li a:hover { color: var(--academy-gold); background: #f9f9f9; }
-        .sub-menu { background: #f0f4f8; display: flex; justify-content: center; flex-wrap: wrap; border-bottom: 1px solid #ddd; } .sub-menu li a { display: block; padding: 12px 20px; color: #444; font-size: 0.95em; border-left: 1px solid #e0e0e0; } .sub-menu li a:hover { color: var(--academy-blue); background: #e9ecef; }
+        .main-menu { display: flex; justify-content: center; flex-wrap: wrap; }
+        .main-menu li a { display: block; padding: 15px 20px; color: var(--academy-blue); font-weight: bold; }
+        .main-menu li a:hover { color: var(--academy-gold); background: #f9f9f9; }
+
+        /* --- COURSE PAGE STYLES --- */
         .container { display: grid; grid-template-columns: 3fr 1fr; gap: 40px; padding: 50px 5%; max-width: 1500px; margin: 0 auto; }
-        .category-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 25px; border-bottom: 3px solid var(--academy-blue); padding-bottom: 10px; } .category-header h2 { color: var(--academy-blue); font-size: 1.8em; background: var(--off-white); padding-left: 20px; z-index: 2; }
-        .card { background: white; border-radius: 10px; overflow: hidden; box-shadow: var(--shadow-card); transition: 0.3s; border: 1px solid #eee; margin-bottom: 20px; } .card:hover { transform: translateY(-5px); border-color: var(--academy-gold); }
-        .card-img { width: 100%; height: 250px; object-fit: cover; } .card-content { padding: 20px; }
-        .sidebar-widget { background: white; border-radius: 8px; padding: 25px; margin-bottom: 30px; box-shadow: var(--shadow-card); border-top: 4px solid var(--academy-blue); }
-        footer { background: var(--academy-blue); color: #ccc; padding: 60px 5%; margin-top: 80px; border-top: 5px solid var(--academy-gold); text-align: center; }
-        @media (max-width: 992px) { .container { grid-template-columns: 1fr; } }
+        
+        .page-header { 
+            border-bottom: 3px solid var(--academy-blue); margin-bottom: 30px; padding-bottom: 15px; 
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .page-header h2 { color: var(--academy-blue); font-size: 2em; margin: 0; }
+        .mqa-badge { background: var(--academy-gold); color: white; padding: 5px 15px; border-radius: 20px; font-weight: bold; font-size: 0.8em; }
+
+        /* COURSE GRID */
+        .courses-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 30px;
+        }
+
+        /* MODERN COURSE CARD */
+        .course-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(12, 45, 72, 0.05);
+            transition: all 0.3s ease;
+            border: 1px solid #eee;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+        .course-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(12, 45, 72, 0.15);
+            border-color: var(--academy-gold);
+        }
+
+        /* Image Area */
+        .course-img-wrap {
+            height: 180px;
+            overflow: hidden;
+            position: relative;
+        }
+        .course-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: 0.5s;
+        }
+        .course-card:hover .course-img { transform: scale(1.1); }
+        
+        /* Level Badge */
+        .level-badge {
+            position: absolute;
+            top: 15px; right: 15px;
+            background: var(--academy-blue);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 8px;
+            font-size: 0.8em;
+            font-weight: bold;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            font-family: sans-serif;
+        }
+
+        /* Content Area */
+        .course-content {
+            padding: 25px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        .course-title {
+            color: var(--academy-blue);
+            font-size: 1.3em;
+            margin-bottom: 15px;
+            font-weight: bold;
+            line-height: 1.4;
+        }
+        
+        /* Icons & Info */
+        .course-meta {
+            margin-bottom: 20px;
+            font-size: 0.9em;
+            color: #666;
+        }
+        .meta-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        .meta-item i { margin-left: 10px; color: var(--academy-gold); width: 20px; text-align: center; }
+
+        /* Apply Button */
+        .apply-btn {
+            margin-top: auto;
+            display: block;
+            text-align: center;
+            background: var(--academy-gold);
+            color: var(--academy-blue);
+            padding: 12px;
+            border-radius: 30px;
+            font-weight: bold;
+            transition: 0.3s;
+            border: 2px solid var(--academy-gold);
+        }
+        .apply-btn:hover {
+            background: var(--academy-blue);
+            color: var(--academy-gold);
+        }
+
+        /* Sidebar Styles */
+        .sidebar-widget { background: white; border-radius: 8px; padding: 25px; margin-bottom: 30px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); border-top: 4px solid var(--academy-blue); }
+        .sidebar-title { font-size: 1.2em; margin-bottom: 20px; color: var(--academy-blue); border-bottom: 2px solid #eee; padding-bottom: 10px; font-weight: bold; }
+        .link-list li { margin-bottom: 10px; border-bottom: 1px dashed #eee; padding-bottom: 8px; }
+        .link-list a:hover { color: var(--academy-blue); font-weight: bold; }
+
+        footer { background: var(--academy-blue); color: #ccc; text-align: center; padding: 30px; margin-top: 50px; border-top: 5px solid var(--academy-gold); }
+
+        @media (max-width: 900px) { .container { grid-template-columns: 1fr; } }
     </style>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
 
-    <div class="top-bar"><div>📞 +960 9901550</div></div>
+    <div class="top-bar"><div>📞 +960 9901550 | ✉️ academyzaa@gmail.com</div></div>
     <header>
-        <div class="header-container">
-            <div class="logo-section"><img src="images/logo.png" class="logo-img" onerror="this.style.display='none'"><div class="site-logo"><h1>ޒާދް އެކަޑެމީ</h1><span>Zaad Academy Blog</span></div></div>
+        <div class="site-logo">
+            <h1>ޒާދް އެކަޑެމީ</h1>
+            <span>Zaad Academy Blog</span>
         </div>
     </header>
 
     <nav>
         <ul class="main-menu">
             <li><a href="index.html">ހޯމް</a></li>
-            <li><a href="courses.html">ކޯސްތައް</a></li>
+            <li><a href="courses.html" style="color:var(--academy-gold);">ކޯސްތައް</a></li>
             <li><a href="modern-education.html">ޒަމާނީ ތަޢުލީމް</a></li>
-            <li><a href="co-curricular.html">ކޯ-ކަރިކިއުލަރ</a></li>
             <li><a href="islamic-economy.html">އިސްލާމީ އިޤްތިޞާދު</a></li>
-            <li><a href="tarbiyah.html">ތަރުބިއްޔަތު</a></li>
             <li><a href="library.html">ޑިޖިޓަލް ލައިބްރަރީ</a></li>
             <li><a href="contact.html">ގުޅިލައްވާ</a></li>
         </ul>
     </nav>
-    <ul class="sub-menu">
-        <li><a href="ai.html">އާޓިފިޝަލް އިންޓެލިޖެންސް</a></li>
-        <li><a href="ai-teaching.html">ކިޔަވައިދިނުމުގައި އޭ.އައި</a></li>
-        <li><a href="ai-research.html">ދިރާސާކުރުމަށް އޭ.އައި</a></li>
-        <li><a href="edtech.html">އެޑިއުކޭޝަނަލް ޓެކްނޮލޮޖީ</a></li>
-        <li><a href="online-learning.html">އޮންލައިން ލާރނިންގ</a></li>
-    </ul>
 
     <div class="container">
+        
         <main class="content">
-            <div class="category-header">
-                <h2>ޒާދް އެކަޑެމީން ހިންގާ ކޯސްތައް</h2> 
+            <div class="page-header">
+                <h2>އެމް.ކިއު.އޭ އެޕްރޫވްޑް ކޯސްތައް</h2>
+                <span class="mqa-badge">MQA Approved ✅</span>
             </div>
 
-            <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap:25px;">
-                <div class="card">
-                    <img src="https://via.placeholder.com/400x250/0C2D48/FFFFFF" class="card-img">
-                    <div class="card-content">
-                        <h3 style="color:#0C2D48;">ލިޔުމުގެ ސުރުޚީ 1</h3>
-                        <p style="color:#666;">މިތަނުގައި ލިޔުމުގެ ކުރު ޚުލާޞާއެއް ލިޔުއްވާ...</p>
+            <div class="courses-grid">
+                
+                <div class="course-card">
+                    <div class="course-img-wrap">
+                        <span class="level-badge">Level 3</span>
+                        <img src="https://images.unsplash.com/photo-1607469707248-c917b2f4f209?auto=format&fit=crop&w=400&q=60" alt="Quran" class="course-img">
+                    </div>
+                    <div class="course-content">
+                        <h3 class="course-title">ސެޓްފިކެޓް 3 އިން ޤިރާޢަތު</h3>
+                        <div class="course-meta">
+                            <div class="meta-item"><i class="fas fa-clock"></i> މުއްދަތު: 6 މަސް</div>
+                            <div class="meta-item"><i class="fas fa-layer-group"></i> ކްރެޑިޓް: 40</div>
+                            <div class="meta-item"><i class="fas fa-laptop-house"></i> މޯޑް: ފޭސް-ޓު-ފޭސް / އޮންލައިން</div>
+                        </div>
+                        <a href="https://docs.google.com/forms/d/e/1FAIpQLSdq57JwWpVI1ZgcfiqN3zKUni38lO_iqruTHMPFzojYYzxzZQ/viewform?usp=sf_link" target="_blank" class="apply-btn">އެޕްލައި ކުރައްވާ <i class="fas fa-arrow-left"></i></a>
                     </div>
                 </div>
-                <div class="card">
-                    <img src="https://via.placeholder.com/400x250/B49658/FFFFFF" class="card-img">
-                    <div class="card-content">
-                        <h3 style="color:#0C2D48;">ލިޔުމުގެ ސުރުޚީ 2</h3>
-                        <p style="color:#666;">މިތަނުގައި ލިޔުމުގެ ކުރު ޚުލާޞާއެއް ލިޔުއްވާ...</p>
+
+                <div class="course-card">
+                    <div class="course-img-wrap">
+                        <span class="level-badge">Level 3</span>
+                        <img src="https://images.unsplash.com/photo-1546410531-bb4caa6b424d?auto=format&fit=crop&w=400&q=60" alt="Arabic" class="course-img">
+                    </div>
+                    <div class="course-content">
+                        <h3 class="course-title">ސެޓްފިކެޓް 3 އިން ޢަރަބިކް ލޭންގުއޭޖް</h3>
+                        <div class="course-meta">
+                            <div class="meta-item"><i class="fas fa-clock"></i> މުއްދަތު: 6 މަސް</div>
+                            <div class="meta-item"><i class="fas fa-layer-group"></i> ކްރެޑިޓް: 40</div>
+                            <div class="meta-item"><i class="fas fa-laptop-house"></i> މޯޑް: އޮންލައިން</div>
+                        </div>
+                        <a href="https://docs.google.com/forms/d/e/1FAIpQLSdq57JwWpVI1ZgcfiqN3zKUni38lO_iqruTHMPFzojYYzxzZQ/viewform?usp=sf_link" target="_blank" class="apply-btn">އެޕްލައި ކުރައްވާ <i class="fas fa-arrow-left"></i></a>
                     </div>
                 </div>
+
+                <div class="course-card">
+                    <div class="course-img-wrap">
+                        <span class="level-badge">Level 4</span>
+                        <img src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=400&q=60" alt="Education" class="course-img">
+                    </div>
+                    <div class="course-content">
+                        <h3 class="course-title">އެޑްވާންސް ސެޓްފިކެޓް އިން ޓީޗިންގ</h3>
+                        <div class="course-meta">
+                            <div class="meta-item"><i class="fas fa-clock"></i> މުއްދަތު: 1 އަހަރު</div>
+                            <div class="meta-item"><i class="fas fa-layer-group"></i> ކްރެޑިޓް: 60</div>
+                            <div class="meta-item"><i class="fas fa-laptop-house"></i> މޯޑް: ހައިބްރިޑް</div>
+                        </div>
+                        <a href="https://docs.google.com/forms/d/e/1FAIpQLSdq57JwWpVI1ZgcfiqN3zKUni38lO_iqruTHMPFzojYYzxzZQ/viewform?usp=sf_link" target="_blank" class="apply-btn">އެޕްލައި ކުރައްވާ <i class="fas fa-arrow-left"></i></a>
+                    </div>
                 </div>
+
+                <div class="course-card">
+                    <div class="course-img-wrap">
+                        <span class="level-badge">Level 5</span>
+                        <img src="https://images.unsplash.com/photo-1555421689-491a97ff2040?auto=format&fit=crop&w=400&q=60" alt="Imam" class="course-img">
+                    </div>
+                    <div class="course-content">
+                        <h3 class="course-title">ޑިޕްލޮމާ އިން އިމާމް ޝިޕް</h3>
+                        <div class="course-meta">
+                            <div class="meta-item"><i class="fas fa-clock"></i> މުއްދަތު: 1 އަހަރު</div>
+                            <div class="meta-item"><i class="fas fa-layer-group"></i> ކްރެޑިޓް: 120</div>
+                            <div class="meta-item"><i class="fas fa-laptop-house"></i> މޯޑް: ކެމްޕަސް</div>
+                        </div>
+                        <a href="https://docs.google.com/forms/d/e/1FAIpQLSdq57JwWpVI1ZgcfiqN3zKUni38lO_iqruTHMPFzojYYzxzZQ/viewform?usp=sf_link" target="_blank" class="apply-btn">އެޕްލައި ކުރައްވާ <i class="fas fa-arrow-left"></i></a>
+                    </div>
+                </div>
+
+                <div class="course-card">
+                    <div class="course-img-wrap">
+                        <span class="level-badge">Short</span>
+                        <img src="https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=400&q=60" alt="Short Course" class="course-img">
+                    </div>
+                    <div class="course-content">
+                        <h3 class="course-title">ޖަނާޒާގެ ކަންކަން ދަސްކޮށްދޭ ކޯސް</h3>
+                        <div class="course-meta">
+                            <div class="meta-item"><i class="fas fa-clock"></i> މުއްދަތު: 1 ހަފްތާ</div>
+                            <div class="meta-item"><i class="fas fa-layer-group"></i> ޝޯޓް ކޯސް</div>
+                            <div class="meta-item"><i class="fas fa-laptop-house"></i> މޯޑް: ޕްރެކްޓިކަލް</div>
+                        </div>
+                        <a href="https://docs.google.com/forms/d/e/1FAIpQLSdq57JwWpVI1ZgcfiqN3zKUni38lO_iqruTHMPFzojYYzxzZQ/viewform?usp=sf_link" target="_blank" class="apply-btn">އެޕްލައި ކުރައްވާ <i class="fas fa-arrow-left"></i></a>
+                    </div>
+                </div>
+
+            </div>
         </main>
 
         <aside class="sidebar">
             <div class="sidebar-widget">
-                <h3 style="color:#0C2D48; border-bottom:1px solid #eee; padding-bottom:10px;">މުހިންމު ލިންކުތައް</h3>
-                <ul style="list-style:none; padding:0;">
-                    <li style="margin-bottom:10px;"><a href="https://moe.gov.mv" style="color:#555;">🏛️ އެޑިއުކޭޝަން މިނިސްޓްރީ</a></li>
-                    <li style="margin-bottom:10px;"><a href="https://ium.edu.mv" style="color:#555;">🎓 އިސްލާމިކް ޔުނިވަރސިޓީ</a></li>
+                <h3 class="sidebar-title">ގުޅުންހުރި ލިންކުތައް</h3>
+                <ul class="link-list">
+                    <li><a href="https://mqa.gov.mv" target="_blank">📜 މޯލްޑިވްސް ކޮލިފިކޭޝަން އޮތޯރިޓީ</a></li>
+                    <li><a href="https://moe.gov.mv" target="_blank">🏛️ އެޑިއުކޭޝަން މިނިސްޓްރީ</a></li>
+                    <li><a href="https://ium.edu.mv" target="_blank">🎓 އިސްލާމިކް ޔުނިވަރސިޓީ</a></li>
                 </ul>
             </div>
+            
+            <div class="sidebar-widget">
+                <h3 class="sidebar-title">އެހީތެރިކަން ބޭނުންތަ؟</h3>
+                <div style="background:#f0f4f8; padding:15px; border-radius:8px; text-align:center;">
+                    <p style="margin-bottom:10px;">ކޯސްތަކާ ބެހޭ މަޢުލޫމާތު ހޯއްދެވުމަށް:</p>
+                    <a href="tel:+9609901550" style="display:block; background:var(--academy-blue); color:white; padding:8px; border-radius:5px; font-weight:bold;">📞 9901550</a>
+                </div>
+            </div>
         </aside>
+
     </div>
 
     <footer>
