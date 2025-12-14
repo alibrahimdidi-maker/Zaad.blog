@@ -9,295 +9,191 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <style>
-        /* --- 1. ROYAL THEME VARIABLES --- */
+        /* --- CSS VARIABLES --- */
         :root {
-            --royal-blue: #0C2D48;   /* Deep Navy */
-            --royal-dark: #051626;   /* Darker Navy */
-            --royal-gold: #B49658;   /* Luxury Gold */
-            --gold-light: #D4AF37;   /* Brighter Gold */
+            --blue: #0C2D48;
+            --light-blue: #2E8BC0;
+            --gold: #B49658;
             --white: #ffffff;
-            --bg-color: #f8f9fa;     /* Clean Background */
-            --text-main: #1a1a1a;
-            
-            /* Fonts */
+            --bg: #f4f6f8;
+            --text: #1a1a1a;
             --font-dv: 'Noto Sans Thaana', 'Faruma', sans-serif; 
             --font-en: 'Playfair Display', serif;
-            
-            /* Effects */
-            --card-shadow: 0 10px 30px rgba(12, 45, 72, 0.08);
-            --hover-shadow: 0 15px 40px rgba(12, 45, 72, 0.15);
         }
+
+        /* Local Font Fallback */
+        @font-face { font-family: 'Faruma'; src: url('fonts/Mv Galan.ttf') format('truetype'); }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
         
         body {
             font-family: var(--font-dv);
-            background-color: var(--bg-color);
-            color: var(--text-main);
+            background-color: var(--bg);
+            color: var(--text);
             line-height: 1.8;
             margin: 0;
             overflow-x: hidden;
-            /* Subtle Texture Background */
-            background-image: radial-gradient(#B49658 0.5px, transparent 0.5px);
-            background-size: 40px 40px;
-            background-color: #fdfdfd;
         }
 
-        a { text-decoration: none; color: inherit; transition: all 0.3s ease; }
+        a { text-decoration: none; color: inherit; transition: 0.3s; }
         ul { list-style: none; padding: 0; margin: 0; }
         img { max-width: 100%; display: block; }
 
-        /* --- HEADER (ROYAL LOOK) --- */
+        /* --- HEADER --- */
         .top-bar {
-            background: var(--royal-dark); color: #ddd; padding: 8px 5%;
+            background: #051626; color: #ccc; padding: 10px 5%;
             display: flex; justify-content: space-between; font-family: var(--font-en); font-size: 0.9em;
-            border-bottom: 1px solid rgba(180, 150, 88, 0.2);
         }
         .lang-switch a { margin-right: 15px; color: #aaa; font-weight: bold; }
-        .lang-switch a:hover, .lang-switch a.active { color: var(--royal-gold); }
+        .lang-switch a:hover { color: var(--gold); }
 
         header {
-            background: linear-gradient(135deg, var(--royal-blue) 0%, var(--royal-dark) 100%);
-            padding: 40px 5%;
-            border-bottom: 6px solid var(--royal-gold); 
-            text-align: center;
+            background: var(--blue); padding: 30px 5%;
+            border-bottom: 5px solid var(--gold); text-align: center;
             position: relative;
-            overflow: hidden;
-        }
-        /* Islamic Geometric Pattern Overlay */
-        header::before {
-            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background-image: radial-gradient(circle at 50% 50%, rgba(180, 150, 88, 0.1) 10%, transparent 10%);
-            background-size: 30px 30px;
-            opacity: 0.6;
         }
         
-        .header-content { position: relative; z-index: 2; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; }
+        .header-content { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; }
         
         .logo-box { display: flex; align-items: center; gap: 20px; }
         .logo-img { 
-            height: 100px; width: 100px; border-radius: 50%; 
-            border: 3px solid var(--royal-gold); background: white; padding: 5px; 
-            box-shadow: 0 0 20px rgba(180, 150, 88, 0.4);
+            height: 90px; width: 90px; border-radius: 50%; 
+            border: 3px solid var(--gold); background: white; padding: 5px; 
         }
         
-        .site-title h1 { 
-            color: white; margin: 0; font-size: 3.5em; line-height: 1; 
-            text-shadow: 2px 2px 10px rgba(0,0,0,0.5);
-        }
+        .site-title h1 { color: white; margin: 0; font-size: 3em; line-height: 1; }
         .site-title span { 
-            font-family: var(--font-en); color: white !important; /* Force White */
-            font-size: 1em; text-transform: uppercase; display: block; 
-            margin-top: 5px; font-weight: bold; letter-spacing: 3px;
+            font-family: var(--font-en); color: white !important; 
+            font-size: 0.9em; text-transform: uppercase; display: block; 
+            margin-top: 5px; font-weight: bold; letter-spacing: 2px;
         }
 
         .ad-banner {
-            background: rgba(255,255,255,0.05); border: 1px solid rgba(180, 150, 88, 0.3);
-            padding: 20px 40px; border-radius: 12px; color: #f0f0f0; font-weight: bold;
-            backdrop-filter: blur(5px); box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);
+            padding: 15px 30px; border-radius: 10px; color: white; font-weight: bold;
         }
 
         /* --- TICKER --- */
-        .ticker-wrap { background: #fff; overflow: hidden; height: 45px; line-height: 45px; border-bottom: 1px solid #eee; box-shadow: 0 2px 10px rgba(0,0,0,0.02); }
-        .ticker { display: inline-block; white-space: nowrap; padding-right: 100%; animation: ticker 50s linear infinite; }
-        .ticker-item { display: inline-block; padding: 0 3rem; color: var(--royal-blue); font-weight: bold; font-size: 1.1em; }
+        .ticker-wrap { background: #e9ecef; overflow: hidden; height: 40px; line-height: 40px; border-bottom: 1px solid #ccc; }
+        .ticker { display: inline-block; white-space: nowrap; padding-right: 100%; animation: ticker 40s linear infinite; }
+        .ticker-item { display: inline-block; padding: 0 2rem; color: #333; font-weight: bold; }
         @keyframes ticker { 0% { transform: translate3d(0, 0, 0); } 100% { transform: translate3d(100%, 0, 0); } }
 
-        /* --- NAVIGATION --- */
-        nav { 
-            background: white; box-shadow: 0 4px 20px rgba(0,0,0,0.08); 
-            position: sticky; top: 0; z-index: 1000; 
-        }
-        
+        /* --- NAV --- */
+        nav { background: white; box-shadow: 0 4px 10px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 1000; }
         .nav-container { display: flex; justify-content: center; position: relative; padding: 0 5%; }
-        
-        .menu-btn { 
-            display: none; font-size: 1.8em; padding: 15px; 
-            cursor: pointer; color: var(--royal-blue); position: absolute; right: 10px; top: 0; 
-        }
+        .menu-btn { display: none; font-size: 1.8em; padding: 15px; cursor: pointer; color: var(--blue); position: absolute; right: 10px; top: 0; }
 
         .main-menu { display: flex; flex-wrap: wrap; justify-content: center; width: 100%; }
         .main-menu li a { 
-            display: block; padding: 18px 25px; color: var(--royal-blue); 
+            display: block; padding: 15px 20px; color: var(--blue); 
             font-weight: bold; font-size: 1.1em; border-bottom: 3px solid transparent; 
-            position: relative;
         }
-        .main-menu li a:hover { color: var(--royal-gold); background: #fdfdfd; }
-        .main-menu li a::after {
-            content: ''; position: absolute; bottom: 0; left: 0; width: 0%; height: 3px; 
-            background: var(--royal-gold); transition: 0.3s;
-        }
-        .main-menu li a:hover::after { width: 100%; }
+        .main-menu li a:hover { color: var(--gold); border-bottom: 3px solid var(--gold); background: #f9f9f9; }
 
-        /* --- SUB MENU (Corrected Links) --- */
-        .sub-menu { 
-            background: #f4f1ea; border-bottom: 1px solid #e0d8c0; 
-            display: flex; justify-content: center; flex-wrap: wrap; padding: 12px 0; 
-        }
-        .sub-menu li a { 
-            display: block; padding: 5px 25px; color: #554; font-size: 0.95em; 
-            border-left: 1px solid #d0c8b0; transition: 0.2s; 
-        }
-        .sub-menu li a:hover { color: var(--royal-blue); font-weight: bold; text-decoration: underline; }
+        /* --- SUB MENU --- */
+        .sub-menu { background: #f0f4f8; border-bottom: 1px solid #ddd; display: flex; justify-content: center; flex-wrap: wrap; padding: 10px 0; }
+        .sub-menu li a { display: block; padding: 5px 20px; color: #555; font-size: 0.95em; border-left: 1px solid #ddd; }
+        .sub-menu li a:hover { color: var(--blue); font-weight: bold; }
 
         /* --- LAYOUT GRID --- */
         .container { 
             display: grid; grid-template-columns: 3fr 1fr; gap: 40px; 
-            padding: 50px 5%; max-width: 1500px; margin: 0 auto; 
+            padding: 40px 5%; max-width: 1500px; margin: 0 auto; 
         }
 
         .section-header { 
-            display: flex; align-items: center;
-            border-bottom: 2px solid var(--royal-gold); 
-            margin-bottom: 30px; padding-bottom: 10px; 
+            display: flex; justify-content: space-between; border-bottom: 3px solid var(--blue); 
+            margin-bottom: 25px; padding-bottom: 10px; 
         }
-        .section-header h2 { 
-            color: var(--royal-blue); margin: 0; font-size: 1.8em; 
-            background: var(--royal-gold); color: white; padding: 5px 20px;
-            border-radius: 4px 4px 0 0;
-        }
+        .section-header h2 { color: var(--blue); margin: 0; font-size: 1.8em; }
 
-        /* --- CARDS & HERO --- */
-        .hero { display: grid; grid-template-columns: 2fr 1fr; gap: 25px; margin-bottom: 60px; }
-        .hero-main { 
-            position: relative; border-radius: 12px; overflow: hidden; height: 450px; 
-            box-shadow: var(--card-shadow); border: 1px solid var(--royal-gold);
-        }
-        .hero-main img { width: 100%; height: 100%; object-fit: cover; transition: 0.5s; }
-        .hero-main:hover img { transform: scale(1.05); }
-        .hero-text { 
-            position: absolute; bottom: 0; padding: 40px; width: 100%;
-            background: linear-gradient(to top, var(--royal-blue), transparent); color: white; 
-        }
-        .hero-text h2 { font-size: 2.2em; text-shadow: 2px 2px 5px black; }
-        
-        .side-card { 
-            display: flex; align-items: center; background: white; border-radius: 8px; 
-            overflow: hidden; height: 100%; border-right: 5px solid var(--royal-gold); 
-            box-shadow: var(--card-shadow); transition: 0.3s;
-        }
-        .side-card:hover { transform: translateX(-5px); }
-        .side-card img { width: 130px; height: 100%; object-fit: cover; }
-        .side-info { padding: 20px; font-weight: bold; color: var(--royal-blue); font-size: 1.1em; }
+        /* --- HERO & CARDS --- */
+        .hero { display: grid; grid-template-columns: 2fr 1fr; gap: 25px; margin-bottom: 50px; }
+        .hero-main { position: relative; border-radius: 10px; overflow: hidden; height: 450px; }
+        .hero-main img { width: 100%; height: 100%; object-fit: cover; }
+        .hero-text { position: absolute; bottom: 0; padding: 30px; background: linear-gradient(to top, var(--blue), transparent); color: white; width: 100%; }
+        .side-card { display: flex; align-items: center; background: white; border-radius: 8px; overflow: hidden; height: 100%; border-right: 4px solid var(--gold); box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .side-card img { width: 110px; height: 100%; object-fit: cover; border-radius: 5px; margin-left: 15px; }
+        .side-info { padding: 15px; font-weight: bold; color: var(--blue); }
 
-        .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; }
-        .card { 
-            background: white; border-radius: 12px; overflow: hidden; 
-            box-shadow: var(--card-shadow); transition: 0.3s; border: 1px solid #eee; 
-        }
-        .card:hover { transform: translateY(-10px); box-shadow: var(--hover-shadow); border-color: var(--royal-gold); }
-        .card-img { width: 100%; height: 220px; object-fit: cover; }
-        .card-body { padding: 25px; }
-        .card-title { color: var(--royal-blue); margin: 0 0 10px; font-weight: bold; font-size: 1.3em; }
-        .card-tag { 
-            background: var(--royal-gold); color: white; padding: 4px 12px; 
-            border-radius: 30px; font-size: 0.8em; margin-bottom: 15px; display: inline-block; 
-        }
+        .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 25px; }
+        .card { background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.05); transition: 0.3s; border: 1px solid #eee; }
+        .card:hover { transform: translateY(-5px); border-color: var(--gold); }
+        .card-img { width: 100%; height: 200px; object-fit: cover; }
+        .card-body { padding: 20px; }
+        .card-title { color: var(--blue); margin: 0 0 10px; font-weight: bold; font-size: 1.2em; }
+        .card-tag { background: var(--gold); color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.8em; margin-bottom: 10px; display: inline-block; }
 
         /* --- ECONOMY --- */
         .biz-strip { 
-            display: flex; gap: 0; overflow-x: auto; padding: 0; 
-            background: white; border-radius: 15px; border-top: 5px solid var(--royal-blue); 
-            box-shadow: var(--card-shadow); margin-bottom: 60px; 
+            display: flex; gap: 20px; overflow-x: auto; padding: 25px; 
+            background: white; border-radius: 15px; border-top: 5px solid var(--blue); 
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05); margin-bottom: 50px; 
         }
-        .biz-item { 
-            min-width: 180px; text-align: center; border-right: 1px dashed #ddd; 
-            padding: 30px 20px; transition: 0.3s;
-        }
-        .biz-item:hover { background: #fdfdfd; }
-        .biz-val { font-size: 1.6em; font-weight: bold; color: var(--royal-blue); display: block; font-family: var(--font-en); }
-        .biz-label { color: #777; font-size: 0.9em; margin-top: 5px; display: block; }
+        .biz-item { min-width: 160px; text-align: center; border-right: 1px dashed #ddd; }
+        .biz-val { font-size: 1.4em; font-weight: bold; color: var(--blue); display: block; font-family: var(--font-en); }
 
         /* --- LIFESTYLE --- */
-        .lifestyle-grid { display: grid; grid-template-columns: repeat(4, 1fr); grid-template-rows: repeat(2, 220px); gap: 20px; }
-        .life-card { position: relative; border-radius: 12px; overflow: hidden; box-shadow: var(--card-shadow); }
-        .life-card img { width: 100%; height: 100%; object-fit: cover; transition: 0.5s; }
-        .life-card:hover img { transform: scale(1.1); }
+        .lifestyle-grid { display: grid; grid-template-columns: repeat(4, 1fr); grid-template-rows: repeat(2, 200px); gap: 15px; }
+        .life-card { position: relative; border-radius: 10px; overflow: hidden; }
+        .life-card img { width: 100%; height: 100%; object-fit: cover; }
         .life-card.big { grid-column: span 2; grid-row: span 2; }
-        .life-info { 
-            position: absolute; bottom: 0; width: 100%; 
-            background: linear-gradient(to top, rgba(12, 45, 72, 0.95), transparent); 
-            color: white; padding: 20px; font-weight: bold; font-size: 1.1em;
-        }
+        .life-info { position: absolute; bottom: 0; width: 100%; background: rgba(12, 45, 72, 0.85); color: white; padding: 10px; font-weight: bold; }
 
         /* --- SIDEBAR --- */
-        .sidebar-widget { 
-            background: white; padding: 25px; border-radius: 12px; 
-            box-shadow: var(--card-shadow); margin-bottom: 35px; 
-            border-top: 5px solid var(--royal-blue); 
-        }
-        .sidebar-title { 
-            font-size: 1.3em; margin-bottom: 20px; border-bottom: 2px solid #eee; 
-            padding-bottom: 10px; color: var(--royal-blue); font-weight: bold; 
-        }
-        .link-list li { margin-bottom: 12px; border-bottom: 1px dashed #eee; padding-bottom: 8px; }
-        .link-list a:hover { color: var(--royal-gold); font-weight: bold; padding-right: 5px; }
+        .sidebar-widget { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); margin-bottom: 30px; border-top: 4px solid var(--blue); }
+        .sidebar-title { font-size: 1.2em; margin-bottom: 15px; border-bottom: 2px solid #eee; padding-bottom: 10px; color: var(--blue); font-weight: bold; }
+        .link-list li { margin-bottom: 10px; border-bottom: 1px dashed #eee; padding-bottom: 5px; }
+        .link-list a:hover { color: var(--gold); font-weight: bold; }
 
-        .prayer-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px dashed #eee; font-size: 1.05em; }
-        .prayer-time { font-family: var(--font-en); font-weight: bold; color: var(--royal-blue); }
+        .recent-post { display: flex; gap: 10px; margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
+        .recent-post img { width: 60px; height: 60px; object-fit: cover; border-radius: 5px; }
+        .recent-post h4 { margin: 0; font-size: 0.95em; line-height: 1.3; }
 
-        /* Clock Widget */
-        .weather-widget { 
-            text-align: center; 
-            background: linear-gradient(135deg, var(--royal-light), var(--royal-blue)); 
-            color: white; padding: 30px; border-radius: 12px; margin-bottom: 30px; 
-            box-shadow: 0 10px 20px rgba(12, 45, 72, 0.3); border: 2px solid var(--royal-gold);
-        }
-        .live-clock { font-size: 2.8em; font-weight: bold; font-family: var(--font-en); margin-bottom: 5px; display: block; text-shadow: 2px 2px 5px rgba(0,0,0,0.3); }
+        .prayer-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px dashed #eee; }
+        .prayer-time { font-family: var(--font-en); font-weight: bold; color: var(--blue); }
 
-        .hotlines-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        .hotline-item { 
-            background: #f8f9fa; padding: 15px; border-radius: 8px; 
-            text-align: center; font-weight: bold; color: var(--royal-blue); 
-            font-family: var(--font-en); font-size: 1.2em; border: 1px solid #eee;
-        }
+        .weather-widget { text-align: center; background: linear-gradient(135deg, var(--light-blue), var(--blue)); color: white; padding: 25px; border-radius: 10px; margin-bottom: 25px; }
+        .live-clock { font-size: 2.5em; font-weight: bold; font-family: var(--font-en); margin-bottom: 5px; display: block; }
+
+        .hotlines-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .hotline-item { background: #f0f4f8; padding: 10px; border-radius: 8px; text-align: center; font-weight: bold; color: var(--blue); font-family: var(--font-en); }
 
         /* --- FOOTER --- */
-        footer { 
-            background: var(--royal-blue); color: #ccc; padding: 70px 5%; margin-top: 80px; 
-            border-top: 8px solid var(--royal-gold); text-align: center; 
-        }
-        .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 40px; text-align: right; }
-        .footer-col h3 { color: var(--royal-gold); margin-bottom: 25px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; }
-        .footer-input { width: 100%; padding: 12px; border-radius: 6px; border: none; margin-bottom: 15px; }
-        .footer-btn { 
-            width: 100%; padding: 12px; background: var(--royal-gold); 
-            color: var(--royal-blue); border: none; border-radius: 6px; 
-            font-weight: bold; cursor: pointer; transition: 0.3s;
-        }
-        .footer-btn:hover { background: white; }
+        footer { background: var(--blue); color: #ccc; padding: 50px 5%; margin-top: 50px; border-top: 5px solid var(--gold); text-align: center; }
+        .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 30px; text-align: right; }
+        .footer-input { width: 100%; padding: 10px; border-radius: 4px; border: none; margin-bottom: 10px; }
+        .footer-btn { width: 100%; padding: 10px; background: var(--gold); color: #0C2D48; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; }
 
         /* --- MOBILE RESPONSIVE --- */
         @media (max-width: 900px) {
-            .container { grid-template-columns: 1fr; padding: 30px 5%; }
+            .container { grid-template-columns: 1fr; padding: 20px 5%; }
             .hero { grid-template-columns: 1fr; }
             .hero-main { height: 250px; }
-            .hero-title { font-size: 1.5em; }
             .ad-banner { display: none; }
             
-            /* Header */
             .header-content { justify-content: center; text-align: center; }
             .logo-box { flex-direction: column; gap: 10px; }
             
-            /* Menu */
-            .nav-container { justify-content: flex-start; height: 70px; align-items: center; }
+            /* Mobile Menu */
+            .nav-container { justify-content: flex-start; height: 60px; align-items: center; }
             .menu-btn { display: block; }
             .main-menu { 
                 display: none; flex-direction: column; width: 100%; 
-                background: white; position: absolute; top: 70px; left: 0; 
-                box-shadow: 0 10px 30px rgba(0,0,0,0.15); border-top: 3px solid var(--royal-gold); z-index: 2000;
+                background: white; position: absolute; top: 60px; left: 0; 
+                box-shadow: 0 5px 10px rgba(0,0,0,0.1); border-top: 1px solid #eee; z-index: 2000;
             }
             .main-menu.active { display: flex; } 
-            .main-menu li { width: 100%; text-align: center; border-bottom: 1px solid #f0f0f0; }
-            .sub-menu { display: none; } /* Mobile: Hide sub menu or create separate page */
+            .main-menu li { width: 100%; text-align: center; border-bottom: 1px solid #eee; }
+            .sub-menu { display: none; }
             
-            /* Grids */
             .card-grid, .lifestyle-grid, .biz-strip, .hotlines-grid, .footer-grid { grid-template-columns: 1fr; }
             .lifestyle-grid { grid-template-rows: auto; }
             .life-card.big { grid-column: span 1; grid-row: span 1; height: 250px; }
             .life-card { height: 200px; margin-bottom: 15px; }
             
-            aside { margin-top: 50px; }
+            aside { margin-top: 40px; }
         }
     </style>
 </head>
@@ -368,7 +264,7 @@
                 <div class="hero-main">
                     <img src="https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&w=800&q=80" alt="Hero">
                     <div class="hero-text">
-                        <h2 class="hero-title">އޭ.އައި ގެ އެހީގައި ކިޔަވައިދިނުން: މުސްތަޤުބަލުގެ ފެށުން</h2>
+                        <h2>ޒާދް އެކަޑެމީ: އުނގެނުމުގެ އައު މަންޒިލް</h2>
                     </div>
                 </div>
                 <div>
@@ -383,22 +279,22 @@
                 <div class="card">
                     <img src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=400&q=60" class="card-img">
                     <div class="card-body">
-                        <span class="card-tag">އިނޮވޭޝަން</span>
                         <h3 class="card-title">ކްލާސްރޫމްގައި އޭ.އައި</h3>
+                        <span class="card-tag">އިނޮވޭޝަން</span>
                     </div>
                 </div>
                 <div class="card">
                     <img src="https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=400&q=60" class="card-img">
                     <div class="card-body">
-                        <span class="card-tag">ސްކިލްސް</span>
                         <h3 class="card-title">ކޯޑިންގ ދަސްކުރުން</h3>
+                        <span class="card-tag">ސްކިލްސް</span>
                     </div>
                 </div>
                 <div class="card">
                     <img src="https://images.unsplash.com/photo-1555436169-20e93ea9a7ff?auto=format&fit=crop&w=400&q=60" class="card-img">
                     <div class="card-body">
-                        <span class="card-tag">ސައިންސް</span>
                         <h3 class="card-title">ސައިންސް ލެބްތައް</h3>
+                        <span class="card-tag">ސައިންސް</span>
                     </div>
                 </div>
             </div>
@@ -406,22 +302,11 @@
             <div style="margin-top:50px;"></div>
             <div class="section-header"><h2>އިސްލާމީ އިޤްތިޞާދު</h2></div>
             <div class="biz-strip">
-                <div class="biz-item">
-                    <span class="biz-val">MVR 135,420</span>
-                    <span class="biz-label">ރަނުގެ ނިޞާބު</span>
-                </div>
-                <div class="biz-item">
-                    <span class="biz-val">MVR 10,800</span>
-                    <span class="biz-label">ރިހީގެ ނިޞާބު</span>
-                </div>
-                <div class="biz-item">
-                    <span class="biz-val">ހަނޑޫ / ފައިސާ</span>
-                    <span class="biz-label">ފިތުރު ޒަކާތް</span>
-                </div>
-                <div class="biz-item">
-                    <span class="biz-val">އެހީތެރިވޭ</span>
-                    <span class="biz-label">ޞަދަޤާތް</span>
-                </div>
+                <div class="biz-item"><span class="biz-val">MVR 135,420</span><span class="biz-label">ރަނުގެ ނިޞާބު</span></div>
+                <div class="biz-item"><span class="biz-val">MVR 10,800</span><span class="biz-label">ރިހީގެ ނިޞާބު</span></div>
+                <div class="biz-item"><span class="biz-val">ހަނޑޫ</span><span class="biz-label">ފިތުރު ޒަކާތް</span></div>
+                <div class="biz-item"><span class="biz-val">އެހީތެރިވޭ</span><span class="biz-label">ޞަދަޤާތް</span></div>
+                <div class="biz-item"><span class="biz-val">ކުރިއެރުން</span><span class="biz-label">ޙަލާލް ޓޫރިޒަމް</span></div>
             </div>
 
             <div style="margin-top:50px;"></div>
@@ -429,12 +314,12 @@
             <div class="lifestyle-grid">
                 <div class="life-card big">
                     <img src="https://images.unsplash.com/photo-1544367563-121910aa6e8a?auto=format&fit=crop&w=600&q=60">
-                    <div class="life-info">ކުދިންގެ ނަފްސާނީ ދުޅަހެޔޮކަން</div>
+                    <div class="life-info"><h3>ކުދިންގެ ނަފްސާނީ ދުޅަހެޔޮކަން</h3></div>
                 </div>
-                <div class="life-card"><img src="https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&w=300&q=60"><div class="life-info">ޞިއްޙީ ކާނާ</div></div>
-                <div class="life-card"><img src="https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?auto=format&fit=crop&w=300&q=60"><div class="life-info">އާއިލީ ގުޅުން</div></div>
-                <div class="life-card"><img src="https://images.unsplash.com/photo-1543333995-a09abd7d36d9?auto=format&fit=crop&w=300&q=60"><div class="life-info">ކަސްރަތު</div></div>
-                <div class="life-card"><img src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=300&q=60"><div class="life-info">ފޮތް ކިޔުން</div></div>
+                <div class="life-card"><img src="https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&w=300&q=60"><div class="life-info"><h5>ޞިއްޙީ ކާނާ</h5></div></div>
+                <div class="life-card"><img src="https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?auto=format&fit=crop&w=300&q=60"><div class="life-info"><h5>އާއިލީ ގުޅުން</h5></div></div>
+                <div class="life-card"><img src="https://images.unsplash.com/photo-1543333995-a09abd7d36d9?auto=format&fit=crop&w=300&q=60"><div class="life-info"><h5>ކަސްރަތު</h5></div></div>
+                <div class="life-card"><img src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=300&q=60"><div class="life-info"><h5>ފޮތް ކިޔުން</h5></div></div>
             </div>
 
             <div style="margin-top:50px;"></div>
@@ -454,12 +339,12 @@
                 </div>
             </div>
 
-            <div class="sidebar-widget" style="margin-top:40px; border-color:var(--royal-gold);">
+            <div class="sidebar-widget" style="margin-top:40px; border-color:var(--gold);">
                 <h3 class="sidebar-title">ޚިޔާލު ފޮނުއްވާ</h3>
                 <form action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
                     <input type="text" name="name" placeholder="ނަން" style="width:100%; padding:10px; margin-bottom:10px; border:1px solid #ddd; border-radius:4px;" required>
                     <textarea name="message" rows="3" placeholder="މެސެޖް" style="width:100%; padding:10px; margin-bottom:10px; border:1px solid #ddd; border-radius:4px;" required></textarea>
-                    <button style="padding:10px 25px; background:var(--royal-blue); color:white; border:none; cursor:pointer;">ފޮނުވާ</button>
+                    <button style="padding:10px 25px; background:var(--blue); color:white; border:none; cursor:pointer;">ފޮނުވާ</button>
                 </form>
             </div>
         </main>
@@ -491,11 +376,40 @@
             </div>
 
             <div class="sidebar-widget">
+                <h3 class="sidebar-title">އެންމެ ފަހުގެ ލިޔުންތައް</h3>
+                <div class="recent-post">
+                    <img src="https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=100&q=60">
+                    <div><h4>ކުދިން ތަރުބިއްޔަތު</h4></div>
+                </div>
+                <div class="recent-post">
+                    <img src="https://images.unsplash.com/photo-1542810634-71277d95dcbb?auto=format&fit=crop&w=100&q=60">
+                    <div><h4>ރަމަޟާން މަހުގެ ތައްޔާރީ</h4></div>
+                </div>
+            </div>
+
+            <div class="sidebar-widget">
                 <h3 class="sidebar-title">ގުޅުންހުރި ލިންކުތައް</h3>
                 <ul class="link-list">
                     <li><a href="https://www.moe.gov.mv">🏛️ އެޑިއުކޭޝަން މިނިސްޓްރީ</a></li>
                     <li><a href="https://mqa.gov.mv">📜 އެމް.ކިއު.އޭ</a></li>
                     <li><a href="https://ium.edu.mv">🎓 ޤައުމީ ޔުނިވަރސިޓީ</a></li>
+                </ul>
+            </div>
+
+            <div class="sidebar-widget">
+                <h3 class="sidebar-title">ދައުލަތުގެ ވުޒާރާތައް</h3>
+                <ul class="link-list">
+                    <li><a href="#">🏛️ ރައީސް އޮފީސް</a></li>
+                    <li><a href="#">🕌 އިސްލާމިކް މިނިސްޓްރީ</a></li>
+                </ul>
+            </div>
+
+            <div class="sidebar-widget">
+                <h3 class="sidebar-title">ޞިއްޙީ & މުވާޞަލާތީ</h3>
+                <ul class="link-list">
+                    <li><a href="#">🏥 އައި.ޖީ.އެމް.އެޗް</a></li>
+                    <li><a href="#">🩺 އޭ.ޑީ.ކޭ</a></li>
+                    <li><a href="#">📡 ދިރާގު / އުރީދޫ</a></li>
                 </ul>
             </div>
 
@@ -514,7 +428,7 @@
     <footer>
         <div class="footer-grid">
             <div class="footer-col">
-                <h3 style="color:var(--royal-gold);">ޒާދް އެކަޑެމީ</h3>
+                <h3 style="color:var(--gold);">ޒާދް އެކަޑެމީ</h3>
                 <p>📍 މާލެ، ދިވެހިރާއްޖެ</p>
                 <p>📧 academyzaa@gmail.com</p>
             </div>
@@ -530,9 +444,7 @@
                 </form>
             </div>
         </div>
-        <div style="margin-top:30px; border-top:1px solid rgba(255,255,255,0.1); padding-top:20px;">
-            &copy; 2025 Zaad Academy Blog. All Rights Reserved.
-        </div>
+        <div class="copyright">&copy; 2025 Zaad Academy Blog. All Rights Reserved.</div>
     </footer>
 
     <script>
