@@ -3,51 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ޑިޖިޓަލް ލައިބްރަރީ - ޒާދް އެކަޑެމީ</title>
+    <title>ޒާދް އެކަޑެމީ - ޞަފުޙާ</title>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thaana&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* Paste the SAME CSS from index.html here for consistency */
+        :root { --academy-blue: #0C2D48; --academy-gold: #B49658; --off-white: #f4f6f8; --font-dv: 'Faruma', 'Noto Sans Thaana', sans-serif; }
+        body { font-family: var(--font-dv); background: var(--off-white); margin: 0; }
+        /* Add other essential CSS from index.html here... */
+        /* Basic Layout for Subpage */
+        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+        header { background: var(--academy-blue); padding: 20px; color: white; text-align: center; border-bottom: 5px solid var(--academy-gold); }
+        nav { background: white; text-align: center; padding: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        nav a { margin: 0 15px; text-decoration: none; color: var(--academy-blue); font-weight: bold; }
+        h1 { color: var(--academy-blue); border-bottom: 2px solid var(--academy-gold); display: inline-block; }
+    </style>
 </head>
 <body>
-    <div class="top-bar"><div class="contact-info">📞 +960 9901550</div></div>
-    <header>
-        <div class="header-container">
-            <div class="logo-section"><img src="images/logo.png" class="logo-img"><div class="site-logo"><h1>ޒާދް އެކަޑެމީ</h1><span>Zaad Academy Blog</span></div></div>
-        </div>
-    </header>
+    <header><h1>ޒާދް އެކަޑެމީ</h1></header>
     <nav>
-        <ul class="main-menu">
-            <li><a href="index.html">ހޯމް</a></li>
-            <li><a href="library.html" style="color:#B49658;">ޑިޖިޓަލް ލައިބްރަރީ</a></li>
-            </ul>
+        <a href="index.html">ހޯމް</a>
+        <a href="courses.html">ކޯސްތައް</a>
+        <a href="library.html">ލައިބްރަރީ</a>
+        <a href="contact.html">ގުޅިލައްވާ</a>
     </nav>
-
-    <div class="container">
-        <main class="content">
-            <div class="category-header"><h2>📚 ޑިޖިޓަލް ލައިބްރަރީ</h2></div>
-            <div class="library-grid">
-                <div class="book-card">
-                    <img src="https://via.placeholder.com/250x350/0C2D48/FFFFFF?text=Quran" class="book-cover">
-                    <div class="card-content">
-                        <h3>ޤުރުއާން ތަޖުވީދު</h3>
-                        <a href="pdfs/quran.pdf" class="download-btn" download>ޑައުންލޯޑް</a>
-                    </div>
-                </div>
-                <div class="book-card">
-                    <img src="https://via.placeholder.com/250x350/B49658/FFFFFF?text=Arabic" class="book-cover">
-                    <div class="card-content">
-                        <h3>ޢަރަބި ބަސް</h3>
-                        <a href="pdfs/arabic.pdf" class="download-btn" download>ޑައުންލޯޑް</a>
-                    </div>
-                </div>
-            </div>
-        </main>
-        
-        <aside class="sidebar">
-            <div class="sidebar-widget"><h3 class="sidebar-title">ގުޅުންހުރި ލިންކުތައް</h3>...</div>
-        </aside>
+    <div class="container" style="background:white; margin-top:30px; padding:40px; border-radius:10px;">
+        <h1>ޞަފުޙާގެ ސުރުޚީ</h1>
+        <p>މިއީ ސަބް ޕޭޖުގެ މަޢުލޫމާތު ހިމަނާ ތަނެވެ...</p>
     </div>
-    
-    <footer><div class="copyright">&copy; 2025 Zaad Academy.</div></footer>
-    <script src="js/script.js"></script>
+    <footer style="background:var(--academy-blue); color:#ccc; text-align:center; padding:20px; margin-top:50px;">
+        &copy; 2025 Zaad Academy.
+    </footer>
 </body>
 </html>
