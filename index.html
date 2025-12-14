@@ -3,91 +3,213 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ޒާދް އެކަޑެމީ - Home</title>
+    <title>ޒާދް އެކަޑެމީ - Zaad Academy</title>
+    
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thaana&family=Amiri:wght@400;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <style>
-        /* --- MAIN CSS --- */
-        :root { --blue: #0C2D48; --gold: #B49658; --white: #fff; --bg: #f4f6f8; --font-dv: 'Faruma', 'Noto Sans Thaana', sans-serif; --font-en: 'Playfair Display', serif; }
-        @font-face { font-family: 'Faruma'; src: url('fonts/Faruma.ttf') format('truetype'); }
+        /* --- CSS STYLES --- */
+        :root {
+            --blue: #0C2D48;
+            --light-blue: #2E8BC0;
+            --gold: #B49658;
+            --white: #ffffff;
+            --off-white: #f4f6f8;
+            --text: #1a1a1a;
+            --font-dv: 'Faruma', 'Noto Sans Thaana', sans-serif;
+            --font-en: 'Playfair Display', serif;
+        }
+
+        /* Local Font Setup */
+        @font-face {
+            font-family: 'Faruma';
+            src: url('fonts/Faruma.ttf') format('truetype');
+            font-weight: normal;
+        }
+
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: var(--font-dv); background: var(--bg); color: #1a1a1a; line-height: 1.8; overflow-x: hidden; }
-        a { text-decoration: none; color: inherit; transition: 0.3s; } ul { list-style: none; padding: 0; margin: 0; } img { max-width: 100%; display: block; }
-
-        /* Header */
-        .top-bar { background: #051626; color: #ccc; padding: 10px 5%; display: flex; justify-content: space-between; font-family: var(--font-en); font-size: 0.9em; }
-        .lang-btn { margin-right: 10px; color: #aaa; cursor: pointer; } .lang-btn:hover { color: var(--gold); }
-        header { background: var(--blue); padding: 30px 5%; border-bottom: 5px solid var(--gold); text-align: center; }
-        .site-logo h1 { color: white; margin: 0; font-size: 3em; } .site-logo span { color: var(--gold); font-family: var(--font-en); letter-spacing: 2px; text-transform: uppercase; font-weight: bold; }
         
-        /* Nav */
-        nav { background: white; box-shadow: 0 4px 10px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 1000; }
-        .main-menu { display: flex; justify-content: center; flex-wrap: wrap; }
-        .main-menu li a { display: block; padding: 15px 20px; color: var(--blue); font-weight: bold; }
-        .main-menu li a:hover { background: #f9f9f9; color: var(--gold); }
+        body {
+            font-family: var(--font-dv);
+            background-color: var(--off-white);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
 
-        /* Ticker */
+        a { text-decoration: none; color: inherit; transition: 0.3s; }
+        ul { list-style: none; padding: 0; margin: 0; }
+        img { max-width: 100%; display: block; }
+
+        /* 1. TOP BAR */
+        .top-bar {
+            background-color: #051626; color: #ccc; padding: 8px 5%;
+            display: flex; justify-content: space-between; align-items: center;
+            font-family: var(--font-en); font-size: 0.9em;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .lang-switch { display: flex; gap: 15px; }
+        .lang-switch a { display: flex; align-items: center; gap: 5px; color: #aaa; font-weight: bold; }
+        .lang-switch a:hover, .lang-switch a.active { color: var(--gold); }
+        .flag { width: 20px; height: 14px; border-radius: 2px; }
+
+        /* 2. HEADER */
+        header {
+            background-color: var(--blue); color: white; padding: 30px 5%;
+            border-bottom: 5px solid var(--gold); position: relative;
+        }
+        /* Background Pattern */
+        header::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background-image: linear-gradient(30deg, #0C2D48 12%, transparent 12.5%, transparent 87%, #0C2D48 87.5%, #0C2D48);
+            background-size: 60px 100px; opacity: 0.5; z-index: 0;
+        }
+
+        .header-container { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; position: relative; z-index: 1; }
+        
+        .logo-section { display: flex; align-items: center; gap: 20px; }
+        .logo-img { 
+            height: 90px; width: auto; 
+            border: 3px solid var(--gold); border-radius: 50%; 
+            background: white; padding: 4px; box-shadow: 0 0 15px rgba(180, 150, 88, 0.5); 
+        }
+        
+        .site-logo h1 { font-size: 3.2em; margin: 0; line-height: 1; text-shadow: 2px 2px 5px rgba(0,0,0,0.5); }
+        
+        /* ENGLISH NAME IN WHITE */
+        .site-logo span { 
+            font-family: var(--font-en); 
+            color: var(--white); 
+            font-size: 0.9em; 
+            text-transform: uppercase; 
+            display: block; 
+            margin-top: 5px; 
+            font-weight: bold;
+            letter-spacing: 2px;
+        }
+
+        .ad-banner { 
+            background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);
+            padding: 20px 40px; border-radius: 10px; font-weight: bold; backdrop-filter: blur(5px);
+        }
+
+        /* 3. TICKER */
         .ticker-wrap { background: #e9ecef; overflow: hidden; height: 40px; line-height: 40px; border-bottom: 1px solid #ccc; }
         .ticker { display: inline-block; white-space: nowrap; padding-right: 100%; animation: ticker 40s linear infinite; }
         .ticker-item { display: inline-block; padding: 0 2rem; color: #333; font-weight: bold; }
         @keyframes ticker { 0% { transform: translate3d(0, 0, 0); } 100% { transform: translate3d(100%, 0, 0); } }
 
-        /* Layout */
+        /* 4. NAV */
+        nav { background: white; box-shadow: 0 4px 15px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 1000; }
+        .main-menu { display: flex; justify-content: center; flex-wrap: wrap; padding: 0 2%; }
+        .main-menu li a { display: block; padding: 16px 22px; color: var(--blue); font-weight: bold; font-size: 1.1em; border-bottom: 3px solid transparent; }
+        .main-menu li a:hover { color: var(--gold); border-bottom: 3px solid var(--gold); background: #f9f9f9; }
+
+        .sub-menu { background: #f0f4f8; display: flex; justify-content: center; flex-wrap: wrap; border-bottom: 1px solid #ddd; }
+        .sub-menu li a { display: block; padding: 10px 20px; color: #555; font-size: 0.95em; border-left: 1px solid #ddd; }
+        .sub-menu li a:hover { color: var(--blue); background: #e9ecef; }
+
+        /* 5. LAYOUT */
         .container { display: grid; grid-template-columns: 3fr 1fr; gap: 40px; padding: 50px 5%; max-width: 1500px; margin: 0 auto; }
-        .hero-section { display: grid; grid-template-columns: 2fr 1fr; gap: 25px; margin-bottom: 50px; }
+        
+        .section-title { 
+            display: flex; justify-content: space-between; align-items: center;
+            border-bottom: 3px solid var(--blue); margin-bottom: 25px; padding-bottom: 10px; 
+        }
+        .section-title h2 { color: var(--blue); margin: 0; background: var(--off-white); padding-left: 20px; }
+
+        /* CARDS */
+        .card { background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.05); transition: 0.3s; border: 1px solid #eee; }
+        .card:hover { transform: translateY(-5px); border-color: var(--gold); }
+        .card-img { width: 100%; height: 220px; object-fit: cover; }
+        .card-content { padding: 20px; }
+        .card-tag { background: var(--gold); color: white; padding: 4px 10px; border-radius: 4px; font-size: 0.8em; font-weight: bold; display: inline-block; margin-bottom: 10px; }
+        .card-title { font-size: 1.3em; margin: 0 0 10px; color: var(--blue); font-weight: bold; }
+
+        /* SECTIONS */
+        .hero { display: grid; grid-template-columns: 2fr 1fr; gap: 25px; margin-bottom: 50px; }
         .hero-main { position: relative; border-radius: 12px; overflow: hidden; height: 450px; }
         .hero-main img { width: 100%; height: 100%; object-fit: cover; }
-        .hero-overlay { position: absolute; bottom: 0; left: 0; right: 0; padding: 40px; background: linear-gradient(to top, var(--blue), transparent); color: white; }
+        .hero-overlay { position: absolute; bottom: 0; width: 100%; padding: 40px; background: linear-gradient(to top, var(--blue), transparent); color: white; }
+        .side-card { display: flex; align-items: center; background: white; border-radius: 8px; overflow: hidden; height: 100%; border-right: 4px solid var(--gold); box-shadow: 0 5px 10px rgba(0,0,0,0.05); }
+        .side-card img { width: 130px; height: 100%; object-fit: cover; }
+        .side-info { padding: 15px; font-weight: bold; color: var(--blue); }
+
+        .tech-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
         
-        .side-card { display: flex; align-items: center; background: white; border-radius: 8px; overflow: hidden; height: 100%; box-shadow: 0 5px 15px rgba(0,0,0,0.05); border-right: 4px solid var(--gold); }
-        .side-card img { width: 120px; height: 100%; object-fit: cover; }
-        .side-content { padding: 15px; font-weight: bold; color: var(--blue); }
+        .biz-strip { display: flex; gap: 20px; overflow-x: auto; padding: 20px; background: white; border-radius: 15px; border-top: 5px solid var(--blue); margin-bottom: 50px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+        .biz-item { min-width: 150px; text-align: center; border-right: 1px dashed #ddd; }
+        .biz-val { font-size: 1.4em; font-weight: bold; color: var(--blue); display: block; }
 
-        /* Cards */
-        .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; }
-        .card { background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.05); transition: 0.3s; }
-        .card:hover { transform: translateY(-5px); box-shadow: 0 15px 30px rgba(0,0,0,0.1); }
-        .card-img { height: 200px; width: 100%; object-fit: cover; }
-        .card-content { padding: 20px; }
-        .card-title { color: var(--blue); margin-bottom: 10px; font-weight: bold; font-size: 1.2em; }
+        .lifestyle-grid { display: grid; grid-template-columns: repeat(4, 1fr); grid-template-rows: repeat(2, 200px); gap: 15px; }
+        .life-card { position: relative; border-radius: 10px; overflow: hidden; }
+        .life-card img { width: 100%; height: 100%; object-fit: cover; }
+        .life-card.big { grid-column: span 2; grid-row: span 2; }
+        .life-info { position: absolute; bottom: 0; width: 100%; background: rgba(12, 45, 72, 0.85); color: white; padding: 10px; font-weight: bold; }
 
-        /* Sidebar */
+        /* SIDEBAR */
         .sidebar-widget { background: white; border-radius: 8px; padding: 20px; margin-bottom: 25px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); border-top: 4px solid var(--blue); }
         .sidebar-title { font-size: 1.2em; margin-bottom: 15px; border-bottom: 2px solid #eee; padding-bottom: 10px; color: var(--blue); font-weight: bold; }
         .link-list li { margin-bottom: 10px; border-bottom: 1px dashed #eee; padding-bottom: 5px; }
-        .link-list a:hover { color: var(--gold); font-weight: bold; }
+        .link-list a { display: flex; align-items: center; color: #555; } 
+        .link-list a:hover { color: var(--blue); font-weight: bold; }
+        .link-list span { width: 30px; text-align: center; margin-left: 10px; }
 
-        /* Footer */
-        footer { background: var(--blue); color: #ccc; padding: 50px 5%; margin-top: 50px; text-align: center; border-top: 5px solid var(--gold); }
+        /* Weather & Clock Widget */
+        .weather-widget { text-align: center; background: linear-gradient(135deg, var(--light-blue), var(--blue)); color: white; padding: 25px; border-radius: 10px; }
+        .live-clock { font-size: 2.2em; font-weight: bold; font-family: var(--font-en); margin-bottom: 5px; }
+        
+        .prayer-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px dashed #eee; color: #555; }
+        .prayer-row span:last-child { font-weight: bold; color: var(--blue); font-family: var(--font-en); }
 
-        @media (max-width: 992px) { .container, .hero-section { grid-template-columns: 1fr; } }
+        /* FOOTER */
+        footer { background: var(--blue); color: #ccc; padding: 60px 5%; margin-top: 80px; border-top: 5px solid var(--gold); }
+        .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 40px; }
+        .footer-col h3 { color: var(--gold); border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; margin-bottom: 20px; }
+        .footer-col a { color: #ccc; } .footer-col a:hover { color: white; }
+        .copyright { text-align: center; margin-top: 50px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px; }
+
+        @media (max-width: 992px) { 
+            .container, .hero, .tech-grid, .lifestyle-grid { grid-template-columns: 1fr; } 
+            .lifestyle-grid { grid-template-rows: auto; }
+            .life-card { height: 250px; }
+            .ad-banner { display: none; }
+        }
     </style>
 </head>
 <body>
 
     <div class="top-bar">
-        <div>📞 +960 9901550</div>
-        <div>
-            <span class="lang-btn">ދިވެހި</span> | <span class="lang-btn">English</span> | <span class="lang-btn">عربي</span>
+        <div class="contact-info">📞 +960 9901550 | ✉️ academyzaa@gmail.com</div>
+        <div class="lang-switch">
+            <a href="index.html" class="active"><img src="https://flagcdn.com/w20/mv.png" class="flag"> ދިވެހި</a>
+            <a href="index-ar.html"><img src="https://flagcdn.com/w20/sa.png" class="flag"> عربي</a>
+            <a href="index-en.html"><img src="https://flagcdn.com/w20/gb.png" class="flag"> English</a>
         </div>
     </div>
 
     <header>
-        <div class="site-logo">
-            <img src="images/logo.png" style="height:80px; width:auto; margin:0 auto 10px; border-radius:50%; border:2px solid #B49658; padding:2px; background:white;">
-            <h1>ޒާދް އެކަޑެމީ</h1>
-            <span>Zaad Academy Blog</span>
+        <div class="header-container">
+            <div class="logo-section">
+                <img src="images/logo.png" class="logo-img" alt="Logo" onerror="this.src='https://via.placeholder.com/100/B49658/FFFFFF?text=Z'">
+                <div class="site-logo">
+                    <h1>ޒާދް އެކަޑެމީ</h1>
+                    <span>Zaad Academy Blog</span> </div>
+            </div>
+            <div class="ad-banner">
+                <span>🎓 ޢިލްމު ހޯދުމަކީ ކޮންމެ މުސްލިމެއްގެ މައްޗަށް ވާޖިބެކެވެ</span>
+            </div>
         </div>
     </header>
 
     <div class="ticker-wrap">
         <div class="ticker">
             <div class="ticker-item">🔴 އައު ކޯސްތަކަށް ހުޅުވާލުން...</div>
-            <div class="ticker-item">🤖 އޭ.އައި ވޯކްޝޮޕް...</div>
+            <div class="ticker-item">🤖 އޭ.އައި ވޯކްޝޮޕް އަންނަ ހަފްތާގައި...</div>
             <div class="ticker-item">🏆 ޤުރުއާން މުބާރާތުގެ ނަތީޖާ...</div>
             <div class="ticker-item">🎓 ސްކޮލަރޝިޕް ފުރުޞަތު...</div>
-            <div class="ticker-item">📚 ފޮތް މައުރަޒު...</div>
+            <div class="ticker-item">📚 ފޮތް މައުރަޒު ފެށިއްޖެ...</div>
         </div>
     </div>
 
@@ -95,90 +217,118 @@
         <ul class="main-menu">
             <li><a href="index.html">ހޯމް</a></li>
             <li><a href="courses.html">ކޯސްތައް</a></li>
-            <li><a href="library.html">ލައިބްރަރީ</a></li>
+            <li><a href="modern-education.html">ޒަމާނީ ތަޢުލީމް</a></li>
+            <li><a href="co-curricular.html">ކޯ-ކަރިކިއުލަރ</a></li>
+            <li><a href="islamic-economy.html">އިސްލާމީ އިޤްތިޞާދު</a></li>
+            <li><a href="tarbiyah.html">ތަރުބިއްޔަތު</a></li>
+            <li><a href="library.html">ޑިޖިޓަލް ލައިބްރަރީ</a></li>
             <li><a href="contact.html">ގުޅިލައްވާ</a></li>
         </ul>
     </nav>
+    <ul class="sub-menu">
+        <li><a href="ai.html">އާޓިފިޝަލް އިންޓެލިޖެންސް</a></li>
+        <li><a href="ai-teaching.html">ކިޔަވައިދިނުމުގައި އޭ.އައި</a></li>
+        <li><a href="ai-research.html">ދިރާސާކުރުމަށް އޭ.އައި</a></li>
+        <li><a href="edtech.html">އެޑިއުކޭޝަނަލް ޓެކްނޮލޮޖީ</a></li>
+        <li><a href="online-learning.html">އޮންލައިން ލާރނިންގ</a></li>
+    </ul>
 
     <div class="container">
+        
         <main>
-            <div class="hero-section">
+            <div class="hero">
                 <div class="hero-main">
+                    <span class="card-tag" style="position:absolute; top:20px; right:20px; z-index:10;">މުހިންމު</span>
                     <img src="https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&w=800&q=80">
                     <div class="hero-overlay">
-                        <h2 style="font-size:2em;">އުނގެނުމުގެ އައު މަންޒިލް</h2>
-                        <p>ޒަމާނީ ވަސީލަތްތަކާއެކު ފެންވަރު ރަނގަޅު ތަޢުލީމް.</p>
+                        <h2 style="font-size:2em; margin-bottom:10px;">ޒާދް އެކަޑެމީ: އައު އަހަރުގެ ކޯސްތަކަށް މަރުޙަބާ</h2>
                     </div>
                 </div>
                 <div class="hero-side">
-                    <div class="side-card"><img src="https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=200&q=60"><div class="side-content">އޮންލައިން ކޯސް</div></div>
-                    <div class="side-card"><img src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&w=200&q=60"><div class="side-content">ދަރިވަރުންގެ ފެންވަރު</div></div>
+                    <div class="side-card"><img src="https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=200&q=60"><div class="side-info">އޮންލައިން ޕޯޓަލް</div></div>
+                    <div class="side-card"><img src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&w=200&q=60"><div class="side-info">ދަރިވަރުންގެ ނަތީޖާ</div></div>
+                    <div class="side-card"><img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=200&q=60"><div class="side-info">ޑިޖިޓަލް ލައިބްރަރީ</div></div>
                 </div>
             </div>
 
-            <div style="margin-bottom:30px; border-bottom:2px solid #0C2D48; padding-bottom:10px;">
-                <h2 style="color:#0C2D48;">ޒަމާނީ ތަޢުލީމް & ޓެކްނޮލޮޖީ</h2>
+            <div class="section-title"><h2>ޒަމާނީ ތަޢުލީމް & ޓެކްނޮލޮޖީ</h2></div>
+            <div class="tech-grid">
+                <div class="card">
+                    <div class="card-img-wrap"><img src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=400&q=60" class="card-img"></div>
+                    <div class="card-content"><h3>ކްލާސްރޫމްގައި އޭ.އައި</h3></div>
+                </div>
+                <div class="card">
+                    <div class="card-img-wrap"><img src="https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=400&q=60" class="card-img"></div>
+                    <div class="card-content"><h3>ކޯޑިންގ ދަސްކުރުން</h3></div>
+                </div>
+                <div class="card">
+                    <div class="card-img-wrap"><img src="https://images.unsplash.com/photo-1555436169-20e93ea9a7ff?auto=format&fit=crop&w=400&q=60" class="card-img"></div>
+                    <div class="card-content"><h3>ސައިންސް ލެބް</h3></div>
+                </div>
             </div>
-            <div class="grid-3">
-                <div class="card">
-                    <img src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=400&q=60" class="card-img">
-                    <div class="card-content">
-                        <h3 class="card-title">ކްލާސްރޫމްގައި އޭ.އައި</h3>
-                        <p style="font-size:0.9em; color:#666;">ކިޔަވައިދިނުމުގައި ޒަމާނީ ޓެކްނޮލޮޖީ ބޭނުންކުރުން.</p>
-                    </div>
+
+            <div style="margin-top:50px;"></div>
+            <div class="section-title"><h2>އިސްލާމީ އިޤްތިޞާދު</h2></div>
+            <div class="biz-strip">
+                <div class="biz-item"><span class="biz-val">MVR 135,420</span>ރަނުގެ ނިޞާބު</div>
+                <div class="biz-item"><span class="biz-val">MVR 10,800</span>ރިހީގެ ނިޞާބު</div>
+                <div class="biz-item"><span class="biz-val">ހަނޑޫ</span>ފިތުރު ޒަކާތް</div>
+            </div>
+
+            <div style="margin-top:50px;"></div>
+            <div class="section-title"><h2>ތަރުބިއްޔަތާއި ދުޅަހެޔޮކަން</h2></div>
+            <div class="lifestyle-grid">
+                <div class="life-card big">
+                    <img src="https://images.unsplash.com/photo-1544367563-121910aa6e8a?auto=format&fit=crop&w=600&q=60">
+                    <div class="life-info">ކުދިންގެ ނަފްސާނީ ދުޅަހެޔޮކަން</div>
                 </div>
-                <div class="card">
-                    <img src="https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=400&q=60" class="card-img">
-                    <div class="card-content">
-                        <h3 class="card-title">ކޯޑިންގ ދަސްކުރުން</h3>
-                        <p style="font-size:0.9em; color:#666;">ކުޑަކުދިންނަށް ޚާއްޞަ ޕްރޮގްރާމިންގ ކްލާސްތައް.</p>
-                    </div>
-                </div>
-                <div class="card">
-                    <img src="https://images.unsplash.com/photo-1555436169-20e93ea9a7ff?auto=format&fit=crop&w=400&q=60" class="card-img">
-                    <div class="card-content">
-                        <h3 class="card-title">ސައިންސް ލެބް</h3>
-                        <p style="font-size:0.9em; color:#666;">އަމަލީ ގޮތުން ސައިންސް ތަޖުރިބާ ކުރުން.</p>
-                    </div>
-                </div>
+                <div class="life-card"><img src="https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&w=300&q=60"><div class="life-info">ޞިއްޙީ ކާނާ</div></div>
+                <div class="life-card"><img src="https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?auto=format&fit=crop&w=300&q=60"><div class="life-info">އާއިލީ ގުޅުން</div></div>
             </div>
         </main>
 
         <aside>
-            <div class="sidebar-widget" style="text-align:center; background:linear-gradient(to right, #2E8BC0, #0C2D48); color:white;">
-                <div id="live-clock" style="font-size:2em; font-weight:bold; font-family:'Playfair Display';">--:--</div>
-                <div style="font-size:1.1em;">މާލެ, ދިވެހިރާއްޖެ</div>
-                <div style="font-size:2.5em; font-weight:bold;">30°C</div>
+            <div class="sidebar-widget" style="padding:0; border:none; overflow:hidden;">
+                <div class="weather-widget">
+                    <div id="live-clock" class="live-clock">--:--</div>
+                    <p id="current-date" style="font-size:1.1em; opacity:0.9;">--</p>
+                    <div style="margin:10px 0; font-size:3em; font-weight:bold;">30°C</div>
+                    <div>🌤️ މާލެ، ދިވެހިރާއްޖެ</div>
+                </div>
             </div>
 
             <div class="sidebar-widget">
-                <h3 class="sidebar-title">މުހިންމު ލިންކުތައް</h3>
+                <h3 class="sidebar-title">ނަމާދު ވަގުތު (މާލެ)</h3>
+                <div id="prayer-content">
+                    <div class="prayer-row"><span>ފަތިސް</span> <span id="fajr-time">--:--</span></div>
+                    <div class="prayer-row"><span>އިރުއަރާ</span> <span id="sunrise-time">--:--</span></div>
+                    <div class="prayer-row"><span>މެންދުރު</span> <span id="dhuhr-time">--:--</span></div>
+                    <div class="prayer-row"><span>ޢަޞްރު</span> <span id="asr-time">--:--</span></div>
+                    <div class="prayer-row"><span>މަޣްރިބް</span> <span id="maghrib-time">--:--</span></div>
+                    <div class="prayer-row"><span>ޢިޝާ</span> <span id="isha-time">--:--</span></div>
+                </div>
+            </div>
+
+            <div class="sidebar-widget">
+                <h3 class="sidebar-title">ގުޅުންހުރި ލިންކުތައް</h3>
                 <ul class="link-list">
-                    <li><a href="#">🏛️ އެޑިއުކޭޝަން މިނިސްޓްރީ</a></li>
-                    <li><a href="#">📜 އެމް.ކިއު.އޭ</a></li>
-                    <li><a href="#">🎓 ޤައުމީ ޔުނިވަރސިޓީ</a></li>
-                    <li><a href="#">🏥 އައި.ޖީ.އެމް.އެޗް</a></li>
+                    <li><a href="https://moe.gov.mv" target="_blank"><span>🏛️</span> އެޑިއުކޭޝަން މިނިސްޓްރީ</a></li>
+                    <li><a href="https://mqa.gov.mv" target="_blank"><span>📜</span> އެމް.ކިއު.އޭ</a></li>
+                    <li><a href="https://ium.edu.mv" target="_blank"><span>🎓</span> އިސްލާމިކް ޔުނިވަރސިޓީ</a></li>
                 </ul>
             </div>
 
             <div class="sidebar-widget">
-                <h3 class="sidebar-title">ހޮޓްލައިން</h3>
-                <div style="display:flex; gap:10px;">
-                    <div style="flex:1; background:#f4f6f8; padding:10px; text-align:center; border-radius:5px; font-weight:bold; color:#0C2D48;">👮 119</div>
-                    <div style="flex:1; background:#f4f6f8; padding:10px; text-align:center; border-radius:5px; font-weight:bold; color:#0C2D48;">🚑 102</div>
+                <h3 class="sidebar-title">މުހިންމު ނަންބަރުތައް</h3>
+                <div class="hotlines-grid">
+                    <div class="hotline-item">👮 119</div>
+                    <div class="hotline-item">🚑 102</div>
+                    <div class="hotline-item">🚒 118</div>
+                    <div class="hotline-item">🚢 191</div>
                 </div>
             </div>
         </aside>
     </div>
 
-    <footer>&copy; 2025 Zaad Academy Blog. All Rights Reserved.</footer>
-
-    <script>
-        function updateClock() {
-            const now = new Date();
-            document.getElementById('live-clock').textContent = now.toLocaleTimeString('en-US', { hour12: true });
-        }
-        setInterval(updateClock, 1000); updateClock();
-    </script>
-</body>
-</html>
+    <footer>
+        <div class="footer-
