@@ -1,29 +1,22 @@
-// Current Date
-const dateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-document.getElementById('current-date').textContent = new Date().toLocaleDateString('en-US', dateOptions);
-
-// Prayer Times Fetcher
+// Prayer Times (Same ID used across all pages)
 async function getPrayerTimes() {
     try {
         const date = new Date();
         const timestamp = Math.floor(date.getTime() / 1000);
-        // Male' Coordinates: 4.1755, 73.5093
         const response = await fetch(`https://api.aladhan.com/v1/timings/${timestamp}?latitude=4.1755&longitude=73.5093&method=1`);
         const data = await response.json();
         const timings = data.data.timings;
 
-        document.getElementById('fajr-time').textContent = timings.Fajr;
-        document.getElementById('sunrise-time').textContent = timings.Sunrise;
-        document.getElementById('dhuhr-time').textContent = timings.Dhuhr;
-        document.getElementById('asr-time').textContent = timings.Asr;
-        document.getElementById('maghrib-time').textContent = timings.Maghrib;
-        document.getElementById('isha-time').textContent = timings.Isha;
+        // Ensure these IDs exist in all HTML files
+        if(document.getElementById('fajr-time')) document.getElementById('fajr-time').textContent = timings.Fajr;
+        if(document.getElementById('sunrise-time')) document.getElementById('sunrise-time').textContent = timings.Sunrise;
+        if(document.getElementById('dhuhr-time')) document.getElementById('dhuhr-time').textContent = timings.Dhuhr;
+        if(document.getElementById('asr-time')) document.getElementById('asr-time').textContent = timings.Asr;
+        if(document.getElementById('maghrib-time')) document.getElementById('maghrib-time').textContent = timings.Maghrib;
+        if(document.getElementById('isha-time')) document.getElementById('isha-time').textContent = timings.Isha;
 
-        document.getElementById('prayer-loading').style.display = 'none';
-        document.getElementById('prayer-content').style.display = 'block';
     } catch (error) {
         console.error("Error fetching times:", error);
-        document.getElementById('prayer-loading').textContent = "Error loading times";
     }
 }
 getPrayerTimes();
