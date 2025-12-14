@@ -12,20 +12,17 @@
         /* --- CSS VARIABLES --- */
         :root {
             --blue: #0C2D48;
+            --light-blue: #2E8BC0;
             --gold: #B49658;
             --white: #ffffff;
             --bg: #f4f6f8;
             --text: #1a1a1a;
-            /* FONT STACK: Local -> Google -> System */
-            --font-dv: 'Mv Galan', 'Faruma', 'Noto Sans Thaana', sans-serif; 
+            --font-dv: 'Noto Sans Thaana', 'Faruma', sans-serif; 
             --font-en: 'Playfair Display', serif;
         }
 
-        /* Attempt to load local font */
-        @font-face {
-            font-family: 'Mv Galan';
-            src: url('fonts/Mv Galan.ttf') format('truetype');
-        }
+        /* Load Local Font */
+        @font-face { font-family: 'Faruma'; src: url('fonts/Mv Galan.ttf') format('truetype'); }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
         
@@ -66,7 +63,7 @@
         
         .site-title h1 { color: white; margin: 0; font-size: 3em; line-height: 1; }
         .site-title span { 
-            font-family: var(--font-en); color: white !important; /* FORCED WHITE */
+            font-family: var(--font-en); color: white !important; 
             font-size: 0.9em; text-transform: uppercase; display: block; 
             margin-top: 5px; font-weight: bold; letter-spacing: 2px;
         }
@@ -84,14 +81,8 @@
 
         /* --- NAV --- */
         nav { background: white; box-shadow: 0 4px 10px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 1000; }
-        
         .nav-container { display: flex; justify-content: center; position: relative; padding: 0 5%; }
-        
-        /* Mobile Menu Button */
-        .menu-btn { 
-            display: none; font-size: 1.8em; padding: 15px; 
-            cursor: pointer; color: var(--blue); position: absolute; right: 10px; top: 0; 
-        }
+        .menu-btn { display: none; font-size: 1.8em; padding: 15px; cursor: pointer; color: var(--blue); position: absolute; right: 10px; top: 0; }
 
         .main-menu { display: flex; flex-wrap: wrap; justify-content: center; width: 100%; }
         .main-menu li a { 
@@ -117,7 +108,7 @@
         }
         .section-header h2 { color: var(--blue); margin: 0; font-size: 1.8em; }
 
-        /* --- HERO --- */
+        /* HERO */
         .hero { display: grid; grid-template-columns: 2fr 1fr; gap: 25px; margin-bottom: 50px; }
         .hero-main { position: relative; border-radius: 10px; overflow: hidden; height: 450px; }
         .hero-main img { width: 100%; height: 100%; object-fit: cover; }
@@ -127,7 +118,7 @@
         .side-card img { width: 110px; height: 100%; object-fit: cover; border-radius: 5px; margin-left: 15px; }
         .side-info { padding: 15px; font-weight: bold; color: var(--blue); }
 
-        /* --- CARDS --- */
+        /* CARDS */
         .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 25px; }
         .card { background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.05); transition: 0.3s; border: 1px solid #eee; }
         .card:hover { transform: translateY(-5px); border-color: var(--gold); }
@@ -136,7 +127,7 @@
         .card-title { color: var(--blue); margin: 0 0 10px; font-weight: bold; font-size: 1.2em; }
         .card-tag { background: var(--gold); color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.8em; margin-bottom: 10px; display: inline-block; }
 
-        /* --- ECONOMY --- */
+        /* ECONOMY */
         .biz-strip { 
             display: flex; gap: 20px; overflow-x: auto; padding: 25px; 
             background: white; border-radius: 15px; border-top: 5px solid var(--blue); 
@@ -145,49 +136,52 @@
         .biz-item { min-width: 160px; text-align: center; border-right: 1px dashed #ddd; }
         .biz-val { font-size: 1.4em; font-weight: bold; color: var(--blue); display: block; font-family: var(--font-en); }
 
-        /* --- LIFESTYLE --- */
+        /* LIFESTYLE */
         .lifestyle-grid { display: grid; grid-template-columns: repeat(4, 1fr); grid-template-rows: repeat(2, 200px); gap: 15px; }
         .life-card { position: relative; border-radius: 10px; overflow: hidden; }
         .life-card img { width: 100%; height: 100%; object-fit: cover; }
         .life-card.big { grid-column: span 2; grid-row: span 2; }
         .life-info { position: absolute; bottom: 0; width: 100%; background: rgba(12, 45, 72, 0.85); color: white; padding: 10px; font-weight: bold; }
 
-        /* --- SIDEBAR --- */
+        /* --- SIDEBAR WIDGETS --- */
         .sidebar-widget { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); margin-bottom: 30px; border-top: 4px solid var(--blue); }
         .sidebar-title { font-size: 1.2em; margin-bottom: 15px; border-bottom: 2px solid #eee; padding-bottom: 10px; color: var(--blue); font-weight: bold; }
         .link-list li { margin-bottom: 10px; border-bottom: 1px dashed #eee; padding-bottom: 5px; }
         .link-list a:hover { color: var(--gold); font-weight: bold; }
 
-        .recent-post { display: flex; gap: 10px; margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
-        .recent-post img { width: 60px; height: 60px; object-fit: cover; border-radius: 5px; }
-        .recent-post h4 { margin: 0; font-size: 0.95em; line-height: 1.3; }
+        /* Clock Widget */
+        .weather-widget { text-align: center; background: linear-gradient(135deg, var(--light-blue), var(--blue)); color: white; padding: 25px; border-radius: 10px; margin-bottom: 25px; }
+        .live-clock { font-size: 2.5em; font-weight: bold; font-family: var(--font-en); margin-bottom: 5px; display: block; }
 
         .prayer-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px dashed #eee; }
         .prayer-time { font-family: var(--font-en); font-weight: bold; color: var(--blue); }
 
-        .weather-widget { text-align: center; background: linear-gradient(135deg, var(--light-blue), var(--blue)); color: white; padding: 25px; border-radius: 10px; margin-bottom: 25px; }
-        .live-clock { font-size: 2.5em; font-weight: bold; font-family: var(--font-en); margin-bottom: 5px; display: block; }
-
         .hotlines-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
         .hotline-item { background: #f0f4f8; padding: 10px; border-radius: 8px; text-align: center; font-weight: bold; color: var(--blue); font-family: var(--font-en); }
 
+        /* Video Widget */
+        .video-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 8px; }
+        .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+
         /* --- FOOTER --- */
-        footer { background: var(--blue); color: #ccc; padding: 50px 5%; margin-top: 50px; border-top: 5px solid var(--gold); text-align: center; }
-        .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 30px; text-align: right; }
+        footer { background: var(--blue); color: #ccc; padding: 60px 5%; margin-top: 80px; border-top: 5px solid var(--gold); }
+        .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 40px; }
+        .footer-col h3 { color: var(--gold); margin-bottom: 20px; font-size: 1.3em; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; }
+        .footer-col ul li { margin-bottom: 10px; }
+        .footer-col a { color: #ccc; transition: 0.3s; }
+        .footer-col a:hover { color: white; padding-right: 5px; }
         .footer-input { width: 100%; padding: 10px; border-radius: 4px; border: none; margin-bottom: 10px; }
         .footer-btn { width: 100%; padding: 10px; background: var(--gold); color: #0C2D48; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; }
+        .copyright { text-align: center; margin-top: 50px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); }
 
-        /* --- MOBILE RESPONSIVE (FIXED) --- */
+        /* --- MOBILE RESPONSIVE --- */
         @media (max-width: 900px) {
             .container { grid-template-columns: 1fr; padding: 20px 5%; }
             .hero { grid-template-columns: 1fr; }
             .hero-main { height: 250px; }
             .ad-banner { display: none; }
-            
             .header-content { justify-content: center; text-align: center; }
             .logo-box { flex-direction: column; gap: 10px; }
-            
-            /* Mobile Menu */
             .nav-container { justify-content: flex-start; height: 60px; align-items: center; }
             .menu-btn { display: block; }
             .main-menu { 
@@ -197,13 +191,11 @@
             }
             .main-menu.active { display: flex; } 
             .main-menu li { width: 100%; text-align: center; border-bottom: 1px solid #eee; }
-            .sub-menu { display: none; } 
-            
+            .sub-menu { display: none; }
             .card-grid, .lifestyle-grid, .biz-strip, .hotlines-grid, .footer-grid { grid-template-columns: 1fr; }
             .lifestyle-grid { grid-template-rows: auto; }
             .life-card.big { grid-column: span 1; grid-row: span 1; height: 250px; }
             .life-card { height: 200px; margin-bottom: 15px; }
-            
             aside { margin-top: 40px; }
         }
     </style>
@@ -317,6 +309,7 @@
                 <div class="biz-item"><span class="biz-val">MVR 10,800</span><span class="biz-label">ރިހީގެ ނިޞާބު</span></div>
                 <div class="biz-item"><span class="biz-val">ހަނޑޫ</span><span class="biz-label">ފިތުރު ޒަކާތް</span></div>
                 <div class="biz-item"><span class="biz-val">އެހީތެރިވޭ</span><span class="biz-label">ޞަދަޤާތް</span></div>
+                <div class="biz-item"><span class="biz-val">ކުރިއެރުން</span><span class="biz-label">ޙަލާލް ޓޫރިޒަމް</span></div>
             </div>
 
             <div style="margin-top:50px;"></div>
@@ -324,7 +317,7 @@
             <div class="lifestyle-grid">
                 <div class="life-card big">
                     <img src="https://images.unsplash.com/photo-1544367563-121910aa6e8a?auto=format&fit=crop&w=600&q=60">
-                    <div class="life-info"><h3>ކުދިންގެ ނަފްސާނީ ދުޅަހެޔޮކަމަށް ސަމާލުކަންދޭންވީ ކީއްވެ؟</h3></div>
+                    <div class="life-info"><h3>ކުދިންގެ ނަފްސާނީ ދުޅަހެޔޮކަން</h3></div>
                 </div>
                 <div class="life-card"><img src="https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&w=300&q=60"><div class="life-info"><h5>ޞިއްޙީ ކާނާ</h5></div></div>
                 <div class="life-card"><img src="https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?auto=format&fit=crop&w=300&q=60"><div class="life-info"><h5>އާއިލީ ގުޅުން</h5></div></div>
@@ -379,14 +372,9 @@
             </div>
 
             <div class="sidebar-widget">
-                <h3 class="sidebar-title">އެންމެ ފަހުގެ ލިޔުންތައް</h3>
-                <div class="recent-post">
-                    <img src="https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=100&q=60">
-                    <div><h4>ކުދިން ތަރުބިއްޔަތު</h4></div>
-                </div>
-                <div class="recent-post">
-                    <img src="https://images.unsplash.com/photo-1542810634-71277d95dcbb?auto=format&fit=crop&w=100&q=60">
-                    <div><h4>ރަމަޟާން މަހުގެ ތައްޔާރީ</h4></div>
+                <h3 class="sidebar-title">ވީޑިއޯ ދަރުސް</h3>
+                <div class="video-container">
+                    <iframe src="https://www.youtube.com/embed/zpOULjyy-n8" frameborder="0" allowfullscreen></iframe>
                 </div>
             </div>
 
@@ -408,6 +396,15 @@
                     <div class="hotline-item">🚢 191</div>
                 </div>
             </div>
+
+            <div class="sidebar-widget">
+                <h3 class="sidebar-title">ގުޅިލައްވާ</h3>
+                <div style="display:flex; justify-content:center; gap:10px;">
+                    <a href="#" style="background:#3b5998; color:white; width:40px; height:40px; display:flex; align-items:center; justify-content:center; border-radius:50%;"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" style="background:#1da1f2; color:white; width:40px; height:40px; display:flex; align-items:center; justify-content:center; border-radius:50%;"><i class="fab fa-twitter"></i></a>
+                    <a href="#" style="background:#e1306c; color:white; width:40px; height:40px; display:flex; align-items:center; justify-content:center; border-radius:50%;"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
         </aside>
     </div>
 
@@ -419,8 +416,20 @@
                 <p>📧 academyzaa@gmail.com</p>
             </div>
             <div class="footer-col">
-                <h3>އަވަސް ލިންކު</h3>
-                <ul><li><a href="#">ކޯސްތައް</a></li><li><a href="#">ގުޅިލައްވާ</a></li></ul>
+                <h3>ބްލޮގް ބައިތައް</h3>
+                <ul>
+                    <li><a href="#">› ކޯސްތައް</a></li>
+                    <li><a href="#">› މަޒުމޫނު</a></li>
+                    <li><a href="#">› ވީޑިއޯ ދަރުސް</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h3>އެހެނިހެން</h3>
+                <ul>
+                    <li><a href="#">› އަޅުގަނޑުމެން</a></li>
+                    <li><a href="#">› ކޮންޓެކްޓް</a></li>
+                    <li><a href="#">› ޕްރައިވެސީ ޕޮލިސީ</a></li>
+                </ul>
             </div>
             <div class="footer-col">
                 <h3>ނިއުސްލެޓަރ</h3>
