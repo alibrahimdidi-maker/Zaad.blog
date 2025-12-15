@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <style>
-        /* --- 1. THEME VARIABLES --- */
+        /* --- THEME VARIABLES --- */
         :root {
             --academy-blue: #0C2D48;
             --academy-dark: #051626;
@@ -22,19 +22,26 @@
             --text-dark: #333;
         }
 
-        /* --- 2. GLOBAL FONT RESET --- */
-        * {
-            box-sizing: border-box; 
-            margin: 0; 
-            padding: 0;
-            font-family: 'Mv Galan', 'Noto Sans Thaana', 'Faruma', sans-serif !important;
+        /* --- GLOBAL FONT FIX --- */
+        /* Noto Sans Thaana is now FIRST priority */
+        body, h1, h2, h3, h4, h5, h6, p, span, a, li, div {
+            font-family: 'Noto Sans Thaana', 'Mv Galan', 'Faruma', sans-serif !important;
         }
 
+        /* Force Inputs to use Dhivehi Font */
+        input, textarea, button, select, option {
+            font-family: 'Noto Sans Thaana', 'Mv Galan', sans-serif !important;
+        }
+
+        /* English Number/Text Override */
         .ltr-text {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
             direction: ltr;
             unicode-bidi: embed;
         }
+
+        /* --- BASIC RESET & LAYOUT --- */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
             background-color: var(--off-white);
@@ -42,7 +49,7 @@
             line-height: 1.8;
         }
 
-        /* --- 3. HEADER & NAV --- */
+        /* --- HEADER & NAV --- */
         .top-bar { 
             background: #051626; color: #ccc; padding: 10px 5%; 
             font-size: 0.9em; text-align: left; 
@@ -58,7 +65,7 @@
         .main-menu li a { display: block; padding: 15px 20px; color: var(--academy-blue); font-weight: bold; transition: 0.3s; font-size: 1.1em; }
         .main-menu li a:hover { color: var(--academy-gold); background: #f9f9f9; }
 
-        /* --- 4. PAGE HEADER --- */
+        /* --- PAGE HEADER --- */
         .page-header {
             background: linear-gradient(135deg, var(--academy-blue), var(--academy-dark));
             padding: 60px 20px;
@@ -69,7 +76,7 @@
         .header-title { font-size: 2.8em; margin-bottom: 10px; text-shadow: 0 2px 5px rgba(0,0,0,0.3); }
         .header-desc { font-size: 1.2em; opacity: 0.9; }
 
-        /* --- 5. CONTACT LAYOUT --- */
+        /* --- CONTACT LAYOUT --- */
         .container {
             max-width: 1200px;
             margin: 50px auto;
@@ -98,7 +105,7 @@
             padding: 12px;
             border: 1px solid #ddd;
             border-radius: 8px;
-            font-size: 1.1em;
+            font-size: 1.1em; 
             transition: 0.3s;
             background: #fafafa;
         }
@@ -151,6 +158,7 @@
         .info-text h4 { margin: 0 0 5px 0; color: var(--academy-blue); font-size: 1.3em; }
         .info-text p { margin: 0; color: #666; font-size: 1.1em; }
 
+        /* Map */
         .map-container {
             border-radius: 12px;
             overflow: hidden;
@@ -211,7 +219,7 @@
                 <div class="icon-circle"><i class="fas fa-envelope"></i></div>
                 <div class="info-text">
                     <h4>އީމެއިލް</h4>
-                    <p class="ltr-text">academyzaa@gmail.com</p>
+                    <p class="ltr-text">academyzaad@gmail.com</p>
                 </div>
             </div>
 
@@ -224,7 +232,7 @@
             </div>
 
             <div class="map-container">
-                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3979.377478637774!2d73.5093!3d4.1755!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3b3f7f457717f939%3A0xb376e3373516550!2sMale%2C%20Maldives!5e0!3m2!1sen!2s!4v1700000000000" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3979.336427329432!2d73.508888!3d4.175496!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3b3f7f4577239617%3A0x6b4c37929497e743!2sMale&#39;%2C%20Maldives!5e0!3m2!1sen!2s!4v1645423895674!5m2!1sen!2s" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
             </div>
         </div>
 
