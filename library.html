@@ -3,111 +3,75 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ޑިޖިޓަލް ލައިބްރަރީ - ޒާދް އެކަޑެމީ</title>
+    <title>ޑިޖިޓަލް ލައިބްރަރީ (100 ފޮތް) - ޒާދް އެކަޑެމީ</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thaana:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <style>
-        /* --- THEME VARIABLES --- */
+        /* --- 1. THEME SETTINGS --- */
         :root {
             --royal-blue: #0C2D48;
             --royal-dark: #051626;
             --royal-gold: #B49658;
             --white: #ffffff;
             --bg-color: #f4f6f8;
-            --text-main: #333;
-            --card-shadow: 0 10px 20px rgba(0,0,0,0.05);
-            
-            /* FONT SETTINGS */
-            --font-dv: 'Mv Galan', 'Noto Sans Thaana', 'Faruma', sans-serif;
-        }
-
-        /* Local Font Face */
-        @font-face {
-            font-family: 'Mv Galan';
-            src: url('fonts/Mv Galan.ttf') format('truetype');
-            font-weight: normal;
+            --font-main: 'Noto Sans Thaana', sans-serif; /* Dhivehi Font */
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
-            font-family: var(--font-dv);
+            font-family: var(--font-main);
             background-color: var(--bg-color);
-            color: var(--text-main);
+            color: #333;
             line-height: 1.6;
         }
 
-        /* --- HEADER AREA --- */
+        /* --- 2. HEADER & NAV --- */
+        .nav-bar {
+            background: white;
+            padding: 15px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            position: sticky; top: 0; z-index: 100;
+        }
+        .nav-bar a {
+            text-decoration: none; color: var(--royal-blue);
+            font-weight: bold; margin: 0 15px; transition: 0.3s;
+        }
+        .nav-bar a:hover { color: var(--royal-gold); }
+
         .library-header {
             background: linear-gradient(135deg, var(--royal-blue), var(--royal-dark));
-            padding: 60px 20px;
+            padding: 50px 20px;
             text-align: center;
             color: white;
             border-bottom: 5px solid var(--royal-gold);
             margin-bottom: 40px;
         }
 
-        .library-title {
-            font-size: 2.5em;
-            margin-bottom: 15px;
-            text-shadow: 0 2px 5px rgba(0,0,0,0.3);
-        }
-
-        .library-subtitle {
-            font-size: 1.1em;
-            opacity: 0.9;
-            max-width: 600px;
-            margin: 0 auto 30px auto;
+        .library-title { font-size: 2.2em; margin-bottom: 10px; }
+        .library-count { 
+            background: var(--royal-gold); 
+            color: var(--royal-blue); 
+            padding: 5px 15px; 
+            border-radius: 20px; 
+            font-weight: bold; 
+            font-size: 0.9em; 
         }
 
         /* SEARCH BAR */
-        .search-container {
-            max-width: 500px;
-            margin: 0 auto;
-            position: relative;
-        }
-
+        .search-wrapper { max-width: 500px; margin: 20px auto 0; position: relative; }
         .search-input {
-            width: 100%;
-            padding: 15px 50px 15px 20px;
-            border-radius: 50px;
-            border: none;
-            font-family: var(--font-dv);
-            font-size: 1em;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-            outline: none;
+            width: 100%; padding: 12px 50px 12px 20px;
+            border-radius: 50px; border: none;
+            font-family: var(--font-main); font-size: 1em;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2); outline: none;
         }
+        .search-icon { position: absolute; right: 20px; top: 50%; transform: translateY(-50%); color: var(--royal-blue); }
 
-        .search-icon {
-            position: absolute;
-            right: 20px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--royal-blue);
-        }
-
-        /* --- NAV BAR (Simplified) --- */
-        .nav-bar {
-            background: white;
-            padding: 15px;
-            text-align: center;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-        .nav-bar a {
-            text-decoration: none;
-            color: var(--royal-blue);
-            font-weight: bold;
-            margin: 0 15px;
-            transition: 0.3s;
-        }
-        .nav-bar a:hover { color: var(--royal-gold); }
-
-        /* --- GRID LAYOUT --- */
+        /* --- 3. GRID LAYOUT (RESPONSIVE) --- */
         .container {
             max-width: 1400px;
             margin: 0 auto;
@@ -116,114 +80,77 @@
 
         .books-grid {
             display: grid;
-            /* Auto-fit makes it responsive: Min 180px width per card */
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            /* Creates columns that fit automatically. Min width 180px */
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
             gap: 25px;
         }
 
-        /* --- MODERN BOOK CARD --- */
+        /* --- 4. BOOK CARD DESIGN --- */
         .book-card {
             background: white;
             border-radius: 12px;
             padding: 20px;
             text-align: center;
-            box-shadow: var(--card-shadow);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
             transition: all 0.3s ease;
             border: 1px solid #eee;
             display: flex;
             flex-direction: column;
             align-items: center;
             position: relative;
-            overflow: hidden;
         }
 
         .book-card:hover {
-            transform: translateY(-8px);
+            transform: translateY(-5px);
             box-shadow: 0 15px 30px rgba(12, 45, 72, 0.15);
             border-color: var(--royal-gold);
         }
 
-        /* Icon Circle Background */
-        .icon-wrapper {
-            width: 80px;
-            height: 80px;
-            background: #f4f6f8;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        /* Book Icon Styling */
+        .icon-box {
+            width: 70px; height: 70px;
+            background: #f0f4f8;
+            border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
             margin-bottom: 15px;
             transition: 0.3s;
         }
+        .book-card:hover .icon-box { background: var(--royal-blue); }
+        
+        .book-icon { font-size: 2.5em; color: var(--royal-gold); transition: 0.3s; }
+        .book-card:hover .book-icon { color: white; }
 
-        .book-card:hover .icon-wrapper {
-            background: var(--royal-blue);
-        }
-
-        .book-icon {
-            font-size: 2.5em;
-            color: var(--royal-gold); /* Gold Icon */
-            transition: 0.3s;
-        }
-
-        .book-card:hover .book-icon {
-            color: white; /* Icon turns white on hover */
-        }
-
+        /* Text Styling */
+        .book-id { font-size: 0.8em; color: #aaa; margin-bottom: 5px; font-family: sans-serif; }
+        
         .book-title {
-            font-size: 1.1em;
-            font-weight: bold;
-            color: var(--royal-blue);
-            margin-bottom: 5px;
-            line-height: 1.3;
-            min-height: 45px; /* Ensures alignment */
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
+            font-size: 1.1em; font-weight: bold; color: var(--royal-blue);
+            margin-bottom: 5px; line-height: 1.3;
+            min-height: 46px; /* Keeps cards same height even with long titles */
+            display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
         }
 
-        .book-category {
-            font-size: 0.8em;
-            color: #888;
-            margin-bottom: 15px;
-            background: #eee;
-            padding: 2px 10px;
-            border-radius: 20px;
+        .book-cat {
+            font-size: 0.8em; color: #666; background: #eee;
+            padding: 2px 10px; border-radius: 15px; margin-bottom: 15px;
         }
 
+        /* Download Button */
         .download-btn {
-            margin-top: auto;
-            width: 100%;
-            padding: 10px;
-            background: white;
-            border: 1px solid var(--royal-blue);
-            color: var(--royal-blue);
-            border-radius: 6px;
-            text-decoration: none;
-            font-size: 0.9em;
-            font-weight: bold;
-            transition: 0.3s;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 8px;
+            margin-top: auto; width: 100%; padding: 8px;
+            background: white; border: 1px solid var(--royal-blue);
+            color: var(--royal-blue); border-radius: 6px;
+            text-decoration: none; font-size: 0.9em; font-weight: bold;
+            transition: 0.3s; display: flex; justify-content: center; align-items: center; gap: 8px;
         }
-
-        .download-btn:hover {
-            background: var(--royal-blue);
-            color: white;
-        }
+        .download-btn:hover { background: var(--royal-blue); color: white; }
 
         /* --- FOOTER --- */
         footer {
-            background: var(--royal-blue);
-            color: #ccc;
-            padding: 40px;
-            text-align: center;
-            border-top: 5px solid var(--royal-gold);
+            margin-top: 50px; padding: 40px;
+            background: var(--royal-blue); color: #ccc;
+            text-align: center; border-top: 5px solid var(--royal-gold);
         }
-
     </style>
 </head>
 <body>
@@ -236,17 +163,16 @@
 
     <header class="library-header">
         <h1 class="library-title">ޑިޖިޓަލް ލައިބްރަރީ</h1>
-        <p class="library-subtitle">ޒާދް އެކަޑެމީގެ ޚާއްޞަ ފޮތްތަކާއި، ދަރިވަރުންނަށް ބޭނުންވާ މުހިންމު ލިޔުންތައް އެއްތަނަކުން</p>
+        <span class="library-count">ޖުމްލަ 100 ފޮތް</span>
         
-        <div class="search-container">
+        <div class="search-wrapper">
             <i class="fas fa-search search-icon"></i>
-            <input type="text" class="search-input" placeholder="ފޮތުގެ ނަން ޖައްސަވާ...">
+            <input type="text" class="search-input" id="searchBox" placeholder="ފޮތުގެ ނަން ނުވަތަ ނަންބަރު ޖައްސަވާ...">
         </div>
     </header>
 
     <div class="container">
-        <div class="books-grid" id="books-container">
-            </div>
+        <div class="books-grid" id="library-grid"></div>
     </div>
 
     <footer>
@@ -254,21 +180,29 @@
     </footer>
 
     <script>
-        // Sample Data for Variety (Categories & Titles)
-        const categories = ["އިސްލާމީ", "ތާރީޚް", "ސައިންސް", "ހިސާބު", "އަދަބިއްޔާތު", "ޓެކްނޮލޮޖީ"];
-        const bookPrefixes = ["ފޮތް", "ގައިޑް", "ނޯޓްސް", "ފިލާވަޅު", "ރިޕޯޓް"];
+        const grid = document.getElementById('library-grid');
         
-        const container = document.getElementById('books-container');
+        // Data Arrays for variety
+        const categories = ["އިސްލާމީ", "ތާރީޚް", "ސައިންސް", "ހިސާބު", "އަދަބިއްޔާތު", "ޓެކްނޮލޮޖީ"];
+        const types = ["ފޮތް", "ގައިޑް", "ނޯޓްސް", "ފިލާވަޅު", "ރިޕޯޓް"];
 
-        // Function to create a single card HTML
-        function createCard(id, title, category) {
+        // Function to create a card
+        function createBookCard(number) {
+            // Logic to pick category based on number (to make it look organized)
+            const catIndex = number % categories.length;
+            const typeIndex = number % types.length;
+            
+            const category = categories[catIndex];
+            const title = `${category} ${types[typeIndex]} - ބައި ${number}`;
+
             return `
                 <div class="book-card">
-                    <div class="icon-wrapper">
-                        <i class="fas fa-book-open book-icon"></i>
+                    <div class="book-id">#${number}</div>
+                    <div class="icon-box">
+                        <i class="fas fa-file-pdf book-icon"></i>
                     </div>
                     <h3 class="book-title">${title}</h3>
-                    <span class="book-category">${category}</span>
+                    <span class="book-cat">${category}</span>
                     <a href="#" class="download-btn">
                         <i class="fas fa-download"></i> ޑައުންލޯޑް
                     </a>
@@ -276,39 +210,26 @@
             `;
         }
 
-        // Loop to generate 50 Cards
-        let cardsHTML = "";
-        for (let i = 1; i <= 50; i++) {
-            // Randomly select category and title structure for variety
-            const cat = categories[Math.floor(Math.random() * categories.length)];
-            const prefix = bookPrefixes[Math.floor(Math.random() * bookPrefixes.length)];
-            
-            // Create a realistic looking title
-            const title = `${cat} - ${prefix} ${i}`; 
-            
-            // Or specific names for the first few to look nice
-            let finalTitle = title;
-            if (i === 1) finalTitle = "ތައުޙީދު ފޮތް (ބައި 1)";
-            if (i === 2) finalTitle = "ފިޤްހު - ނަމާދު";
-            if (i === 3) finalTitle = "ދިވެހި ތާރީޚް";
-            if (i === 4) finalTitle = "އޭ.އައި ތަޢާރަފް";
-            if (i === 5) finalTitle = "ކުޑަކުދިންގެ ވާހަކަ";
-
-            cardsHTML += createCard(i, finalTitle, cat);
+        // Loop 100 Times
+        let allCards = "";
+        for (let i = 1; i <= 100; i++) {
+            allCards += createBookCard(i);
         }
 
-        // Inject into HTML
-        container.innerHTML = cardsHTML;
+        // Insert into HTML
+        grid.innerHTML = allCards;
 
-        // Simple Search Functionality (Optional Bonus)
-        const searchInput = document.querySelector('.search-input');
-        searchInput.addEventListener('keyup', (e) => {
+        // Search Functionality
+        const searchInput = document.getElementById('searchBox');
+        searchInput.addEventListener('keyup', function(e) {
             const term = e.target.value.toLowerCase();
             const cards = document.querySelectorAll('.book-card');
-            
+
             cards.forEach(card => {
                 const title = card.querySelector('.book-title').innerText.toLowerCase();
-                if (title.includes(term)) {
+                const id = card.querySelector('.book-id').innerText;
+                
+                if (title.includes(term) || id.includes(term)) {
                     card.style.display = 'flex';
                 } else {
                     card.style.display = 'none';
