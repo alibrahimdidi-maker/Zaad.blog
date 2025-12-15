@@ -2,190 +2,397 @@
 <html lang="en" dir="ltr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zaad Academy Blog</title>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Zaad Academy (Blog) - English</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <style>
-        /* CSS copied and adapted for English LTR */
-        :root { --academy-blue: #0C2D48; --academy-light: #2E8BC0; --academy-gold: #B49658; --off-white: #f4f6f8; --text-dark: #1a1a1a; }
+        /* --- THEME VARIABLES --- */
+        :root {
+            --royal-blue: #0C2D48;
+            --royal-dark: #051626;
+            --royal-gold: #B49658;
+            --white: #ffffff;
+            --bg-color: #f4f6f8;
+            --text-main: #1a1a1a;
+            
+            /* English Fonts */
+            --font-main: 'Roboto', sans-serif; 
+            --font-head: 'Playfair Display', serif;
+        }
+
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: 'Open Sans', sans-serif; background: var(--off-white); color: var(--text-dark); overflow-x: hidden; }
-        a { text-decoration: none; transition: 0.3s; color: inherit; } ul { list-style: none; padding: 0; margin: 0; } img { max-width: 100%; display: block; }
-
-        /* Header */
-        .top-bar { background: #051626; color: #ccc; padding: 10px 5%; display: flex; justify-content: space-between; font-size: 0.9em; }
-        .lang-switch a { margin-left: 15px; font-weight: bold; color: #bbb; } .lang-switch a:hover { color: var(--academy-gold); }
-        header { background: var(--academy-blue); padding: 35px 5%; border-bottom: 5px solid var(--academy-gold); position: relative; }
-        .header-container { display: flex; justify-content: space-between; align-items: center; position: relative; z-index: 1; }
-        .logo-section { display: flex; align-items: center; gap: 20px; }
-        .logo-img { height: 90px; border: 2px solid var(--academy-gold); border-radius: 50%; background: white; padding: 5px; }
-        .site-logo h1 { font-family: 'Playfair Display', serif; font-size: 3em; color: white; margin: 0; line-height: 1; }
-        .site-logo span { color: var(--academy-gold); letter-spacing: 2px; text-transform: uppercase; font-weight: bold; }
-        .main-ad-slider { height: 90px; width: 500px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.2); display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; border-radius: 8px; }
-
-        /* Nav */
-        nav { background: white; box-shadow: 0 4px 15px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 1000; }
-        .main-menu { display: flex; justify-content: center; flex-wrap: wrap; border-bottom: 1px solid #eee; }
-        .main-menu li a { display: block; padding: 16px 20px; color: var(--academy-blue); font-weight: bold; }
-        .main-menu li a:hover { color: var(--academy-gold); background: #f9f9f9; }
-        .sub-menu { background: #f0f4f8; border-bottom: 1px solid #ddd; display: flex; justify-content: center; flex-wrap: wrap; }
-        .sub-menu li a { display: block; padding: 12px 20px; color: #444; font-weight: bold; border-right: 1px solid #e0e0e0; }
-        .sub-menu li a:hover { color: var(--academy-blue); background: #e9ecef; }
         
-        /* Layout */
-        .container { display: grid; grid-template-columns: 3fr 1fr; gap: 40px; padding: 50px 5%; max-width: 1500px; margin: 0 auto; }
+        body {
+            font-family: var(--font-main);
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+            background-image: radial-gradient(#B49658 0.5px, transparent 0.5px);
+            background-size: 40px 40px;
+        }
+
+        a { text-decoration: none; color: inherit; transition: all 0.3s ease; }
+        img { max-width: 100%; display: block; height: auto; border-radius: 8px; }
+
+        /* --- HEADER --- */
+        .top-bar {
+            background: var(--royal-dark); color: #ddd; padding: 8px 2%;
+            display: flex; justify-content: space-between; font-size: 0.9em;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
         
-        /* Sections */
-        .hero-section { display: grid; grid-template-columns: 2fr 1fr; gap: 25px; margin-bottom: 60px; }
-        .hero-main { position: relative; border-radius: 12px; overflow: hidden; height: 500px; }
-        .hero-main img { width: 100%; height: 100%; object-fit: cover; }
-        .hero-overlay { position: absolute; bottom: 0; left: 0; right: 0; padding: 40px; background: linear-gradient(to top, var(--academy-blue), transparent); color: white; }
-        .side-card { display: flex; align-items: center; background: white; border-radius: 8px; overflow: hidden; height: 100%; box-shadow: 0 5px 15px rgba(0,0,0,0.05); border-left: 4px solid var(--academy-gold); }
-        .side-card img { width: 130px; height: 100%; object-fit: cover; }
-        .side-content { padding: 15px; }
+        .lang-switch a { margin-left: 10px; font-weight: bold; color: #aaa; }
+        .lang-switch a:hover, .lang-switch a.active { color: var(--royal-gold); }
 
-        .category-header { display: flex; justify-content: space-between; border-bottom: 3px solid var(--academy-blue); margin-bottom: 25px; padding-bottom: 10px; }
-        .category-header h2 { color: var(--academy-blue); font-family: 'Playfair Display', serif; margin: 0; }
+        #hijri-date { color: var(--royal-gold); font-weight: bold; display: flex; align-items: center; gap: 5px; }
+
+        header {
+            background: linear-gradient(135deg, var(--royal-blue) 0%, var(--royal-dark) 100%);
+            padding: 25px 2%;
+            border-bottom: 5px solid var(--royal-gold); 
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            position: relative; z-index: 50;
+        }
         
-        .card { background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 5px 20px rgba(12,45,72,0.1); border: 1px solid #eee; transition: 0.3s; }
-        .card:hover { transform: translateY(-5px); border-color: var(--academy-gold); }
-        .card-img { width: 100%; height: 200px; object-fit: cover; }
-        .card-content { padding: 20px; }
-        .card-title { color: var(--academy-blue); margin-bottom: 10px; font-weight: bold; }
-
-        .content-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; }
-
-        /* Sidebar */
-        .sidebar-widget { background: white; border-radius: 8px; padding: 25px; margin-bottom: 30px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); border-top: 4px solid var(--academy-blue); }
-        .sidebar-title { color: var(--academy-blue); border-bottom: 2px solid #eee; padding-bottom: 10px; margin-bottom: 20px; font-family: 'Playfair Display', serif; }
-        .link-list li { margin-bottom: 10px; border-bottom: 1px dashed #eee; padding-bottom: 8px; }
-        .link-list a:hover { color: var(--academy-blue); font-weight: bold; padding-left: 5px; }
+        .header-content { display: flex; justify-content: space-between; align-items: center; max-width: 1400px; margin: 0 auto; }
+        .logo-box { display: flex; align-items: center; gap: 20px; }
         
-        footer { background: var(--academy-blue); color: #ccc; padding: 60px 5%; margin-top: 80px; border-top: 5px solid var(--academy-gold); text-align: center; }
+        .logo-svg { 
+            height: 100px; width: 100px; background: white; border: 2px solid var(--royal-gold); 
+            border-radius: 12px; box-shadow: 0 0 15px rgba(180, 150, 88, 0.5); padding: 5px;
+        }
 
-        @media (max-width: 992px) { .container, .hero-section { grid-template-columns: 1fr; } .ad-banner-area { display: none; } }
+        .site-title h1 { color: white; margin: 0; font-size: 2.5em; font-family: var(--font-head); text-shadow: 2px 2px 5px rgba(0,0,0,0.5); }
+        .site-title span { color: var(--royal-gold); letter-spacing: 2px; text-transform: uppercase; font-size: 0.9em; display: block; }
+
+        /* --- TICKER --- */
+        .ticker-wrap {
+            background: linear-gradient(90deg, var(--royal-dark) 0%, var(--royal-blue) 100%);
+            width: 100%; height: 45px; overflow: hidden;
+            border-bottom: 2px solid var(--royal-gold);
+        }
+        .ticker { display: inline-block; white-space: nowrap; padding-left: 100%; animation: ticker-scroll 35s linear infinite; line-height: 45px; }
+        .ticker-item { display: inline-block; padding: 0 30px; color: white; font-size: 1.1em; }
+        .ticker-item i { color: var(--royal-gold); margin-right: 10px; }
+        .ticker-highlight { color: var(--royal-gold); font-weight: bold; }
+        
+        @keyframes ticker-scroll { 0% { transform: translate3d(0, 0, 0); } 100% { transform: translate3d(-100%, 0, 0); } } /* LTR Animation */
+
+        /* --- NAV --- */
+        nav { background: white; box-shadow: 0 2px 10px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 1000; border-bottom: 1px solid #eee; }
+        .nav-inner { max-width: 1400px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 0 2%; min-height: 60px; }
+        .main-menu { display: flex; list-style: none; }
+        .main-menu li a { display: block; padding: 18px 15px; color: var(--royal-blue); font-weight: bold; font-size: 1.05em; border-bottom: 3px solid transparent;}
+        .main-menu li a:hover { color: var(--royal-gold); border-bottom: 3px solid var(--royal-gold); background: #fcfcfc; }
+        .menu-btn { display: none; font-size: 1.5em; padding: 15px; cursor: pointer; color: var(--royal-blue); }
+
+        .website-btn {
+            background-color: var(--royal-gold); color: white; padding: 8px 20px;
+            border-radius: 5px; font-weight: bold; font-size: 0.9em;
+            display: flex; align-items: center; gap: 10px; transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1); white-space: nowrap;
+        }
+        .website-btn:hover { background-color: var(--royal-blue); transform: translateY(-2px); }
+
+        /* --- SUB MENU --- */
+        .sub-nav-bar { background-color: var(--royal-blue); border-bottom: 3px solid #082035; padding: 0 5%; }
+        .sub-menu-list { display: flex; justify-content: center; flex-wrap: wrap; max-width: 1400px; margin: 0 auto; list-style:none;}
+        .sub-menu-list li a { display: block; padding: 12px 25px; font-size: 0.9em; color: #e0e0e0; border-right: 1px solid rgba(255,255,255,0.1); transition: 0.2s; }
+        .sub-menu-list li:first-child a { border-left: 1px solid rgba(255,255,255,0.1); }
+        .sub-menu-list li a:hover { background-color: var(--royal-gold); color: white; }
+
+        /* --- LAYOUT --- */
+        .container { display: grid; grid-template-columns: 1fr 2.5fr 1fr; gap: 25px; padding: 30px 2%; max-width: 1600px; margin: 0 auto; }
+        
+        .widget { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 3px 10px rgba(0,0,0,0.03); margin-bottom: 25px; border-top: 4px solid var(--royal-blue); }
+        .widget-title { font-size: 1.2em; color: var(--royal-blue); margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 8px; font-weight: bold; font-family: var(--font-head); display: flex; align-items: center; gap: 10px; }
+        .widget-title i { color: var(--royal-gold); }
+
+        .side-links li { margin-bottom: 10px; border-bottom: 1px dashed #eee; padding-bottom: 5px; }
+        .side-links a { display: flex; align-items: center; gap: 10px; font-size: 0.95em; }
+        .side-links a:hover { color: var(--royal-gold); transform: translateX(5px); } /* Translate Right for LTR */
+
+        .hero-banner { position: relative; border-radius: 12px; overflow: hidden; height: 350px; margin-bottom: 30px; box-shadow: 0 5px 20px rgba(0,0,0,0.1); }
+        .hero-banner img { width: 100%; height: 100%; object-fit: cover; }
+        .hero-overlay { position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(to top, rgba(5,22,38,0.9), transparent); padding: 30px; color: white; }
+
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 30px; }
+        .post-card { background: white; border-radius: 10px; overflow: hidden; border: 1px solid #eee; transition: 0.3s; display: flex; flex-direction: column; }
+        .post-card:hover { transform: translateY(-5px); border-color: var(--royal-gold); }
+        .post-img { height: 180px; width: 100%; object-fit: cover; }
+        .post-content { padding: 15px; }
+        .post-tag { background: var(--royal-gold); color: white; padding: 2px 10px; font-size: 0.75em; border-radius: 20px; }
+        .post-title { font-size: 1.1em; margin: 10px 0; color: var(--royal-blue); font-weight: bold; font-family: var(--font-head); }
+
+        .economy-box { background: var(--royal-dark); color: white; padding: 20px; border-radius: 10px; display: flex; justify-content: space-around; align-items: center; text-align: center; margin-bottom: 30px; border: 1px solid var(--royal-gold); }
+        .eco-val { font-size: 1.4em; color: var(--royal-gold); font-weight: bold; display: block; font-family: var(--font-head); }
+        .eco-link { text-decoration: none; flex: 1; transition: transform 0.2s ease; }
+        .eco-link:hover { transform: scale(1.05); }
+        .eco-link:hover .eco-val { color: #fff; text-shadow: 0 0 10px var(--royal-gold); }
+
+        .weather-box { background: linear-gradient(135deg, #4b6cb7, #182848); color: white; text-align: center; padding: 20px; border-radius: 10px; margin-bottom: 20px; border: 2px solid var(--royal-gold); }
+        .prayer-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px dashed rgba(0,0,0,0.1); font-size: 0.9em; }
+        .prayer-time { font-weight: bold; color: var(--royal-blue); }
+
+        footer { background: var(--royal-blue); color: #ccc; padding: 50px 5%; margin-top: 50px; text-align: center; border-top: 5px solid var(--royal-gold); }
+        .footer-logo { font-size: 2em; color: var(--royal-gold); margin-bottom: 20px; font-weight: bold; font-family: var(--font-head); }
+
+        @media (max-width: 900px) {
+            .container { grid-template-columns: 1fr; gap: 20px; } 
+            .left-sidebar { order: 2; } .right-sidebar { order: 3; } .main-content { order: 1; }
+            .top-bar, .header-content { flex-direction: column; text-align: center; gap: 5px; }
+            .logo-box { flex-direction: column; margin-bottom: 10px; }
+            .desktop-ad { display: none !important; }
+            .nav-inner { justify-content: space-between; padding: 10px 20px; }
+            .menu-btn { display: block; } 
+            .main-menu { display: none; flex-direction: column; width: 100%; background: white; position: absolute; top: 100%; left: 0; border-top: 3px solid var(--royal-gold); z-index: 2000; }
+            .main-menu.active { display: flex; }
+            .sub-menu-list { flex-direction: column; text-align: center; }
+            .sub-menu-list li a { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.05); padding: 10px; }
+            .website-btn.desktop-btn { display: none; }
+            .mobile-btn-li { display: block !important; padding: 15px !important; }
+            .grid-2 { grid-template-columns: 1fr; }
+            .economy-box { flex-direction: column; gap: 20px; }
+        }
     </style>
 </head>
 <body>
 
     <div class="top-bar">
-        <div class="contact-info">📞 +960 9901550 | ✉️ academyzaa@gmail.com</div>
-        <div class="lang-switch">
-            <a href="index.html">Dhivehi</a> | 
-            <a href="index-ar.html">Arabic</a> | 
-            <a href="index-en.html" style="color:var(--academy-gold);">English</a>
+        <div><i class="fas fa-phone"></i> 9901550 | <i class="fas fa-envelope"></i> info@zaad.edu.mv</div>
+        <div style="display:flex; gap:15px; align-items:center;">
+            <div id="hijri-date"><i class="fas fa-calendar-alt"></i> <span id="date-text">Loading...</span></div>
+            <div class="lang-switch">
+                <a href="index.html">Dv</a> | 
+                <a href="ar.html">Ar</a> | 
+                <a href="en.html" class="active">En</a>
+            </div>
         </div>
     </div>
 
     <header>
-        <div class="header-container">
-            <div class="logo-section">
-                <img src="images/logo.png" class="logo-img" alt="Logo" onerror="this.src='https://via.placeholder.com/90/B49658/FFFFFF?text=Z'">
-                <div class="site-logo"><h1>Zaad Academy</h1><span>Excellence in Education</span></div>
+        <div class="header-content">
+            <div class="logo-box">
+                <svg class="logo-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M50 95 C 20 80, 10 55, 10 30 L 10 10 L 50 0 L 90 10 L 90 30 C 90 55, 80 80, 50 95 Z" fill="#B49658" stroke="#0C2D48" stroke-width="2"/>
+                    <path d="M50 88 C 28 75, 20 55, 20 35 L 20 18 L 50 10 L 80 18 L 80 35 C 80 55, 72 75, 50 88 Z" fill="#FFFFFF"/>
+                    <path d="M25 45 C 30 45, 45 50, 50 45 C 55 50, 70 45, 75 45 L 75 65 C 70 65, 55 70, 50 65 C 45 70, 30 65, 25 65 Z" fill="#B49658"/>
+                    <path d="M60 25 C 60 25, 55 45, 50 55 L 55 52 C 58 48, 65 30, 65 25 Z" fill="#B49658"/>
+                    <path d="M50 15 L 52 20 L 58 20 L 53 24 L 55 30 L 50 26 L 45 30 L 47 24 L 42 20 L 48 20 Z" fill="#B49658"/>
+                </svg>
+                <div class="site-title">
+                    <h1>Zaad Academy (Blog)</h1>
+                    <span>Excellence in Knowledge</span>
+                </div>
             </div>
-            <div class="ad-banner-area"><div class="main-ad-slider"><span>🎓 Knowledge is power</span></div></div>
+            <div class="desktop-ad">
+                <span style="color:var(--royal-gold); font-size:1.1em; border:1px solid var(--royal-gold); padding:8px 20px; border-radius:30px; font-weight:bold;">
+                    🎓 Seeking knowledge is obligatory for every Muslim
+                </span>
+            </div>
         </div>
     </header>
 
+    <div class="ticker-wrap">
+        <div class="ticker">
+            <div class="ticker-item"><i class="fas fa-star"></i> <span class="ticker-highlight">Great News:</span> Applications for Zaad Academy 2025 Intake are now open!</div>
+            <div class="ticker-item"><i class="fas fa-trophy"></i> Zaad students achieve top ranks in the National Quran Competition</div>
+            <div class="ticker-item"><i class="fas fa-bullhorn"></i> New AI Courses syllabus available on the website</div>
+        </div>
+    </div>
+
     <nav>
-        <ul class="main-menu">
-            <li><a href="index-en.html">Home</a></li>
-            <li><a href="courses.html">Courses</a></li>
-            <li><a href="modern-education.html">Modern Ed</a></li>
-            <li><a href="co-curricular.html">Co-Curricular</a></li>
-            <li><a href="islamic-economy.html">Islamic Econ</a></li>
-            <li><a href="tarbiyah.html">Upbringing</a></li>
-            <li><a href="library.html">Library</a></li>
-            <li><a href="contact.html">Contact</a></li>
-        </ul>
+        <div class="nav-inner">
+            <div class="menu-btn" onclick="toggleMenu()"><i class="fas fa-bars"></i></div>
+            <ul class="main-menu">
+                <li><a href="en.html">Home</a></li>
+                <li><a href="courses.html">Courses</a></li>
+                <li><a href="modern-education.html">Modern Ed</a></li>
+                <li><a href="islamic-economy.html">Islamic Economy</a></li>
+                <li><a href="library.html">Digital Library</a></li>
+                <li><a href="contact.html">Contact Us</a></li>
+                <li class="mobile-btn-li" style="display:none;">
+                    <a href="https://zaad.edu.mv" style="background:var(--royal-gold); color:white; border-radius:5px;">Zaad Website</a>
+                </li>
+            </ul>
+            <a href="https://zaad.edu.mv" class="website-btn desktop-btn">
+                Zaad Main Website <i class="fas fa-external-link-alt"></i>
+            </a>
+        </div>
     </nav>
-    
+
+    <div class="sub-nav-bar">
+        <ul class="sub-menu-list">
+            <li><a href="#">Artificial Intelligence</a></li>
+            <li><a href="#">AI in Teaching</a></li>
+            <li><a href="#">AI Research</a></li>
+            <li><a href="#">EdTech</a></li>
+            <li><a href="#">Online Learning</a></li>
+        </ul>
+    </div>
+
     <div class="container">
-        <main class="content">
-            <div class="hero-section">
-                <div class="hero-main">
-                    <img src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=800&q=80">
-                    <div class="hero-overlay">
-                        <h2 style="font-size: 2em; font-family: 'Playfair Display'; margin-bottom: 10px;">Admissions Open for New Academic Year</h2>
-                        <p>Join Zaad Academy for world-class Islamic and Modern education.</p>
+        <aside class="left-sidebar">
+            <div class="widget">
+                <h3 class="widget-title"><i class="fas fa-graduation-cap"></i> For Students</h3>
+                <ul class="side-links">
+                    <li><a href="#"><i class="fas fa-user-lock"></i> Student Portal</a></li>
+                    <li><a href="#"><i class="fas fa-calendar-alt"></i> Exam Schedule</a></li>
+                    <li><a href="#"><i class="fas fa-file-invoice"></i> Course Results</a></li>
+                    <li><a href="#"><i class="fas fa-book-reader"></i> Library</a></li>
+                </ul>
+            </div>
+            <div class="widget">
+                <h3 class="widget-title"><i class="fas fa-download"></i> Downloads</h3>
+                <ul class="side-links">
+                    <li><a href="#">Application Form</a></li>
+                    <li><a href="#">Academic Calendar</a></li>
+                    <li><a href="#">Parent Info</a></li>
+                </ul>
+            </div>
+            <div class="widget">
+                <h3 class="widget-title"><i class="fas fa-phone-alt"></i> Hotline</h3>
+                <div style="text-align:center;">
+                    <div style="font-size:1.5em; color:var(--royal-blue); font-weight:bold;">9901550</div>
+                    <small>Call during office hours</small>
+                </div>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <div class="hero-banner">
+                <img src="https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&w=800&q=80">
+                <div class="hero-overlay">
+                    <span style="background:var(--royal-gold); padding:5px 10px; border-radius:5px; font-size:0.8em; color:black; font-weight:bold;">FEATURED</span>
+                    <h2 style="margin-top:10px;">Teaching with AI: A New Era of Education</h2>
+                </div>
+            </div>
+
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; border-bottom:2px solid var(--royal-blue); padding-bottom:10px;">
+                <h2 style="color:var(--royal-blue); font-size:1.5em; font-family:var(--font-head);">Modern Education</h2>
+                <a href="#" style="color:var(--royal-gold); font-weight:bold;">View All ›</a>
+            </div>
+
+            <div class="grid-2">
+                <div class="post-card">
+                    <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=400&q=60" class="post-img">
+                    <div class="post-content">
+                        <span class="post-tag">Technology</span>
+                        <h3 class="post-title">Benefits of Tablets in Classrooms</h3>
                     </div>
                 </div>
-                <div class="hero-side">
-                     <div class="side-card">
-                        <img src="https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=200&q=60">
-                        <div class="side-content"><h4>Online Learning Portal</h4></div>
-                    </div>
-                     <div class="side-card">
-                        <img src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&w=200&q=60">
-                        <div class="side-content"><h4>Student Assessments</h4></div>
+                <div class="post-card">
+                    <img src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&w=400&q=60" class="post-img">
+                    <div class="post-content">
+                        <span class="post-tag">Tarbiyah</span>
+                        <h3 class="post-title">Mental Health of Students</h3>
                     </div>
                 </div>
             </div>
 
-            <div class="category-header"><h2>Latest Updates</h2></div>
-            <div class="content-grid">
-                <div class="card">
-                    <img src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=400&q=60" class="card-img">
-                    <div class="card-content">
-                        <h3>AI in Classrooms</h3>
-                        <p>How we are using technology to enhance learning.</p>
+            <h2 style="color:var(--royal-blue); font-size:1.5em; margin-bottom:15px; font-family:var(--font-head);">Islamic Economy</h2>
+            <div class="economy-box">
+                <a href="https://www.islamicaffairs.gov.mv" target="_blank" class="eco-link">
+                    <div>
+                        <span class="eco-val"><i class="fas fa-external-link-alt" style="font-size:0.5em; vertical-align:middle;"></i> Check</span>
+                        <span class="eco-label">Gold Nisab</span>
                     </div>
-                </div>
-                <div class="card">
-                    <img src="https://images.unsplash.com/photo-1555436169-20e93ea9a7ff?auto=format&fit=crop&w=400&q=60" class="card-img">
-                    <div class="card-content">
-                        <h3>Science Lab Upgrade</h3>
-                        <p>New equipment for our science students.</p>
+                </a>
+                <div style="border-right:1px dashed #555; height:40px; margin: 0 10px;"></div>
+                <a href="https://www.islamicaffairs.gov.mv" target="_blank" class="eco-link">
+                    <div>
+                        <span class="eco-val"><i class="fas fa-external-link-alt" style="font-size:0.5em; vertical-align:middle;"></i> Check</span>
+                        <span class="eco-label">Silver Nisab</span>
                     </div>
-                </div>
+                </a>
             </div>
         </main>
 
-        <aside class="sidebar">
-            <div class="sidebar-widget">
-                <h3 class="sidebar-title">Useful Links</h3>
-                <ul class="link-list">
-                    <li><a href="#">🏛️ Ministry of Education</a></li>
-                    <li><a href="#">🎓 Maldives National University</a></li>
-                </ul>
+        <aside class="right-sidebar">
+            <div class="weather-box">
+                <div id="live-clock" style="font-size:2.5em; font-weight:bold;">--:--</div>
+                <div style="font-size:1.2em;">Male', Maldives</div>
+                <div style="margin-top:10px; font-size:0.9em; opacity:0.9;">30°C | 🌤️</div>
             </div>
-            <div class="sidebar-widget">
-                <h3 class="sidebar-title">Prayer Times (Male')</h3>
-                <div id="prayer-content">
-                     <div style="display:flex; justify-content:space-between; border-bottom:1px dashed #eee; padding:5px 0;"><span>Fajr</span><span id="fajr-time">--:--</span></div>
-                     <div style="display:flex; justify-content:space-between; border-bottom:1px dashed #eee; padding:5px 0;"><span>Sunrise</span><span id="sunrise-time">--:--</span></div>
-                     <div style="display:flex; justify-content:space-between; border-bottom:1px dashed #eee; padding:5px 0;"><span>Dhuhr</span><span id="dhuhr-time">--:--</span></div>
-                     <div style="display:flex; justify-content:space-between; border-bottom:1px dashed #eee; padding:5px 0;"><span>Asr</span><span id="asr-time">--:--</span></div>
-                     <div style="display:flex; justify-content:space-between; border-bottom:1px dashed #eee; padding:5px 0;"><span>Maghrib</span><span id="maghrib-time">--:--</span></div>
-                     <div style="display:flex; justify-content:space-between; border-bottom:1px dashed #eee; padding:5px 0;"><span>Isha</span><span id="isha-time">--:--</span></div>
-                </div>
+
+            <div class="widget">
+                <h3 class="widget-title"><i class="fas fa-mosque"></i> Prayer Times</h3>
+                <div class="prayer-row"><span>Fajr</span> <span id="fajr" class="prayer-time">--:--</span></div>
+                <div class="prayer-row"><span>Sunrise</span> <span id="sunrise" class="prayer-time">--:--</span></div>
+                <div class="prayer-row"><span>Dhuhr</span> <span id="dhuhr" class="prayer-time">--:--</span></div>
+                <div class="prayer-row"><span>Asr</span> <span id="asr" class="prayer-time">--:--</span></div>
+                <div class="prayer-row"><span>Maghrib</span> <span id="maghrib" class="prayer-time">--:--</span></div>
+                <div class="prayer-row"><span>Isha</span> <span id="isha" class="prayer-time">--:--</span></div>
+            </div>
+
+            <div class="widget">
+                <h3 class="widget-title"><i class="fas fa-link"></i> Useful Links</h3>
+                <ul class="side-links">
+                    <li><a href="#">Ministry of Education</a></li>
+                    <li><a href="#">Islamic University</a></li>
+                    <li><a href="#">MQA</a></li>
+                </ul>
             </div>
         </aside>
     </div>
 
     <footer>
-        <div class="copyright">&copy; 2025 Zaad Academy Blog. All Rights Reserved.</div>
+        <div class="footer-logo">Zaad Academy</div>
+        <p>Seeking knowledge is obligatory for every Muslim</p>
+        <div style="margin-top:30px; font-size:0.9em; opacity:0.6;">
+            © 2025 Zaad Academy. All Rights Reserved.
+        </div>
     </footer>
 
     <script>
-        // Simple Prayer Time Fetcher
-        async function getPrayerTimes() {
-            try {
-                const date = new Date();
-                const timestamp = Math.floor(date.getTime() / 1000);
-                const response = await fetch(`https://api.aladhan.com/v1/timings/${timestamp}?latitude=4.1755&longitude=73.5093&method=1`);
-                const data = await response.json();
-                const timings = data.data.timings;
-                document.getElementById('fajr-time').textContent = timings.Fajr;
-                document.getElementById('sunrise-time').textContent = timings.Sunrise;
-                document.getElementById('dhuhr-time').textContent = timings.Dhuhr;
-                document.getElementById('asr-time').textContent = timings.Asr;
-                document.getElementById('maghrib-time').textContent = timings.Maghrib;
-                document.getElementById('isha-time').textContent = timings.Isha;
-            } catch (e) { console.log(e); }
+        function toggleMenu() {
+            var menu = document.querySelector('.main-menu');
+            menu.classList.toggle('active');
+            var mobileBtn = document.querySelector('.mobile-btn-li');
+            if(menu.classList.contains('active')) {
+                mobileBtn.style.display = 'block';
+                if(window.innerWidth < 900) document.querySelector('.desktop-btn').style.display = 'none';
+            } else {
+                 mobileBtn.style.display = 'none';
+                 if(window.innerWidth < 900) document.querySelector('.desktop-btn').style.display = 'none';
+                 else document.querySelector('.desktop-btn').style.display = 'flex';
+            }
         }
-        getPrayerTimes();
+
+        function updateClock() {
+            const now = new Date();
+            document.getElementById('live-clock').innerText = now.toLocaleTimeString('en-US', { hour12: true });
+        }
+        setInterval(updateClock, 1000); updateClock();
+
+        fetch('https://api.aladhan.com/v1/timingsByCity?city=Male&country=Maldives&method=4')
+            .then(response => response.json())
+            .then(data => {
+                const timings = data.data.timings;
+                const hijri = data.data.date.hijri;
+
+                document.getElementById('fajr').innerText = timings.Fajr;
+                document.getElementById('sunrise').innerText = timings.Sunrise;
+                document.getElementById('dhuhr').innerText = timings.Dhuhr;
+                document.getElementById('asr').innerText = timings.Asr;
+                document.getElementById('maghrib').innerText = timings.Maghrib;
+                document.getElementById('isha').innerText = timings.Isha;
+
+                // English Transliteration of Hijri Months
+                const hijriMonths = [
+                    "Muharram", "Safar", "Rabi Al-Awwal", "Rabi Al-Thani",
+                    "Jumada Al-Ula", "Jumada Al-Akhirah", "Rajab", "Sha'ban",
+                    "Ramadan", "Shawwal", "Dhul Qadah", "Dhul Hijjah"
+                ];
+                
+                const monthName = hijriMonths[hijri.month.number - 1];
+                const dateString = `${hijri.day} ${monthName} ${hijri.year}`;
+                document.getElementById('date-text').innerText = dateString;
+            });
     </script>
 </body>
 </html>
