@@ -16,16 +16,31 @@
             --royal-gold: #B49658;
             --white: #ffffff;
             --bg-color: #f4f6f8;
-            --font-main: 'Noto Sans Thaana', sans-serif; /* Dhivehi Font */
+            
+            /* FONT STACK (IMPORTANT FIX) */
+            /* This tries Mv Galan first, then Google Font, then System Faruma */
+            --font-dv: 'Mv Galan', 'Noto Sans Thaana', 'Faruma', sans-serif;
+        }
+
+        /* Local Font Face (If you have the file) */
+        @font-face {
+            font-family: 'Mv Galan';
+            src: url('fonts/Mv Galan.ttf') format('truetype');
+            font-weight: normal;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
-            font-family: var(--font-main);
+            font-family: var(--font-dv); /* Applying the Font */
             background-color: var(--bg-color);
             color: #333;
             line-height: 1.6;
+        }
+
+        /* Also apply font to inputs and buttons */
+        input, button, select, textarea, a {
+            font-family: var(--font-dv);
         }
 
         /* --- 2. HEADER & NAV --- */
@@ -51,22 +66,22 @@
             margin-bottom: 40px;
         }
 
-        .library-title { font-size: 2.2em; margin-bottom: 10px; }
+        .library-title { font-size: 2.5em; margin-bottom: 10px; text-shadow: 0 2px 5px rgba(0,0,0,0.3); }
         .library-count { 
             background: var(--royal-gold); 
             color: var(--royal-blue); 
-            padding: 5px 15px; 
+            padding: 5px 20px; 
             border-radius: 20px; 
             font-weight: bold; 
-            font-size: 0.9em; 
+            font-size: 1em; 
         }
 
         /* SEARCH BAR */
-        .search-wrapper { max-width: 500px; margin: 20px auto 0; position: relative; }
+        .search-wrapper { max-width: 500px; margin: 25px auto 0; position: relative; }
         .search-input {
-            width: 100%; padding: 12px 50px 12px 20px;
+            width: 100%; padding: 15px 50px 15px 20px;
             border-radius: 50px; border: none;
-            font-family: var(--font-main); font-size: 1em;
+            font-size: 1.1em;
             box-shadow: 0 5px 15px rgba(0,0,0,0.2); outline: none;
         }
         .search-icon { position: absolute; right: 20px; top: 50%; transform: translateY(-50%); color: var(--royal-blue); }
@@ -80,7 +95,7 @@
 
         .books-grid {
             display: grid;
-            /* Creates columns that fit automatically. Min width 180px */
+            /* Responsive Grid */
             grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
             gap: 25px;
         }
@@ -110,7 +125,7 @@
         .icon-box {
             width: 70px; height: 70px;
             background: #f0f4f8;
-            border-radius: 10px;
+            border-radius: 50%;
             display: flex; align-items: center; justify-content: center;
             margin-bottom: 15px;
             transition: 0.3s;
@@ -121,23 +136,26 @@
         .book-card:hover .book-icon { color: white; }
 
         /* Text Styling */
-        .book-id { font-size: 0.8em; color: #aaa; margin-bottom: 5px; font-family: sans-serif; }
+        .book-id { 
+            font-size: 0.8em; color: #aaa; margin-bottom: 5px; 
+            font-family: 'Noto Sans Thaana', sans-serif; /* ID numbers look better in Noto */
+        }
         
         .book-title {
-            font-size: 1.1em; font-weight: bold; color: var(--royal-blue);
-            margin-bottom: 5px; line-height: 1.3;
-            min-height: 46px; /* Keeps cards same height even with long titles */
+            font-size: 1.2em; font-weight: bold; color: var(--royal-blue);
+            margin-bottom: 5px; line-height: 1.4;
+            min-height: 50px; 
             display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
         }
 
         .book-cat {
-            font-size: 0.8em; color: #666; background: #eee;
-            padding: 2px 10px; border-radius: 15px; margin-bottom: 15px;
+            font-size: 0.85em; color: #666; background: #eee;
+            padding: 4px 12px; border-radius: 15px; margin-bottom: 15px;
         }
 
         /* Download Button */
         .download-btn {
-            margin-top: auto; width: 100%; padding: 8px;
+            margin-top: auto; width: 100%; padding: 10px;
             background: white; border: 1px solid var(--royal-blue);
             color: var(--royal-blue); border-radius: 6px;
             text-decoration: none; font-size: 0.9em; font-weight: bold;
@@ -188,7 +206,7 @@
 
         // Function to create a card
         function createBookCard(number) {
-            // Logic to pick category based on number (to make it look organized)
+            // Logic to pick category based on number
             const catIndex = number % categories.length;
             const typeIndex = number % types.length;
             
