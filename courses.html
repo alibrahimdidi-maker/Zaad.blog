@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ކޯސްތައް - ޒާދް އެކަޑެމީ</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thaana&family=Amiri:wght@400;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thaana:wght@400;500;700&family=Playfair+Display:wght@600&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <style>
@@ -17,11 +17,29 @@
             --white: #ffffff;
             --off-white: #f4f6f8;
             --text-dark: #1a1a1a;
-            --font-dv: 'Faruma', 'Noto Sans Thaana', sans-serif; 
-            --font-en: 'Playfair Display', serif;
+            
+            /* UPDATED FONT STACK */
+            /* Dhivehi: Mv Galan > Noto Sans > Faruma */
+            --font-dv: 'Mv Galan', 'Noto Sans Thaana', 'Faruma', sans-serif; 
+            /* English Headings */
+            --font-en-head: 'Playfair Display', serif;
+            /* English Body */
+            --font-en-body: 'Poppins', sans-serif;
         }
 
-        @font-face { font-family: 'Faruma'; src: url('fonts/Faruma.ttf') format('truetype'); font-weight: normal; }
+        /* Font Face for Local Mv Galan */
+        @font-face { 
+            font-family: 'Mv Galan'; 
+            src: url('fonts/Mv Galan.ttf') format('truetype'); 
+            font-weight: normal; 
+        }
+        
+        /* Font Face for Local Faruma (Backup) */
+        @font-face { 
+            font-family: 'Faruma'; 
+            src: url('fonts/Faruma.ttf') format('truetype'); 
+            font-weight: normal; 
+        }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
         
@@ -38,15 +56,19 @@
         ul { list-style: none; padding: 0; margin: 0; }
 
         /* HEADER & NAV */
-        .top-bar { background: #051626; color: #ccc; padding: 10px 5%; font-family: var(--font-en); font-size: 0.9em; text-align: left; }
+        .top-bar { 
+            background: #051626; color: #ccc; padding: 10px 5%; 
+            font-family: var(--font-en-body); font-size: 0.9em; text-align: left; 
+            direction: ltr; /* English text needs LTR */
+        }
         
         header { background: var(--academy-blue); padding: 25px 5%; border-bottom: 5px solid var(--academy-gold); text-align: center; }
         .site-logo h1 { color: white; margin: 0; font-size: 3em; text-shadow: 2px 2px 4px black; }
-        .site-logo span { color: white; font-family: var(--font-en); letter-spacing: 2px; font-weight: bold; text-transform: uppercase; }
+        .site-logo span { color: white; font-family: var(--font-en-head); letter-spacing: 2px; font-weight: bold; text-transform: uppercase; }
         
         nav { background: white; box-shadow: 0 4px 15px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 1000; }
         .main-menu { display: flex; justify-content: center; flex-wrap: wrap; }
-        .main-menu li a { display: block; padding: 15px 20px; color: var(--academy-blue); font-weight: bold; }
+        .main-menu li a { display: block; padding: 15px 20px; color: var(--academy-blue); font-weight: bold; font-family: var(--font-dv); }
         .main-menu li a:hover { color: var(--academy-gold); background: #f9f9f9; }
 
         /* --- COURSE PAGE LAYOUT --- */
@@ -58,7 +80,7 @@
         .page-header h2 { font-size: 2.5em; color: var(--academy-blue); margin-bottom: 10px; }
         .mqa-badge { 
             background: var(--academy-gold); color: #0C2D48; padding: 5px 20px; 
-            border-radius: 30px; font-weight: bold; font-family: sans-serif; display: inline-block;
+            border-radius: 30px; font-weight: bold; font-family: var(--font-en-body); display: inline-block;
         }
 
         /* COURSE GRID */
@@ -87,7 +109,7 @@
         }
 
         .course-img-wrap {
-            height: 200px; /* Increased height for the header photo */
+            height: 200px;
             overflow: hidden;
             position: relative;
         }
@@ -104,7 +126,7 @@
             background: var(--academy-blue); color: white;
             padding: 5px 12px; border-radius: 8px;
             font-size: 0.8em; font-weight: bold;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3); font-family: sans-serif;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3); font-family: var(--font-en-body);
             z-index: 10;
         }
 
@@ -114,13 +136,17 @@
             display: flex;
             flex-direction: column;
         }
+        
+        /* Font fix specifically for course titles (English) */
         .course-title {
             color: var(--academy-blue);
-            font-size: 1.2em;
+            font-size: 1.25em;
             margin-bottom: 15px;
             font-weight: bold;
             line-height: 1.4;
-            font-family: var(--font-en); /* Using English font for English Titles */
+            font-family: var(--font-en-head); /* Use English font for titles */
+            direction: ltr; /* English text should be LTR */
+            text-align: left;
         }
         
         .course-meta {
@@ -130,13 +156,17 @@
             border-top: 1px dashed #eee;
             padding-top: 15px;
         }
-        .meta-item { display: flex; justify-content: space-between; margin-bottom: 8px; }
-        .meta-label { font-weight: bold; color: var(--academy-gold); }
+        .meta-item { display: flex; justify-content: space-between; margin-bottom: 8px; direction: rtl; }
+        .meta-label { font-weight: bold; color: var(--academy-gold); font-family: var(--font-dv); }
+        /* Data inside meta (credits/duration) is English, so use English font */
+        .meta-value { font-family: var(--font-en-body); direction: ltr; display: inline-block; }
 
         .apply-btn {
             margin-top: auto;
-            display: block;
-            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
             background: var(--academy-blue);
             color: white;
             padding: 12px;
@@ -144,6 +174,7 @@
             font-weight: bold;
             transition: 0.3s;
             border: 2px solid var(--academy-blue);
+            font-family: var(--font-dv);
         }
         .apply-btn:hover {
             background: var(--academy-gold);
@@ -151,7 +182,7 @@
             color: var(--academy-blue);
         }
 
-        footer { background: var(--academy-blue); color: #ccc; text-align: center; padding: 30px; margin-top: 50px; border-top: 5px solid var(--academy-gold); }
+        footer { background: var(--academy-blue); color: #ccc; text-align: center; padding: 30px; margin-top: 50px; border-top: 5px solid var(--academy-gold); font-family: var(--font-en-body); }
         
         @media (max-width: 600px) { .courses-grid { grid-template-columns: 1fr; } }
     </style>
@@ -219,9 +250,8 @@
             { name: "Diploma in Arabic Language", credits: 173, level: 5, duration: "1 Year" }
         ];
 
-        // 1. MAKE SURE YOU SAVE YOUR PHOTO AS 'images/header.jpg'
-        // This variable sets the same image for ALL cards
-        const commonHeaderImage = "images/header.jpg";
+        // Ensure you have an image at this path or use the placeholder
+        const commonHeaderImage = "images/header.jpg"; 
 
         // Render Cards
         const container = document.getElementById('course-container');
@@ -238,15 +268,15 @@
                         <div class="course-meta">
                             <div class="meta-item">
                                 <span class="meta-label">ކްރެޑިޓްސް:</span>
-                                <span>${course.credits}</span>
+                                <span class="meta-value">${course.credits}</span>
                             </div>
                             <div class="meta-item">
                                 <span class="meta-label">މުއްދަތު:</span>
-                                <span>${course.duration}</span>
+                                <span class="meta-value">${course.duration}</span>
                             </div>
                             <div class="meta-item">
                                 <span class="meta-label">މޯޑް:</span>
-                                <span>Face to Face</span>
+                                <span class="meta-value">Face to Face</span>
                             </div>
                         </div>
                         <a href="${applyLink}" target="_blank" class="apply-btn">
