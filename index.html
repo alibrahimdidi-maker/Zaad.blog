@@ -9,21 +9,18 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <style>
-        /* --- 2. ROYAL THEME VARIABLES --- */
+        /* --- THEME VARIABLES --- */
         :root {
-            --royal-blue: #0C2D48;   /* Deep Navy */
-            --royal-dark: #051626;   /* Darker Navy */
-            --royal-gold: #B49658;   /* Luxury Gold */
+            --royal-blue: #0C2D48;
+            --royal-dark: #051626;
+            --royal-gold: #B49658;
             --white: #ffffff;
             --bg-color: #f8f9fa;
             --text-main: #1a1a1a;
-            
-            /* Font Stack: Priority to Mv Galan, Backup to Noto Sans */
             --font-dv: 'Mv Galan', 'Noto Sans Thaana', 'Faruma', sans-serif; 
             --font-en: 'Playfair Display', serif;
         }
 
-        /* Local Font */
         @font-face {
             font-family: 'Mv Galan';
             src: url('fonts/Mv Galan.ttf') format('truetype');
@@ -40,14 +37,14 @@
             margin: 0;
             overflow-x: hidden;
             background-image: radial-gradient(#B49658 0.5px, transparent 0.5px);
-            background-size: 40px 40px; /* Subtle texture */
+            background-size: 40px 40px;
         }
 
         a { text-decoration: none; color: inherit; transition: all 0.3s ease; }
         ul { list-style: none; padding: 0; margin: 0; }
         img { max-width: 100%; display: block; height: auto; }
 
-        /* --- HEADER (ROYAL LOOK RESTORED) --- */
+        /* --- HEADER --- */
         .top-bar {
             background: var(--royal-dark); color: #ddd; padding: 8px 5%;
             display: flex; justify-content: space-between; font-family: var(--font-en); font-size: 0.9em;
@@ -57,7 +54,6 @@
         .lang-switch a:hover { color: var(--royal-gold); }
 
         header {
-            /* Royal Gradient Background */
             background: linear-gradient(135deg, var(--royal-blue) 0%, var(--royal-dark) 100%);
             padding: 30px 5%;
             border-bottom: 6px solid var(--royal-gold); 
@@ -68,14 +64,13 @@
         
         .logo-box { display: flex; align-items: center; gap: 20px; }
         
-        /* LOGO FIX: Full visibility */
         .logo-img { 
             height: 100px; width: 100px; 
-            border-radius: 15px; /* Soft square instead of circle to show full logo */
+            border-radius: 15px;
             border: 2px solid var(--royal-gold); 
             background: white; 
             padding: 5px; 
-            object-fit: contain; /* Ensures logo fits inside */
+            object-fit: contain;
             box-shadow: 0 0 20px rgba(180, 150, 88, 0.4);
         }
         
@@ -98,10 +93,12 @@
         /* --- TICKER --- */
         .ticker-wrap { background: #fff; overflow: hidden; height: 45px; line-height: 45px; border-bottom: 1px solid #eee; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
         .ticker { display: inline-block; white-space: nowrap; padding-right: 100%; animation: ticker 45s linear infinite; }
+        /* Pause ticker on hover for readability */
+        .ticker-wrap:hover .ticker { animation-play-state: paused; }
         .ticker-item { display: inline-block; padding: 0 2rem; color: var(--royal-blue); font-weight: bold; font-size: 1.1em; }
         @keyframes ticker { 0% { transform: translate3d(0, 0, 0); } 100% { transform: translate3d(100%, 0, 0); } }
 
-        /* --- NAV (PREMIUM) --- */
+        /* --- NAV --- */
         nav { 
             background: white; box-shadow: 0 4px 15px rgba(0,0,0,0.08); 
             position: sticky; top: 0; z-index: 1000; 
@@ -109,9 +106,9 @@
         }
         .nav-container { display: flex; justify-content: center; position: relative; padding: 0 5%; }
         
-        .menu-btn { display: none; font-size: 1.8em; padding: 15px; cursor: pointer; color: var(--royal-blue); position: absolute; right: 10px; top: 0; }
+        .menu-btn { display: none; font-size: 1.8em; padding: 15px; cursor: pointer; color: var(--royal-blue); }
 
-        .main-menu { display: flex; flex-wrap: wrap; justify-content: center; width: 100%; }
+        .main-menu { display: flex; flex-wrap: wrap; justify-content: center; width: 100%; transition: all 0.3s ease; }
         .main-menu li a { 
             display: block; padding: 16px 24px; color: var(--royal-blue); 
             font-weight: bold; font-size: 1.1em; border-bottom: 3px solid transparent; 
@@ -126,12 +123,11 @@
             display: block; padding: 5px 25px; color: #fff; font-size: 0.95em; 
             border-left: 1px solid rgba(255,255,255,0.2); 
         }
-        .sub-menu li a:hover { color: var(--royal-gold); }
 
         /* --- LAYOUT GRID --- */
         .container { 
             display: grid; 
-            grid-template-columns: 3fr 1fr; /* Desktop: 75% | 25% */
+            grid-template-columns: 3fr 1fr; /* Desktop default */
             gap: 40px; 
             padding: 50px 5%; 
             max-width: 1500px; margin: 0 auto; 
@@ -211,10 +207,6 @@
         .link-list li { margin-bottom: 12px; border-bottom: 1px dashed #eee; padding-bottom: 8px; }
         .link-list a:hover { color: var(--royal-gold); font-weight: bold; padding-right: 5px; }
 
-        .recent-post { display: flex; gap: 15px; margin-bottom: 20px; border-bottom: 1px solid #f0f0f0; padding-bottom: 10px; }
-        .recent-post img { width: 80px; height: 80px; object-fit: cover; border-radius: 8px; flex-shrink: 0; }
-        .recent-post h4 { margin: 0; font-size: 1em; line-height: 1.4; color: #333; font-weight: bold; }
-
         .prayer-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px dashed #eee; font-size: 1.05em; }
         .prayer-time { font-family: var(--font-en); font-weight: bold; color: var(--royal-blue); }
 
@@ -237,7 +229,6 @@
         .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 40px; text-align: right; }
         .footer-col h3 { color: var(--royal-gold); margin-bottom: 25px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; font-weight: bold; }
         .footer-col ul li { margin-bottom: 10px; border-bottom: 1px dashed rgba(255,255,255,0.1); padding-bottom: 5px; }
-        .footer-col a:hover { color: white; padding-right: 5px; }
         .footer-input { width: 100%; padding: 12px; border-radius: 6px; border: none; margin-bottom: 15px; }
         .footer-btn { 
             width: 100%; padding: 12px; background: var(--royal-gold); 
@@ -247,42 +238,49 @@
         .footer-btn:hover { background: white; }
         .copyright { text-align: center; margin-top: 50px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); width: 100%; display: block; }
 
-        /* --- MOBILE RESPONSIVE (ZERO ERRORS) --- */
+        /* --- MOBILE RESPONSIVE OPTIMIZATION --- */
         @media (max-width: 900px) {
-            /* 1. Layout: 1 Column */
-            .container { grid-template-columns: 1fr; padding: 30px 5%; gap: 30px; }
-            .hero { grid-template-columns: 1fr; height: auto; }
-            .hero-main { height: 250px; min-height: 250px; margin-bottom: 20px; }
-            .hero-side { height: auto; gap: 15px; }
-            .side-card { height: auto; min-height: 100px; flex: none; }
-            .ad-banner { display: none; }
+            /* 1. Global Layout Fixes */
+            .top-bar { flex-direction: column; text-align: center; gap: 5px; }
+            .container { grid-template-columns: 1fr; padding: 20px 5%; gap: 30px; }
             
-            /* 2. Header & Logo Fix */
+            /* 2. Header & Logo */
             .header-content { justify-content: center; text-align: center; flex-direction: column; }
-            .logo-box { flex-direction: column; gap: 10px; margin-bottom: 15px; }
-            .site-title { text-align: center; }
+            .logo-box { flex-direction: column; gap: 15px; margin-bottom: 15px; }
             .site-title h1 { font-size: 2.2em; }
+            .ad-banner { display: none; } /* Hide ads on mobile to save space */
             
-            /* 3. Menu Fix */
-            .nav-container { justify-content: flex-start; height: 70px; align-items: center; }
-            .menu-btn { display: block; }
+            /* 3. Navigation (Hamburger) */
+            .nav-container { justify-content: flex-start; align-items: center; min-height: 60px; }
+            .menu-btn { display: block; position: absolute; left: 0; top: 10px; } /* Left aligned for RTL/Thaana feel if preferred, or right */
+            
             .main-menu { 
-                display: none; flex-direction: column; width: 100%; 
-                background: white; position: absolute; top: 70px; left: 0; 
+                display: none; /* Hidden by default */
+                flex-direction: column; width: 100%; 
+                background: white; position: absolute; top: 100%; left: 0; 
                 box-shadow: 0 10px 30px rgba(0,0,0,0.15); border-top: 3px solid var(--royal-gold); z-index: 2000;
             }
-            .main-menu.active { display: flex; } 
+            .main-menu.active { display: flex; } /* Show when active class is added */
             .main-menu li { width: 100%; text-align: center; border-bottom: 1px solid #f0f0f0; }
             .main-menu li a { padding: 15px; }
-            .sub-menu { display: none; }
+            .sub-menu { display: none; } /* Hide sub-menu on mobile for simplicity */
+
+            /* 4. Grid Stacking */
+            .hero { grid-template-columns: 1fr; height: auto; }
+            .hero-main { height: 250px; min-height: 250px; margin-bottom: 20px; }
+            .hero-side { height: auto; flex-direction: row; overflow-x: auto; padding-bottom: 10px; }
+            .side-card { min-width: 200px; margin-right: 15px; border-right: none; border-bottom: 4px solid var(--royal-gold); }
             
-            /* 4. Grid Fixes */
-            .card-grid, .lifestyle-grid, .biz-strip, .hotlines-grid, .footer-grid { grid-template-columns: 1fr; }
-            .lifestyle-grid { grid-template-rows: auto; grid-auto-rows: auto; }
+            .card-grid, .lifestyle-grid, .hotlines-grid, .footer-grid { grid-template-columns: 1fr; }
+            
+            /* 5. Lifestyle Grid Fix */
             .life-card.big { grid-column: span 1; grid-row: span 1; height: 250px; }
-            .life-card { height: 200px; margin-bottom: 15px; }
-            
-            aside { margin-top: 50px; }
+            .life-card { height: 200px; }
+
+            /* 6. Sidebar Reordering */
+            aside { margin-top: 30px; }
+            .weather-widget { padding: 20px; }
+            .live-clock { font-size: 2em; }
         }
     </style>
 </head>
@@ -315,7 +313,10 @@
 
     <nav>
         <div class="nav-container">
-            <div class="menu-btn" onclick="toggleMenu()"><i class="fas fa-bars"></i></div>
+            <div class="menu-btn" onclick="toggleMenu()">
+                <i class="fas fa-bars"></i>
+            </div>
+            
             <ul class="main-menu">
                 <li><a href="index.html">ހޯމް</a></li>
                 <li><a href="courses.html">ކޯސްތައް</a></li>
@@ -334,7 +335,6 @@
         <li><a href="ai-teaching.html">ކިޔަވައިދިނުމުގައި އޭ.އައި</a></li>
         <li><a href="ai-research.html">ދިރާސާކުރުމަށް އޭ.އައި</a></li>
         <li><a href="edtech.html">އެޑިއުކޭޝަނަލް ޓެކްނޮލޮޖީ</a></li>
-        <li><a href="online-learning.html">އޮންލައިން ލާރނިންގ</a></li>
     </ul>
 
     <div class="container">
@@ -356,7 +356,6 @@
             <div class="card-grid">
                 <div class="card"><img src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=400&q=60" class="card-img"><div class="card-body"><span class="card-tag">އިނޮވޭޝަން</span><h3 class="card-title">ކްލާސްރޫމްގައި އޭ.އައި</h3></div></div>
                 <div class="card"><img src="https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=400&q=60" class="card-img"><div class="card-body"><span class="card-tag">ސްކިލްސް</span><h3 class="card-title">ކޯޑިންގ ދަސްކުރުން</h3></div></div>
-                <div class="card"><img src="https://images.unsplash.com/photo-1555436169-20e93ea9a7ff?auto=format&fit=crop&w=400&q=60" class="card-img"><div class="card-body"><span class="card-tag">ސައިންސް</span><h3 class="card-title">ސައިންސް ލެބްތައް</h3></div></div>
             </div>
 
             <div style="margin-top:50px;"></div>
@@ -366,7 +365,6 @@
                 <div class="biz-item"><span class="biz-val">MVR 10,800</span><span class="biz-label">ރިހީގެ ނިޞާބު</span></div>
                 <div class="biz-item"><span class="biz-val">ހަނޑޫ / ފައިސާ</span><span class="biz-label">ފިތުރު ޒަކާތް</span></div>
                 <div class="biz-item"><span class="biz-val">އެހީތެރިވޭ</span><span class="biz-label">ޞަދަޤާތް</span></div>
-                <div class="biz-item"><span class="biz-val">ކުރިއެރުން</span><span class="biz-label">ޙަލާލް ޓޫރިޒަމް</span></div>
             </div>
 
             <div style="margin-top:50px;"></div>
@@ -375,21 +373,11 @@
                 <div class="life-card big"><img src="https://images.unsplash.com/photo-1544367563-121910aa6e8a?auto=format&fit=crop&w=600&q=60"><div class="life-info"><h3>ކުދިންގެ ނަފްސާނީ ދުޅަހެޔޮކަން</h3></div></div>
                 <div class="life-card"><img src="https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&w=300&q=60"><div class="life-info"><h5>ޞިއްޙީ ކާނާ</h5></div></div>
                 <div class="life-card"><img src="https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?auto=format&fit=crop&w=300&q=60"><div class="life-info"><h5>އާއިލީ ގުޅުން</h5></div></div>
-                <div class="life-card"><img src="https://images.unsplash.com/photo-1543333995-a09abd7d36d9?auto=format&fit=crop&w=300&q=60"><div class="life-info"><h5>ކަސްރަތު</h5></div></div>
-                <div class="life-card"><img src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=300&q=60"><div class="life-info"><h5>ފޮތް ކިޔުން</h5></div></div>
-            </div>
-
-            <div style="margin-top:50px;"></div>
-            <div class="section-header"><h2>ކޯ-ކަރިކިއުލަރ ޙަރަކާތްތައް</h2></div>
-            <div class="card-grid">
-                <div class="card"><img src="https://images.unsplash.com/photo-1526976668912-1a811878dd37?auto=format&fit=crop&w=400&q=60" class="card-img"><div class="card-body"><span class="card-tag">ސްކައުޓް</span><h3 class="card-title">އަހަރީ ކޭމްޕް</h3></div></div>
-                <div class="card"><img src="https://images.unsplash.com/photo-1585829365295-ab7cd400c167?auto=format&fit=crop&w=400&q=60" class="card-img"><div class="card-body"><span class="card-tag">ޤުރުއާން</span><h3 class="card-title">މުބާރާތުގެ ނަތީޖާ</h3></div></div>
-                <div class="card"><img src="https://images.unsplash.com/photo-1577985051167-0d49eec21977?auto=format&fit=crop&w=400&q=60" class="card-img"><div class="card-body"><span class="card-tag">އަދަބީ</span><h3 class="card-title">ވާހަކަ ދެއްކުން</h3></div></div>
             </div>
 
             <div class="sidebar-widget" style="margin-top:40px; border-color:var(--royal-gold);">
                 <h3 class="sidebar-title">ޚިޔާލު ފޮނުއްވާ</h3>
-                <form action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+                <form action="#" method="POST">
                     <input type="text" name="name" placeholder="ނަން" style="width:100%; padding:12px; margin-bottom:10px; border:1px solid #ddd; border-radius:6px;" required>
                     <textarea name="message" rows="3" placeholder="މެސެޖް" style="width:100%; padding:12px; margin-bottom:10px; border:1px solid #ddd; border-radius:6px;" required></textarea>
                     <button style="padding:12px 25px; background:var(--royal-blue); color:white; border:none; cursor:pointer;">ފޮނުވާ</button>
@@ -398,7 +386,6 @@
         </main>
 
         <aside class="sidebar">
-            
             <div class="weather-widget">
                 <div id="live-clock" class="live-clock">--:--</div>
                 <div id="current-date">--</div>
@@ -417,45 +404,10 @@
             </div>
 
             <div class="sidebar-widget">
-                <h3 class="sidebar-title">ވީޑިއޯ ދަރުސް</h3>
-                <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius:8px;">
-                    <iframe style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" src="https://www.youtube.com/embed/zpOULjyy-n8" frameborder="0" allowfullscreen></iframe>
-                </div>
-            </div>
-
-            <div class="sidebar-widget">
-                <h3 class="sidebar-title">ދަރިވަރުންނަށް</h3>
-                <ul class="link-list">
-                    <li><a href="#">👨‍🎓 ސްޓޫޑެންޓް ޕޯޓަލް</a></li>
-                    <li><a href="#">📅 އިމްތިޙާނު ތާވަލު</a></li>
-                    <li><a href="#">📝 ނަތީޖާ</a></li>
-                </ul>
-            </div>
-
-            <div class="sidebar-widget">
-                <h3 class="sidebar-title">ޑައުންލޯޑްސް</h3>
-                <ul class="link-list">
-                    <li><a href="#">📄 އެޕްލިކޭޝަން ފޯމު</a></li>
-                    <li><a href="#">🗓️ އެކަޑެމިކް ކަލަންޑަރު</a></li>
-                </ul>
-            </div>
-
-            <div class="sidebar-widget">
-                <h3 class="sidebar-title">ގުޅުންހުރި ލިންކުތައް</h3>
-                <ul class="link-list">
-                    <li><a href="https://www.moe.gov.mv">🏛️ އެޑިއުކޭޝަން މިނިސްޓްރީ</a></li>
-                    <li><a href="https://mqa.gov.mv">📜 އެމް.ކިއު.އޭ</a></li>
-                    <li><a href="https://ium.edu.mv">🎓 ޤައުމީ ޔުނިވަރސިޓީ</a></li>
-                </ul>
-            </div>
-
-            <div class="sidebar-widget">
                 <h3 class="sidebar-title">މުހިންމު ނަންބަރުތައް</h3>
                 <div class="hotlines-grid">
                     <div class="hotline-item">👮 119</div>
                     <div class="hotline-item">🚑 102</div>
-                    <div class="hotline-item">🚒 118</div>
-                    <div class="hotline-item">🚢 191</div>
                 </div>
             </div>
         </aside>
@@ -473,23 +425,7 @@
                 <ul>
                     <li><a href="#">› ކޯސްތައް</a></li>
                     <li><a href="#">› ގުޅިލައްވާ</a></li>
-                    <li><a href="#">› ވަޒީފާ</a></li>
                 </ul>
-            </div>
-            <div class="footer-col">
-                <h3>ވަސީލަތްތައް</h3>
-                <ul>
-                    <li><a href="#">› ލައިބްރަރީ</a></li>
-                    <li><a href="#">› ފޮޓޯ ގެލެރީ</a></li>
-                    <li><a href="#">› ސުވާލާއި ޖަވާބު</a></li>
-                </ul>
-            </div>
-            <div class="footer-col">
-                <h3>ނިއުސްލެޓަރ</h3>
-                <form action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
-                    <input type="email" name="subscriber_email" placeholder="Email Address" class="footer-input">
-                    <button class="footer-btn">Subscribe</button>
-                </form>
             </div>
         </div>
         <div class="copyright">
@@ -517,16 +453,11 @@
                 document.getElementById('isha').innerText = timings.Isha;
             });
             
+        // Improved Mobile Menu Logic using Classes
         function toggleMenu() {
             var menu = document.querySelector('.main-menu');
-            if (menu.style.display === "flex") {
-                menu.style.display = "none";
-            } else {
-                menu.style.display = "flex";
-                menu.style.flexDirection = "column";
-            }
+            menu.classList.toggle('active');
         }
-        document.querySelector('.menu-btn').addEventListener('click', toggleMenu);
     </script>
 
 </body>
