@@ -4,239 +4,126 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ޑިޖިޓަލް ލައިބްރަރީ - ޒާދް އެކަޑެމީ</title>
-    
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thaana&family=Amiri:wght@400;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thaana:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <style>
-        /* --- 1. THEME VARIABLES --- */
-        :root {
-            --academy-blue: #0C2D48;
-            --academy-light: #2E8BC0;
-            --academy-gold: #B49658;
-            --white: #ffffff;
-            --off-white: #f4f6f8;
-            --text-dark: #1a1a1a;
-            --font-dv: 'Faruma', 'Noto Sans Thaana', sans-serif;
-        }
-
-        @font-face { font-family: 'Faruma'; src: url('fonts/Faruma.ttf') format('truetype'); font-weight: normal; }
-
-        * { box-sizing: border-box; margin: 0; padding: 0; }
+        /* Shared Root Variables from Index */
+        :root { --royal-blue: #0C2D48; --royal-gold: #B49658; --bg-color: #f4f6f8; }
+        body { font-family: 'Noto Sans Thaana', sans-serif; background: var(--bg-color); margin: 0; padding: 20px; }
         
-        body {
-            font-family: var(--font-dv);
-            background-color: var(--off-white);
-            color: var(--text-dark);
-            line-height: 1.8;
-            background-image: radial-gradient(#dbeafe 1px, transparent 1px);
-            background-size: 30px 30px;
-        }
+        .library-header { text-align: center; margin-bottom: 40px; }
+        .library-header h1 { color: var(--royal-blue); font-size: 2.5em; margin-bottom: 10px; }
+        .library-header p { color: #666; }
 
-        a { text-decoration: none; transition: 0.3s; color: inherit; }
-        ul { list-style: none; padding: 0; margin: 0; }
-
-        /* --- HEADER & NAV (Same as Index) --- */
-        .top-bar { background: #051626; color: #ccc; padding: 10px 5%; display: flex; justify-content: space-between; }
-        header { background: var(--academy-blue); padding: 25px 5%; border-bottom: 5px solid var(--academy-gold); text-align: center; }
-        .site-logo h1 { font-size: 2.5em; color: white; margin: 0; }
-        .site-logo span { color: var(--academy-gold); font-family: 'Playfair Display'; letter-spacing: 2px; }
-
-        nav { background: white; box-shadow: 0 4px 15px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 1000; }
-        .main-menu { display: flex; justify-content: center; flex-wrap: wrap; }
-        .main-menu li a { display: block; padding: 15px 20px; color: var(--academy-blue); font-weight: bold; }
-        .main-menu li a:hover { color: var(--academy-gold); background: #f9f9f9; }
-
-        /* --- LIBRARY GRID STYLES --- */
-        .container { max-width: 1400px; margin: 0 auto; padding: 50px 5%; }
-        
-        .page-header { 
-            text-align: center; margin-bottom: 50px; 
-            border-bottom: 2px solid #ddd; padding-bottom: 20px; 
-        }
-        .page-header h2 { font-size: 2.5em; color: var(--academy-blue); margin-bottom: 10px; }
-        .page-header p { color: #666; font-size: 1.1em; }
-
-        /* THE GRID */
-        .book-grid {
+        /* --- LIBRARY GRID (Holds 100+ items) --- */
+        .library-grid {
             display: grid;
-            /* Auto-fill creates as many columns as fit */
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 30px;
+            /* Creates small cards that adjust to screen size */
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); 
+            gap: 25px;
+            max-width: 1400px;
+            margin: 0 auto;
         }
 
-        /* BOOK CARD DESIGN */
         .book-card {
             background: white;
-            border-radius: 12px;
-            overflow: hidden;
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
             box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: 0.3s;
             border: 1px solid #eee;
-            transition: all 0.3s ease;
-            position: relative;
             display: flex;
             flex-direction: column;
+            align-items: center;
         }
 
         .book-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 40px rgba(12, 45, 72, 0.2);
-            border-color: var(--academy-gold);
+            transform: translateY(-5px);
+            border-color: var(--royal-gold);
+            box-shadow: 0 10px 25px rgba(180, 150, 88, 0.2);
         }
 
-        .book-cover-wrap {
-            width: 100%;
-            height: 280px; /* Fixed height for uniformity */
-            background: #f0f0f0;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .book-cover {
-            width: 100%;
-            height: 100%;
-            object-fit: cover; /* Ensures image fills box nicely */
-            transition: 0.5s;
-        }
-        
-        .book-card:hover .book-cover { transform: scale(1.05); }
-
-        /* PDF Badge */
-        .pdf-badge {
-            position: absolute; top: 10px; right: 10px;
-            background: #e63946; color: white;
-            padding: 2px 8px; border-radius: 4px;
-            font-size: 0.7em; font-weight: bold;
-            font-family: sans-serif;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-        }
-
-        .book-info {
-            padding: 15px;
-            text-align: center;
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
-
-        .book-title {
-            font-size: 1.1em;
-            color: var(--academy-blue);
-            font-weight: bold;
-            margin-bottom: 5px;
-            line-height: 1.4;
-        }
-
-        .book-author {
-            font-size: 0.85em;
-            color: #777;
+        .book-icon {
+            font-size: 3em;
+            color: #ff5252; /* PDF Red color */
             margin-bottom: 15px;
             display: block;
         }
+        
+        /* If using cover images instead of icons */
+        .book-cover {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        .book-title {
+            font-size: 1em;
+            font-weight: bold;
+            color: var(--royal-blue);
+            margin-bottom: 5px;
+            line-height: 1.3;
+        }
+
+        .book-author {
+            font-size: 0.8em;
+            color: #888;
+            margin-bottom: 15px;
+        }
 
         .download-btn {
-            display: inline-block;
-            width: 100%;
-            padding: 8px 0;
-            background-color: var(--academy-blue);
+            margin-top: auto; /* Pushes button to bottom */
+            background: var(--royal-blue);
             color: white;
-            border-radius: 6px;
-            font-size: 0.9em;
-            font-weight: bold;
-            border: 2px solid var(--academy-blue);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: 0.2s;
         }
+        
+        .download-btn:hover { background: var(--royal-gold); }
 
-        .download-btn:hover {
-            background-color: white;
-            color: var(--academy-blue);
-        }
-
-        /* Responsive */
-        @media (max-width: 600px) {
-            .book-grid { grid-template-columns: repeat(2, 1fr); gap: 15px; }
-            .book-cover-wrap { height: 200px; }
-        }
     </style>
 </head>
 <body>
 
-    <header>
-        <div class="site-logo">
-            <h1>ޒާދް އެކަޑެމީ</h1>
-            <span>Zaad Academy Blog</span>
-        </div>
-    </header>
-
-    <nav>
-        <ul class="main-menu">
-            <li><a href="index.html">ހޯމް</a></li>
-            <li><a href="library.html" style="color:var(--academy-gold);">ޑިޖިޓަލް ލައިބްރަރީ</a></li>
-            <li><a href="#">ކޯސްތައް</a></li>
-            <li><a href="#">ގުޅިލައްވާ</a></li>
-        </ul>
-    </nav>
-
-    <div class="container">
-        
-        <div class="page-header">
-            <h2>📚 ޑިޖިޓަލް ލައިބްރަރީ</h2>
-            <p>އިސްލާމީ، ޢިލްމީ އަދި ތަރުބަވީ 50 އަށްވުރެ ގިނަ ފޮތް ހިލޭ ޑައުންލޯޑް ކުރައްވާ</p>
-        </div>
-
-        <div class="book-grid" id="book-container">
-            </div>
-
+    <div class="library-header">
+        <h1>ޑިޖިޓަލް ލައިބްރަރީ</h1>
+        <p>100+ އިސްލާމީ އަދި ތަޢުލީމީ ފޮތްތައް</p>
     </div>
 
-    <footer style="background:#0C2D48; color:#ccc; text-align:center; padding:30px; margin-top:50px;">
-        &copy; 2025 Zaad Academy Library.
-    </footer>
-
-    <script>
-        // 1. Book Data Array (You can edit names and image links here)
-        // For demonstration, I will generate 50 dummy books. 
-        // In real use, you can manually list them like: { title: "Book Name", img: "image.jpg", link: "file.pdf" }
+    <div class="library-grid">
         
-        const books = [];
-        const categories = ["ޤުރުއާން", "ފިޤުހު", "ތާރީޚް", "ސައިންސް", "އަދަބިއްޔާތު", "ކުޑަކުދިން"];
+        <div class="book-card">
+            <i class="fas fa-file-pdf book-icon"></i>
+            <h3 class="book-title">ތައުޙީދު ފޮތް 1</h3>
+            <p class="book-author">އިސްލާމިކް މިނިސްޓްރީ</p>
+            <a href="#" class="download-btn"><i class="fas fa-download"></i> ޑައުންލޯޑް</a>
+        </div>
+
+        <div class="book-card">
+            <img src="https://via.placeholder.com/150x200?text=Book+Cover" class="book-cover" alt="Cover">
+            <h3 class="book-title">އޭ.އައި ގައިޑް</h3>
+            <p class="book-author">ޒާދް އެކަޑެމީ</p>
+            <a href="#" class="download-btn"><i class="fas fa-eye"></i> ކިޔުއްވާ</a>
+        </div>
+
+        <div class="book-card">
+            <i class="fas fa-file-pdf book-icon"></i>
+            <h3 class="book-title">ފޮތުގެ ނަން 3</h3>
+            <a href="#" class="download-btn">ޑައުންލޯޑް</a>
+        </div>
         
-        // Generating 50 Sample Books
-        for (let i = 1; i <= 50; i++) {
-            books.push({
-                id: i,
-                title: `އީ-ބުކް ނަންބަރު ${i}`, // Example: E-book Number 1
-                author: "ޒާދް ޕަބްލިކޭޝަންސް",
-                image: `https://via.placeholder.com/200x280/0C2D48/FFFFFF?text=Book+${i}`, // Placeholder Image
-                link: "#" // Link to PDF (e.g., pdfs/book1.pdf)
-            });
-        }
-
-        // 2. Function to Render Books
-        const container = document.getElementById('book-container');
-
-        books.forEach(book => {
-            // Create Card HTML
-            const cardHTML = `
-                <div class="book-card">
-                    <div class="book-cover-wrap">
-                        <span class="pdf-badge">PDF</span>
-                        <img src="${book.image}" alt="${book.title}" class="book-cover">
-                    </div>
-                    <div class="book-info">
-                        <div>
-                            <h3 class="book-title">${book.title}</h3>
-                            <span class="book-author">${book.author}</span>
-                        </div>
-                        <a href="${book.link}" class="download-btn" target="_blank">
-                            📥 ޑައުންލޯޑް
-                        </a>
-                    </div>
-                </div>
-            `;
-            // Add to container
-            container.innerHTML += cardHTML;
-        });
-    </script>
+        </div>
 
 </body>
 </html>
