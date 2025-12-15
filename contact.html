@@ -7,12 +7,12 @@
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thaana:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thaana:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <style>
-        /* --- THEME VARIABLES --- */
+        /* --- 1. THEME VARIABLES --- */
         :root {
             --academy-blue: #0C2D48;
             --academy-dark: #051626;
@@ -20,40 +20,49 @@
             --white: #ffffff;
             --off-white: #f4f6f8;
             --text-dark: #333;
+            /* Main Font Variable */
+            --font-main: 'Noto Sans Thaana', sans-serif; 
         }
 
-        /* --- GLOBAL FONT FIX --- */
-        /* Noto Sans Thaana is now FIRST priority */
-        body, h1, h2, h3, h4, h5, h6, p, span, a, li, div {
-            font-family: 'Noto Sans Thaana', 'Mv Galan', 'Faruma', sans-serif !important;
+        /* --- 2. AGGRESSIVE FONT RESET (THE FIX) --- */
+        
+        /* Apply to EVERYTHING */
+        * {
+            box-sizing: border-box; 
+            margin: 0; 
+            padding: 0;
+            font-family: var(--font-main) !important; /* Force Dhivehi Font */
         }
 
-        /* Force Inputs to use Dhivehi Font */
-        input, textarea, button, select, option {
-            font-family: 'Noto Sans Thaana', 'Mv Galan', sans-serif !important;
+        /* Specific fix for Form Inputs, Textareas, Buttons & Placeholders */
+        input, button, select, textarea {
+            font-family: var(--font-main) !important;
         }
 
-        /* English Number/Text Override */
+        ::placeholder {
+            font-family: var(--font-main) !important;
+            opacity: 0.7;
+        }
+
+        /* Override for English Text/Numbers only */
         .ltr-text {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
             direction: ltr;
             unicode-bidi: embed;
+            text-align: left;
         }
 
-        /* --- BASIC RESET & LAYOUT --- */
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-
+        /* --- 3. LAYOUT STYLES --- */
         body {
             background-color: var(--off-white);
             color: var(--text-dark);
             line-height: 1.8;
         }
 
-        /* --- HEADER & NAV --- */
+        /* Top Bar */
         .top-bar { 
             background: #051626; color: #ccc; padding: 10px 5%; 
-            font-size: 0.9em; text-align: left; 
-            direction: ltr; 
+            font-size: 0.9em; 
         }
         
         header { background: var(--academy-blue); padding: 25px 5%; border-bottom: 5px solid var(--academy-gold); text-align: center; }
@@ -65,7 +74,7 @@
         .main-menu li a { display: block; padding: 15px 20px; color: var(--academy-blue); font-weight: bold; transition: 0.3s; font-size: 1.1em; }
         .main-menu li a:hover { color: var(--academy-gold); background: #f9f9f9; }
 
-        /* --- PAGE HEADER --- */
+        /* Page Header */
         .page-header {
             background: linear-gradient(135deg, var(--academy-blue), var(--academy-dark));
             padding: 60px 20px;
@@ -76,7 +85,7 @@
         .header-title { font-size: 2.8em; margin-bottom: 10px; text-shadow: 0 2px 5px rgba(0,0,0,0.3); }
         .header-desc { font-size: 1.2em; opacity: 0.9; }
 
-        /* --- CONTACT LAYOUT --- */
+        /* Contact Container */
         .container {
             max-width: 1200px;
             margin: 50px auto;
@@ -86,7 +95,7 @@
             gap: 50px;
         }
 
-        /* Contact Form */
+        /* Form Box */
         .contact-form-box {
             background: white;
             padding: 40px;
@@ -102,7 +111,7 @@
         
         .form-input {
             width: 100%;
-            padding: 12px;
+            padding: 15px; /* Increased padding */
             border: 1px solid #ddd;
             border-radius: 8px;
             font-size: 1.1em; 
@@ -158,7 +167,6 @@
         .info-text h4 { margin: 0 0 5px 0; color: var(--academy-blue); font-size: 1.3em; }
         .info-text p { margin: 0; color: #666; font-size: 1.1em; }
 
-        /* Map */
         .map-container {
             border-radius: 12px;
             overflow: hidden;
@@ -232,7 +240,7 @@
             </div>
 
             <div class="map-container">
-                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3979.336427329432!2d73.508888!3d4.175496!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3b3f7f4577239617%3A0x6b4c37929497e743!2sMale&#39;%2C%20Maldives!5e0!3m2!1sen!2s!4v1645423895674!5m2!1sen!2s" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3979.789582697078!2d73.5065433142755!3d4.172420896963865!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3b3f7f441c2c3c67%3A0x9c3336334633719!2sMale%2C%20Maldives!5e0!3m2!1sen!2s!4v1645520000000!5m2!1sen!2s" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
             </div>
         </div>
 
@@ -240,7 +248,6 @@
             <h3 class="form-title">މެސެޖު ފޮނުއްވާ</h3>
             
             <form action="https://formsubmit.co/academyzaad@gmail.com" method="POST">
-                
                 <input type="hidden" name="_subject" value="New Message from Zaad Academy Website">
                 <input type="hidden" name="_captcha" value="false">
                 <input type="hidden" name="_template" value="table">
