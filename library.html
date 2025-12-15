@@ -4,126 +4,318 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ޑިޖިޓަލް ލައިބްރަރީ - ޒާދް އެކަޑެމީ</title>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thaana:wght@400;700&display=swap" rel="stylesheet">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thaana:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <style>
-        /* Shared Root Variables from Index */
-        :root { --royal-blue: #0C2D48; --royal-gold: #B49658; --bg-color: #f4f6f8; }
-        body { font-family: 'Noto Sans Thaana', sans-serif; background: var(--bg-color); margin: 0; padding: 20px; }
-        
-        .library-header { text-align: center; margin-bottom: 40px; }
-        .library-header h1 { color: var(--royal-blue); font-size: 2.5em; margin-bottom: 10px; }
-        .library-header p { color: #666; }
-
-        /* --- LIBRARY GRID (Holds 100+ items) --- */
-        .library-grid {
-            display: grid;
-            /* Creates small cards that adjust to screen size */
-            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); 
-            gap: 25px;
-            max-width: 1400px;
-            margin: 0 auto;
+        /* --- THEME VARIABLES --- */
+        :root {
+            --royal-blue: #0C2D48;
+            --royal-dark: #051626;
+            --royal-gold: #B49658;
+            --white: #ffffff;
+            --bg-color: #f4f6f8;
+            --text-main: #333;
+            --card-shadow: 0 10px 20px rgba(0,0,0,0.05);
+            
+            /* FONT SETTINGS */
+            --font-dv: 'Mv Galan', 'Noto Sans Thaana', 'Faruma', sans-serif;
         }
 
-        .book-card {
+        /* Local Font Face */
+        @font-face {
+            font-family: 'Mv Galan';
+            src: url('fonts/Mv Galan.ttf') format('truetype');
+            font-weight: normal;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: var(--font-dv);
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+        }
+
+        /* --- HEADER AREA --- */
+        .library-header {
+            background: linear-gradient(135deg, var(--royal-blue), var(--royal-dark));
+            padding: 60px 20px;
+            text-align: center;
+            color: white;
+            border-bottom: 5px solid var(--royal-gold);
+            margin-bottom: 40px;
+        }
+
+        .library-title {
+            font-size: 2.5em;
+            margin-bottom: 15px;
+            text-shadow: 0 2px 5px rgba(0,0,0,0.3);
+        }
+
+        .library-subtitle {
+            font-size: 1.1em;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto 30px auto;
+        }
+
+        /* SEARCH BAR */
+        .search-container {
+            max-width: 500px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 15px 50px 15px 20px;
+            border-radius: 50px;
+            border: none;
+            font-family: var(--font-dv);
+            font-size: 1em;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            outline: none;
+        }
+
+        .search-icon {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--royal-blue);
+        }
+
+        /* --- NAV BAR (Simplified) --- */
+        .nav-bar {
             background: white;
-            border-radius: 10px;
             padding: 15px;
             text-align: center;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .nav-bar a {
+            text-decoration: none;
+            color: var(--royal-blue);
+            font-weight: bold;
+            margin: 0 15px;
             transition: 0.3s;
+        }
+        .nav-bar a:hover { color: var(--royal-gold); }
+
+        /* --- GRID LAYOUT --- */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px 60px 20px;
+        }
+
+        .books-grid {
+            display: grid;
+            /* Auto-fit makes it responsive: Min 180px width per card */
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 25px;
+        }
+
+        /* --- MODERN BOOK CARD --- */
+        .book-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: var(--card-shadow);
+            transition: all 0.3s ease;
             border: 1px solid #eee;
             display: flex;
             flex-direction: column;
             align-items: center;
+            position: relative;
+            overflow: hidden;
         }
 
         .book-card:hover {
-            transform: translateY(-5px);
+            transform: translateY(-8px);
+            box-shadow: 0 15px 30px rgba(12, 45, 72, 0.15);
             border-color: var(--royal-gold);
-            box-shadow: 0 10px 25px rgba(180, 150, 88, 0.2);
+        }
+
+        /* Icon Circle Background */
+        .icon-wrapper {
+            width: 80px;
+            height: 80px;
+            background: #f4f6f8;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 15px;
+            transition: 0.3s;
+        }
+
+        .book-card:hover .icon-wrapper {
+            background: var(--royal-blue);
         }
 
         .book-icon {
-            font-size: 3em;
-            color: #ff5252; /* PDF Red color */
-            margin-bottom: 15px;
-            display: block;
+            font-size: 2.5em;
+            color: var(--royal-gold); /* Gold Icon */
+            transition: 0.3s;
         }
-        
-        /* If using cover images instead of icons */
-        .book-cover {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-            border-radius: 5px;
-            margin-bottom: 10px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+
+        .book-card:hover .book-icon {
+            color: white; /* Icon turns white on hover */
         }
 
         .book-title {
-            font-size: 1em;
+            font-size: 1.1em;
             font-weight: bold;
             color: var(--royal-blue);
             margin-bottom: 5px;
             line-height: 1.3;
+            min-height: 45px; /* Ensures alignment */
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
         }
 
-        .book-author {
+        .book-category {
             font-size: 0.8em;
             color: #888;
             margin-bottom: 15px;
+            background: #eee;
+            padding: 2px 10px;
+            border-radius: 20px;
         }
 
         .download-btn {
-            margin-top: auto; /* Pushes button to bottom */
+            margin-top: auto;
+            width: 100%;
+            padding: 10px;
+            background: white;
+            border: 1px solid var(--royal-blue);
+            color: var(--royal-blue);
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 0.9em;
+            font-weight: bold;
+            transition: 0.3s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .download-btn:hover {
             background: var(--royal-blue);
             color: white;
-            padding: 5px 15px;
-            border-radius: 20px;
-            font-size: 0.8em;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            transition: 0.2s;
         }
-        
-        .download-btn:hover { background: var(--royal-gold); }
+
+        /* --- FOOTER --- */
+        footer {
+            background: var(--royal-blue);
+            color: #ccc;
+            padding: 40px;
+            text-align: center;
+            border-top: 5px solid var(--royal-gold);
+        }
 
     </style>
 </head>
 <body>
 
-    <div class="library-header">
-        <h1>ޑިޖިޓަލް ލައިބްރަރީ</h1>
-        <p>100+ އިސްލާމީ އަދި ތަޢުލީމީ ފޮތްތައް</p>
+    <nav class="nav-bar">
+        <a href="index.html">← ހޯމް</a>
+        <a href="courses.html">ކޯސްތައް</a>
+        <a href="contact.html">ގުޅިލައްވާ</a>
+    </nav>
+
+    <header class="library-header">
+        <h1 class="library-title">ޑިޖިޓަލް ލައިބްރަރީ</h1>
+        <p class="library-subtitle">ޒާދް އެކަޑެމީގެ ޚާއްޞަ ފޮތްތަކާއި، ދަރިވަރުންނަށް ބޭނުންވާ މުހިންމު ލިޔުންތައް އެއްތަނަކުން</p>
+        
+        <div class="search-container">
+            <i class="fas fa-search search-icon"></i>
+            <input type="text" class="search-input" placeholder="ފޮތުގެ ނަން ޖައްސަވާ...">
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="books-grid" id="books-container">
+            </div>
     </div>
 
-    <div class="library-grid">
-        
-        <div class="book-card">
-            <i class="fas fa-file-pdf book-icon"></i>
-            <h3 class="book-title">ތައުޙީދު ފޮތް 1</h3>
-            <p class="book-author">އިސްލާމިކް މިނިސްޓްރީ</p>
-            <a href="#" class="download-btn"><i class="fas fa-download"></i> ޑައުންލޯޑް</a>
-        </div>
+    <footer>
+        <p>© 2025 ޒާދް އެކަޑެމީ. ހުރިހާ ޙައްޤެއް ވަނީ ރައްކާތެރިކުރެވިފައި.</p>
+    </footer>
 
-        <div class="book-card">
-            <img src="https://via.placeholder.com/150x200?text=Book+Cover" class="book-cover" alt="Cover">
-            <h3 class="book-title">އޭ.އައި ގައިޑް</h3>
-            <p class="book-author">ޒާދް އެކަޑެމީ</p>
-            <a href="#" class="download-btn"><i class="fas fa-eye"></i> ކިޔުއްވާ</a>
-        </div>
-
-        <div class="book-card">
-            <i class="fas fa-file-pdf book-icon"></i>
-            <h3 class="book-title">ފޮތުގެ ނަން 3</h3>
-            <a href="#" class="download-btn">ޑައުންލޯޑް</a>
-        </div>
+    <script>
+        // Sample Data for Variety (Categories & Titles)
+        const categories = ["އިސްލާމީ", "ތާރީޚް", "ސައިންސް", "ހިސާބު", "އަދަބިއްޔާތު", "ޓެކްނޮލޮޖީ"];
+        const bookPrefixes = ["ފޮތް", "ގައިޑް", "ނޯޓްސް", "ފިލާވަޅު", "ރިޕޯޓް"];
         
-        </div>
+        const container = document.getElementById('books-container');
+
+        // Function to create a single card HTML
+        function createCard(id, title, category) {
+            return `
+                <div class="book-card">
+                    <div class="icon-wrapper">
+                        <i class="fas fa-book-open book-icon"></i>
+                    </div>
+                    <h3 class="book-title">${title}</h3>
+                    <span class="book-category">${category}</span>
+                    <a href="#" class="download-btn">
+                        <i class="fas fa-download"></i> ޑައުންލޯޑް
+                    </a>
+                </div>
+            `;
+        }
+
+        // Loop to generate 50 Cards
+        let cardsHTML = "";
+        for (let i = 1; i <= 50; i++) {
+            // Randomly select category and title structure for variety
+            const cat = categories[Math.floor(Math.random() * categories.length)];
+            const prefix = bookPrefixes[Math.floor(Math.random() * bookPrefixes.length)];
+            
+            // Create a realistic looking title
+            const title = `${cat} - ${prefix} ${i}`; 
+            
+            // Or specific names for the first few to look nice
+            let finalTitle = title;
+            if (i === 1) finalTitle = "ތައުޙީދު ފޮތް (ބައި 1)";
+            if (i === 2) finalTitle = "ފިޤްހު - ނަމާދު";
+            if (i === 3) finalTitle = "ދިވެހި ތާރީޚް";
+            if (i === 4) finalTitle = "އޭ.އައި ތަޢާރަފް";
+            if (i === 5) finalTitle = "ކުޑަކުދިންގެ ވާހަކަ";
+
+            cardsHTML += createCard(i, finalTitle, cat);
+        }
+
+        // Inject into HTML
+        container.innerHTML = cardsHTML;
+
+        // Simple Search Functionality (Optional Bonus)
+        const searchInput = document.querySelector('.search-input');
+        searchInput.addEventListener('keyup', (e) => {
+            const term = e.target.value.toLowerCase();
+            const cards = document.querySelectorAll('.book-card');
+            
+            cards.forEach(card => {
+                const title = card.querySelector('.book-title').innerText.toLowerCase();
+                if (title.includes(term)) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+    </script>
 
 </body>
 </html>
