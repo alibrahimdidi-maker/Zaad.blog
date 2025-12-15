@@ -50,6 +50,10 @@
             border-bottom: 1px solid rgba(255,255,255,0.1);
         }
 
+        /* Language Switcher Styles */
+        .lang-switch a { margin-right: 10px; font-weight: bold; color: #aaa; text-decoration: none; }
+        .lang-switch a:hover, .lang-switch a.active { color: var(--royal-gold); }
+
         /* Date Display Style */
         #hijri-date {
             color: var(--royal-gold);
@@ -327,9 +331,17 @@
     <div class="top-bar">
         <div><i class="fas fa-phone"></i> 9901550 | <i class="fas fa-envelope"></i> info@zaad.edu.mv</div>
         
-        <div id="hijri-date">
-            <i class="fas fa-calendar-alt"></i> 
-            <span id="date-text">ތާރީޚް ލޯޑުވަނީ...</span>
+        <div style="display:flex; gap:15px; align-items:center;">
+            <div id="hijri-date">
+                <i class="fas fa-calendar-alt"></i> 
+                <span id="date-text">ތާރީޚް ލޯޑުވަނީ...</span>
+            </div>
+
+            <div class="lang-switch">
+                <a href="index.html" class="active">Dv</a> | 
+                <a href="ar.html">Ar</a> | 
+                <a href="en.html">En</a>
+            </div>
         </div>
     </div>
 
@@ -578,7 +590,6 @@
         setInterval(updateClock, 1000); updateClock();
 
         // Prayer Times API + Hijri Date (Saudi Method 4)
-        // Changed method to 4 (Umm Al-Qura University, Makkah) for Saudi Calendar
         fetch('https://api.aladhan.com/v1/timingsByCity?city=Male&country=Maldives&method=4')
             .then(response => response.json())
             .then(data => {
@@ -600,7 +611,6 @@
                     "ރަމަޟާން", "ޝައްވާލް", "ޛުލްޤައިދާ", "ޛުލްޙިއްޖާ"
                 ];
                 
-                // API month number is 1-12, array is 0-11
                 const monthName = hijriMonths[hijri.month.number - 1];
                 const dateString = `${hijri.day} ${monthName} ${hijri.year}`;
                 
