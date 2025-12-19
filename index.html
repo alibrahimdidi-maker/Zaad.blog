@@ -43,74 +43,6 @@
         a { text-decoration: none; color: inherit; transition: all 0.3s ease; }
         img { max-width: 100%; display: block; height: auto; border-radius: 8px; }
 
-        /* --- PASSWORD OVERLAY STYLES (ENGLISH) --- */
-        #login-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: var(--royal-dark);
-            z-index: 99999; /* Super high priority */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-            backdrop-filter: blur(5px); /* Nice blur effect */
-        }
-
-        .login-box {
-            background: white;
-            padding: 40px;
-            border-radius: 12px;
-            text-align: center;
-            border: 2px solid var(--royal-gold);
-            box-shadow: 0 10px 50px rgba(0,0,0,0.5);
-            max-width: 400px;
-            width: 90%;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* English Font */
-            direction: ltr; /* Left to right for English */
-        }
-
-        .login-box h2 {
-            color: var(--royal-blue);
-            margin-bottom: 10px;
-            font-weight: bold;
-            font-size: 1.8em;
-        }
-
-        .login-input {
-            width: 100%;
-            padding: 12px;
-            margin-bottom: 15px;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-            font-size: 1.1em;
-            text-align: center;
-            outline: none;
-        }
-        
-        .login-input:focus {
-            border-color: var(--royal-blue);
-            box-shadow: 0 0 5px rgba(12, 45, 72, 0.3);
-        }
-
-        .login-btn {
-            background: var(--royal-blue);
-            color: white;
-            border: none;
-            padding: 12px 30px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 1em;
-            font-weight: bold;
-            transition: 0.3s;
-            width: 100%;
-        }
-        .login-btn:hover {
-            background: var(--royal-gold);
-        }
-
         /* --- 2. HEADER AREA --- */
         .top-bar {
             background: var(--royal-dark); color: #ddd; padding: 8px 2%;
@@ -418,20 +350,6 @@
 </head>
 <body>
 
-    <div id="login-overlay">
-        <div class="login-box">
-            <div style="font-size:3em; color:var(--royal-gold); margin-bottom:10px;">
-                <i class="fas fa-lock"></i>
-            </div>
-            <h2>Restricted Access</h2>
-            <p style="margin-bottom:20px; font-size:0.9em; color:#555;">Please enter the password to continue.</p>
-            
-            <input type="password" id="passwordInput" class="login-input" placeholder="Enter Password">
-            <button onclick="checkPassword()" class="login-btn">Login</button>
-            <p id="error-msg" style="color:red; display:none; margin-top:10px; font-weight:bold;">Incorrect Password!</p>
-        </div>
-    </div>
-
     <div class="top-bar">
         <div><i class="fas fa-phone"></i> 9901550 | <i class="fas fa-envelope"></i> info@zaad.edu.mv</div>
         
@@ -669,34 +587,7 @@
     </footer>
 
     <script>
-        // --- PASSWORD CHECK FUNCTION (FIXED) ---
-        function checkPassword() {
-            var password = document.getElementById("passwordInput").value;
-            var overlay = document.getElementById("login-overlay");
-            var errorMsg = document.getElementById("error-msg");
-
-            // CHANGE PASSWORD HERE: "Zaad123"
-            if (password === "Zaad123") { 
-                overlay.style.opacity = "0"; // Fade out effect
-                overlay.style.pointerEvents = "none"; // Stop clicking immediately
-                setTimeout(function(){ 
-                    overlay.style.display = "none"; // Remove completely
-                }, 500);
-            } else {
-                errorMsg.style.display = "block"; // Show error message
-                document.getElementById("passwordInput").value = ""; // Clear input
-                document.getElementById("passwordInput").focus();
-            }
-        }
-
-        // Allow pressing "Enter" key to login
-        document.getElementById("passwordInput").addEventListener("keypress", function(event) {
-            if (event.key === "Enter") {
-                checkPassword();
-            }
-        });
-
-        // --- EXISTING WEBSITE LOGIC ---
+        // --- EXISTING WEBSITE LOGIC (Password Removed) ---
 
         // Mobile Menu Logic
         function toggleMenu() {
@@ -762,4 +653,3 @@
     </script>
 </body>
 </html>
-
