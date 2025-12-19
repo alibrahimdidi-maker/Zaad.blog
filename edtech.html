@@ -2,7 +2,7 @@
 <html lang="dv" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>Royal Graduation System (Final V11)</title>
+    <title>Royal Graduation System (Final V12)</title>
     <style>
         /* --- GLOBAL --- */
         body {
@@ -92,7 +92,20 @@
         .manual-btn { background: #ff8f00; color: white; border: none; padding: 2px 6px; border-radius: 3px; font-size: 10px; margin-top: 2px; }
 
         #statusMsg { text-align: center; margin-top: 2px; font-weight: bold; color: green; font-size: 12px; flex-shrink: 0; }
-        .copyright-text { text-align: center; font-size: 9px; color: #777; margin-top: 2px; flex-shrink: 0; }
+        
+        /* COPYRIGHT BAR */
+        .copyright-text { 
+            text-align: center; 
+            font-size: 11px; 
+            color: #d4af37; 
+            background: #00281c; 
+            margin-top: 5px; 
+            padding: 5px; 
+            border-radius: 4px;
+            flex-shrink: 0; 
+            font-family: 'Times New Roman', serif;
+            border-top: 1px solid #d4af37;
+        }
     </style>
 </head>
 <body oncontextmenu="return false;">
@@ -269,7 +282,7 @@
                 /* LOGO LAYER */
                 #logoWrap { 
                     position:absolute; 
-                    /* STATE A: IDLE (TOP 40px - Very High) */
+                    /* STATE A: IDLE (TOP 40px) */
                     top: 40px; 
                     left:50%; transform:translate(-50%, 0); 
                     z-index:20; transition: all 0.8s cubic-bezier(0.22, 1, 0.36, 1);
