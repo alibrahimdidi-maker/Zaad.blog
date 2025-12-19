@@ -2,7 +2,7 @@
 <html lang="dv" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>Royal Graduation System (Final V13)</title>
+    <title>Royal Graduation System (Final V14)</title>
     <style>
         /* --- GLOBAL --- */
         body {
@@ -43,13 +43,15 @@
         }
         .sidebar {
             flex: 0 0 300px; background: #f1f8e9; padding: 10px; border-radius: 8px;
-            display: flex; flex-direction: column; height: 100%; overflow: hidden; /* Important */
+            display: flex; flex-direction: column; height: 100%; overflow: hidden;
             border-right: 4px solid #d4af37;
         }
         .editor {
             flex: 1; background: #ffffff; padding: 20px; border-radius: 8px;
             display: flex; flex-direction: column; height: 100%; overflow-y: auto; position: relative;
             border-left: 4px solid #d4af37;
+            /* Key Fix: Prevent stretching gaps */
+            justify-content: flex-start; 
         }
         
         h2 { margin: 0 0 5px 0; color: #004d40; text-align: center; font-size: 1.2em; font-family: 'Faruuma'; }
@@ -76,7 +78,13 @@
         #stuList { flex-grow: 1; min-height: 0; margin-bottom: 5px; }
 
         .jalsa-panel { background: #e8f5e9; padding: 8px; border-radius: 5px; border: 1px solid #a5d6a7; margin-bottom: 5px; flex-shrink: 0; }
-        .video-panel { background: #e3f2fd; padding: 8px; border-radius: 5px; border: 1px solid #90caf9; margin-top: auto; flex-shrink: 0; }
+        
+        /* Video Panel Fixed: No margin-top auto */
+        .video-panel { 
+            background: #e3f2fd; padding: 8px; border-radius: 5px; border: 1px solid #90caf9; 
+            margin-top: 10px; /* Fixed margin */
+            flex-shrink: 0; 
+        }
         .btn-vid { font-size: 12px; padding: 4px; margin-top: 2px; border:none; border-radius:3px; color:white; width: 100%; }
 
         .controls { display: flex; gap: 5px; margin-top: 5px; flex-shrink: 0; }
@@ -91,21 +99,16 @@
         #logoPreview { height: 40px; object-fit: contain; }
         .manual-btn { background: #ff8f00; color: white; border: none; padding: 2px 6px; border-radius: 3px; font-size: 10px; margin-top: 2px; }
 
-        #statusMsg { text-align: center; margin-top: 2px; font-weight: bold; color: green; font-size: 12px; flex-shrink: 0; }
+        #statusMsg { 
+            text-align: center; margin-top: 5px; font-weight: bold; color: green; font-size: 13px; 
+            background: #e8f5e9; padding: 5px; border-radius: 4px; border: 1px solid green;
+            flex-shrink: 0;
+        }
         
-        /* COPYRIGHT BAR (FIXED VISIBLE) */
         .copyright-text { 
-            text-align: center; 
-            font-size: 12px; 
-            color: #d4af37; 
-            background: #00281c; 
-            margin-top: auto; /* Pushes to bottom */
-            padding: 8px; 
-            border-radius: 4px;
-            flex-shrink: 0; 
-            font-family: 'Times New Roman', serif;
-            border: 1px solid #d4af37;
-            font-weight: bold;
+            text-align: center; font-size: 12px; color: #d4af37; background: #00281c; 
+            margin-top: auto; padding: 8px; border-radius: 4px;
+            flex-shrink: 0; font-family: 'Times New Roman', serif; border: 1px solid #d4af37; font-weight: bold;
         }
     </style>
 </head>
@@ -195,6 +198,8 @@
                 <button class="action btn-nav" onclick="move(1)">Next ▶</button>
                 <button class="action btn-clear" onclick="clearTV()">X</button>
             </div>
+            
+            <div id="statusMsg">Ready</div>
 
             <div class="video-panel">
                 <h3 style="margin-top:0;">🎥 Auto-Play Video</h3>
@@ -208,8 +213,6 @@
                 </div>
                 <button class="btn-vid" style="background:#333; margin-top:5px;" onclick="stopVideo()">⏹ STOP VIDEO</button>
             </div>
-
-            <div id="statusMsg">Ready</div>
         </div>
     </div>
 
