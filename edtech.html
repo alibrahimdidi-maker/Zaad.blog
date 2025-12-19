@@ -2,7 +2,7 @@
 <html lang="dv" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>Royal Graduation System (Final Master)</title>
+    <title>Graduation Master (Final v3)</title>
     <style>
         /* --- GLOBAL --- */
         body {
@@ -12,6 +12,7 @@
             overflow: hidden; height: 100vh;
         }
 
+        /* Initial Font Placeholder */
         @font-face {
             font-family: 'Faruuma';
             src: local('Faruuma'), local('Faruumaa'), url('Fonts/faruuma.ttf') format('truetype');
@@ -36,7 +37,7 @@
             background: #d4af37; border: none; border-radius: 5px; font-weight: bold; color: #00281c; font-family: 'Faruuma';
         }
 
-        /* --- CONTROL PANEL --- */
+        /* --- MAIN UI --- */
         .main-layout { 
             display: none; gap: 10px; height: 100vh; width: 100vw; 
             padding: 10px; box-sizing: border-box; background: #00281c;
@@ -52,16 +53,14 @@
             border-left: 4px solid #d4af37;
         }
         
-        /* Typography & Inputs */
-        h2 { margin: 0 0 10px 0; color: #004d40; text-align: center; font-size: 1.4em; font-family: 'Faruuma'; }
-        h3 { margin: 15px 0 5px 0; font-size: 1.1em; border-bottom: 2px solid #004d40; color: #004d40; font-family: 'Faruuma'; }
-        label { display: block; font-weight: bold; font-size: 13px; margin-bottom: 2px; color: #333; font-family: 'Faruuma'; }
+        h2 { margin: 0 0 10px 0; color: #004d40; text-align: center; font-size: 1.4em; }
+        h3 { margin: 10px 0 5px 0; font-size: 1.1em; border-bottom: 2px solid #004d40; color: #004d40; }
         
+        label { display: block; font-weight: bold; font-size: 13px; margin-bottom: 2px; color: #333; }
         input[type="text"], textarea, select { 
             width: 98%; padding: 6px; border: 1px solid #aaa; border-radius: 4px; 
             font-size: 14px; margin-bottom: 4px; font-family: 'Faruuma', 'Times New Roman';
         }
-        
         .file-box { background: #e0e0e0; padding: 8px; border-radius: 5px; margin-bottom: 8px; border: 1px solid #bbb; }
         input[type="file"] { width: 100%; font-size: 11px; margin-bottom: 3px; }
 
@@ -71,27 +70,25 @@
         .eng { direction: ltr; text-align: left; font-family: 'Times New Roman', serif; font-weight: bold; }
 
         /* Buttons */
-        button { cursor: pointer; font-family: 'Faruuma'; font-weight: bold; }
-        .launch-btn { background: #c62828; color: white; padding: 10px; width: 100%; border: none; border-radius: 5px; margin-bottom: 5px; }
-        .fs-btn { background: #004d40; color: white; padding: 5px; width: 100%; border: 1px solid #d4af37; border-radius: 5px; margin-bottom: 10px; font-size: 12px; }
+        .launch-btn { background: #c62828; color: white; padding: 10px; width: 100%; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; margin-bottom: 10px; font-family: 'Faruuma'; }
+        .fs-btn { background: #004d40; color: white; padding: 5px; width: 100%; border: 1px solid #d4af37; border-radius: 5px; margin-bottom: 10px; font-size: 12px; cursor: pointer; }
 
         .controls { display: flex; gap: 5px; margin-top: 10px; }
-        button.action { flex: 1; padding: 12px; font-size: 16px; border: none; border-radius: 5px; color: white; transition: 0.2s; }
+        button.action { flex: 1; padding: 12px; font-size: 16px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; color: white; font-family: 'Faruuma'; transition: 0.2s; }
         .btn-live { background: #004d40; flex: 2; border: 2px solid #ffd700; color: #ffd700; }
         .btn-live:hover { background: #00695c; box-shadow: 0 0 10px #ffd700; }
         .btn-nav { background: #455a64; }
         .btn-clear { background: #b71c1c; flex: 0.5; }
 
-        /* Panels */
         .jalsa-panel { background: #e8f5e9; padding: 10px; border-radius: 8px; border: 1px solid #a5d6a7; margin-bottom: 15px; }
         .video-panel { background: #e3f2fd; padding: 10px; border-radius: 8px; border: 1px solid #90caf9; margin-top: 15px; }
-        .btn-vid { font-size: 13px; padding: 6px; margin-top: 4px; border:none; border-radius:4px; color:white; width: 100%; }
+        .btn-vid { font-size: 13px; padding: 6px; margin-top: 4px; border:none; border-radius:4px; cursor:pointer; font-weight:bold; color:white; width: 100%; }
 
         #statusMsg { text-align: center; margin-top: 8px; font-weight: bold; color: green; font-size: 15px; }
-        
         .preview-container { display: flex; gap: 20px; align-items: center; justify-content: center; background: #fff8e1; padding: 5px; border: 1px solid #ffb300; border-radius: 5px; margin-top: auto; }
         #previewImg { height: 80px; width: 80px; object-fit: cover; border-radius: 50%; border: 2px solid #d4af37; background: #ddd; }
         #logoPreview { height: 50px; object-fit: contain; }
+        .manual-btn { background: #ff8f00; color: white; border: none; padding: 3px 8px; border-radius: 3px; cursor: pointer; font-size: 11px; margin-top: 2px; }
     </style>
 </head>
 <body oncontextmenu="return false;">
@@ -117,7 +114,8 @@
                 <label>1. Students CSV:</label><input type="file" id="csvFile" accept=".csv">
                 <label>2. Photos:</label><input type="file" id="photoFolder" webkitdirectory directory multiple>
                 <label>3. Logo:</label><input type="file" id="logoFile" accept="image/*">
-                <label>4. Font (Dhivehi):</label><input type="file" id="fontFile" accept=".ttf, .otf">
+                <label>4. Font (TTF):</label><input type="file" id="fontFile" accept=".ttf, .otf">
+                <label style="color:#004d40; margin-top:5px;">5. Jalsa Titles CSV:</label><input type="file" id="jalsaCsvFile" accept=".csv">
             </div>
 
             <label>Search:</label>
@@ -127,12 +125,12 @@
 
         <div class="editor">
             <div class="jalsa-panel">
-                <h3 style="color:#1b5e20; margin-top:0;">🏛️ Jalsa Screen (Idle Mode)</h3>
+                <h3 style="color:#1b5e20; margin-top:0;">🏛️ Jalsa Screen (Idle)</h3>
                 <div style="display:flex; gap:5px; margin-bottom:5px;">
-                    <label>Background (Vid/Img):</label>
+                    <label>Background (Video/Img):</label>
                     <input type="file" id="jalsaBgFile" accept="video/*, image/*">
                 </div>
-                <input type="text" id="jLine1" placeholder="Main Title (e.g. Graduation 2024)" class="font-dv" style="font-weight:bold; font-size:16px; color:#00281c;">
+                <input type="text" id="jLine1" placeholder="Main Title (Heading 1)" class="font-dv" style="font-weight:bold; font-size:16px; color:#00281c;">
                 <input type="text" id="jLine2" placeholder="Sub-heading 1" class="font-dv">
                 <input type="text" id="jLine3" placeholder="Sub-heading 2" class="font-dv">
                 <input type="text" id="jLine4" placeholder="Sub-heading 3" class="font-dv">
@@ -143,7 +141,7 @@
                 </div>
             </div>
 
-            <h3>🎓 Student Info (Live Mode)</h3>
+            <h3>🎓 Student Info</h3>
             <div class="row">
                 <div class="col"><label>ނަން</label><input id="nD" class="font-dv"></div>
                 <div class="col"><label style="text-align:left;">Name</label><input id="nE" class="eng"></div>
@@ -165,19 +163,6 @@
                 <button class="action btn-clear" onclick="clearTV()">Clear</button>
             </div>
 
-            <div class="video-panel">
-                <h3 style="margin-top:0;">🎥 Video Player (Auto-Play)</h3>
-                <div style="display:flex; gap:5px;">
-                    <input type="file" id="videoLocal" accept="video/*" style="width:70%">
-                    <button class="btn-vid" style="background:#e65100; margin:0; width:30%;" onclick="playLocalVideo()">▶ Play Local</button>
-                </div>
-                <div style="display:flex; gap:5px; margin-top:5px;">
-                    <input type="text" id="ytLink" placeholder="YouTube Link..." style="width:70%; text-align:left;" class="font-en">
-                    <button class="btn-vid" style="background:#c62828; margin:0; width:30%;" onclick="playYoutube()">▶ Play YT</button>
-                </div>
-                <button class="btn-vid" style="background:#333; margin-top:8px;" onclick="stopVideo()">⏹ Stop Video</button>
-            </div>
-
             <div class="preview-container">
                 <div style="text-align:center;">
                     <span style="font-size:10px;">Logo</span><br><img id="logoPreview" alt="-">
@@ -189,6 +174,19 @@
                     <button class="manual-btn" onclick="document.getElementById('singlePhoto').click()">📷 Set</button>
                     <input type="file" id="singlePhoto" accept="image/*" style="display:none" onchange="manualPhoto(this)">
                 </div>
+            </div>
+
+            <div class="video-panel">
+                <h3 style="margin-top:0;">🎥 Video Player (Auto-Play)</h3>
+                <div style="display:flex; gap:5px;">
+                    <input type="file" id="videoLocal" accept="video/*" style="width:70%">
+                    <button class="btn-vid" style="background:#e65100; margin:0; width:30%;" onclick="playLocalVideo()">▶ Play Local</button>
+                </div>
+                <div style="display:flex; gap:5px; margin-top:5px;">
+                    <input type="text" id="ytLink" placeholder="YouTube Link..." style="width:70%; text-align:left;" class="font-en">
+                    <button class="btn-vid" style="background:#c62828; margin:0; width:30%;" onclick="playYoutube()">▶ Play YT</button>
+                </div>
+                <button class="btn-vid" style="background:#333; margin-top:8px;" onclick="stopVideo()">⏹ Stop Video</button>
             </div>
 
             <div id="statusMsg">Ready</div>
@@ -248,7 +246,7 @@
                 
                 #fsBtn { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); z-index:9999; padding:20px; font-size:20px; cursor:pointer; background:#d4af37; border:2px solid #fff; }
 
-                /* --- BACKGROUND LAYER --- */
+                /* --- BACKGROUND --- */
                 #bgLayer { position:fixed; top:0; left:0; width:100%; height:100%; z-index:0; background:#00281c; }
                 
                 /* --- JALSA TITLES --- */
@@ -259,63 +257,60 @@
                 }
                 #jalsaContent.hidden { opacity: 0; pointer-events:none; }
 
+                /* Font settings for titles - Arabic/Dhivehi aware */
+                .jalsa-text { font-family: 'Faruuma', 'Amiri', serif; direction: rtl; text-align: center; }
+
                 .main-title { 
-                    font-family: 'Faruuma', 'Amiri', serif; 
-                    font-size: 3.5em; color: #d4af37; text-align: center; 
+                    font-size: 3.5em; color: #d4af37; 
                     text-shadow: 2px 2px 10px black; margin-bottom: 20px;
                     border-bottom: 3px solid #d4af37; padding-bottom:10px;
                 }
                 .sub-title { 
-                    font-family: 'Faruuma', 'Amiri', serif; 
-                    font-size: 2em; color: #fff; text-align: center; 
-                    text-shadow: 1px 1px 5px black; margin: 5px 0;
+                    font-size: 2em; color: #fff; 
+                    text-shadow: 1px 1px 5px black; margin: 8px 0;
                 }
 
-                /* --- LOGO LAYER --- */
+                /* --- LOGO --- */
                 #logoWrap { 
                     position:absolute; 
-                    /* STATE A: IDLE (Center, Above Titles) */
+                    /* Idle: Center, slightly above middle (because of text below) */
                     top: 25%; left:50%; transform:translate(-50%, -50%); 
                     z-index:20; transition: all 0.8s cubic-bezier(0.22, 1, 0.36, 1);
                 }
-                #logoImg { height:200px; filter: drop-shadow(0 5px 15px rgba(0,0,0,0.5)); transition:height 0.8s ease; }
+                /* REDUCED IDLE SIZE: 130px */
+                #logoImg { height:130px; filter: drop-shadow(0 5px 15px rgba(0,0,0,0.5)); transition:height 0.8s ease; }
                 
-                /* STATE B: LIVE (Top Border) */
+                /* Live: Top Border */
                 #logoWrap.live { top:60px; }
                 #logoWrap.live #logoImg { height:90px; }
 
-                /* --- STUDENT CARD --- */
+                /* --- CARD --- */
                 #card { 
                     position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
                     width:90vw; max-width:1500px; height:85vh;
                     display:flex; flex-direction:row-reverse; align-items:center;
                     background:rgba(0,40,28,0.95); box-shadow:0 0 100px #000;
-                    padding:50px; box-sizing:border-box;
-                    /* NO MAIN BORDER - Previous Design */
-                    border:none;
+                    padding:50px; box-sizing:border-box; border:none;
                     opacity:0; transition:opacity 0.5s ease; z-index:15;
                 }
                 #card.active { opacity:1; }
 
-                /* --- DOUBLE CORNERS (PREVIOUS DESIGN) --- */
-                /* Thick Outer */
+                /* Corners */
                 .corner-thick { position:absolute; width:40px; height:40px; border:6px solid #d4af37; }
                 .tl { top:-8px; left:-8px; border-right:0; border-bottom:0; }
                 .tr { top:-8px; right:-8px; border-left:0; border-bottom:0; }
                 .bl { bottom:-8px; left:-8px; border-right:0; border-top:0; }
                 .br { bottom:-8px; right:-8px; border-left:0; border-top:0; }
 
-                /* Thin Inner (Offset) */
                 .corner-thin { position:absolute; width:70px; height:70px; border:2px solid #ffe57f; }
                 .tl-in { top:8px; left:8px; border-right:0; border-bottom:0; }
                 .tr-in { top:8px; right:8px; border-left:0; border-bottom:0; }
                 .bl-in { bottom:8px; left:8px; border-right:0; border-top:0; }
                 .br-in { bottom:8px; right:8px; border-left:0; border-top:0; }
 
-                /* Data Styling */
-                .font-dv { font-family: 'Faruuma', system-ui; }
+                /* Text */
+                .font-dv { font-family: 'Faruuma', 'Amiri', serif; }
                 .font-en { font-family: 'Times New Roman', serif; direction:ltr; }
-                .font-ar { font-family: 'Amiri', serif; direction:rtl; }
 
                 h1 { font-size: 5em; margin:0; color:white; line-height:1.1; }
                 h2 { font-size: 3em; margin:10px 0; color:#d4af37; text-transform:uppercase; border-bottom:2px solid #d4af37; display:inline-block; width:100%; text-align:left; }
@@ -329,7 +324,6 @@
                 #stuImg { width:260px; height:260px; object-fit:cover; border-radius:50%; border:5px solid #d4af37; background:#000; box-shadow:0 15px 40px rgba(0,0,0,0.8); }
                 .text-col { flex:1; text-align:right; padding-right:30px; color:white; display:flex; flex-direction:column; justify-content:center; }
 
-                /* Video Overlay */
                 #videoLayer { position:fixed; top:0; left:0; width:100%; height:100%; background:#000; z-index:1000; display:none; justify-content:center; align-items:center; }
                 #videoLayer video, #videoLayer iframe { width:100%; height:100%; border:none; }
                 
@@ -343,13 +337,14 @@
             
             <div id="bgLayer"></div>
 
-            <div id="logoWrap"><img id="logoImg" src="https://via.placeholder.com/180x180/00281c/d4af37?text=LOGO"></div>
+            <div id="logoWrap"><img id="logoImg" src="https://via.placeholder.com/130x130/00281c/d4af37?text=LOGO"></div>
 
             <div id="jalsaContent">
-                <div style="margin-top:150px;"> <div id="jt1" class="main-title"></div>
-                    <div id="jt2" class="sub-title"></div>
-                    <div id="jt3" class="sub-title"></div>
-                    <div id="jt4" class="sub-title"></div>
+                <div style="margin-top:100px;">
+                    <div id="jt1" class="main-title jalsa-text"></div>
+                    <div id="jt2" class="sub-title jalsa-text"></div>
+                    <div id="jt3" class="sub-title jalsa-text"></div>
+                    <div id="jt4" class="sub-title jalsa-text"></div>
                 </div>
             </div>
 
@@ -406,14 +401,14 @@
         doc.getElementById('jt3').innerText = document.getElementById('jLine3').value;
         doc.getElementById('jt4').innerText = document.getElementById('jLine4').value;
         
+        // Ensure Font is applied to titles
         if(currentFontData) {
              const style = doc.createElement('style');
-             style.innerHTML = `@font-face { font-family: 'Faruuma'; src: url('${currentFontData}') format('truetype'); } .font-dv { font-family: 'Faruuma', 'Amiri', serif !important; }`;
+             style.innerHTML = `@font-face { font-family: 'Faruuma'; src: url('${currentFontData}') format('truetype'); } .jalsa-text, .font-dv { font-family: 'Faruuma', 'Amiri', serif !important; }`;
              doc.head.appendChild(style);
         }
     }
 
-    // MODE 1: JALSA
     function showJalsaScreen() {
         if(!tvWindow || tvWindow.closed) return;
         tvWindow.document.getElementById('card').classList.remove('active');
@@ -422,7 +417,6 @@
         document.getElementById('statusMsg').innerText = "Mode: Jalsa";
     }
 
-    // MODE 2: STUDENT LIVE
     function updateTV() {
         if(!tvWindow || tvWindow.closed) { alert("TV Closed!"); return; }
         
@@ -456,10 +450,9 @@
         document.getElementById('statusMsg').innerText = "Screen Cleared";
     }
 
-    // --- VIDEO ---
+    // --- VIDEO PLAYER (AUTO PLAY) ---
     function playLocalVideo() {
         if(!tvWindow || tvWindow.closed) { alert("TV Closed!"); return; }
-        // Force hide Jalsa text so video is clean
         tvWindow.document.getElementById('jalsaContent').classList.add('hidden');
         
         const file = document.getElementById('videoLocal').files[0];
@@ -497,14 +490,32 @@
         if(!tvWindow || tvWindow.closed) return;
         const vl = tvWindow.document.getElementById('videoLayer');
         vl.innerHTML = ''; vl.style.display = 'none';
-        
-        // If card not active, revert to Jalsa
         if(!tvWindow.document.getElementById('card').classList.contains('active')) {
             showJalsaScreen();
         }
     }
 
-    // --- DATA ---
+    // --- CSV & FILES ---
+    document.getElementById('jalsaCsvFile').onchange = e => {
+        const file = e.target.files[0];
+        if(!file) return;
+        const r = new FileReader();
+        r.onload = evt => {
+            // Very basic CSV parse: first line only
+            const lines = evt.target.result.split('\n');
+            if(lines.length > 0) {
+                const cols = lines[0].split(',');
+                if(cols[0]) document.getElementById('jLine1').value = cols[0].trim();
+                if(cols[1]) document.getElementById('jLine2').value = cols[1].trim();
+                if(cols[2]) document.getElementById('jLine3').value = cols[2].trim();
+                if(cols[3]) document.getElementById('jLine4').value = cols[3].trim();
+                updateJalsaText();
+                alert("Titles Loaded from CSV!");
+            }
+        };
+        r.readAsText(file);
+    };
+
     document.getElementById('fontFile').onchange = e => {
         const file = e.target.files[0];
         if(!file) return;
