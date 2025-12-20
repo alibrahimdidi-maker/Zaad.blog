@@ -61,12 +61,18 @@
         .header-content { display: flex; justify-content: space-between; align-items: center; max-width: 1400px; margin: 0 auto; }
         .logo-box { display: flex; align-items: center; gap: 20px; }
         
-        /* NEW CSS FOR THE LOGO IMAGE TO REMOVE WHITE BACKGROUND */
+        /* UPDATED LOGO STYLE FOR GOLD COLOR */
         .logo-img {
-            height: 110px; /* Adjust size as needed */
+            height: 110px; 
             width: auto;
-            /* This property makes white pixels transparent, blending into the dark background */
-            mix-blend-mode: multiply; 
+            /* Steps to make it Gold: 
+               1. Invert (White BG -> Black BG)
+               2. Grayscale (Remove original colors)
+               3. Sepia & Saturate (Add Gold Color)
+               4. Screen Mode (Hide the Black BG) 
+            */
+            filter: invert(1) grayscale(1) sepia(1) saturate(4) hue-rotate(5deg) contrast(1.2);
+            mix-blend-mode: screen; 
             display: block;
             object-fit: contain;
         }
