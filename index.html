@@ -100,20 +100,28 @@
         
         .logo-box { display: flex; align-items: center; gap: 20px; }
         
-        /* LOGO STYLING - UPDATED FOR PNG */
+        /* LOGO STYLING - FIX FOR PNG */
         .logo-img { 
-            height: 100px; 
-            width: auto; /* Keeps aspect ratio */
+            height: 110px; /* Slightly larger for better visibility */
+            width: auto; 
             background: white; 
             border: 2px solid var(--royal-gold); 
             border-radius: 12px;
             box-shadow: 0 0 15px rgba(180, 150, 88, 0.5);
             padding: 5px;
             object-fit: contain;
+            display: block; /* Ensures no inline spacing issues */
+        }
+        /* Fallback if image breaks: styling the alt text container */
+        .logo-img:after {
+            content: " 📷 " attr(alt);
+            display: block;
+            font-size: 12px;
+            color: #333;
         }
 
-        .site-title h1 { color: white; margin: 0; font-size: 2.5em; text-shadow: 2px 2px 5px rgba(0,0,0,0.5); }
-        .site-title span { font-family: var(--font-en); color: var(--royal-gold); letter-spacing: 2px; text-transform: uppercase; font-size: 0.9em; display: block; }
+        .site-title h1 { color: white; margin: 0; font-size: 2.2em; text-shadow: 2px 2px 5px rgba(0,0,0,0.5); line-height: 1.2; }
+        .site-title span { font-family: var(--font-en); color: var(--royal-gold); letter-spacing: 2px; text-transform: uppercase; font-size: 0.85em; display: block; margin-top: 5px; }
 
         /* --- NEWS TICKER --- */
         .ticker-wrap {
@@ -324,6 +332,8 @@
             .header-content { flex-direction: column; text-align: center; }
             .logo-box { flex-direction: column; margin-bottom: 10px; }
             .desktop-ad { display: none !important; }
+            
+            .site-title h1 { font-size: 1.8em; }
 
             /* Navigation Mobile */
             .nav-inner { justify-content: space-between; padding: 10px 20px; position: relative; }
