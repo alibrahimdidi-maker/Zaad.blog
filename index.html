@@ -252,8 +252,8 @@
                 <li><a href="contact.html">ގުޅުއްވާ</a></li>
             </ul>
             <div class="nav-right-group">
-                <a href="library.html" class="resource-btn">Digital Resources</a>
-                <a href="event_slideshow.html" class="event-btn">Event Slideshow</a>
+                <a href="#" class="resource-btn">Digital Resources</a>
+                <a href="#" class="event-btn">Event Slideshow</a>
                 
                 <a href="https://alibrahimdidi-maker.github.io/Zaadacademy/index.html" target="_blank" class="website-btn">
                     ޒާދް ވެބްސައިޓް <i class="fas fa-globe"></i>
@@ -366,16 +366,6 @@
             </div>
 
             <div class="widget">
-                <h3 class="widget-title"><i class="fas fa-link"></i> މުހިންމު ލިންކުތައް</h3>
-                <ul class="side-links">
-                    <li><a href="https://www.moe.gov.mv" target="_blank" contenteditable="false">އެޑިއުކޭޝަން މިނިސްޓްރީ</a></li>
-                    <li><a href="https://ium.edu.mv" target="_blank" contenteditable="false">އިސްލާމިކް ޔުނިވަރސިޓީ</a></li>
-                    <li><a href="https://mqa.gov.mv" target="_blank" contenteditable="false">އެމް.ކިއު.އޭ</a></li>
-                    <li><a href="https://www.islamicaffairs.gov.mv" target="_blank" contenteditable="false">އިސްލާމިކް މިނިސްޓްރީ</a></li>
-                </ul>
-            </div>
-
-            <div class="widget">
                 <h3 class="widget-title"><i class="fas fa-calendar-check"></i> ކުރިއަށް ހުރި ހަރަކާތްތައް</h3>
                 <div class="event-item" contenteditable="false">
                     <span class="event-date">25 ޑިސެމްބަރު</span>
@@ -384,6 +374,10 @@
                 <div class="event-item" contenteditable="false">
                     <span class="event-date">01 ޖަނަވަރީ</span>
                     <span class="event-title">އައު ސެމިސްޓަރ ފެށުން</span>
+                </div>
+                <div class="event-item" contenteditable="false" style="border:none;">
+                    <span class="event-date">10 ޖަނަވަރީ</span>
+                    <span class="event-title">ދަރިވަރުންގެ ބައްދަލުވުން</span>
                 </div>
             </div>
 
@@ -402,6 +396,16 @@
                 <div class="prayer-row"><span>ޢަޞްރު</span> <span class="prayer-time" id="asr" contenteditable="false">15:40</span></div>
                 <div class="prayer-row"><span>މަޣްރިބް</span> <span class="prayer-time" id="maghrib" contenteditable="false">18:10</span></div>
                 <div class="prayer-row"><span>ޢިޝާ</span> <span class="prayer-time" id="isha" contenteditable="false">19:30</span></div>
+            </div>
+
+            <div class="widget">
+                <h3 class="widget-title"><i class="fas fa-link"></i> މުހިންމު ލިންކުތައް</h3>
+                <ul class="side-links">
+                    <li><a href="https://www.moe.gov.mv" target="_blank" contenteditable="false">އެޑިއުކޭޝަން މިނިސްޓްރީ</a></li>
+                    <li><a href="https://ium.edu.mv" target="_blank" contenteditable="false">އިސްލާމިކް ޔުނިވަރސިޓީ</a></li>
+                    <li><a href="https://mqa.gov.mv" target="_blank" contenteditable="false">އެމް.ކިއު.އޭ</a></li>
+                    <li><a href="https://www.islamicaffairs.gov.mv" target="_blank" contenteditable="false">އިސްލާމިކް މިނިސްޓްރީ</a></li>
+                </ul>
             </div>
         </aside>
     </div>
@@ -479,9 +483,11 @@
                 document.body.classList.add('admin-active');
                 document.getElementById('adminToolbar').style.display = 'flex';
                 
+                // Make Elements Editable
                 let textElements = document.querySelectorAll('[contenteditable="false"]');
                 textElements.forEach(el => el.contentEditable = "true");
                 
+                // Add click events to images for changing
                 let imgs = document.querySelectorAll('img');
                 imgs.forEach(img => {
                     img.onclick = function() {
@@ -492,6 +498,7 @@
                     }
                 });
 
+                // Prevent Link Navigation in Admin Mode
                 let links = document.querySelectorAll('a');
                 links.forEach(link => {
                     link.addEventListener('click', function(e) {
@@ -502,7 +509,7 @@
                     });
                 });
 
-                alert("Admin Mode Active!");
+                alert("Admin Mode Active!\n\n- Click text to edit.\n- Click images to change them.\n- Links are disabled while editing.\n- Click 'Save & Download' when done.");
             } else {
                 alert("Incorrect Password!");
             }
@@ -512,6 +519,7 @@
             let clone = document.documentElement.cloneNode(true);
             clone.querySelector('body').classList.remove('admin-active');
             
+            // Remove editable attributes and onclicks for images in the saved file
             let editables = clone.querySelectorAll('[contenteditable]');
             editables.forEach(el => {
                 el.contentEditable = "false";
