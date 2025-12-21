@@ -7,11 +7,11 @@
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thaana:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thaana:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <style>
-        /* --- FONT LOADING --- */
+        /* --- 1. FONT LOADING --- */
         @font-face { font-family: 'Mv Galan'; src: url('fonts/Mv Galan.ttf') format('truetype'), local('Mv Galan'); font-weight: normal; font-style: normal; font-display: swap; }
         @font-face { font-family: 'Faruma'; src: url('fonts/Faruma.ttf') format('truetype'), local('Faruma'); font-weight: normal; font-style: normal; font-display: swap; }
 
@@ -70,7 +70,15 @@
         .card-img { width: 100%; height: 100%; object-fit: cover; transition: 0.5s; }
         .article-card:hover .card-img { transform: scale(1.05); }
         .card-body { padding: 25px; flex-grow: 1; display: flex; flex-direction: column; }
-        .meta-row { display: flex; justify-content: space-between; font-size: 0.85em; color: var(--meta); margin-bottom: 15px; border-bottom: 1px dashed #eee; padding-bottom: 10px; }
+        
+        /* UPDATED META ROW FOR AUTHOR & DATE */
+        .meta-row { 
+            display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;
+            font-size: 0.85em; color: var(--meta); margin-bottom: 15px; border-bottom: 1px dashed #eee; padding-bottom: 10px; 
+        }
+        .meta-item { display: flex; align-items: center; gap: 6px; }
+        .meta-item i { color: var(--accent); }
+
         .article-tag { background: var(--primary); color: white; padding: 2px 10px; font-size: 0.8em; border-radius: 20px; width: fit-content; margin-bottom: 10px; }
         .article-title { font-size: 1.5em; font-weight: bold; margin: 0 0 15px 0; line-height: 1.4; color: var(--primary); }
         .article-summary { font-size: 1.1em; color: #555; line-height: 1.7; margin-bottom: 20px; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
@@ -129,12 +137,13 @@
     <div class="search-container">
         <div class="search-box">
             <div class="search-icon-box"><i class="fas fa-search"></i></div>
-            <input type="text" id="searchInput" class="search-input" onkeyup="filterArticles()" placeholder="އާޓިކަލް ހޯއްދަވާ...">
+            <input type="text" id="searchInput" class="search-input" onkeyup="filterArticles()" placeholder="އާޓިކަލް ހޯއްދަވާ (ސުރުޚީ ނުވަތަ ޓެގް ޖައްސަވާ)...">
         </div>
     </div>
 
     <div class="container">
-        <div class="article-grid" id="articleGrid"></div>
+        <div class="article-grid" id="articleGrid">
+            </div>
     </div>
 
     <footer>
@@ -166,15 +175,20 @@
     </div>
 
     <script>
-        // --- DATA & LOGIC ---
+        // --- 1. DATA & LOGIC ---
         
-        // 1. SMART VIEW COUNTER
+        // AUTO VIEWS SIMULATION (Stored in Browser Memory)
         function getViewCount(index) {
             let key = 'zaad_view_' + index;
             let count = localStorage.getItem(key);
-            if (!count) count = Math.floor(Math.random() * 2000) + 200; // Fake start
-            else count = parseInt(count);
-            count++;
+            if (!count) {
+                // Initial Random Views (e.g. 300 to 2000)
+                count = Math.floor(Math.random() * (2000 - 300 + 1)) + 300; 
+            } else {
+                count = parseInt(count);
+            }
+            // Increment view by random 1-3 to simulate activity
+            count += Math.floor(Math.random() * 3) + 1;
             localStorage.setItem(key, count);
             return count;
         }
@@ -206,8 +220,8 @@
         function generateArticles() {
             const grid = document.getElementById('articleGrid');
             if(grid.innerHTML.trim() === "") {
-                articlesData.forEach((item, i) => {
-                    let views = getViewCount(i);
+                articlesData.forEach((item, index) => {
+                    let views = getViewCount(index);
                     const articleHTML = `
                     <article class="article-card">
                         <button class="delete-btn admin-ui" onclick="removeCard(this)">Delete</button>
@@ -216,16 +230,12 @@
                             <div class="article-tag" contenteditable="false">${item.cat}</div>
                             <h2 class="article-title" contenteditable="false">${item.title}</h2>
                             <div class="meta-row">
+                                <div class="meta-item"><i class="far fa-user"></i> <span contenteditable="false">ލިޔުނީ: ${item.author}</span></div>
                                 <div class="meta-item"><i class="far fa-calendar-alt"></i> <span contenteditable="false">${item.date}</span></div>
                                 <div class="meta-item"><i class="far fa-eye" style="color:var(--accent)"></i> <strong>${views}</strong></div>
                             </div>
                             <div class="article-summary" contenteditable="false">މިއީ އާޓިކަލްގެ ކުރު ޚުލާސާއެވެ. މިތަނުގައި ލިޔާނީ ކިޔުންތެރިންގެ ޝައުޤުވެރިކަން ދަމައިގަންނަ ފަދަ ކުރު އިބާރާތެކެވެ.</div>
-                            <div class="full-content" contenteditable="false">
-                                <p><strong>${item.title}</strong></p>
-                                <p>މިއީ މި ލިޔުމުގެ ތަފްޞީލީ ބައެވެ. މިތަނުގައި އާޓިކަލްގެ ފުރިހަމަ މަޢުލޫމާތު ހިމަނުއްވާށެވެ.</p>
-                                <p>ލިޔުންތެރިޔާ: ${item.author}<br>ތާރީޚް: ${item.date}</p>
-                                <p>މިތަނުގައި އިތުރު ޕެރެގްރާފްތައް ލިޔުއްވާށެވެ. މި ބައި ފެންނާނީ "އިތުރަށް ވިދާޅުވޭ" އަށް ފިތާލުމުންނެވެ.</p>
-                            </div>
+                            <div class="full-content" contenteditable="false"><p><strong>${item.title}</strong></p><p>މިއީ މި ލިޔުމުގެ ތަފްޞީލީ ބައެވެ. މިތަނުގައި އާޓިކަލްގެ ފުރިހަމަ މަޢުލޫމާތު ހިމަނުއްވާށެވެ.</p></div>
                             <div class="read-more-btn" onclick="openModal(this)">އިތުރަށް ވިދާޅުވޭ</div>
                         </div>
                     </article>`;
@@ -266,12 +276,12 @@
 
         function activateAdmin() {
             if(document.body.classList.contains('admin-active')) return;
-            if(prompt("Password:") === "admin123") {
+            if(prompt("Enter Admin Password:") === "admin123") {
                 document.body.classList.add('admin-active');
                 document.getElementById('adminToolbar').style.display = 'flex';
                 document.querySelectorAll('.article-title, .article-summary, .full-content, .article-tag, .meta-item span').forEach(el => el.contentEditable = "true");
-                alert("Admin Active");
-            } else alert("Wrong Password");
+                alert("Admin Mode Active!");
+            } else alert("Incorrect Password");
         }
 
         function addNewArticle() {
@@ -280,12 +290,16 @@
             const newCard = document.createElement('article');
             newCard.className = 'article-card';
             newCard.innerHTML = `
-                <button class="delete-btn admin-ui" onclick="removeCard(this)">Delete</button>
+                <button class="delete-btn admin-ui" onclick="removeCard(this)" style="position:absolute; top:10px; left:10px; background:red; color:white; border:none; padding:5px; z-index:10;">Delete</button>
                 <div class="card-img-container"><img src="https://via.placeholder.com/600x400" class="card-img" onclick="changeImage(this)"></div>
                 <div class="card-body">
                     <div class="article-tag" contenteditable="true">Category</div>
                     <h2 class="article-title" contenteditable="true">New Title</h2>
-                    <div class="meta-row"><div class="meta-item"><span contenteditable="true">${today}</span></div><div class="meta-item"><strong>1</strong></div></div>
+                    <div class="meta-row">
+                        <div class="meta-item"><i class="far fa-user"></i> <span contenteditable="true">ލިޔުނީ: އެޑްމިން</span></div>
+                        <div class="meta-item"><i class="far fa-calendar-alt"></i> <span contenteditable="true">${today}</span></div>
+                        <div class="meta-item"><i class="far fa-eye" style="color:var(--accent)"></i> <strong>1</strong></div>
+                    </div>
                     <div class="article-summary" contenteditable="true">Summary...</div>
                     <div class="full-content" contenteditable="true">Content...</div>
                     <div class="read-more-btn" onclick="openModal(this)">Read More</div>
@@ -307,7 +321,7 @@
             let blob = new Blob(["<!DOCTYPE html>\n" + clone.outerHTML], {type: "text/html"});
             let link = document.createElement("a");
             link.href = URL.createObjectURL(blob);
-            link.download = "zaad_news_updated.html";
+            link.download = "zaad_articles_updated.html";
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
