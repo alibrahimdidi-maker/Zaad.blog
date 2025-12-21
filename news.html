@@ -20,21 +20,19 @@
             --text: #333333;
             --meta: #777777;
             
-            /* FONT PRIORITY: Mv Galan First -> Folder -> System -> Google Fallback */
+            /* FONT PRIORITY: 
+               1. Mv Galan (If installed)
+               2. Faruma (If installed)
+               3. Noto Sans Thaana (Mobile/Web fallback) 
+            */
             --font-main: 'Mv Galan', 'Faruma', 'Noto Sans Thaana', sans-serif;
         }
 
-        /* Load Fonts Local/Folder */
-        @font-face { 
-            font-family: 'Mv Galan'; 
-            src: local('Mv Galan'), url('fonts/Mv Galan.ttf') format('truetype'); 
-        }
-        @font-face { 
-            font-family: 'Faruma'; 
-            src: local('Faruma'), url('fonts/Faruma.ttf') format('truetype'); 
-        }
+        /* Attempt to load local fonts */
+        @font-face { font-family: 'Mv Galan'; src: local('Mv Galan'); }
+        @font-face { font-family: 'Faruma'; src: local('Faruma'); }
 
-        /* --- 2. SECURITY CSS (Disable Selection) --- */
+        /* --- 2. SECURITY CSS --- */
         body { 
             margin: 0; 
             font-family: var(--font-main); 
@@ -44,17 +42,16 @@
             line-height: 1.8; 
             padding-top: 60px;
             
-            /* SECURITY: Disable Text Selection */
+            /* Disable Selection */
             user-select: none; 
             -webkit-user-select: none;
             -moz-user-select: none;
-            -ms-user-select: none;
         }
         
         a { text-decoration: none; color: inherit; transition: 0.3s; }
         * { box-sizing: border-box; }
 
-        /* --- NAVIGATION MENU --- */
+        /* --- NAVIGATION --- */
         .navbar {
             position: fixed; top: 0; left: 0; width: 100%;
             background: var(--primary); color: white;
@@ -78,7 +75,7 @@
             background: rgba(255,255,255,0.1); color: var(--accent);
         }
 
-        /* --- HEADER --- */
+        /* --- HEADER & LOGO --- */
         header { 
             background: linear-gradient(180deg, var(--primary) 0%, #051626 100%); 
             color: var(--white); 
@@ -90,16 +87,18 @@
         }
 
         .profile-photo {
-            width: 130px; 
-            height: 130px;
+            width: 140px; 
+            height: 140px;
+            /* Transparent background */
             background-color: transparent; 
             object-fit: contain; 
-            margin-bottom: 10px;
-            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));
+            margin-bottom: 15px;
+            /* Drop shadow to make it pop */
+            filter: drop-shadow(0 5px 15px rgba(0,0,0,0.5));
             transition: transform 0.3s;
         }
         
-        .profile-photo:hover { transform: scale(1.05); }
+        .profile-photo:hover { transform: scale(1.1) rotate(5deg); }
 
         .page-title { font-size: 2.5em; font-weight: bold; margin: 0; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); }
         .page-subtitle { color: var(--accent); margin-top: 10px; font-size: 1.2em; opacity: 0.9; }
@@ -152,9 +151,7 @@
             text-overflow: ellipsis;
         }
         
-        .article-excerpt.expanded {
-            display: block; -webkit-line-clamp: unset; overflow: visible;
-        }
+        .article-excerpt.expanded { display: block; -webkit-line-clamp: unset; overflow: visible; }
 
         .read-more-btn { 
             display: inline-flex; align-items: center; gap: 10px; cursor: pointer;
@@ -164,13 +161,13 @@
         }
         .read-more-btn:hover { background: var(--accent); }
         
-        /* --- ADMIN STYLES --- */
+        /* --- ADMIN MODE --- */
         .admin-ui { display: none !important; }
         body.admin-active .admin-ui { display: inline-flex !important; }
         body.admin-active .article-card { border: 2px dashed #999; }
         body.admin-active .article-excerpt { display: block; -webkit-line-clamp: unset; border: 1px dashed #ccc; padding: 5px; }
-
-        /* Need to allow selection in Admin mode for editing */
+        
+        /* Enable selection in admin mode */
         body.admin-active { user-select: text; -webkit-user-select: text; }
 
         .delete-btn { 
@@ -186,13 +183,16 @@
         .save-btn { background: var(--accent); color: white; padding: 10px 25px; border-radius: 5px; border: none; font-weight: bold; cursor: pointer; }
 
         [contenteditable="true"] { outline: none; background: rgba(255, 255, 255, 0.9); border-bottom: 2px dashed var(--accent); cursor: text; }
-        
+
         footer { text-align: center; margin-top: 60px; color: #888; font-size: 0.9em; padding-bottom: 20px; }
 
+        /* Mobile Adjustments */
         @media (max-width: 768px) {
             .nav-links { gap: 10px; font-size: 0.9em; }
             .nav-links li a { padding: 5px 8px; }
             .page-title { font-size: 1.8em; }
+            /* Force Noto Sans on Mobile if Galan fails */
+            body { font-family: 'Noto Sans Thaana', sans-serif; }
         }
     </style>
 </head>
@@ -210,7 +210,7 @@
     </nav>
 
     <header>
-        <img src="photos/logo.png" alt="Zaad Academy Logo" class="profile-photo" onerror="this.src='https://ui-avatars.com/api/?name=ZA&background=transparent&color=B49658&size=200';">
+        <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMDAgMjAwIj4KICA8ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPgogICAgPHBhdGggZmlsbD0idHJhbnNwYXJlbnQiIGQ9Ik0wIDBoMjAwdjIwMEgwVjB6Ii8+CiAgICA8Y2lyY2xlIGN4PSIxMDAiIGN5PSIxMDAiIHI9IjkwIiBzdHJva2U9IiNCNDk2NTgiIHN0cm9rZS13aWR0aD0iOCIgZmlsbD0ibm9uZSIvPgogICAgPHRleHQgeD0iMTAwIiB5PSIxMjUiIGZvbnQtZmFtaWx5PSJzZXJpZiIgZm9udC1zaXplPSI4MCIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IiNCNDk2NTgiIHRleHQtYW5jaG9yPSJtaWRkbGUiPlpBPC90ZXh0PgogICAgPHRleHQgeD0iMTAwIiB5PSIxNjAiIGZvbnQtZmFtaWx5PSJzYW5zLXNlcmlmIiBmb250LXNpemU9IjE2IiBmaWxsPSIjRkZGIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBsZXR0ZXItc3BhY2luZz0iMiI+QUNBREVNWTwvdGV4dD4KICA8L2c+Cjwvc3ZnPg==" alt="Zaad Academy Logo" class="profile-photo">
         
         <h1 class="page-title">ޒާދް އެކަޑެމީ - ޚަބަރާއި މަޢުލޫމާތު</h1>
         <div class="page-subtitle">އެންމެ ފަހުގެ ޚަބަރުތަކާއި، ދިރާސީ ލިޔުންތައް އެއްތަނަކުން (100 އާޓިކަލް)</div>
@@ -222,7 +222,7 @@
 
     <footer>
         <div id="copyright" ondblclick="activateAdmin()" style="cursor: pointer; display: inline-block; padding: 20px;">
-            © 2025 Zaad Academy. All Rights Reserved. (Double click to Edit)
+            © 2025 Zaad Academy. All Rights Reserved. (Double Click to Edit)
         </div>
     </footer>
 
@@ -238,7 +238,7 @@
         // --- 1. SECURITY SCRIPTS (ANTI-THEFT) ---
         // Disable F12, Ctrl+U, Ctrl+Shift+I
         document.onkeydown = function(e) {
-            if(document.body.classList.contains('admin-active')) return true; // Disable security if Admin Mode
+            if(document.body.classList.contains('admin-active')) return true; // Allow if Admin
             if(event.keyCode == 123) return false;
             if(e.ctrlKey && e.shiftKey && (e.keyCode == 'I'.charCodeAt(0) || e.keyCode == 'C'.charCodeAt(0) || e.keyCode == 'J'.charCodeAt(0))) return false;
             if(e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) return false;
@@ -310,7 +310,7 @@
                 // Make all texts editable
                 const editables = document.querySelectorAll('.article-title, .article-excerpt, .meta-item span');
                 editables.forEach(el => el.contentEditable = "true");
-                alert("އެޑްމިން މޯޑް ހުޅުވިއްޖެ!\nމިހާރު ކޮޕީ/ޕޭސްޓް ކުރެވޭނެ.");
+                alert("އެޑްމިން މޯޑް ހުޅުވިއްޖެ!");
             } else {
                 alert("ޕާސްވޯޑް ނުބައި!");
             }
