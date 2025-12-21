@@ -7,11 +7,11 @@
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thaana:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thaana:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <style>
-        /* --- 1. THEME VARIABLES --- */
+        /* --- THEME VARIABLES --- */
         :root {
             --primary: #0C2D48;
             --accent: #B49658;
@@ -20,38 +20,43 @@
             --text: #333333;
             --meta: #777777;
             
-            /* FONT PRIORITY: 
-               1. Mv Galan (If installed)
-               2. Faruma (If installed)
-               3. Noto Sans Thaana (Mobile/Web fallback) 
+            /* FONT STACK: 
+               1. Tries Mv Galan (Computer)
+               2. Tries Faruma (Computer)
+               3. Falls back to Noto Sans Thaana (Mobile Phone) 
             */
             --font-main: 'Mv Galan', 'Faruma', 'Noto Sans Thaana', sans-serif;
         }
 
-        /* Attempt to load local fonts */
+        /* Load local fonts if available */
         @font-face { font-family: 'Mv Galan'; src: local('Mv Galan'); }
         @font-face { font-family: 'Faruma'; src: local('Faruma'); }
 
-        /* --- 2. SECURITY CSS --- */
+        /* --- HIGH SECURITY CSS --- */
         body { 
             margin: 0; 
-            font-family: var(--font-main); 
+            font-family: var(--font-main); /* Uses stack defined above */
             background: var(--bg); 
             color: var(--text); 
             padding-bottom: 80px; 
             line-height: 1.8; 
-            padding-top: 60px;
+            padding-top: 60px; 
             
-            /* Disable Selection */
-            user-select: none; 
-            -webkit-user-select: none;
-            -moz-user-select: none;
+            /* DISABLE SELECTION & COPYING */
+            -webkit-user-select: none; /* Chrome/Safari */
+            -moz-user-select: none; /* Firefox */
+            -ms-user-select: none; /* IE */
+            user-select: none; /* Standard */
+            -webkit-touch-callout: none; /* iOS Safari */
         }
         
+        /* Disable Image Dragging */
+        img { pointer-events: none; -webkit-user-drag: none; }
+
         a { text-decoration: none; color: inherit; transition: 0.3s; }
         * { box-sizing: border-box; }
 
-        /* --- NAVIGATION --- */
+        /* --- NAVIGATION MENU --- */
         .navbar {
             position: fixed; top: 0; left: 0; width: 100%;
             background: var(--primary); color: white;
@@ -89,15 +94,12 @@
         .profile-photo {
             width: 140px; 
             height: 140px;
-            /* Transparent background */
             background-color: transparent; 
             object-fit: contain; 
             margin-bottom: 15px;
-            /* Drop shadow to make it pop */
             filter: drop-shadow(0 5px 15px rgba(0,0,0,0.5));
             transition: transform 0.3s;
         }
-        
         .profile-photo:hover { transform: scale(1.1) rotate(5deg); }
 
         .page-title { font-size: 2.5em; font-weight: bold; margin: 0; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); }
@@ -161,13 +163,12 @@
         }
         .read-more-btn:hover { background: var(--accent); }
         
-        /* --- ADMIN MODE --- */
+        /* --- ADMIN MODE CSS --- */
         .admin-ui { display: none !important; }
         body.admin-active .admin-ui { display: inline-flex !important; }
         body.admin-active .article-card { border: 2px dashed #999; }
-        body.admin-active .article-excerpt { display: block; -webkit-line-clamp: unset; border: 1px dashed #ccc; padding: 5px; }
         
-        /* Enable selection in admin mode */
+        /* Enable selection ONLY in admin mode */
         body.admin-active { user-select: text; -webkit-user-select: text; }
 
         .delete-btn { 
@@ -191,8 +192,9 @@
             .nav-links { gap: 10px; font-size: 0.9em; }
             .nav-links li a { padding: 5px 8px; }
             .page-title { font-size: 1.8em; }
-            /* Force Noto Sans on Mobile if Galan fails */
-            body { font-family: 'Noto Sans Thaana', sans-serif; }
+            
+            /* FORCE NOTO SANS ON MOBILE (If Galan fails) */
+            body, h1, h2, p, span, a { font-family: 'Noto Sans Thaana', sans-serif !important; }
         }
     </style>
 </head>
@@ -235,13 +237,26 @@
     </div>
 
     <script>
-        // --- 1. SECURITY SCRIPTS (ANTI-THEFT) ---
-        // Disable F12, Ctrl+U, Ctrl+Shift+I
+        // --- 1. HIGH SECURITY SCRIPTS (Anti-Theft) ---
+        
+        // Disable F12, Ctrl+U, Ctrl+S, Ctrl+P, Copy
         document.onkeydown = function(e) {
             if(document.body.classList.contains('admin-active')) return true; // Allow if Admin
+            
+            // F12
             if(event.keyCode == 123) return false;
+            
+            // Ctrl+Shift+I / J / C
             if(e.ctrlKey && e.shiftKey && (e.keyCode == 'I'.charCodeAt(0) || e.keyCode == 'C'.charCodeAt(0) || e.keyCode == 'J'.charCodeAt(0))) return false;
+            
+            // Ctrl+U (Source)
             if(e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) return false;
+            
+            // Ctrl+S (Save)
+            if(e.ctrlKey && e.keyCode == 'S'.charCodeAt(0)) return false;
+
+            // Ctrl+P (Print)
+            if(e.ctrlKey && e.keyCode == 'P'.charCodeAt(0)) return false;
         }
 
         // --- 2. GENERATE ARTICLES ---
@@ -310,7 +325,7 @@
                 // Make all texts editable
                 const editables = document.querySelectorAll('.article-title, .article-excerpt, .meta-item span');
                 editables.forEach(el => el.contentEditable = "true");
-                alert("އެޑްމިން މޯޑް ހުޅުވިއްޖެ!");
+                alert("އެޑްމިން މޯޑް ހުޅުވިއްޖެ! \n(ސެކިއުރިޓީ ވަގުތީގޮތުން ނިއްވާލެވިއްޖެ)");
             } else {
                 alert("ޕާސްވޯޑް ނުބައި!");
             }
