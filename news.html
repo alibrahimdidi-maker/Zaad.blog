@@ -7,11 +7,11 @@
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thaana:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thaana:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <style>
-        /* --- 1. FONT LOADING --- */
+        /* --- 2. FONT LOADING (PC Support) --- */
         @font-face {
             font-family: 'Mv Galan';
             src: url('fonts/Mv Galan.ttf') format('truetype'), local('Mv Galan');
@@ -31,16 +31,18 @@
             --white: #ffffff;
             --text: #333333;
             --meta: #777777;
+            /* Font Stack: Galan (PC) -> Faruma -> Noto Sans (Mobile) */
             --font-main: 'Mv Galan', 'Faruma', 'Noto Sans Thaana', sans-serif;
         }
 
-        /* --- 2. BASE STYLES & SECURITY --- */
+        /* --- 3. BASE STYLES & SECURITY --- */
         body { 
-            margin: 0; font-family: var(--font-main) !important;
+            margin: 0; 
+            font-family: var(--font-main) !important;
             background: var(--bg); color: var(--text); padding-bottom: 100px;
             line-height: 1.8; padding-top: 60px;
             
-            /* High Security: Disable Selection */
+            /* HIGH SECURITY: Disable Selection */
             -webkit-user-select: none;
             -moz-user-select: none;
             -ms-user-select: none;
@@ -48,11 +50,11 @@
             -webkit-touch-callout: none;
         }
         
+        img { pointer-events: none; -webkit-user-drag: none; }
         a { text-decoration: none; color: inherit; transition: 0.3s; }
         * { box-sizing: border-box; }
-        img { pointer-events: none; -webkit-user-drag: none; }
 
-        /* --- 3. NAVIGATION --- */
+        /* --- NAVIGATION --- */
         .navbar {
             position: fixed; top: 0; left: 0; width: 100%;
             background: var(--white); z-index: 1000; box-shadow: 0 4px 10px rgba(0,0,0,0.05);
@@ -67,7 +69,7 @@
         }
         .nav-links li a:hover { color: var(--accent); background: #fcfcfc; }
 
-        /* --- 4. HEADER & ROYAL LOGO --- */
+        /* --- HEADER & LOGO --- */
         header { 
             background: linear-gradient(135deg, var(--primary) 0%, #051626 100%); 
             color: var(--white); padding: 50px 5% 80px 5%; 
@@ -80,11 +82,10 @@
             object-fit: contain; margin-bottom: 15px;
             background-color: transparent; 
             border-radius: 50%;
-            /* Royal Glow Effect */
-            filter: drop-shadow(0 0 10px rgba(180, 150, 88, 0.6));
+            filter: drop-shadow(0 0 15px rgba(180, 150, 88, 0.4));
             transition: transform 0.5s;
         }
-        .profile-photo:hover { transform: scale(1.1) rotate(5deg); }
+        .profile-photo:hover { transform: scale(1.05); }
 
         .page-title { 
             font-size: 2.8em; font-weight: bold; margin: 0; 
@@ -93,7 +94,7 @@
         }
         .page-subtitle { color: var(--accent); margin-top: 10px; font-size: 1.2em; opacity: 0.9; }
 
-        /* --- 5. SEARCH BAR --- */
+        /* --- SEARCH BAR --- */
         .search-container { max-width: 700px; margin: -80px auto 40px auto; padding: 0 20px; position: relative; z-index: 100; }
         .search-box {
             position: relative; background: white; border-radius: 50px; padding: 5px;
@@ -111,7 +112,7 @@
             display: flex; align-items: center; justify-content: center; color: var(--accent); font-size: 1.2em;
         }
 
-        /* --- 6. GRID & CARDS --- */
+        /* --- GRID & CARDS --- */
         .container { max-width: 1400px; margin: 0 auto; padding: 0 20px; }
         .article-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 30px; }
 
@@ -148,11 +149,15 @@
         body.admin-active .article-card { border: 2px dashed var(--accent); }
         body.admin-active .full-content { display: block; border: 1px dashed #ccc; padding: 10px; margin-top: 10px; background: #fffbe6; }
         body.admin-active .article-summary, body.admin-active .read-more-btn { display: none; }
+        
+        /* Enable selection ONLY in admin mode */
         body.admin-active { user-select: text; -webkit-user-select: text; }
 
-        .delete-btn { position: absolute; top: 10px; left: 10px; background: red; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; z-index: 10; font-weight: bold; }
+        .delete-btn { position: absolute; top: 10px; left: 10px; background: red; color: white; border: none; padding: 5px; cursor: pointer; z-index: 10; font-weight: bold; }
         .admin-toolbar { position: fixed; bottom: 0; left: 0; width: 100%; background: #1a1a1a; color: white; padding: 15px 30px; display: none; justify-content: space-between; align-items: center; z-index: 9999; border-top: 4px solid var(--accent); }
         .admin-btn { padding: 10px 25px; border-radius: 5px; border: none; font-weight: bold; cursor: pointer; }
+        .save-btn { background: var(--accent); color: white; }
+        .add-btn { background: #27ae60; color: white; }
         [contenteditable="true"] { outline: none; background: rgba(255, 255, 255, 0.9); border-bottom: 2px dashed var(--accent); cursor: text; }
 
         /* --- MODAL --- */
@@ -186,7 +191,7 @@
     </nav>
 
     <header>
-        <img src="photos/logo.png" alt="Zaad Academy Logo" class="profile-photo" onerror="this.src='https://ui-avatars.com/api/?name=ZA&background=transparent&color=B49658&size=200'">
+        <img src="photos/logo.png" alt="Zaad Academy Logo" class="profile-photo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MDAgNTAwIj4KICA8ZGVmcz4KICAgIDxsaW5lYXJHcmFkaWVudCBpZD0iZ29sZCIgeDE9IjAlIiB5MT0iMCUiIHgyPSIxMDAlIiB5Mj0iMTAwJSI+CiAgICAgIDxzdG9wIG9mZnNldD0iMCUiIHN0eWxlPSJzdG9wLWNvbG9yOiNCNDk2NTgiIC8+CiAgICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3R5bGU9InN0b3AtY29sb3I6I0YzRTVBQiIgLz4KICAgIDwvbGluZWFyR3JhZGllbnQ+CiAgPC9kZWZzPgogIDxjaXJjbGUgY3g9IjI1MCIgY3k9IjI1MCIgcj0iMjMwIiBzdHJva2U9InVybCgjZ29sZCkiIHN0cm9rZS13aWR0aD0iMTUiIGZpbGw9Im5vbmUiLz4KICA8dGV4dCB4PSI1MCUiIHk9IjU1JSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0idXJsKCNnb2xkKSIgZm9udC1zaXplPSIxODAiIGZvbnQtZmFtaWx5PSJzZXJpZiIgZm9udC13ZWlnaHQ9ImJvbGQiPlpBPC90ZXh0PgogIDx0ZXh0IHg9IjUwJSIgeT0iNzUlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjRkZGIiBmb250LXNpemU9IjQwIiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgbGV0dGVyLXNwYWNpbmc9IjUiPkFDQURFTVk8L3RleHQ+Cjwvc3ZnPg=='">
         
         <h1 class="page-title">ޒާދް އެކަޑެމީ - އާޓިކަލްސް</h1>
         <div class="page-subtitle">އެންމެ ފަހުގެ ޚަބަރުތަކާއި، ދިރާސީ ލިޔުންތައް އެއްތަނަކުން</div>
@@ -201,7 +206,60 @@
 
     <div class="container">
         <div class="article-grid" id="articleGrid">
-            </div>
+            
+            <article class="article-card">
+                <button class="delete-btn admin-ui" onclick="removeCard(this)">Delete</button>
+                <div class="card-img-container"><img src="https://images.unsplash.com/photo-1677442136019-21780ecad995?w=500" class="card-img" onclick="changeImage(this)"></div>
+                <div class="card-body">
+                    <div class="article-tag" contenteditable="false">ޓެކްނޮލޮޖީ</div>
+                    <h2 class="article-title" contenteditable="false">އޭ.އައި ގެ ކުރިމަގު</h2>
+                    <div class="meta-row"><div class="meta-item"><i class="far fa-calendar-alt"></i> <span contenteditable="false">21 Dec 2025</span></div><div class="meta-item"><i class="far fa-user"></i> <span contenteditable="false">އެޑްމިން</span></div></div>
+                    <div class="article-summary" contenteditable="false">އާޓިފިޝަލް އިންޓެލިޖެންސްގެ ސަބަބުން ދުނިޔެއަށް އަންނަމުންދާ ބޮޑެތި ބަދަލުތަކާއި، އޭގެ ފައިދާ...</div>
+                    <div class="full-content" contenteditable="false"><p><strong>އޭ.އައި ގެ ކުރިމަގު</strong></p><p>އާޓިފިޝަލް އިންޓެލިޖެންސް ނުވަތަ މަސްނޫޢީ ވިސްނުމަކީ މިއަދު ދުނިޔޭގެ ހުރިހާ ދާއިރާއަކަށް ނުފޫޒު ފޯރުވަމުންދާ އެއްޗެކެވެ. ތަޢުލީމީ ދާއިރާ، ސިއްޙީ ދާއިރާ، އަދި ވިޔަފާރީގެ ދާއިރާގައި އޭ.އައި ގެ ބޭނުން ހިފުން އިތުރުވަމުންދާއިރު، މުސްތަޤުބަލުގައި މި ޓެކްނޮލޮޖީ ވެގެންދާނީ އަޅުގަނޑުމެންގެ ދިރިއުޅުމުގެ މުހިންމު ބަޔަކަށެވެ.</p></div>
+                    <div class="read-more-btn" onclick="openModal(this)">އިތުރަށް ވިދާޅުވޭ</div>
+                </div>
+            </article>
+
+            <article class="article-card">
+                <button class="delete-btn admin-ui" onclick="removeCard(this)">Delete</button>
+                <div class="card-img-container"><img src="https://images.unsplash.com/photo-1501504905252-473c47e087f8?w=500" class="card-img" onclick="changeImage(this)"></div>
+                <div class="card-body">
+                    <div class="article-tag" contenteditable="false">ތަޢުލީމް</div>
+                    <h2 class="article-title" contenteditable="false">އޮންލައިންކޮށް ކިޔެވުން</h2>
+                    <div class="meta-row"><div class="meta-item"><i class="far fa-calendar-alt"></i> <span contenteditable="false">20 Dec 2025</span></div><div class="meta-item"><i class="far fa-user"></i> <span contenteditable="false">ޒާދް</span></div></div>
+                    <div class="article-summary" contenteditable="false">ގޭގައި ތިބެގެން ކިޔެވުމުގެ ފަސޭހަކަމާއި، ވަގުތު ސަލާމަތްކުރުމަށް ލިބޭ ފުރުޞަތުތައް...</div>
+                    <div class="full-content" contenteditable="false"><p><strong>އޮންލައިންކޮށް ކިޔެވުން</strong></p><p>އިންޓަނެޓްގެ ޒަރިއްޔާއިން ކިޔެވުމަކީ މިހާރު ވަރަށް އާންމު ކަމެކެވެ. ޒާދް އެކަޑަމީންވެސް ދަނީ ދުރުންދޭ ތަޢުލީމުގެ ނިޒާމު ހަރުދަނާކޮށް، ރާއްޖޭގެ ކޮންމެ ހިސާބެއްގައި ހުރެގެންވެސް ފެންވަރު ރަނގަޅު ތަޢުލީމު ހޯދޭނެ މަގު ފަހިކޮށްދެމުންނެވެ.</p></div>
+                    <div class="read-more-btn" onclick="openModal(this)">އިތުރަށް ވިދާޅުވޭ</div>
+                </div>
+            </article>
+
+            <article class="article-card">
+                <button class="delete-btn admin-ui" onclick="removeCard(this)">Delete</button>
+                <div class="card-img-container"><img src="https://images.unsplash.com/photo-1548625361-12e624c969b8?w=500" class="card-img" onclick="changeImage(this)"></div>
+                <div class="card-body">
+                    <div class="article-tag" contenteditable="false">ތާރީޚް</div>
+                    <h2 class="article-title" contenteditable="false">އަންދަލުސްގެ ރަން ޒަމާން</h2>
+                    <div class="meta-row"><div class="meta-item"><i class="far fa-calendar-alt"></i> <span contenteditable="false">18 Dec 2025</span></div><div class="meta-item"><i class="far fa-user"></i> <span contenteditable="false">އެޑްމިން</span></div></div>
+                    <div class="article-summary" contenteditable="false">އިސްލާމީ ތާރީޚުގައި އަންދަލުސް (ސްޕެއިން) ގައި މުސްލިމުން ހޭދަކުރި ފާގަތި ދުވަސްތައް...</div>
+                    <div class="full-content" contenteditable="false"><p><strong>އަންދަލުސްގެ ރަން ޒަމާން</strong></p><p>ޔޫރަޕް އަނދިރިކަމުގެ ތެރޭގައި އޮތްއިރު، މުސްލިމުންގެ އަންދަލުސް އޮތީ ޢިލްމާއި ޙަޟާރަތުގެ ގޮތުން އެންމެ ކުރީގައެވެ. ކޯޓުބާގެ ލައިބްރަރީތަކާއި، ސައިންސްވެރިންގެ ހޯދުންތަކަކީ މިއަދުގެ ޒަމާނީ ދުނިޔޭގެ ބިންގަލެވެ.</p></div>
+                    <div class="read-more-btn" onclick="openModal(this)">އިތުރަށް ވިދާޅުވޭ</div>
+                </div>
+            </article>
+
+             <article class="article-card">
+                <button class="delete-btn admin-ui" onclick="removeCard(this)">Delete</button>
+                <div class="card-img-container"><img src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=500" class="card-img" onclick="changeImage(this)"></div>
+                <div class="card-body">
+                    <div class="article-tag" contenteditable="false">ސައިންސް</div>
+                    <h2 class="article-title" contenteditable="false">ޖައްވީ ހޯދުންތައް</h2>
+                    <div class="meta-row"><div class="meta-item"><i class="far fa-calendar-alt"></i> <span contenteditable="false">17 Dec 2025</span></div><div class="meta-item"><i class="far fa-user"></i> <span contenteditable="false">ސައިންސް</span></div></div>
+                    <div class="article-summary" contenteditable="false">ކާއިނާތުގެ އަޖައިބުތަކާއި، ތަރިތަކާއި ގުރަހަތަކުގެ ދައުރުވުން...</div>
+                    <div class="full-content" contenteditable="false"><p><strong>ޖައްވީ ހޯދުންތައް</strong></p><p>އالލާހުގެ ކުޅަދުންވަންތަކަން ހާމަވެގެންދާ އެންމެ ބޮޑު އެއް ހެއްކަކީ މި വിശާލަ ކާއިނާތެވެ. ޖޭމްސް ވެބް ޓެލެސްކޯޕުން ލިބެމުންދާ އައު މަޢުލޫމާތުތަކުން އިންސާނުންގެ ލޯތައް ވަނީ ހުޅުވިފައެވެ.</p></div>
+                    <div class="read-more-btn" onclick="openModal(this)">އިތުރަށް ވިދާޅުވޭ</div>
+                </div>
+            </article>
+
+        </div>
     </div>
 
     <footer>
@@ -213,8 +271,8 @@
     <div class="admin-toolbar" id="adminToolbar">
         <div><i class="fas fa-lock-open"></i> <strong>Admin Mode</strong></div>
         <div style="display:flex; gap:10px;">
-            <button class="admin-btn" style="background:#27ae60; color:white;" onclick="addNewArticle()">Add Article</button>
-            <button class="admin-btn" style="background:var(--accent); color:white;" onclick="savePage()">Save & Download</button>
+            <button class="admin-btn add-btn" onclick="addNewArticle()">Add Article</button>
+            <button class="admin-btn save-btn" onclick="savePage()">Save & Download</button>
         </div>
     </div>
 
@@ -233,53 +291,20 @@
     </div>
 
     <script>
-        // --- 1. SAMPLE DATA (20 Articles) ---
-        const articlesData = [
-            { cat: "ޓެކްނޮލޮޖީ", title: "އޭ.އައި ގެ ކުރިމަގު", img: "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=500", date: "21 Dec 2025", author: "އެޑްމިން" },
-            { cat: "ތަޢުލީމް", title: "އޮންލައިންކޮށް ކިޔެވުމުގެ ފައިދާ", img: "https://images.unsplash.com/photo-1501504905252-473c47e087f8?w=500", date: "20 Dec 2025", author: "ޒާދް" },
-            { cat: "ދިރާސާ", title: "ކުދިންގެ ވިސްނުން ތަރައްޤީކުރުން", img: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=500", date: "19 Dec 2025", author: "ރިސާރޗް ޓީމް" },
-            { cat: "އިސްލާމީ ތާރީޚް", title: "އަންދަލުސްގެ ރަން ޒަމާން", img: "https://images.unsplash.com/photo-1548625361-12e624c969b8?w=500", date: "18 Dec 2025", author: "ތާރީޚް" },
-            { cat: "ސައިންސް", title: "ޖައްވީ ދިރާސާތަކުގެ އާ ހޯދުންތައް", img: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=500", date: "17 Dec 2025", author: "ސައިންސް" },
-            { cat: "ޓެކްނޮލޮޖީ", title: "ކޯޑިންގ ދަސްކުރުމުގެ މުހިންމުކަން", img: "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=500", date: "16 Dec 2025", author: "ޓެކް" },
-            { cat: "ތަޢުލީމް", title: "މުދައްރިސުންގެ ދައުރު", img: "https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=500", date: "15 Dec 2025", author: "އެޑިއުކޭޝަން" },
-            { cat: "ސިއްޙަތު", title: "ދުުޅަހެޔޮ ސިއްހަތެއްގައި ހުރުން", img: "https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=500", date: "14 Dec 2025", author: "ހެލްތު" },
-            { cat: "އިޤްތިޞާދު", title: "އިސްލާމީ ބޭންކިންގ", img: "https://images.unsplash.com/photo-1611974765270-ca1258634369?w=500", date: "13 Dec 2025", author: "ފައިނޭންސް" },
-            { cat: "ދިރާސާ", title: "ކަނޑުގެ ދިރުންތައް", img: "https://images.unsplash.com/photo-1582967788606-a171f1080ca8?w=500", date: "12 Dec 2025", author: "މެރިން" },
-            { cat: "އަދަބިއްޔާތު", title: "ދިވެހި ބަހުގެ މުއްސަނދިކަން", img: "https://images.unsplash.com/photo-1455390582262-044cdead277a?w=500", date: "11 Dec 2025", author: "ބަސް" },
-            { cat: "ޓެކްނޮލޮޖީ", title: "ރޮބޮޓިކްސްގެ ކުރިއެރުން", img: "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?w=500", date: "10 Dec 2025", author: "ރޮބޮޓިކްސް" },
-            { cat: "ތަޢުލީމް", title: "ލައިބްރަރީގެ މުހިންމުކަން", img: "https://images.unsplash.com/photo-1521587760476-6c12a4b040da?w=500", date: "09 Dec 2025", author: "ލައިބްރަރީ" },
-            { cat: "އިސްލާމީ ތާރީޚް", title: "މައްކާގެ ފަތަޙަ", img: "https://images.unsplash.com/photo-1537704940854-34d2847be177?w=500", date: "08 Dec 2025", author: "ތާރީޚް" },
-            { cat: "ސައިންސް", title: "އިއާދަކުރަނިވި ހަކަތަ", img: "https://images.unsplash.com/photo-1509391366360-2e959784a276?w=500", date: "07 Dec 2025", author: "އެނާޖީ" },
-            { cat: "ޓެކްނޮލޮޖީ", title: "ސައިބަރ ސެކިއުރިޓީ", img: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=500", date: "06 Dec 2025", author: "ސެކިއުރިޓީ" },
-            { cat: "ތަޢުލީމް", title: "އުނގެނުމުގެ އާ ވައްޓަފާޅި", img: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=500", date: "05 Dec 2025", author: "ޓީޗިންގ" },
-            { cat: "ދިރާސާ", title: "މޫސުމީ ބަދަލުތައް", img: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=500", date: "04 Dec 2025", author: "ކްލައިމެޓް" },
-            { cat: "އަދަބިއްޔާތު", title: "ޅެންވެރިކަން", img: "https://images.unsplash.com/photo-1471107340929-a87cd0f5b5f3?w=500", date: "03 Dec 2025", author: "ޅެން" },
-            { cat: "އާންމު", title: "ވަގުތުގެ ބޭނުން ހެޔޮގޮތުގައި ހިފުން", img: "https://images.unsplash.com/photo-1501139083538-0139583c61df?w=500", date: "02 Dec 2025", author: "އެޑްމިން" }
-        ];
-
-        // --- 2. GENERATE CARDS ---
-        function generateArticles() {
-            const grid = document.getElementById('articleGrid');
-            if(grid.innerHTML.trim() === "") {
-                articlesData.forEach(item => {
-                    const articleHTML = `
-                    <article class="article-card">
-                        <button class="delete-btn admin-ui" onclick="removeCard(this)">Delete</button>
-                        <div class="card-img-container"><img  src="${item.img}" class="card-img" onclick="changeImage(this)"></div>
-                        <div class="card-body">
-                            <div class="article-tag" contenteditable="true">Category</div>
-                            <h2 class="article-title" contenteditable="true">New Title</h2>
-                            <div class="meta-row"><div class="meta-item"><span contenteditable="true">Date</span></div></div>
-                            <div class="full-content" contenteditable="true">Full content...</div>
-                            <div class="read-more-btn" onclick="openModal(this)">Read More</div>
-                        </div>`;
-                    grid.insertAdjacentHTML('beforeend', articleHTML);
-                });
-            }
+        // --- 1. HIGH SECURITY SCRIPTS (Anti-Theft) ---
+        document.onkeydown = function(e) {
+            if(document.body.classList.contains('admin-active')) return true; // Allow if Admin
+            
+            // F12, Ctrl+U, Ctrl+S, Ctrl+P, Ctrl+C
+            if(event.keyCode == 123) return false;
+            if(e.ctrlKey && e.shiftKey && (e.keyCode == 'I'.charCodeAt(0) || e.keyCode == 'C'.charCodeAt(0) || e.keyCode == 'J'.charCodeAt(0))) return false;
+            if(e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) return false;
+            if(e.ctrlKey && e.keyCode == 'S'.charCodeAt(0)) return false;
+            if(e.ctrlKey && e.keyCode == 'P'.charCodeAt(0)) return false;
+            if(e.ctrlKey && e.keyCode == 'C'.charCodeAt(0)) return false;
         }
-        window.onload = generateArticles;
 
-        // --- 3. FILTER FUNCTION ---
+        // --- 2. FILTER FUNCTION ---
         function filterArticles() {
             const input = document.getElementById('searchInput');
             const filter = input.value.toLowerCase();
@@ -297,7 +322,7 @@
             }
         }
 
-        // --- 4. MODAL LOGIC ---
+        // --- 3. MODAL LOGIC ---
         function openModal(btn) {
             if(document.body.classList.contains('admin-active')) return; 
             const card = btn.closest('.article-card');
@@ -314,12 +339,7 @@
         }
         window.onclick = function(e) { if (e.target == document.getElementById('detailsModal')) closeModal(); }
 
-        // --- 5. ADMIN & SECURITY ---
-        document.onkeydown = function(e) {
-            if(document.body.classList.contains('admin-active')) return true; 
-            if(event.keyCode == 123 || (e.ctrlKey && (e.keyCode == 'U'.charCodeAt(0) || e.keyCode == 'S'.charCodeAt(0)))) return false;
-        }
-
+        // --- 4. ADMIN FUNCTIONS ---
         function activateAdmin() {
             if(document.body.classList.contains('admin-active')) return;
             var pass = prompt("Enter Admin Password:");
@@ -338,12 +358,13 @@
             const newCard = document.createElement('article');
             newCard.className = 'article-card';
             newCard.innerHTML = `
-                <button class="delete-btn admin-ui" onclick="removeCard(this)" style="position:absolute; top:10px; left:10px; background:red; color:white; border:none; padding:5px; z-index:10;">Delete</button>
+                <button class="delete-btn admin-ui" onclick="removeCard(this)">Delete</button>
                 <div class="card-img-container"><img src="https://via.placeholder.com/600x400" class="card-img" onclick="changeImage(this)"></div>
                 <div class="card-body">
                     <div class="article-tag" contenteditable="true">Category</div>
                     <h2 class="article-title" contenteditable="true">New Title</h2>
                     <div class="meta-row"><div class="meta-item"><span contenteditable="true">Date</span></div></div>
+                    <div class="article-summary" contenteditable="true">Short summary...</div>
                     <div class="full-content" contenteditable="true">Full content...</div>
                     <div class="read-more-btn" onclick="openModal(this)">Read More</div>
                 </div>`;
@@ -358,8 +379,6 @@
             clone.querySelector('body').classList.remove('admin-active');
             clone.querySelectorAll('[contenteditable]').forEach(el => el.removeAttribute('contenteditable'));
             clone.querySelector('#adminToolbar').style.display = 'none';
-            let script = clone.querySelector('script'); 
-            script.innerHTML = script.innerHTML.replace('window.onload = generateArticles;', '// Auto-gen removed');
             let blob = new Blob(["<!DOCTYPE html>\n" + clone.outerHTML], { type: "text/html" });
             let link = document.createElement("a");
             link.href = URL.createObjectURL(blob);
