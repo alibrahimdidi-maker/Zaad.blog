@@ -46,7 +46,7 @@
         }
 
         a { text-decoration: none; color: inherit; transition: all 0.3s ease; }
-        img { max-width: 100%; display: block; height: auto; border-radius: 8px; pointer-events: none; /* Prevent dragging images */ }
+        img { max-width: 100%; display: block; height: auto; border-radius: 8px; pointer-events: none; }
 
         /* --- 2. HEADER AREA --- */
         .top-bar {
@@ -107,7 +107,7 @@
         }
         
         .nav-inner { 
-            max-width: 1400px; 
+            max-width: 1600px; /* Increased slightly for extra buttons */
             margin: 0 auto; 
             display: flex; 
             justify-content: space-between; 
@@ -127,6 +127,28 @@
             gap: 15px;
         }
 
+        /* --- NEW: DIGITAL RESOURCE BUTTON (GREEN) --- */
+        .resource-btn {
+            background-color: #1a5c2d; /* Dark Green */
+            color: white !important;
+            font-weight: 800 !important;
+            font-size: 1.15em !important;
+            border-radius: 5px;
+            padding: 8px 15px !important;
+            font-family: var(--font-en);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            
+            /* Royal Red Underline */
+            border-bottom: 4px solid red !important;
+            white-space: nowrap;
+        }
+        .resource-btn:hover {
+            background-color: var(--royal-blue);
+            transform: scale(1.05);
+            color: white !important;
+        }
+
         /* EVENT BUTTON STYLE */
         .event-btn {
             background-color: var(--royal-gold);
@@ -139,6 +161,7 @@
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
             transition: all 0.3s ease;
             border-bottom: 4px solid red !important;
+            white-space: nowrap;
         }
         .event-btn:hover {
             background-color: var(--royal-blue);
@@ -289,6 +312,8 @@
             </ul>
 
             <div class="nav-right-group">
+                <a href="library.html" class="resource-btn">Digital Resources</a>
+
                 <a href="event_slideshow.html" class="event-btn">Event Slideshow</a>
                 
                 <a href="https://alibrahimdidi-maker.github.io/Zaadacademy/index.html" class="website-btn desktop-btn">
