@@ -26,7 +26,7 @@
         /* --- THEME VARIABLES --- */
         :root {
             --primary: #0C2D48;
-            --accent: #B49658;
+            --accent: #B49658; /* Gold */
             --bg: #f8f9fa;
             --white: #ffffff;
             --text: #333333;
@@ -34,16 +34,23 @@
             --font-main: 'Mv Galan', 'Faruma', 'Noto Sans Thaana', sans-serif;
         }
 
-        /* --- 2. BASE STYLES --- */
+        /* --- 2. BASE STYLES & SECURITY --- */
         body { 
             margin: 0; font-family: var(--font-main) !important;
             background: var(--bg); color: var(--text); padding-bottom: 100px;
             line-height: 1.8; padding-top: 60px;
-            user-select: none; /* Security */
+            
+            /* High Security: Disable Selection */
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            -webkit-touch-callout: none;
         }
         
         a { text-decoration: none; color: inherit; transition: 0.3s; }
         * { box-sizing: border-box; }
+        img { pointer-events: none; -webkit-user-drag: none; }
 
         /* --- 3. NAVIGATION --- */
         .navbar {
@@ -56,12 +63,11 @@
         .nav-links li a { 
             font-weight: bold; font-size: 1.1em; color: var(--primary); 
             padding: 10px 15px; border-radius: 5px; 
-            border-bottom: 3px solid transparent;
             font-family: var(--font-main) !important;
         }
-        .nav-links li a:hover { color: var(--accent); border-bottom: 3px solid var(--accent); background: #fcfcfc; }
+        .nav-links li a:hover { color: var(--accent); background: #fcfcfc; }
 
-        /* --- 4. HEADER --- */
+        /* --- 4. HEADER & ROYAL LOGO --- */
         header { 
             background: linear-gradient(135deg, var(--primary) 0%, #051626 100%); 
             color: var(--white); padding: 50px 5% 80px 5%; 
@@ -70,16 +76,15 @@
         }
 
         .profile-photo {
-            width: 160px; height: 160px;
+            width: 150px; height: 150px;
             object-fit: contain; margin-bottom: 15px;
-            background: white; /* White background to make logo pop */
+            background-color: transparent; 
             border-radius: 50%;
-            padding: 5px;
-            border: 4px solid var(--accent);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-            transition: transform 0.3s;
+            /* Royal Glow Effect */
+            filter: drop-shadow(0 0 10px rgba(180, 150, 88, 0.6));
+            transition: transform 0.5s;
         }
-        .profile-photo:hover { transform: scale(1.05); }
+        .profile-photo:hover { transform: scale(1.1) rotate(5deg); }
 
         .page-title { 
             font-size: 2.8em; font-weight: bold; margin: 0; 
@@ -145,7 +150,7 @@
         body.admin-active .article-summary, body.admin-active .read-more-btn { display: none; }
         body.admin-active { user-select: text; -webkit-user-select: text; }
 
-        .delete-btn { position: absolute; top: 10px; left: 10px; background: red; color: white; border: none; padding: 5px; cursor: pointer; z-index: 10; font-weight: bold; }
+        .delete-btn { position: absolute; top: 10px; left: 10px; background: red; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; z-index: 10; font-weight: bold; }
         .admin-toolbar { position: fixed; bottom: 0; left: 0; width: 100%; background: #1a1a1a; color: white; padding: 15px 30px; display: none; justify-content: space-between; align-items: center; z-index: 9999; border-top: 4px solid var(--accent); }
         .admin-btn { padding: 10px 25px; border-radius: 5px; border: none; font-weight: bold; cursor: pointer; }
         [contenteditable="true"] { outline: none; background: rgba(255, 255, 255, 0.9); border-bottom: 2px dashed var(--accent); cursor: text; }
@@ -181,7 +186,7 @@
     </nav>
 
     <header>
-        <img  src="https://academyzaad.com/images/logo.png" alt="Zaad Academy Logo" class="profile-photo" onerror="this.src='https://ui-avatars.com/api/?name=ZA&background=B49658&color=fff&size=200'">
+        <img src="photos/logo.png" alt="Zaad Academy Logo" class="profile-photo" onerror="this.src='https://ui-avatars.com/api/?name=ZA&background=transparent&color=B49658&size=200'">
         
         <h1 class="page-title">ޒާދް އެކަޑެމީ - އާޓިކަލްސް</h1>
         <div class="page-subtitle">އެންމެ ފަހުގެ ޚަބަރުތަކާއި، ދިރާސީ ލިޔުންތައް އެއްތަނަކުން</div>
@@ -259,31 +264,15 @@
                 articlesData.forEach(item => {
                     const articleHTML = `
                     <article class="article-card">
-                        <button class="delete-btn admin-ui" onclick="removeCard(this)">ފޮހެލާ</button>
-                        <div class="card-img-container">
-                            <img src="${item.img}" class="card-img" onclick="changeImage(this)">
-                        </div>
+                        <button class="delete-btn admin-ui" onclick="removeCard(this)">Delete</button>
+                        <div class="card-img-container"><img  src="${item.img}" class="card-img" onclick="changeImage(this)"></div>
                         <div class="card-body">
-                            <div class="article-tag" contenteditable="false">${item.cat}</div>
-                            <h2 class="article-title" contenteditable="false">${item.title}</h2>
-                            <div class="meta-row">
-                                <div class="meta-item"><i class="far fa-calendar-alt"></i> <span contenteditable="false">${item.date}</span></div>
-                                <div class="meta-item"><i class="far fa-user"></i> <span contenteditable="false">${item.author}</span></div>
-                            </div>
-                            <div class="article-summary" contenteditable="false">
-                                މިއީ އާޓިކަލްގެ ކުރު ޚުލާސާއެވެ. މިތަނުގައި ލިޔާނީ ކިޔުންތެރިންގެ ޝައުޤުވެރިކަން ދަމައިގަންނަ ފަދަ ކުރު އިބާރާތެކެވެ. (މިބައި ބަދަލުކުރައްވާ)
-                            </div>
-                            <div class="full-content" contenteditable="false">
-                                <p><strong>${item.title}</strong></p>
-                                <p>މިއީ މި ލިޔުމުގެ ތަފްޞީލީ ބައެވެ. މިތަނުގައި އާޓިކަލްގެ ފުރިހަމަ މަޢުލޫމާތު ހިމަނުއްވާށެވެ.</p>
-                                <p>ލިޔުންތެރިޔާ: ${item.author}<br>ތާރީޚް: ${item.date}</p>
-                                <p>މިތަނުގައި އިތުރު ޕެރެގްރާފްތައް ލިޔުއްވާށެވެ. މި ބައި ފެންނާނީ "އިތުރަށް ވިދާޅުވޭ" އަށް ފިތާލުމުންނެވެ.</p>
-                            </div>
-                            <div class="read-more-btn" onclick="openModal(this)">
-                                އިތުރަށް ވިދާޅުވޭ <i class="fas fa-arrow-left"></i>
-                            </div>
-                        </div>
-                    </article>`;
+                            <div class="article-tag" contenteditable="true">Category</div>
+                            <h2 class="article-title" contenteditable="true">New Title</h2>
+                            <div class="meta-row"><div class="meta-item"><span contenteditable="true">Date</span></div></div>
+                            <div class="full-content" contenteditable="true">Full content...</div>
+                            <div class="read-more-btn" onclick="openModal(this)">Read More</div>
+                        </div>`;
                     grid.insertAdjacentHTML('beforeend', articleHTML);
                 });
             }
@@ -349,7 +338,7 @@
             const newCard = document.createElement('article');
             newCard.className = 'article-card';
             newCard.innerHTML = `
-                <button class="delete-btn admin-ui" onclick="removeCard(this)">Delete</button>
+                <button class="delete-btn admin-ui" onclick="removeCard(this)" style="position:absolute; top:10px; left:10px; background:red; color:white; border:none; padding:5px; z-index:10;">Delete</button>
                 <div class="card-img-container"><img src="https://via.placeholder.com/600x400" class="card-img" onclick="changeImage(this)"></div>
                 <div class="card-body">
                     <div class="article-tag" contenteditable="true">Category</div>
