@@ -88,24 +88,38 @@
         @keyframes ticker-scroll { 0% { transform: translate3d(0, 0, 0); } 100% { transform: translate3d(100%, 0, 0); } }
         body.admin-active .ticker { animation-play-state: paused; }
 
-        /* --- NAVIGATION --- */
+        /* --- MAIN NAVIGATION --- */
         nav { background: white; box-shadow: 0 2px 10px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 1000; border-bottom: 1px solid #eee; }
         .nav-inner { max-width: 1600px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 0 2%; min-height: 60px; }
+        
         .main-menu { display: flex; list-style: none; flex-wrap: wrap; align-items: center; }
         .main-menu li a { display: block; padding: 18px 15px; color: var(--royal-blue); font-weight: bold; font-size: 1.05em; border-bottom: 3px solid transparent;}
         .main-menu li a:hover { color: var(--royal-gold); border-bottom: 3px solid var(--royal-gold); background: #fcfcfc; }
+        
+        /* Nav Right Buttons */
         .nav-right-group { display: flex; align-items: center; gap: 15px; }
         
-        /* Buttons */
-        .resource-btn { background-color: #1a5c2d; color: white !important; font-weight: 800 !important; font-size: 1.15em !important; border-radius: 5px; padding: 8px 15px !important; font-family: var(--font-en); border-bottom: 4px solid red !important; }
-        .event-btn { background-color: var(--royal-gold); color: white !important; font-weight: 800 !important; font-size: 1.15em !important; border-radius: 5px; padding: 8px 15px !important; font-family: var(--font-en); border-bottom: 4px solid red !important; }
-        .website-btn { background-color: var(--royal-gold); color: white; padding: 8px 20px; border-radius: 5px; font-weight: bold; display: flex; align-items: center; gap: 10px; white-space: nowrap; }
+        .resource-btn { background-color: #1a5c2d; color: white !important; font-weight: 800 !important; font-size: 1em !important; border-radius: 5px; padding: 8px 15px !important; font-family: var(--font-en); border-bottom: 4px solid red !important; }
+        .event-btn { background-color: var(--royal-gold); color: white !important; font-weight: 800 !important; font-size: 1em !important; border-radius: 5px; padding: 8px 15px !important; font-family: var(--font-en); border-bottom: 4px solid red !important; }
+        
+        /* RESTORED WEBSITE BUTTON */
+        .website-btn { 
+            background-color: var(--royal-blue); 
+            color: white; padding: 8px 20px; 
+            border-radius: 5px; font-weight: bold; 
+            display: flex; align-items: center; gap: 10px; 
+            white-space: nowrap; font-size: 0.9em;
+            border: 2px solid var(--royal-gold);
+        }
+        .website-btn:hover { background-color: var(--royal-gold); color: white; }
+
         .menu-btn { display: none; font-size: 1.5em; padding: 15px; cursor: pointer; color: var(--royal-blue); }
 
-        /* --- SUB MENU --- */
+        /* --- RESTORED SUB MENU --- */
         .sub-nav-bar { background-color: var(--royal-blue); border-bottom: 3px solid #082035; color: white; padding: 0 5%; }
-        .sub-menu-list { display: flex; justify-content: center; flex-wrap: wrap; max-width: 1400px; margin: 0 auto; }
-        .sub-menu-list li a { display: block; padding: 12px 25px; font-size: 0.9em; color: #e0e0e0; border-left: 1px solid rgba(255,255,255,0.1); }
+        .sub-menu-list { display: flex; justify-content: center; flex-wrap: wrap; max-width: 1400px; margin: 0 auto; list-style: none; padding: 0; }
+        .sub-menu-list li a { display: block; padding: 12px 25px; font-size: 0.9em; color: #e0e0e0; border-left: 1px solid rgba(255,255,255,0.1); text-decoration: none; transition: 0.2s; }
+        .sub-menu-list li:first-child a { border-right: 1px solid rgba(255,255,255,0.1); }
         .sub-menu-list li a:hover { background-color: var(--royal-gold); color: white; }
 
         /* --- LAYOUT --- */
@@ -113,11 +127,11 @@
         .widget { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 3px 10px rgba(0,0,0,0.03); margin-bottom: 25px; border-top: 4px solid var(--royal-blue); }
         .widget-title { font-size: 1.2em; color: var(--royal-blue); margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 8px; font-weight: bold; display: flex; align-items: center; gap: 10px; }
         .widget-title i { color: var(--royal-gold); }
+        .side-links { list-style: none; padding: 0; }
         .side-links li { margin-bottom: 10px; border-bottom: 1px dashed #eee; padding-bottom: 5px; }
-        .side-links a { display: flex; align-items: center; gap: 10px; font-size: 0.95em; color: #444; }
+        .side-links a { display: flex; align-items: center; gap: 10px; font-size: 0.95em; color: #444; text-decoration: none; }
         .side-links a:hover { color: var(--royal-gold); transform: translateX(-5px); }
 
-        /* Special Widget Styles */
         .quote-box { background: #fffbe6; padding: 15px; border-right: 4px solid var(--royal-gold); font-style: italic; color: #555; }
         .event-item { margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
         .event-date { background: var(--royal-blue); color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.8em; font-weight: bold; display: inline-block; margin-bottom: 5px; }
@@ -147,31 +161,13 @@
         .footer-logo { font-size: 2em; color: var(--royal-gold); margin-bottom: 20px; font-weight: bold; }
         
         .footer-content-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 30px;
-            text-align: right;
-            max-width: 1400px;
-            margin: 0 auto 30px auto;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            padding-bottom: 30px;
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 30px; text-align: right;
+            max-width: 1400px; margin: 0 auto 30px auto; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 30px;
         }
-        
-        /* FOOTER HEADINGS */
-        .footer-col-title { 
-            color: var(--royal-gold) !important; 
-            font-size: 1.3em; 
-            margin-bottom: 15px; 
-            font-weight: bold; 
-            display: block;
-            border-bottom: 2px solid rgba(180, 150, 88, 0.3); 
-            padding-bottom: 5px;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.5); 
-        }
-
+        .footer-col-title { color: var(--royal-gold) !important; font-size: 1.3em; margin-bottom: 15px; font-weight: bold; display: block; border-bottom: 2px solid rgba(180, 150, 88, 0.3); padding-bottom: 5px; text-shadow: 1px 1px 2px rgba(0,0,0,0.5); }
         .footer-links-list { list-style: none; padding: 0; margin: 0; }
         .footer-links-list li { margin-bottom: 10px; border-bottom: 1px dashed rgba(255,255,255,0.05); padding-bottom: 5px; }
-        .footer-links-list a { color: #ddd; transition: 0.2s; }
+        .footer-links-list a { color: #ddd; transition: 0.2s; text-decoration: none; }
         .footer-links-list a:hover { color: var(--royal-gold); padding-right: 5px; }
 
         /* --- ADMIN STYLES --- */
@@ -200,6 +196,8 @@
             .grid-2 { grid-template-columns: 1fr; }
             .nav-right-group { display: none; } 
             .footer-content-grid { text-align: center; }
+            .sub-menu-list { flex-direction: column; text-align: center; }
+            .sub-menu-list li a { border-left: none; border-bottom: 1px solid rgba(255,255,255,0.1); padding: 10px; }
         }
     </style>
 </head>
@@ -250,9 +248,23 @@
             <div class="nav-right-group">
                 <a href="#" class="resource-btn">Digital Resources</a>
                 <a href="#" class="event-btn">Event Slideshow</a>
+                
+                <a href="https://alibrahimdidi-maker.github.io/Zaadacademy/index.html" target="_blank" class="website-btn">
+                    ޒާދް ވެބްސައިޓް <i class="fas fa-globe"></i>
+                </a>
             </div>
         </div>
     </nav>
+
+    <div class="sub-nav-bar">
+        <ul class="sub-menu-list">
+            <li><a href="ai.html">އާޓިފިޝަލް އިންޓެލިޖެންސް</a></li>
+            <li><a href="ai-teaching.html">ޖަލްސާތަކާއި އިވެންޓުތައް</a></li>
+            <li><a href="ai-research.html">ދިރާސާކުރުމަށް އޭ.އައި</a></li>
+            <li><a href="event_slideshow.html">ބެނާ އާއި ޕްރެޒެންޓޭޝަން</a></li>
+            <li><a href="event_slideshow-help.html">އިވެންޓް ހެލްޕް ފައިލް</a></li>
+        </ul>
+    </div>
 
     <div class="container">
         <aside class="left-sidebar">
@@ -472,6 +484,7 @@
             let clone = document.documentElement.cloneNode(true);
             clone.querySelector('body').classList.remove('admin-active');
             
+            // Remove editable attributes and onclicks for images in the saved file
             let editables = clone.querySelectorAll('[contenteditable]');
             editables.forEach(el => {
                 el.contentEditable = "false";
