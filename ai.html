@@ -1,11 +1,10 @@
 <!DOCTYPE html>
-<html lang="dv" dir="rtl">
-<head>
+<html lang="dv" dir="rtl" data-qb-installed="true"><plasmo-csui id="brisk-teaching-extension-shadow-root" style="z-index: 2147483647;" data-extension-version="1.0.338" data-extension-name="Brisk Teaching – AI Assistant for Teachers"></plasmo-csui><script async="" defer="" src="chrome-extension://pcblbflgdkdfdjpjifeppkljdnaekohj/GdocApi.bb24edea.js" type="text/javascript"></script><head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ޒާދް ޑިޖިޓަލް ލައިބްރަރީ (Multi-Link)</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thaana:wght@400;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thaana:wght@400;700&amp;family=Playfair+Display:wght@700&amp;display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
@@ -147,8 +146,479 @@
         
         footer { text-align: center; padding: 20px; color: #888; font-size: 0.9em; user-select: none; }
     </style>
-</head>
-<body>
+<style>
+.--brisk-axd {
+  filter: blur(4px);
+  user-select: none;
+}
+</style><style type="text/css">.lf-progress {
+  -webkit-appearance: none;
+  -moz-apperance: none;
+  width: 100%;
+  /* margin: 0 10px; */
+  height: 4px;
+  border-radius: 3px;
+  cursor: pointer;
+}
+.lf-progress:focus {
+  outline: none;
+  border: none;
+}
+.lf-progress::-moz-range-track {
+  cursor: pointer;
+  background: none;
+  border: none;
+  outline: none;
+}
+.lf-progress::-webkit-slider-thumb {
+  -webkit-appearance: none !important;
+  height: 13px;
+  width: 13px;
+  border: 0;
+  border-radius: 50%;
+  background: #0fccce;
+  cursor: pointer;
+}
+.lf-progress::-moz-range-thumb {
+  -moz-appearance: none !important;
+  height: 13px;
+  width: 13px;
+  border: 0;
+  border-radius: 50%;
+  background: #0fccce;
+  cursor: pointer;
+}
+.lf-progress::-ms-track {
+  width: 100%;
+  height: 3px;
+  cursor: pointer;
+  background: transparent;
+  border-color: transparent;
+  color: transparent;
+}
+.lf-progress::-ms-fill-lower {
+  background: #ccc;
+  border-radius: 3px;
+}
+.lf-progress::-ms-fill-upper {
+  background: #ccc;
+  border-radius: 3px;
+}
+.lf-progress::-ms-thumb {
+  border: 0;
+  height: 15px;
+  width: 15px;
+  border-radius: 50%;
+  background: #0fccce;
+  cursor: pointer;
+}
+.lf-progress:focus::-ms-fill-lower {
+  background: #ccc;
+}
+.lf-progress:focus::-ms-fill-upper {
+  background: #ccc;
+}
+.lf-player-container :focus {
+  outline: 0;
+}
+.lf-popover {
+  position: relative;
+}
+
+.lf-popover-content {
+  display: inline-block;
+  position: absolute;
+  opacity: 1;
+  visibility: visible;
+  transform: translate(0, -10px);
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
+  transition: all 0.3s cubic-bezier(0.75, -0.02, 0.2, 0.97);
+}
+
+.lf-popover-content.hidden {
+  opacity: 0;
+  visibility: hidden;
+  transform: translate(0, 0px);
+}
+
+.lf-player-btn-container {
+  display: flex;
+  align-items: center;
+}
+.lf-player-btn {
+  cursor: pointer;
+  fill: #999;
+  width: 14px;
+}
+
+.lf-player-btn.active {
+  fill: #555;
+}
+
+.lf-popover {
+  position: relative;
+}
+
+.lf-popover-content {
+  display: inline-block;
+  position: absolute;
+  background-color: #ffffff;
+  opacity: 1;
+
+  transform: translate(0, -10px);
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
+  transition: all 0.3s cubic-bezier(0.75, -0.02, 0.2, 0.97);
+  padding: 10px;
+}
+
+.lf-popover-content.hidden {
+  opacity: 0;
+  visibility: hidden;
+  transform: translate(0, 0px);
+}
+
+.lf-arrow {
+  position: absolute;
+  z-index: -1;
+  content: '';
+  bottom: -9px;
+  border-style: solid;
+  border-width: 10px 10px 0px 10px;
+}
+
+.lf-left-align,
+.lf-left-align .lfarrow {
+  left: 0;
+  right: unset;
+}
+
+.lf-right-align,
+.lf-right-align .lf-arrow {
+  right: 0;
+  left: unset;
+}
+
+.lf-text-input {
+  border: 1px #ccc solid;
+  border-radius: 5px;
+  padding: 3px;
+  width: 60px;
+  margin: 0;
+}
+
+.lf-color-picker {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  height: 90px;
+}
+
+.lf-color-selectors {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.lf-color-component {
+  display: flex;
+  flex-direction: row;
+  font-size: 12px;
+  align-items: center;
+  justify-content: center;
+}
+
+.lf-color-component strong {
+  width: 40px;
+}
+
+.lf-color-component input[type='range'] {
+  margin: 0 0 0 10px;
+}
+
+.lf-color-component input[type='number'] {
+  width: 50px;
+  margin: 0 0 0 10px;
+}
+
+.lf-color-preview {
+  font-size: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding-left: 5px;
+}
+
+.lf-preview {
+  height: 60px;
+  width: 60px;
+}
+
+.lf-popover-snapshot {
+  width: 150px;
+}
+.lf-popover-snapshot h5 {
+  margin: 5px 0 10px 0;
+  font-size: 0.75rem;
+}
+.lf-popover-snapshot a {
+  display: block;
+  text-decoration: none;
+}
+.lf-popover-snapshot a:before {
+  content: '⥼';
+  margin-right: 5px;
+}
+.lf-popover-snapshot .lf-note {
+  display: block;
+  margin-top: 10px;
+  color: #999;
+}
+.lf-player-controls > div {
+  margin-right: 5px;
+  margin-left: 5px;
+}
+.lf-player-controls > div:first-child {
+  margin-left: 0px;
+}
+.lf-player-controls > div:last-child {
+  margin-right: 0px;
+}
+</style><style type="text/css">.lf-progress {
+  -webkit-appearance: none;
+  -moz-apperance: none;
+  width: 100%;
+  /* margin: 0 10px; */
+  height: 4px;
+  border-radius: 3px;
+  cursor: pointer;
+}
+.lf-progress:focus {
+  outline: none;
+  border: none;
+}
+.lf-progress::-moz-range-track {
+  cursor: pointer;
+  background: none;
+  border: none;
+  outline: none;
+}
+.lf-progress::-webkit-slider-thumb {
+  -webkit-appearance: none !important;
+  height: 13px;
+  width: 13px;
+  border: 0;
+  border-radius: 50%;
+  background: #0fccce;
+  cursor: pointer;
+}
+.lf-progress::-moz-range-thumb {
+  -moz-appearance: none !important;
+  height: 13px;
+  width: 13px;
+  border: 0;
+  border-radius: 50%;
+  background: #0fccce;
+  cursor: pointer;
+}
+.lf-progress::-ms-track {
+  width: 100%;
+  height: 3px;
+  cursor: pointer;
+  background: transparent;
+  border-color: transparent;
+  color: transparent;
+}
+.lf-progress::-ms-fill-lower {
+  background: #ccc;
+  border-radius: 3px;
+}
+.lf-progress::-ms-fill-upper {
+  background: #ccc;
+  border-radius: 3px;
+}
+.lf-progress::-ms-thumb {
+  border: 0;
+  height: 15px;
+  width: 15px;
+  border-radius: 50%;
+  background: #0fccce;
+  cursor: pointer;
+}
+.lf-progress:focus::-ms-fill-lower {
+  background: #ccc;
+}
+.lf-progress:focus::-ms-fill-upper {
+  background: #ccc;
+}
+.lf-player-container :focus {
+  outline: 0;
+}
+.lf-popover {
+  position: relative;
+}
+
+.lf-popover-content {
+  display: inline-block;
+  position: absolute;
+  opacity: 1;
+  visibility: visible;
+  transform: translate(0, -10px);
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
+  transition: all 0.3s cubic-bezier(0.75, -0.02, 0.2, 0.97);
+}
+
+.lf-popover-content.hidden {
+  opacity: 0;
+  visibility: hidden;
+  transform: translate(0, 0px);
+}
+
+.lf-player-btn-container {
+  display: flex;
+  align-items: center;
+}
+.lf-player-btn {
+  cursor: pointer;
+  fill: #999;
+  width: 14px;
+}
+
+.lf-player-btn.active {
+  fill: #555;
+}
+
+.lf-popover {
+  position: relative;
+}
+
+.lf-popover-content {
+  display: inline-block;
+  position: absolute;
+  background-color: #ffffff;
+  opacity: 1;
+
+  transform: translate(0, -10px);
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
+  transition: all 0.3s cubic-bezier(0.75, -0.02, 0.2, 0.97);
+  padding: 10px;
+}
+
+.lf-popover-content.hidden {
+  opacity: 0;
+  visibility: hidden;
+  transform: translate(0, 0px);
+}
+
+.lf-arrow {
+  position: absolute;
+  z-index: -1;
+  content: '';
+  bottom: -9px;
+  border-style: solid;
+  border-width: 10px 10px 0px 10px;
+}
+
+.lf-left-align,
+.lf-left-align .lfarrow {
+  left: 0;
+  right: unset;
+}
+
+.lf-right-align,
+.lf-right-align .lf-arrow {
+  right: 0;
+  left: unset;
+}
+
+.lf-text-input {
+  border: 1px #ccc solid;
+  border-radius: 5px;
+  padding: 3px;
+  width: 60px;
+  margin: 0;
+}
+
+.lf-color-picker {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  height: 90px;
+}
+
+.lf-color-selectors {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.lf-color-component {
+  display: flex;
+  flex-direction: row;
+  font-size: 12px;
+  align-items: center;
+  justify-content: center;
+}
+
+.lf-color-component strong {
+  width: 40px;
+}
+
+.lf-color-component input[type='range'] {
+  margin: 0 0 0 10px;
+}
+
+.lf-color-component input[type='number'] {
+  width: 50px;
+  margin: 0 0 0 10px;
+}
+
+.lf-color-preview {
+  font-size: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding-left: 5px;
+}
+
+.lf-preview {
+  height: 60px;
+  width: 60px;
+}
+
+.lf-popover-snapshot {
+  width: 150px;
+}
+.lf-popover-snapshot h5 {
+  margin: 5px 0 10px 0;
+  font-size: 0.75rem;
+}
+.lf-popover-snapshot a {
+  display: block;
+  text-decoration: none;
+}
+.lf-popover-snapshot a:before {
+  content: '⥼';
+  margin-right: 5px;
+}
+.lf-popover-snapshot .lf-note {
+  display: block;
+  margin-top: 10px;
+  color: #999;
+}
+.lf-player-controls > div {
+  margin-right: 5px;
+  margin-left: 5px;
+}
+.lf-player-controls > div:first-child {
+  margin-left: 0px;
+}
+.lf-player-controls > div:last-child {
+  margin-right: 0px;
+}
+</style></head>
+<body class="">
 
     <header>
         <div class="logo-text">Zaad Academy Resources</div>
@@ -169,63 +639,63 @@
                     <div class="card-title" contenteditable="false">ތަޖުވީދު ލެވަލް 1</div>
                     <div class="card-desc" contenteditable="false">މި ކާޑުގައި ކޯހުގެ ވީޑިއޯ، ފޮތް، އަދި އެސައިންމަންޓް ލިންކުތައް ހިމެނިފައިވާނެއެވެ.</div>
                     
-                    <div class="lock-container" id="lock-div-card-1">
+                    <div class="lock-container" id="lock-div-card-1" style="display: block;">
                         <button class="lock-btn" onclick="openLogin('card-1')">
                             <i class="fas fa-lock"></i> ކޮންޓެންޓްތައް ބައްލަވާ
                         </button>
                     </div>
 
-                    <div class="unlocked-links" id="links-div-card-1">
-                        <a href="#" target="_blank" class="resource-link-btn" id="btn1-card-1"><i class="fas fa-video"></i> <span id="lbl1-card-1">ވީޑިއޯ ދަރުސް</span></a>
-                        <a href="#" target="_blank" class="resource-link-btn" id="btn2-card-1"><i class="fas fa-file-pdf"></i> <span id="lbl2-card-1">ކޯސް ފޮތް (PDF)</span></a>
-                        <a href="#" target="_blank" class="resource-link-btn" id="btn3-card-1"><i class="fas fa-clipboard-check"></i> <span id="lbl3-card-1">އެސައިންމަންޓް</span></a>
-                        <a href="#" target="_blank" class="resource-link-btn" id="btn4-card-1"><i class="fas fa-globe"></i> <span id="lbl4-card-1">އިތުރު ލިންކް</span></a>
+                    <div class="unlocked-links" id="links-div-card-1" style="display: none;">
+                        <a href="https://youtu.be/fJWxh9ZNuPM?si=HoxYrOnW3Jr1o-3q" target="_blank" class="resource-link-btn" id="btn1-card-1"><i class="fas fa-video"></i> <span id="lbl1-card-1">ވީޑިއޯ ދަރުސް</span></a>
+                        <a href="https://youtu.be/7MzniHDNl5g?si=X06MlA5EZHlkQIE5#" target="_blank" class="resource-link-btn" id="btn2-card-1"><i class="fas fa-file-pdf"></i> <span id="lbl2-card-1">ކޯސް ފޮތް (PDF)</span></a>
+                        <a href="https://youtu.be/7MzniHDNl5g?si=X06MlA5EZHlkQIE5" target="_blank" class="resource-link-btn" id="btn3-card-1"><i class="fas fa-clipboard-check"></i> <span id="lbl3-card-1">އެސައިންމަންޓް</span></a>
+                        <a href="https://youtu.be/7MzniHDNl5g?si=X06MlA5EZHlkQIE5" target="_blank" class="resource-link-btn" id="btn4-card-1"><i class="fas fa-globe"></i> <span id="lbl4-card-1">އިތުރު ލިންކް</span></a>
                     </div>
 
                     <input type="hidden" id="user-card-1" value="student">
                     <input type="hidden" id="pass-card-1" value="123">
 
-                    <input type="hidden" id="url1-card-1" value="#">
+                    <input type="hidden" id="url1-card-1" value="https://youtu.be/fJWxh9ZNuPM?si=HoxYrOnW3Jr1o-3q">
                     <input type="hidden" id="name1-card-1" value="ވީޑިއޯ ދަރުސް">
                     
-                    <input type="hidden" id="url2-card-1" value="#">
+                    <input type="hidden" id="url2-card-1" value="https://youtu.be/7MzniHDNl5g?si=X06MlA5EZHlkQIE5#">
                     <input type="hidden" id="name2-card-1" value="ކޯސް ފޮތް (PDF)">
                     
-                    <input type="hidden" id="url3-card-1" value="#">
+                    <input type="hidden" id="url3-card-1" value="https://youtu.be/7MzniHDNl5g?si=X06MlA5EZHlkQIE5">
                     <input type="hidden" id="name3-card-1" value="އެސައިންމަންޓް">
                     
-                    <input type="hidden" id="url4-card-1" value="#">
+                    <input type="hidden" id="url4-card-1" value="https://youtu.be/7MzniHDNl5g?si=X06MlA5EZHlkQIE5">
                     <input type="hidden" id="name4-card-1" value="އިތުރު ލިންކް">
 
                     <div class="admin-controls">
                         <div class="admin-group">
-                            <label class="admin-label">Username & Password:</label>
+                            <label class="admin-label">Username &amp; Password:</label>
                             <input type="text" class="admin-input" placeholder="User" onchange="updateValue('user-card-1', this.value)" value="student">
                             <input type="text" class="admin-input" placeholder="Pass" onchange="updateValue('pass-card-1', this.value)" value="123">
                         </div>
                         
                         <div class="admin-group">
-                            <label class="admin-label">Link 1 (Name & URL):</label>
+                            <label class="admin-label">Link 1 (Name &amp; URL):</label>
                             <input type="text" class="admin-input" onchange="updateLinkName('card-1', 1, this.value)" value="ވީޑިއޯ ދަރުސް">
-                            <input type="text" class="admin-input" onchange="updateLinkURL('card-1', 1, this.value)" value="#">
+                            <input type="text" class="admin-input" onchange="updateLinkURL('card-1', 1, this.value)" value="https://youtu.be/fJWxh9ZNuPM?si=HoxYrOnW3Jr1o-3q">
                         </div>
 
                         <div class="admin-group">
-                            <label class="admin-label">Link 2 (Name & URL):</label>
+                            <label class="admin-label">Link 2 (Name &amp; URL):</label>
                             <input type="text" class="admin-input" onchange="updateLinkName('card-1', 2, this.value)" value="ކޯސް ފޮތް (PDF)">
-                            <input type="text" class="admin-input" onchange="updateLinkURL('card-1', 2, this.value)" value="#">
+                            <input type="text" class="admin-input" onchange="updateLinkURL('card-1', 2, this.value)" value="https://youtu.be/7MzniHDNl5g?si=X06MlA5EZHlkQIE5#">
                         </div>
 
                         <div class="admin-group">
-                            <label class="admin-label">Link 3 (Name & URL):</label>
+                            <label class="admin-label">Link 3 (Name &amp; URL):</label>
                             <input type="text" class="admin-input" onchange="updateLinkName('card-1', 3, this.value)" value="އެސައިންމަންޓް">
-                            <input type="text" class="admin-input" onchange="updateLinkURL('card-1', 3, this.value)" value="#">
+                            <input type="text" class="admin-input" onchange="updateLinkURL('card-1', 3, this.value)" value="https://youtu.be/7MzniHDNl5g?si=X06MlA5EZHlkQIE5">
                         </div>
 
                         <div class="admin-group">
-                            <label class="admin-label">Link 4 (Name & URL):</label>
+                            <label class="admin-label">Link 4 (Name &amp; URL):</label>
                             <input type="text" class="admin-input" onchange="updateLinkName('card-1', 4, this.value)" value="އިތުރު ލިންކް">
-                            <input type="text" class="admin-input" onchange="updateLinkURL('card-1', 4, this.value)" value="#">
+                            <input type="text" class="admin-input" onchange="updateLinkURL('card-1', 4, this.value)" value="https://youtu.be/7MzniHDNl5g?si=X06MlA5EZHlkQIE5">
                         </div>
 
                         <button class="delete-btn" onclick="removeCard('card-1')">Delete Card</button>
@@ -233,12 +703,779 @@
                 </div>
             </div>
 
-        </div>
+        <div class="card" id="card-1766295620576">
+                <div class="card-img-area">
+                    <span class="type-tag" contenteditable="false">NEW</span>
+                    <i class="fas fa-layer-group"></i>
+                </div>
+                <div class="card-body">
+                    <div class="card-title" contenteditable="false">އައު ކާޑު</div>
+                    <div class="card-desc" contenteditable="false">މިތަނުގައި ތަފްސީލް ލިޔުއްވާ...</div>
+                    
+                    <div class="lock-container" id="lock-div-card-1766295620576" style="display: block;">
+                        <button class="lock-btn" onclick="openLogin('card-1766295620576')"><i class="fas fa-lock"></i> ކޮންޓެންޓްތައް ބައްލަވާ</button>
+                    </div>
+
+                    <div class="unlocked-links" id="links-div-card-1766295620576" style="display: none;">
+                        <a href="#" target="_blank" class="resource-link-btn" id="btn1-card-1766295620576"><i class="fas fa-link"></i> <span id="lbl1-card-1766295620576">Link 1</span></a>
+                        <a href="#" target="_blank" class="resource-link-btn" id="btn2-card-1766295620576"><i class="fas fa-link"></i> <span id="lbl2-card-1766295620576">Link 2</span></a>
+                        <a href="#" target="_blank" class="resource-link-btn" id="btn3-card-1766295620576"><i class="fas fa-link"></i> <span id="lbl3-card-1766295620576">Link 3</span></a>
+                        <a href="#" target="_blank" class="resource-link-btn" id="btn4-card-1766295620576"><i class="fas fa-link"></i> <span id="lbl4-card-1766295620576">Link 4</span></a>
+                    </div>
+
+                    <input type="hidden" id="user-card-1766295620576" value="user">
+                    <input type="hidden" id="pass-card-1766295620576" value="pass">
+                    
+                    <input type="hidden" id="url1-card-1766295620576" value="#">
+                         <input type="hidden" id="name1-card-1766295620576" value="Link 1"><input type="hidden" id="url2-card-1766295620576" value="#">
+                         <input type="hidden" id="name2-card-1766295620576" value="Link 2"><input type="hidden" id="url3-card-1766295620576" value="#">
+                         <input type="hidden" id="name3-card-1766295620576" value="Link 3"><input type="hidden" id="url4-card-1766295620576" value="#">
+                         <input type="hidden" id="name4-card-1766295620576" value="Link 4">
+
+                    <div class="admin-controls">
+                        <div class="admin-group">
+                            <label class="admin-label">Username &amp; Password:</label>
+                            <input type="text" class="admin-input" placeholder="User" onchange="updateValue('user-card-1766295620576', this.value)" value="user">
+                            <input type="text" class="admin-input" placeholder="Pass" onchange="updateValue('pass-card-1766295620576', this.value)" value="pass">
+                        </div>
+                        
+                <div class="admin-group">
+                    <label class="admin-label">Link 1 (Name &amp; URL):</label>
+                    <input type="text" class="admin-input" onchange="updateLinkName('card-1766295620576', 1, this.value)" value="Link 1">
+                    <input type="text" class="admin-input" onchange="updateLinkURL('card-1766295620576', 1, this.value)" value="#">
+                </div>
+                <div class="admin-group">
+                    <label class="admin-label">Link 2 (Name &amp; URL):</label>
+                    <input type="text" class="admin-input" onchange="updateLinkName('card-1766295620576', 2, this.value)" value="Link 2">
+                    <input type="text" class="admin-input" onchange="updateLinkURL('card-1766295620576', 2, this.value)" value="#">
+                </div>
+                <div class="admin-group">
+                    <label class="admin-label">Link 3 (Name &amp; URL):</label>
+                    <input type="text" class="admin-input" onchange="updateLinkName('card-1766295620576', 3, this.value)" value="Link 3">
+                    <input type="text" class="admin-input" onchange="updateLinkURL('card-1766295620576', 3, this.value)" value="#">
+                </div>
+                <div class="admin-group">
+                    <label class="admin-label">Link 4 (Name &amp; URL):</label>
+                    <input type="text" class="admin-input" onchange="updateLinkName('card-1766295620576', 4, this.value)" value="Link 4">
+                    <input type="text" class="admin-input" onchange="updateLinkURL('card-1766295620576', 4, this.value)" value="#">
+                </div>
+                        <button class="delete-btn" onclick="removeCard('card-1766295620576')">Delete Card</button>
+                    </div>
+                </div>
+            </div><div class="card" id="card-1766295621471">
+                <div class="card-img-area">
+                    <span class="type-tag" contenteditable="false">NEW</span>
+                    <i class="fas fa-layer-group"></i>
+                </div>
+                <div class="card-body">
+                    <div class="card-title" contenteditable="false">އައު ކާޑު</div>
+                    <div class="card-desc" contenteditable="false">މިތަނުގައި ތަފްސީލް ލިޔުއްވާ...</div>
+                    
+                    <div class="lock-container" id="lock-div-card-1766295621471" style="display: block;">
+                        <button class="lock-btn" onclick="openLogin('card-1766295621471')"><i class="fas fa-lock"></i> ކޮންޓެންޓްތައް ބައްލަވާ</button>
+                    </div>
+
+                    <div class="unlocked-links" id="links-div-card-1766295621471" style="display: none;">
+                        <a href="#" target="_blank" class="resource-link-btn" id="btn1-card-1766295621471"><i class="fas fa-link"></i> <span id="lbl1-card-1766295621471">Link 1</span></a>
+                        <a href="#" target="_blank" class="resource-link-btn" id="btn2-card-1766295621471"><i class="fas fa-link"></i> <span id="lbl2-card-1766295621471">Link 2</span></a>
+                        <a href="#" target="_blank" class="resource-link-btn" id="btn3-card-1766295621471"><i class="fas fa-link"></i> <span id="lbl3-card-1766295621471">Link 3</span></a>
+                        <a href="#" target="_blank" class="resource-link-btn" id="btn4-card-1766295621471"><i class="fas fa-link"></i> <span id="lbl4-card-1766295621471">Link 4</span></a>
+                    </div>
+
+                    <input type="hidden" id="user-card-1766295621471" value="user">
+                    <input type="hidden" id="pass-card-1766295621471" value="pass">
+                    
+                    <input type="hidden" id="url1-card-1766295621471" value="#">
+                         <input type="hidden" id="name1-card-1766295621471" value="Link 1"><input type="hidden" id="url2-card-1766295621471" value="#">
+                         <input type="hidden" id="name2-card-1766295621471" value="Link 2"><input type="hidden" id="url3-card-1766295621471" value="#">
+                         <input type="hidden" id="name3-card-1766295621471" value="Link 3"><input type="hidden" id="url4-card-1766295621471" value="#">
+                         <input type="hidden" id="name4-card-1766295621471" value="Link 4">
+
+                    <div class="admin-controls">
+                        <div class="admin-group">
+                            <label class="admin-label">Username &amp; Password:</label>
+                            <input type="text" class="admin-input" placeholder="User" onchange="updateValue('user-card-1766295621471', this.value)" value="user">
+                            <input type="text" class="admin-input" placeholder="Pass" onchange="updateValue('pass-card-1766295621471', this.value)" value="pass">
+                        </div>
+                        
+                <div class="admin-group">
+                    <label class="admin-label">Link 1 (Name &amp; URL):</label>
+                    <input type="text" class="admin-input" onchange="updateLinkName('card-1766295621471', 1, this.value)" value="Link 1">
+                    <input type="text" class="admin-input" onchange="updateLinkURL('card-1766295621471', 1, this.value)" value="#">
+                </div>
+                <div class="admin-group">
+                    <label class="admin-label">Link 2 (Name &amp; URL):</label>
+                    <input type="text" class="admin-input" onchange="updateLinkName('card-1766295621471', 2, this.value)" value="Link 2">
+                    <input type="text" class="admin-input" onchange="updateLinkURL('card-1766295621471', 2, this.value)" value="#">
+                </div>
+                <div class="admin-group">
+                    <label class="admin-label">Link 3 (Name &amp; URL):</label>
+                    <input type="text" class="admin-input" onchange="updateLinkName('card-1766295621471', 3, this.value)" value="Link 3">
+                    <input type="text" class="admin-input" onchange="updateLinkURL('card-1766295621471', 3, this.value)" value="#">
+                </div>
+                <div class="admin-group">
+                    <label class="admin-label">Link 4 (Name &amp; URL):</label>
+                    <input type="text" class="admin-input" onchange="updateLinkName('card-1766295621471', 4, this.value)" value="Link 4">
+                    <input type="text" class="admin-input" onchange="updateLinkURL('card-1766295621471', 4, this.value)" value="#">
+                </div>
+                        <button class="delete-btn" onclick="removeCard('card-1766295621471')">Delete Card</button>
+                    </div>
+                </div>
+            </div><div class="card" id="card-1766295622057">
+                <div class="card-img-area">
+                    <span class="type-tag" contenteditable="false">NEW</span>
+                    <i class="fas fa-layer-group"></i>
+                </div>
+                <div class="card-body">
+                    <div class="card-title" contenteditable="false">އައު ކާޑު</div>
+                    <div class="card-desc" contenteditable="false">މިތަނުގައި ތަފްސީލް ލިޔުއްވާ...</div>
+                    
+                    <div class="lock-container" id="lock-div-card-1766295622057" style="display: block;">
+                        <button class="lock-btn" onclick="openLogin('card-1766295622057')"><i class="fas fa-lock"></i> ކޮންޓެންޓްތައް ބައްލަވާ</button>
+                    </div>
+
+                    <div class="unlocked-links" id="links-div-card-1766295622057" style="display: none;">
+                        <a href="#" target="_blank" class="resource-link-btn" id="btn1-card-1766295622057"><i class="fas fa-link"></i> <span id="lbl1-card-1766295622057">Link 1</span></a>
+                        <a href="#" target="_blank" class="resource-link-btn" id="btn2-card-1766295622057"><i class="fas fa-link"></i> <span id="lbl2-card-1766295622057">Link 2</span></a>
+                        <a href="#" target="_blank" class="resource-link-btn" id="btn3-card-1766295622057"><i class="fas fa-link"></i> <span id="lbl3-card-1766295622057">Link 3</span></a>
+                        <a href="#" target="_blank" class="resource-link-btn" id="btn4-card-1766295622057"><i class="fas fa-link"></i> <span id="lbl4-card-1766295622057">Link 4</span></a>
+                    </div>
+
+                    <input type="hidden" id="user-card-1766295622057" value="user">
+                    <input type="hidden" id="pass-card-1766295622057" value="pass">
+                    
+                    <input type="hidden" id="url1-card-1766295622057" value="#">
+                         <input type="hidden" id="name1-card-1766295622057" value="Link 1"><input type="hidden" id="url2-card-1766295622057" value="#">
+                         <input type="hidden" id="name2-card-1766295622057" value="Link 2"><input type="hidden" id="url3-card-1766295622057" value="#">
+                         <input type="hidden" id="name3-card-1766295622057" value="Link 3"><input type="hidden" id="url4-card-1766295622057" value="#">
+                         <input type="hidden" id="name4-card-1766295622057" value="Link 4">
+
+                    <div class="admin-controls">
+                        <div class="admin-group">
+                            <label class="admin-label">Username &amp; Password:</label>
+                            <input type="text" class="admin-input" placeholder="User" onchange="updateValue('user-card-1766295622057', this.value)" value="user">
+                            <input type="text" class="admin-input" placeholder="Pass" onchange="updateValue('pass-card-1766295622057', this.value)" value="pass">
+                        </div>
+                        
+                <div class="admin-group">
+                    <label class="admin-label">Link 1 (Name &amp; URL):</label>
+                    <input type="text" class="admin-input" onchange="updateLinkName('card-1766295622057', 1, this.value)" value="Link 1">
+                    <input type="text" class="admin-input" onchange="updateLinkURL('card-1766295622057', 1, this.value)" value="#">
+                </div>
+                <div class="admin-group">
+                    <label class="admin-label">Link 2 (Name &amp; URL):</label>
+                    <input type="text" class="admin-input" onchange="updateLinkName('card-1766295622057', 2, this.value)" value="Link 2">
+                    <input type="text" class="admin-input" onchange="updateLinkURL('card-1766295622057', 2, this.value)" value="#">
+                </div>
+                <div class="admin-group">
+                    <label class="admin-label">Link 3 (Name &amp; URL):</label>
+                    <input type="text" class="admin-input" onchange="updateLinkName('card-1766295622057', 3, this.value)" value="Link 3">
+                    <input type="text" class="admin-input" onchange="updateLinkURL('card-1766295622057', 3, this.value)" value="#">
+                </div>
+                <div class="admin-group">
+                    <label class="admin-label">Link 4 (Name &amp; URL):</label>
+                    <input type="text" class="admin-input" onchange="updateLinkName('card-1766295622057', 4, this.value)" value="Link 4">
+                    <input type="text" class="admin-input" onchange="updateLinkURL('card-1766295622057', 4, this.value)" value="#">
+                </div>
+                        <button class="delete-btn" onclick="removeCard('card-1766295622057')">Delete Card</button>
+                    </div>
+                </div>
+            </div><div class="card" id="card-1766295622791">
+                <div class="card-img-area">
+                    <span class="type-tag" contenteditable="false">NEW</span>
+                    <i class="fas fa-layer-group"></i>
+                </div>
+                <div class="card-body">
+                    <div class="card-title" contenteditable="false">އައު ކާޑު</div>
+                    <div class="card-desc" contenteditable="false">މިތަނުގައި ތަފްސީލް ލިޔުއްވާ...</div>
+                    
+                    <div class="lock-container" id="lock-div-card-1766295622791" style="display: block;">
+                        <button class="lock-btn" onclick="openLogin('card-1766295622791')"><i class="fas fa-lock"></i> ކޮންޓެންޓްތައް ބައްލަވާ</button>
+                    </div>
+
+                    <div class="unlocked-links" id="links-div-card-1766295622791" style="display: none;">
+                        <a href="#" target="_blank" class="resource-link-btn" id="btn1-card-1766295622791"><i class="fas fa-link"></i> <span id="lbl1-card-1766295622791">Link 1</span></a>
+                        <a href="#" target="_blank" class="resource-link-btn" id="btn2-card-1766295622791"><i class="fas fa-link"></i> <span id="lbl2-card-1766295622791">Link 2</span></a>
+                        <a href="#" target="_blank" class="resource-link-btn" id="btn3-card-1766295622791"><i class="fas fa-link"></i> <span id="lbl3-card-1766295622791">Link 3</span></a>
+                        <a href="#" target="_blank" class="resource-link-btn" id="btn4-card-1766295622791"><i class="fas fa-link"></i> <span id="lbl4-card-1766295622791">Link 4</span></a>
+                    </div>
+
+                    <input type="hidden" id="user-card-1766295622791" value="user">
+                    <input type="hidden" id="pass-card-1766295622791" value="pass">
+                    
+                    <input type="hidden" id="url1-card-1766295622791" value="#">
+                         <input type="hidden" id="name1-card-1766295622791" value="Link 1"><input type="hidden" id="url2-card-1766295622791" value="#">
+                         <input type="hidden" id="name2-card-1766295622791" value="Link 2"><input type="hidden" id="url3-card-1766295622791" value="#">
+                         <input type="hidden" id="name3-card-1766295622791" value="Link 3"><input type="hidden" id="url4-card-1766295622791" value="#">
+                         <input type="hidden" id="name4-card-1766295622791" value="Link 4">
+
+                    <div class="admin-controls">
+                        <div class="admin-group">
+                            <label class="admin-label">Username &amp; Password:</label>
+                            <input type="text" class="admin-input" placeholder="User" onchange="updateValue('user-card-1766295622791', this.value)" value="user">
+                            <input type="text" class="admin-input" placeholder="Pass" onchange="updateValue('pass-card-1766295622791', this.value)" value="pass">
+                        </div>
+                        
+                <div class="admin-group">
+                    <label class="admin-label">Link 1 (Name &amp; URL):</label>
+                    <input type="text" class="admin-input" onchange="updateLinkName('card-1766295622791', 1, this.value)" value="Link 1">
+                    <input type="text" class="admin-input" onchange="updateLinkURL('card-1766295622791', 1, this.value)" value="#">
+                </div>
+                <div class="admin-group">
+                    <label class="admin-label">Link 2 (Name &amp; URL):</label>
+                    <input type="text" class="admin-input" onchange="updateLinkName('card-1766295622791', 2, this.value)" value="Link 2">
+                    <input type="text" class="admin-input" onchange="updateLinkURL('card-1766295622791', 2, this.value)" value="#">
+                </div>
+                <div class="admin-group">
+                    <label class="admin-label">Link 3 (Name &amp; URL):</label>
+                    <input type="text" class="admin-input" onchange="updateLinkName('card-1766295622791', 3, this.value)" value="Link 3">
+                    <input type="text" class="admin-input" onchange="updateLinkURL('card-1766295622791', 3, this.value)" value="#">
+                </div>
+                <div class="admin-group">
+                    <label class="admin-label">Link 4 (Name &amp; URL):</label>
+                    <input type="text" class="admin-input" onchange="updateLinkName('card-1766295622791', 4, this.value)" value="Link 4">
+                    <input type="text" class="admin-input" onchange="updateLinkURL('card-1766295622791', 4, this.value)" value="#">
+                </div>
+                        <button class="delete-btn" onclick="removeCard('card-1766295622791')">Delete Card</button>
+                    </div>
+                </div>
+            </div><div class="card" id="card-1766295623048">
+                <div class="card-img-area">
+                    <span class="type-tag" contenteditable="false">NEW</span>
+                    <i class="fas fa-layer-group"></i>
+                </div>
+                <div class="card-body">
+                    <div class="card-title" contenteditable="false">އައު ކާޑު</div>
+                    <div class="card-desc" contenteditable="false">މިތަނުގައި ތަފްސީލް ލިޔުއްވާ...</div>
+                    
+                    <div class="lock-container" id="lock-div-card-1766295623048" style="display: block;">
+                        <button class="lock-btn" onclick="openLogin('card-1766295623048')"><i class="fas fa-lock"></i> ކޮންޓެންޓްތައް ބައްލަވާ</button>
+                    </div>
+
+                    <div class="unlocked-links" id="links-div-card-1766295623048" style="display: none;">
+                        <a href="#" target="_blank" class="resource-link-btn" id="btn1-card-1766295623048"><i class="fas fa-link"></i> <span id="lbl1-card-1766295623048">Link 1</span></a>
+                        <a href="#" target="_blank" class="resource-link-btn" id="btn2-card-1766295623048"><i class="fas fa-link"></i> <span id="lbl2-card-1766295623048">Link 2</span></a>
+                        <a href="#" target="_blank" class="resource-link-btn" id="btn3-card-1766295623048"><i class="fas fa-link"></i> <span id="lbl3-card-1766295623048">Link 3</span></a>
+                        <a href="#" target="_blank" class="resource-link-btn" id="btn4-card-1766295623048"><i class="fas fa-link"></i> <span id="lbl4-card-1766295623048">Link 4</span></a>
+                    </div>
+
+                    <input type="hidden" id="user-card-1766295623048" value="user">
+                    <input type="hidden" id="pass-card-1766295623048" value="pass">
+                    
+                    <input type="hidden" id="url1-card-1766295623048" value="#">
+                         <input type="hidden" id="name1-card-1766295623048" value="Link 1"><input type="hidden" id="url2-card-1766295623048" value="#">
+                         <input type="hidden" id="name2-card-1766295623048" value="Link 2"><input type="hidden" id="url3-card-1766295623048" value="#">
+                         <input type="hidden" id="name3-card-1766295623048" value="Link 3"><input type="hidden" id="url4-card-1766295623048" value="#">
+                         <input type="hidden" id="name4-card-1766295623048" value="Link 4">
+
+                    <div class="admin-controls">
+                        <div class="admin-group">
+                            <label class="admin-label">Username &amp; Password:</label>
+                            <input type="text" class="admin-input" placeholder="User" onchange="updateValue('user-card-1766295623048', this.value)" value="user">
+                            <input type="text" class="admin-input" placeholder="Pass" onchange="updateValue('pass-card-1766295623048', this.value)" value="pass">
+                        </div>
+                        
+                <div class="admin-group">
+                    <label class="admin-label">Link 1 (Name &amp; URL):</label>
+                    <input type="text" class="admin-input" onchange="updateLinkName('card-1766295623048', 1, this.value)" value="Link 1">
+                    <input type="text" class="admin-input" onchange="updateLinkURL('card-1766295623048', 1, this.value)" value="#">
+                </div>
+                <div class="admin-group">
+                    <label class="admin-label">Link 2 (Name &amp; URL):</label>
+                    <input type="text" class="admin-input" onchange="updateLinkName('card-1766295623048', 2, this.value)" value="Link 2">
+                    <input type="text" class="admin-input" onchange="updateLinkURL('card-1766295623048', 2, this.value)" value="#">
+                </div>
+                <div class="admin-group">
+                    <label class="admin-label">Link 3 (Name &amp; URL):</label>
+                    <input type="text" class="admin-input" onchange="updateLinkName('card-1766295623048', 3, this.value)" value="Link 3">
+                    <input type="text" class="admin-input" onchange="updateLinkURL('card-1766295623048', 3, this.value)" value="#">
+                </div>
+                <div class="admin-group">
+                    <label class="admin-label">Link 4 (Name &amp; URL):</label>
+                    <input type="text" class="admin-input" onchange="updateLinkName('card-1766295623048', 4, this.value)" value="Link 4">
+                    <input type="text" class="admin-input" onchange="updateLinkURL('card-1766295623048', 4, this.value)" value="#">
+                </div>
+                        <button class="delete-btn" onclick="removeCard('card-1766295623048')">Delete Card</button>
+                    </div>
+                </div>
+            </div><div class="card" id="card-1766295623271">
+                <div class="card-img-area">
+                    <span class="type-tag" contenteditable="false">NEW</span>
+                    <i class="fas fa-layer-group"></i>
+                </div>
+                <div class="card-body">
+                    <div class="card-title" contenteditable="false">އައު ކާޑު</div>
+                    <div class="card-desc" contenteditable="false">މިތަނުގައި ތަފްސީލް ލިޔުއްވާ...</div>
+                    
+                    <div class="lock-container" id="lock-div-card-1766295623271" style="display: block;">
+                        <button class="lock-btn" onclick="openLogin('card-1766295623271')"><i class="fas fa-lock"></i> ކޮންޓެންޓްތައް ބައްލަވާ</button>
+                    </div>
+
+                    <div class="unlocked-links" id="links-div-card-1766295623271" style="display: none;">
+                        <a href="#" target="_blank" class="resource-link-btn" id="btn1-card-1766295623271"><i class="fas fa-link"></i> <span id="lbl1-card-1766295623271">Link 1</span></a>
+                        <a href="#" target="_blank" class="resource-link-btn" id="btn2-card-1766295623271"><i class="fas fa-link"></i> <span id="lbl2-card-1766295623271">Link 2</span></a>
+                        <a href="#" target="_blank" class="resource-link-btn" id="btn3-card-1766295623271"><i class="fas fa-link"></i> <span id="lbl3-card-1766295623271">Link 3</span></a>
+                        <a href="#" target="_blank" class="resource-link-btn" id="btn4-card-1766295623271"><i class="fas fa-link"></i> <span id="lbl4-card-1766295623271">Link 4</span></a>
+                    </div>
+
+                    <input type="hidden" id="user-card-1766295623271" value="user">
+                    <input type="hidden" id="pass-card-1766295623271" value="pass">
+                    
+                    <input type="hidden" id="url1-card-1766295623271" value="#">
+                         <input type="hidden" id="name1-card-1766295623271" value="Link 1"><input type="hidden" id="url2-card-1766295623271" value="#">
+                         <input type="hidden" id="name2-card-1766295623271" value="Link 2"><input type="hidden" id="url3-card-1766295623271" value="#">
+                         <input type="hidden" id="name3-card-1766295623271" value="Link 3"><input type="hidden" id="url4-card-1766295623271" value="#">
+                         <input type="hidden" id="name4-card-1766295623271" value="Link 4">
+
+                    <div class="admin-controls">
+                        <div class="admin-group">
+                            <label class="admin-label">Username &amp; Password:</label>
+                            <input type="text" class="admin-input" placeholder="User" onchange="updateValue('user-card-1766295623271', this.value)" value="user">
+                            <input type="text" class="admin-input" placeholder="Pass" onchange="updateValue('pass-card-1766295623271', this.value)" value="pass">
+                        </div>
+                        
+                <div class="admin-group">
+                    <label class="admin-label">Link 1 (Name &amp; URL):</label>
+                    <input type="text" class="admin-input" onchange="updateLinkName('card-1766295623271', 1, this.value)" value="Link 1">
+                    <input type="text" class="admin-input" onchange="updateLinkURL('card-1766295623271', 1, this.value)" value="#">
+                </div>
+                <div class="admin-group">
+                    <label class="admin-label">Link 2 (Name &amp; URL):</label>
+                    <input type="text" class="admin-input" onchange="updateLinkName('card-1766295623271', 2, this.value)" value="Link 2">
+                    <input type="text" class="admin-input" onchange="updateLinkURL('card-1766295623271', 2, this.value)" value="#">
+                </div>
+                <div class="admin-group">
+                    <label class="admin-label">Link 3 (Name &amp; URL):</label>
+                    <input type="text" class="admin-input" onchange="updateLinkName('card-1766295623271', 3, this.value)" value="Link 3">
+                    <input type="text" class="admin-input" onchange="updateLinkURL('card-1766295623271', 3, this.value)" value="#">
+                </div>
+                <div class="admin-group">
+                    <label class="admin-label">Link 4 (Name &amp; URL):</label>
+                    <input type="text" class="admin-input" onchange="updateLinkName('card-1766295623271', 4, this.value)" value="Link 4">
+                    <input type="text" class="admin-input" onchange="updateLinkURL('card-1766295623271', 4, this.value)" value="#">
+                </div>
+                        <button class="delete-btn" onclick="removeCard('card-1766295623271')">Delete Card</button>
+                    </div>
+                </div>
+            </div><div class="card" id="card-1766295623499">
+                <div class="card-img-area">
+                    <span class="type-tag" contenteditable="false">NEW</span>
+                    <i class="fas fa-layer-group"></i>
+                </div>
+                <div class="card-body">
+                    <div class="card-title" contenteditable="false">އައު ކާޑު</div>
+                    <div class="card-desc" contenteditable="false">މިތަނުގައި ތަފްސީލް ލިޔުއްވާ...</div>
+                    
+                    <div class="lock-container" id="lock-div-card-1766295623499" style="display: block;">
+                        <button class="lock-btn" onclick="openLogin('card-1766295623499')"><i class="fas fa-lock"></i> ކޮންޓެންޓްތައް ބައްލަވާ</button>
+                    </div>
+
+                    <div class="unlocked-links" id="links-div-card-1766295623499" style="display: none;">
+                        <a href="#" target="_blank" class="resource-link-btn" id="btn1-card-1766295623499"><i class="fas fa-link"></i> <span id="lbl1-card-1766295623499">Link 1</span></a>
+                        <a href="#" target="_blank" class="resource-link-btn" id="btn2-card-1766295623499"><i class="fas fa-link"></i> <span id="lbl2-card-1766295623499">Link 2</span></a>
+                        <a href="#" target="_blank" class="resource-link-btn" id="btn3-card-1766295623499"><i class="fas fa-link"></i> <span id="lbl3-card-1766295623499">Link 3</span></a>
+                        <a href="#" target="_blank" class="resource-link-btn" id="btn4-card-1766295623499"><i class="fas fa-link"></i> <span id="lbl4-card-1766295623499">Link 4</span></a>
+                    </div>
+
+                    <input type="hidden" id="user-card-1766295623499" value="user">
+                    <input type="hidden" id="pass-card-1766295623499" value="pass">
+                    
+                    <input type="hidden" id="url1-card-1766295623499" value="#">
+                         <input type="hidden" id="name1-card-1766295623499" value="Link 1"><input type="hidden" id="url2-card-1766295623499" value="#">
+                         <input type="hidden" id="name2-card-1766295623499" value="Link 2"><input type="hidden" id="url3-card-1766295623499" value="#">
+                         <input type="hidden" id="name3-card-1766295623499" value="Link 3"><input type="hidden" id="url4-card-1766295623499" value="#">
+                         <input type="hidden" id="name4-card-1766295623499" value="Link 4">
+
+                    <div class="admin-controls">
+                        <div class="admin-group">
+                            <label class="admin-label">Username &amp; Password:</label>
+                            <input type="text" class="admin-input" placeholder="User" onchange="updateValue('user-card-1766295623499', this.value)" value="user">
+                            <input type="text" class="admin-input" placeholder="Pass" onchange="updateValue('pass-card-1766295623499', this.value)" value="pass">
+                        </div>
+                        
+                <div class="admin-group">
+                    <label class="admin-label">Link 1 (Name &amp; URL):</label>
+                    <input type="text" class="admin-input" onchange="updateLinkName('card-1766295623499', 1, this.value)" value="Link 1">
+                    <input type="text" class="admin-input" onchange="updateLinkURL('card-1766295623499', 1, this.value)" value="#">
+                </div>
+                <div class="admin-group">
+                    <label class="admin-label">Link 2 (Name &amp; URL):</label>
+                    <input type="text" class="admin-input" onchange="updateLinkName('card-1766295623499', 2, this.value)" value="Link 2">
+                    <input type="text" class="admin-input" onchange="updateLinkURL('card-1766295623499', 2, this.value)" value="#">
+                </div>
+                <div class="admin-group">
+                    <label class="admin-label">Link 3 (Name &amp; URL):</label>
+                    <input type="text" class="admin-input" onchange="updateLinkName('card-1766295623499', 3, this.value)" value="Link 3">
+                    <input type="text" class="admin-input" onchange="updateLinkURL('card-1766295623499', 3, this.value)" value="#">
+                </div>
+                <div class="admin-group">
+                    <label class="admin-label">Link 4 (Name &amp; URL):</label>
+                    <input type="text" class="admin-input" onchange="updateLinkName('card-1766295623499', 4, this.value)" value="Link 4">
+                    <input type="text" class="admin-input" onchange="updateLinkURL('card-1766295623499', 4, this.value)" value="#">
+                </div>
+                        <button class="delete-btn" onclick="removeCard('card-1766295623499')">Delete Card</button>
+                    </div>
+                </div>
+            </div><div class="card" id="card-1766295623724">
+                <div class="card-img-area">
+                    <span class="type-tag" contenteditable="false">NEW</span>
+                    <i class="fas fa-layer-group"></i>
+                </div>
+                <div class="card-body">
+                    <div class="card-title" contenteditable="false">އައު ކާޑު</div>
+                    <div class="card-desc" contenteditable="false">މިތަނުގައި ތަފްސީލް ލިޔުއްވާ...</div>
+                    
+                    <div class="lock-container" id="lock-div-card-1766295623724" style="display: block;">
+                        <button class="lock-btn" onclick="openLogin('card-1766295623724')"><i class="fas fa-lock"></i> ކޮންޓެންޓްތައް ބައްލަވާ</button>
+                    </div>
+
+                    <div class="unlocked-links" id="links-div-card-1766295623724" style="display: none;">
+                        <a href="#" target="_blank" class="resource-link-btn" id="btn1-card-1766295623724"><i class="fas fa-link"></i> <span id="lbl1-card-1766295623724">Link 1</span></a>
+                        <a href="#" target="_blank" class="resource-link-btn" id="btn2-card-1766295623724"><i class="fas fa-link"></i> <span id="lbl2-card-1766295623724">Link 2</span></a>
+                        <a href="#" target="_blank" class="resource-link-btn" id="btn3-card-1766295623724"><i class="fas fa-link"></i> <span id="lbl3-card-1766295623724">Link 3</span></a>
+                        <a href="#" target="_blank" class="resource-link-btn" id="btn4-card-1766295623724"><i class="fas fa-link"></i> <span id="lbl4-card-1766295623724">Link 4</span></a>
+                    </div>
+
+                    <input type="hidden" id="user-card-1766295623724" value="user">
+                    <input type="hidden" id="pass-card-1766295623724" value="pass">
+                    
+                    <input type="hidden" id="url1-card-1766295623724" value="#">
+                         <input type="hidden" id="name1-card-1766295623724" value="Link 1"><input type="hidden" id="url2-card-1766295623724" value="#">
+                         <input type="hidden" id="name2-card-1766295623724" value="Link 2"><input type="hidden" id="url3-card-1766295623724" value="#">
+                         <input type="hidden" id="name3-card-1766295623724" value="Link 3"><input type="hidden" id="url4-card-1766295623724" value="#">
+                         <input type="hidden" id="name4-card-1766295623724" value="Link 4">
+
+                    <div class="admin-controls">
+                        <div class="admin-group">
+                            <label class="admin-label">Username &amp; Password:</label>
+                            <input type="text" class="admin-input" placeholder="User" onchange="updateValue('user-card-1766295623724', this.value)" value="user">
+                            <input type="text" class="admin-input" placeholder="Pass" onchange="updateValue('pass-card-1766295623724', this.value)" value="pass">
+                        </div>
+                        
+                <div class="admin-group">
+                    <label class="admin-label">Link 1 (Name &amp; URL):</label>
+                    <input type="text" class="admin-input" onchange="updateLinkName('card-1766295623724', 1, this.value)" value="Link 1">
+                    <input type="text" class="admin-input" onchange="updateLinkURL('card-1766295623724', 1, this.value)" value="#">
+                </div>
+                <div class="admin-group">
+                    <label class="admin-label">Link 2 (Name &amp; URL):</label>
+                    <input type="text" class="admin-input" onchange="updateLinkName('card-1766295623724', 2, this.value)" value="Link 2">
+                    <input type="text" class="admin-input" onchange="updateLinkURL('card-1766295623724', 2, this.value)" value="#">
+                </div>
+                <div class="admin-group">
+                    <label class="admin-label">Link 3 (Name &amp; URL):</label>
+                    <input type="text" class="admin-input" onchange="updateLinkName('card-1766295623724', 3, this.value)" value="Link 3">
+                    <input type="text" class="admin-input" onchange="updateLinkURL('card-1766295623724', 3, this.value)" value="#">
+                </div>
+                <div class="admin-group">
+                    <label class="admin-label">Link 4 (Name &amp; URL):</label>
+                    <input type="text" class="admin-input" onchange="updateLinkName('card-1766295623724', 4, this.value)" value="Link 4">
+                    <input type="text" class="admin-input" onchange="updateLinkURL('card-1766295623724', 4, this.value)" value="#">
+                </div>
+                        <button class="delete-btn" onclick="removeCard('card-1766295623724')">Delete Card</button>
+                    </div>
+                </div>
+            </div><div class="card" id="card-1766295623904">
+                <div class="card-img-area">
+                    <span class="type-tag" contenteditable="false">NEW</span>
+                    <i class="fas fa-layer-group"></i>
+                </div>
+                <div class="card-body">
+                    <div class="card-title" contenteditable="false">އައު ކާޑު</div>
+                    <div class="card-desc" contenteditable="false">މިތަނުގައި ތަފްސީލް ލިޔުއްވާ...</div>
+                    
+                    <div class="lock-container" id="lock-div-card-1766295623904" style="display: block;">
+                        <button class="lock-btn" onclick="openLogin('card-1766295623904')"><i class="fas fa-lock"></i> ކޮންޓެންޓްތައް ބައްލަވާ</button>
+                    </div>
+
+                    <div class="unlocked-links" id="links-div-card-1766295623904" style="display: none;">
+                        <a href="#" target="_blank" class="resource-link-btn" id="btn1-card-1766295623904"><i class="fas fa-link"></i> <span id="lbl1-card-1766295623904">Link 1</span></a>
+                        <a href="#" target="_blank" class="resource-link-btn" id="btn2-card-1766295623904"><i class="fas fa-link"></i> <span id="lbl2-card-1766295623904">Link 2</span></a>
+                        <a href="#" target="_blank" class="resource-link-btn" id="btn3-card-1766295623904"><i class="fas fa-link"></i> <span id="lbl3-card-1766295623904">Link 3</span></a>
+                        <a href="#" target="_blank" class="resource-link-btn" id="btn4-card-1766295623904"><i class="fas fa-link"></i> <span id="lbl4-card-1766295623904">Link 4</span></a>
+                    </div>
+
+                    <input type="hidden" id="user-card-1766295623904" value="user">
+                    <input type="hidden" id="pass-card-1766295623904" value="pass">
+                    
+                    <input type="hidden" id="url1-card-1766295623904" value="#">
+                         <input type="hidden" id="name1-card-1766295623904" value="Link 1"><input type="hidden" id="url2-card-1766295623904" value="#">
+                         <input type="hidden" id="name2-card-1766295623904" value="Link 2"><input type="hidden" id="url3-card-1766295623904" value="#">
+                         <input type="hidden" id="name3-card-1766295623904" value="Link 3"><input type="hidden" id="url4-card-1766295623904" value="#">
+                         <input type="hidden" id="name4-card-1766295623904" value="Link 4">
+
+                    <div class="admin-controls">
+                        <div class="admin-group">
+                            <label class="admin-label">Username &amp; Password:</label>
+                            <input type="text" class="admin-input" placeholder="User" onchange="updateValue('user-card-1766295623904', this.value)" value="user">
+                            <input type="text" class="admin-input" placeholder="Pass" onchange="updateValue('pass-card-1766295623904', this.value)" value="pass">
+                        </div>
+                        
+                <div class="admin-group">
+                    <label class="admin-label">Link 1 (Name &amp; URL):</label>
+                    <input type="text" class="admin-input" onchange="updateLinkName('card-1766295623904', 1, this.value)" value="Link 1">
+                    <input type="text" class="admin-input" onchange="updateLinkURL('card-1766295623904', 1, this.value)" value="#">
+                </div>
+                <div class="admin-group">
+                    <label class="admin-label">Link 2 (Name &amp; URL):</label>
+                    <input type="text" class="admin-input" onchange="updateLinkName('card-1766295623904', 2, this.value)" value="Link 2">
+                    <input type="text" class="admin-input" onchange="updateLinkURL('card-1766295623904', 2, this.value)" value="#">
+                </div>
+                <div class="admin-group">
+                    <label class="admin-label">Link 3 (Name &amp; URL):</label>
+                    <input type="text" class="admin-input" onchange="updateLinkName('card-1766295623904', 3, this.value)" value="Link 3">
+                    <input type="text" class="admin-input" onchange="updateLinkURL('card-1766295623904', 3, this.value)" value="#">
+                </div>
+                <div class="admin-group">
+                    <label class="admin-label">Link 4 (Name &amp; URL):</label>
+                    <input type="text" class="admin-input" onchange="updateLinkName('card-1766295623904', 4, this.value)" value="Link 4">
+                    <input type="text" class="admin-input" onchange="updateLinkURL('card-1766295623904', 4, this.value)" value="#">
+                </div>
+                        <button class="delete-btn" onclick="removeCard('card-1766295623904')">Delete Card</button>
+                    </div>
+                </div>
+            </div><div class="card" id="card-1766295624093">
+                <div class="card-img-area">
+                    <span class="type-tag" contenteditable="false">NEW</span>
+                    <i class="fas fa-layer-group"></i>
+                </div>
+                <div class="card-body">
+                    <div class="card-title" contenteditable="false">އައު ކާޑު</div>
+                    <div class="card-desc" contenteditable="false">މިތަނުގައި ތަފްސީލް ލިޔުއްވާ...</div>
+                    
+                    <div class="lock-container" id="lock-div-card-1766295624093" style="display: block;">
+                        <button class="lock-btn" onclick="openLogin('card-1766295624093')"><i class="fas fa-lock"></i> ކޮންޓެންޓްތައް ބައްލަވާ</button>
+                    </div>
+
+                    <div class="unlocked-links" id="links-div-card-1766295624093" style="display: none;">
+                        <a href="#" target="_blank" class="resource-link-btn" id="btn1-card-1766295624093"><i class="fas fa-link"></i> <span id="lbl1-card-1766295624093">Link 1</span></a>
+                        <a href="#" target="_blank" class="resource-link-btn" id="btn2-card-1766295624093"><i class="fas fa-link"></i> <span id="lbl2-card-1766295624093">Link 2</span></a>
+                        <a href="#" target="_blank" class="resource-link-btn" id="btn3-card-1766295624093"><i class="fas fa-link"></i> <span id="lbl3-card-1766295624093">Link 3</span></a>
+                        <a href="#" target="_blank" class="resource-link-btn" id="btn4-card-1766295624093"><i class="fas fa-link"></i> <span id="lbl4-card-1766295624093">Link 4</span></a>
+                    </div>
+
+                    <input type="hidden" id="user-card-1766295624093" value="user">
+                    <input type="hidden" id="pass-card-1766295624093" value="pass">
+                    
+                    <input type="hidden" id="url1-card-1766295624093" value="#">
+                         <input type="hidden" id="name1-card-1766295624093" value="Link 1"><input type="hidden" id="url2-card-1766295624093" value="#">
+                         <input type="hidden" id="name2-card-1766295624093" value="Link 2"><input type="hidden" id="url3-card-1766295624093" value="#">
+                         <input type="hidden" id="name3-card-1766295624093" value="Link 3"><input type="hidden" id="url4-card-1766295624093" value="#">
+                         <input type="hidden" id="name4-card-1766295624093" value="Link 4">
+
+                    <div class="admin-controls">
+                        <div class="admin-group">
+                            <label class="admin-label">Username &amp; Password:</label>
+                            <input type="text" class="admin-input" placeholder="User" onchange="updateValue('user-card-1766295624093', this.value)" value="user">
+                            <input type="text" class="admin-input" placeholder="Pass" onchange="updateValue('pass-card-1766295624093', this.value)" value="pass">
+                        </div>
+                        
+                <div class="admin-group">
+                    <label class="admin-label">Link 1 (Name &amp; URL):</label>
+                    <input type="text" class="admin-input" onchange="updateLinkName('card-1766295624093', 1, this.value)" value="Link 1">
+                    <input type="text" class="admin-input" onchange="updateLinkURL('card-1766295624093', 1, this.value)" value="#">
+                </div>
+                <div class="admin-group">
+                    <label class="admin-label">Link 2 (Name &amp; URL):</label>
+                    <input type="text" class="admin-input" onchange="updateLinkName('card-1766295624093', 2, this.value)" value="Link 2">
+                    <input type="text" class="admin-input" onchange="updateLinkURL('card-1766295624093', 2, this.value)" value="#">
+                </div>
+                <div class="admin-group">
+                    <label class="admin-label">Link 3 (Name &amp; URL):</label>
+                    <input type="text" class="admin-input" onchange="updateLinkName('card-1766295624093', 3, this.value)" value="Link 3">
+                    <input type="text" class="admin-input" onchange="updateLinkURL('card-1766295624093', 3, this.value)" value="#">
+                </div>
+                <div class="admin-group">
+                    <label class="admin-label">Link 4 (Name &amp; URL):</label>
+                    <input type="text" class="admin-input" onchange="updateLinkName('card-1766295624093', 4, this.value)" value="Link 4">
+                    <input type="text" class="admin-input" onchange="updateLinkURL('card-1766295624093', 4, this.value)" value="#">
+                </div>
+                        <button class="delete-btn" onclick="removeCard('card-1766295624093')">Delete Card</button>
+                    </div>
+                </div>
+            </div><div class="card" id="card-1766295624306">
+                <div class="card-img-area">
+                    <span class="type-tag" contenteditable="false">NEW</span>
+                    <i class="fas fa-layer-group"></i>
+                </div>
+                <div class="card-body">
+                    <div class="card-title" contenteditable="false">އައު ކާޑު</div>
+                    <div class="card-desc" contenteditable="false">މިތަނުގައި ތަފްސީލް ލިޔުއްވާ...</div>
+                    
+                    <div class="lock-container" id="lock-div-card-1766295624306" style="display: block;">
+                        <button class="lock-btn" onclick="openLogin('card-1766295624306')"><i class="fas fa-lock"></i> ކޮންޓެންޓްތައް ބައްލަވާ</button>
+                    </div>
+
+                    <div class="unlocked-links" id="links-div-card-1766295624306" style="display: none;">
+                        <a href="#" target="_blank" class="resource-link-btn" id="btn1-card-1766295624306"><i class="fas fa-link"></i> <span id="lbl1-card-1766295624306">Link 1</span></a>
+                        <a href="#" target="_blank" class="resource-link-btn" id="btn2-card-1766295624306"><i class="fas fa-link"></i> <span id="lbl2-card-1766295624306">Link 2</span></a>
+                        <a href="#" target="_blank" class="resource-link-btn" id="btn3-card-1766295624306"><i class="fas fa-link"></i> <span id="lbl3-card-1766295624306">Link 3</span></a>
+                        <a href="#" target="_blank" class="resource-link-btn" id="btn4-card-1766295624306"><i class="fas fa-link"></i> <span id="lbl4-card-1766295624306">Link 4</span></a>
+                    </div>
+
+                    <input type="hidden" id="user-card-1766295624306" value="user">
+                    <input type="hidden" id="pass-card-1766295624306" value="pass">
+                    
+                    <input type="hidden" id="url1-card-1766295624306" value="#">
+                         <input type="hidden" id="name1-card-1766295624306" value="Link 1"><input type="hidden" id="url2-card-1766295624306" value="#">
+                         <input type="hidden" id="name2-card-1766295624306" value="Link 2"><input type="hidden" id="url3-card-1766295624306" value="#">
+                         <input type="hidden" id="name3-card-1766295624306" value="Link 3"><input type="hidden" id="url4-card-1766295624306" value="#">
+                         <input type="hidden" id="name4-card-1766295624306" value="Link 4">
+
+                    <div class="admin-controls">
+                        <div class="admin-group">
+                            <label class="admin-label">Username &amp; Password:</label>
+                            <input type="text" class="admin-input" placeholder="User" onchange="updateValue('user-card-1766295624306', this.value)" value="user">
+                            <input type="text" class="admin-input" placeholder="Pass" onchange="updateValue('pass-card-1766295624306', this.value)" value="pass">
+                        </div>
+                        
+                <div class="admin-group">
+                    <label class="admin-label">Link 1 (Name &amp; URL):</label>
+                    <input type="text" class="admin-input" onchange="updateLinkName('card-1766295624306', 1, this.value)" value="Link 1">
+                    <input type="text" class="admin-input" onchange="updateLinkURL('card-1766295624306', 1, this.value)" value="#">
+                </div>
+                <div class="admin-group">
+                    <label class="admin-label">Link 2 (Name &amp; URL):</label>
+                    <input type="text" class="admin-input" onchange="updateLinkName('card-1766295624306', 2, this.value)" value="Link 2">
+                    <input type="text" class="admin-input" onchange="updateLinkURL('card-1766295624306', 2, this.value)" value="#">
+                </div>
+                <div class="admin-group">
+                    <label class="admin-label">Link 3 (Name &amp; URL):</label>
+                    <input type="text" class="admin-input" onchange="updateLinkName('card-1766295624306', 3, this.value)" value="Link 3">
+                    <input type="text" class="admin-input" onchange="updateLinkURL('card-1766295624306', 3, this.value)" value="#">
+                </div>
+                <div class="admin-group">
+                    <label class="admin-label">Link 4 (Name &amp; URL):</label>
+                    <input type="text" class="admin-input" onchange="updateLinkName('card-1766295624306', 4, this.value)" value="Link 4">
+                    <input type="text" class="admin-input" onchange="updateLinkURL('card-1766295624306', 4, this.value)" value="#">
+                </div>
+                        <button class="delete-btn" onclick="removeCard('card-1766295624306')">Delete Card</button>
+                    </div>
+                </div>
+            </div><div class="card" id="card-1766295633486">
+                <div class="card-img-area">
+                    <span class="type-tag" contenteditable="false">NEW</span>
+                    <i class="fas fa-layer-group"></i>
+                </div>
+                <div class="card-body">
+                    <div class="card-title" contenteditable="false">އައު ކާޑު</div>
+                    <div class="card-desc" contenteditable="false">މިތަނުގައި ތަފްސީލް ލިޔުއްވާ...</div>
+                    
+                    <div class="lock-container" id="lock-div-card-1766295633486" style="display: block;">
+                        <button class="lock-btn" onclick="openLogin('card-1766295633486')"><i class="fas fa-lock"></i> ކޮންޓެންޓްތައް ބައްލަވާ</button>
+                    </div>
+
+                    <div class="unlocked-links" id="links-div-card-1766295633486" style="display: none;">
+                        <a href="#" target="_blank" class="resource-link-btn" id="btn1-card-1766295633486"><i class="fas fa-link"></i> <span id="lbl1-card-1766295633486">Link 1</span></a>
+                        <a href="#" target="_blank" class="resource-link-btn" id="btn2-card-1766295633486"><i class="fas fa-link"></i> <span id="lbl2-card-1766295633486">Link 2</span></a>
+                        <a href="#" target="_blank" class="resource-link-btn" id="btn3-card-1766295633486"><i class="fas fa-link"></i> <span id="lbl3-card-1766295633486">Link 3</span></a>
+                        <a href="#" target="_blank" class="resource-link-btn" id="btn4-card-1766295633486"><i class="fas fa-link"></i> <span id="lbl4-card-1766295633486">Link 4</span></a>
+                    </div>
+
+                    <input type="hidden" id="user-card-1766295633486" value="user">
+                    <input type="hidden" id="pass-card-1766295633486" value="pass">
+                    
+                    <input type="hidden" id="url1-card-1766295633486" value="#">
+                         <input type="hidden" id="name1-card-1766295633486" value="Link 1"><input type="hidden" id="url2-card-1766295633486" value="#">
+                         <input type="hidden" id="name2-card-1766295633486" value="Link 2"><input type="hidden" id="url3-card-1766295633486" value="#">
+                         <input type="hidden" id="name3-card-1766295633486" value="Link 3"><input type="hidden" id="url4-card-1766295633486" value="#">
+                         <input type="hidden" id="name4-card-1766295633486" value="Link 4">
+
+                    <div class="admin-controls">
+                        <div class="admin-group">
+                            <label class="admin-label">Username &amp; Password:</label>
+                            <input type="text" class="admin-input" placeholder="User" onchange="updateValue('user-card-1766295633486', this.value)" value="user">
+                            <input type="text" class="admin-input" placeholder="Pass" onchange="updateValue('pass-card-1766295633486', this.value)" value="pass">
+                        </div>
+                        
+                <div class="admin-group">
+                    <label class="admin-label">Link 1 (Name &amp; URL):</label>
+                    <input type="text" class="admin-input" onchange="updateLinkName('card-1766295633486', 1, this.value)" value="Link 1">
+                    <input type="text" class="admin-input" onchange="updateLinkURL('card-1766295633486', 1, this.value)" value="#">
+                </div>
+                <div class="admin-group">
+                    <label class="admin-label">Link 2 (Name &amp; URL):</label>
+                    <input type="text" class="admin-input" onchange="updateLinkName('card-1766295633486', 2, this.value)" value="Link 2">
+                    <input type="text" class="admin-input" onchange="updateLinkURL('card-1766295633486', 2, this.value)" value="#">
+                </div>
+                <div class="admin-group">
+                    <label class="admin-label">Link 3 (Name &amp; URL):</label>
+                    <input type="text" class="admin-input" onchange="updateLinkName('card-1766295633486', 3, this.value)" value="Link 3">
+                    <input type="text" class="admin-input" onchange="updateLinkURL('card-1766295633486', 3, this.value)" value="#">
+                </div>
+                <div class="admin-group">
+                    <label class="admin-label">Link 4 (Name &amp; URL):</label>
+                    <input type="text" class="admin-input" onchange="updateLinkName('card-1766295633486', 4, this.value)" value="Link 4">
+                    <input type="text" class="admin-input" onchange="updateLinkURL('card-1766295633486', 4, this.value)" value="#">
+                </div>
+                        <button class="delete-btn" onclick="removeCard('card-1766295633486')">Delete Card</button>
+                    </div>
+                </div>
+            </div><div class="card" id="card-1766295633862">
+                <div class="card-img-area">
+                    <span class="type-tag" contenteditable="false">NEW</span>
+                    <i class="fas fa-layer-group"></i>
+                </div>
+                <div class="card-body">
+                    <div class="card-title" contenteditable="false">އައު ކާޑު</div>
+                    <div class="card-desc" contenteditable="false">މިތަނުގައި ތަފްސީލް ލިޔުއްވާ...</div>
+                    
+                    <div class="lock-container" id="lock-div-card-1766295633862" style="display: block;">
+                        <button class="lock-btn" onclick="openLogin('card-1766295633862')"><i class="fas fa-lock"></i> ކޮންޓެންޓްތައް ބައްލަވާ</button>
+                    </div>
+
+                    <div class="unlocked-links" id="links-div-card-1766295633862" style="display: none;">
+                        <a href="#" target="_blank" class="resource-link-btn" id="btn1-card-1766295633862"><i class="fas fa-link"></i> <span id="lbl1-card-1766295633862">Link 1</span></a>
+                        <a href="#" target="_blank" class="resource-link-btn" id="btn2-card-1766295633862"><i class="fas fa-link"></i> <span id="lbl2-card-1766295633862">Link 2</span></a>
+                        <a href="#" target="_blank" class="resource-link-btn" id="btn3-card-1766295633862"><i class="fas fa-link"></i> <span id="lbl3-card-1766295633862">Link 3</span></a>
+                        <a href="#" target="_blank" class="resource-link-btn" id="btn4-card-1766295633862"><i class="fas fa-link"></i> <span id="lbl4-card-1766295633862">Link 4</span></a>
+                    </div>
+
+                    <input type="hidden" id="user-card-1766295633862" value="user">
+                    <input type="hidden" id="pass-card-1766295633862" value="pass">
+                    
+                    <input type="hidden" id="url1-card-1766295633862" value="#">
+                         <input type="hidden" id="name1-card-1766295633862" value="Link 1"><input type="hidden" id="url2-card-1766295633862" value="#">
+                         <input type="hidden" id="name2-card-1766295633862" value="Link 2"><input type="hidden" id="url3-card-1766295633862" value="#">
+                         <input type="hidden" id="name3-card-1766295633862" value="Link 3"><input type="hidden" id="url4-card-1766295633862" value="#">
+                         <input type="hidden" id="name4-card-1766295633862" value="Link 4">
+
+                    <div class="admin-controls">
+                        <div class="admin-group">
+                            <label class="admin-label">Username &amp; Password:</label>
+                            <input type="text" class="admin-input" placeholder="User" onchange="updateValue('user-card-1766295633862', this.value)" value="user">
+                            <input type="text" class="admin-input" placeholder="Pass" onchange="updateValue('pass-card-1766295633862', this.value)" value="pass">
+                        </div>
+                        
+                <div class="admin-group">
+                    <label class="admin-label">Link 1 (Name &amp; URL):</label>
+                    <input type="text" class="admin-input" onchange="updateLinkName('card-1766295633862', 1, this.value)" value="Link 1">
+                    <input type="text" class="admin-input" onchange="updateLinkURL('card-1766295633862', 1, this.value)" value="#">
+                </div>
+                <div class="admin-group">
+                    <label class="admin-label">Link 2 (Name &amp; URL):</label>
+                    <input type="text" class="admin-input" onchange="updateLinkName('card-1766295633862', 2, this.value)" value="Link 2">
+                    <input type="text" class="admin-input" onchange="updateLinkURL('card-1766295633862', 2, this.value)" value="#">
+                </div>
+                <div class="admin-group">
+                    <label class="admin-label">Link 3 (Name &amp; URL):</label>
+                    <input type="text" class="admin-input" onchange="updateLinkName('card-1766295633862', 3, this.value)" value="Link 3">
+                    <input type="text" class="admin-input" onchange="updateLinkURL('card-1766295633862', 3, this.value)" value="#">
+                </div>
+                <div class="admin-group">
+                    <label class="admin-label">Link 4 (Name &amp; URL):</label>
+                    <input type="text" class="admin-input" onchange="updateLinkName('card-1766295633862', 4, this.value)" value="Link 4">
+                    <input type="text" class="admin-input" onchange="updateLinkURL('card-1766295633862', 4, this.value)" value="#">
+                </div>
+                        <button class="delete-btn" onclick="removeCard('card-1766295633862')">Delete Card</button>
+                    </div>
+                </div>
+            </div></div>
     </div>
 
     <div class="admin-bar">
         <div><i class="fas fa-edit"></i> <strong>Admin Mode</strong></div>
-        <button class="save-btn" onclick="downloadPage()">💾 Save & Download</button>
+        <button class="save-btn" onclick="downloadPage()">💾 Save &amp; Download</button>
     </div>
 
     <footer>
@@ -251,8 +1488,8 @@
         <div class="modal-box">
             <h3 style="color:var(--royal-blue); margin-bottom:15px;">Login Required</h3>
             <p style="font-size:0.9em; margin-bottom:15px; color:#666;">މި ކާޑުގައިވާ ލިންކުތައް ބެއްލެވުމަށް ލޮގިން ކުރައްވާ</p>
-            <input type="text" id="modalUser" class="login-inp" placeholder="Username">
-            <input type="password" id="modalPass" class="login-inp" placeholder="Password">
+            <input type="text" id="modalUser" class="login-inp" placeholder="Username" value="">
+            <input type="password" id="modalPass" class="login-inp" placeholder="Password" value="">
             <button class="login-submit" onclick="verifyLogin()">Unlock Links</button>
             <p id="errMsg" style="color:red; font-size:0.9em; margin-top:10px; display:none;">Incorrect Credentials!</p>
         </div>
@@ -443,5 +1680,6 @@
             alert("Saved! Please upload the new file.");
         }
     </script>
-</body>
-</html>
+
+
+<!----comment node----></body></html>
