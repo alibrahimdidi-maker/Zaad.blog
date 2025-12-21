@@ -114,8 +114,16 @@
         .widget-title { font-size: 1.2em; color: var(--royal-blue); margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 8px; font-weight: bold; display: flex; align-items: center; gap: 10px; }
         .widget-title i { color: var(--royal-gold); }
         .side-links li { margin-bottom: 10px; border-bottom: 1px dashed #eee; padding-bottom: 5px; }
+        .side-links a { display: flex; align-items: center; gap: 10px; font-size: 0.95em; color: #444; }
         .side-links a:hover { color: var(--royal-gold); transform: translateX(-5px); }
 
+        /* Special Widget Styles */
+        .quote-box { background: #fffbe6; padding: 15px; border-right: 4px solid var(--royal-gold); font-style: italic; color: #555; }
+        .event-item { margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
+        .event-date { background: var(--royal-blue); color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.8em; font-weight: bold; display: inline-block; margin-bottom: 5px; }
+        .event-title { font-weight: bold; color: #333; display: block; line-height: 1.4; }
+
+        /* Main Content */
         .hero-banner { position: relative; border-radius: 12px; overflow: hidden; height: 350px; margin-bottom: 30px; box-shadow: 0 5px 20px rgba(0,0,0,0.1); }
         .hero-banner img { width: 100%; height: 100%; object-fit: cover; }
         .hero-overlay { position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(to top, rgba(5,22,38,0.9), transparent); padding: 30px; color: white; }
@@ -135,16 +143,7 @@
         .prayer-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px dashed rgba(0,0,0,0.1); font-size: 0.9em; }
         .prayer-time { font-weight: bold; color: var(--royal-blue); font-family: var(--font-en); }
 
-        /* --- FOOTER & GRID --- */
-        footer { 
-            background: var(--royal-blue); 
-            color: #ccc; 
-            padding: 50px 5%; 
-            margin-top: 50px; 
-            text-align: center; 
-            border-top: 5px solid var(--royal-gold); 
-        }
-        
+        footer { background: var(--royal-blue); color: #ccc; padding: 50px 5%; margin-top: 50px; text-align: center; border-top: 5px solid var(--royal-gold); }
         .footer-logo { font-size: 2em; color: var(--royal-gold); margin-bottom: 20px; font-weight: bold; }
         
         .footer-content-grid {
@@ -158,16 +157,16 @@
             padding-bottom: 30px;
         }
         
-        /* FOOTER HEADINGS (FIXED) */
+        /* FOOTER HEADINGS */
         .footer-col-title { 
-            color: var(--royal-gold) !important; /* Force Gold Color */
+            color: var(--royal-gold) !important; 
             font-size: 1.3em; 
             margin-bottom: 15px; 
             font-weight: bold; 
             display: block;
             border-bottom: 2px solid rgba(180, 150, 88, 0.3); 
             padding-bottom: 5px;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.5); /* Shadow for readability */
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5); 
         }
 
         .footer-links-list { list-style: none; padding: 0; margin: 0; }
@@ -178,9 +177,7 @@
         /* --- ADMIN STYLES --- */
         body.admin-active { user-select: auto !important; -webkit-user-select: auto !important; }
         body.admin-active [contenteditable="true"] { outline: 2px dashed #B49658; background: rgba(255,255,255,0.9); cursor: text; min-height: 1em; color: #000; }
-        /* Special handling for footer titles in admin mode so they remain visible when editing */
         body.admin-active .footer-col-title[contenteditable="true"] { color: #B49658 !important; background: rgba(0,0,0,0.5); }
-        
         body.admin-active img { cursor: pointer; border: 2px dashed red; pointer-events: auto; }
         body.admin-active img:hover { opacity: 0.7; }
         
@@ -260,18 +257,29 @@
     <div class="container">
         <aside class="left-sidebar">
             <div class="widget">
+                <h3 class="widget-title"><i class="fas fa-quote-right"></i> ދުވަހުގެ ޙިކުމަތް</h3>
+                <div class="quote-box" contenteditable="false">
+                    "ޢިލްމަކީ މުއުމިނާގެ ގެއްލިފައިވާ މުދަލެކެވެ. އެ ފެނުނު ކޮންމެ ތަނަކުން، އެ ލިބިގަތުމަށް އޭނާ ޙައްޤުކަން ބޮޑެވެ."
+                </div>
+            </div>
+
+            <div class="widget">
                 <h3 class="widget-title"><i class="fas fa-graduation-cap"></i> ދަރިވަރުންނަށް</h3>
                 <ul class="side-links">
-                    <li><a href="#" contenteditable="false"><i class="fas fa-user-lock"></i> ސްޓޫޑެންޓް ޕޯޓަލް</a></li>
+                    <li><a href="https://portal.academyzaad.com" target="_blank" contenteditable="false"><i class="fas fa-user-lock"></i> ސްޓޫޑެންޓް ޕޯޓަލް</a></li>
                     <li><a href="#" contenteditable="false"><i class="fas fa-calendar-alt"></i> އިމްތިޙާނު ތާވަލު</a></li>
                     <li><a href="#" contenteditable="false"><i class="fas fa-file-invoice"></i> ކޯހުގެ ނަތީޖާ</a></li>
                 </ul>
             </div>
+
             <div class="widget">
-                <h3 class="widget-title"><i class="fas fa-phone-alt"></i> ހޮޓްލައިން</h3>
-                <div style="text-align:center;">
-                    <div style="font-size:1.5em; color:var(--royal-blue); font-weight:bold; font-family:var(--font-en);" contenteditable="false">9901550</div>
-                    <small contenteditable="false">އޮފީސް ގަޑީގައި ގުޅުއްވުމަށް</small>
+                <h3 class="widget-title"><i class="fas fa-star"></i> ޚާއްޞަ ކޯސް</h3>
+                <img src="https://images.unsplash.com/photo-1546410531-bb4caa6b424d?w=300" onclick="changeImage(this)" style="margin-bottom:10px;">
+                <div contenteditable="false">
+                    <strong>ސެޓްފިކެޓް 3 އިން އަރަބިކް</strong><br>
+                    މުއްދަތު: 6 މަސް<br>
+                    ފީ: 2500ރ<br>
+                    <a href="courses.html" style="color:var(--royal-gold); font-weight:bold;">އިތުރަށް ބައްލަވާ...</a>
                 </div>
             </div>
         </aside>
@@ -330,13 +338,40 @@
                 <div style="font-size:1.2em;">މާލެ, ދިވެހިރާއްޖެ</div>
                 <div style="margin-top:10px;">30°C | 🌤️</div>
             </div>
+
+            <div class="widget">
+                <h3 class="widget-title"><i class="fas fa-calendar-check"></i> ކުރިއަށް ހުރި ހަރަކާތްތައް</h3>
+                <div class="event-item" contenteditable="false">
+                    <span class="event-date">25 ޑިސެމްބަރު</span>
+                    <span class="event-title">އަހަރީ އިނާމު ދިނުމުގެ ޖަލްސާ</span>
+                </div>
+                <div class="event-item" contenteditable="false">
+                    <span class="event-date">01 ޖަނަވަރީ</span>
+                    <span class="event-title">އައު ސެމިސްޓަރ ފެށުން</span>
+                </div>
+                <div class="event-item" contenteditable="false" style="border:none;">
+                    <span class="event-date">10 ޖަނަވަރީ</span>
+                    <span class="event-title">ދަރިވަރުންގެ ބައްދަލުވުން</span>
+                </div>
+            </div>
+
             <div class="widget">
                 <h3 class="widget-title"><i class="fas fa-mosque"></i> ނަމާދު ވަގުތު</h3>
-                <div class="prayer-row"><span>ފަތިސް</span> <span class="prayer-time" contenteditable="false">04:55</span></div>
-                <div class="prayer-row"><span>މެންދުރު</span> <span class="prayer-time" contenteditable="false">12:15</span></div>
-                <div class="prayer-row"><span>ޢަޞްރު</span> <span class="prayer-time" contenteditable="false">15:40</span></div>
-                <div class="prayer-row"><span>މަޣްރިބް</span> <span class="prayer-time" contenteditable="false">18:10</span></div>
-                <div class="prayer-row"><span>ޢިޝާ</span> <span class="prayer-time" contenteditable="false">19:30</span></div>
+                <div class="prayer-row"><span>ފަތިސް</span> <span class="prayer-time" id="fajr" contenteditable="false">04:55</span></div>
+                <div class="prayer-row"><span>މެންދުރު</span> <span class="prayer-time" id="dhuhr" contenteditable="false">12:15</span></div>
+                <div class="prayer-row"><span>ޢަޞްރު</span> <span class="prayer-time" id="asr" contenteditable="false">15:40</span></div>
+                <div class="prayer-row"><span>މަޣްރިބް</span> <span class="prayer-time" id="maghrib" contenteditable="false">18:10</span></div>
+                <div class="prayer-row"><span>ޢިޝާ</span> <span class="prayer-time" id="isha" contenteditable="false">19:30</span></div>
+            </div>
+
+            <div class="widget">
+                <h3 class="widget-title"><i class="fas fa-link"></i> މުހިންމު ލިންކުތައް</h3>
+                <ul class="side-links">
+                    <li><a href="https://www.moe.gov.mv" target="_blank" contenteditable="false">އެޑިއުކޭޝަން މިނިސްޓްރީ</a></li>
+                    <li><a href="https://ium.edu.mv" target="_blank" contenteditable="false">އިސްލާމިކް ޔުނިވަރސިޓީ</a></li>
+                    <li><a href="https://mqa.gov.mv" target="_blank" contenteditable="false">އެމް.ކިއު.އޭ</a></li>
+                    <li><a href="https://www.islamicaffairs.gov.mv" target="_blank" contenteditable="false">އިސްލާމިކް މިނިސްޓްރީ</a></li>
+                </ul>
             </div>
         </aside>
     </div>
@@ -472,8 +507,13 @@
                 const h = data.data.date.hijri;
                 document.getElementById('date-text').innerText = `${h.day} ${h.month.en} ${h.year}`;
                 const t = data.data.timings;
-                // Assuming elements with these IDs exist or will be populated by order in widget
-                // Note: The widget uses static times in the HTML, can be made dynamic if ids added.
+                
+                // Update Prayer Times (if IDs exist)
+                if(document.getElementById('fajr')) document.getElementById('fajr').innerText = t.Fajr;
+                if(document.getElementById('dhuhr')) document.getElementById('dhuhr').innerText = t.Dhuhr;
+                if(document.getElementById('asr')) document.getElementById('asr').innerText = t.Asr;
+                if(document.getElementById('maghrib')) document.getElementById('maghrib').innerText = t.Maghrib;
+                if(document.getElementById('isha')) document.getElementById('isha').innerText = t.Isha;
             });
 
         function toggleMenu() {
