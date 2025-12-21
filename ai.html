@@ -29,13 +29,13 @@
             background-color: var(--bg-color);
             color: #333;
             padding-bottom: 100px;
-            user-select: none; /* Prevents copying text */
+            user-select: none;
             -webkit-user-select: none;
             -moz-user-select: none;
             -ms-user-select: none;
         }
 
-        /* --- 2. NAVIGATION MENU (NEW) --- */
+        /* --- 2. NAVIGATION MENU --- */
         .top-nav {
             background-color: var(--royal-dark);
             padding: 15px 0;
@@ -60,7 +60,7 @@
         
         .nav-links li a i { margin-left: 8px; font-size: 0.9em; }
 
-        /* --- 3. HEADER --- */
+        /* --- 3. HEADER & ROYAL NOTICE --- */
         header {
             background: linear-gradient(135deg, var(--royal-blue), #051626);
             color: white; padding: 40px 20px; text-align: center;
@@ -69,12 +69,49 @@
         .logo-text { font-family: var(--font-en); font-size: 2.2em; color: var(--royal-gold); }
         .page-sub { font-size: 1.1em; opacity: 0.9; margin-top: 10px; }
 
-        /* --- 4. GRID & CARDS --- */
-        .container { max-width: 1200px; margin: 30px auto; padding: 0 20px; }
+        /* ROYAL NOTICE BOX */
+        .royal-notice-container {
+            max-width: 1000px; margin: 25px auto 10px auto; padding: 0 20px;
+        }
+        .royal-notice {
+            background: var(--royal-dark);
+            color: #fff;
+            border: 2px solid var(--royal-gold);
+            outline: 4px double var(--royal-dark); /* Double border effect */
+            padding: 20px;
+            text-align: center;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            position: relative;
+        }
+        .royal-notice i { color: var(--royal-gold); font-size: 1.5em; margin-bottom: 10px; display: block; }
+        .notice-title { color: var(--royal-gold); font-family: var(--font-dv); font-weight: bold; font-size: 1.3em; margin-bottom: 5px; }
+        .notice-text { font-size: 1.1em; line-height: 1.6; opacity: 0.9; }
+
+        /* --- 4. SEARCH & GRID --- */
+        .container { max-width: 1200px; margin: 10px auto; padding: 0 20px; }
         
+        /* SEARCH BAR STYLES */
+        .search-wrapper {
+            max-width: 600px; margin: 0 auto 30px auto; position: relative;
+        }
+        .search-input {
+            width: 100%; padding: 15px 50px 15px 20px;
+            border: 2px solid #ddd; border-radius: 50px;
+            font-size: 1.1em; font-family: var(--font-dv);
+            text-align: right; outline: none; transition: 0.3s;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            user-select: text; /* Allow typing */
+        }
+        .search-input:focus { border-color: var(--royal-blue); box-shadow: 0 4px 15px rgba(12, 45, 72, 0.2); }
+        .search-icon {
+            position: absolute; right: 20px; top: 50%; transform: translateY(-50%);
+            color: #999; font-size: 1.2em;
+        }
+
         .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
             gap: 25px;
         }
 
@@ -93,8 +130,10 @@
         
         .type-tag {
             position: absolute; top: 10px; right: 10px;
-            background: var(--royal-gold); color: white;
-            padding: 3px 10px; border-radius: 4px; font-size: 0.8em; font-weight: bold;
+            background: var(--royal-blue); color: var(--royal-gold);
+            padding: 5px 12px; border-radius: 4px; font-size: 0.9em; font-weight: bold;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2); letter-spacing: 1px;
+            font-family: sans-serif; /* For clean code display */
         }
 
         .card-body { padding: 20px; flex-grow: 1; }
@@ -120,7 +159,7 @@
             background: #fff; border: 1px solid var(--royal-blue); color: var(--royal-blue);
             border-radius: 6px; text-decoration: none; text-align: center;
             font-weight: bold; font-size: 0.9em; transition: 0.2s;
-            user-select: none; /* Prevent copying link text */
+            user-select: none;
         }
         .resource-link-btn:hover { background: var(--royal-blue); color: white; }
         .resource-link-btn i { margin-left: 8px; }
@@ -139,7 +178,7 @@
         .admin-input {
             width: 100%; padding: 6px; margin-bottom: 5px;
             border: 1px solid #ddd; border-radius: 4px; font-size: 0.9em;
-            font-family: sans-serif; direction: ltr; user-select: text; /* Allow select in inputs */
+            font-family: sans-serif; direction: ltr; user-select: text; 
         }
         
         .delete-btn { background: #ff4444; color: white; border: none; padding: 8px; border-radius: 4px; cursor: pointer; width: 100%; margin-top: 5px; }
@@ -176,25 +215,10 @@
 
     <nav class="top-nav">
         <ul class="nav-links">
-            <li>
-                <a href="index.html"> <i class="fas fa-home"></i> ހޯމް
-                </a>
-            </li>
-            
-            <li>
-                <a href="courses.html"> <i class="fas fa-graduation-cap"></i> ކޯސްތައް
-                </a>
-            </li>
-            
-            <li>
-                <a href="contact.html"> <i class="fas fa-envelope"></i> ގުޅުއްވާ
-                </a>
-            </li>
-
-            <li>
-                <a href="https://zaadacademy.edu.mv"> <i class="fas fa-globe"></i> ޒާދް ވެބްސައިޓް
-                </a>
-            </li>
+            <li><a href="index.html"><i class="fas fa-home"></i> ހޯމް</a></li>
+            <li><a href="courses.html"><i class="fas fa-graduation-cap"></i> ކޯސްތައް</a></li>
+            <li><a href="contact.html"><i class="fas fa-envelope"></i> ގުޅުއްވާ</a></li>
+            <li><a href="https://zaadacademy.edu.mv"><i class="fas fa-globe"></i> ޒާދް ވެބްސައިޓް</a></li>
         </ul>
     </nav>
     <header>
@@ -202,72 +226,26 @@
         <div class="page-sub">ޑިޖިޓަލް ލައިބްރަރީ - 4 ލިންކު ސިސްޓަމް</div>
     </header>
 
+    <div class="royal-notice-container">
+        <div class="royal-notice">
+            <i class="fas fa-crown"></i>
+            <div class="notice-title" contenteditable="false">އެންމެހާ ދަރިވަރުންގެ ސަމާލުކަމަށް</div>
+            <div class="notice-text" contenteditable="false">
+                މިއީ ޒާދް އެކަޑަމީގެ ޑިޖިޓަލް ރިސޯސް ޕޯޓަލްއެވެ. ތިރީގައިވާ ސާރޗް ބާ ގައި ތިޔަ ދަރިވަރަށް ލިބިލައްވާފައިވާ ކޯޑު (Username) ޖެއްސެވުމަށްފަހު، ކާޑު ހުޅުއްވާލައްވާށެވެ.
+            </div>
+        </div>
+    </div>
+
     <div class="container">
-        <button class="add-card-btn" onclick="addNewCard()">+ އައު ކާޑެއް އިތުރުކުރައްވާ</button>
+        <button class="add-card-btn" onclick="addNewCard()">+ Add New Card</button>
+
+        <div class="search-wrapper">
+            <i class="fas fa-search search-icon"></i>
+            <input type="text" id="searchInput" class="search-input" onkeyup="filterCards()" placeholder="ތިޔަ ދަރިވަރުގެ ކޯޑު (Username) ޖައްސަވާ...">
+        </div>
 
         <div class="grid" id="cardContainer">
-            
-            <div class="card" id="card-1">
-                <div class="card-img-area">
-                    <span class="type-tag" contenteditable="false">BUNDLE</span>
-                    <i class="fas fa-layer-group"></i>
-                </div>
-                <div class="card-body">
-                    <div class="card-title" contenteditable="false">ތަޖުވީދު ލެވަލް 1</div>
-                    <div class="card-desc" contenteditable="false">މި ކާޑުގައި ކޯހުގެ ވީޑިއޯ، ފޮތް، އަދި އެސައިންމަންޓް ލިންކުތައް ހިމެނިފައިވާނެއެވެ.</div>
-                    
-                    <div class="lock-container" id="lock-div-card-1">
-                        <button class="lock-btn" onclick="openLogin('card-1')">
-                            <i class="fas fa-lock"></i> ކޮންޓެންޓްތައް ބައްލަވާ
-                        </button>
-                    </div>
-
-                    <div class="unlocked-links" id="links-div-card-1">
-                        <a href="#" target="_blank" class="resource-link-btn" id="btn1-card-1"><i class="fas fa-video"></i> <span id="lbl1-card-1">ވީޑިއޯ ދަރުސް</span></a>
-                        <a href="#" target="_blank" class="resource-link-btn" id="btn2-card-1"><i class="fas fa-file-pdf"></i> <span id="lbl2-card-1">ކޯސް ފޮތް (PDF)</span></a>
-                        <a href="#" target="_blank" class="resource-link-btn" id="btn3-card-1"><i class="fas fa-clipboard-check"></i> <span id="lbl3-card-1">އެސައިންމަންޓް</span></a>
-                        <a href="#" target="_blank" class="resource-link-btn" id="btn4-card-1"><i class="fas fa-globe"></i> <span id="lbl4-card-1">އިތުރު ލިންކް</span></a>
-                    </div>
-
-                    <input type="hidden" id="user-card-1" value="student">
-                    <input type="hidden" id="pass-card-1" value="123">
-                    <input type="hidden" id="url1-card-1" value="#"> <input type="hidden" id="name1-card-1" value="ވީޑިއޯ ދަރުސް">
-                    <input type="hidden" id="url2-card-1" value="#"> <input type="hidden" id="name2-card-1" value="ކޯސް ފޮތް (PDF)">
-                    <input type="hidden" id="url3-card-1" value="#"> <input type="hidden" id="name3-card-1" value="އެސައިންމަންޓް">
-                    <input type="hidden" id="url4-card-1" value="#"> <input type="hidden" id="name4-card-1" value="އިތުރު ލިންކް">
-
-                    <div class="admin-controls">
-                        <div class="admin-group">
-                            <label class="admin-label">Username & Password:</label>
-                            <input type="text" class="admin-input" placeholder="User" onchange="updateValue('user-card-1', this.value)" value="student">
-                            <input type="text" class="admin-input" placeholder="Pass" onchange="updateValue('pass-card-1', this.value)" value="123">
-                        </div>
-                        <div class="admin-group">
-                            <label class="admin-label">Link 1:</label>
-                            <input type="text" class="admin-input" onchange="updateLinkName('card-1', 1, this.value)" value="ވީޑިއޯ ދަރުސް">
-                            <input type="text" class="admin-input" onchange="updateLinkURL('card-1', 1, this.value)" value="#">
-                        </div>
-                        <div class="admin-group">
-                            <label class="admin-label">Link 2:</label>
-                            <input type="text" class="admin-input" onchange="updateLinkName('card-1', 2, this.value)" value="ކޯސް ފޮތް (PDF)">
-                            <input type="text" class="admin-input" onchange="updateLinkURL('card-1', 2, this.value)" value="#">
-                        </div>
-                        <div class="admin-group">
-                            <label class="admin-label">Link 3:</label>
-                            <input type="text" class="admin-input" onchange="updateLinkName('card-1', 3, this.value)" value="އެސައިންމަންޓް">
-                            <input type="text" class="admin-input" onchange="updateLinkURL('card-1', 3, this.value)" value="#">
-                        </div>
-                        <div class="admin-group">
-                            <label class="admin-label">Link 4:</label>
-                            <input type="text" class="admin-input" onchange="updateLinkName('card-1', 4, this.value)" value="އިތުރު ލިންކް">
-                            <input type="text" class="admin-input" onchange="updateLinkURL('card-1', 4, this.value)" value="#">
-                        </div>
-                        <button class="delete-btn" onclick="removeCard('card-1')">Delete Card</button>
-                    </div>
-                </div>
             </div>
-
-        </div>
     </div>
 
     <div class="admin-bar">
@@ -293,31 +271,63 @@
     </div>
 
     <script>
-        // --- 1. SECURITY SCRIPTS (ANTI-THEFT) ---
-        
-        // Disable Right Click
-        document.addEventListener('contextmenu', event => event.preventDefault());
+        // --- 1. INITIALIZATION & DUMMY DATA ---
+        window.onload = function() {
+            // Check if cards already exist (from a saved file). If not, generate 100.
+            const container = document.getElementById('cardContainer');
+            if(container.children.length === 0) {
+                generateDummyData();
+            }
+        };
 
-        // Disable F12, Ctrl+U, Ctrl+Shift+I (DevTools)
-        document.onkeydown = function(e) {
-            if(event.keyCode == 123) { // F12
-                return false;
-            }
-            if(e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) { // Ctrl+Shift+I
-                return false;
-            }
-            if(e.ctrlKey && e.shiftKey && e.keyCode == 'C'.charCodeAt(0)) { // Ctrl+Shift+C
-                return false;
-            }
-            if(e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)) { // Ctrl+Shift+J
-                return false;
-            }
-            if(e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) { // Ctrl+U
-                return false;
+        function generateDummyData() {
+            const grid = document.getElementById('cardContainer');
+            // Generate 100 Cards
+            for(let i=1; i<=100; i++) {
+                const id = 'card-gen-' + i;
+                const userCode = 'ST-' + String(i).padStart(3, '0'); // Creates ST-001, ST-002 etc.
+                const passCode = 'pass' + i; // Simple password
+                
+                const div = document.createElement('div');
+                div.className = 'card';
+                div.id = id;
+                // Note: The badge (type-tag) is NOT contenteditable manually, it updates via input
+                div.innerHTML = getCardHTML(id, userCode, passCode, `Student Card ${i}`, `މިއީ ދަރިވަރު ${userCode} އަށް ޚާއްސަ ކުރެވިފައިވާ ކާޑެވެ.`);
+                grid.appendChild(div);
             }
         }
 
-        // --- 2. LOGIN LOGIC ---
+        // --- 2. SECURITY SCRIPTS (ANTI-THEFT) ---
+        document.addEventListener('contextmenu', event => event.preventDefault());
+        document.onkeydown = function(e) {
+            if(event.keyCode == 123) return false; // F12
+            if(e.ctrlKey && e.shiftKey && (e.keyCode == 'I'.charCodeAt(0) || e.keyCode == 'C'.charCodeAt(0) || e.keyCode == 'J'.charCodeAt(0))) return false;
+            if(e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) return false;
+        }
+
+        // --- 3. SEARCH LOGIC ---
+        function filterCards() {
+            const input = document.getElementById('searchInput');
+            const filter = input.value.toUpperCase();
+            const grid = document.getElementById('cardContainer');
+            const cards = grid.getElementsByClassName('card');
+
+            for (let i = 0; i < cards.length; i++) {
+                const badge = cards[i].querySelector('.type-tag');
+                const title = cards[i].querySelector('.card-title');
+                
+                const badgeTxt = badge ? badge.innerText : "";
+                const titleTxt = title ? title.innerText : "";
+
+                if (badgeTxt.toUpperCase().indexOf(filter) > -1 || titleTxt.toUpperCase().indexOf(filter) > -1) {
+                    cards[i].style.display = "";
+                } else {
+                    cards[i].style.display = "none";
+                }
+            }
+        }
+
+        // --- 4. LOGIN LOGIC ---
         let targetCardId = null;
 
         function openLogin(cardId) {
@@ -360,13 +370,14 @@
             }
         }
 
-        // --- 3. ADMIN LOGIC ---
+        // --- 5. ADMIN LOGIC ---
         function enableAdmin() {
             if(document.body.classList.contains('admin-mode')) return;
             const pass = prompt("Enter Admin Password:");
             if(pass === "admin123") {
                 document.body.classList.add('admin-mode');
-                document.querySelectorAll('.card-title, .card-desc, .type-tag').forEach(el => {
+                // Make text editable
+                document.querySelectorAll('.card-title, .card-desc, .notice-title, .notice-text').forEach(el => {
                     el.setAttribute('contenteditable', 'true');
                 });
                 alert("Edit Mode Active!");
@@ -375,7 +386,17 @@
             }
         }
 
-        function updateValue(id, val) { document.getElementById(id).value = val; }
+        // Core Update Function: Handles Inputs AND Badge Updates
+        function updateValue(id, val) { 
+            document.getElementById(id).value = val; 
+            
+            // If the updated field is a Username field, update the Card Badge
+            if(id.startsWith('user-')) {
+                const cardId = id.replace('user-', '');
+                const badge = document.querySelector(`#${cardId} .type-tag`);
+                if(badge) badge.innerText = val;
+            }
+        }
         
         function updateLinkName(cardId, num, val) {
             document.getElementById(`name${num}-${cardId}`).value = val;
@@ -390,18 +411,23 @@
         function addNewCard() {
             const id = 'card-' + Date.now();
             const grid = document.getElementById('cardContainer');
-            
             const div = document.createElement('div');
             div.className = 'card';
             div.id = id;
-            div.innerHTML = `
+            div.innerHTML = getCardHTML(id, "NEW-USER", "123", "New Card", "Description...");
+            grid.insertBefore(div, grid.firstChild); // Add to top
+        }
+
+        // Helper to generate Card HTML
+        function getCardHTML(id, user, pass, title, desc) {
+            return `
                 <div class="card-img-area">
-                    <span class="type-tag" contenteditable="true">NEW</span>
+                    <span class="type-tag">${user}</span>
                     <i class="fas fa-layer-group"></i>
                 </div>
                 <div class="card-body">
-                    <div class="card-title" contenteditable="true">New Card</div>
-                    <div class="card-desc" contenteditable="true">Description here...</div>
+                    <div class="card-title" contenteditable="${document.body.classList.contains('admin-mode')}">${title}</div>
+                    <div class="card-desc" contenteditable="${document.body.classList.contains('admin-mode')}">${desc}</div>
                     <div class="lock-container" id="lock-div-${id}">
                         <button class="lock-btn" onclick="openLogin('${id}')"><i class="fas fa-lock"></i> View Content</button>
                     </div>
@@ -411,27 +437,27 @@
                         <a href="#" target="_blank" class="resource-link-btn" id="btn3-${id}"><i class="fas fa-link"></i> <span id="lbl3-${id}">Link 3</span></a>
                         <a href="#" target="_blank" class="resource-link-btn" id="btn4-${id}"><i class="fas fa-link"></i> <span id="lbl4-${id}">Link 4</span></a>
                     </div>
-                    <input type="hidden" id="user-${id}" value="user"> <input type="hidden" id="pass-${id}" value="pass">
+                    
+                    <input type="hidden" id="user-${id}" value="${user}"> 
+                    <input type="hidden" id="pass-${id}" value="${pass}">
                     ${generateHiddenInputs(id)}
+                    
                     <div class="admin-controls">
                         <div class="admin-group">
-                            <label class="admin-label">User/Pass:</label>
-                            <input type="text" class="admin-input" onchange="updateValue('user-${id}', this.value)" value="user">
-                            <input type="text" class="admin-input" onchange="updateValue('pass-${id}', this.value)" value="pass">
+                            <label class="admin-label">User (Code) & Password:</label>
+                            <input type="text" class="admin-input" onchange="updateValue('user-${id}', this.value)" value="${user}" placeholder="Username shows on Badge">
+                            <input type="text" class="admin-input" onchange="updateValue('pass-${id}', this.value)" value="${pass}" placeholder="Password">
                         </div>
                         ${generateAdminInputs(id)}
                         <button class="delete-btn" onclick="removeCard('${id}')">Delete Card</button>
                     </div>
                 </div>
             `;
-            grid.appendChild(div);
         }
 
         function generateHiddenInputs(id) {
             let html = '';
-            for(let i=1; i<=4; i++) {
-                html += `<input type="hidden" id="url${i}-${id}" value="#"> <input type="hidden" id="name${i}-${id}" value="Link ${i}">`;
-            }
+            for(let i=1; i<=4; i++) html += `<input type="hidden" id="url${i}-${id}" value="#"> <input type="hidden" id="name${i}-${id}" value="Link ${i}">`;
             return html;
         }
 
@@ -444,7 +470,7 @@
         }
 
         function removeCard(id) {
-            if(confirm("Delete?")) document.getElementById(id).remove();
+            if(confirm("Delete this card?")) document.getElementById(id).remove();
         }
 
         function downloadPage() {
@@ -457,6 +483,10 @@
             clone.querySelectorAll('.lock-container').forEach(el => el.style.display = 'block');
             clone.querySelectorAll('.unlocked-links').forEach(el => el.style.display = 'none');
 
+            // Remove Search Filter effects (Show all cards in saved file)
+            const cards = clone.getElementsByClassName('card');
+            for(let i=0; i<cards.length; i++) cards[i].style.display = "";
+
             const htmlContent = "<!DOCTYPE html>\n" + clone.outerHTML;
             const blob = new Blob([htmlContent], { type: "text/html" });
             const link = document.createElement("a");
@@ -467,7 +497,7 @@
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
-            alert("File Saved!");
+            alert("File Saved! Please use the new file.");
         }
     </script>
 </body>
