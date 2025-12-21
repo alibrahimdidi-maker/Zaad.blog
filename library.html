@@ -11,6 +11,26 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
+        /* --- FONT LOADING FROM LOCAL FOLDER --- */
+        
+        /* 1. Loading Faruma from 'fonts' folder */
+        @font-face {
+            font-family: 'Faruma';
+            src: url('fonts/Faruma.ttf') format('truetype'), /* Looks in folder first */
+                 local('Faruma'); /* Then checks computer */
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        /* 2. Loading Mv Galan from 'fonts' folder */
+        @font-face {
+            font-family: 'Mv Galan';
+            src: url('fonts/Mv Galan.ttf') format('truetype'),
+                 local('Mv Galan');
+            font-weight: normal;
+            font-style: normal;
+        }
+
         /* --- THEME VARIABLES --- */
         :root {
             --primary: #0C2D48;      /* Royal Blue */
@@ -20,8 +40,13 @@
             --accent: #c0392b;       /* Price Red */
             --bg: #f8f9fa;
             --white: #ffffff;
-            /* Font Stack: Noto Sans Thaana is the hero for mobile */
-            --font-dv: 'Noto Sans Thaana', 'Faruma', 'Mv Galan', sans-serif; 
+            
+            /* FONT STACK: 
+               1. Tries 'Mv Galan' (Folder or Installed)
+               2. Tries 'Faruma' (Folder or Installed)
+               3. Falls back to 'Noto Sans Thaana' (Google Font for Mobile) 
+            */
+            --font-dv: 'Mv Galan', 'Faruma', 'Noto Sans Thaana', sans-serif; 
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -34,11 +59,36 @@
             user-select: none; /* Security */
         }
 
+        /* --- NAVIGATION MENU --- */
+        .top-nav {
+            background-color: var(--dark);
+            text-align: center;
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            position: sticky; top: 0; z-index: 1000;
+        }
+        
+        .nav-links {
+            display: flex; justify-content: center; gap: 25px; flex-wrap: wrap;
+            list-style: none; padding: 0; margin: 0;
+        }
+
+        .nav-links li a {
+            color: #fff; text-decoration: none; font-weight: bold; font-size: 1.1em;
+            transition: 0.3s; padding: 5px 15px; border-radius: 20px;
+            font-family: var(--font-dv);
+        }
+        
+        .nav-links li a:hover {
+            color: var(--gold);
+            background: rgba(255,255,255,0.1);
+        }
+
         /* --- ROYAL HEADER --- */
         header {
             background: radial-gradient(circle at center, var(--primary), var(--dark));
             color: white;
-            padding: 50px 20px 100px 20px;
+            padding: 40px 20px 90px 20px;
             text-align: center;
             border-bottom: 8px double var(--gold);
             position: relative;
@@ -46,7 +96,7 @@
         }
 
         .brand-title { 
-            font-family: 'Playfair Display', serif; /* English Serif for Flair */
+            font-family: 'Playfair Display', serif; 
             font-size: 2.8em; 
             color: var(--gold); 
             margin-bottom: 10px; 
@@ -59,11 +109,11 @@
             font-weight: 500;
         }
 
-        /* --- ROYAL SEARCH BAR (New Design) --- */
+        /* --- ROYAL SEARCH BAR --- */
         .search-wrapper {
             position: relative;
             max-width: 750px;
-            margin: -40px auto 40px auto; /* Pull up into header */
+            margin: -40px auto 40px auto; 
             padding: 0 20px;
             z-index: 100;
         }
@@ -172,12 +222,14 @@
         .book-title { 
             font-size: 1.3em; font-weight: 700; color: var(--primary); 
             margin-bottom: 8px; line-height: 1.5;
-            min-height: 3em; /* 2 lines space */
+            min-height: 3em; 
+            font-family: var(--font-dv);
         }
         
         .book-author { 
             font-size: 0.95em; color: #777; margin-bottom: 15px; 
             border-bottom: 1px dashed #eee; padding-bottom: 10px;
+            font-family: var(--font-dv);
         }
 
         .buy-btn {
@@ -203,12 +255,11 @@
         }
         .admin-label { display: block; color: #666; font-size: 0.8em; margin-top: 5px; font-weight:bold;}
         
-        /* Show admin stuff when body has class 'admin-active' */
         body.admin-active .admin-panel { display: block; }
         body.admin-active .book-card { border: 2px dashed var(--gold); }
         body.admin-active [contenteditable="true"] { outline: 2px solid #3498db; background: #ebf5fb; cursor: text; padding: 2px; }
 
-        /* --- ADMIN TOOLBAR (Fixed Bottom) --- */
+        /* --- ADMIN TOOLBAR --- */
         .admin-toolbar {
             position: fixed; bottom: 0; left: 0; width: 100%;
             background: var(--dark); color: white; padding: 15px;
@@ -241,6 +292,15 @@
     </style>
 </head>
 <body oncontextmenu="return false;">
+
+    <nav class="top-nav">
+        <ul class="nav-links">
+            <li><a href="https://academyzaad.com/index.html"><i class="fas fa-home"></i> ހޯމް</a></li>
+            <li><a href="https://academyzaad.com/courses.html">ކޯސްތައް</a></li>
+            <li><a href="https://academyzaad.com/about.html">އަޅުގަނޑުމެން</a></li>
+            <li><a href="https://academyzaad.com/contact.html">ގުޅުއްވާ</a></li>
+        </ul>
+    </nav>
 
     <header>
         <div class="brand-title">ZAAD BOOKSTORE</div>
@@ -305,11 +365,10 @@
             const grid = document.getElementById('shelfGrid');
             const id = 'book-' + (Date.now() + i); 
             
-            // Dummy Data for visual
+            // Dummy Data
             const dummyPrice = "150 ރުފިޔާ";
             const dummyTitle = `ދިވެހި ތާރީޚް - ފޮތް ${i}`;
             const dummyAuthor = "ޒާދް ޕަބްލިކޭޝަންސް";
-            // Random colors for placeholders to look authentic
             const dummyImg = `https://placehold.co/400x600/0C2D48/D4AF37?text=Book+${i}`;
 
             const div = document.createElement('div');
@@ -385,8 +444,6 @@
         function checkCredentials() {
             const u = document.getElementById('inpUser').value;
             const p = document.getElementById('inpPass').value;
-            
-            // Get correct credentials from the hidden inputs
             const correctU = document.getElementById('user-' + currentBookId).value;
             const correctP = document.getElementById('pass-' + currentBookId).value;
             const link = document.getElementById('real-link-' + currentBookId).href;
@@ -433,12 +490,10 @@
             const pass = prompt("Enter Secretary Password:");
             if(pass === "admin123") {
                 document.body.classList.add('admin-active');
-                
-                // Make titles editable
                 document.querySelectorAll('.book-title, .book-author').forEach(el => {
                     el.setAttribute('contenteditable', 'true');
                 });
-                alert("Secretary Mode Active.\nYou can now edit prices, names, and links.");
+                alert("Secretary Mode Active.");
             } else {
                 alert("Wrong Password");
             }
@@ -479,7 +534,7 @@
             link.click();
             document.body.removeChild(link);
             
-            alert("Changes Saved! Please upload the new HTML file.");
+            alert("Changes Saved!");
         }
     </script>
 </body>
