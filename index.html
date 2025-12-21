@@ -44,7 +44,6 @@
             line-height: 1.8;
             background-image: radial-gradient(#B49658 0.5px, transparent 0.5px);
             background-size: 40px 40px;
-            /* Security: Prevention disabled in Admin Mode via JS */
             user-select: none; -webkit-user-select: none;
         }
 
@@ -87,8 +86,6 @@
         .ticker-item { display: inline-block; padding: 0 30px; color: white; font-size: 1.1em; }
         .ticker-highlight { color: var(--royal-gold); font-weight: bold; }
         @keyframes ticker-scroll { 0% { transform: translate3d(0, 0, 0); } 100% { transform: translate3d(100%, 0, 0); } }
-        
-        /* Stop ticker in admin mode for editing */
         body.admin-active .ticker { animation-play-state: paused; }
 
         /* --- NAVIGATION --- */
@@ -138,12 +135,52 @@
         .prayer-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px dashed rgba(0,0,0,0.1); font-size: 0.9em; }
         .prayer-time { font-weight: bold; color: var(--royal-blue); font-family: var(--font-en); }
 
-        footer { background: var(--royal-blue); color: #ccc; padding: 50px 5%; margin-top: 50px; text-align: center; border-top: 5px solid var(--royal-gold); }
+        /* --- FOOTER & GRID --- */
+        footer { 
+            background: var(--royal-blue); 
+            color: #ccc; 
+            padding: 50px 5%; 
+            margin-top: 50px; 
+            text-align: center; 
+            border-top: 5px solid var(--royal-gold); 
+        }
+        
         .footer-logo { font-size: 2em; color: var(--royal-gold); margin-bottom: 20px; font-weight: bold; }
+        
+        .footer-content-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 30px;
+            text-align: right;
+            max-width: 1400px;
+            margin: 0 auto 30px auto;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding-bottom: 30px;
+        }
+        
+        /* FOOTER HEADINGS (FIXED) */
+        .footer-col-title { 
+            color: var(--royal-gold) !important; /* Force Gold Color */
+            font-size: 1.3em; 
+            margin-bottom: 15px; 
+            font-weight: bold; 
+            display: block;
+            border-bottom: 2px solid rgba(180, 150, 88, 0.3); 
+            padding-bottom: 5px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5); /* Shadow for readability */
+        }
+
+        .footer-links-list { list-style: none; padding: 0; margin: 0; }
+        .footer-links-list li { margin-bottom: 10px; border-bottom: 1px dashed rgba(255,255,255,0.05); padding-bottom: 5px; }
+        .footer-links-list a { color: #ddd; transition: 0.2s; }
+        .footer-links-list a:hover { color: var(--royal-gold); padding-right: 5px; }
 
         /* --- ADMIN STYLES --- */
         body.admin-active { user-select: auto !important; -webkit-user-select: auto !important; }
-        body.admin-active [contenteditable="true"] { outline: 2px dashed #B49658; background: rgba(255,255,255,0.9); cursor: text; min-height: 1em; }
+        body.admin-active [contenteditable="true"] { outline: 2px dashed #B49658; background: rgba(255,255,255,0.9); cursor: text; min-height: 1em; color: #000; }
+        /* Special handling for footer titles in admin mode so they remain visible when editing */
+        body.admin-active .footer-col-title[contenteditable="true"] { color: #B49658 !important; background: rgba(0,0,0,0.5); }
+        
         body.admin-active img { cursor: pointer; border: 2px dashed red; pointer-events: auto; }
         body.admin-active img:hover { opacity: 0.7; }
         
@@ -152,8 +189,7 @@
             padding: 15px 30px; display: none; justify-content: space-between; align-items: center; z-index: 9999;
             border-top: 4px solid var(--royal-gold);
         }
-        .admin-btn { padding: 10px 25px; border-radius: 5px; border: none; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 10px; }
-        .save-btn { background: var(--royal-gold); color: white; }
+        .save-btn { background: var(--royal-gold); color: white; padding: 10px 25px; border-radius: 5px; border: none; font-weight: bold; cursor: pointer; }
 
         /* --- MOBILE --- */
         @media (max-width: 900px) {
@@ -166,6 +202,7 @@
             .main-menu.active { display: flex; }
             .grid-2 { grid-template-columns: 1fr; }
             .nav-right-group { display: none; } 
+            .footer-content-grid { text-align: center; }
         }
     </style>
 </head>
@@ -305,8 +342,48 @@
     </div>
 
     <footer>
-        <div class="footer-logo">ޒާދް އެކަޑެމީ</div>
-        <p>ޢިލްމު ހޯދުމަކީ ކޮންމެ މުސްލިމެއްގެ މައްޗަށް ވާޖިބެކެވެ</p>
+        <div class="footer-content-grid">
+            <div style="text-align: right;">
+                <div class="footer-logo" style="margin-bottom: 5px;">ޒާދް އެކަޑެމީ</div>
+                <p style="font-size: 0.9em; margin-bottom: 10px;" contenteditable="false">ޢިލްމު ހޯދުމަކީ ކޮންމެ މުސްލިމެއްގެ މައްޗަށް ވާޖިބެކެވެ</p>
+                <div style="font-size: 0.8em; color: #aaa;" contenteditable="false">ރެޖިސްޓްރޭޝަން ނަމްބަރު: SP-2019/001</div>
+            </div>
+
+            <div>
+                <h4 class="footer-col-title" contenteditable="false">އަވަސް ލިންކު</h4>
+                <ul class="footer-links-list">
+                    <li><a href="courses.html" contenteditable="false">» ކޯސްތައް</a></li>
+                    <li><a href="news.html" contenteditable="false">» ޚަބަރު</a></li>
+                    <li><a href="library.html" contenteditable="false">» ލައިބްރަރީ</a></li>
+                    <li><a href="contact.html" contenteditable="false">» ގުޅުއްވުމަށް</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <h4 class="footer-col-title" contenteditable="false">ދަރިވަރުންނަށް</h4>
+                <ul class="footer-links-list">
+                    <li><a href="#" contenteditable="false">» ސްޓޫޑެންޓް ޕޯޓަލް</a></li>
+                    <li><a href="#" contenteditable="false">» އިމްތިޙާނު ނަތީޖާ</a></li>
+                    <li><a href="downloads.html" contenteditable="false">» ޑައުންލޯޑްސް</a></li>
+                    <li><a href="#" contenteditable="false">» ކަލަންޑަރު</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <h4 class="footer-col-title" contenteditable="false">ގުޅުއްވުމަށް</h4>
+                <ul class="footer-links-list">
+                    <li><i class="fas fa-phone fa-fw" style="color:var(--royal-gold)"></i> <span contenteditable="false">9901550</span></li>
+                    <li><i class="fas fa-envelope fa-fw" style="color:var(--royal-gold)"></i> <span contenteditable="false">info@zaad.edu.mv</span></li>
+                    <li><i class="fas fa-map-marker-alt fa-fw" style="color:var(--royal-gold)"></i> <span contenteditable="false">ނޭޝަނަލް ލައިބްރަރީ، މާލެ</span></li>
+                </ul>
+            </div>
+        </div>
+
+        <div style="margin-top: 20px; display: flex; justify-content: center; gap: 20px;">
+            <a href="https://www.facebook.com/ZaadAcademy" target="_blank" title="Facebook" style="color: var(--royal-gold); font-size: 1.5em;"><i class="fab fa-facebook-f"></i></a>
+            <a href="https://twitter.com/ZaadAcademy" target="_blank" title="X (Twitter)" style="color: var(--royal-gold); font-size: 1.5em;"><i class="fab fa-x-twitter"></i></a>
+        </div>
+
         <div style="margin-top:30px; font-size:0.9em; opacity:0.6; cursor:pointer;" id="admin-login" ondblclick="activateAdmin()">
             © <span id="year"></span> Zaad Academy. All Rights Reserved. (Double Click to Edit)
         </div>
@@ -350,7 +427,7 @@
                     }
                 });
 
-                alert("Admin Mode Active!\n\n- Click text to edit.\n- Click images to change them.\n- Double click footer to login again if needed.\n- Click 'Save & Download' when done.");
+                alert("Admin Mode Active!");
             } else {
                 alert("Incorrect Password!");
             }
@@ -360,12 +437,11 @@
             let clone = document.documentElement.cloneNode(true);
             clone.querySelector('body').classList.remove('admin-active');
             
-            // Remove editable attributes and onclicks for images in the saved file
             let editables = clone.querySelectorAll('[contenteditable]');
             editables.forEach(el => {
                 el.contentEditable = "false";
-                el.removeAttribute('contenteditable'); // Clean up
-                el.setAttribute('contenteditable', 'false'); // Reset for next load
+                el.removeAttribute('contenteditable'); 
+                el.setAttribute('contenteditable', 'false'); 
             });
 
             let imgs = clone.querySelectorAll('img');
@@ -377,15 +453,15 @@
             let blob = new Blob([htmlContent], { type: "text/html" });
             let link = document.createElement("a");
             link.href = URL.createObjectURL(blob);
-            link.download = "index.html"; // Suggests replacing the main file
+            link.download = "index.html"; 
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
             
-            alert("File Downloaded!\n\nPlease upload 'index.html' to your server to see changes live.");
+            alert("File Downloaded! Please upload 'index.html' to your server.");
         }
 
-        // --- 3. CLOCK & API (Standard features) ---
+        // --- 3. CLOCK & API ---
         setInterval(() => {
             document.getElementById('live-clock').innerText = new Date().toLocaleTimeString('en-US', {hour12:true});
         }, 1000);
@@ -395,6 +471,9 @@
             .then(data => {
                 const h = data.data.date.hijri;
                 document.getElementById('date-text').innerText = `${h.day} ${h.month.en} ${h.year}`;
+                const t = data.data.timings;
+                // Assuming elements with these IDs exist or will be populated by order in widget
+                // Note: The widget uses static times in the HTML, can be made dynamic if ids added.
             });
 
         function toggleMenu() {
