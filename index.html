@@ -25,10 +25,18 @@
             --white: #ffffff;
             --bg-color: #f4f6f8;
             --text-main: #1a1a1a;
-            --font-dv: 'Mv Galan', 'Noto Sans Thaana', 'Faruma', sans-serif; 
+            
+            /* FONT PRIORITY: Faruma -> Mv Galan -> Google Fonts */
+            --font-dv: 'Faruma', 'Mv Galan', 'Noto Sans Thaana', sans-serif; 
             --font-en: 'Playfair Display', serif;
         }
 
+        @font-face {
+            font-family: 'Faruma';
+            src: url('fonts/Faruma.ttf') format('truetype');
+            font-weight: normal;
+        }
+        
         @font-face {
             font-family: 'Mv Galan';
             src: url('fonts/Mv Galan.ttf') format('truetype');
@@ -300,6 +308,14 @@
                     <a href="courses.html" style="color:var(--royal-gold); font-weight:bold;">އިތުރަށް ބައްލަވާ...</a>
                 </div>
             </div>
+
+            <div class="widget">
+                <h3 class="widget-title"><i class="fas fa-file-download"></i> ފޯމުތައް</h3>
+                <ul class="side-links">
+                    <li><a href="downloads/application.pdf" download><i class="fas fa-file-pdf"></i> އެޕްލިކޭޝަން ފޯމު</a></li>
+                    <li><a href="downloads/scholarship.pdf" download><i class="fas fa-file-pdf"></i> ސްކޮލަރޝިޕް ފޯމު</a></li>
+                </ul>
+            </div>
         </aside>
 
         <main class="main-content">
@@ -367,11 +383,11 @@
 
             <div class="widget">
                 <h3 class="widget-title"><i class="fas fa-mosque"></i> ނަމާދު ވަގުތު</h3>
-                <div class="prayer-row"><span>ފަތިސް</span> <span class="prayer-time" id="fajr" contenteditable="false">04:55</span></div>
-                <div class="prayer-row"><span>މެންދުރު</span> <span class="prayer-time" id="dhuhr" contenteditable="false">12:15</span></div>
-                <div class="prayer-row"><span>ޢަޞްރު</span> <span class="prayer-time" id="asr" contenteditable="false">15:40</span></div>
-                <div class="prayer-row"><span>މަޣްރިބް</span> <span class="prayer-time" id="maghrib" contenteditable="false">18:10</span></div>
-                <div class="prayer-row"><span>ޢިޝާ</span> <span class="prayer-time" id="isha" contenteditable="false">19:30</span></div>
+                <div class="prayer-row"><span>ފަތިސް</span> <span class="prayer-time" id="fajr" contenteditable="false">--:--</span></div>
+                <div class="prayer-row"><span>މެންދުރު</span> <span class="prayer-time" id="dhuhr" contenteditable="false">--:--</span></div>
+                <div class="prayer-row"><span>ޢަޞްރު</span> <span class="prayer-time" id="asr" contenteditable="false">--:--</span></div>
+                <div class="prayer-row"><span>މަޣްރިބް</span> <span class="prayer-time" id="maghrib" contenteditable="false">--:--</span></div>
+                <div class="prayer-row"><span>ޢިޝާ</span> <span class="prayer-time" id="isha" contenteditable="false">--:--</span></div>
             </div>
 
             <div class="widget">
@@ -463,10 +479,9 @@
     </div>
 
     <script>
-        // 1. Anti-Debugger Logic (Security)
-        setInterval(function(){ debugger; }, 200); 
-
-        // 2. Prevent Keyboard Inspect
+        // --- 1. SECURITY (RELAXED FOR API TO WORK) ---
+        // Removed aggressive debugger loop to fix API loading
+        
         document.onkeydown = function(e) {
             if(document.body.classList.contains('admin-active')) return true; 
             if(e.keyCode == 123 || (e.ctrlKey && (e.keyCode == 'U'.charCodeAt(0) || e.keyCode == 'S'.charCodeAt(0)))) return false;
@@ -474,7 +489,28 @@
         document.addEventListener('contextmenu', e => !document.body.classList.contains('admin-active') && e.preventDefault());
         document.getElementById('year').innerText = new Date().getFullYear();
 
-        // 3. ADMIN FUNCTIONS
+        // --- 2. CLOCK & API (FIXED) ---
+        setInterval(() => {
+            document.getElementById('live-clock').innerText = new Date().toLocaleTimeString('en-US', {hour12:true});
+        }, 1000);
+
+        // Standard API fetch without blocking script
+        fetch('https://api.aladhan.com/v1/timingsByCity?city=Male&country=Maldives&method=4')
+            .then(res => res.json())
+            .then(data => {
+                const h = data.data.date.hijri;
+                document.getElementById('date-text').innerText = `${h.day} ${h.month.en} ${h.year}`;
+                const t = data.data.timings;
+                
+                document.getElementById('fajr').innerText = t.Fajr;
+                document.getElementById('dhuhr').innerText = t.Dhuhr;
+                document.getElementById('asr').innerText = t.Asr;
+                document.getElementById('maghrib').innerText = t.Maghrib;
+                document.getElementById('isha').innerText = t.Isha;
+            })
+            .catch(e => console.log("API Error: " + e));
+
+        // --- 3. ADMIN FUNCTIONS ---
         function activateAdmin() {
             if(document.body.classList.contains('admin-active')) return;
             let pass = prompt("Enter Admin Password:");
@@ -495,7 +531,6 @@
                     }
                 });
 
-                // Prevent link clicks in admin mode
                 let links = document.querySelectorAll('a');
                 links.forEach(link => {
                     link.addEventListener('click', function(e) {
@@ -539,24 +574,6 @@
             
             alert("File Downloaded! Please upload 'index.html' to your server.");
         }
-
-        // 4. CLOCK & API
-        setInterval(() => {
-            document.getElementById('live-clock').innerText = new Date().toLocaleTimeString('en-US', {hour12:true});
-        }, 1000);
-
-        fetch('https://api.aladhan.com/v1/timingsByCity?city=Male&country=Maldives&method=4')
-            .then(res => res.json())
-            .then(data => {
-                const h = data.data.date.hijri;
-                document.getElementById('date-text').innerText = `${h.day} ${h.month.en} ${h.year}`;
-                const t = data.data.timings;
-                if(document.getElementById('fajr')) document.getElementById('fajr').innerText = t.Fajr;
-                if(document.getElementById('dhuhr')) document.getElementById('dhuhr').innerText = t.Dhuhr;
-                if(document.getElementById('asr')) document.getElementById('asr').innerText = t.Asr;
-                if(document.getElementById('maghrib')) document.getElementById('maghrib').innerText = t.Maghrib;
-                if(document.getElementById('isha')) document.getElementById('isha').innerText = t.Isha;
-            });
 
         function toggleMenu() {
             document.querySelector('.main-menu').classList.toggle('active');
