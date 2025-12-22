@@ -2,11 +2,11 @@
 <html lang="dv" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>Royal Graduation System (Final V11)</title>
+    <title>Royal Graduation System (Secure V12)</title>
     <style>
         /* --- GLOBAL --- */
         body {
-            -webkit-user-select: none; user-select: none;
+            -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none;
             margin: 0; padding: 0;
             background: #001a12; font-family: 'Faruuma', 'Times New Roman', serif;
             overflow: hidden; height: 100vh; width: 100vw;
@@ -59,6 +59,8 @@
         input[type="text"], textarea, select { 
             width: 98%; padding: 4px; border: 1px solid #aaa; border-radius: 3px; 
             font-size: 13px; margin-bottom: 2px; font-family: 'Faruuma', 'Times New Roman';
+            /* Allow text selection inside inputs only */
+            -webkit-user-select: text; user-select: text; 
         }
         
         .file-box { background: #e0e0e0; padding: 5px; border-radius: 5px; margin-bottom: 5px; border: 1px solid #bbb; overflow-y: auto; max-height: 150px; flex-shrink: 0; }
@@ -92,16 +94,42 @@
         .manual-btn { background: #ff8f00; color: white; border: none; padding: 2px 6px; border-radius: 3px; font-size: 10px; margin-top: 2px; }
 
         #statusMsg { text-align: center; margin-top: 2px; font-weight: bold; color: green; font-size: 12px; flex-shrink: 0; }
-        .copyright-text { text-align: center; font-size: 9px; color: #777; margin-top: 2px; flex-shrink: 0; }
+        .copyright-text { text-align: center; font-size: 9px; color: #777; margin-top: 2px; flex-shrink: 0; font-family: sans-serif; }
     </style>
+    <script>
+        // --- HIGH SECURITY SCRIPT ---
+        
+        // 1. Disable Right Click
+        document.addEventListener('contextmenu', event => event.preventDefault());
+
+        // 2. Disable Drag and Drop
+        document.ondragstart = function() { return false; };
+
+        // 3. Disable Keyboard Shortcuts (Inspect, View Source, Save, Print)
+        document.onkeydown = function(e) {
+            if(e.keyCode == 123) { return false; } // F12
+            if(e.ctrlKey && e.shiftKey && (e.keyCode == 'I'.charCodeAt(0) || e.keyCode == 'C'.charCodeAt(0) || e.keyCode == 'J'.charCodeAt(0))) { return false; }
+            if(e.ctrlKey && (e.keyCode == 'U'.charCodeAt(0) || e.keyCode == 'S'.charCodeAt(0) || e.keyCode == 'P'.charCodeAt(0))) { return false; }
+        };
+
+        // 4. Anti-Debugger / DevTools Trap (Freezes browser if DevTools opens)
+        // Note: This loops 'debugger' statement. If user opens DevTools, script pauses and annoys them.
+        setInterval(function() {
+            // Uncomment the line below to enable strict Anti-Debugger (It stops you from editing too!)
+            // debugger; 
+        }, 100);
+
+        // 5. Clear Console
+        setInterval(function(){ console.clear(); console.log("%cProtected System by Ali Ibrahim Didi", "color: red; font-size: 20px; font-weight: bold;"); }, 1000);
+    </script>
 </head>
-<body oncontextmenu="return false;">
+<body>
 
     <div id="loginOverlay">
         <div id="loginBox">
             <h1 style="color:#d4af37; font-family:'Faruuma';">Royal Graduation System</h1>
             <p style="font-size: 14px; margin-bottom: 20px; color:#fff;">Protected File</p>
-            <input type="password" id="passInput" placeholder="Password">
+            <input type="password" id="passInput" placeholder="Password" autocomplete="off">
             <br>
             <button id="loginBtn" onclick="checkPassword()">Login</button>
             <p id="loginError" style="color: #ff5252; display: none; margin-top: 10px;">Incorrect Password!</p>
@@ -199,6 +227,7 @@
     </div>
 
 <script>
+    // --- AUTH ---
     function checkPassword() {
         if (document.getElementById('passInput').value.trim() === "7791550") {
             document.getElementById('loginOverlay').style.display = 'none';
@@ -209,8 +238,8 @@
         }
     }
     document.getElementById('passInput').addEventListener("keyup", e => { if (e.key === "Enter") checkPassword(); });
-    document.onkeydown = e => { if(e.keyCode==123) return false; };
 
+    // --- FULLSCREEN CTRL ---
     function toggleControlFS() {
         if (!document.fullscreenElement) {
             document.documentElement.requestFullscreen().catch(e => console.log(e));
@@ -219,6 +248,7 @@
         }
     }
 
+    // --- APP LOGIC ---
     let tvWindow = null;
     let students = [];
     let photoFiles = {};
@@ -243,7 +273,7 @@
                 @font-face { font-family: 'Faruuma'; src: ${fontCSS}; }
                 @import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&display=swap');
                 
-                body { margin:0; overflow:hidden; background:#00281c; font-family:'Faruuma', serif; user-select:none; }
+                body { margin:0; overflow:hidden; background:#00281c; font-family:'Faruuma', serif; user-select:none; -webkit-user-select:none; }
                 
                 #fsBtn { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); z-index:9999; padding:20px; font-size:20px; cursor:pointer; background:#d4af37; border:2px solid #fff; }
 
@@ -268,24 +298,15 @@
 
                 /* LOGO LAYER */
                 #logoWrap { 
-                    position:absolute; 
-                    /* STATE A: IDLE (TOP 40px - Very High) */
-                    top: 40px; 
-                    left:50%; transform:translate(-50%, 0); 
+                    position:absolute; top: 40px; left:50%; transform:translate(-50%, 0); 
                     z-index:20; transition: all 0.8s cubic-bezier(0.22, 1, 0.36, 1);
                 }
-                /* Idle Size: 145px */
                 #logoImg { height:145px; filter: drop-shadow(0 5px 15px rgba(0,0,0,0.5)); transition:height 0.8s ease; }
                 
-                /* STATE B: LIVE (Small, Masked, On Border) */
                 #logoWrap.live { 
-                    top: 7.5vh; 
-                    transform:translate(-50%, -50%); 
-                    background-color: #00281c; /* Masking border */
-                    padding: 0 10px;
-                    border-radius: 50px;
+                    top: 7.5vh; transform:translate(-50%, -50%); 
+                    background-color: #00281c; padding: 0 10px; border-radius: 50px;
                 }
-                /* Live Size Reduced (70px) */
                 #logoWrap.live #logoImg { height:70px; }
 
                 /* CARD */
@@ -334,7 +355,15 @@
                 
                 .copyright { position:absolute; bottom:10px; right:10px; font-size:10px; color:rgba(255,255,255,0.3); font-family:sans-serif; z-index:900; }
             </style>
-            <script>function goFS(btn){document.documentElement.requestFullscreen(); btn.style.display='none';}<\/script>
+            <script>
+                document.addEventListener('contextmenu', event => event.preventDefault());
+                document.onkeydown = function(e) {
+                    if(e.keyCode == 123) { return false; }
+                    if(e.ctrlKey && e.shiftKey && (e.keyCode == 'I'.charCodeAt(0) || e.keyCode == 'C'.charCodeAt(0) || e.keyCode == 'J'.charCodeAt(0))) { return false; }
+                    if(e.ctrlKey && (e.keyCode == 'U'.charCodeAt(0) || e.keyCode == 'S'.charCodeAt(0) || e.keyCode == 'P'.charCodeAt(0))) { return false; }
+                };
+                function goFS(btn){document.documentElement.requestFullscreen(); btn.style.display='none';}
+            <\/script>
         </head>
         <body>
             <button id="fsBtn" onclick="goFS(this)">⛶ FULL SCREEN</button>
@@ -420,6 +449,7 @@
         tvWindow.document.getElementById('jalsaContent').classList.remove('hidden');
         tvWindow.document.getElementById('logoWrap').classList.remove('live');
         document.getElementById('statusMsg').innerText = "Mode: Jalsa";
+        stopVideo();
     }
 
     function updateTV() {
@@ -448,15 +478,24 @@
 
     function clearTV() {
         if(!tvWindow || tvWindow.closed) return;
-        showJalsaScreen();
+        // Hide card first
+        tvWindow.document.getElementById('card').classList.remove('active');
+        
+        // Show Jalsa Screen (Default state)
+        tvWindow.document.getElementById('jalsaContent').classList.remove('hidden');
+        tvWindow.document.getElementById('logoWrap').classList.remove('live');
+        
         stopVideo();
         document.getElementById('statusMsg').innerText = "Screen Cleared";
     }
 
-    // --- VIDEO PLAYER (FORCE AUTOPLAY) ---
+    // --- VIDEO PLAYER ---
     function playLocalVideo() {
         if(!tvWindow || tvWindow.closed) { alert("TV Closed!"); return; }
+        // Hide Everything Else
         tvWindow.document.getElementById('jalsaContent').classList.add('hidden');
+        tvWindow.document.getElementById('card').classList.remove('active');
+        
         const file = document.getElementById('videoLocal').files[0];
         if(!file) { alert("Select video!"); return; }
         const url = URL.createObjectURL(file);
@@ -467,16 +506,17 @@
         
         setTimeout(() => { 
             const v = tvWindow.document.getElementById('mainVid'); 
-            if(v) v.play().catch(e => {
-                alert("Please click ONCE on the TV screen to enable audio auto-play.");
-            }); 
+            if(v) v.play().catch(e => {}); 
         }, 100);
         document.getElementById('statusMsg').innerText = "Playing Video...";
     }
 
     function playYoutube() {
         if(!tvWindow || tvWindow.closed) { alert("TV Closed!"); return; }
+        // Hide Everything Else
         tvWindow.document.getElementById('jalsaContent').classList.add('hidden');
+        tvWindow.document.getElementById('card').classList.remove('active');
+
         const url = document.getElementById('ytLink').value;
         if(!url) return;
         const match = url.match(/^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/);
@@ -494,6 +534,8 @@
         const vl = tvWindow.document.getElementById('videoLayer');
         vl.innerHTML = ''; vl.style.display = 'none';
         
+        // If we were playing video, we should return to Jalsa Screen or Card? 
+        // Logic: If Card is not active, show Jalsa Screen
         if(!tvWindow.document.getElementById('card').classList.contains('active')) {
             showJalsaScreen();
         }
