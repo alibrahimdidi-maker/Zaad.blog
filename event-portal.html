@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>އިވެންޓް ޕޯޓަލް (Secure)</title>
+    <title>އިވެންޓް ޕޯޓަލް | Zaad Academy</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thaana:wght@400;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -11,10 +11,10 @@
     <style>
         /* --- THEME --- */
         :root {
-            --royal-blue: #2c3e50;
-            --royal-dark: #1a252f;
-            --royal-gold: #e67e22;
-            --bg-color: #ecf0f1;
+            --royal-blue: #002347; /* Zaad Dark Blue */
+            --royal-gold: #c5a059; /* Zaad Gold */
+            --bg-color: #f9f9f9;
+            --text-color: #333;
             --font-dv: 'Faruma', 'Mv Galan', 'Noto Sans Thaana', sans-serif; 
         }
 
@@ -26,23 +26,76 @@
         body {
             font-family: var(--font-dv);
             background-color: var(--bg-color);
-            color: #333;
+            color: var(--text-color);
             padding-bottom: 100px;
             user-select: none; 
         }
 
-        /* --- HEADER --- */
-        header {
-            background: linear-gradient(135deg, var(--royal-blue), var(--royal-dark));
-            color: white; padding: 40px 20px; text-align: center;
-            border-bottom: 5px solid var(--royal-gold);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        /* --- 1. NEW HEADER STYLES (Academy Zaad Look) --- */
+        
+        /* Top Bar (Dark) */
+        .top-bar {
+            background-color: var(--royal-blue);
+            color: #fff;
+            padding: 10px 0;
+            font-size: 0.9em;
         }
-        .logo-text { font-family: var(--font-dv); font-size: 2.5em; color: var(--royal-gold); font-weight: bold; }
-        .page-sub { font-size: 1.2em; opacity: 0.9; margin-top: 10px; color: #ecf0f1; }
+        .top-bar-container {
+            max-width: 1200px; margin: 0 auto; padding: 0 20px;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .top-info span { margin-left: 20px; }
+        .top-info i { margin-left: 5px; color: var(--royal-gold); }
+        .top-social a { color: white; margin-right: 15px; transition: 0.3s; }
+        .top-social a:hover { color: var(--royal-gold); }
 
-        /* --- GRID --- */
-        .container { max-width: 1200px; margin: 30px auto; padding: 0 20px; }
+        /* Main Header (White) */
+        .site-header {
+            background: white;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            position: sticky; top: 0; z-index: 1000;
+        }
+        .header-inner {
+            max-width: 1200px; margin: 0 auto; padding: 15px 20px;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        
+        /* Logo Area */
+        .brand-logo {
+            display: flex; align-items: center; gap: 10px;
+            text-decoration: none; color: var(--royal-blue);
+        }
+        .brand-logo img { height: 50px; } /* Use if you have an image */
+        .brand-text {
+            font-family: 'Playfair Display', serif; 
+            font-size: 1.8em; font-weight: bold; letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        /* Navigation */
+        .main-nav ul {
+            list-style: none; display: flex; gap: 30px; margin: 0; padding: 0;
+        }
+        .main-nav a {
+            text-decoration: none; color: #444; font-weight: bold; font-size: 1.05em;
+            transition: 0.3s; position: relative;
+        }
+        .main-nav a:hover { color: var(--royal-gold); }
+        .main-nav a.active { color: var(--royal-gold); }
+
+        /* Page Title Section (Hero) */
+        .page-hero {
+            background: linear-gradient(rgba(0,35,71,0.9), rgba(0,35,71,0.9)), url('https://academyzaad.com/wp-content/uploads/2023/01/slider-1.jpg');
+            background-size: cover; background-position: center;
+            color: white; padding: 60px 20px; text-align: center;
+            margin-bottom: 30px; border-bottom: 5px solid var(--royal-gold);
+        }
+        .hero-title { font-family: var(--font-dv); font-size: 2.5em; color: var(--royal-gold); margin-bottom: 10px; text-shadow: 0 2px 4px rgba(0,0,0,0.3); }
+        .hero-sub { font-size: 1.2em; opacity: 0.9; color: #eee; }
+
+
+        /* --- GRID & CARDS --- */
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
         
         .search-wrapper {
             max-width: 600px; margin: 0 auto 30px auto; position: relative;
@@ -55,7 +108,7 @@
             box-shadow: 0 4px 10px rgba(0,0,0,0.05);
             user-select: text; 
         }
-        .search-input:focus { border-color: var(--royal-gold); }
+        .search-input:focus { border-color: var(--royal-gold); box-shadow: 0 4px 15px rgba(197, 160, 89, 0.2); }
         .search-icon { position: absolute; right: 20px; top: 50%; transform: translateY(-50%); color: #999; }
 
         .grid {
@@ -91,7 +144,7 @@
 
         /* --- SPECIAL CODE BOX --- */
         .special-code-box {
-            background: #fff8e1; /* Light Yellow background */
+            background: #fff8e1;
             border: 1px solid #ffe082;
             border-radius: 8px;
             padding: 15px;
@@ -152,11 +205,7 @@
         body.admin-mode [contenteditable="true"] { outline: 2px solid #3498db; background: #fff; cursor: text; padding: 2px; }
         
         .admin-input { width: 100%; padding: 6px; margin-bottom: 5px; border: 1px solid #ddd; border-radius: 4px; user-select: text; }
-        
-        /* Highlight Code Input for Admin */
-        .admin-code-input {
-            border: 2px solid #f39c12; background: #fffcf5; color: #d35400; font-weight: bold;
-        }
+        .admin-code-input { border: 2px solid #f39c12; background: #fffcf5; color: #d35400; font-weight: bold; }
 
         .admin-bar {
             position: fixed; bottom: 0; left: 0; width: 100%;
@@ -177,15 +226,45 @@
         .login-inp { width: 100%; padding: 12px; margin-bottom: 10px; text-align: center; border: 1px solid #ccc; border-radius: 5px; font-size: 1.1em; user-select: text; }
         .login-submit { background: var(--royal-blue); color: white; padding: 12px; width: 100%; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; }
         
-        footer { text-align: center; padding: 20px; color: #888; font-size: 0.9em; margin-top: 40px; }
+        footer { background: var(--royal-blue); text-align: center; padding: 30px; color: rgba(255,255,255,0.7); font-size: 0.9em; margin-top: 60px; }
     </style>
 </head>
 <body oncontextmenu="return false;">
 
-    <header>
-        <div class="logo-text">އިވެންޓް ޕޯޓަލް</div>
-        <div class="page-sub">ކަސްޓަމަރ ރިސޯސް ސެންޓަރ</div>
+    <div class="top-bar">
+        <div class="top-bar-container">
+            <div class="top-social">
+                <a href="#"><i class="fab fa-facebook-f"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+            </div>
+            <div class="top-info">
+                <span>admin@academyzaad.com <i class="fas fa-envelope"></i></span>
+                <span>9999999 <i class="fas fa-phone-alt"></i></span>
+            </div>
+        </div>
+    </div>
+
+    <header class="site-header">
+        <div class="header-inner">
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="https://academyzaad.com/">Home</a></li>
+                    <li><a href="https://academyzaad.com/courses/">Courses</a></li>
+                    <li><a href="https://academyzaad.com/about-us/">About Us</a></li>
+                    <li><a href="#" class="active">Event Portal</a></li>
+                </ul>
+            </nav>
+            <a href="https://academyzaad.com" class="brand-logo">
+                <div class="brand-text">ZAAD ACADEMY</div>
+            </a>
+        </div>
     </header>
+
+    <div class="page-hero">
+        <h1 class="hero-title">އިވެންޓް ޕޯޓަލް</h1>
+        <div class="hero-sub">ކަސްޓަމަރ ރިސޯސް ސެންޓަރ</div>
+    </div>
 
     <div class="container">
         <div class="search-wrapper">
@@ -203,7 +282,7 @@
 
     <footer>
         <div id="copyright" ondblclick="enableAdmin()" style="cursor: pointer; display: inline-block; padding: 10px;">
-            © 2025 Event Portal System. (Double Click to Admin)
+            © 2025 Zaad Academy. All Rights Reserved. (Double Click to Admin)
         </div>
     </footer>
 
