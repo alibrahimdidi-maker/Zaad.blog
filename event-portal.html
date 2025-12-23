@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        /* --- 1. THEME & SECURITY --- */
+        /* --- 1. THEME & STYLES --- */
         :root {
             --royal-blue: #2c3e50;
             --royal-dark: #1a252f;
@@ -28,10 +28,10 @@
             background-color: var(--bg-color);
             color: #333;
             padding-bottom: 100px;
-            user-select: none; /* Disables selection globally */
+            user-select: none; /* Security: Disables selection generally */
         }
 
-        /* --- 2. HEADER --- */
+        /* --- HEADER --- */
         header {
             background: linear-gradient(135deg, var(--royal-blue), var(--royal-dark));
             color: white; padding: 40px 20px; text-align: center;
@@ -41,7 +41,7 @@
         .logo-text { font-family: var(--font-dv); font-size: 2.5em; color: var(--royal-gold); font-weight: bold; }
         .page-sub { font-size: 1.2em; opacity: 0.9; margin-top: 10px; color: #ecf0f1; }
 
-        /* --- 3. SEARCH & GRID --- */
+        /* --- GRID --- */
         .container { max-width: 1200px; margin: 30px auto; padding: 0 20px; }
         
         .search-wrapper {
@@ -53,7 +53,7 @@
             font-size: 1.1em; font-family: var(--font-dv);
             text-align: right; outline: none; transition: 0.3s;
             box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-            user-select: text; /* Search input needs text selection */
+            user-select: text; 
         }
         .search-input:focus { border-color: var(--royal-gold); }
         .search-icon { position: absolute; right: 20px; top: 50%; transform: translateY(-50%); color: #999; }
@@ -89,41 +89,41 @@
         .card-title { font-size: 1.4em; font-weight: bold; margin-bottom: 5px; color: var(--royal-blue); }
         .card-desc { font-size: 0.95em; color: #666; margin-bottom: 15px; }
 
-        /* --- EVENT CODE BOX STYLE --- */
-        .event-code-display {
-            background: #eef9f0;
-            border: 2px dashed #27ae60;
-            padding: 10px;
+        /* --- SPEICAL CODE BOX (THE FIX) --- */
+        .special-code-box {
+            background: #fff8e1; /* Light Yellow background */
+            border: 1px solid #ffe082;
             border-radius: 8px;
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+            text-align: center;
         }
-        .code-content { flex-grow: 1; text-align: center; }
-        .event-code-label { display: block; font-size: 0.7em; color: #555; margin-bottom: 2px; text-transform: uppercase; letter-spacing: 1px; }
-        
-        /* ENABLE COPYING FOR THIS FIELD */
-        .event-code-val { 
-            font-weight: bold; 
-            font-size: 1.1em; 
-            color: #27ae60; 
-            user-select: text !important; /* Forces selection to work */
+        .code-label {
+            display: block; font-size: 0.8em; color: #f57f17; 
+            font-weight: bold; margin-bottom: 5px; text-transform: uppercase;
+        }
+        .code-display {
+            background: #fff;
+            border: 2px dashed #ffca28;
+            padding: 10px;
+            font-family: monospace; /* Monospace for codes */
+            font-size: 1.2em;
+            color: #333;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            word-break: break-all;
+            user-select: text !important; /* Forces text to be selectable */
             -webkit-user-select: text !important;
             cursor: text;
-            word-break: break-all;
-            direction: ltr; /* Ensure code reads left-to-right */
         }
-
-        .copy-btn-sml {
-            background: #27ae60; color: white; border: none;
-            width: 35px; height: 35px; border-radius: 5px;
-            cursor: pointer; font-size: 1em; display: flex; align-items: center; justify-content: center;
+        .copy-btn {
+            background: #ffca28; color: #333; border: none;
+            padding: 8px 15px; border-radius: 5px; cursor: pointer;
+            font-weight: bold; font-size: 0.9em; width: 100%;
             transition: 0.2s;
         }
-        .copy-btn-sml:hover { background: #2ecc71; }
-        .copy-btn-sml:active { transform: scale(0.95); }
+        .copy-btn:hover { background: #ffb300; }
+        .copy-btn i { margin-right: 5px; }
 
         /* --- LOCK & LINKS --- */
         .lock-container { margin-top: auto; }
@@ -151,7 +151,7 @@
         /* --- ADMIN STYLES --- */
         .admin-controls { display: none; margin-top: 15px; padding: 15px; border-top: 2px dashed #ccc; background: #f9f9f9; }
         body.admin-mode .admin-controls { display: block; }
-        body.admin-mode [contenteditable="true"] { outline: 2px solid #3498db; background: #fff; cursor: text; padding: 2px; user-select: text; }
+        body.admin-mode [contenteditable="true"] { outline: 2px solid #3498db; background: #fff; cursor: text; padding: 2px; }
         
         .admin-input { width: 100%; padding: 6px; margin-bottom: 5px; border: 1px solid #ddd; border-radius: 4px; user-select: text; }
         .admin-bar {
@@ -219,7 +219,6 @@
         // --- 1. INITIALIZATION: GENERATE 200 CARDS ---
         window.onload = function() {
             const container = document.getElementById('cardContainer');
-            // Only generate if empty (first time run)
             if(container.children.length === 0) {
                 generateDummyData();
             }
@@ -237,8 +236,8 @@
                 const div = document.createElement('div');
                 div.className = 'card';
                 div.id = id;
-                // Creating the card with the new Copy Button
-                div.innerHTML = getCardHTML(id, userCode, passCode, title, "ތިރީގައިވާ ބަޓަނަށް ފިއްތަވާލެއްވުމަށްފަހު ލޮގިން ކުރައްވާ!", "Pending Code...");
+                // Add card with "Event Code" functionality
+                div.innerHTML = getCardHTML(id, userCode, passCode, title, "ތިރީގައިވާ ބަޓަނަށް ފިއްތަވާލެއްވުމަށްފަހު ލޮގިން ކުރައްވާ!", "WIFI-PASS-12345");
                 grid.appendChild(div);
             }
         }
@@ -253,7 +252,7 @@
             const textToCopy = textElement.innerText;
             const btn = document.getElementById(btnId);
 
-            // Create temporary textarea to copy (works in most browsers/offline)
+            // Create temporary textarea
             const tempInput = document.createElement("textarea");
             tempInput.value = textToCopy;
             document.body.appendChild(tempInput);
@@ -263,11 +262,14 @@
 
             // Visual Feedback
             const originalHTML = btn.innerHTML;
-            btn.innerHTML = '<i class="fas fa-check"></i>';
-            btn.style.background = "#27ae60";
+            btn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+            btn.style.background = "#27ae60"; // Green
+            btn.style.color = "white";
             
             setTimeout(() => {
                 btn.innerHTML = originalHTML;
+                btn.style.background = "#ffca28";
+                btn.style.color = "#333";
             }, 2000);
         }
 
@@ -338,8 +340,8 @@
             const pass = prompt("Enter Admin Password:");
             if(pass === "admin123") {
                 document.body.classList.add('admin-mode');
-                // Make editable areas active
-                document.querySelectorAll('.card-title, .card-desc, .event-code-val').forEach(el => {
+                // Make editable areas active (including the code box)
+                document.querySelectorAll('.card-title, .card-desc, .code-display').forEach(el => {
                     el.setAttribute('contenteditable', 'true');
                 });
                 alert("Admin Mode Active!");
@@ -383,13 +385,12 @@
                     </div>
 
                     <div class="unlocked-links" id="links-div-${id}">
-                        <div class="event-code-display">
-                            <div class="code-content">
-                                <span class="event-code-label">Event Code / Password</span>
-                                <div class="event-code-val" id="code-${id}" contenteditable="${document.body.classList.contains('admin-mode')}">${eventCode}</div>
-                            </div>
-                            <button class="copy-btn-sml" id="btn-copy-${id}" onclick="copyText('code-${id}', 'btn-copy-${id}')" title="Copy Code">
-                                <i class="fas fa-copy"></i>
+                        
+                        <div class="special-code-box">
+                            <span class="code-label">Event Code / Password:</span>
+                            <div class="code-display" id="code-${id}" contenteditable="${document.body.classList.contains('admin-mode')}">${eventCode}</div>
+                            <button class="copy-btn" id="btn-copy-${id}" onclick="copyText('code-${id}', 'btn-copy-${id}')">
+                                <i class="fas fa-copy"></i> COPY CODE
                             </button>
                         </div>
 
