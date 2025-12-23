@@ -2,7 +2,7 @@
 <html lang="dv" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>Royal Graduation System (V9.0 - Ultimate Edition)</title>
+    <title>Royal Graduation System (V9.1 - Custom Lines & Colors)</title>
     <style>
         /* --- GLOBAL --- */
         body {
@@ -123,7 +123,7 @@
 
     <div id="securityOverlay">
         <div class="sec-box">
-            <h1 style="color:#d4af37; font-family:'Faruuma'; font-size:30px;">Royal Graduation V9</h1>
+            <h1 style="color:#d4af37; font-family:'Faruuma'; font-size:30px;">Royal Graduation V9.1</h1>
             <p style="color:#fff; font-size:14px; margin-bottom:20px;">🔒 Protected Software. Enter License Key:</p>
             <input type="password" id="licenseKey" class="sec-input" placeholder="Paste Generated Key">
             <button class="sec-btn" onclick="verifyLicense()">UNLOCK</button>
@@ -165,19 +165,26 @@
             <button id="lockBtn" class="btn-lock" onclick="toggleLock()">🔓 Lock Settings (For Live)</button>
 
             <div class="design-panel" id="designPanel">
-                <h3 style="margin-top:0; border:none; font-size:14px;">🎨 Live Design Controls (V9)</h3>
+                <h3 style="margin-top:0; border:none; font-size:14px;">🎨 Live Design Controls (V9.1)</h3>
                 
                 <div class="design-row">
                     <div class="design-col">
-                        <span class="d-label">Main Title:</span>
+                        <span class="d-label">Main Title (Screen 1):</span>
                         <div style="display:flex; gap:2px;">
                             <input type="range" id="mtSizeRange" min="2" max="10" step="0.1" value="5.6" oninput="liveUpdate('mtSize', this.value)">
-                            <input type="color" id="mtColorPick" value="#d4af37" oninput="liveUpdate('mtColor', this.value)">
+                            <input type="color" id="mtColorPick" value="#d4af37" oninput="liveUpdate('mtColor', this.value)" title="Title Color">
+                        </div>
+                        <div style="display:flex; gap:2px; margin-top:2px;">
+                            <select id="tLineSel" onchange="liveUpdate('tLine', this.value)" style="width:100%; background:#c8e6c9;">
+                                <option value="show">Line: SHOW</option>
+                                <option value="hide">Line: HIDE</option>
+                            </select>
                         </div>
                         <div style="display:flex; gap:2px; margin-top:2px;">
                             <input type="range" id="mtYRange" min="0" max="500" value="210" title="Y Pos" oninput="liveUpdate('mtY', this.value)">
                         </div>
                     </div>
+                    
                     <div class="design-col">
                         <span class="d-label">50 Royal Themes:</span>
                         <select id="bgPresetSel" onchange="liveUpdate('bgPreset', this.value)" style="width:100%; background:#e1bee7;">
@@ -194,8 +201,25 @@
                             <option value="b0">🚫 No Border</option>
                         </select>
                          <div style="display:flex; gap:2px; margin-top:2px;">
-                            <span style="font-size:10px;">Thm:</span><input type="color" id="bdColorPick" value="#d4af37" oninput="liveUpdate('bdColor', this.value)">
+                            <span style="font-size:10px;">Thm:</span><input type="color" id="bdColorPick" value="#d4af37" oninput="liveUpdate('bdColor', this.value)" title="Border/Theme Color">
                         </div>
+                    </div>
+                </div>
+
+                <div class="design-row">
+                    <div class="design-col">
+                        <span class="d-label">Student Name (Screen 2):</span>
+                         <div style="display:flex; gap:2px;">
+                            <select id="nLineSel" onchange="liveUpdate('nLine', this.value)" style="width:50%; background:#ffccbc;">
+                                <option value="show">Line: SHOW</option>
+                                <option value="hide">Line: HIDE</option>
+                            </select>
+                            <input type="color" id="nameColorPick" value="#ffffff" oninput="liveUpdate('nameColor', this.value)" style="width:50%;" title="Name Text Color">
+                         </div>
+                    </div>
+                    <div class="design-col">
+                        <span class="d-label">Student Details Color:</span>
+                        <input type="color" id="detColorPick" value="#fff9c4" oninput="liveUpdate('detColor', this.value)" style="width:100%;" title="Details Text Color">
                     </div>
                 </div>
 
@@ -355,7 +379,7 @@
     document.getElementById('licenseKey').addEventListener("keyup", e => { if (e.key === "Enter") verifyLicense(); });
 
     /* =========================================
-       SECTION 2: APP LOGIC (V9.0 FEATURES)
+       SECTION 2: APP LOGIC (V9.1 FEATURES)
        ========================================= */
 
     function toggleControlFS() {
@@ -376,13 +400,14 @@
 
     // Default State
     let designState = {
-        mtY: 210, mtX: 0, mtSize: 5.6, mtColor: '#d4af37',
+        mtY: 210, mtX: 0, mtSize: 5.6, mtColor: '#d4af37', tLine: 'show',
         stY: 0, stX: 0, stSize: 2.6, stColor: '#ffffff',
         logoY: 40, logoX: 0, lVis: 'show', lShape: 'square', lSize: 145,
         pShape: '50%', pSize: 260, pBorder: 'on', pX: 0, pY: 0, pVis: 'show',
         cBorder: 'b1', bdColor: '#d4af37', bgPreset: 'bg1',
         layoutDir: 'rtl', textAlign: 'right', bgLoop: 'on',
-        txtX: 0, txtY: 0
+        txtX: 0, txtY: 0,
+        nLine: 'show', nameColor: '#ffffff', detColor: '#fff9c4'
     };
 
     function toggleLock() {
@@ -411,6 +436,7 @@
                 designState = JSON.parse(e.target.result);
                 setVal('mtSizeRange', designState.mtSize); setVal('mtColorPick', designState.mtColor); setVal('mtYRange', designState.mtY);
                 setVal('stSizeRange', designState.stSize); setVal('stColorPick', designState.stColor); setVal('stYRange', designState.stY);
+                setVal('tLineSel', designState.tLine);
                 setVal('layoutDirSel', designState.layoutDir); setVal('textAlignSel', designState.textAlign);
                 setVal('lVisSel', designState.lVis); setVal('lShapeSel', designState.lShape); setVal('lSizeRange', designState.lSize);
                 setVal('logoYRange', designState.logoY); setVal('logoXRange', designState.logoX);
@@ -418,6 +444,7 @@
                 setVal('pShapeSel', designState.pShape); setVal('pBorderSel', designState.pBorder); setVal('pVisSel', designState.pVis);
                 setVal('pSizeRange', designState.pSize); setVal('pYRange', designState.pY); setVal('pXRange', designState.pX);
                 setVal('bgLoopSel', designState.bgLoop);
+                setVal('nLineSel', designState.nLine); setVal('nameColorPick', designState.nameColor); setVal('detColorPick', designState.detColor);
                 
                 if(tvWindow && !tvWindow.closed) { for (const key in designState) { liveUpdate(key, designState[key]); } }
                 alert("Settings Loaded Successfully!");
@@ -441,9 +468,8 @@
         if(key === 'logoX' || key === 'logoY') {
             const logo = doc.getElementById('logoWrap');
             if(logo) {
-                // If live mode (Jalsa Screen), behavior might differ, but generally absolute
                 logo.style.transform = `translate(calc(-50% + ${designState.logoX}px), ${designState.logoY}px)`;
-                logo.style.top = "0"; // Reset top and handle via transform
+                logo.style.top = "0"; 
             }
         }
         if(key === 'lSize') { 
@@ -465,11 +491,35 @@
         if(key === 'bdColor') { doc.documentElement.style.setProperty('--theme-color', value); }
         if(key === 'mtY') { doc.getElementById('titleContainer').style.marginTop = value + 'px'; }
         if(key === 'mtSize') { doc.getElementById('jt1').style.fontSize = value + 'em'; }
-        if(key === 'mtColor') { const el = doc.getElementById('jt1'); el.style.color = value; el.style.borderBottomColor = value; }
+        if(key === 'mtColor') { 
+            const el = doc.getElementById('jt1'); 
+            el.style.color = value; 
+            if(designState.tLine === 'show') el.style.borderBottomColor = value; 
+        }
+        if(key === 'tLine') {
+            const el = doc.getElementById('jt1');
+            if(value === 'show') el.style.borderBottom = `3px solid ${designState.mtColor}`;
+            else el.style.borderBottom = 'none';
+        }
+
         if(key === 'stY') { doc.getElementById('subTitleWrap').style.marginTop = value + 'px'; }
         if(key === 'stSize') { doc.querySelectorAll('.sub-title').forEach(e => e.style.fontSize = value + 'em'); }
         if(key === 'stColor') { doc.querySelectorAll('.sub-title').forEach(e => e.style.color = value); }
         
+        // STUDENT INFO COLORS & LINES
+        if(key === 'nLine') {
+            const el = doc.getElementById('tnE'); // English Name usually carries the line
+            if(value === 'show') el.style.borderBottom = `2px solid ${designState.bdColor}`;
+            else el.style.borderBottom = 'none';
+        }
+        if(key === 'nameColor') {
+            doc.getElementById('tnD').style.color = value;
+            doc.getElementById('tnE').style.color = value;
+        }
+        if(key === 'detColor') {
+            doc.querySelectorAll('.fac-dv, .fac-en, .crs-dv, .crs-en').forEach(el => el.style.color = value);
+        }
+
         if(key === 'pShape') { 
             const img = doc.getElementById('stuImg'); 
             if(img) {
@@ -671,6 +721,11 @@
         liveUpdate('lVis', designState.lVis);
         liveUpdate('lShape', designState.lShape);
         liveUpdate('bgLoop', designState.bgLoop);
+        
+        liveUpdate('tLine', designState.tLine);
+        liveUpdate('nLine', designState.nLine);
+        liveUpdate('nameColor', designState.nameColor);
+        liveUpdate('detColor', designState.detColor);
         
         if(designState.cBorder === 'custom' && customBorderData) {
             liveUpdate('cBorder', 'custom');
