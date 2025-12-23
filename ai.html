@@ -150,7 +150,22 @@
 
         .card-body { padding: 20px; flex-grow: 1; }
         .card-title { font-size: 1.3em; font-weight: bold; margin-bottom: 10px; color: var(--royal-blue); }
-        .card-desc { font-size: 0.95em; color: #666; line-height: 1.6; margin-bottom: 20px; }
+        .card-desc { font-size: 0.95em; color: #666; line-height: 1.6; margin-bottom: 15px; }
+
+        /* --- NEW NOTE BOX STYLE --- */
+        .note-box {
+            background: #fffdf5; /* Very light yellow */
+            border-right: 4px solid var(--royal-gold); /* Right side border for RTL */
+            padding: 10px;
+            margin-bottom: 20px;
+            font-size: 0.9em;
+            color: #444;
+            border-radius: 4px;
+            border: 1px solid #eee;
+            border-right: 4px solid var(--royal-gold);
+            min-height: 40px;
+            font-style: italic;
+        }
 
         /* --- LOCK & LINKS STYLES --- */
         .lock-container { margin-top: auto; }
@@ -304,7 +319,7 @@
                 div.className = 'card';
                 div.id = id;
                 // Note: The badge (type-tag) is NOT contenteditable manually, it updates via input
-                div.innerHTML = getCardHTML(id, userCode, passCode, `Student Card ${i}`, `މިއީ ދަރިވަރު ${userCode} އަށް ޚާއްސަ ކުރެވިފައިވާ ކާޑެވެ.`);
+                div.innerHTML = getCardHTML(id, userCode, passCode, `Student Card ${i}`, `މިއީ ދަރިވަރު ${userCode} އަށް ޚާއްސަ ކުރެވިފައިވާ ކާޑެވެ.`, `މުހިއްމު ނޯޓެއް:`);
                 grid.appendChild(div);
             }
         }
@@ -388,17 +403,17 @@
             const pass = prompt("Enter Admin Password:");
             if(pass === "admin123") {
                 document.body.classList.add('admin-mode');
-                // Make text editable
-                document.querySelectorAll('.card-title, .card-desc, .notice-title, .notice-text').forEach(el => {
+                // Make text editable (Including Note Box)
+                document.querySelectorAll('.card-title, .card-desc, .note-box, .notice-title, .notice-text').forEach(el => {
                     el.setAttribute('contenteditable', 'true');
                 });
-                alert("Edit Mode Active!");
+                alert("Edit Mode Active! You can now write inside the text boxes.");
             } else {
                 alert("Invalid Password!");
             }
         }
 
-        // Core Update Function: Handles Inputs AND Badge Updates
+        // Core Update Function
         function updateValue(id, val) { 
             document.getElementById(id).value = val; 
             
@@ -426,12 +441,15 @@
             const div = document.createElement('div');
             div.className = 'card';
             div.id = id;
-            div.innerHTML = getCardHTML(id, "NEW-USER", "123", "New Card", "Description...");
+            div.innerHTML = getCardHTML(id, "NEW-USER", "123", "New Card", "Description...", "Note...");
             grid.insertBefore(div, grid.firstChild); // Add to top
         }
 
         // Helper to generate Card HTML
-        function getCardHTML(id, user, pass, title, desc) {
+        function getCardHTML(id, user, pass, title, desc, note) {
+            // Note default text
+            if(!note) note = "މުހިއްމު މެސެޖެއް...";
+
             return `
                 <div class="card-img-area">
                     <span class="type-tag">${user}</span>
@@ -440,6 +458,11 @@
                 <div class="card-body">
                     <div class="card-title" contenteditable="${document.body.classList.contains('admin-mode')}">${title}</div>
                     <div class="card-desc" contenteditable="${document.body.classList.contains('admin-mode')}">${desc}</div>
+                    
+                    <div class="note-box" contenteditable="${document.body.classList.contains('admin-mode')}">
+                        <i class="fas fa-pen-nib" style="color:var(--royal-gold); margin-left:5px;"></i> ${note}
+                    </div>
+
                     <div class="lock-container" id="lock-div-${id}">
                         <button class="lock-btn" onclick="openLogin('${id}')"><i class="fas fa-lock"></i> View Content</button>
                     </div>
