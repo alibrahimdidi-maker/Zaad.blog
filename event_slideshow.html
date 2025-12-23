@@ -1,715 +1,849 @@
 <!DOCTYPE html>
 <html lang="dv" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <title>Royal Event Master (V38 - Full Restore)</title>
-    <style>
-        /* --- GLOBAL --- */
-        body { margin: 0; padding: 0; background: #001a12; font-family: 'Faruuma', serif; overflow: hidden; height: 100vh; width: 100vw; user-select: none; }
-        @font-face { font-family: 'Faruuma'; src: local('Faruuma'), local('Faruumaa'), url('Fonts/faruuma.ttf') format('truetype'); }
+    <meta charset="UTF-8">
+    <title>Royal Graduation System (Final V32)</title>
+    <style>
+        /* --- GLOBAL --- */
+        body {
+            -webkit-user-select: none; user-select: none;
+            margin: 0; padding: 0;
+            background: #001a12; font-family: 'Faruuma', 'Times New Roman', serif;
+            overflow: hidden; height: 100vh; width: 100vw;
+        }
 
-        /* --- LOGIN --- */
-        #loginOverlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #00281c; z-index: 10000; display: flex; flex-direction: column; justify-content: center; align-items: center; color: #d4af37; }
-        #loginBox { background: rgba(0, 0, 0, 0.6); padding: 40px; border-radius: 15px; border: 2px solid #d4af37; text-align: center; }
-        #passInput { padding: 10px; font-size: 20px; border-radius: 5px; text-align: center; width: 250px; margin-top: 15px; }
-        #loginBtn { margin-top: 15px; padding: 10px 30px; font-size: 18px; cursor: pointer; background: #d4af37; border: none; border-radius: 5px; font-weight: bold; }
+        @font-face {
+            font-family: 'Faruuma';
+            src: local('Faruuma'), local('Faruumaa'), url('Fonts/faruuma.ttf') format('truetype');
+        }
 
-        /* --- LAYOUT --- */
-        .main-layout { display: none; gap: 5px; height: 100vh; width: 100vw; padding: 5px; box-sizing: border-box; background: #00281c; }
-        .sidebar { flex: 0 0 270px; background: #f1f8e9; padding: 5px; border-radius: 5px; display: flex; flex-direction: column; height: 100%; overflow-y: auto; border-right: 3px solid #d4af37; }
-        .editor { flex: 1; background: #ffffff; padding: 5px; border-radius: 5px; display: flex; flex-direction: column; height: 100%; overflow-y: auto; }
-        .extra-panel { flex: 0 0 290px; background: #e0f2f1; padding: 5px; border-radius: 5px; display: flex; flex-direction: column; height: 100%; overflow-y: auto; border-left: 3px solid #d4af37; }
+        /* --- LOGIN --- */
+        #loginOverlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #00281c; z-index: 10000;
+            display: flex; flex-direction: column; justify-content: center; align-items: center; color: #d4af37;
+        }
+        #loginBox {
+            background: rgba(0, 0, 0, 0.4); padding: 40px; border-radius: 15px;
+            border: 2px solid #d4af37; text-align: center;
+        }
+        #passInput {
+            padding: 10px; font-size: 20px; border-radius: 5px; border: 1px solid #d4af37; 
+            text-align: center; width: 250px; margin-top: 15px; font-family: sans-serif;
+        }
+        #loginBtn {
+            margin-top: 15px; padding: 10px 30px; font-size: 18px; cursor: pointer; 
+            background: #d4af37; border: none; border-radius: 5px; font-weight: bold; color: #00281c; font-family: 'Faruuma';
+        }
 
-        /* --- UI ELEMENTS --- */
-        h3 { margin: 4px 0; color: #004d40; font-family: 'Faruuma'; font-size: 14px; border-bottom: 1px solid #aaa; }
-        label { display: block; font-weight: bold; font-size: 10px; margin-bottom: 1px; color: #333; }
-        input[type="text"], textarea, select { width: 98%; padding: 3px; border: 1px solid #aaa; border-radius: 3px; font-size: 11px; margin-bottom: 2px; font-family: 'Faruuma', sans-serif; }
-        input[type="file"] { width: 100%; font-size: 9px; }
-        .btn-vid { font-size: 11px; padding: 4px; margin-top: 2px; border:none; border-radius:3px; color:white; width: 100%; cursor: pointer; }
-        .controls { display: flex; gap: 2px; margin-top: 5px; }
-        button.action { flex: 1; padding: 8px; font-size: 12px; border: none; border-radius: 4px; color: white; cursor: pointer; }
-        .btn-live { background: #004d40; flex: 2; border: 2px solid #ffd700; color: #ffd700; }
-        .btn-nav { background: #455a64; } .btn-clear { background: #b71c1c; flex: 0.5; }
-        .file-box { background: #eee; padding: 5px; border-radius: 5px; margin-bottom: 5px; border: 1px solid #ccc; }
+        /* --- CONTROL PANEL --- */
+        .main-layout { 
+            display: none; gap: 8px; height: 100vh; width: 100vw; 
+            padding: 8px; box-sizing: border-box; background: #00281c;
+        }
+        .sidebar {
+            flex: 0 0 290px; background: #f1f8e9; padding: 10px; border-radius: 8px;
+            display: flex; flex-direction: column; height: 100%; overflow: hidden;
+            border-right: 4px solid #d4af37;
+        }
+        .editor {
+            flex: 1; background: #ffffff; padding: 10px; border-radius: 8px;
+            display: flex; flex-direction: column; height: 100%; overflow-y: auto; position: relative;
+            border-left: 4px solid #d4af37;
+        }
+        
+        /* Design Tabs */
+        .design-panel {
+            background: #fff8e1; border: 1px solid #ffb300; border-radius: 5px;
+            padding: 8px; margin-bottom: 8px; transition: opacity 0.3s;
+        }
+        .design-panel.locked { opacity: 0.6; pointer-events: none; filter: grayscale(0.5); }
 
-        /* Target Selectors */
-        .target-bar { display:flex; gap:2px; margin-bottom:5px; background:#b0bec5; padding:3px; border-radius:3px; }
-        .t-btn { flex:1; border:none; padding:5px; font-size:10px; cursor:pointer; background:#eceff1; }
-        .t-btn.active { background:#006064; color:white; font-weight:bold; }
+        .design-row { display: flex; gap: 10px; margin-bottom: 5px; border-bottom: 1px dashed #ccc; padding-bottom: 5px; }
+        .design-col { flex: 1; }
+        .d-label { font-size: 11px; font-weight: bold; color: #e65100; display: block; margin-bottom: 2px; }
+        
+        input[type=range] { width: 100%; cursor: pointer; height: 10px; }
+        input[type=color] { width: 30px; height: 20px; border: none; padding: 0; cursor: pointer; vertical-align: middle; }
+        
+        h2, h3 { margin: 5px 0; color: #004d40; font-family: 'Faruuma'; }
+        label { display: block; font-weight: bold; font-size: 11px; margin-bottom: 1px; color: #333; }
+        
+        input[type="text"], textarea, select { 
+            width: 98%; padding: 3px; border: 1px solid #aaa; border-radius: 3px; 
+            font-size: 12px; margin-bottom: 2px; font-family: 'Faruuma', 'Times New Roman';
+        }
+        
+        .file-box { background: #e0e0e0; padding: 5px; border-radius: 5px; margin-bottom: 5px; border: 1px solid #bbb; overflow-y: auto; max-height: 100px; flex-shrink: 0; }
+        input[type="file"] { width: 100%; font-size: 10px; margin-bottom: 2px; }
 
-        /* Preview */
-        .preview-container { display: flex; gap: 5px; align-items: center; justify-content: center; background: #fff8e1; padding: 4px; border: 1px solid #ffb300; border-radius: 4px; margin-top: 5px; }
-        #previewImg { width: 60px; height: 60px; object-fit: cover; border: 1px solid #d4af37; }
-        #logoPreview { height: 30px; object-fit: contain; }
+        .row { display: flex; gap: 5px; margin-bottom: 2px; align-items: flex-end; }
+        .col { flex: 1; }
+        .dhi { direction: rtl; text-align: right; }
+        .eng { direction: ltr; text-align: left; font-family: 'Times New Roman', serif; font-weight: bold; }
 
-        /* Design Panel */
-        .design-panel { background: #fff3e0; border: 1px solid #ffb74d; border-radius: 5px; padding: 5px; margin-bottom: 5px; display:none; }
-        .design-panel.active { display:block; }
-        .design-panel.locked { pointer-events:none; opacity:0.6; filter:grayscale(1); }
-        .d-grp { border-bottom: 1px dashed #ccc; padding-bottom: 3px; margin-bottom: 3px; }
-        .d-label { font-size: 9px; font-weight: bold; color: #e65100; display:block; }
-        input[type=range] { height: 10px; width: 100%; cursor: pointer; }
-        input[type=color] { height: 15px; width: 25px; border:none; padding:0; cursor:pointer; }
-        .row { display: flex; gap: 2px; } .col { flex: 1; }
+        button { cursor: pointer; font-family: 'Faruuma'; font-weight: bold; }
+        .fs-btn { background: #004d40; color: white; padding: 5px; width: 100%; border: 1px solid #d4af37; border-radius: 4px; margin-bottom: 5px; font-size: 11px; flex-shrink: 0; }
+        .launch-btn { background: #c62828; color: white; padding: 8px; width: 100%; border: none; border-radius: 4px; margin-bottom: 5px; font-size: 14px; flex-shrink: 0; }
+        
+        .cfg-btn { background: #0277bd; color: white; padding: 4px; width: 48%; border: none; border-radius: 3px; font-size: 11px; }
 
-        /* Video & Pres Panels */
-        .video-panel { background: #e3f2fd; padding: 5px; border-radius: 5px; border: 1px solid #90caf9; margin-top: auto; }
-        .pres-panel { background: #fbe9e7; padding: 5px; border-radius: 5px; border: 1px solid #ffab91; margin-bottom: 5px; }
-        .pres-active { border: 2px solid red; animation: pulse 1s infinite; }
-        @keyframes pulse { 0% { box-shadow: 0 0 5px red; } 50% { box-shadow: 0 0 15px red; } 100% { box-shadow: 0 0 5px red; } }
+        #stuList { flex-grow: 1; min-height: 0; margin-bottom: 5px; }
 
-        .screen-launcher { display: grid; grid-template-columns: 1fr 1fr; gap: 3px; margin-bottom: 5px; }
-        .launch-btn { background: #37474f; color: white; padding: 6px; border: none; border-radius: 3px; font-size: 10px; width: 100%; cursor: pointer; }
-        .cfg-btn { background: #0277bd; color: white; padding: 4px; width: 48%; border: none; border-radius: 3px; font-size: 11px; margin-top:2px; cursor: pointer; }
-        #statusMsg { text-align: center; margin-top: auto; font-weight: bold; color: green; font-size: 11px; background: #e8f5e9; padding: 2px; }
-    </style>
+        .btn-vid { font-size: 12px; padding: 4px; margin-top: 2px; border:none; border-radius:3px; color:white; width: 100%; }
+        .controls { display: flex; gap: 5px; margin-top: 5px; flex-shrink: 0; }
+        button.action { flex: 1; padding: 8px; font-size: 14px; border: none; border-radius: 4px; color: white; transition: 0.2s; }
+        .btn-live { background: #004d40; flex: 2; border: 2px solid #ffd700; color: #ffd700; }
+        .btn-nav { background: #455a64; }
+        .btn-clear { background: #b71c1c; flex: 0.5; }
+
+        .preview-container { display: flex; gap: 10px; align-items: center; justify-content: center; background: #fff8e1; padding: 4px; border: 1px solid #ffb300; border-radius: 4px; margin-top: 5px; flex-shrink: 0; }
+        #previewImg { height: 50px; width: 50px; object-fit: cover; border-radius: 50%; border: 2px solid #d4af37; background: #ddd; }
+        #logoPreview { height: 30px; object-fit: contain; }
+        
+        .video-panel { background: #e3f2fd; padding: 5px; border-radius: 5px; margin-top: 5px; flex-shrink: 0; }
+
+        #statusMsg { text-align: center; margin-top: 5px; font-weight: bold; color: green; font-size: 12px; background: #e8f5e9; padding: 2px; border-radius: 4px; flex-shrink: 0; }
+        .copyright-text { text-align: center; font-size: 10px; color: #d4af37; background: #00281c; margin-top: auto; padding: 5px; border-radius: 4px; flex-shrink: 0; font-family: sans-serif; font-weight: bold; }
+        
+        .lock-controls { display:flex; align-items:center; justify-content:flex-end; margin-bottom:5px; font-size:12px; font-weight:bold; color:#c62828; }
+        .lock-controls input { width:auto; margin-left:5px; cursor:pointer; }
+    </style>
 </head>
 <body oncontextmenu="return false;">
 
-    <div id="loginOverlay">
-        <div id="loginBox">
-            <h1 style="color:#d4af37; font-family:'Faruuma';">Royal Event Master V38</h1>
-            <p id="expiryMsg" style="font-size:10px; color:#aaa;"></p>
-            <input type="password" id="passInput" placeholder="License Key">
-            <button id="loginBtn" onclick="checkPassword()">Verify & Login</button>
-            <p id="loginError" style="color: #ff5252; display: none; margin-top: 10px;">Invalid License!</p>
-        </div>
-    </div>
+    <div id="loginOverlay">
+        <div id="loginBox">
+            <h1 style="color:#d4af37; font-family:'Faruuma';">Royal Graduation System</h1>
+            <p id="expiryMsg" style="font-size:10px; color:#aaa;"></p>
+            <input type="password" id="passInput" placeholder="Password">
+            <button id="loginBtn" onclick="checkPassword()">Login</button>
+            <p id="loginError" style="color: #ff5252; display: none; margin-top: 10px;">Incorrect Password!</p>
+        </div>
+    </div>
 
-    <div class="main-layout" id="mainApp">
-        
-        <div class="sidebar">
-            <div class="screen-launcher">
-                <button class="launch-btn" style="background:#c62828; grid-column: span 2;" onclick="openTV(1)">🖥️ 1. MAIN (Stage)</button>
-                <button class="launch-btn" onclick="openTV(2)">🖥️ 2. Left Banner</button>
-                <button class="launch-btn" onclick="openTV(3)">🖥️ 3. Right Banner</button>
-                <button class="launch-btn" onclick="openTV(4)">🖥️ 4. Presentation</button>
-            </div>
-            
-            <div style="display:flex; justify-content:space-between; margin-bottom: 5px;">
-                <button class="cfg-btn" onclick="exportConfig()">💾 Save Config</button>
-                <button class="cfg-btn" style="background:#00695c;" onclick="document.getElementById('confLoad').click()">📂 Load Config</button>
-                <input type="file" id="confLoad" accept=".json" style="display:none" onchange="importConfig(this)">
-            </div>
+    <div class="main-layout" id="mainApp">
+        <div class="sidebar">
+            <button class="fs-btn" onclick="toggleControlFS()">⛶ Fullscreen</button>
+            <button class="launch-btn" onclick="openTV()">🖥️ 1. Open TV</button>
+            <div id="connStatus" style="font-size:11px; color:red; text-align:center;">Not Connected</div>
 
-            <div class="target-bar">
-                <button class="t-btn active" onclick="setTarget(1)" id="tb1">S1</button>
-                <button class="t-btn" onclick="setTarget(2)" id="tb2">S2</button>
-                <button class="t-btn" onclick="setTarget(3)" id="tb3">S3</button>
-                <button class="t-btn" onclick="setTarget(4)" id="tb4">S4</button>
-            </div>
+            <div style="background:#e3f2fd; padding:5px; border-radius:5px; border:1px solid #90caf9; margin-bottom:5px;">
+                <div style="display:flex; justify-content:space-between;">
+                    <button class="cfg-btn" onclick="exportConfig()">💾 Save Setup</button>
+                    <button class="cfg-btn" style="background:#00695c;" onclick="document.getElementById('confLoad').click()">📂 Load Setup</button>
+                    <input type="file" id="confLoad" accept=".json" style="display:none" onchange="importConfig(this)">
+                </div>
+            </div>
 
-            <div class="file-box">
-                <label id="fileLabel" style="color:blue;">Files for: Screen 1</label>
-                <label>1. Content CSV:</label><input type="file" id="targetCsv" accept=".csv" onchange="loadTargetCsv(this)">
-                <label>2. Background:</label><input type="file" id="targetBg" accept="video/*, image/*" onchange="updateTargetBg(this)">
-                
-                <div id="mainFilesOnly">
-                    <label>3. Photos (S1 Only):</label><input type="file" id="photoFolder" webkitdirectory directory multiple onchange="loadPhotos(this)">
-                    <label>4. Logo (S1 Only):</label><input type="file" id="logoFile" accept="image/*" onchange="loadLogo(this)">
-                    <label>5. Font (Global):</label><input type="file" id="fontFile" accept=".ttf, .otf" onchange="loadFont(this)">
-                    <label style="color:#e65100;">6. Custom Frame (S1):</label><input type="file" id="customBorderFile" accept="image/*" onchange="loadCustomFrame(this)">
-                </div>
-            </div>
+            <div class="file-box">
+                <label>1. CSV List:</label><input type="file" id="csvFile" accept=".csv">
+                <label>2. Photos:</label><input type="file" id="photoFolder" webkitdirectory directory multiple>
+                <label>3. Logo:</label><input type="file" id="logoFile" accept="image/*">
+                <label>4. Font:</label><input type="file" id="fontFile" accept=".ttf, .otf">
+                <label>5. Titles:</label><input type="file" id="jalsaCsvFile" accept=".csv">
+                <label style="color:#e65100;">6. Custom Frame:</label><input type="file" id="customBorderFile" accept="image/*">
+            </div>
 
-            <label>Select Item:</label>
-            <input type="text" id="search" placeholder="Search..." onkeyup="filterList()">
-            <select id="stuList" size="5" style="flex-grow:1;" onchange="loadContentToEditor()"></select>
-            
-            <button onclick="toggleDesignPanel()" class="btn-vid" style="background:#555;">🎨 Design Panel</button>
-        </div>
+            <label>Search:</label>
+            <input type="text" id="search" placeholder="..." onkeyup="filterList()">
+            <select id="stuList" size="2" style="flex-grow:1;" onchange="loadStudent()"></select>
+            <div class="copyright-text">&copy; Ali Ibrahim Didi (7791550)</div>
+        </div>
 
-        <div class="editor">
-            <div style="background:#e8f5e9; padding:5px; border-radius:4px; margin-bottom:5px;">
-                <h3>✏️ Edit Content (<span id="editLabel">Screen 1</span>)</h3>
-                <input type="text" id="line1" placeholder="Line 1 / Main Title" class="font-dv" style="font-weight:bold;">
-                <input type="text" id="line2" placeholder="Line 2 / Sub Title" class="font-dv">
-                <input type="text" id="line3" placeholder="Line 3 / Detail 1" class="font-dv">
-                <input type="text" id="line4" placeholder="Line 4 / Detail 2" class="font-dv">
-                <button class="btn-vid" style="background:#2e7d32;" onclick="sendContent()">⚡ Send to Screen</button>
-            </div>
+        <div class="editor">
+            <div class="lock-controls">
+                <label for="lockDesign">🔒 Lock Controls</label>
+                <input type="checkbox" id="lockDesign" onchange="toggleLock(this)">
+                <button onclick="resetDesign()" style="margin-right:10px; font-size:10px; background:#555; color:white; border:none; border-radius:3px; cursor:pointer;">Reset</button>
+            </div>
 
-            <div class="controls">
-                <button class="action btn-nav" onclick="move(-1)">◀ Prev</button>
-                <button class="action btn-live" onclick="sendContent()">📺 LIVE</button>
-                <button class="action btn-nav" onclick="move(1)">Next ▶</button>
-                <button class="action btn-clear" onclick="clearTarget()">Clear</button>
-            </div>
+            <div class="design-panel" id="designPanel">
+                <h3 style="margin-top:0; border:none; font-size:14px;">🎨 Live Design Controls</h3>
+                
+                <div class="design-row">
+                    <div class="design-col">
+                        <span class="d-label">Main Title:</span>
+                        <div style="display:flex; gap:2px;">
+                            <input id="in_mtSize" type="range" min="2" max="10" step="0.1" value="5.6" oninput="liveUpdate('mtSize', this.value)">
+                            <input id="in_mtColor" type="color" value="#d4af37" oninput="liveUpdate('mtColor', this.value)">
+                        </div>
+                        <div style="display:flex; gap:2px; margin-top:2px;">
+                            <input id="in_mtY" type="range" min="0" max="500" value="210" oninput="liveUpdate('mtY', this.value)">
+                            <input id="in_mtX" type="range" min="-300" max="300" value="0" oninput="liveUpdate('mtX', this.value)">
+                        </div>
+                    </div>
+                    <div class="design-col">
+                        <span class="d-label">Sub Titles:</span>
+                        <div style="display:flex; gap:2px;">
+                            <input id="in_stSize" type="range" min="1" max="6" step="0.1" value="2.6" oninput="liveUpdate('stSize', this.value)">
+                            <input id="in_stColor" type="color" value="#ffffff" oninput="liveUpdate('stColor', this.value)">
+                        </div>
+                        <div style="display:flex; gap:2px; margin-top:2px;">
+                            <input id="in_stY" type="range" min="0" max="100" value="0" oninput="liveUpdate('stY', this.value)">
+                            <input id="in_stX" type="range" min="-300" max="300" value="0" oninput="liveUpdate('stX', this.value)">
+                        </div>
+                    </div>
+                </div>
 
-            <div style="margin-top:5px; display:flex; justify-content:space-between; align-items:center;">
-                <div style="font-size:10px; font-weight:bold; color:#c62828;"><input type="checkbox" id="lockCheck" onchange="toggleLock(this)"> Lock</div>
-            </div>
+                <div class="design-row">
+                    <div class="design-col">
+                        <span class="d-label">Layout Direction:</span>
+                        <div style="display:flex; gap:5px;">
+                            <select id="in_layoutDir" onchange="liveUpdate('layoutDir', this.value)" style="width:50%; background:#bbdefb;">
+                                <option value="rtl">Photo: Right</option>
+                                <option value="ltr">Photo: Left</option>
+                            </select>
+                            <select id="in_textAlign" onchange="liveUpdate('textAlign', this.value)" style="width:50%; background:#bbdefb;">
+                                <option value="right">Align: Right</option>
+                                <option value="left">Align: Left</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="design-col">
+                        <span class="d-label">Logo (Pos/Vis):</span>
+                        <div style="display:flex; gap:5px; margin-bottom:2px;">
+                            <select id="in_lVis" onchange="liveUpdate('lVis', this.value)" style="width:100%; background:#ffe0b2;">
+                                <option value="show">Logo: Show</option>
+                                <option value="hide">Logo: Hide</option>
+                            </select>
+                        </div>
+                        <div style="display:flex; gap:2px;">
+                            <input id="in_logoY" type="range" min="0" max="400" value="40" oninput="liveUpdate('logoY', this.value)">
+                            <input id="in_logoX" type="range" min="-300" max="300" value="0" oninput="liveUpdate('logoX', this.value)">
+                        </div>
+                    </div>
+                </div>
 
-            <div id="designPanel" class="design-panel">
-                <label style="color:#e65100;">🎨 Design for: <span id="designTargetLabel">Screen 1</span></label>
-                
-                <div id="mainDesignCtrls">
-                    <div class="d-grp">
-                        <span class="d-label">Frame & Theme:</span>
-                        <select id="in_cBorder" onchange="liveUpdate('cBorder', this.value)" style="width:100%;">
-                            <option value="frame-1">Gold</option><option value="b0">None</option>
-                            <option value="frame-2">Glow</option><option value="frame-10">Scroll</option>
-                        </select>
-                        <select id="in_mainTheme" onchange="liveUpdate('mainTheme', this.value)" style="width:100%; margin-top:2px;">
-                            <option value="theme-1">Green</option><option value="theme-2">Blue</option>
-                            <option value="theme-4">Black</option><option value="theme-7">Red</option>
-                        </select>
-                    </div>
-                    <div class="d-grp">
-                        <span class="d-label">Photo Pos (X/Y):</span>
-                        <div class="row">
-                            <input id="in_pX" type="range" min="-800" max="800" value="-40" oninput="liveUpdate('pX', this.value)">
-                            <input id="in_pY" type="range" min="-500" max="500" value="0" oninput="liveUpdate('pY', this.value)">
-                        </div>
-                    </div>
-                </div>
+                <div class="design-row">
+                    <div class="design-col">
+                        <span class="d-label">Student Text Position:</span>
+                        <div style="display:flex; gap:2px;">
+                            <input id="in_txtY" type="range" min="-200" max="200" value="0" oninput="liveUpdate('txtY', this.value)">
+                            <input id="in_txtX" type="range" min="-200" max="200" value="0" oninput="liveUpdate('txtX', this.value)">
+                        </div>
+                    </div>
+                    <div class="design-col" style="display:flex; gap:5px; align-items:center;">
+                        <div>
+                            <span class="d-label">Name Col:</span>
+                            <input id="in_nameCol" type="color" value="#ffffff" oninput="liveUpdate('nameCol', this.value)">
+                        </div>
+                        <div>
+                            <span class="d-label">Detail Col:</span>
+                            <input id="in_detCol" type="color" value="#fff9c4" oninput="liveUpdate('detCol', this.value)">
+                        </div>
+                    </div>
+                </div>
 
-                <div id="subDesignCtrls" style="display:none;">
-                    <div class="d-grp">
-                        <span class="d-label">Text Position (X/Y):</span>
-                        <div class="row">
-                            <input id="in_subX" type="range" min="-800" max="800" value="0" oninput="liveUpdate('subX', this.value)">
-                            <input id="in_subY" type="range" min="-800" max="800" value="0" oninput="liveUpdate('subY', this.value)">
-                        </div>
-                    </div>
-                    <div class="d-grp">
-                        <span class="d-label">Text Style:</span>
-                        <div class="row">
-                            <input id="in_subSize" type="range" min="1" max="10" step="0.1" value="4.0" oninput="liveUpdate('subSize', this.value)">
-                            <input id="in_subColor" type="color" value="#d4af37" oninput="liveUpdate('subColor', this.value)">
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+                <div class="design-row" style="margin-bottom:0; border:none;">
+                    <div class="design-col">
+                        <span class="d-label">Card Style:</span>
+                        <select id="in_cBorder" onchange="liveUpdate('cBorder', this.value)" style="width:100%;">
+                            <option value="b1">Gold Double</option>
+                            <option value="b2">Dashed Glow</option>
+                            <option value="b3">Thick Solid</option>
+                            <option value="b4">Gradient</option>
+                            <option value="b5">Frame Offset</option>
+                            <option value="b6">Ornamental</option>
+                            <option value="b0">🚫 No Border</option>
+                            <option value="custom">🖼️ Custom Frame</option>
+                        </select>
+                        <div style="display:flex; gap:5px; align-items:center; margin-top:2px;">
+                            <span style="font-size:10px;">Thm:</span><input id="in_bdColor" type="color" value="#d4af37" oninput="liveUpdate('bdColor', this.value)">
+                            <span style="font-size:10px;">BG:</span><input id="in_bgColor" type="color" value="#001a12" oninput="liveUpdate('bgColor', this.value)">
+                        </div>
+                    </div>
+                    <div class="design-col">
+                        <span class="d-label">Photo (Vis/Pos/Size):</span>
+                        <div style="display:flex; gap:5px;">
+                            <select id="in_pVis" onchange="liveUpdate('pVis', this.value)" style="width:50%; background:#ffe0b2;">
+                                <option value="show">Show</option>
+                                <option value="hide">Hide</option>
+                            </select>
+                            <select id="in_pBorder" onchange="liveUpdate('pBorder', this.value)" style="width:50%;">
+                                <option value="on">Bord ON</option>
+                                <option value="off">Bord OFF</option>
+                            </select>
+                        </div>
+                        <div style="display:flex; gap:2px; margin-top:2px;">
+                            <input id="in_pY" type="range" min="-600" max="600" value="0" oninput="liveUpdate('pY', this.value)">
+                            <input id="in_pX" type="range" min="-1000" max="1000" value="-40" oninput="liveUpdate('pX', this.value)">
+                        </div>
+                        <input id="in_pSize" type="range" min="150" max="400" value="260" oninput="liveUpdate('pSize', this.value)">
+                        <select id="in_pShape" onchange="liveUpdate('pShape', this.value)" style="display:none;"><option value="50%">R</option><option value="10px">S</option></select>
+                    </div>
+                </div>
+            </div>
 
-        <div class="extra-panel">
-            <div class="video-panel">
-                <h3>🎥 Main Screen Video</h3>
-                <input type="file" id="videoLocal" accept="video/*">
-                <button class="btn-vid" style="background:#e65100;" onclick="playLocalVideo()">▶ Play Local Video</button>
-                <hr>
-                <input type="text" id="ytLink" placeholder="YouTube Link..." class="font-en">
-                <button class="btn-vid" style="background:#c62828;" onclick="playYoutube()">▶ Play YouTube</button>
-                <button class="btn-vid" style="background:#333; margin-top:5px;" onclick="stopVideo()">⏹ STOP VIDEO</button>
-            </div>
+            <div style="display:flex; gap:5px; margin-bottom:5px;">
+                <input type="file" id="jalsaBgFile" accept="video/*, image/*" style="width:33%">
+                <select id="in_bgLoop" onchange="liveUpdate('bgLoop', this.value)" style="width:33%; background:#c8e6c9;">
+                    <option value="on">BG Loop: ON</option>
+                    <option value="off">BG Loop: OFF</option>
+                </select>
+                <button class="btn-vid" style="background:#1b5e20; width:33%; margin:0;" onclick="showJalsaScreen()">🖼️ Show</button>
+            </div>
+            <div style="display:flex; gap:5px; margin-bottom:2px;">
+                <button class="btn-vid" style="background:#2e7d32; width:100%; margin:0;" onclick="updateJalsaText()">Update Text</button>
+            </div>
+            <input type="text" id="jLine1" placeholder="Main Title" class="font-dv" style="font-weight:bold; color:#00281c;">
+            <input type="text" id="jLine2" placeholder="Sub 1" class="font-dv">
+            <input type="text" id="jLine3" placeholder="Sub 2" class="font-dv">
+            <input type="text" id="jLine4" placeholder="Sub 3" class="font-dv">
 
-            <div class="pres-panel" id="presPanel">
-                <h3>📊 Presentation Hub</h3>
-                <input type="text" id="presUrl" class="font-en" placeholder="Embed URL..." onchange="loadPres()">
-                <div class="row">
-                    <button class="btn-vid" style="background:#bf360c;" onclick="loadPres()">Load on S4</button>
-                    <button class="btn-vid" style="background:#3e2723;" onclick="clearPres()">Clear</button>
-                </div>
-                <hr>
-                <label style="color:red; font-weight:bold;">🔴 MAIN SCREEN OVERRIDE:</label>
-                <button id="castBtn" class="btn-vid" style="background:#b71c1c; padding:10px;" onclick="toggleCast()">CAST PRES TO MAIN</button>
-            </div>
+            <h3 style="margin-top:5px;">🎓 Info</h3>
+            <div class="row"><div class="col"><input id="nD" class="font-dv"></div><div class="col"><input id="nE" class="eng"></div></div>
+            <div class="row"><div class="col"><input id="fD" class="font-dv"></div><div class="col"><input id="fE" class="eng"></div></div>
+            <div class="row"><div class="col"><input id="cD" class="font-dv"></div><div class="col"><input id="cE" class="eng"></div></div>
+            <textarea id="cm" rows="1" class="font-dv" placeholder="Comment" style="text-align:center;"></textarea>
 
-            <div id="statusMsg">Ready</div>
-        </div>
-    </div>
+            <div class="preview-container">
+                <div><img id="logoPreview" alt="-"></div>
+                <div style="text-align:center;">
+                    <span id="pStat" style="font-size:10px;">No Photo</span>
+                    <img id="previewImg" src="https://via.placeholder.com/150">
+                    <button class="manual-btn" onclick="document.getElementById('singlePhoto').click()">📷</button>
+                    <input type="file" id="singlePhoto" accept="image/*" style="display:none" onchange="manualPhoto(this)">
+                </div>
+            </div>
+
+            <div class="controls">
+                <button class="action btn-nav" onclick="move(-1)">◀</button>
+                <button class="action btn-live" onclick="updateTV()">📺 LIVE</button>
+                <button class="action btn-nav" onclick="move(1)">▶</button>
+                <button class="action btn-clear" onclick="clearTV()">X</button>
+            </div>
+
+            <div class="video-panel">
+                <div style="display:flex; gap:5px;">
+                    <input type="file" id="videoLocal" accept="video/*" style="width:70%">
+                    <button class="btn-vid" style="background:#e65100; width:30%;" onclick="playLocalVideo()">▶ Local</button>
+                </div>
+                <div style="display:flex; gap:5px; margin-top:2px;">
+                    <input type="text" id="ytLink" placeholder="YouTube Link..." style="width:70%; text-align:left;" class="font-en">
+                    <button class="btn-vid" style="background:#c62828; width:30%;" onclick="playYoutube()">▶ YT</button>
+                </div>
+                <button class="btn-vid" style="background:#333; margin-top:2px;" onclick="stopVideo()">⏹ STOP VIDEO</button>
+            </div>
+            <div id="statusMsg">Ready</div>
+        </div>
+    </div>
 
 <script>
-    // --- SECURITY & CONFIG ---
-    const LICENSE_KEY = "7791550";
-    const EXPIRY_DATE = "2025-12-31"; 
+    // --- SUBSCRIPTION ---
+    function getExpiryDate() {
+        const filename = window.location.pathname.split('/').pop();
+        const match = filename.match(/(\d{4}-\d{2}-\d{2})/);
+        return match ? match[1] : "2025-12-31"; 
+    }
 
-    // Disable Right Click & DevTools (Basic Level)
-    document.addEventListener('contextmenu', event => event.preventDefault());
-    document.onkeydown = function(e) {
-        if(e.keyCode == 123) { return false; }
-        if(e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) { return false; }
-        if(e.ctrlKey && e.shiftKey && e.keyCode == 'C'.charCodeAt(0)) { return false; }
-        if(e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)) { return false; }
-        if(e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) { return false; }
-    }
+    function checkPassword() {
+        const pass = document.getElementById('passInput').value.trim();
+        const today = new Date();
+        const expiryStr = getExpiryDate();
+        const expiry = new Date(expiryStr);
+        expiry.setHours(23, 59, 59, 999);
 
-    // --- APP STATE ---
-    let activeTarget = 1;
-    let tvWindows = {};
-    let screenData = { 1: [], 2: [], 3: [], 4: [] }; // Data for each screen
-    let bgData = { 1: {d:null, t:'none'}, 2: {d:null, t:'none'}, 3: {d:null, t:'none'}, 4: {d:null, t:'none'} };
-    let photoFiles = {};
-    let logoData = null;
-    let customBorderData = null;
-    let currentFontData = null;
-    let isCasting = false;
+        document.getElementById('expiryMsg').innerText = "Expires: " + expiryStr;
 
-    // Design State per Screen
-    let settings = {
-        1: { cBorder:'frame-1', mainTheme:'theme-1', pX:-40, pY:0, pSize:260, pVis:'show', pShape:'50%', pBorder:'on', lVis:'show', logoX:0, logoY:40, mtX:0, mtY:210, mtSize:5.6, mtColor:'#d4af37', txtX:0, txtY:0, layoutDir:'rtl', textAlign:'right' },
-        2: { mainTheme:'theme-1', subX:0, subY:0, subSize:4.0, subColor:'#d4af37' },
-        3: { mainTheme:'theme-1', subX:0, subY:0, subSize:4.0, subColor:'#d4af37' },
-        4: { mainTheme:'theme-1', subX:0, subY:0, subSize:4.0, subColor:'#d4af37' }
-    };
+        if (today > expiry) {
+            alert("System Expired on " + expiryStr + ".\nPlease contact Administrator.");
+            return;
+        }
 
-    function checkPassword() {
-        const pass = document.getElementById('passInput').value.trim();
-        const today = new Date();
-        const expiry = new Date(EXPIRY_DATE);
-        expiry.setHours(23, 59, 59);
+        if (pass === "7791550") {
+            document.getElementById('loginOverlay').style.display = 'none';
+            document.getElementById('mainApp').style.display = 'flex';
+            loadSettings(); // AUTO LOAD
+        } else {
+            document.getElementById('loginError').style.display = 'block';
+            document.getElementById('passInput').value = '';
+        }
+    }
+    document.getElementById('passInput').addEventListener("keyup", e => { if (e.key === "Enter") checkPassword(); });
+    document.onkeydown = e => { if(e.keyCode==123) return false; };
 
-        document.getElementById('expiryMsg').innerText = "Valid until: " + EXPIRY_DATE;
+    function toggleControlFS() {
+        if (!document.fullscreenElement) document.documentElement.requestFullscreen().catch(e => console.log(e));
+        else document.exitFullscreen();
+    }
 
-        if (today > expiry) { alert("License Expired! Contact Vendor."); return; }
+    let tvWindow = null;
+    let students = [];
+    let photoFiles = {};
+    let currentPhotoData = null;
+    let currentLogoData = null;
+    let currentFontData = null;
+    let currentJalsaBgData = null;
+    let currentJalsaBgType = 'none';
+    let customBorderData = null;
 
-        if (pass === LICENSE_KEY) {
-            document.getElementById('loginOverlay').style.display = 'none';
-            document.getElementById('mainApp').style.display = 'flex';
-            // Try load settings
-            try { loadSettings(); } catch(e){}
-        } else {
-            document.getElementById('loginError').style.display = 'block';
-        }
-    }
+    // Default Design State
+    const defaultDesignState = {
+        mtY: 210, mtX: 0, mtSize: 5.6, mtColor: '#d4af37',
+        stY: 0, stX: 0, stSize: 2.6, stColor: '#ffffff',
+        logoY: 40, logoX: 0, lVis: 'show',
+        pShape: '50%', pSize: 260, pBorder: 'on', pX: -40, pY: 0, pVis: 'show',
+        cBorder: 'b1', bdColor: '#d4af37', bgColor: '#001a12',
+        txtY: 0, txtX: 0, nameCol: '#ffffff', detCol: '#fff9c4',
+        layoutDir: 'rtl', textAlign: 'right', bgLoop: 'on'
+    };
 
-    // --- TARGET SYSTEM ---
-    function setTarget(id) {
-        activeTarget = id;
-        // UI Updates
-        document.querySelectorAll('.t-btn').forEach(b => b.classList.remove('active'));
-        document.getElementById('tb'+id).classList.add('active');
-        document.getElementById('fileLabel').innerText = "Files for: Screen " + id;
-        document.getElementById('editLabel').innerText = "Screen " + id;
-        document.getElementById('designTargetLabel').innerText = "Screen " + id;
-        
-        // Show/Hide Specific Inputs
-        document.getElementById('mainFilesOnly').style.display = (id === 1) ? 'block' : 'none';
-        document.getElementById('mainDesignCtrls').style.display = (id === 1) ? 'block' : 'none';
-        document.getElementById('subDesignCtrls').style.display = (id !== 1) ? 'block' : 'none';
+    let designState = { ...defaultDesignState };
 
-        // Refresh List
-        refreshList();
-        
-        // Update inputs
-        updateDesignInputs();
-    }
+    // --- SAVE / LOAD SYSTEM ---
+    function liveUpdate(key, value) {
+        designState[key] = value;
+        localStorage.setItem('royalGradConfig', JSON.stringify(designState));
+        if(!tvWindow || tvWindow.closed) return;
+        applyStyle(key, value, tvWindow.document);
+    }
 
-    function refreshList() {
-        const sel = document.getElementById('stuList');
-        sel.innerHTML = '';
-        const data = screenData[activeTarget];
-        if (data && data.length > 0) {
-            data.forEach((item, i) => {
-                let txt = (activeTarget === 1) ? item.nD : item.l1; // S1 uses Name, others use Line1
-                let opt = document.createElement('option');
-                opt.value = i;
-                opt.text = (i+1) + ". " + txt;
-                sel.add(opt);
-            });
-        }
-    }
-    
-    function updateDesignInputs() {
-        const s = settings[activeTarget];
-        for(const [k,v] of Object.entries(s)) {
-            const el = document.getElementById('in_'+k);
-            if(el) el.value = v;
-        }
-    }
+    function applyStyle(key, value, doc) {
+        if(key === 'bgColor') { const bg = doc.getElementById('bgLayer'); if(bg) bg.style.backgroundColor = value; }
+        if(key === 'bdColor') { doc.documentElement.style.setProperty('--theme-color', value); if(designState.pBorder === 'on') { const img = doc.getElementById('stuImg'); if(img) img.style.border = `5px solid ${value}`; } }
+        if(key === 'pVis') { const el = doc.querySelector('.photo-col'); if(el) el.style.display = (value === 'show') ? 'flex' : 'none'; }
+        if(key === 'lVis') { const el = doc.getElementById('logoWrap'); if(el) el.style.display = (value === 'show') ? 'block' : 'none'; }
+        if(key === 'bgLoop') { const vid = doc.getElementById('bgVid'); if(vid) vid.style.display = (value === 'on') ? 'block' : 'none'; }
+        if(key === 'layoutDir') { const card = doc.getElementById('card'); if(card) card.style.flexDirection = (value === 'rtl') ? 'row-reverse' : 'row'; }
+        if(key === 'textAlign') { const txt = doc.querySelector('.text-col'); if(txt) txt.style.textAlign = value; }
+        if(key === 'mtY' || key === 'mtX') { const con = doc.getElementById('titleContainer'); const el = doc.getElementById('mainTitleWrap'); if(con) con.style.marginTop = designState.mtY + 'px'; if(el) el.style.transform = `translate(${designState.mtX}px, 0)`; }
+        if(key === 'mtSize') { const el = doc.getElementById('jt1'); if(el) el.style.fontSize = value + 'em'; }
+        if(key === 'mtColor') { const el = doc.getElementById('jt1'); if(el) { el.style.color = value; el.style.borderBottomColor = value; } }
+        if(key === 'stY' || key === 'stX') { const el = doc.getElementById('subTitleWrap'); if(el) { el.style.transform = `translate(${designState.stX}px, 0)`; el.style.marginTop = designState.stY + 'px'; } }
+        if(key === 'stSize') { const els = doc.querySelectorAll('.sub-title'); els.forEach(e => e.style.fontSize = value + 'em'); }
+        if(key === 'stColor') { const els = doc.querySelectorAll('.sub-title'); els.forEach(e => e.style.color = value); }
+        if(key === 'txtY' || key === 'txtX') { const el = doc.querySelector('.text-col'); if(el) el.style.transform = `translate(${designState.txtX}px, ${designState.txtY}px)`; }
+        if(key === 'nameCol') { doc.getElementById('tnD').style.color = value; doc.getElementById('tnE').style.color = value; }
+        if(key === 'detCol') { ['tfD','tfE','tcD','tcE','tcm'].forEach(id => { const e = doc.getElementById(id); if(e) e.style.color = value; }); }
+        if(key === 'logoY' || key === 'logoX') { const logo = doc.getElementById('logoWrap'); if(logo) { logo.style.left = '50%'; logo.style.transform = `translate(calc(-50% + ${designState.logoX}px), 0)`; logo.style.top = designState.logoY + 'px'; } }
+        if(key === 'pShape') { const img = doc.getElementById('stuImg'); if(img) img.style.borderRadius = value; }
+        if(key === 'pSize') { const img = doc.getElementById('stuImg'); if(img) { img.style.width = value+'px'; img.style.height = value+'px'; } }
+        if(key === 'pX' || key === 'pY') { const el = doc.querySelector('.photo-col'); if(el) el.style.transform = `translate(${designState.pX}px, ${designState.pY}px)`; }
+        if(key === 'pBorder') { const img = doc.getElementById('stuImg'); if(img) { if(value === 'off') { img.style.border = 'none'; img.style.background = 'transparent'; img.style.boxShadow = 'none'; } else { img.style.border = `5px solid ${designState.bdColor}`; img.style.background = '#000'; img.style.boxShadow = '0 15px 40px rgba(0,0,0,0.8)'; } } }
+        if(key === 'cBorder') {
+            const card = doc.getElementById('card');
+            if(card) {
+                card.className = ''; card.classList.add(value);
+                if(value === 'custom' && customBorderData) {
+                    card.style.backgroundImage = `url(${customBorderData})`;
+                    card.style.backgroundSize = "100% 100%"; card.style.border = "none"; card.style.boxShadow = "none";
+                } else { card.style.backgroundImage = "none"; }
+                card.classList.add('active'); 
+            }
+        }
+    }
 
-    // --- FILE LOADERS ---
-    function loadTargetCsv(input) {
-        const file = input.files[0];
-        if(!file) return;
-        const r = new FileReader();
-        r.onload = e => {
-            const lines = e.target.result.split('\n');
-            let newData = [];
-            lines.forEach(l => {
-                const c = l.split(',');
-                if(c[0]) {
-                    if(activeTarget === 1) {
-                        // Main Screen: nD, nE, cD, cE, fD, fE
-                        newData.push({nD:c[0], nE:c[1], cD:c[2], cE:c[3], fD:c[4], fE:c[5]});
-                    } else {
-                        // Sub Screens: Line1, Line2, Line3...
-                        newData.push({l1:c[0], l2:c[1]||'', l3:c[2]||'', l4:c[3]||''});
-                    }
-                }
-            });
-            screenData[activeTarget] = newData;
-            refreshList();
-            alert("Loaded " + newData.length + " items to Screen " + activeTarget);
-        };
-        r.readAsText(file);
-    }
+    function loadSettings() {
+        const saved = localStorage.getItem('royalGradConfig');
+        if (saved) {
+            designState = JSON.parse(saved);
+            for (const [key, value] of Object.entries(designState)) {
+                const el = document.getElementById('in_' + key);
+                if(el) el.value = value;
+            }
+        }
+    }
 
-    function updateTargetBg(input) {
-        const file = input.files[0];
-        if(!file) return;
-        const r = new FileReader();
-        r.onload = e => {
-            bgData[activeTarget] = { 
-                d: e.target.result, 
-                t: file.type.startsWith('video') ? 'video' : 'image' 
-            };
-            // Update live if open
-            if(tvWindows[activeTarget] && !tvWindows[activeTarget].closed) {
-                applyBg(activeTarget);
-            }
-        };
-        r.readAsDataURL(file);
-    }
+    function exportConfig() {
+        const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(designState));
+        const downloadAnchorNode = document.createElement('a');
+        downloadAnchorNode.setAttribute("href", dataStr);
+        downloadAnchorNode.setAttribute("download", "royal_setup.json");
+        document.body.appendChild(downloadAnchorNode);
+        downloadAnchorNode.click();
+        downloadAnchorNode.remove();
+    }
 
-    function loadPhotos(input) {
-        for(let f of input.files) {
-            let n = f.name.toLowerCase().split('.')[0];
-            photoFiles[n] = f;
-        }
-        alert("Photos Loaded for Main Screen");
-    }
+    function importConfig(input) {
+        const file = input.files[0];
+        if(!file) return;
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            try {
+                designState = JSON.parse(e.target.result);
+                localStorage.setItem('royalGradConfig', JSON.stringify(designState));
+                loadSettings();
+                alert("Setup Loaded!");
+            } catch(err) {
+                alert("Invalid file!");
+            }
+        };
+        reader.readAsText(file);
+    }
 
-    function loadLogo(input) {
-        const r = new FileReader();
-        r.onload = e => {
-            logoData = e.target.result;
-            if(tvWindows[1]) tvWindows[1].document.getElementById('logoImg').src = logoData;
-            document.getElementById('logoPreview').src = logoData;
-        };
-        r.readAsDataURL(input.files[0]);
-    }
-    
-    function loadCustomFrame(input) {
-        const r = new FileReader();
-        r.onload = e => { customBorderData = e.target.result; alert("Custom Frame Loaded"); };
-        r.readAsDataURL(input.files[0]);
-    }
-    
-    function loadFont(input) {
-        const r = new FileReader();
-        r.onload = e => { currentFontData = e.target.result; alert("Font Loaded"); };
-        r.readAsDataURL(input.files[0]);
-    }
+    function resetDesign() {
+        if(confirm("Reset all design settings?")) {
+            designState = { ...defaultDesignState };
+            localStorage.removeItem('royalGradConfig');
+            loadSettings();
+            if(tvWindow && !tvWindow.closed) {
+                for (const [key, value] of Object.entries(designState)) applyStyle(key, value, tvWindow.document);
+            }
+        }
+    }
 
-    // --- EDITOR ---
-    function loadContentToEditor() {
-        const idx = document.getElementById('stuList').value;
-        const data = screenData[activeTarget][idx];
-        if(!data) return;
+    function toggleLock(checkbox) {
+        const panel = document.getElementById('designPanel');
+        if(checkbox.checked) panel.classList.add('locked');
+        else panel.classList.remove('locked');
+    }
 
-        if(activeTarget === 1) {
-            document.getElementById('line1').value = data.nD;
-            document.getElementById('line2').value = data.nE;
-            document.getElementById('line3').value = data.fD;
-            document.getElementById('line4').value = data.cD;
-            
-            // Photo Preview
-            let pName = data.nD ? data.nD.trim().toLowerCase() : "";
-            if(photoFiles[pName]) {
-                const r = new FileReader();
-                r.onload = e => { document.getElementById('previewImg').src = e.target.result; };
-                r.readAsDataURL(photoFiles[pName]);
-            } else {
-                document.getElementById('previewImg').src = "https://via.placeholder.com/150";
-            }
-        } else {
-            document.getElementById('line1').value = data.l1;
-            document.getElementById('line2').value = data.l2;
-            document.getElementById('line3').value = data.l3;
-            document.getElementById('line4').value = data.l4;
-        }
-    }
+    function openTV() {
+        tvWindow = window.open('', 'GradTV', 'width=1280,height=720,menubar=no,toolbar=no');
+        if(!tvWindow) { alert("Enable Popups!"); return; }
 
-    // --- LIVE UPDATES ---
-    function openTV(id) {
-        const win = window.open('', 'TV_'+id, 'width=1280,height=720,menubar=no,toolbar=no');
-        tvWindows[id] = win;
-        
-        let css = `
-            @font-face { font-family: 'Faruuma'; src: url('Fonts/faruuma.ttf') format('truetype'); }
-            body { margin:0; overflow:hidden; background:#000; font-family:'Faruuma', serif; transition:0.3s; }
-            #bgLayer { position:absolute; top:0; left:0; width:100%; height:100%; z-index:0; }
-            #bgLayer video, #bgLayer img { width:100%; height:100%; object-fit:cover; }
-            
-            /* S1 Specific */
-            .frame-1 { border:none; box-shadow:0 0 100px #000; }
-            .frame-2 { border: 4px dashed #d4af37; box-shadow: 0 0 20px #d4af37; border-radius: 20px; }
-            .frame-10 { background: #3e2723; border: 5px solid #5d4037; }
-            .theme-1 { background: #001a12; } .theme-2 { background: #0d47a1; } .theme-7 { background: #b71c1c; }
-            
-            #card { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:90vw; display:flex; align-items:center; z-index:20; opacity:0; transition:0.5s; padding:20px; }
-            #card.active { opacity:1; }
-            #logoWrap { position:absolute; top:40px; left:50%; transform:translateX(-50%); z-index:30; }
-            #logoImg { height:120px; filter:drop-shadow(0 5px 5px rgba(0,0,0,0.5)); }
-            
-            /* S2,3,4 Specific */
-            #subContent { position:absolute; width:100%; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; z-index:10; text-align:center; transition:0.3s; }
-            #videoLayer { position:fixed; top:0; left:0; width:100%; height:100%; background:#000; z-index:5000; display:none; justify-content:center; align-items:center; }
-            #videoLayer video, #videoLayer iframe { width:100%; height:100%; border:none; }
-            
-            /* S1 Text */
-            h1 { font-size:5em; margin:0; line-height:1.1; color:white; } h2 { font-size:3em; margin:5px 0; color:#d4af37; }
-            .photo-col { flex:0 0 300px; display:flex; justify-content:center; }
-            #stuImg { width:260px; height:260px; object-fit:cover; }
-            .text-col { flex:1; padding-right:30px; color:white; }
-            
-            /* S4 Pres */
-            #presFrame { position:fixed; top:0; left:0; width:100%; height:100%; border:none; z-index:60; display:none; background:white; }
-        `;
+        let fontCSS = `url('Fonts/faruuma.ttf') format('truetype')`;
+        if (currentFontData) fontCSS = `url('${currentFontData}') format('truetype')`;
 
-        let html = `<html><head><style>${css}</style></head><body>
-            <div id="videoLayer"></div>
-            <div id="bgLayer"></div>
-            <iframe id="presFrame"></iframe>
-            
-            ${id === 1 ? `
-            <div id="logoWrap"><img id="logoImg" src=""></div>
-            <div id="card" class="frame-1">
-                <div class="photo-col"><img id="stuImg"></div>
-                <div class="text-col">
-                    <h1 id="t1" class="font-dv"></h1>
-                    <h2 id="t2" class="font-en"></h2>
-                    <div id="t3" style="font-size:2em;"></div>
-                    <div id="t4" style="font-size:2em;"></div>
-                </div>
-            </div>` : 
-            /* S2, S3, S4 SUB */
-            `<div id="subContent">
-                <div id="s1" style="font-weight:bold;"></div>
-                <div id="s2"></div>
-                <div id="s3"></div>
-                <div id="s4"></div>
-            </div>`}
-        </body></html>`;
+        const html = `
+        <!DOCTYPE html>
+        <html lang="dv" dir="rtl">
+        <head>
+            <style>
+                @font-face { font-family: 'Faruuma'; src: ${fontCSS}; }
+                @import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&display=swap');
+                :root { --theme-color: ${designState.bdColor}; }
+                body { margin:0; overflow:hidden; background:${designState.bgColor}; font-family:'Faruuma', serif; user-select:none; }
+                #fsBtn { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); z-index:9999; padding:20px; font-size:20px; cursor:pointer; background:var(--theme-color); border:2px solid #fff; }
+                #bgLayer { position:fixed; top:0; left:0; width:100%; height:100%; z-index:0; background:transparent; }
+                #jalsaContent { position:absolute; top:0; left:0; width:100%; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; z-index:10; transition: opacity 0.8s ease; opacity:1; }
+                #jalsaContent.hidden { opacity: 0; pointer-events:none; }
+                .jalsa-text { font-family: 'Faruuma', 'Amiri', serif; direction: rtl; text-align: center; }
+                .main-title { font-size: ${designState.mtSize}em; color: ${designState.mtColor}; text-shadow: 2px 2px 10px black; margin-bottom: 20px; border-bottom: 3px solid ${designState.mtColor}; padding-bottom:10px; }
+                .sub-title { font-size: ${designState.stSize}em; color: ${designState.stColor}; text-shadow: 1px 1px 5px black; margin: 8px 0; }
+                #logoWrap { position:absolute; top: ${designState.logoY}px; left:50%; transform:translate(-50%, 0); z-index:20; transition: all 0.8s cubic-bezier(0.22, 1, 0.36, 1); display: ${designState.lVis === 'show' ? 'block' : 'none'}; }
+                #logoImg { height:145px; filter: drop-shadow(0 5px 15px rgba(0,0,0,0.5)); transition:height 0.8s ease; }
+                #logoWrap.live { top: 7.5vh !important; transform:translate(-50%, -50%) !important; background-color: #00281c; padding: 0 10px; border-radius: 50px; }
+                #logoWrap.live #logoImg { height:70px; }
+                #card { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:90vw; max-width:1500px; height:85vh; display:flex; flex-direction:${designState.layoutDir === 'rtl' ? 'row-reverse' : 'row'}; align-items:center; background:rgba(0,40,28,0.95); padding:3vh; box-sizing:border-box; opacity:0; transition:opacity 0.5s ease; z-index:15; }
+                #card.active { opacity:1; }
+                .custom { border: none !important; box-shadow: none !important; }
+                .custom .corner-thick, .custom .corner-thin, .custom .b1-mask { display: none; }
+                .corner-thick { position:absolute; width:40px; height:40px; border:6px solid var(--theme-color); }
+                .corner-thin { position:absolute; width:70px; height:70px; border:2px solid #ffe57f; }
+                .b0 { border: none !important; box-shadow: none !important; background: transparent !important; }
+                .b0 .corner-thick, .b0 .corner-thin, .b0 .b1-mask { display: none; }
+                .b1 { border:none; box-shadow:0 0 100px #000; }
+                .b1 .tl { top:-8px; left:-8px; border-right:0; border-bottom:0; }
+                .b1 .tr { top:-8px; right:-8px; border-left:0; border-bottom:0; }
+                .b1 .bl { bottom:-8px; left:-8px; border-right:0; border-top:0; }
+                .b1 .br { bottom:-8px; right:-8px; border-left:0; border-top:0; }
+                .b1 .tl-in { top:8px; left:8px; border-right:0; border-bottom:0; }
+                .b1 .tr-in { top:8px; right:8px; border-left:0; border-bottom:0; }
+                .b1 .bl-in { bottom:8px; left:8px; border-right:0; border-top:0; }
+                .b1 .br-in { bottom:8px; right:8px; border-left:0; border-top:0; }
+                .b1-mask { position:absolute; background:var(--theme-color); z-index:-1; }
+                .b2 { border: 4px dashed var(--theme-color); box-shadow: 0 0 20px var(--theme-color); border-radius: 20px; } .b2 .corner-thick, .b2 .corner-thin, .b2 .b1-mask { display: none; }
+                .b3 { border: 10px solid var(--theme-color); border-radius: 30px; box-shadow: inset 0 0 30px #000; } .b3 .corner-thick, .b3 .corner-thin, .b3 .b1-mask { display: none; }
+                .b4 { border: 8px solid transparent; border-image: linear-gradient(45deg, var(--theme-color), #ffe57f, var(--theme-color)) 1; box-shadow: 0 0 15px rgba(212,175,55,0.5); } .b4 .corner-thick, .b4 .corner-thin, .b4 .b1-mask { display: none; }
+                .b5 { border: 2px solid var(--theme-color); outline: 4px solid #00281c; outline-offset: -10px; box-shadow: 0 0 0 6px var(--theme-color); } .b5 .corner-thick, .b5 .corner-thin, .b5 .b1-mask { display: none; }
+                .b6 { border-top: 10px double var(--theme-color); border-bottom: 10px double var(--theme-color); border-left: 2px solid var(--theme-color); border-right: 2px solid var(--theme-color); } .b6 .corner-thick, .b6 .corner-thin, .b6 .b1-mask { display: none; }
+                .b7 { border: 1px solid var(--theme-color); box-shadow: 0 0 50px rgba(0,0,0,0.8); } .b7 .corner-thick, .b7 .corner-thin, .b7 .b1-mask { display: none; }
+                .font-dv { font-family: 'Faruuma', 'Amiri', serif; } .font-en { font-family: 'Times New Roman', serif; direction:ltr; }
+                h1 { font-size: 5em; margin:0; color:${designState.nameCol}; line-height:1.1; }
+                h2 { font-size: 3em; margin:10px 0; color:var(--theme-color); text-transform:uppercase; border-bottom:2px solid var(--theme-color); display:inline-block; width:100%; text-align:left; }
+                .fac-dv { font-size: 2em; color:${designState.detCol}; margin-top:10px; }
+                .fac-en { font-size: 1.6em; color:${designState.detCol}; font-weight:bold; margin-bottom:5px; text-align:left; }
+                .crs-dv { font-size: 2.5em; color:${designState.detCol}; font-weight:bold; }
+                .crs-en { font-size: 2em; color:${designState.detCol}; font-style:italic; margin-bottom:20px; text-align:left; }
+                .comm { background:rgba(212,175,55,0.15); border:2px solid var(--theme-color); padding:20px; font-size:2.2em; color:white; border-radius:10px; text-align:center; width:100%; box-sizing:border-box; }
+                .photo-col { flex:0 0 320px; display:${designState.pVis === 'show' ? 'flex' : 'none'}; justify-content:center; transform:translate(${designState.pX}px, ${designState.pY}px); transition: transform 0.2s ease; }
+                #stuImg { width:${designState.pSize}px; height:${designState.pSize}px; object-fit:cover; border-radius:${designState.pShape}; border:${designState.pBorder === 'on' ? '5px solid var(--theme-color)' : 'none'}; background:${designState.pBorder === 'on' ? '#000' : 'transparent'}; box-shadow:${designState.pBorder === 'on' ? '0 15px 40px rgba(0,0,0,0.8)' : 'none'}; transition: all 0.3s ease; }
+                .text-col { flex:1; text-align:${designState.textAlign}; padding-right:30px; color:white; display:flex; flex-direction:column; justify-content:center; transform: translate(${designState.txtX}px, ${designState.txtY}px); transition: transform 0.2s ease; }
+                #videoLayer { position:fixed; top:0; left:0; width:100%; height:100%; background:#000; z-index:5000; display:none; justify-content:center; align-items:center; }
+                #videoLayer video, #videoLayer iframe { width:100%; height:100%; border:none; }
+                .copyright { position:absolute; bottom:10px; right:10px; font-size:10px; color:rgba(255,255,255,0.3); font-family:sans-serif; z-index:900; }
+            </style>
+            <script>function goFS(btn){document.documentElement.requestFullscreen(); btn.style.display='none';}<\/script>
+        </head>
+        <body>
+            <button id="fsBtn" onclick="goFS(this)">⛶ FULL SCREEN</button>
+            <div id="videoLayer"></div>
+            <div id="bgLayer"></div>
+            <div id="logoWrap"><img id="logoImg" src="https://via.placeholder.com/180x180/00281c/d4af37?text=LOGO"></div>
+            <div id="jalsaContent">
+                <div id="titleContainer" style="margin-top:${designState.mtY}px;"> 
+                    <div id="mainTitleWrap"><div id="jt1" class="main-title jalsa-text"></div></div>
+                    <div id="subTitleWrap">
+                        <div id="jt2" class="sub-title jalsa-text"></div>
+                        <div id="jt3" class="sub-title jalsa-text"></div>
+                        <div id="jt4" class="sub-title jalsa-text"></div>
+                    </div>
+                </div>
+            </div>
+            <div id="card" class="${designState.cBorder}">
+                <div class="b1-mask" style="top:0; left:0; width:100%; height:1px;"></div> <div class="b1-mask" style="bottom:0; left:0; width:100%; height:1px;"></div> <div class="b1-mask" style="top:0; left:0; width:1px; height:100%;"></div> <div class="b1-mask" style="top:0; right:0; width:1px; height:100%;"></div>
+                <div class="corner-thick tl"></div><div class="corner-thick tr"></div><div class="corner-thick bl"></div><div class="corner-thick br"></div>
+                <div class="corner-thin tl-in"></div><div class="corner-thin tr-in"></div><div class="corner-thin bl-in"></div><div class="corner-thin br-in"></div>
+                <div class="photo-col"><img id="stuImg" src=""></div>
+                <div class="text-col">
+                    <h1 id="tnD" class="font-dv"></h1><h2 id="tnE" class="font-en"></h2>
+                    <div id="tfD" class="fac-dv font-dv"></div><div id="tfE" class="fac-en font-en"></div>
+                    <div id="tcD" class="crs-dv font-dv"></div><div id="tcE" class="crs-en font-en"></div>
+                    <div id="tcm" class="comm font-dv"></div>
+                </div>
+            </div>
+            <div class="copyright">© Ali Ibrahim Didi (7791550)</div>
+        </body>
+        </html>`;
 
-        win.document.write(html);
-        win.document.close();
+        tvWindow.document.write(html);
+        tvWindow.document.close();
 
-        // Inject Font
-        if(currentFontData) {
-             const style = win.document.createElement('style');
-             style.innerHTML = `@font-face { font-family: 'Faruuma'; src: url('${currentFontData}') format('truetype'); } body { font-family: 'Faruuma'; }`;
-             win.document.head.appendChild(style);
-        }
+        if(currentLogoData) tvWindow.document.getElementById('logoImg').src = currentLogoData;
+        updateJalsaBackground();
+        updateJalsaText();
+        
+        // Init Custom Border
+        if(customBorderData) applyStyle('cBorder', designState.cBorder, tvWindow.document);
+        
+        document.getElementById('connStatus').innerText = "✅ Connected";
+        document.getElementById('connStatus').style.color = "green";
+    }
 
-        applyBg(id);
-        if(id===1 && logoData) win.document.getElementById('logoImg').src = logoData;
-        applyDesign(id);
-        
-        document.getElementById('connStatus').innerText = "✅ Connected";
-        document.getElementById('connStatus').style.color = "green";
-    }
+    // --- LOGIC ---
+    function updateJalsaBackground() {
+        if(!tvWindow || tvWindow.closed || !currentJalsaBgData) return;
+        const bgDiv = tvWindow.document.getElementById('bgLayer');
+        if(currentJalsaBgType === 'video') {
+            bgDiv.innerHTML = `<video id="bgVid" src="${currentJalsaBgData}" autoplay loop muted style="width:100%; height:100%; object-fit:cover; display:${designState.bgLoop === 'on' ? 'block' : 'none'}"></video>`;
+            setTimeout(() => { const v = tvWindow.document.getElementById('bgVid'); if(v) v.play().catch(e=>{}); }, 500);
+        } else {
+            bgDiv.innerHTML = `<img src="${currentJalsaBgData}" style="width:100%; height:100%; object-fit:cover;">`;
+        }
+    }
 
-    function applyBg(id) {
-        const win = tvWindows[id];
-        const data = bgData[id];
-        if(win && !win.closed && data.d) {
-            const bg = win.document.getElementById('bgLayer');
-            if(data.t === 'video') bg.innerHTML = `<video src="${data.d}" autoplay loop muted></video>`;
-            else bg.innerHTML = `<img src="${data.d}">`;
-        }
-    }
+    function updateJalsaText() {
+        if(!tvWindow || tvWindow.closed) return;
+        const doc = tvWindow.document;
+        doc.getElementById('jt1').innerText = document.getElementById('jLine1').value;
+        doc.getElementById('jt2').innerText = document.getElementById('jLine2').value;
+        doc.getElementById('jt3').innerText = document.getElementById('jLine3').value;
+        doc.getElementById('jt4').innerText = document.getElementById('jLine4').value;
+        if(currentFontData) {
+             const style = doc.createElement('style');
+             style.innerHTML = `@font-face { font-family: 'Faruuma'; src: url('${currentFontData}') format('truetype'); } .jalsa-text, .font-dv { font-family: 'Faruuma', 'Amiri', serif !important; }`;
+             doc.head.appendChild(style);
+        }
+    }
 
-    function sendContent() {
-        const win = tvWindows[activeTarget];
-        if(!win || win.closed) return;
-        const doc = win.document;
+    function showJalsaScreen() {
+        if(!tvWindow || tvWindow.closed) return;
+        tvWindow.document.getElementById('card').classList.remove('active');
+        tvWindow.document.getElementById('jalsaContent').classList.remove('hidden');
+        const logo = tvWindow.document.getElementById('logoWrap');
+        logo.classList.remove('live');
+        logo.style.display = (designState.lVis === 'show') ? 'block' : 'none';
+        document.getElementById('statusMsg').innerText = "Mode: Jalsa";
+    }
 
-        const l1 = document.getElementById('line1').value;
-        const l2 = document.getElementById('line2').value;
-        const l3 = document.getElementById('line3').value;
-        const l4 = document.getElementById('line4').value;
+    function updateTV() {
+        if(!tvWindow || tvWindow.closed) { alert("TV Closed!"); return; }
+        tvWindow.document.getElementById('jalsaContent').classList.add('hidden');
+        const logo = tvWindow.document.getElementById('logoWrap');
+        logo.classList.add('live');
+        logo.style.display = (designState.lVis === 'show') ? 'block' : 'none';
+        const doc = tvWindow.document;
+        doc.getElementById('tnD').textContent = document.getElementById('nD').value;
+        doc.getElementById('tnE').textContent = document.getElementById('nE').value;
+        doc.getElementById('tfD').textContent = document.getElementById('fD').value;
+        doc.getElementById('tfE').textContent = document.getElementById('fE').value;
+        doc.getElementById('tcD').textContent = document.getElementById('cD').value;
+        doc.getElementById('tcE').textContent = document.getElementById('cE').value;
+        doc.getElementById('tcm').textContent = document.getElementById('cm').value;
+        const img = doc.getElementById('stuImg');
+        if(currentPhotoData) { img.src = currentPhotoData; img.style.display='block'; }
+        else { img.src = 'https://via.placeholder.com/280x280/00281c/d4af37?text=No+Photo'; }
+        setTimeout(() => doc.getElementById('card').classList.add('active'), 300);
+        stopVideo(); 
+        document.getElementById('statusMsg').innerText = "On Air: " + document.getElementById('nE').value;
+    }
 
-        if(activeTarget === 1) {
-            // S1 Logic
-            const idx = document.getElementById('stuList').value;
-            const data = screenData[1][idx];
-            
-            // Manual overrides from text box if empty csv, else use data
-            if(data) {
-                doc.getElementById('t1').innerText = data.nD;
-                doc.getElementById('t2').innerText = data.nE;
-                doc.getElementById('t3').innerText = data.fD;
-                doc.getElementById('t4').innerText = data.cD;
-                
-                let pName = data.nD ? data.nD.trim().toLowerCase() : "";
-                if(photoFiles[pName]) {
-                    const r = new FileReader();
-                    r.onload = e => { doc.getElementById('stuImg').src = e.target.result; };
-                    r.readAsDataURL(photoFiles[pName]);
-                } else { doc.getElementById('stuImg').src = ""; }
-            } else {
-                // Manual text sent
-                doc.getElementById('t1').innerText = l1;
-                doc.getElementById('t2').innerText = l2;
-            }
-            doc.getElementById('card').classList.add('active');
-        } else {
-            // Sub Screens
-            doc.getElementById('s1').innerText = l1;
-            doc.getElementById('s2').innerText = l2;
-            doc.getElementById('s3').innerText = l3;
-            doc.getElementById('s4').innerText = l4;
-        }
-    }
+    function clearTV() {
+        if(!tvWindow || tvWindow.closed) return;
+        showJalsaScreen();
+        stopVideo();
+        document.getElementById('statusMsg').innerText = "Screen Cleared";
+    }
 
-    function clearTarget() {
-        const win = tvWindows[activeTarget];
-        if(win && !win.closed) {
-            if(activeTarget === 1) win.document.getElementById('card').classList.remove('active');
-            else { 
-                win.document.getElementById('s1').innerText = ""; 
-                win.document.getElementById('s2').innerText = ""; 
-                win.document.getElementById('s3').innerText = ""; 
-                win.document.getElementById('s4').innerText = ""; 
-            }
-        }
-    }
+    function playLocalVideo() {
+        if(!tvWindow || tvWindow.closed) { alert("TV Closed!"); return; }
+        tvWindow.document.getElementById('jalsaContent').classList.add('hidden');
+        const file = document.getElementById('videoLocal').files[0];
+        if(!file) { alert("Select video!"); return; }
+        const url = URL.createObjectURL(file);
+        const vl = tvWindow.document.getElementById('videoLayer');
+        vl.innerHTML = `<video id="mainVid" src="${url}" autoplay controls style="width:100%;height:100%;"></video>`;
+        vl.style.display = 'flex';
+        setTimeout(() => { const v = tvWindow.document.getElementById('mainVid'); if(v) v.play().catch(e => { alert("Please click ONCE on the TV screen to enable audio auto-play."); }); }, 100);
+        document.getElementById('statusMsg').innerText = "Playing Video...";
+    }
 
-    // --- DESIGN SYSTEM ---
-    function liveUpdate(key, value) {
-        settings[activeTarget][key] = value;
-        localStorage.setItem('royalEventConfig', JSON.stringify(settings));
-        applyDesign(activeTarget);
-    }
+    function playYoutube() {
+        if(!tvWindow || tvWindow.closed) { alert("TV Closed!"); return; }
+        tvWindow.document.getElementById('jalsaContent').classList.add('hidden');
+        const url = document.getElementById('ytLink').value;
+        if(!url) return;
+        const match = url.match(/^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/);
+        const id = (match && match[2].length === 11) ? match[2] : null;
+        if(!id) return;
+        const vl = tvWindow.document.getElementById('videoLayer');
+        vl.innerHTML = `<iframe src="https://www.youtube.com/embed/${id}?autoplay=1&mute=0" allow="autoplay; encrypted-media" style="width:100%;height:100%;border:none;"></iframe>`;
+        vl.style.display = 'flex';
+        document.getElementById('statusMsg').innerText = "Playing YouTube...";
+    }
 
-    function applyDesign(id) {
-        const win = tvWindows[id];
-        if(!win || win.closed) return;
-        const doc = win.document;
-        const s = settings[id];
+    function stopVideo() {
+        if(!tvWindow || tvWindow.closed) return;
+        const vl = tvWindow.document.getElementById('videoLayer');
+        vl.innerHTML = ''; vl.style.display = 'none';
+        if(!tvWindow.document.getElementById('card').classList.contains('active')) { showJalsaScreen(); }
+    }
 
-        // Theme
-        doc.body.className = s.mainTheme;
+    document.getElementById('jalsaCsvFile').onchange = e => {
+        const file = e.target.files[0];
+        if(!file) return;
+        const r = new FileReader();
+        r.onload = evt => {
+            const lines = evt.target.result.split('\n');
+            if(lines.length > 0) {
+                const cols = lines[0].split(',');
+                if(cols[0]) document.getElementById('jLine1').value = cols[0].trim();
+                if(cols[1]) document.getElementById('jLine2').value = cols[1].trim();
+                if(cols[2]) document.getElementById('jLine3').value = cols[2].trim();
+                if(cols[3]) document.getElementById('jLine4').value = cols[3].trim();
+                updateJalsaText();
+                alert("Titles Loaded!");
+            }
+        };
+        r.readAsText(file);
+    };
 
-        if(id === 1) {
-            // S1 Specifics
-            const card = doc.getElementById('card');
-            card.className = s.cBorder;
-            if(s.cBorder === 'custom' && customBorderData) {
-                card.style.backgroundImage = `url(${customBorderData})`;
-                card.style.backgroundSize = "100% 100%";
-            } else { card.style.backgroundImage = "none"; }
-            
-            // Photo
-            const pCol = doc.querySelector('.photo-col');
-            pCol.style.display = (s.pVis === 'show') ? 'flex' : 'none';
-            pCol.style.transform = `translate(${s.pX}px, ${s.pY}px)`;
-            const img = doc.getElementById('stuImg');
-            img.style.width = s.pSize + 'px'; img.style.height = s.pSize + 'px';
-            img.style.borderRadius = s.pShape;
-            img.style.border = (s.pBorder === 'on') ? "5px solid #d4af37" : "none";
+    document.getElementById('fontFile').onchange = e => {
+        const file = e.target.files[0];
+        if(!file) return;
+        const r = new FileReader();
+        r.onload = evt => {
+            currentFontData = evt.target.result;
+            const newFont = new FontFace('Faruuma', `url(${currentFontData})`);
+            newFont.load().then(f => {
+                document.fonts.add(f);
+                document.querySelectorAll('.font-dv, input, h2').forEach(el => el.style.fontFamily = "'Faruuma', serif");
+                alert("Font Loaded! Re-open TV.");
+            });
+        };
+        r.readAsDataURL(file);
+    };
 
-            // Logo
-            const logo = doc.getElementById('logoWrap');
-            logo.style.display = (s.lVis === 'show') ? 'block' : 'none';
-            logo.style.top = s.logoY + 'px';
-            logo.style.left = '50%';
-            logo.style.transform = `translate(calc(-50% + ${s.logoX}px), 0)`;
+    document.getElementById('jalsaBgFile').onchange = e => {
+        const file = e.target.files[0];
+        if(!file) return;
+        const r = new FileReader();
+        r.onload = evt => {
+            currentJalsaBgData = evt.target.result;
+            currentJalsaBgType = file.type.startsWith('video') ? 'video' : 'image';
+            updateJalsaBackground();
+            alert("Background Set");
+        };
+        r.readAsDataURL(file);
+    };
 
-        } else {
-            // Sub Screens
-            const con = doc.getElementById('subContent');
-            con.style.transform = `translate(${s.subX}px, ${s.subY}px)`;
-            doc.getElementById('s1').style.fontSize = (parseFloat(s.subSize)+2) + 'em';
-            doc.getElementById('s2').style.fontSize = s.subSize + 'em';
-            
-            doc.getElementById('s1').style.color = s.subColor;
-        }
-    }
+    document.getElementById('logoFile').onchange = e => {
+        const r = new FileReader();
+        r.onload = evt => {
+            currentLogoData = evt.target.result;
+            if(tvWindow && !tvWindow.closed) tvWindow.document.getElementById('logoImg').src = currentLogoData;
+        };
+        r.readAsDataURL(e.target.files[0]);
+    };
 
-    // --- VIDEO & PRES ---
-    function playLocalVideo() {
-        if(!tvWindows[1] || tvWindows[1].closed) return;
-        const file = document.getElementById('videoLocal').files[0];
-        if(!file) return;
-        const url = URL.createObjectURL(file);
-        const vl = tvWindows[1].document.getElementById('videoLayer');
-        vl.innerHTML = `<video id="mainVid" src="${url}" autoplay controls></video>`;
-        vl.style.display = 'flex';
-        tvWindows[1].document.getElementById('card').classList.remove('active');
-    }
+    document.getElementById('customBorderFile').onchange = e => {
+        const r = new FileReader();
+        r.onload = evt => {
+            customBorderData = evt.target.result;
+            alert("Custom Frame Loaded! Select 'Custom Frame' in Card Style.");
+        };
+        r.readAsDataURL(e.target.files[0]);
+    };
 
-    function playYoutube() {
-        if(!tvWindows[1] || tvWindows[1].closed) return;
-        const url = document.getElementById('ytLink').value;
-        const match = url.match(/^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/);
-        const id = (match && match[2].length === 11) ? match[2] : null;
-        if(id) {
-            const vl = tvWindows[1].document.getElementById('videoLayer');
-            vl.innerHTML = `<iframe src="https://www.youtube.com/embed/${id}?autoplay=1" style="border:none;"></iframe>`;
-            vl.style.display = 'flex';
-            tvWindows[1].document.getElementById('card').classList.remove('active');
-        }
-    }
+    document.getElementById('csvFile').onchange = e => {
+        const r = new FileReader();
+        r.onload = ev => {
+            let txt = ev.target.result; if(txt.charCodeAt(0)===0xFEFF) txt=txt.substr(1);
+            let lines = txt.split('\n');
+            students = [];
+            lines.forEach(l => {
+                let c = l.split(',');
+                if(c.length>1) {
+                    students.push({
+                        nD: c[0]?.trim(), nE: c[1]?.trim(), cD: c[2]?.trim(), cE: c[3]?.trim(), 
+                        fD: c[4]?.trim(), fE: c[5]?.trim(), cm: c[6]?.trim(), ph: c[7]?.trim()
+                    });
+                }
+            });
+            filterList(); alert("Loaded: " + students.length);
+        };
+        r.readAsText(e.target.files[0]);
+    };
 
-    function stopVideo() {
-        if(tvWindows[1] && !tvWindows[1].closed) {
-            const vl = tvWindows[1].document.getElementById('videoLayer');
-            vl.innerHTML = ''; vl.style.display = 'none';
-        }
-    }
+    document.getElementById('photoFolder').onchange = e => {
+        photoFiles = {};
+        for(let f of e.target.files) {
+            let name = f.name.toLowerCase();
+            photoFiles[name] = f; 
+            let nameNoExt = name.split('.').slice(0, -1).join('.');
+            if(nameNoExt) photoFiles[nameNoExt] = f; 
+        }
+        alert("Photos: " + e.target.files.length);
+    };
 
-    function loadPres() {
-        const url = document.getElementById('presUrl').value;
-        if(tvWindows[4]) { 
-            const f = tvWindows[4].document.getElementById('presFrame');
-            f.src = url; f.style.display = 'block'; 
-        }
-        if(isCasting && tvWindows[1]) {
-            const f = tvWindows[1].document.getElementById('presFrame');
-            f.src = url; f.style.display = 'block';
-        }
-    }
+    function processPhoto(file, cb) {
+        const reader = new FileReader();
+        reader.onload = e => { cb(e.target.result); };
+        reader.readAsDataURL(file);
+    }
 
-    function clearPres() {
-        if(tvWindows[4]) tvWindows[4].document.getElementById('presFrame').style.display='none';
-    }
+    function filterList() {
+        let t = document.getElementById('search').value.toLowerCase();
+        let l = document.getElementById('stuList'); l.innerHTML = '';
+        students.forEach((s,i) => {
+            if((s.nD+s.nE).toLowerCase().includes(t)) {
+                let o = document.createElement('option'); o.value=i; o.text=(i+1)+". "+s.nD; l.add(o);
+            }
+        });
+    }
 
-    function toggleCast() {
-        isCasting = !isCasting;
-        const btn = document.getElementById('castBtn');
-        const url = document.getElementById('presUrl').value;
-        if(isCasting) {
-            btn.innerText = "⏹ STOP CASTING"; btn.style.background = "#333";
-            document.getElementById('presPanel').classList.add('pres-active');
-            if(tvWindows[1]) {
-                const f = tvWindows[1].document.getElementById('presFrame');
-                f.src = url; f.style.display = 'block';
-                tvWindows[1].document.getElementById('card').classList.remove('active');
-            }
-        } else {
-            btn.innerText = "🔴 CAST PRES TO MAIN"; btn.style.background = "#b71c1c";
-            document.getElementById('presPanel').classList.remove('pres-active');
-            if(tvWindows[1]) tvWindows[1].document.getElementById('presFrame').style.display='none';
-        }
-    }
+    function loadStudent() {
+        let idx = document.getElementById('stuList').value;
+        let s = students[idx];
+        document.getElementById('nD').value = s.nD; document.getElementById('nE').value = s.nE;
+        document.getElementById('fD').value = s.fD; document.getElementById('fE').value = s.fE;
+        document.getElementById('cD').value = s.cD; document.getElementById('cE').value = s.cE;
+        document.getElementById('cm').value = s.cm;
+        let pName = s.ph ? s.ph.trim().toLowerCase() : "";
+        let prev = document.getElementById('previewImg');
+        let stat = document.getElementById('pStat');
+        let foundFile = photoFiles[pName]; 
+        if(foundFile) {
+            stat.innerText = "Loading...";
+            processPhoto(foundFile, d => {
+                currentPhotoData = d; prev.src = d; 
+                stat.innerText = "✅ Found"; stat.style.color="green";
+            });
+        } else {
+            currentPhotoData = null; prev.src = "https://via.placeholder.com/150"; 
+            stat.innerText = "❌ Missing"; stat.style.color="red";
+        }
+    }
 
-    // --- UTILS ---
-    function move(d) {
-        let l = document.getElementById('stuList');
-        l.selectedIndex = Math.min(Math.max(l.selectedIndex+d, 0), l.options.length-1);
-        loadContentToEditor();
-    }
-    
-    function toggleDesignPanel() {
-        const p = document.getElementById('designPanel');
-        p.style.display = p.style.display === 'block' ? 'none' : 'block';
-    }
-    
-    function toggleLock(cb) {
-        if(cb.checked) document.getElementById('designPanel').classList.add('locked');
-        else document.getElementById('designPanel').classList.remove('locked');
-    }
-
-    // Save/Load
-    function exportConfig() {
-        const d = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(settings));
-        const a = document.createElement('a'); a.href=d; a.download="royal_setup.json"; a.click();
-    }
-    function importConfig(i) {
-        const f = i.files[0]; if(!f) return;
-        const r = new FileReader();
-        r.onload = e => { settings = JSON.parse(e.target.result); localStorage.setItem('royalEventConfig', JSON.stringify(settings)); loadSettings(); alert("Loaded!"); };
-        r.readAsText(f);
-    }
-    function loadSettings() {
-        const s = localStorage.getItem('royalEventConfig');
-        if(s) settings = JSON.parse(s);
-        updateDesignInputs();
-    }
+    function move(d) {
+        let l = document.getElementById('stuList');
+        if(l.options.length) {
+            l.selectedIndex = Math.min(Math.max(l.selectedIndex+d, 0), l.options.length-1);
+            loadStudent();
+        }
+    }
 </script>
 </body>
 </html>
