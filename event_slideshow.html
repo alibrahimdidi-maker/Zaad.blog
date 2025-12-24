@@ -2,7 +2,7 @@
 <html lang="dv" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>Royal Graduation System (V9.2 - Ultimate Control)</title>
+    <title>Royal Graduation System (V9.3 - Smart Adaptive)</title>
     <style>
         /* --- GLOBAL --- */
         body {
@@ -123,7 +123,7 @@
 
     <div id="securityOverlay">
         <div class="sec-box">
-            <h1 style="color:#d4af37; font-family:'Faruuma'; font-size:30px;">Royal Graduation V9.2</h1>
+            <h1 style="color:#d4af37; font-family:'Faruuma'; font-size:30px;">Royal Graduation V9.3</h1>
             <p style="color:#fff; font-size:14px; margin-bottom:20px;">🔒 Protected Software. Enter License Key:</p>
             <input type="password" id="licenseKey" class="sec-input" placeholder="Paste Generated Key">
             <button class="sec-btn" onclick="verifyLicense()">UNLOCK</button>
@@ -165,7 +165,7 @@
             <button id="lockBtn" class="btn-lock" onclick="toggleLock()">🔓 Lock Settings (For Live)</button>
 
             <div class="design-panel" id="designPanel">
-                <h3 style="margin-top:0; border:none; font-size:14px;">🎨 Live Design Controls (V9.2)</h3>
+                <h3 style="margin-top:0; border:none; font-size:14px;">🎨 Live Design Controls (V9.3)</h3>
                 
                 <div class="design-row">
                     <div class="design-col">
@@ -183,10 +183,6 @@
                         <div style="display:flex; gap:2px; margin-top:2px;">
                             <span style="font-size:9px;">Pos Y:</span>
                             <input type="range" id="mtYRange" min="0" max="500" value="210" oninput="liveUpdate('mtY', this.value)">
-                        </div>
-                        <div style="display:flex; gap:2px; margin-top:2px;">
-                            <span style="font-size:9px;">Pos X:</span>
-                            <input type="range" id="mtXRange" min="-600" max="600" value="0" oninput="liveUpdate('mtX', this.value)">
                         </div>
                     </div>
                     
@@ -218,10 +214,10 @@
                             <option value="rtl">▶ Right to Left (Photo Right)</option>
                             <option value="ltr">◀ Left to Right (Photo Left)</option>
                         </select>
-                        <select id="textAlignSel" onchange="liveUpdate('textAlign', this.value)" style="width:100%; background:#bbdefb; margin-top:2px;">
-                            <option value="right">Align: Right</option>
-                            <option value="center">Align: Center</option>
-                            <option value="left">Align: Left</option>
+                        <span class="d-label" style="margin-top:2px;">Student Name Underline:</span>
+                        <select id="nLineSel" onchange="liveUpdate('nLine', this.value)" style="width:100%; background:#ffccbc;">
+                            <option value="show">Name Line: SHOW</option>
+                            <option value="hide">Name Line: HIDE</option>
                         </select>
                     </div>
                     <div class="design-col">
@@ -233,6 +229,10 @@
                         <div style="display:flex; gap:2px; margin-top:2px; align-items:center;">
                             <span style="font-size:9px;">Detail:</span>
                             <input type="color" id="detColorPick" value="#fff9c4" oninput="liveUpdate('detColor', this.value)" style="width:100%;">
+                        </div>
+                        <div style="display:flex; gap:2px; margin-top:2px; align-items:center;">
+                            <span style="font-size:9px;">Comment:</span>
+                            <input type="color" id="commColorPick" value="#ffffff" oninput="liveUpdate('commColor', this.value)" style="width:100%;">
                         </div>
                     </div>
                 </div>
@@ -257,30 +257,21 @@
                             <input type="range" id="logoXRange" min="-900" max="900" value="0" title="X Pos" oninput="liveUpdate('logoX', this.value)">
                             <input type="range" id="logoYRange" min="0" max="800" value="40" title="Y Pos" oninput="liveUpdate('logoY', this.value)">
                         </div>
-                        <div style="display:flex; gap:2px; margin-top:2px;">
-                            <span style="font-size:9px;">Size:</span>
-                            <input type="range" id="lSizeRange" min="50" max="500" value="145" oninput="liveUpdate('lSize', this.value)">
-                        </div>
                     </div>
                 </div>
 
                 <div class="design-row" style="margin-bottom:0; border:none;">
                     <div class="design-col">
-                        <span class="d-label">Photo Settings:</span>
+                        <span class="d-label">Photo Control (Auto-Hide if Missing):</span>
                         <div style="display:flex; gap:2px;">
-                            <select id="pShapeSel" onchange="liveUpdate('pShape', this.value)" style="width:50%;">
-                                <option value="50%">Circle</option>
-                                <option value="15px">Square</option>
-                                <option value="portrait">Full Body</option>
-                            </select>
-                            <select id="pBorderSel" onchange="liveUpdate('pBorder', this.value)" style="width:50%;">
-                                <option value="on">Frame: ON</option>
-                                <option value="off">Frame: OFF</option>
+                            <select id="pVisSel" onchange="liveUpdate('pVis', this.value)" style="width:100%; background:#ffe0b2;">
+                                <option value="show">Photo & Frame: ON</option>
+                                <option value="hide">Photo & Frame: OFF</option>
                             </select>
                         </div>
                     </div>
                     <div class="design-col">
-                        <span class="d-label">Resize & Position:</span>
+                        <span class="d-label">Resize:</span>
                         <input type="range" id="pSizeRange" min="150" max="600" value="260" title="Size" oninput="liveUpdate('pSize', this.value)">
                         <div style="display:flex; gap:2px; margin-top:2px;">
                             <input type="range" id="pYRange" min="-200" max="200" value="0" title="Y" oninput="liveUpdate('pY', this.value)">
@@ -382,7 +373,7 @@
     document.getElementById('licenseKey').addEventListener("keyup", e => { if (e.key === "Enter") verifyLicense(); });
 
     /* =========================================
-       SECTION 2: APP LOGIC (V9.2 FEATURES)
+       SECTION 2: APP LOGIC (V9.3 FEATURES)
        ========================================= */
 
     function toggleControlFS() {
@@ -410,7 +401,7 @@
         cBorder: 'b1', bdColor: '#d4af37', bgPreset: 'bg1',
         layoutDir: 'rtl', textAlign: 'right', bgLoop: 'on',
         txtX: 0, txtY: 0,
-        nLine: 'show', nameColor: '#ffffff', detColor: '#fff9c4'
+        nLine: 'show', nameColor: '#ffffff', detColor: '#fff9c4', commColor: '#ffffff'
     };
 
     function toggleLock() {
@@ -447,7 +438,8 @@
                 setVal('pShapeSel', designState.pShape); setVal('pBorderSel', designState.pBorder); setVal('pVisSel', designState.pVis);
                 setVal('pSizeRange', designState.pSize); setVal('pYRange', designState.pY); setVal('pXRange', designState.pX);
                 setVal('bgLoopSel', designState.bgLoop);
-                setVal('nameColorPick', designState.nameColor); setVal('detColorPick', designState.detColor);
+                setVal('nameColorPick', designState.nameColor); setVal('detColorPick', designState.detColor); setVal('commColorPick', designState.commColor);
+                setVal('nLineSel', designState.nLine);
                 
                 if(tvWindow && !tvWindow.closed) { for (const key in designState) { liveUpdate(key, designState[key]); } }
                 alert("Settings Loaded Successfully!");
@@ -464,7 +456,13 @@
         if(!tvWindow || tvWindow.closed) return;
         const doc = tvWindow.document;
 
-        if(key === 'pVis') { const el = doc.querySelector('.photo-col'); if(el) el.style.opacity = (value === 'show') ? '1' : '0'; }
+        if(key === 'pVis') { 
+            const el = doc.querySelector('.photo-col'); 
+            if(el) {
+                if(value === 'show') { el.style.visibility = 'visible'; el.style.opacity = '1'; }
+                else { el.style.visibility = 'hidden'; el.style.opacity = '0'; }
+            }
+        }
         if(key === 'lVis') { const el = doc.getElementById('logoWrap'); if(el) el.style.display = (value === 'show') ? 'block' : 'none'; }
         
         // LOGO UPDATE
@@ -521,6 +519,14 @@
         }
         if(key === 'detColor') {
             doc.querySelectorAll('.fac-dv, .fac-en, .crs-dv, .crs-en').forEach(el => el.style.color = value);
+        }
+        if(key === 'commColor') {
+            doc.getElementById('tcm').style.color = value;
+        }
+        if(key === 'nLine') {
+            const el = doc.getElementById('tnE'); // English Name usually carries the line
+            if(value === 'show') el.style.borderBottom = `2px solid ${designState.bdColor}`;
+            else el.style.borderBottom = 'none';
         }
 
         if(key === 'pShape') { 
@@ -699,9 +705,16 @@
                 .fac-en { font-size: 1.6em; color:#fff9c4; font-weight:bold; margin-bottom:5px; text-align:inherit; }
                 .crs-dv { font-size: 2.5em; color:#fff9c4; font-weight:bold; }
                 .crs-en { font-size: 2em; color:#fff9c4; font-style:italic; margin-bottom:20px; text-align:inherit; }
-                .comm { background:rgba(212,175,55,0.15); border:2px solid var(--theme-color); padding:20px; font-size:2.2em; color:white; border-radius:10px; text-align:center; width:100%; box-sizing:border-box; }
+                .comm { background:rgba(212,175,55,0.15); border:2px solid var(--theme-color); padding:20px; font-size:2.2em; color:white; border-radius:10px; text-align:center; width:100%; box-sizing:border-box; transition: all 0.3s ease; }
+                
+                /* TINY COMMENT LINE STYLE */
+                .comm-tiny { padding: 0 !important; height: 5px !important; overflow: hidden; border:none; background: var(--theme-color); opacity: 0.5; margin-top:10px; }
 
                 .photo-col { flex:0 0 auto; min-width: 200px; display:flex; justify-content:center; align-items:center; transform:translate(${designState.pX}px, ${designState.pY}px); transition: transform 0.2s ease; height: 100%; }
+                
+                /* TINY PHOTO DOT STYLE */
+                .shrink-photo img { width: 5px !important; height: 5px !important; border-radius: 50% !important; border: none !important; box-shadow: none !important; background: var(--theme-color); }
+                
                 #stuImg { width:${designState.pSize}px; height:${designState.pSize}px; object-fit:cover; border-radius:${designState.pShape}; border:5px solid var(--theme-color); background:#000; box-shadow:0 15px 40px rgba(0,0,0,0.8); transition: all 0.3s ease; }
                 #stuImg.portrait-mode { height: 95% !important; width: auto !important; max-width: 100%; object-fit: contain; border-radius: 10px; }
 
@@ -758,8 +771,10 @@
         liveUpdate('tLine', designState.tLine);
         liveUpdate('nameColor', designState.nameColor);
         liveUpdate('detColor', designState.detColor);
+        liveUpdate('commColor', designState.commColor);
         liveUpdate('mtX', designState.mtX);
         liveUpdate('layoutDir', designState.layoutDir);
+        liveUpdate('nLine', designState.nLine);
         
         if(designState.cBorder === 'custom' && customBorderData) {
             liveUpdate('cBorder', 'custom');
@@ -817,11 +832,30 @@
         doc.getElementById('tfE').textContent = document.getElementById('fE').value;
         doc.getElementById('tcD').textContent = document.getElementById('cD').value;
         doc.getElementById('tcE').textContent = document.getElementById('cE').value;
-        doc.getElementById('tcm').textContent = document.getElementById('cm').value;
+        
+        // AUTO COMMENT COLLAPSE
+        const cmText = document.getElementById('cm').value;
+        const commBox = doc.getElementById('tcm');
+        if(!cmText || cmText.trim() === "") {
+            commBox.textContent = "";
+            commBox.classList.add('comm-tiny');
+        } else {
+            commBox.textContent = cmText;
+            commBox.classList.remove('comm-tiny');
+        }
 
         const img = doc.getElementById('stuImg');
-        if(currentPhotoData) { img.src = currentPhotoData; img.style.display='block'; }
-        else { img.src = 'https://via.placeholder.com/280x280/00281c/d4af37?text=No+Photo'; }
+        const pCol = doc.querySelector('.photo-col');
+        
+        if(currentPhotoData) { 
+            img.src = currentPhotoData; 
+            img.style.display='block'; 
+            pCol.classList.remove('shrink-photo');
+        } else { 
+            // AUTO PHOTO DOT
+            img.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'; // Empty pixel
+            pCol.classList.add('shrink-photo');
+        }
 
         setTimeout(() => doc.getElementById('card').classList.add('active'), 300);
         stopVideo(); 
