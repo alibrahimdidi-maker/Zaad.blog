@@ -2,7 +2,7 @@
 <html lang="dv" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>Royal Graduation System (V9.5 - Fixed Alignment)</title>
+    <title>Royal Graduation System (V10.2 - Ultimate Customization)</title>
     <style>
         /* --- GLOBAL --- */
         body {
@@ -123,7 +123,7 @@
 
     <div id="securityOverlay">
         <div class="sec-box">
-            <h1 style="color:#d4af37; font-family:'Faruuma'; font-size:30px;">Royal Graduation V9.5</h1>
+            <h1 style="color:#d4af37; font-family:'Faruuma'; font-size:30px;">Royal Graduation V10.2</h1>
             <p style="color:#fff; font-size:14px; margin-bottom:20px;">🔒 Protected Software. Enter License Key:</p>
             <input type="password" id="licenseKey" class="sec-input" placeholder="Paste Generated Key">
             <button class="sec-btn" onclick="verifyLicense()">UNLOCK</button>
@@ -165,11 +165,11 @@
             <button id="lockBtn" class="btn-lock" onclick="toggleLock()">🔓 Lock Settings (For Live)</button>
 
             <div class="design-panel" id="designPanel">
-                <h3 style="margin-top:0; border:none; font-size:14px;">🎨 Live Design Controls (V9.5)</h3>
+                <h3 style="margin-top:0; border:none; font-size:14px;">🎨 Live Design Controls (V10.2)</h3>
                 
                 <div class="design-row">
                     <div class="design-col">
-                        <span class="d-label">Main Title:</span>
+                        <span class="d-label">Main Title (Position & Align):</span>
                         <div style="display:flex; gap:2px;">
                             <input type="range" id="mtSizeRange" min="2" max="10" step="0.1" value="5.6" oninput="liveUpdate('mtSize', this.value)" title="Size">
                             <input type="color" id="mtColorPick" value="#d4af37" oninput="liveUpdate('mtColor', this.value)" title="Color">
@@ -228,6 +228,33 @@
                     </div>
                 </div>
 
+                <div class="design-row" style="background:#e0f7fa; padding:5px; border-radius:5px;">
+                    <div class="design-col">
+                        <span class="d-label" style="color:#006064;">📝 Individual Text Control:</span>
+                        
+                        <div style="display:flex; gap:2px; margin-top:2px; align-items:center;">
+                            <span style="font-size:9px; width:40px;">Name Dv:</span>
+                            <input type="range" min="1" max="8" step="0.1" value="5" oninput="liveUpdate('tnDSize', this.value)" style="flex:1;">
+                            <input type="color" value="#ffffff" oninput="liveUpdate('tnDColor', this.value)">
+                        </div>
+                        <div style="display:flex; gap:2px; margin-top:2px; align-items:center;">
+                            <span style="font-size:9px; width:40px;">Name En:</span>
+                            <input type="range" min="1" max="6" step="0.1" value="3" oninput="liveUpdate('tnESize', this.value)" style="flex:1;">
+                            <input type="color" value="#ffffff" oninput="liveUpdate('tnEColor', this.value)">
+                        </div>
+                        <div style="display:flex; gap:2px; margin-top:2px; align-items:center;">
+                            <span style="font-size:9px; width:40px;">Det 1:</span>
+                            <input type="range" min="1" max="5" step="0.1" value="2" oninput="liveUpdate('tfDSize', this.value)" style="flex:1;">
+                            <input type="color" value="#fff9c4" oninput="liveUpdate('tfDColor', this.value)">
+                        </div>
+                        <div style="display:flex; gap:2px; margin-top:2px; align-items:center;">
+                            <span style="font-size:9px; width:40px;">Det 2:</span>
+                            <input type="range" min="1" max="5" step="0.1" value="2.5" oninput="liveUpdate('tcDSize', this.value)" style="flex:1;">
+                            <input type="color" value="#fff9c4" oninput="liveUpdate('tcDColor', this.value)">
+                        </div>
+                    </div>
+                </div>
+
                 <div class="design-row">
                     <div class="design-col">
                         <span class="d-label">Card & Text Align:</span>
@@ -245,26 +272,11 @@
                             <option value="hide">Name Line: HIDE</option>
                         </select>
                     </div>
-                    <div class="design-col">
-                        <span class="d-label">Text Colors:</span>
-                        <div style="display:flex; gap:2px; align-items:center;">
-                            <span style="font-size:9px;">Name:</span>
-                            <input type="color" id="nameColorPick" value="#ffffff" oninput="liveUpdate('nameColor', this.value)" style="width:100%;">
-                        </div>
-                        <div style="display:flex; gap:2px; margin-top:2px; align-items:center;">
-                            <span style="font-size:9px;">Detail:</span>
-                            <input type="color" id="detColorPick" value="#fff9c4" oninput="liveUpdate('detColor', this.value)" style="width:100%;">
-                        </div>
-                        <div style="display:flex; gap:2px; margin-top:2px; align-items:center;">
-                            <span style="font-size:9px;">Comment:</span>
-                            <input type="color" id="commColorPick" value="#ffffff" oninput="liveUpdate('commColor', this.value)" style="width:100%;">
-                        </div>
-                    </div>
                 </div>
 
                 <div class="design-row">
                     <div class="design-col">
-                        <span class="d-label">Logo Control (4 Corners + Center):</span>
+                        <span class="d-label">Logo Control (Move Anywhere):</span>
                         <div style="display:flex; gap:2px;">
                             <select id="lShapeSel" onchange="liveUpdate('lShape', this.value)" style="width:50%;">
                                 <option value="square">Square</option>
@@ -294,20 +306,25 @@
 
                 <div class="design-row" style="margin-bottom:0; border:none;">
                     <div class="design-col">
-                        <span class="d-label">Photo Control (Auto-Hide):</span>
+                        <span class="d-label">Photo (Move & Resize):</span>
                         <div style="display:flex; gap:2px;">
-                            <select id="pVisSel" onchange="liveUpdate('pVis', this.value)" style="width:100%; background:#ffe0b2;">
-                                <option value="show">Photo & Frame: ON</option>
-                                <option value="hide">Photo & Frame: OFF</option>
+                            <select id="pShapeSel" onchange="liveUpdate('pShape', this.value)" style="width:50%;">
+                                <option value="50%">Circle</option>
+                                <option value="15px">Square</option>
+                                <option value="portrait">Full Body (Side)</option>
+                            </select>
+                            <select id="pVisSel" onchange="liveUpdate('pVis', this.value)" style="width:50%; background:#ffe0b2;">
+                                <option value="show">Show</option>
+                                <option value="hide">Hide</option>
                             </select>
                         </div>
                     </div>
                     <div class="design-col">
-                        <span class="d-label">Resize:</span>
-                        <input type="range" id="pSizeRange" min="150" max="600" value="260" title="Size" oninput="liveUpdate('pSize', this.value)">
+                        <span class="d-label">Size/Pos:</span>
+                        <input type="range" id="pSizeRange" min="150" max="800" value="260" title="Size" oninput="liveUpdate('pSize', this.value)">
                         <div style="display:flex; gap:2px; margin-top:2px;">
-                            <input type="range" id="pYRange" min="-200" max="200" value="0" title="Y" oninput="liveUpdate('pY', this.value)">
-                            <input type="range" id="pXRange" min="-200" max="200" value="0" title="X" oninput="liveUpdate('pX', this.value)">
+                            <input type="range" id="pYRange" min="-400" max="400" value="0" title="Y" oninput="liveUpdate('pY', this.value)">
+                            <input type="range" id="pXRange" min="-600" max="600" value="0" title="X" oninput="liveUpdate('pX', this.value)">
                         </div>
                     </div>
                 </div>
@@ -405,7 +422,7 @@
     document.getElementById('licenseKey').addEventListener("keyup", e => { if (e.key === "Enter") verifyLicense(); });
 
     /* =========================================
-       SECTION 2: APP LOGIC (V9.5 FEATURES)
+       SECTION 2: APP LOGIC (V10.2 FEATURES)
        ========================================= */
 
     function toggleControlFS() {
@@ -433,7 +450,12 @@
         cBorder: 'b1', bdColor: '#d4af37', bgPreset: 'bg1',
         layoutDir: 'rtl', textAlign: 'right', bgLoop: 'on',
         txtX: 0, txtY: 0,
-        nLine: 'show', nameColor: '#ffffff', detColor: '#fff9c4', commColor: '#ffffff'
+        nLine: 'show', nameColor: '#ffffff', detColor: '#fff9c4', commColor: '#ffffff',
+        // INDIVIDUAL TEXT CONTROLS
+        tnDSize: 5, tnDColor: '#ffffff',
+        tnESize: 3, tnEColor: '#ffffff',
+        tfDSize: 2, tfDColor: '#fff9c4',
+        tcDSize: 2.5, tcDColor: '#fff9c4'
     };
 
     function toggleLock() {
@@ -539,7 +561,6 @@
             if(value === 'show') el.style.borderBottom = `3px solid ${designState.mtColor}`;
             else el.style.borderBottom = 'none';
         }
-        // FIX: Target both wrapper and inner text for alignment
         if(key === 'mtAlign') {
             doc.getElementById('mainTitleWrap').style.textAlign = value;
             doc.getElementById('jt1').style.textAlign = value;
@@ -549,10 +570,9 @@
         if(key === 'stY') { doc.getElementById('subTitleWrap').style.marginTop = value + 'px'; }
         if(key === 'stSize') { doc.querySelectorAll('.sub-title').forEach(e => e.style.fontSize = value + 'em'); }
         if(key === 'stColor') { doc.querySelectorAll('.sub-title').forEach(e => e.style.color = value); }
-        // FIX: Target wrapper
         if(key === 'stAlign') { doc.getElementById('subTitleWrap').style.textAlign = value; }
         
-        // STUDENT INFO COLORS
+        // STUDENT INFO COLORS (GLOBAL)
         if(key === 'nameColor') {
             doc.getElementById('tnD').style.color = value;
             doc.getElementById('tnE').style.color = value;
@@ -564,10 +584,20 @@
             doc.getElementById('tcm').style.color = value;
         }
         if(key === 'nLine') {
-            const el = doc.getElementById('tnE'); // English Name usually carries the line
+            const el = doc.getElementById('tnE'); 
             if(value === 'show') el.style.borderBottom = `2px solid ${designState.bdColor}`;
             else el.style.borderBottom = 'none';
         }
+
+        // INDIVIDUAL TEXT CONTROLS
+        if(key === 'tnDSize') doc.getElementById('tnD').style.fontSize = value + 'em';
+        if(key === 'tnDColor') doc.getElementById('tnD').style.color = value;
+        if(key === 'tnESize') doc.getElementById('tnE').style.fontSize = value + 'em';
+        if(key === 'tnEColor') doc.getElementById('tnE').style.color = value;
+        if(key === 'tfDSize') { doc.getElementById('tfD').style.fontSize = value + 'em'; doc.getElementById('tfE').style.fontSize = (value*0.8) + 'em'; }
+        if(key === 'tfDColor') { doc.getElementById('tfD').style.color = value; doc.getElementById('tfE').style.color = value; }
+        if(key === 'tcDSize') { doc.getElementById('tcD').style.fontSize = value + 'em'; doc.getElementById('tcE').style.fontSize = (value*0.8) + 'em'; }
+        if(key === 'tcDColor') { doc.getElementById('tcD').style.color = value; doc.getElementById('tcE').style.color = value; }
 
         if(key === 'pShape') { 
             const img = doc.getElementById('stuImg'); 
@@ -635,7 +665,6 @@
             "linear-gradient(-20deg, #b721ff 0%, #21d4fd 100%)", "linear-gradient(to top, #1e3c72 0%, #2a5298 100%)", "linear-gradient(to right, #243949 0%, #517fa4 100%)",
             "radial-gradient(circle, #d4af37, #000)", "linear-gradient(to right, #868f96 0%, #596164 100%)", "radial-gradient(circle at bottom, #1b2735 0%, #090a0f 100%)",
             "linear-gradient(to top, #000000 0%, #434343 74%)", "linear-gradient(to right, #92fe9d 0%, #00c9ff 100%)",
-             // ... More simulated gradients
              "linear-gradient(45deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%)", "linear-gradient(to top, #fbc2eb 0%, #a6c1ee 100%)", "linear-gradient(120deg, #a1c4fd 0%, #c2e9fb 100%)",
              "linear-gradient(to top, #5f72bd 0%, #9b23ea 100%)", "radial-gradient(circle, #330000, #000)", "radial-gradient(circle, #000033, #000)",
              "conic-gradient(#d4af37, #f0e68c, #d4af37)", "linear-gradient(to bottom, #323232 0%, #3f3f3f 40%, #1c1c1c 150%), linear-gradient(to top, rgba(255,255,255,0.40) 0%, rgba(0,0,0,0.25) 200%)",
@@ -646,8 +675,6 @@
              "linear-gradient(to right, #000000, #434343)"
         ];
         for(let i=0; i<50; i++) { cssGen += `.bg${i+1} { background: ${gradients[i % gradients.length]}; }\n`; }
-        
-        // Generate 50 Unique Card Themes (Borders/Effects)
         const borderStyles = [
             "border:none; box-shadow:0 0 100px #000;", // b1
             "border: 4px dashed var(--theme-color); box-shadow: 0 0 20px var(--theme-color); border-radius: 20px;",
