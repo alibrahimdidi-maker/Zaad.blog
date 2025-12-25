@@ -2,7 +2,7 @@
 <html lang="dv" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>Royal Graduation System (V10.3 - Master AIDD)</title>
+    <title>Royal Graduation System (V10.3 - Final Stable)</title>
     <style>
         /* --- GLOBAL --- */
         body {
@@ -396,7 +396,7 @@
        ========================================= */
     
     // THIS IS FIXED TO USE 'var' FOR OBFUSCATOR COMPATIBILITY
-    var ACCESS_DB = {
+    window.ACCESS_DB = {
         "ROYAL_ADMIN": "2030-12-31", // Admin Key
         "USER01": "2025-12-31", "USER02": "2025-12-31", "USER03": "2025-12-31", "USER04": "2025-12-31", "USER05": "2025-12-31",
         "USER06": "2025-12-31", "USER07": "2025-12-31", "USER08": "2025-12-31", "USER09": "2025-12-31", "USER10": "2025-12-31",
@@ -417,7 +417,7 @@
         if(e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) { return false; }
     };
     
-    function verifyLicense() {
+    window.verifyLicense = function() {
         var inputKey = document.getElementById('licenseKey').value.trim();
         var msg = document.getElementById('secMsg');
         var btn = document.querySelector('.sec-btn');
@@ -427,18 +427,18 @@
         btn.innerText = "CHECKING DATE...";
         
         setTimeout(function() {
-            if (ACCESS_DB.hasOwnProperty(inputKey)) {
-                var expiryDate = new Date(ACCESS_DB[inputKey]);
+            if (window.ACCESS_DB.hasOwnProperty(inputKey)) {
+                var expiryDate = new Date(window.ACCESS_DB[inputKey]);
                 var currentDate = new Date();
 
                 if (currentDate > expiryDate) {
-                    msg.innerText = "⚠️ EXPIRED: This key ended on " + ACCESS_DB[inputKey];
+                    msg.innerText = "⚠️ EXPIRED: This key ended on " + window.ACCESS_DB[inputKey];
                     msg.style.color = "orange";
                     btn.innerText = "RENEW KEY";
                 } else {
                     document.getElementById('securityOverlay').style.display = 'none';
                     document.getElementById('mainApp').style.display = 'flex';
-                    document.getElementById('licenseStatus').innerText = "✅ Unlocked (Valid until: " + ACCESS_DB[inputKey] + ")";
+                    document.getElementById('licenseStatus').innerText = "✅ Unlocked (Valid until: " + window.ACCESS_DB[inputKey] + ")";
                 }
             } else {
                 msg.innerText = "❌ WRONG KEY"; 
@@ -448,13 +448,13 @@
             document.getElementById('licenseKey').value = "";
         }, 800);
     }
-    document.getElementById('licenseKey').addEventListener("keyup", function(e) { if (e.key === "Enter") verifyLicense(); });
+    document.getElementById('licenseKey').addEventListener("keyup", function(e) { if (e.key === "Enter") window.verifyLicense(); });
 
     /* =========================================
        SECTION 2: APP LOGIC (V10.3 FEATURES)
        ========================================= */
 
-    function toggleControlFS() {
+    window.toggleControlFS = function() {
         if (!document.fullscreenElement) document.documentElement.requestFullscreen().catch(function(e){ console.log(e); });
         else document.exitFullscreen();
     }
@@ -486,7 +486,7 @@
         tcDSize: 2.5, tcDColor: '#fff9c4'
     };
 
-    function toggleLock() {
+    window.toggleLock = function() {
         isLocked = !isLocked;
         var btn = document.getElementById('lockBtn');
         var els = [document.getElementById('designPanel'), document.getElementById('sidebarFiles'), document.getElementById('globalTitles')];
@@ -499,12 +499,12 @@
         }
     }
 
-    function downloadConfig() {
+    window.downloadConfig = function() {
         var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(designState));
         var a = document.createElement('a'); a.href = dataStr; a.download = "royal_config_v10.json"; document.body.appendChild(a); a.click(); a.remove();
     }
 
-    function loadConfig(input) {
+    window.loadConfig = function(input) {
         var file = input.files[0]; if(!file) return;
         var reader = new FileReader();
         reader.onload = function(e) {
@@ -523,16 +523,16 @@
                 setVal('nameColorPick', designState.nameColor); setVal('detColorPick', designState.detColor); setVal('commColorPick', designState.commColor);
                 setVal('nLineSel', designState.nLine);
                 
-                if(tvWindow && !tvWindow.closed) { for (var key in designState) { liveUpdate(key, designState[key]); } }
+                if(tvWindow && !tvWindow.closed) { for (var key in designState) { window.liveUpdate(key, designState[key]); } }
                 alert("Settings Loaded Successfully!");
             } catch(err) { alert("Invalid Config File"); }
         };
         reader.readAsText(file);
     }
     
-    function setVal(id, val) { var el = document.getElementById(id); if(el) el.value = val; }
+    window.setVal = function(id, val) { var el = document.getElementById(id); if(el) el.value = val; }
 
-    function liveUpdate(key, value) {
+    window.liveUpdate = function(key, value) {
         if(isLocked) return; 
         designState[key] = value;
         if(!tvWindow || tvWindow.closed) return;
@@ -667,7 +667,7 @@
         }
     }
 
-    function openTV() {
+    window.openTV = function() {
         tvWindow = window.open('', 'GradTV', 'width=1280,height=720,menubar=no,toolbar=no');
         if(!tvWindow) { alert("Enable Popups!"); return; }
 
@@ -834,7 +834,7 @@
             <script>function goFS(btn){document.documentElement.requestFullscreen(); btn.style.display='none';}<\/script>
         </head>
         <body>
-            <div class="watermark">AIDD(7791550)</div> <button id="fsBtn" onclick="goFS(this)">⛶ FULL SCREEN</button>
+            <div class="watermark">AIDD(7791550)</div> <button id=\"fsBtn\" onclick=\"goFS(this)\">⛶ FULL SCREEN</button>
             <div id="videoLayer"></div>
             <div id="bgLayer" class="${designState.bgPreset}"></div>
             <div id="logoWrap"><img id="logoImg" class="logo-${designState.lShape}" src="https://via.placeholder.com/180x180/00281c/d4af37?text=LOGO"></div>
@@ -870,31 +870,31 @@
         updateJalsaBackground();
         updateJalsaText();
         
-        liveUpdate('pShape', designState.pShape);
-        liveUpdate('pVis', designState.pVis);
-        liveUpdate('lVis', designState.lVis);
-        liveUpdate('lShape', designState.lShape);
-        liveUpdate('bgLoop', designState.bgLoop);
+        window.liveUpdate('pShape', designState.pShape);
+        window.liveUpdate('pVis', designState.pVis);
+        window.liveUpdate('lVis', designState.lVis);
+        window.liveUpdate('lShape', designState.lShape);
+        window.liveUpdate('bgLoop', designState.bgLoop);
         
-        liveUpdate('tLine', designState.tLine);
-        liveUpdate('nameColor', designState.nameColor);
-        liveUpdate('detColor', designState.detColor);
-        liveUpdate('commColor', designState.commColor);
-        liveUpdate('mtX', designState.mtX);
-        liveUpdate('layoutDir', designState.layoutDir);
-        liveUpdate('nLine', designState.nLine);
-        liveUpdate('mtAlign', designState.mtAlign);
-        liveUpdate('stAlign', designState.stAlign);
-        liveUpdate('stSize', designState.stSize);
-        liveUpdate('stColor', designState.stColor);
+        window.liveUpdate('tLine', designState.tLine);
+        window.liveUpdate('nameColor', designState.nameColor);
+        window.liveUpdate('detColor', designState.detColor);
+        window.liveUpdate('commColor', designState.commColor);
+        window.liveUpdate('mtX', designState.mtX);
+        window.liveUpdate('layoutDir', designState.layoutDir);
+        window.liveUpdate('nLine', designState.nLine);
+        window.liveUpdate('mtAlign', designState.mtAlign);
+        window.liveUpdate('stAlign', designState.stAlign);
+        window.liveUpdate('stSize', designState.stSize);
+        window.liveUpdate('stColor', designState.stColor);
 
-        liveUpdate('tnDSize', designState.tnDSize); liveUpdate('tnDColor', designState.tnDColor);
-        liveUpdate('tnESize', designState.tnESize); liveUpdate('tnEColor', designState.tnEColor);
-        liveUpdate('tfDSize', designState.tfDSize); liveUpdate('tfDColor', designState.tfDColor);
-        liveUpdate('tcDSize', designState.tcDSize); liveUpdate('tcDColor', designState.tcDColor);
+        window.liveUpdate('tnDSize', designState.tnDSize); window.liveUpdate('tnDColor', designState.tnDColor);
+        window.liveUpdate('tnESize', designState.tnESize); window.liveUpdate('tnEColor', designState.tnEColor);
+        window.liveUpdate('tfDSize', designState.tfDSize); window.liveUpdate('tfDColor', designState.tfDColor);
+        window.liveUpdate('tcDSize', designState.tcDSize); window.liveUpdate('tcDColor', designState.tcDColor);
         
         if(designState.cBorder === 'custom' && customBorderData) {
-            liveUpdate('cBorder', 'custom');
+            window.liveUpdate('cBorder', 'custom');
         }
 
         document.getElementById('connStatus').innerText = "✅ Connected";
@@ -902,7 +902,7 @@
     }
 
     // --- LOGIC ---
-    function updateJalsaBackground() {
+    window.updateJalsaBackground = function() {
         if(!tvWindow || tvWindow.closed || !currentJalsaBgData) return;
         var bgDiv = tvWindow.document.getElementById('bgLayer');
         if(currentJalsaBgType === 'video') {
@@ -913,7 +913,7 @@
         }
     }
 
-    function updateJalsaText() {
+    window.updateJalsaText = function() {
         if(!tvWindow || tvWindow.closed) return;
         var doc = tvWindow.document;
         doc.getElementById('jt1').innerText = document.getElementById('jLine1').value;
@@ -927,7 +927,7 @@
         }
     }
 
-    function showJalsaScreen() {
+    window.showJalsaScreen = function() {
         if(!tvWindow || tvWindow.closed) return;
         tvWindow.document.getElementById('card').classList.remove('active');
         tvWindow.document.getElementById('jalsaContent').classList.remove('hidden');
@@ -936,7 +936,7 @@
         document.getElementById('statusMsg').innerText = "Mode: Jalsa";
     }
 
-    function updateTV() {
+    window.updateTV = function() {
         if(!tvWindow || tvWindow.closed) { alert("TV Closed!"); return; }
         tvWindow.document.getElementById('jalsaContent').classList.add('hidden');
         var logo = tvWindow.document.getElementById('logoWrap');
@@ -973,19 +973,19 @@
         }
 
         setTimeout(function() { doc.getElementById('card').classList.add('active'); }, 300);
-        stopVideo(); 
+        window.stopVideo(); 
         document.getElementById('statusMsg').innerText = "On Air: " + document.getElementById('nE').value;
     }
 
-    function clearTV() {
+    window.clearTV = function() {
         if(!tvWindow || tvWindow.closed) return;
-        showJalsaScreen();
-        stopVideo();
+        window.showJalsaScreen();
+        window.stopVideo();
         document.getElementById('statusMsg').innerText = "Screen Cleared";
     }
 
     // --- VIDEO PLAYER ---
-    function playLocalVideo() {
+    window.playLocalVideo = function() {
         if(!tvWindow || tvWindow.closed) { alert("TV Closed!"); return; }
         tvWindow.document.getElementById('jalsaContent').classList.add('hidden');
         var file = document.getElementById('videoLocal').files[0];
@@ -999,7 +999,7 @@
         document.getElementById('statusMsg').innerText = "Playing Video...";
     }
 
-    function playYoutube() {
+    window.playYoutube = function() {
         if(!tvWindow || tvWindow.closed) { alert("TV Closed!"); return; }
         tvWindow.document.getElementById('jalsaContent').classList.add('hidden');
         var url = document.getElementById('ytLink').value;
@@ -1013,11 +1013,11 @@
         document.getElementById('statusMsg').innerText = "Playing YouTube...";
     }
 
-    function stopVideo() {
+    window.stopVideo = function() {
         if(!tvWindow || tvWindow.closed) return;
         var vl = tvWindow.document.getElementById('videoLayer');
         vl.innerHTML = ''; vl.style.display = 'none';
-        if(!tvWindow.document.getElementById('card').classList.contains('active')) { showJalsaScreen(); }
+        if(!tvWindow.document.getElementById('card').classList.contains('active')) { window.showJalsaScreen(); }
     }
 
     // --- FILES ---
@@ -1032,7 +1032,7 @@
                 if(cols[1]) document.getElementById('jLine2').value = cols[1].trim();
                 if(cols[2]) document.getElementById('jLine3').value = cols[2].trim();
                 if(cols[3]) document.getElementById('jLine4').value = cols[3].trim();
-                updateJalsaText(); alert("Titles Loaded!");
+                window.updateJalsaText(); alert("Titles Loaded!");
             }
         }; r.readAsText(file);
     };
@@ -1057,7 +1057,7 @@
         r.onload = function(evt) {
             currentJalsaBgData = evt.target.result;
             currentJalsaBgType = file.type.startsWith('video') ? 'video' : 'image';
-            updateJalsaBackground(); alert("Background Set");
+            window.updateJalsaBackground(); alert("Background Set");
         }; r.readAsDataURL(file);
     };
 
@@ -1073,7 +1073,7 @@
         var r = new FileReader();
         r.onload = function(evt) {
             customBorderData = evt.target.result;
-            if(designState.cBorder === 'custom') liveUpdate('cBorder', 'custom');
+            if(designState.cBorder === 'custom') window.liveUpdate('cBorder', 'custom');
             alert("Custom Border Loaded!");
         }; r.readAsDataURL(e.target.files[0]);
     };
@@ -1099,7 +1099,7 @@
                     });
                 }
             });
-            filterList(); alert("Loaded: " + students.length);
+            window.filterList(); alert("Loaded: " + students.length);
         }; r.readAsText(e.target.files[0]);
     };
 
@@ -1115,15 +1115,15 @@
         alert("Photos: " + e.target.files.length);
     };
 
-    function processPhoto(file, cb) {
+    window.processPhoto = function(file, cb) {
         var reader = new FileReader();
         reader.onload = function(e) { cb(e.target.result); };
         reader.readAsDataURL(file);
     }
     
-    function manualPhoto(input) {
+    window.manualPhoto = function(input) {
         if(input.files && input.files[0]) {
-             processPhoto(input.files[0], function(d) {
+             window.processPhoto(input.files[0], function(d) {
                 currentPhotoData = d;
                 document.getElementById('previewImg').src = d;
                 document.getElementById('pStat').innerText = "Manual";
@@ -1132,7 +1132,7 @@
         }
     }
 
-    function filterList() {
+    window.filterList = function() {
         var t = document.getElementById('search').value.toLowerCase();
         var l = document.getElementById('stuList'); l.innerHTML = '';
         students.forEach(function(s,i) {
@@ -1142,7 +1142,7 @@
         });
     }
 
-    function loadStudent() {
+    window.loadStudent = function() {
         var idx = document.getElementById('stuList').value;
         var s = students[idx];
         document.getElementById('nD').value = s.nD || ""; document.getElementById('nE').value = s.nE || "";
@@ -1155,7 +1155,7 @@
         var foundFile = photoFiles[pName]; 
         if(foundFile) {
             stat.innerText = "Loading...";
-            processPhoto(foundFile, function(d) {
+            window.processPhoto(foundFile, function(d) {
                 currentPhotoData = d; prev.src = d; 
                 stat.innerText = "✅ Found"; stat.style.color="green";
             });
@@ -1165,15 +1165,13 @@
         }
     }
 
-    function move(d) {
+    window.move = function(d) {
         var l = document.getElementById('stuList');
         if(l.options.length) {
             l.selectedIndex = Math.min(Math.max(l.selectedIndex+d, 0), l.options.length-1);
-            loadStudent();
+            window.loadStudent();
         }
     }
-
-// ▲▲▲▲▲ STOP COPYING HERE (OBFUSCATOR) ▲▲▲▲▲
 </script>
 </body>
 </html>
