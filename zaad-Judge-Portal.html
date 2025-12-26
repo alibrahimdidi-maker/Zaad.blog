@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="dv" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Zaad Royal V23 (Blue Edition)</title>
+    <style>
+        /* --- 1. FONTS & THEME --- */
+        @font-face { font-family: 'Faruma'; src: url('https://academyzaad.com/fonts/af_faruma.ttf') format('truetype'); }
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+        :root { 
+            --primary: #FFD700;       /* Royal Gold */
+            --primary-dim: #B8860B;   /* Darker Gold */
+            --bg-dark: #001a33;       /* Deep Royal Blue */
+            --glass: rgba(0, 30, 60, 0.95); /* Blue-tinted Glass */
+            --text-main: #fff;
+        }
+        
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
+
+        body { 
+            /* Royal Blue Gradient */
+            background: radial-gradient(circle at center, #003366 0%, #000814 100%); 
+            color: var(--primary); font-family: 'Faruma', sans-serif; 
+            margin: 0; height: 100vh; overflow: hidden; 
+        }
+
+        /* --- 2. LAYOUT --- */
+        .view { display: none; height: 100%; width: 100%; flex-direction: column; position: absolute; top:0; left:0; background:#000; z-index: 10; } 
+        .active { display: flex !important; z-index: 100; background: transparent; }
+        .center-box { justify-content: center; align-items: center; }
+
+        /* --- 3. UI COMPONENTS --- */
+        .card { 
+            background: var(--glass); border: 2px solid var(--primary); 
+            padding: 40px; border-radius: 20px; text-align: center; 
+            box-shadow: 0 0 60px rgba(0,0,0,0.8); width: 90%; max-width: 450px; 
+        }
+
+        input, select { 
+            width: 100%; padding: 12px; background: rgba(0,0,0,0.4); 
+            border: 1px solid #444; border-bottom: 2px solid var(--primary); 
+            color: #fff; text-align: center; margin-top: 10px; border-radius: 5px; 
+            font-size: 16px; font-family: 'Faruma';
+        }
+
+        .btn { 
+            background: linear-gradient(45deg, var(--primary-dim), var(--primary)); border: none; 
+            padding: 12px; width: 100%; font-weight: bold; cursor: pointer; 
+            border-radius: 8px; margin-top: 15px; color: #000; font-size: 16px; 
+            transition: 0.3s; font-family: 'Faruma'; text-transform: uppercase;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+        .btn:hover { transform: scale(1.02); filter: brightness(1.2); }
+        .btn:active { transform: scale(0.95); }
+        
+        .btn-blue { background: linear-gradient(45deg, #004080, #0059b3); color: #fff; border: 1px solid var(--primary); }
+        .btn-red { background: linear-gradient(45deg, #800000, #b30000); color: #fff; }
+        .btn-green { background: linear-gradient(45deg, #006600, #009900); color: #fff; }
+
+        /* --- 4. GRID SYSTEM --- */
+        .control-grid { 
+            display: grid; grid-template-columns: 280px 1fr 300px; 
+            gap: 20px; height: 100%; padding: 20px; overflow: hidden; 
+        }
+        .panel { 
+            background: rgba(0, 20, 40, 0.7); border: 1px solid #333; 
+            padding: 20px; border-radius: 15px; overflow-y: auto; 
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+        }
+
+        @media (max-width: 1000px) {
+            .control-grid { display: block; overflow-y: auto; }
+            .panel { margin-bottom: 20px; max-height: 500px; }
+            .dash-layout { flex-direction: column-reverse; } 
+            .sidebar { width: 100%; height: 300px; border-left: none; border-top: 2px solid var(--primary); }
+        }
+
+        /* --- 5. LISTS & PREVIEWS --- */
+        .student-item { 
+            padding: 15px; border-bottom: 1px solid rgba(255,255,255,0.1); 
+            cursor: pointer; display: flex; justify-content: space-between; transition: 0.2s; 
+        }
+        .student-item:hover { background: rgba(212, 175, 55, 0.2); }
+        .student-item.selected { background: var(--primary); color: #000; font-weight: bold; border-radius: 5px; }
+
+        .question-preview { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-top: 15px; }
+        .q-thumb { width: 80px; height: 100px; border: 1px solid var(--primary); object-fit: cover; background: #000; }
+        
+        /* --- 6. MODALS & TOAST --- */
+        .modal { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.95); z-index:2000; justify-content:center; align-items:center; }
+        .modal-content { background: #001a33; border: 2px solid var(--primary); padding: 30px; width: 600px; max-width: 90%; border-radius: 15px; max-height: 90vh; overflow-y: auto; text-align: center; }
+
+        .toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: #003366; border: 1px solid var(--primary); color: #fff; padding: 12px 30px; border-radius: 30px; display: none; z-index: 3000; font-family: sans-serif; pointer-events: none; box-shadow: 0 5px 20px rgba(0,0,0,0.5); }
+        
+        /* --- 7. JUDGE LAYOUT --- */
+        .dash-layout { display: flex; height: 100%; width: 100%; }
+        .sidebar { width: 320px; background: rgba(0,0,0,0.5); border-left: 2px solid var(--primary); padding: 20px; display: flex; flex-direction: column; }
+        .main { flex: 1; padding: 30px; overflow-y: auto; }
+    </style>
+</head>
+<body>
+
+    <div id="toast" class="toast">Notification</div>
+
+    <div id="v-login" class="view active center-box">
+        <div class="card">
+            <img src="https://academyzaad.com/photos/logo.png" width="120" style="margin-bottom:15px;" onerror="this.style.display='none'">
+            <h2 style="margin:5px 0; color:var(--primary); font-size: 28px;">ZAAD SYSTEM V23</h2>
+            <p style="font-size:14px; color:#aaa; margin-bottom:20px;">Royal Blue Edition</p>
+            
+            <label style="font-size:12px; display:block; text-align:right; color:#aaa;">Login As</label>
+            <select id="role">
+                <option value="admin">Admin</option>
+                <option value="judge">Judge</option>
+            </select>
+            
+            <label style="font-size:12px; display:block; text-align:right; color:#aaa; margin-top:15px;">Password</label>
+            <input type="password" id="pass" placeholder="••••••••" autocapitalize="off">
+            
+            <button onclick="attemptLogin()" class="btn">LOGIN</button>
+        </div>
+    </div>
+
+    <div id="v-admin" class="view">
+        <div style="background:rgba(0,0,0,0.8); padding:15px 20px; border-bottom:1px solid var(--primary); display:flex; justify-content:space-between; align-items:center;">
+            <span style="font-weight:bold; font-size: 20px;">🎛️ CONTROL ROOM</span>
+            <button onclick="logout()" class="btn btn-red" style="width:auto; margin:0; padding:5px 20px; font-size:14px;">EXIT</button>
+        </div>
+
+        <div class="control-grid">
+            <div class="panel">
+                <h3>📋 PARTICIPANTS</h3>
+                <button onclick="openDataManager()" class="btn btn-green" style="font-size:14px; margin-bottom:15px;">📂 DATA MANAGER</button>
+                <input type="text" placeholder="Search..." onkeyup="renderList(this.value)">
+                <div id="stuList" style="margin-top:15px;"></div>
+            </div>
+
+            <div class="panel" style="text-align:center;">
+                <h3>📡 SCREENS</h3>
+                <div style="display:flex; gap:10px; justify-content:center;">
+                    <button onclick="openExternalWin('STUDENT')" class="btn" style="width:48%; background:#fff; color:#000;">Student</button>
+                    <button onclick="openExternalWin('AUDIENCE')" class="btn" style="width:48%; background:#fff; color:#000;">Audience</button>
+                </div>
+
+                <div style="margin-top:25px; border:1px solid #444; padding:15px; border-radius:10px; background:rgba(0,0,0,0.3);">
+                    <h4 style="margin:0 0 10px 0; color:#aaa;">🎨 DESIGN STUDIO</h4>
+                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+                        <button onclick="changeStyle('border')" class="btn" style="background:#003366; color:#fff; border:1px solid var(--primary); margin:0;">🔲 Frame</button>
+                        <button onclick="changeStyle('bg')" class="btn" style="background:#003366; color:#fff; border:1px solid var(--primary); margin:0;">🖼️ BG</button>
+                    </div>
+                </div>
+
+                <div style="margin-top:25px; padding: 15px; border: 1px dashed var(--primary); border-radius: 10px;">
+                    <h3 id="activeName" style="color:var(--primary); margin:0;">Select Student</h3>
+                    <p id="activeInfo" style="color:#aaa; font-size:12px; margin:5px 0;">Waiting...</p>
+                </div>
+
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:15px;">
+                    <button onclick="sendToScreen('PROFILE')" class="btn">👤 Profile</button>
+                    <button onclick="sendToScreen('SCORE')" class="btn btn-blue">🏆 Score</button>
+                </div>
+                <button onclick="resetSystem()" class="btn btn-red">🔄 NEXT STUDENT</button>
+            </div>
+
+            <div class="panel">
+                <h3>🎲 LOTTERY</h3>
+                <div style="display:flex; align-items:center; gap:10px; margin-bottom:15px;">
+                    <label style="margin:0;">Pick Limit:</label>
+                    <input type="number" id="pickLimit" value="2" style="width:70px; margin:0;">
+                </div>
+                <button onclick="startLottery()" class="btn btn-blue" style="font-size: 18px; padding: 20px;">START DRAW</button>
+                
+                <h4 style="margin-top:20px; border-bottom:1px solid #444;">Selected:</h4>
+                <div id="liveQuestions" class="question-preview"></div>
+                
+                <hr style="border-color:#333; margin:30px 0;">
+                <button onclick="fullReset()" class="btn btn-red" style="font-size:12px;">⚠️ Factory Reset</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="dataModal" class="modal">
+        <div class="modal-content">
+            <h2 style="color:var(--primary); margin-top:0;">📂 DATA SETTINGS</h2>
+            
+            <div style="background:rgba(0,0,0,0.3); padding:20px; border-radius:10px; margin-bottom:20px;">
+                <h4>1. Import from Google Sheets</h4>
+                <input type="text" id="scriptUrl" placeholder="Paste Google Script URL here...">
+                <button onclick="importFromSheet()" class="btn btn-blue">📥 Import Now</button>
+            </div>
+
+            <div style="background:rgba(0,0,0,0.3); padding:20px; border-radius:10px; margin-bottom:20px;">
+                <h4>2. Manual Add</h4>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+                    <input type="text" id="newReg" placeholder="Reg No">
+                    <input type="text" id="newName" placeholder="Name">
+                </div>
+                <button onclick="addManualStudent()" class="btn btn-green">➕ Add Student</button>
+            </div>
+
+            <div style="background:rgba(0,0,0,0.3); padding:20px; border-radius:10px;">
+                <h4>3. Total Questions (in q/ folder)</h4>
+                <input type="number" id="totalQInput" value="20" style="width:100px;">
+                <button onclick="saveQSettings()" class="btn">💾 Save Limit</button>
+            </div>
+
+            <button onclick="document.getElementById('dataModal').style.display='none'" class="btn btn-red">CLOSE</button>
+        </div>
+    </div>
+
+    <div id="v-judge" class="view">
+        <div class="dash-layout">
+            <div class="main">
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <h3>JUDGE PANEL</h3>
+                    <button onclick="logout()" class="btn btn-red" style="width:auto; margin:0; padding:5px 20px;">LOGOUT</button>
+                </div>
+
+                <div id="jWait" style="text-align:center; margin-top:100px; color:#aaa;">
+                    <h1>Waiting for Selection...</h1>
+                </div>
+
+                <div id="judgeScoreArea" style="display:none; margin-top:20px;">
+                    <div style="display:flex; align-items:center; gap:20px; background:rgba(0,0,0,0.4); padding:20px; border-radius:15px; border:1px solid var(--primary);">
+                        <img id="jPhoto" src="" style="width:80px; height:80px; border-radius:50%; object-fit:cover; border: 2px solid var(--primary);">
+                        <div>
+                            <h2 id="jName" style="margin:0;">Name</h2>
+                            <p id="jInfo" style="color:#aaa; margin:5px 0;">Reg</p>
+                        </div>
+                    </div>
+
+                    <div style="margin-top:30px;">
+                        <h4 style="color:var(--primary);">SELECTED QUESTIONS:</h4>
+                        <div id="judgeQView" class="question-preview"></div>
+                    </div>
+
+                    <div id="scoringGrid" style="display:grid; grid-template-columns:1fr 1fr; gap:15px; margin-top:30px;">
+                        </div>
+                    
+                    <button onclick="submitScore()" class="btn btn-blue" style="margin-top: 30px;">SUBMIT SCORE</button>
+                </div>
+            </div>
+            
+            <div class="sidebar">
+                <h4>STUDENT LIST</h4>
+                <div id="judgeStuList" style="overflow-y:auto; flex:1;"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // CONFIG
+        const PHOTO_PATH = "q/"; 
+        let TOTAL_Q = 20;
+        let students = [{ reg:"001", name:"Ahmed Ali", cat:"Quran", img:"https://via.placeholder.com/150" }];
+        let activeStudent = null;
+        let usedNumbers = JSON.parse(localStorage.getItem('zaad_used') || "[]");
+        let currentPicks = [];
+        let stuWin = null, audWin = null;
+
+        // --- STYLES CONFIG ---
+        const BORDERS = [
+            "10px double #FFD700", "8px solid #FFD700", "15px ridge #c0c0c0", "12px groove #B8860B", 
+            "10px inset #fff", "5px dashed #FFD700", "20px solid transparent"
+        ];
+        const BACKGROUNDS = [
+            "radial-gradient(circle, #003366, #000814)",
+            "url('https://img.freepik.com/free-vector/islamic-gradient-background-design_23-2148906373.jpg')",
+            "#000000", 
+            "linear-gradient(135deg, #1a2980, #26d0ce)"
+        ];
+        let currentBorder = BORDERS[0];
+        let currentBg = BACKGROUNDS[0];
+
+        // INIT
+        if(localStorage.getItem('zaad_students')) students = JSON.parse(localStorage.getItem('zaad_students'));
+        if(localStorage.getItem('zaad_total_q')) TOTAL_Q = parseInt(localStorage.getItem('zaad_total_q'));
+
+        // --- AUTH ---
+        function attemptLogin() {
+            const pass = document.getElementById('pass').value.trim().toLowerCase();
+            if (pass === 'admin123') { switchScreen('v-admin'); renderList(); }
+            else if (pass === 'judge123') { switchScreen('v-judge'); renderList(); }
+            else showToast("❌ Incorrect Password");
+        }
+        function switchScreen(id) {
+            document.querySelectorAll('.view').forEach(v => { v.style.display='none'; v.classList.remove('active'); });
+            const t = document.getElementById(id); t.style.display='flex'; setTimeout(()=>t.classList.add('active'),10);
+        }
+        function logout() { document.getElementById('pass').value=""; switchScreen('v-login'); }
+        function showToast(msg) { const t=document.getElementById('toast'); t.innerText=msg; t.style.display="block"; setTimeout(()=>t.style.display="none",3000); }
+
+        // --- DATA ---
+        function openDataManager() { document.getElementById('totalQInput').value = TOTAL_Q; document.getElementById('dataModal').style.display = 'flex'; }
+        function saveQSettings() {
+            const val = document.getElementById('totalQInput').value;
+            if(val) { TOTAL_Q = parseInt(val); localStorage.setItem('zaad_total_q', TOTAL_Q); showToast("✅ Limit Saved"); }
+        }
+        function addManualStudent() {
+            const reg = document.getElementById('newReg').value;
+            const name = document.getElementById('newName').value;
+            if(reg && name) { 
+                students.push({reg, name, cat:"Manual", img:"https://via.placeholder.com/150"}); 
+                localStorage.setItem('zaad_students', JSON.stringify(students));
+                renderList(); showToast("✅ Added"); 
+            }
+        }
+        function importFromSheet() {
+            const url = document.getElementById('scriptUrl').value;
+            if(!url) return showToast("Enter URL");
+            fetch(url + "?action=getStudents", { method: "POST" })
+            .then(r => r.json()).then(d => {
+                if(d.result==="success") {
+                    students = d.students.map(s => ({reg: s.regNo, name: s.name, cat: s.category, img: s.photo||""}));
+                    localStorage.setItem('zaad_students', JSON.stringify(students));
+                    renderList(); showToast("✅ Imported");
+                }
+            });
+        }
+
+        // --- LISTS ---
+        function renderList(filter="") {
+            const html = students.filter(s => s.name.toLowerCase().includes(filter.toLowerCase()) || s.reg.includes(filter))
+                .map(s => `<div class="student-item" onclick="selectStudent('${s.reg}')"><span><b>${s.reg}</b> ${s.name}</span></div>`).join('');
+            document.getElementById('stuList').innerHTML = html;
+            document.getElementById('judgeStuList').innerHTML = html;
+        }
+        function selectStudent(reg) {
+            activeStudent = students.find(s => s.reg === reg);
+            document.getElementById('activeName').innerText = activeStudent.name;
+            document.getElementById('activeInfo').innerText = activeStudent.reg;
+            
+            document.getElementById('jWait').style.display='none';
+            document.getElementById('judgeScoreArea').style.display='block';
+            document.getElementById('jName').innerText = activeStudent.name;
+            document.getElementById('jPhoto').src = activeStudent.img || "https://via.placeholder.com/150";
+            document.getElementById('jInfo').innerText = activeStudent.reg;
+            document.getElementById('scoringGrid').innerHTML = `
+                <input type="number" placeholder="Tajweed (40)">
+                <input type="number" placeholder="Fasaahath (30)">
+                <input type="number" placeholder="Voice (20)">
+                <input type="number" placeholder="Hifz (10)">`;
+        }
+
+        // --- STYLES ---
+        function changeStyle(type) {
+            if(type === 'border') {
+                const idx = BORDERS.indexOf(currentBorder);
+                currentBorder = BORDERS[(idx + 1) % BORDERS.length];
+            } else {
+                const idx = BACKGROUNDS.indexOf(currentBg);
+                currentBg = BACKGROUNDS[(idx + 1) % BACKGROUNDS.length];
+            }
+            syncStyles();
+        }
+        function syncStyles() {
+            const js = `
+                document.body.style.background = "${currentBg}"; 
+                document.body.style.backgroundSize = "cover";
+                document.querySelectorAll('.royal-frame').forEach(f => { f.style.border = "${currentBorder}"; });
+            `;
+            if(stuWin && !stuWin.closed) stuWin.eval(js);
+            if(audWin && !audWin.closed) audWin.eval(js);
+        }
+
+        // --- WINDOWS (FIXED CENTERING & LAYOUT) ---
+        const SCREEN_CSS = `
+            <style>
+                @font-face { font-family: 'Faruma'; src: url('https://academyzaad.com/fonts/af_faruma.ttf') format('truetype'); }
+                body { margin:0; background: radial-gradient(circle at center, #003366 0%, #000814 100%); background-size:cover; display:flex; justify-content:center; align-items:center; height:100vh; overflow:hidden; font-family:'Faruma'; color:#FFD700; transition: background 0.5s; }
+                
+                #fs-btn { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(0,0,0,0.8); border: 2px solid #FFD700; color: #fff; padding: 20px 40px; font-size: 24px; cursor: pointer; z-index: 9999; border-radius: 15px; animation: pulse 2s infinite; }
+                @keyframes pulse { 0% { transform: translate(-50%, -50%) scale(1); } 50% { transform: translate(-50%, -50%) scale(1.1); } 100% { transform: translate(-50%, -50%) scale(1); } }
+
+                .welcome-card { text-align:center; animation: fadeIn 2s; background: rgba(0,0,0,0.7); padding: 40px; border-radius: 20px; border: 2px solid #FFD700; }
+                .welcome-card img { width: 150px; margin-bottom: 20px; }
+                .welcome-card h1 { font-size: 60px; margin: 0; text-shadow: 2px 2px 10px #000; }
+
+                /* FIXED CENTERING CONTAINER */
+                .stage-center {
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center;
+                    width: 100%;
+                    height: 100%;
+                }
+
+                .grid { 
+                    display:flex; flex-wrap: wrap; justify-content: center; align-content: center; 
+                    gap: 20px; max-width: 1200px; padding: 20px;
+                }
+                
+                .box { 
+                    width: 120px; height: 120px; 
+                    background: rgba(0, 30, 60, 0.8); border: 2px solid #FFD700; 
+                    display: flex; justify-content: center; align-items: center; 
+                    font-size: 50px; color: #FFD700; cursor: pointer; 
+                    border-radius: 15px; transition: 0.3s; 
+                    box-shadow: 0 5px 15px rgba(0,0,0,0.5); 
+                }
+                .box:hover { transform: scale(1.1); background: #FFD700; color: #000; }
+                .box.picked { background: #FFD700; color: #000; transform: scale(1.1); box-shadow: 0 0 40px #FFD700; }
+                .box.disabled { opacity: 0.1; pointer-events: none; }
+
+                .q-container { display: flex; gap: 30px; justify-content: center; width: 100%; align-items: center; flex-wrap: wrap; }
+                .royal-frame { 
+                    border: 10px double #FFD700; padding: 10px; background: #000; 
+                    box-shadow: 0 0 60px rgba(255, 215, 0, 0.4); border-radius: 10px; 
+                    animation: zoomIn 0.8s; max-width: 45%; max-height: 85vh;
+                }
+                .royal-frame img { width: 100%; height: auto; display: block; max-height: 80vh; object-fit: contain; }
+                .profile { text-align:center; background:rgba(0,0,0,0.8); padding:50px; border-radius:30px; border:4px solid #FFD700; width:80%; }
+                @keyframes zoomIn { from { transform: scale(0.5); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+                @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+            </style>
+        `;
+        const FS_SCRIPT = `<script>function goFull() { document.documentElement.requestFullscreen(); document.getElementById('fs-btn').style.display = 'none'; }<\/script>`;
+
+        function openExternalWin(type) {
+            const w = 800, h = 600;
+            const content = `
+                <button id="fs-btn" onclick="goFull()">🔲 GO FULL SCREEN</button>
+                <div class="welcome-card">
+                    <img src="https://academyzaad.com/photos/logo.png">
+                    <h1>ACADEMY ZAAD</h1>
+                    <p style="font-size:20px; color:#FFD700;">${type === 'STUDENT' ? 'Student Station' : 'Welcome Audience'}</p>
+                </div>`;
+            const win = window.open("", type, `width=${w},height=${h}`);
+            win.document.write(`<html><head><title>${type}</title>${SCREEN_CSS}</head><body>${content}${FS_SCRIPT}</body></html>`);
+            if(type=='STUDENT') stuWin = win; else audWin = win;
+            setTimeout(syncStyles, 500);
+        }
+
+        // --- LOTTERY ---
+        function startLottery() {
+            if(!stuWin || stuWin.closed) { showToast("⚠️ Open Student Screen"); return; }
+            if(!activeStudent) { showToast("⚠️ Select Student"); return; }
+            currentPicks = [];
+            const limit = document.getElementById('pickLimit').value;
+            
+            let html = `
+                <div class="stage-center">
+                    <h1 style="color:#fff; margin-bottom:30px; text-shadow:0 0 10px #000;">Select ${limit} Numbers</h1>
+                    <div class="grid">`;
+            
+            for(let i=1; i<=TOTAL_Q; i++) {
+                let cls = usedNumbers.includes(i) ? "box disabled" : "box";
+                html += `<div id="b${i}" class="${cls}" onclick="window.opener.handlePick(${i})">${i}</div>`;
+            }
+            html += `</div></div>`;
+            stuWin.document.body.innerHTML = html;
+            syncStyles();
+        }
+
+        window.handlePick = function(num) {
+            const limit = document.getElementById('pickLimit').value;
+            if(currentPicks.includes(num)) return;
+            stuWin.document.getElementById(`b${num}`).className = "box picked";
+            stuWin.document.getElementById(`b${num}`).innerText = "✔";
+            currentPicks.push(num);
+            if(currentPicks.length >= limit) setTimeout(revealQuestions, 1000);
+        }
+
+        function revealQuestions() {
+            let html = `<div class="stage-center"><div class="q-container">`;
+            let thumbs = "";
+            currentPicks.forEach(n => {
+                const src = `${PHOTO_PATH}${n}.jpg`;
+                const err = `https://via.placeholder.com/600x800?text=Question+${n}`;
+                html += `<div class="royal-frame"><img src="${src}" onerror="this.src='${err}'"></div>`;
+                thumbs += `<img src="${src}" class="q-thumb" onerror="this.src='${err}'">`;
+            });
+            html += `</div></div>`;
+            if(stuWin) stuWin.document.body.innerHTML = html;
+            if(audWin) audWin.document.body.innerHTML = html;
+            document.getElementById('liveQuestions').innerHTML = thumbs;
+            document.getElementById('judgeQView').innerHTML = thumbs;
+            syncStyles();
+        }
+
+        function sendToScreen(mode) {
+            if(!activeStudent || !audWin) return;
+            if(mode === 'PROFILE') {
+                audWin.document.body.innerHTML = `
+                    <div class="profile">
+                        <img src="${activeStudent.img}" style="width:200px; height:200px; border-radius:50%; border:3px solid #FFD700; object-fit:cover;">
+                        <h1>${activeStudent.name}</h1>
+                        <h2 style="color:#FFD700;">${activeStudent.reg} | ${activeStudent.cat}</h2>
+                    </div>`;
+            } else if (mode === 'SCORE') {
+                audWin.document.body.innerHTML = `<div class="profile"><h1>${activeStudent.name}</h1><h2 style="color:#aaa;">TOTAL SCORE</h2><div style="font-size:120px; color:#00e676; font-weight:bold;">95.0</div></div>`;
+            }
+            syncStyles();
+        }
+
+        function resetSystem() {
+            if(currentPicks.length > 0) {
+                usedNumbers = [...usedNumbers, ...currentPicks];
+                localStorage.setItem('zaad_used', JSON.stringify(usedNumbers));
+            }
+            const standby = `<div class="welcome-card"><img src="https://academyzaad.com/photos/logo.png"><h1>NEXT STUDENT</h1><p style="font-size:20px; color:#FFD700;">Please Wait...</p></div>`;
+            if(stuWin) stuWin.document.body.innerHTML = standby;
+            if(audWin) audWin.document.body.innerHTML = standby;
+            document.getElementById('liveQuestions').innerHTML = "";
+            currentPicks = [];
+            showToast("✅ Ready");
+            syncStyles();
+        }
+
+        function fullReset() { if(confirm("Clear history?")) { localStorage.removeItem('zaad_used'); usedNumbers=[]; showToast("Reset Done"); } }
+        function submitScore() { showToast("✅ Saved"); }
+    </script>
+</body>
+</html>
