@@ -3,15 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ޒާދް ޑިޖިޓަލް ލައިބްރަރީ</title>
+    <title>ޒާދް ޑިޖިޓަލް ލައިބްރަރީ (Protected)</title>
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
     <style>
-        /* --- 1. މައިގަނޑު ޑިޒައިން (Theme) --- */
+        /* --- 1. SECURITY STYLES (ކޮޕީ ނުކުރެވޭގޮތް ހެދުން) --- */
+        body {
+            -webkit-user-select: none; /* Chrome/Safari */
+            -moz-user-select: none;    /* Firefox */
+            -ms-user-select: none;     /* IE/Edge */
+            user-select: none;         /* Standard */
+        }
+        
+        img {
+            pointer-events: none;      /* ފޮޓޯ ޑްރެގް ނުކުރެވޭނެ */
+            -webkit-user-drag: none;
+        }
+
+        /* ޕްރިންޓް ކުރަން އުޅެފިނަމަ ހުދު ގަނޑެއް ދެއްކުން */
+        @media print {
+            html, body { display: none; }
+        }
+
+        /* --- 2. މައިގަނޑު ޑިޒައިން --- */
         :root {
-            --primary: #0C2D48; /* ގަދަ ނޫ */
-            --accent: #B49658;  /* ރަން ކުލަ */
+            --primary: #0C2D48; 
+            --accent: #B49658; 
             --light: #f8f9fa;
             --white: #ffffff;
             --text: #333;
@@ -19,7 +37,7 @@
 
         @font-face {
             font-family: 'Mv Galan';
-            src: url('fonts/Mv Galan.ttf'); /* ފޮންޓް ފައިލް ނެތަސް ޑިފޯލްޓް ފޮންޓް އަރާނެ */
+            src: url('fonts/Mv Galan.ttf'); 
         }
 
         body {
@@ -30,11 +48,10 @@
             padding: 0;
             display: flex;
             flex-direction: column;
-            height: 100vh; /* މުޅި ސްކްރީން ފުރޭގޮތަށް */
+            height: 100vh;
             overflow: hidden;
         }
 
-        /* --- 2. ހެޑަރ (Mareege Bai) --- */
         header {
             background: var(--primary);
             color: var(--white);
@@ -47,19 +64,15 @@
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
 
-        .brand h1 { margin: 0; font-size: 1.6em; letter-spacing: 1px; }
+        .brand h1 { margin: 0; font-size: 1.6em; }
         .brand span { font-size: 0.8em; opacity: 0.8; font-family: sans-serif; }
-        .info-btn { color: white; cursor: pointer; opacity: 0.8; transition: 0.3s; }
-        .info-btn:hover { opacity: 1; transform: scale(1.1); }
 
-        /* --- 3. މައި ލޭއައުޓް (Left & Right) --- */
         .main-container {
             display: flex;
             flex: 1;
             overflow: hidden;
         }
 
-        /* --- 4. ސައިޑްބާ (ލިސްޓް އިންނަ ތަން) --- */
         .sidebar {
             width: 360px;
             background: var(--white);
@@ -70,7 +83,6 @@
             z-index: 10;
         }
 
-        /* ސާޗް ބާ */
         .search-area {
             padding: 15px;
             background: #f4f4f4;
@@ -86,9 +98,7 @@
             outline: none;
             box-sizing: border-box;
             font-size: 1em;
-            transition: 0.3s;
         }
-        .search-box input:focus { border-color: var(--accent); background: #fff; }
         .search-box i {
             position: absolute;
             right: 12px; top: 50%;
@@ -96,14 +106,12 @@
             color: #888;
         }
 
-        /* ފޮތްތަކުގެ ލިސްޓް (Scrollable Area) */
         .book-list {
             flex: 1;
             overflow-y: auto;
             padding: 12px;
         }
 
-        /* ވަކިވަކި ކާޑުތައް */
         .book-card {
             display: flex;
             align-items: start;
@@ -115,7 +123,6 @@
             border-radius: 8px;
             cursor: pointer;
             transition: all 0.2s ease;
-            position: relative;
         }
 
         .book-card:hover {
@@ -131,7 +138,6 @@
             border-right: 5px solid var(--accent);
         }
 
-        /* ފޮތުގެ ކަވަރ ފޮޓޯ */
         .book-card img {
             width: 55px;
             height: 80px;
@@ -144,7 +150,7 @@
 
         .book-details { flex: 1; }
         .book-details h4 { margin: 0 0 5px 0; font-size: 1.1em; color: var(--primary); line-height: 1.4; }
-        .book-details p { margin: 0; font-size: 0.85em; color: #666; line-height: 1.5; }
+        .book-details p { margin: 0; font-size: 0.85em; color: #666; }
         
         .tag {
             font-size: 0.7em;
@@ -156,7 +162,6 @@
             margin-top: 5px;
         }
 
-        /* --- 5. ވިއުއަރ (PDF ފެންނަ ތަން) --- */
         .viewer-area {
             flex: 1;
             background-color: #525659;
@@ -166,13 +171,8 @@
             justify-content: center;
         }
 
-        iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
+        iframe { width: 100%; height: 100%; border: none; }
 
-        /* ފައިލް ނުނަގާއިރު ދައްކާ މެސެޖް */
         .placeholder-msg {
             text-align: center;
             color: rgba(255,255,255,0.7);
@@ -180,7 +180,6 @@
         .placeholder-msg i { font-size: 5em; margin-bottom: 20px; display: block; opacity: 0.5; }
         .placeholder-msg h2 { margin: 0; font-size: 1.8em; }
 
-        /* --- Responsive (Mobile) --- */
         @media (max-width: 768px) {
             .main-container { flex-direction: column; }
             .sidebar { width: 100%; height: 40%; border-left: none; border-bottom: 3px solid var(--accent); }
@@ -188,20 +187,15 @@
         }
     </style>
 </head>
-<body>
-
-    <header>
+<body oncontextmenu="return false;"> <header>
         <div class="brand">
             <h1>ޒާދް އެކަޑެމީ ލައިބްރަރީ</h1>
-            <span>Zaad Digital Resource Center</span>
+            <span>Protected Digital Resource</span>
         </div>
-        <div class="info-btn" title="Help">
-            <i class="fa fa-question-circle fa-lg"></i>
-        </div>
+        <div><i class="fa fa-lock fa-lg" title="Secure Mode"></i></div>
     </header>
 
     <div class="main-container">
-        
         <div class="sidebar">
             <div class="search-area">
                 <div class="search-box">
@@ -209,73 +203,93 @@
                     <input type="text" id="searchInput" placeholder="ފައިލްގެ ނަން ހޯއްދަވާ..." onkeyup="filterBooks()">
                 </div>
             </div>
-            
-            <div class="book-list" id="bookListContainer">
-                </div>
+            <div class="book-list" id="bookListContainer"></div>
         </div>
 
         <div class="viewer-area">
             <div id="placeholder" class="placeholder-msg">
-                <i class="fa fa-book-reader"></i>
+                <i class="fa fa-shield-alt"></i>
                 <h2>ފައިލްއެއް ޚިޔާރުކުރައްވާ</h2>
                 <p>ކިޔުމަށްޓަކައި ލިސްޓުން ފޮތަކަށް ފިތާލައްވާ</p>
             </div>
             <iframe id="pdfFrame" style="display:none;" allow="autoplay"></iframe>
         </div>
-
     </div>
 
     <script>
         // ==========================================
-        // 1. ޑޭޓާބޭސް (ތިބާގެ ފައިލްތައް މިތަނަށް ލިޔުއްވާ)
+        // 🔒 SECURITY MODULE (ރައްކާތެރިކަމުގެ ބައި)
+        // ==========================================
+        
+        document.onkeydown = function(e) {
+            // Disable F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U
+            if(e.keyCode == 123) { return false; }
+            if(e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) { return false; }
+            if(e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)) { return false; }
+            if(e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) { return false; }
+            
+            // Disable Ctrl+S (Save), Ctrl+P (Print)
+            if(e.ctrlKey && e.keyCode == 'S'.charCodeAt(0)) { 
+                e.preventDefault(); 
+                alert("This content is protected."); 
+                return false; 
+            }
+            if(e.ctrlKey && e.keyCode == 'P'.charCodeAt(0)) { 
+                e.preventDefault(); 
+                alert("Printing is disabled."); 
+                return false; 
+            }
+        }
+
+        // Disable Developer Tools Detection (Simple Loop)
+        setInterval(function(){
+            var before = new Date().getTime();
+            debugger; // This stops code execution if DevTools is open
+            var after = new Date().getTime();
+            if (after - before > 100) {
+                document.body.innerHTML = "<h1>Security Violation Detected. Please close Developer Tools.</h1>";
+            }
+        }, 1000);
+
+
+        // ==========================================
+        // 1. ޑޭޓާބޭސް (DATA)
         // ==========================================
         
         let libraryData = [
             
-            // --- މިސާލު 1: ހުރިހާ އެއްޗެއް ގޫގްލް ޑްރައިވް އިން ---
+            // --- މިސާލު ފައިލް ---
             { 
-                title: "ގޫގްލް ޑްރައިވް ޓެސްޓް", 
-                // PDF ލިންކް
+                title: "ޓެސްޓް ފައިލް", 
                 file: "https://drive.google.com/file/d/1suI7rGxKoo33Q9iHZs_xCMNbjEDybG9-/view?usp=sharing",
-                // PHOTO ލިންކް (ތިބާ ދެއްވި ލިންކް މިތަނަށް ލީމާ އޮޓޯއިން ފޮޓޯއެއް ގޮތަށް ދައްކާނެ)
                 img: "https://drive.google.com/file/d/1suI7rGxKoo33Q9iHZs_xCMNbjEDybG9-/view?usp=sharing", 
-                type: "GDrive",
-                desc: "އޮންލައިން ފޮޓޯ + ޕީޑީއެފް" 
-            },
-
-            // --- މިސާލު 2: ލޯކަލް ފޮޓޯ + ޑްރައިވް ޕީޑީއެފް ---
-            { 
-                title: "ޔޫޒަރ ގައިޑް (މިސާލު)", 
-                file: "https://drive.google.com/file/d/1suI7rGxKoo33Q9iHZs_xCMNbjEDybG9-/view?usp=sharing",
-                img: "covers/guide.jpg", // ކޮމްޕިއުޓަރުގައި އިން ފޮޓޯއެއް
-                type: "Mixed",
-                desc: "ފޮޓޯ ކޮމްޕިއުޓަރުން" 
+                type: "Secure",
+                desc: "ޑްރައިވް ފޮޓޯ + ޕީޑީއެފް" 
             }
 
-            // އިތުރު ފައިލްތައް މިގޮތަށް ތިރިއަށް އިތުރުކުރައްވާ...
+            // މިތަނަށް އިތުރު ފައިލްތައް އަޅުއްވާ...
         ];
 
-        // --- 500 ސާމްޕަލް ފައިލް (ޓެސްޓް ކުރުމަށް - ފަހުން ފޮހެލާ) ---
+        // --- 500 Sample Files ---
         for (let i = 1; i <= 500; i++) {
             libraryData.push({
-                title: `ރިޕޯޓް ނަންބަރު ${i} - 2025`,
-                file: `https://drive.google.com/file/d/1suI7rGxKoo33Q9iHZs_xCMNbjEDybG9-/view?usp=sharing`, // Sample Link
-                img: "", // No Image
+                title: `ރިޕޯޓް ނަންބަރު ${i}`,
+                file: `https://drive.google.com/file/d/1suI7rGxKoo33Q9iHZs_xCMNbjEDybG9-/view?usp=sharing`,
+                img: "", 
                 type: "Sample",
-                desc: `ޑޮކިއުމަންޓް ID: ${2000 + i}`
+                desc: `ID: ${3000 + i}`
             });
         }
 
 
         // ==========================================
-        // 2. ސިސްޓަމް ފަންކްޝަންތައް (System Code)
+        // 2. SYSTEM LOGIC
         // ==========================================
 
         const listContainer = document.getElementById('bookListContainer');
         const pdfFrame = document.getElementById('pdfFrame');
         const placeholder = document.getElementById('placeholder');
 
-        // (A) ގޫގްލް ޑްރައިވް PDF ލިންކް 'Preview' މޯޑަށް ބަދަލުކުރުން
         function fixDrivePdfLink(url) {
             if (url.includes("drive.google.com") && url.includes("/view")) {
                 return url.replace(/\/view.*/, "/preview");
@@ -283,23 +297,19 @@
             return url;
         }
 
-        // (B) ގޫގްލް ޑްރައިވް IMAGE ލިންކް 'Thumbnail' މޯޑަށް ބަދަލުކުރުން
         function fixDriveImgLink(url) {
             if (url.includes("drive.google.com") && url.includes("/view")) {
-                // ލިންކުން އައިޑީ (ID) ވަކިކޮށްލުން
                 let idMatch = url.match(/\/d\/(.+?)\//);
                 if (idMatch && idMatch[1]) {
-                    // ފޮޓޯ ފެންނަ ލިންކަށް ބަދަލުކުރުން
                     return `https://drive.google.com/thumbnail?id=${idMatch[1]}&sz=w200`; 
                 }
             }
             return url;
         }
 
-        // (C) ލިސްޓް ދެއްކުން
         function renderList(data) {
-            listContainer.innerHTML = ""; // Clear list
-            const fragment = document.createDocumentFragment(); // Performance booster
+            listContainer.innerHTML = ""; 
+            const fragment = document.createDocumentFragment();
 
             if (data.length === 0) {
                 listContainer.innerHTML = "<p style='text-align:center; padding:20px; color:#666;'>އެއްވެސް ފައިލްއެއް ނުފެނުނު</p>";
@@ -310,32 +320,23 @@
                 let card = document.createElement('div');
                 card.className = 'book-card';
                 
-                // ކާޑަށް ފިތާލުމުން ވާނެ ގޮތް
                 card.onclick = () => {
-                    // Highlight active item
                     document.querySelectorAll('.book-card').forEach(el => el.classList.remove('active'));
                     card.classList.add('active');
-
-                    // Show PDF
                     placeholder.style.display = 'none';
                     pdfFrame.style.display = 'block';
                     pdfFrame.src = fixDrivePdfLink(book.file);
                 };
 
-                // ފޮޓޯ ސެޓްކުރުން (Logic)
-                let imageSrc = "https://via.placeholder.com/60x85.png?text=PDF"; // Default placeholder
-                
+                let imageSrc = "https://via.placeholder.com/60x85.png?text=PDF"; 
                 if (book.img && book.img.trim() !== "") {
                     if(book.img.includes("drive.google.com")) {
-                        // ޑްރައިވް ލިންކެއްނަމަ ފިކްސްކުރޭ
                         imageSrc = fixDriveImgLink(book.img);
                     } else {
-                        // ލޯކަލް ލިންކެއްނަމަ ސީދާ ދައްކާ
                         imageSrc = book.img;
                     }
                 }
 
-                // HTML Structure inside Card
                 card.innerHTML = `
                     <img src="${imageSrc}" onerror="this.src='https://via.placeholder.com/60x85.png?text=Err'">
                     <div class="book-details">
@@ -350,7 +351,6 @@
             listContainer.appendChild(fragment);
         }
 
-        // (D) ސާޗް ކުރުން
         function filterBooks() {
             let input = document.getElementById('searchInput').value.toLowerCase();
             let filtered = libraryData.filter(book => 
@@ -360,7 +360,6 @@
             renderList(filtered);
         }
 
-        // ޕޭޖް ހުޅުވޭއިރު ލިސްޓް ދައްކާ
         renderList(libraryData);
 
     </script>
