@@ -3,28 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ޒާދް ޑިޖިޓަލް ލައިބްރަރީ (Protected)</title>
+    <title>ޒާދް ޑިޖިޓަލް ލައިބްރަރީ</title>
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
     <style>
-        /* --- 1. SECURITY STYLES (ކޮޕީ ނުކުރެވޭގޮތް ހެދުން) --- */
+        /* --- 1. ސެކިއުރިޓީ --- */
         body {
-            -webkit-user-select: none; /* Chrome/Safari */
-            -moz-user-select: none;    /* Firefox */
-            -ms-user-select: none;     /* IE/Edge */
-            user-select: none;         /* Standard */
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
         }
-        
-        img {
-            pointer-events: none;      /* ފޮޓޯ ޑްރެގް ނުކުރެވޭނެ */
-            -webkit-user-drag: none;
-        }
-
-        /* ޕްރިންޓް ކުރަން އުޅެފިނަމަ ހުދު ގަނޑެއް ދެއްކުން */
-        @media print {
-            html, body { display: none; }
-        }
+        img { pointer-events: none; -webkit-user-drag: none; }
+        @media print { html, body { display: none; } }
 
         /* --- 2. މައިގަނޑު ޑިޒައިން --- */
         :root {
@@ -33,6 +25,7 @@
             --light: #f8f9fa;
             --white: #ffffff;
             --text: #333;
+            --footer-bg: #051b2c;
         }
 
         @font-face {
@@ -48,33 +41,55 @@
             padding: 0;
             display: flex;
             flex-direction: column;
-            height: 100vh;
+            height: 100vh; /* ފުލް ސްކްރީން */
             overflow: hidden;
         }
 
+        /* --- ހެޑަރ --- */
         header {
             background: var(--primary);
             color: var(--white);
-            padding: 15px 25px;
+            padding: 10px 20px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            border-bottom: 5px solid var(--accent);
+            border-bottom: 4px solid var(--accent);
             flex-shrink: 0;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
 
-        .brand h1 { margin: 0; font-size: 1.6em; }
-        .brand span { font-size: 0.8em; opacity: 0.8; font-family: sans-serif; }
+        .brand h1 { margin: 0; font-size: 1.4em; }
+        .brand span { font-size: 0.7em; opacity: 0.8; font-family: sans-serif; }
 
+        /* މެނޫ ބަޓަންތައް */
+        .nav-buttons a {
+            text-decoration: none;
+            color: white;
+            background: rgba(255,255,255,0.1);
+            padding: 8px 15px;
+            border-radius: 5px;
+            margin-left: 10px;
+            font-size: 0.9em;
+            transition: 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .nav-buttons a:hover {
+            background: var(--accent);
+            color: var(--primary);
+        }
+
+        /* --- މައި ކޮންޓެއިނަރ --- */
         .main-container {
             display: flex;
-            flex: 1;
+            flex: 1; /* ބާކީ އޮތް ޖާގަ ނެގުމަށް */
             overflow: hidden;
         }
 
+        /* ސައިޑްބާ */
         .sidebar {
-            width: 360px;
+            width: 340px;
             background: var(--white);
             border-left: 1px solid #ddd;
             display: flex;
@@ -83,119 +98,114 @@
             z-index: 10;
         }
 
-        .search-area {
-            padding: 15px;
-            background: #f4f4f4;
-            border-bottom: 1px solid #ddd;
-        }
+        .search-area { padding: 15px; background: #f4f4f4; border-bottom: 1px solid #ddd; }
         .search-box { position: relative; width: 100%; }
         .search-box input {
-            width: 100%;
-            padding: 12px 40px 12px 10px;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            font-family: 'Mv Galan', sans-serif;
-            outline: none;
-            box-sizing: border-box;
-            font-size: 1em;
+            width: 100%; padding: 10px 35px 10px 10px;
+            border: 1px solid #ccc; border-radius: 6px;
+            font-family: 'Mv Galan', sans-serif; outline: none; box-sizing: border-box;
         }
-        .search-box i {
-            position: absolute;
-            right: 12px; top: 50%;
-            transform: translateY(-50%);
-            color: #888;
-        }
+        .search-box i { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); color: #888; }
 
-        .book-list {
-            flex: 1;
-            overflow-y: auto;
-            padding: 12px;
-        }
+        .book-list { flex: 1; overflow-y: auto; padding: 10px; }
 
         .book-card {
-            display: flex;
-            align-items: start;
-            gap: 12px;
-            background: var(--white);
-            border: 1px solid #eee;
-            padding: 10px;
-            margin-bottom: 10px;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.2s ease;
+            display: flex; align-items: start; gap: 10px;
+            background: var(--white); border: 1px solid #eee;
+            padding: 10px; margin-bottom: 8px; border-radius: 6px;
+            cursor: pointer; transition: 0.2s;
         }
-
-        .book-card:hover {
-            background-color: #fdfdfd;
-            border-color: var(--accent);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
-        }
-
-        .book-card.active {
-            background-color: #fffbf0;
-            border: 1px solid var(--accent);
-            border-right: 5px solid var(--accent);
-        }
+        .book-card:hover { transform: translateX(-3px); border-color: var(--accent); }
+        .book-card.active { background-color: #fffbf0; border: 1px solid var(--accent); border-right: 4px solid var(--accent); }
 
         .book-card img {
-            width: 55px;
-            height: 80px;
-            object-fit: cover;
-            border-radius: 4px;
-            border: 1px solid #ddd;
-            background-color: #eee;
-            flex-shrink: 0;
+            width: 50px; height: 70px; object-fit: cover;
+            border-radius: 4px; border: 1px solid #ddd; background: #eee;
         }
+        .book-details h4 { margin: 0 0 4px 0; font-size: 1em; color: var(--primary); }
+        .book-details p { margin: 0; font-size: 0.8em; color: #666; }
 
-        .book-details { flex: 1; }
-        .book-details h4 { margin: 0 0 5px 0; font-size: 1.1em; color: var(--primary); line-height: 1.4; }
-        .book-details p { margin: 0; font-size: 0.85em; color: #666; }
-        
-        .tag {
-            font-size: 0.7em;
-            background: #eee;
-            padding: 2px 6px;
-            border-radius: 4px;
-            color: #555;
-            display: inline-block;
-            margin-top: 5px;
-        }
-
+        /* ވިއުއަރ */
         .viewer-area {
             flex: 1;
             background-color: #525659;
             position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            display: flex; align-items: center; justify-content: center;
         }
-
         iframe { width: 100%; height: 100%; border: none; }
+        .placeholder-msg { text-align: center; color: rgba(255,255,255,0.7); }
+        .placeholder-msg i { font-size: 4em; margin-bottom: 15px; display: block; opacity: 0.5; }
 
-        .placeholder-msg {
-            text-align: center;
-            color: rgba(255,255,255,0.7);
+        /* --- ފޫޓަރ (Footer) --- */
+        footer {
+            background-color: var(--footer-bg);
+            color: #ccc;
+            padding: 15px 20px;
+            border-top: 3px solid var(--accent);
+            font-size: 0.9em;
+            flex-shrink: 0;
         }
-        .placeholder-msg i { font-size: 5em; margin-bottom: 20px; display: block; opacity: 0.5; }
-        .placeholder-msg h2 { margin: 0; font-size: 1.8em; }
+        
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
 
-        @media (max-width: 768px) {
+        .footer-links a {
+            color: var(--accent);
+            text-decoration: none;
+            margin-left: 20px;
+            transition: 0.3s;
+        }
+        .footer-links a:hover { color: white; text-decoration: underline; }
+        
+        .contact-btn {
+            background: var(--accent);
+            color: var(--primary);
+            border: none;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            font-family: 'Mv Galan', sans-serif;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .contact-btn:hover { background: white; }
+
+        @media (max-width: 800px) {
             .main-container { flex-direction: column; }
-            .sidebar { width: 100%; height: 40%; border-left: none; border-bottom: 3px solid var(--accent); }
+            .sidebar { width: 100%; height: 40%; }
             .viewer-area { height: 60%; }
+            .footer-content { flex-direction: column; gap: 10px; text-align: center; }
+            .nav-buttons span { display: none; } /* Hide text on mobile */
         }
     </style>
 </head>
-<body oncontextmenu="return false;"> <header>
+<body oncontextmenu="return false;">
+
+    <header>
         <div class="brand">
-            <h1>ޒާދް އެކަޑެމީ ލައިބްރަރީ</h1>
-            <span>Protected Digital Resource</span>
+            <h1>ޒާދް ޑިޖިޓަލް ލައިބްރަރީ</h1>
+            <span>Zaad Academy Resource Center</span>
         </div>
-        <div><i class="fa fa-lock fa-lg" title="Secure Mode"></i></div>
+        
+        <div class="nav-buttons">
+            <a href="index.html">
+                <i class="fa fa-home"></i> <span>މައި މެނޫ</span>
+            </a>
+            
+            <a href="contact.html">
+                <i class="fa fa-envelope"></i> <span>ގުޅުއްވުމަށް</span>
+            </a>
+        </div>
     </header>
 
     <div class="main-container">
+        
         <div class="sidebar">
             <div class="search-area">
                 <div class="search-box">
@@ -203,89 +213,74 @@
                     <input type="text" id="searchInput" placeholder="ފައިލްގެ ނަން ހޯއްދަވާ..." onkeyup="filterBooks()">
                 </div>
             </div>
-            <div class="book-list" id="bookListContainer"></div>
+            <div class="book-list" id="bookListContainer">
+                </div>
         </div>
 
         <div class="viewer-area">
             <div id="placeholder" class="placeholder-msg">
-                <i class="fa fa-shield-alt"></i>
+                <i class="fa fa-book-reader"></i>
                 <h2>ފައިލްއެއް ޚިޔާރުކުރައްވާ</h2>
-                <p>ކިޔުމަށްޓަކައި ލިސްޓުން ފޮތަކަށް ފިތާލައްވާ</p>
+                <p>ލިސްޓުން ފޮތަކަށް ފިތާލުމުން މިތަނަށް ހުޅުވޭނެ</p>
             </div>
             <iframe id="pdfFrame" style="display:none;" allow="autoplay"></iframe>
         </div>
+
     </div>
 
-    <script>
-        // ==========================================
-        // 🔒 SECURITY MODULE (ރައްކާތެރިކަމުގެ ބައި)
-        // ==========================================
-        
-        document.onkeydown = function(e) {
-            // Disable F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U
-            if(e.keyCode == 123) { return false; }
-            if(e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) { return false; }
-            if(e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)) { return false; }
-            if(e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) { return false; }
+    <footer>
+        <div class="footer-content">
+            <div>
+                &copy; 2025 ޒާދް އެކަޑެމީ. ހުރިހާ ހައްގެއް ވަނީ ރައްކާތެރިކުރެވިފައި.
+            </div>
             
-            // Disable Ctrl+S (Save), Ctrl+P (Print)
-            if(e.ctrlKey && e.keyCode == 'S'.charCodeAt(0)) { 
-                e.preventDefault(); 
-                alert("This content is protected."); 
-                return false; 
-            }
-            if(e.ctrlKey && e.keyCode == 'P'.charCodeAt(0)) { 
-                e.preventDefault(); 
-                alert("Printing is disabled."); 
-                return false; 
-            }
+            <div class="footer-links">
+                <a href="index.html">ހޯމް</a>
+                <a href="about.html">އަޅުގަނޑުމެން</a>
+                <a href="help.html">އެހީ</a>
+            </div>
+
+            <div>
+                <a href="contact.html" class="contact-btn">
+                    <i class="fa fa-phone-alt"></i> ގުޅުއްވާ
+                </a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // --- Security (Anti-Copy) ---
+        document.onkeydown = function(e) {
+            if(e.keyCode == 123) return false;
+            if(e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) return false;
+            if(e.ctrlKey && e.keyCode == 'S'.charCodeAt(0)) { e.preventDefault(); return false; }
+            if(e.ctrlKey && e.keyCode == 'P'.charCodeAt(0)) { e.preventDefault(); return false; }
         }
 
-        // Disable Developer Tools Detection (Simple Loop)
-        setInterval(function(){
-            var before = new Date().getTime();
-            debugger; // This stops code execution if DevTools is open
-            var after = new Date().getTime();
-            if (after - before > 100) {
-                document.body.innerHTML = "<h1>Security Violation Detected. Please close Developer Tools.</h1>";
-            }
-        }, 1000);
-
-
-        // ==========================================
-        // 1. ޑޭޓާބޭސް (DATA)
-        // ==========================================
-        
+        // --- Database ---
         let libraryData = [
-            
-            // --- މިސާލު ފައިލް ---
             { 
                 title: "ޓެސްޓް ފައިލް", 
                 file: "https://drive.google.com/file/d/1suI7rGxKoo33Q9iHZs_xCMNbjEDybG9-/view?usp=sharing",
                 img: "https://drive.google.com/file/d/1suI7rGxKoo33Q9iHZs_xCMNbjEDybG9-/view?usp=sharing", 
-                type: "Secure",
-                desc: "ޑްރައިވް ފޮޓޯ + ޕީޑީއެފް" 
-            }
-
-            // މިތަނަށް އިތުރު ފައިލްތައް އަޅުއްވާ...
+                type: "GDrive",
+                desc: "އޮންލައިން ފައިލް" 
+            },
+            // Add more files here...
         ];
 
-        // --- 500 Sample Files ---
+        // Add Samples
         for (let i = 1; i <= 500; i++) {
             libraryData.push({
-                title: `ރިޕޯޓް ނަންބަރު ${i}`,
+                title: `ރިޕޯޓް ${i}`,
                 file: `https://drive.google.com/file/d/1suI7rGxKoo33Q9iHZs_xCMNbjEDybG9-/view?usp=sharing`,
                 img: "", 
                 type: "Sample",
-                desc: `ID: ${3000 + i}`
+                desc: `ID: ${i}`
             });
         }
 
-
-        // ==========================================
-        // 2. SYSTEM LOGIC
-        // ==========================================
-
+        // --- Functions ---
         const listContainer = document.getElementById('bookListContainer');
         const pdfFrame = document.getElementById('pdfFrame');
         const placeholder = document.getElementById('placeholder');
@@ -310,11 +305,6 @@
         function renderList(data) {
             listContainer.innerHTML = ""; 
             const fragment = document.createDocumentFragment();
-
-            if (data.length === 0) {
-                listContainer.innerHTML = "<p style='text-align:center; padding:20px; color:#666;'>އެއްވެސް ފައިލްއެއް ނުފެނުނު</p>";
-                return;
-            }
 
             data.forEach((book, index) => {
                 let card = document.createElement('div');
@@ -342,12 +332,10 @@
                     <div class="book-details">
                         <h4>${book.title}</h4>
                         <p>${book.desc}</p>
-                        <span class="tag">${book.type}</span>
                     </div>
                 `;
                 fragment.appendChild(card);
             });
-
             listContainer.appendChild(fragment);
         }
 
@@ -361,7 +349,6 @@
         }
 
         renderList(libraryData);
-
     </script>
 </body>
 </html>
