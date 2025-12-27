@@ -40,6 +40,9 @@
             margin: 0;
             color: var(--royal-blue);
             line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
             
             /* Disable Selection */
             -webkit-user-select: none;
@@ -71,28 +74,30 @@
             position: relative;
         }
 
-        /* HOME BUTTON STYLE */
-        .home-nav {
+        /* TOP NAVIGATION (Home & Request) */
+        .top-nav {
             position: absolute;
             top: 20px;
             right: 20px;
             z-index: 100;
+            display: flex;
+            gap: 10px;
         }
-        .home-btn {
+        .nav-btn {
             background: rgba(255,255,255,0.1);
             color: var(--royal-gold);
             text-decoration: none;
-            padding: 8px 20px;
+            padding: 8px 15px;
             border: 1px solid var(--royal-gold);
             border-radius: 30px;
             font-weight: bold;
             transition: 0.3s;
             display: flex;
             align-items: center;
-            gap: 10px;
-            font-size: 0.9em;
+            gap: 8px;
+            font-size: 0.85em;
         }
-        .home-btn:hover {
+        .nav-btn:hover {
             background: var(--royal-gold);
             color: var(--royal-blue);
             transform: scale(1.05);
@@ -103,7 +108,7 @@
             font-family: 'Mv Galan', 'Faruma', sans-serif;
             font-size: 2.5em;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
-            margin: 20px 0 5px 0;
+            margin: 30px 0 5px 0;
         }
         .subtitle {
             font-size: 1.1em;
@@ -159,6 +164,7 @@
             max-width: 1600px;
             margin: 0 auto;
             padding: 20px;
+            flex: 1; /* Pushes footer down */
         }
 
         /* --- CARD DESIGN --- */
@@ -183,9 +189,8 @@
             position: relative;
             padding-bottom: 56.25%;
             height: 0;
-            background: #000; /* Placeholder background */
+            background: #000;
         }
-        /* Iframe is dynamically added now, so we style it generally */
         .video-wrapper iframe {
             position: absolute;
             top: 0;
@@ -236,7 +241,7 @@
             cursor: pointer;
             font-weight: bold;
             border: 1px solid var(--royal-gold);
-            font-family: var(--main-font); /* Ensure Faruma is used */
+            font-family: var(--main-font);
         }
 
         .video-card.unlocked .security-overlay { opacity: 0; pointer-events: none; }
@@ -296,7 +301,33 @@
             border-radius: 3px;
         }
 
-        /* --- RESPONSIVE & MOBILE OPTIMIZATIONS --- */
+        /* --- FOOTER --- */
+        footer {
+            background: var(--royal-dark);
+            color: #ccc;
+            padding: 40px 20px;
+            border-top: 5px solid var(--royal-gold);
+            text-align: center;
+            margin-top: 50px;
+        }
+        .footer-phones {
+            color: var(--royal-gold);
+            font-size: 1.5em;
+            font-weight: bold;
+            margin-bottom: 20px;
+            font-family: 'Courier New', monospace;
+        }
+        .footer-phones i { margin-left: 10px; }
+        .copyright {
+            font-size: 0.9em;
+            opacity: 0.8;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding-top: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* --- RESPONSIVE --- */
         @media (max-width: 1200px) { .video-grid { grid-template-columns: repeat(3, 1fr); } }
         
         @media (max-width: 900px) { 
@@ -306,31 +337,25 @@
         
         @media (max-width: 600px) { 
             .video-grid { 
-                grid-template-columns: 1fr; /* Single Column for Mobile */
+                grid-template-columns: 1fr; 
                 padding: 10px;
                 gap: 20px; 
             }
-            h1 { font-size: 1.6em; margin-top: 40px; } /* Adjust title so Home btn doesn't overlap */
-            .subtitle { font-size: 0.9em; }
-            .category-btn {
-                padding: 6px 12px;
-                font-size: 0.85em;
-                margin: 3px;
-            }
-            .video-title { font-size: 1.1em; }
-            .controls-container { padding: 0 10px; margin: 20px auto; }
-            
-            /* Home Button Mobile Adjustment */
-            .home-nav { top: 15px; right: 15px; }
-            .home-btn { padding: 6px 15px; font-size: 0.8em; }
+            h1 { font-size: 1.6em; margin-top: 60px; } /* Space for buttons */
+            .top-nav { top: 15px; right: 50%; transform: translateX(50%); width: 100%; justify-content: center; }
+            .nav-btn { padding: 6px 12px; font-size: 0.8em; }
+            .footer-phones { font-size: 1.2em; }
         }
     </style>
 </head>
 <body oncontextmenu="return false;">
 
     <header>
-        <nav class="home-nav">
-            <a href="https://academyzaad.com/" class="home-btn">
+        <nav class="top-nav">
+            <a href="https://academyzaad.com/contact.html" class="nav-btn">
+                <i class="fas fa-key"></i> ކީ ރިކުއެސްޓް
+            </a>
+            <a href="https://academyzaad.com/" class="nav-btn">
                 <i class="fas fa-home"></i> ހޯމް
             </a>
         </nav>
@@ -354,22 +379,33 @@
 
     <div id="videoContainer" class="video-grid"></div>
 
+    <footer>
+        <div class="footer-phones">
+            <i class="fas fa-phone-volume"></i> 7791550 | 9901550
+        </div>
+        <div class="copyright">
+            &copy; <span id="year"></span> <b>Zaad Academy</b> & <b>Zaad Research and Consultancy Firm</b>.<br>
+            All Rights Reserved.
+        </div>
+    </footer>
+
     <script>
+        // Set Auto Copyright Year
+        document.getElementById('year').innerText = new Date().getFullYear();
+
         // ==========================================
-        // 1. ADVANCED SECURITY SCRIPT
+        // 1. SECURITY SCRIPT
         // ==========================================
         document.addEventListener('contextmenu', event => event.preventDefault());
-
         document.onkeydown = function(e) {
-            if (e.keyCode == 123) return false; // F12
+            if (e.keyCode == 123) return false; 
             if (e.ctrlKey && e.shiftKey && (e.keyCode == 'I'.charCodeAt(0) || e.keyCode == 'C'.charCodeAt(0) || e.keyCode == 'J'.charCodeAt(0))) return false;
             if (e.ctrlKey && (e.keyCode == 'U'.charCodeAt(0) || e.keyCode == 'S'.charCodeAt(0) || e.keyCode == 'A'.charCodeAt(0))) return false;
         };
-        
         document.addEventListener('dragstart', function(e) { e.preventDefault(); });
 
         // ==========================================
-        // 2. DATA GENERATION (500 CARDS)
+        // 2. DATA GENERATION
         // ==========================================
         const categories = [
             { id: 'cat1', name: 'ޤުރްއާން ޢިލްމު' },
@@ -416,7 +452,7 @@
         }
 
         // ==========================================
-        // 3. RENDERING & LOGIC (PERFORMANCE FIX)
+        // 3. RENDERING & LOGIC
         // ==========================================
         function renderVideos(videoList) {
             const container = document.getElementById('videoContainer');
@@ -427,9 +463,7 @@
                 const card = document.createElement('div');
                 card.className = 'video-card';
                 card.setAttribute('data-id', video.id);
-                // Note: IFRAME removed from initial render to prevent freezing
-                // Instead, we just have the wrapper and overlay
-                
+
                 card.innerHTML = `
                     <div class="video-wrapper" id="wrapper-${video.id}">
                         <div class="security-overlay" id="overlay-${video.id}">
@@ -439,7 +473,7 @@
                             <span class="error-msg" id="msg-${video.id}">Invalid Key</span>
                             <button class="unlock-btn" onclick="verifyAndUnlock(${video.id}, '${video.youtubeId}')">VERIFY & UNLOCK</button>
                         </div>
-                        </div>
+                    </div>
                     
                     <div class="card-body">
                         <span class="category-badge">${video.catName}</span>
@@ -463,7 +497,7 @@
             const inputField = document.getElementById(`pass-${id}`);
             const msgField = document.getElementById(`msg-${id}`);
             const overlay = document.getElementById(`overlay-${id}`);
-            const wrapper = document.getElementById(`wrapper-${id}`); // Get wrapper
+            const wrapper = document.getElementById(`wrapper-${id}`);
             const card = overlay.closest('.video-card');
             
             const rawKey = inputField.value.trim();
@@ -488,11 +522,10 @@
                     showError(msgField, "މުއްދަތު ހަމަވެއްޖެ!");
                     inputField.style.borderColor = "red";
                 } else {
-                    // --- SUCCESS & LAZY LOAD ---
                     card.classList.add('unlocked');
                     msgField.style.display = 'none';
                     
-                    // Inject Iframe NOW (Prevents freezing on load)
+                    // Lazy Load Iframe
                     const iframe = document.createElement('iframe');
                     iframe.src = `https://www.youtube.com/embed/${youtubeId}?autoplay=1`;
                     iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture";
@@ -515,8 +548,6 @@
         function filterVideos(category) {
             document.querySelectorAll('.category-btn').forEach(btn => btn.classList.remove('active'));
             event.target.classList.add('active');
-            
-            // Limit search to first 500 for performance if list grows huge
             if (category === 'all') renderVideos(allVideos);
             else renderVideos(allVideos.filter(v => v.category === category));
         }
