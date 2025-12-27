@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
     <style>
-        /* --- 1. ސްޓައިލްތައް --- */
+        /* --- 1. މައިގަނޑު ޑިޒައިން (Theme) --- */
         :root {
             --primary: #0C2D48; /* ގަދަ ނޫ */
             --accent: #B49658;  /* ރަން ކުލަ */
@@ -19,7 +19,7 @@
 
         @font-face {
             font-family: 'Mv Galan';
-            src: url('fonts/Mv Galan.ttf');
+            src: url('fonts/Mv Galan.ttf'); /* ފޮންޓް ފައިލް ނެތަސް ޑިފޯލްޓް ފޮންޓް އަރާނެ */
         }
 
         body {
@@ -30,35 +30,38 @@
             padding: 0;
             display: flex;
             flex-direction: column;
-            height: 100vh;
+            height: 100vh; /* މުޅި ސްކްރީން ފުރޭގޮތަށް */
             overflow: hidden;
         }
 
-        /* --- ހެޑަރ --- */
+        /* --- 2. ހެޑަރ (Mareege Bai) --- */
         header {
             background: var(--primary);
             color: var(--white);
-            padding: 15px 20px;
+            padding: 15px 25px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            border-bottom: 4px solid var(--accent);
+            border-bottom: 5px solid var(--accent);
             flex-shrink: 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
 
-        .brand h1 { margin: 0; font-size: 1.5em; }
-        .brand span { font-size: 0.8em; opacity: 0.8; }
+        .brand h1 { margin: 0; font-size: 1.6em; letter-spacing: 1px; }
+        .brand span { font-size: 0.8em; opacity: 0.8; font-family: sans-serif; }
+        .info-btn { color: white; cursor: pointer; opacity: 0.8; transition: 0.3s; }
+        .info-btn:hover { opacity: 1; transform: scale(1.1); }
 
-        /* --- މައި ލޭއައުޓް --- */
+        /* --- 3. މައި ލޭއައުޓް (Left & Right) --- */
         .main-container {
             display: flex;
             flex: 1;
             overflow: hidden;
         }
 
-        /* ސައިޑްބާ (ލިސްޓް) */
+        /* --- 4. ސައިޑްބާ (ލިސްޓް އިންނަ ތަން) --- */
         .sidebar {
-            width: 340px;
+            width: 360px;
             background: var(--white);
             border-left: 1px solid #ddd;
             display: flex;
@@ -70,33 +73,37 @@
         /* ސާޗް ބާ */
         .search-area {
             padding: 15px;
-            background: #f1f1f1;
+            background: #f4f4f4;
             border-bottom: 1px solid #ddd;
         }
         .search-box { position: relative; width: 100%; }
         .search-box input {
             width: 100%;
-            padding: 10px 35px 10px 10px;
+            padding: 12px 40px 12px 10px;
             border: 1px solid #ccc;
-            border-radius: 6px;
+            border-radius: 8px;
             font-family: 'Mv Galan', sans-serif;
             outline: none;
             box-sizing: border-box;
+            font-size: 1em;
+            transition: 0.3s;
         }
+        .search-box input:focus { border-color: var(--accent); background: #fff; }
         .search-box i {
             position: absolute;
-            right: 10px; top: 50%;
+            right: 12px; top: 50%;
             transform: translateY(-50%);
             color: #888;
         }
 
-        /* ފޮތްތަކުގެ ލިސްޓް */
+        /* ފޮތްތަކުގެ ލިސްޓް (Scrollable Area) */
         .book-list {
             flex: 1;
             overflow-y: auto;
-            padding: 10px;
+            padding: 12px;
         }
 
+        /* ވަކިވަކި ކާޑުތައް */
         .book-card {
             display: flex;
             align-items: start;
@@ -104,29 +111,30 @@
             background: var(--white);
             border: 1px solid #eee;
             padding: 10px;
-            margin-bottom: 8px;
+            margin-bottom: 10px;
             border-radius: 8px;
             cursor: pointer;
             transition: all 0.2s ease;
+            position: relative;
         }
 
         .book-card:hover {
             background-color: #fdfdfd;
             border-color: var(--accent);
-            transform: translateX(-3px);
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
         }
 
         .book-card.active {
             background-color: #fffbf0;
             border: 1px solid var(--accent);
-            border-right: 4px solid var(--accent);
+            border-right: 5px solid var(--accent);
         }
 
-        /* ފޮތުގެ ފޮޓޯ (Thumbnail) ޑިޒައިން */
+        /* ފޮތުގެ ކަވަރ ފޮޓޯ */
         .book-card img {
-            width: 60px;
-            height: 85px;
+            width: 55px;
+            height: 80px;
             object-fit: cover;
             border-radius: 4px;
             border: 1px solid #ddd;
@@ -135,18 +143,20 @@
         }
 
         .book-details { flex: 1; }
-        .book-details h4 { margin: 0 0 5px 0; font-size: 1em; color: var(--primary); line-height: 1.4; }
-        .book-details p { margin: 0; font-size: 0.8em; color: #666; }
+        .book-details h4 { margin: 0 0 5px 0; font-size: 1.1em; color: var(--primary); line-height: 1.4; }
+        .book-details p { margin: 0; font-size: 0.85em; color: #666; line-height: 1.5; }
         
-        .type-tag {
+        .tag {
             font-size: 0.7em;
             background: #eee;
-            padding: 2px 5px;
-            border-radius: 3px;
+            padding: 2px 6px;
+            border-radius: 4px;
             color: #555;
+            display: inline-block;
+            margin-top: 5px;
         }
 
-        /* Viewer Area */
+        /* --- 5. ވިއުއަރ (PDF ފެންނަ ތަން) --- */
         .viewer-area {
             flex: 1;
             background-color: #525659;
@@ -156,18 +166,24 @@
             justify-content: center;
         }
 
-        iframe { width: 100%; height: 100%; border: none; }
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
 
+        /* ފައިލް ނުނަގާއިރު ދައްކާ މެސެޖް */
         .placeholder-msg {
             text-align: center;
             color: rgba(255,255,255,0.7);
         }
-        .placeholder-msg i { font-size: 4em; margin-bottom: 20px; display: block; }
+        .placeholder-msg i { font-size: 5em; margin-bottom: 20px; display: block; opacity: 0.5; }
+        .placeholder-msg h2 { margin: 0; font-size: 1.8em; }
 
-        /* Mobile */
+        /* --- Responsive (Mobile) --- */
         @media (max-width: 768px) {
             .main-container { flex-direction: column; }
-            .sidebar { width: 100%; height: 40%; border-left: none; border-bottom: 2px solid var(--accent); }
+            .sidebar { width: 100%; height: 40%; border-left: none; border-bottom: 3px solid var(--accent); }
             .viewer-area { height: 60%; }
         }
     </style>
@@ -177,9 +193,11 @@
     <header>
         <div class="brand">
             <h1>ޒާދް އެކަޑެމީ ލައިބްރަރީ</h1>
-            <span>Digital Library</span>
+            <span>Zaad Digital Resource Center</span>
         </div>
-        <div><i class="fa fa-book-reader fa-lg"></i></div>
+        <div class="info-btn" title="Help">
+            <i class="fa fa-question-circle fa-lg"></i>
+        </div>
     </header>
 
     <div class="main-container">
@@ -188,7 +206,7 @@
             <div class="search-area">
                 <div class="search-box">
                     <i class="fa fa-search"></i>
-                    <input type="text" id="searchInput" placeholder="ފޮތުގެ ނަން ހޯއްދަވާ..." onkeyup="filterBooks()">
+                    <input type="text" id="searchInput" placeholder="ފައިލްގެ ނަން ހޯއްދަވާ..." onkeyup="filterBooks()">
                 </div>
             </div>
             
@@ -198,7 +216,7 @@
 
         <div class="viewer-area">
             <div id="placeholder" class="placeholder-msg">
-                <i class="fa fa-book-open"></i>
+                <i class="fa fa-book-reader"></i>
                 <h2>ފައިލްއެއް ޚިޔާރުކުރައްވާ</h2>
                 <p>ކިޔުމަށްޓަކައި ލިސްޓުން ފޮތަކަށް ފިތާލައްވާ</p>
             </div>
@@ -209,52 +227,55 @@
 
     <script>
         // ==========================================
-        // 1. ޑޭޓާބޭސް (މިތަނަށް ލިންކްތައް އަޅުއްވާ)
+        // 1. ޑޭޓާބޭސް (ތިބާގެ ފައިލްތައް މިތަނަށް ލިޔުއްވާ)
         // ==========================================
         
         let libraryData = [
-            // --- މިސާލު 1: ގޫގްލް ޑްރައިވް (ފޮޓޯ + PDF) ---
+            
+            // --- މިސާލު 1: ހުރިހާ އެއްޗެއް ގޫގްލް ޑްރައިވް އިން ---
             { 
-                title: "ޓެސްޓް ފައިލް (ޑްރައިވް)", 
-                // PDF Link
+                title: "ގޫގްލް ޑްރައިވް ޓެސްޓް", 
+                // PDF ލިންކް
                 file: "https://drive.google.com/file/d/1suI7rGxKoo33Q9iHZs_xCMNbjEDybG9-/view?usp=sharing",
-                // Image Link (އެއް ލިންކެއް މިސާލަކަށް)
+                // PHOTO ލިންކް (ތިބާ ދެއްވި ލިންކް މިތަނަށް ލީމާ އޮޓޯއިން ފޮޓޯއެއް ގޮތަށް ދައްކާނެ)
                 img: "https://drive.google.com/file/d/1suI7rGxKoo33Q9iHZs_xCMNbjEDybG9-/view?usp=sharing", 
                 type: "GDrive",
-                desc: "އޮންލައިން ފޮޓޯ & ޕީޑީއެފް" 
+                desc: "އޮންލައިން ފޮޓޯ + ޕީޑީއެފް" 
             },
 
-            // --- މިސާލު 2: ލޯކަލް ފޮޓޯ + ޑްރައިވް PDF ---
+            // --- މިސާލު 2: ލޯކަލް ފޮޓޯ + ޑްރައިވް ޕީޑީއެފް ---
             { 
-                title: "ކޮމްޕިއުޓަރު ފޮޓޯއެއް", 
+                title: "ޔޫޒަރ ގައިޑް (މިސާލު)", 
                 file: "https://drive.google.com/file/d/1suI7rGxKoo33Q9iHZs_xCMNbjEDybG9-/view?usp=sharing",
-                img: "covers/mybook.jpg", // ކޮމްޕިއުޓަރުގައި އިން ފޮޓޯ
+                img: "covers/guide.jpg", // ކޮމްޕިއުޓަރުގައި އިން ފޮޓޯއެއް
                 type: "Mixed",
                 desc: "ފޮޓޯ ކޮމްޕިއުޓަރުން" 
             }
+
+            // އިތުރު ފައިލްތައް މިގޮތަށް ތިރިއަށް އިތުރުކުރައްވާ...
         ];
 
-        // --- 500 ސާމްޕަލް (ޓެސްޓް ކުރުމަށް - ބޭނުން ނެތްނަމަ ފޮހެލާ) ---
-        for (let i = 1; i <= 50; i++) {
+        // --- 500 ސާމްޕަލް ފައިލް (ޓެސްޓް ކުރުމަށް - ފަހުން ފޮހެލާ) ---
+        for (let i = 1; i <= 500; i++) {
             libraryData.push({
-                title: `ރިޕޯޓް ނަންބަރު ${i}`,
-                file: `https://drive.google.com/file/d/1suI7rGxKoo33Q9iHZs_xCMNbjEDybG9-/view?usp=sharing`,
-                img: "", // ފޮޓޯ ނެތްނަމަ ޑިފޯލްޓް ފޮޓޯ އަރާނެ
+                title: `ރިޕޯޓް ނަންބަރު ${i} - 2025`,
+                file: `https://drive.google.com/file/d/1suI7rGxKoo33Q9iHZs_xCMNbjEDybG9-/view?usp=sharing`, // Sample Link
+                img: "", // No Image
                 type: "Sample",
-                desc: `ID: ${202500 + i}`
+                desc: `ޑޮކިއުމަންޓް ID: ${2000 + i}`
             });
         }
 
 
         // ==========================================
-        // 2. ސިސްޓަމް ފަންކްޝަންތައް (System Logic)
+        // 2. ސިސްޓަމް ފަންކްޝަންތައް (System Code)
         // ==========================================
 
         const listContainer = document.getElementById('bookListContainer');
         const pdfFrame = document.getElementById('pdfFrame');
         const placeholder = document.getElementById('placeholder');
 
-        // (A) ގޫގްލް ޑްރައިވް PDF ލިންކް '/preview' އަށް ބަދަލުކުރުން
+        // (A) ގޫގްލް ޑްރައިވް PDF ލިންކް 'Preview' މޯޑަށް ބަދަލުކުރުން
         function fixDrivePdfLink(url) {
             if (url.includes("drive.google.com") && url.includes("/view")) {
                 return url.replace(/\/view.*/, "/preview");
@@ -262,22 +283,23 @@
             return url;
         }
 
-        // (B) ގޫގްލް ޑްރައިވް IMAGE ލިންކް ދައްކާގޮތަށް ބަދަލުކުރުން
+        // (B) ގޫގްލް ޑްރައިވް IMAGE ލިންކް 'Thumbnail' މޯޑަށް ބަދަލުކުރުން
         function fixDriveImgLink(url) {
             if (url.includes("drive.google.com") && url.includes("/view")) {
-                // Extract ID using Regex
+                // ލިންކުން އައިޑީ (ID) ވަކިކޮށްލުން
                 let idMatch = url.match(/\/d\/(.+?)\//);
                 if (idMatch && idMatch[1]) {
-                    // Convert to viewable image link
+                    // ފޮޓޯ ފެންނަ ލިންކަށް ބަދަލުކުރުން
                     return `https://drive.google.com/thumbnail?id=${idMatch[1]}&sz=w200`; 
                 }
             }
             return url;
         }
 
+        // (C) ލިސްޓް ދެއްކުން
         function renderList(data) {
-            listContainer.innerHTML = ""; 
-            const fragment = document.createDocumentFragment();
+            listContainer.innerHTML = ""; // Clear list
+            const fragment = document.createDocumentFragment(); // Performance booster
 
             if (data.length === 0) {
                 listContainer.innerHTML = "<p style='text-align:center; padding:20px; color:#666;'>އެއްވެސް ފައިލްއެއް ނުފެނުނު</p>";
@@ -288,32 +310,38 @@
                 let card = document.createElement('div');
                 card.className = 'book-card';
                 
-                // Click Handler
+                // ކާޑަށް ފިތާލުމުން ވާނެ ގޮތް
                 card.onclick = () => {
+                    // Highlight active item
                     document.querySelectorAll('.book-card').forEach(el => el.classList.remove('active'));
                     card.classList.add('active');
+
+                    // Show PDF
                     placeholder.style.display = 'none';
                     pdfFrame.style.display = 'block';
                     pdfFrame.src = fixDrivePdfLink(book.file);
                 };
 
-                // Image Logic
-                let imageSrc = "https://via.placeholder.com/60x85.png?text=PDF"; // Default
+                // ފޮޓޯ ސެޓްކުރުން (Logic)
+                let imageSrc = "https://via.placeholder.com/60x85.png?text=PDF"; // Default placeholder
+                
                 if (book.img && book.img.trim() !== "") {
-                    // Check if it's a Drive link or Local
                     if(book.img.includes("drive.google.com")) {
+                        // ޑްރައިވް ލިންކެއްނަމަ ފިކްސްކުރޭ
                         imageSrc = fixDriveImgLink(book.img);
                     } else {
+                        // ލޯކަލް ލިންކެއްނަމަ ސީދާ ދައްކާ
                         imageSrc = book.img;
                     }
                 }
 
+                // HTML Structure inside Card
                 card.innerHTML = `
-                    <img src="${imageSrc}" onerror="this.src='https://via.placeholder.com/60x85.png?text=No+Img'">
+                    <img src="${imageSrc}" onerror="this.src='https://via.placeholder.com/60x85.png?text=Err'">
                     <div class="book-details">
                         <h4>${book.title}</h4>
                         <p>${book.desc}</p>
-                        <span class="type-tag">${book.type}</span>
+                        <span class="tag">${book.type}</span>
                     </div>
                 `;
                 fragment.appendChild(card);
@@ -322,6 +350,7 @@
             listContainer.appendChild(fragment);
         }
 
+        // (D) ސާޗް ކުރުން
         function filterBooks() {
             let input = document.getElementById('searchInput').value.toLowerCase();
             let filtered = libraryData.filter(book => 
@@ -331,7 +360,7 @@
             renderList(filtered);
         }
 
-        // Initial Load
+        // ޕޭޖް ހުޅުވޭއިރު ލިސްޓް ދައްކާ
         renderList(libraryData);
 
     </script>
