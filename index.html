@@ -417,27 +417,94 @@
                     style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; pointer-events: none;">
                 </iframe>
             </div>
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; border-bottom:2px solid var(--royal-blue);">
-                <h2 style="color:var(--royal-blue);">ޒަމާނީ ތަޢުލީމް</h2>
-                <a href="news.html" style="color:var(--royal-gold); font-weight:bold;">ހުރިހާ ލިޔުމެއް ›</a>
-            </div>
+           <style>
+    /* Royal Video Grid Styles */
+    .royal-video-section {
+        margin-bottom: 40px;
+    }
+    .royal-grid-4 {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr); /* 2 columns like requested */
+        gap: 20px;
+    }
+    .royal-v-card {
+        background: #fff;
+        border: 2px solid var(--royal-gold); /* Gold Border */
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        transition: 0.3s ease;
+    }
+    .royal-v-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 25px rgba(180, 150, 88, 0.4); /* Gold Glow */
+        border-color: var(--royal-blue);
+    }
+    .video-wrapper {
+        position: relative;
+        padding-bottom: 56.25%; /* 16:9 Ratio */
+        height: 0;
+        background: #000;
+    }
+    .video-wrapper iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }
+    .v-title {
+        padding: 10px;
+        text-align: center;
+        font-weight: bold;
+        color: var(--royal-blue);
+        font-size: 0.9em;
+        background: #fdfdfd;
+        border-top: 1px solid #eee;
+    }
+    @media (max-width: 600px) {
+        .royal-grid-4 { grid-template-columns: 1fr; } /* Mobile: 1 Column */
+    }
+</style>
 
-            <div class="grid-2">
-                <div class="post-card">
-                    <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=400" class="post-img" onclick="changeImage(this)">
-                    <div class="post-content">
-                        <span class="post-tag" contenteditable="false">ޓެކްނޮލޮޖީ</span>
-                        <h3 class="post-title" contenteditable="false"><a href="secure_news.html">އުނގެނުމަށް ޓެކްނޮލޮޖީގެ އެހީ ހޯދުމާއި އިލެކްޓްރޯނިކްސް ޑިވައިސްތައް ބޭނުންކުރުން</a></h3>
-                    </div>
-                </div>
-                <div class="post-card">
-                    <img src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=400" class="post-img" onclick="changeImage(this)">
-                    <div class="post-content">
-                        <span class="post-tag" contenteditable="false">އެންމެ ފަހުގެ އާޓިކަލް</span>
-                        <h3 class="post-title" contenteditable="false"><a href="secure_news.html">ކުދިންގެ ނަފްސާނީ ދުޅަހެޔޮކަން</a></h3>
-                    </div>
-                </div>
+<div class="royal-video-section">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; border-bottom:2px solid var(--royal-blue);">
+        <h2 style="color:var(--royal-blue);">ޒަމާނީ ތަޢުލީމް - ވީޑިއޯ ގެލެރީ</h2>
+        <a href="#" style="color:var(--royal-gold); font-weight:bold;">ހުރިހާ ވީޑިއޯއެއް ›</a>
+    </div>
+
+    <div class="royal-grid-4">
+        
+        <div class="royal-v-card">
+            <div class="video-wrapper">
+                <iframe src="https://www.youtube.com/embed/1ACr-68iMSE" frameborder="0" allowfullscreen></iframe>
             </div>
+            <div class="v-title" contenteditable="false">ވީޑިއޯ 1: ކޯސް ތަޢާރަފް</div>
+        </div>
+
+        <div class="royal-v-card">
+            <div class="video-wrapper">
+                <iframe src="https://www.youtube.com/embed/JfyAPfnztY8" frameborder="0" allowfullscreen></iframe>
+            </div>
+            <div class="v-title" contenteditable="false">ވީޑިއޯ 2: ދަރިވަރުންގެ ޝުޢޫރު</div>
+        </div>
+
+        <div class="royal-v-card">
+            <div class="video-wrapper">
+                <iframe src="https://www.youtube.com/embed/1ACr-68iMSE" frameborder="0" allowfullscreen></iframe>
+            </div>
+            <div class="v-title" contenteditable="false">ވީޑިއޯ 3: ޚާއްޞަ ސެޝަން</div>
+        </div>
+
+        <div class="royal-v-card">
+            <div class="video-wrapper">
+                <iframe src="https://www.youtube.com/embed/JfyAPfnztY8" frameborder="0" allowfullscreen></iframe>
+            </div>
+            <div class="v-title" contenteditable="false">ވީޑިއޯ 4: އިތުރު ހަރަކާތްތައް</div>
+        </div>
+
+    </div>
+</div>
 
             <h2 style="color:var(--royal-blue); margin-bottom:15px;">އިސްލާމީ އިޤްތިޞާދު</h2>
             <div class="economy-box">
