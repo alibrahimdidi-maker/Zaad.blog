@@ -2,13 +2,25 @@
 <html lang="dv" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>ޒާދް ޕްރީމިއަމް ވީޑިއޯ ލައިބްރަރީ</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thaana:wght@400;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 
     <style>
+        /* --- 1. FONT SETUP --- */
+        @font-face {
+            font-family: 'Faruma';
+            src: url('fonts/Faruma.ttf') format('truetype');
+            font-weight: normal;
+        }
+        @font-face {
+            font-family: 'Mv Galan';
+            src: url('fonts/Mv Galan.ttf') format('truetype');
+            font-weight: normal;
+        }
+
         :root {
             --royal-blue: #0C2D48;
             --royal-dark: #051626;
@@ -16,33 +28,33 @@
             --royal-red: #800000;
             --bg-color: #f4f6f8;
             --card-bg: #ffffff;
+            --main-font: 'Faruma', 'Mv Galan', 'Noto Sans Thaana', sans-serif;
         }
 
-        /* --- SECURITY CSS (Prevents Selection) --- */
+        /* --- SECURITY CSS --- */
         body {
-            font-family: 'Noto Sans Thaana', sans-serif; /* Main Font Applied */
+            font-family: var(--main-font);
             background-color: var(--bg-color);
             background-image: radial-gradient(#B49658 0.5px, transparent 0.5px);
             background-size: 30px 30px;
             margin: 0;
             color: var(--royal-blue);
+            line-height: 1.6;
             
-            /* Disable Text Selection */
-            -webkit-user-select: none; /* Safari */
-            -moz-user-select: none; /* Firefox */
-            -ms-user-select: none; /* IE10+/Edge */
-            user-select: none; /* Standard */
+            /* Disable Selection */
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
         }
 
-        /* Prevent Image Dragging */
         img, iframe {
             -webkit-user-drag: none;
             user-drag: none;
-            pointer-events: none; /* Protects iframe interaction until unlocked (optional) */
+            pointer-events: none;
         }
         
-        /* Allow interaction with inputs and buttons only */
-        input, button, .unlocked iframe {
+        input, button, .unlocked iframe, a {
             pointer-events: auto !important;
             -webkit-user-select: text !important;
             user-select: text !important;
@@ -51,25 +63,52 @@
         /* --- HEADER --- */
         header {
             background: linear-gradient(135deg, var(--royal-blue), var(--royal-dark));
-            padding: 40px 20px;
+            padding: 30px 20px;
             text-align: center;
             border-bottom: 5px solid var(--royal-gold);
             color: white;
             box-shadow: 0 10px 30px rgba(0,0,0,0.3);
             position: relative;
         }
+
+        /* HOME BUTTON STYLE */
+        .home-nav {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            z-index: 100;
+        }
+        .home-btn {
+            background: rgba(255,255,255,0.1);
+            color: var(--royal-gold);
+            text-decoration: none;
+            padding: 8px 20px;
+            border: 1px solid var(--royal-gold);
+            border-radius: 30px;
+            font-weight: bold;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.9em;
+        }
+        .home-btn:hover {
+            background: var(--royal-gold);
+            color: var(--royal-blue);
+            transform: scale(1.05);
+        }
+
         h1 {
             color: var(--royal-gold);
+            font-family: 'Mv Galan', 'Faruma', sans-serif;
             font-size: 2.5em;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
-            margin: 0;
-            font-weight: 900;
+            margin: 20px 0 5px 0;
         }
         .subtitle {
             font-size: 1.1em;
             opacity: 0.9;
-            margin-top: 10px;
-            letter-spacing: 1px;
+            margin-top: 5px;
         }
 
         /* --- CONTROLS --- */
@@ -84,13 +123,14 @@
             background: white;
             border: 2px solid var(--royal-gold);
             color: var(--royal-blue);
-            padding: 10px 20px;
+            padding: 8px 18px;
             margin: 5px;
             border-radius: 30px;
             cursor: pointer;
             font-weight: bold;
-            font-family: 'Noto Sans Thaana', sans-serif;
+            font-family: var(--main-font);
             transition: 0.3s;
+            font-size: 1em;
         }
         .category-btn:hover, .category-btn.active {
             background: var(--royal-gold);
@@ -105,7 +145,7 @@
             max-width: 500px;
             border: 2px solid var(--royal-blue);
             border-radius: 8px;
-            font-family: 'Noto Sans Thaana', sans-serif;
+            font-family: var(--main-font);
             font-size: 1em;
             outline: none;
             text-align: right;
@@ -154,7 +194,7 @@
             border: none;
         }
 
-        /* SECURITY LOCK OVERLAY */
+        /* SECURITY LOCK */
         .security-overlay {
             position: absolute;
             top: 0;
@@ -179,7 +219,7 @@
             border-radius: 4px;
             margin-bottom: 10px;
             width: 80%;
-            font-family: monospace;
+            font-family: monospace; 
             font-weight: bold;
             letter-spacing: 1px;
             background: #051626;
@@ -195,24 +235,12 @@
             cursor: pointer;
             font-weight: bold;
             border: 1px solid var(--royal-gold);
+            font-family: var(--main-font);
         }
 
-        .video-card.unlocked .security-overlay {
-            opacity: 0;
-            pointer-events: none;
-        }
-
-        .video-card.unlocked iframe {
-            pointer-events: auto; /* Enable video only after unlock */
-        }
-
-        .error-msg {
-            color: #ff4d4d;
-            font-size: 0.8em;
-            margin-top: 5px;
-            display: none;
-            font-weight: bold;
-        }
+        .video-card.unlocked .security-overlay { opacity: 0; pointer-events: none; }
+        .video-card.unlocked iframe { pointer-events: auto; }
+        .error-msg { color: #ff4d4d; font-size: 0.9em; margin-top: 5px; display: none; font-weight: bold; }
 
         /* Content */
         .card-body {
@@ -228,18 +256,19 @@
             color: white;
             padding: 4px 12px;
             border-radius: 15px;
-            font-size: 0.75em;
+            font-size: 0.85em;
             display: inline-block;
             margin-bottom: 10px;
             border: 1px solid var(--royal-gold);
+            font-weight: bold;
         }
 
         .video-title {
-            font-size: 1.1em;
-            font-weight: 800;
+            font-size: 1.2em;
+            font-weight: normal; 
             color: var(--royal-dark);
             margin: 5px 0 10px 0;
-            line-height: 1.5;
+            line-height: 1.6;
             text-shadow: 2px 2px 0px rgba(192, 57, 43, 0.2); 
             border-bottom: 2px solid rgba(180, 150, 88, 0.3);
             padding-bottom: 10px;
@@ -252,7 +281,7 @@
             padding: 10px 15px;
             background: #f8f9fa;
             border-top: 1px solid #eee;
-            font-size: 0.85em;
+            font-size: 0.9em;
             color: #666;
         }
         
@@ -266,15 +295,47 @@
             border-radius: 3px;
         }
 
-        /* RESPONSIVE */
+        /* --- RESPONSIVE & MOBILE OPTIMIZATIONS --- */
         @media (max-width: 1200px) { .video-grid { grid-template-columns: repeat(3, 1fr); } }
-        @media (max-width: 900px) { .video-grid { grid-template-columns: repeat(2, 1fr); } }
-        @media (max-width: 600px) { .video-grid { grid-template-columns: 1fr; } }
+        
+        @media (max-width: 900px) { 
+            .video-grid { grid-template-columns: repeat(2, 1fr); } 
+            h1 { font-size: 2em; }
+        }
+        
+        @media (max-width: 600px) { 
+            .video-grid { 
+                grid-template-columns: 1fr; /* Single Column for Mobile */
+                padding: 10px;
+                gap: 20px; 
+            }
+            h1 { font-size: 1.6em; margin-top: 40px; } /* Adjust title so Home btn doesn't overlap */
+            .subtitle { font-size: 0.9em; }
+            .category-btn {
+                padding: 6px 12px;
+                font-size: 0.85em;
+                margin: 3px;
+            }
+            .video-title { font-size: 1.1em; }
+            .controls-container { padding: 0 10px; margin: 20px auto; }
+            
+            /* Home Button Mobile Adjustment */
+            .home-nav { top: 15px; right: 15px; }
+            .home-btn { padding: 6px 15px; font-size: 0.8em; }
+        }
     </style>
 </head>
-<body oncontextmenu="return false;"> <header>
+<body oncontextmenu="return false;">
+
+    <header>
+        <nav class="home-nav">
+            <a href="https://academyzaad.com/" class="home-btn">
+                <i class="fas fa-home"></i> ހޯމް
+            </a>
+        </nav>
+
         <h1>ޒާދް ޕްރީމިއަމް ވީޑިއޯ ލައިބްރަރީ</h1>
-        <div class="subtitle">ސެކިއުއަރ ކީ ބޭނުންކޮށްގެން ވަދެވޭ ޚާއްޞަ ޕޭޖް (500+ Videos)</div>
+        <div class="subtitle">ސެކިއުއަރ ކީ ބޭނުންކޮށްގެން ވަދެވޭ ޚާއްޞަ ޕޭޖް (500+ ވީޑިއޯ)</div>
     </header>
 
     <div class="controls-container">
@@ -292,49 +353,19 @@
 
     <div id="videoContainer" class="video-grid"></div>
 
-    <div id="security-warning" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:black; color:red; z-index:9999; text-align:center; padding-top:20%;">
-        <h1>Security Alert</h1>
-        <p>Developer tools are disabled on this page.</p>
-    </div>
-
     <script>
         // ==========================================
         // 1. ADVANCED SECURITY SCRIPT
         // ==========================================
-        
-        // Disable Right Click
         document.addEventListener('contextmenu', event => event.preventDefault());
 
-        // Disable Keyboard Shortcuts (Ctrl+U, Ctrl+S, Ctrl+C, F12, etc.)
         document.onkeydown = function(e) {
-            if (e.keyCode == 123) { // F12
-                return false;
-            }
-            if (e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) { // Ctrl+Shift+I
-                return false;
-            }
-            if (e.ctrlKey && e.shiftKey && e.keyCode == 'C'.charCodeAt(0)) { // Ctrl+Shift+C
-                return false;
-            }
-            if (e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)) { // Ctrl+Shift+J
-                return false;
-            }
-            if (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) { // Ctrl+U (View Source)
-                return false;
-            }
-            if (e.ctrlKey && e.keyCode == 'S'.charCodeAt(0)) { // Ctrl+S (Save)
-                return false;
-            }
-            if (e.ctrlKey && e.keyCode == 'A'.charCodeAt(0)) { // Ctrl+A (Select All)
-                return false;
-            }
+            if (e.keyCode == 123) return false; // F12
+            if (e.ctrlKey && e.shiftKey && (e.keyCode == 'I'.charCodeAt(0) || e.keyCode == 'C'.charCodeAt(0) || e.keyCode == 'J'.charCodeAt(0))) return false;
+            if (e.ctrlKey && (e.keyCode == 'U'.charCodeAt(0) || e.keyCode == 'S'.charCodeAt(0) || e.keyCode == 'A'.charCodeAt(0))) return false;
         };
-
-        // Disable Drag and Drop
-        document.addEventListener('dragstart', function(e) {
-            e.preventDefault();
-        });
-
+        
+        document.addEventListener('dragstart', function(e) { e.preventDefault(); });
 
         // ==========================================
         // 2. DATA GENERATION (500 CARDS)
@@ -361,11 +392,10 @@
             "ލީޑަރޝިޕް ސްކިލްސް"
         ];
 
-        const videoLinks = ["JfyAPfnztY8", "1ACr-68iMSE"]; // Placeholder Videos
+        const videoLinks = ["JfyAPfnztY8", "1ACr-68iMSE"];
 
         let allVideos = [];
 
-        // Generate 500 Cards Here
         function generateData() {
             for (let i = 1; i <= 500; i++) {
                 let catIndex = Math.floor(Math.random() * categories.length);
@@ -390,8 +420,6 @@
         function renderVideos(videoList) {
             const container = document.getElementById('videoContainer');
             container.innerHTML = ''; 
-
-            // Use DocumentFragment for better performance with 500 items
             const fragment = document.createDocumentFragment();
 
             videoList.forEach(video => {
@@ -403,7 +431,7 @@
                     <div class="video-wrapper">
                         <div class="security-overlay" id="overlay-${video.id}">
                             <i class="fas fa-lock lock-icon"></i>
-                            <div style="color:#d4af37; margin-bottom:5px; font-weight:bold;">ENTER LICENSE KEY</div>
+                            <div style="color:#d4af37; margin-bottom:5px; font-weight:bold; font-family:'Noto Sans Thaana';">މި ވީޑިއޯ ބެލުމަށް ކޯޑު ޖައްސަވާ</div>
                             <input type="text" class="security-input" id="pass-${video.id}" placeholder="Paste Key Here">
                             <span class="error-msg" id="msg-${video.id}">Invalid Key</span>
                             <button class="unlock-btn" onclick="verifyAndUnlock(${video.id})">VERIFY & UNLOCK</button>
@@ -443,7 +471,7 @@
             }
 
             try {
-                // Decode Logic (Matches your KeyGen V2)
+                // Decode Logic (Matches KeyGen V2)
                 const base64Str = rawKey.split('').reverse().join('');
                 const jsonStr = atob(base64Str);
                 const data = JSON.parse(jsonStr);
@@ -454,7 +482,7 @@
 
                 const now = new Date().getTime();
                 if(now > data.e) {
-                    showError(msgField, "މުއްދަތު ހަމަވެއްޖެ (Expired)!");
+                    showError(msgField, "މުއްދަތު ހަމަވެއްޖެ!");
                     inputField.style.borderColor = "red";
                 } else {
                     card.classList.add('unlocked');
@@ -462,7 +490,7 @@
                 }
 
             } catch (e) {
-                showError(msgField, "ކޯޑު ނުބައި (Invalid Key)!");
+                showError(msgField, "ކޯޑު ނުބައި!");
                 inputField.style.borderColor = "red";
                 console.error(e);
             }
@@ -476,8 +504,6 @@
         function filterVideos(category) {
             document.querySelectorAll('.category-btn').forEach(btn => btn.classList.remove('active'));
             event.target.classList.add('active');
-            
-            // Limit search to first 500 for performance if list grows huge
             if (category === 'all') renderVideos(allVideos);
             else renderVideos(allVideos.filter(v => v.category === category));
         }
