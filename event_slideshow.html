@@ -2,7 +2,7 @@
 <html lang="dv" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>Royal Graduation System (V16.5 - Royal Layout)</title>
+    <title>Royal Graduation System (V17.0 - Ultimate Pro)</title>
     <style>
         /* --- GLOBAL & PRO PALETTE --- */
         :root {
@@ -92,7 +92,7 @@
             font-weight: bold;
             line-height: 1.4;
         }
-        .dev-name { color: var(--royal-blue-dark); font-size: 12px; display: block; margin-bottom: 2px; }
+        .dev-name { color: var(--royal-blue-dark); font-size: 13px; display: block; margin-bottom: 2px; }
         .company-name { color: var(--royal-green); font-size: 10px; display: block; letter-spacing: 0.5px; }
 
         /* EDITOR (RIGHT) */
@@ -143,6 +143,24 @@
             background: #fff;
             outline: none; 
             box-shadow: 0 0 8px rgba(13, 71, 161, 0.3); 
+        }
+
+        /* --- SPECIAL STYLING FOR JALSA TITLES --- */
+        #jLine1 {
+            font-size: 28px !important;
+            font-weight: 900 !important;
+            text-align: center !important;
+            color: var(--royal-blue-dark);
+            border: 2px solid var(--royal-accent);
+            background: #fff8e1; /* Light gold tint background */
+            height: 60px;
+        }
+        #jLine2, #jLine3, #jLine4 {
+            font-size: 20px !important;
+            font-weight: bold !important;
+            text-align: center !important;
+            color: var(--royal-blue-mid);
+            height: 45px;
         }
 
         /* FONT SIZES & ALIGNMENT */
@@ -257,7 +275,7 @@
 
     <div id="securityOverlay">
         <div class="sec-box">
-            <h1 style="color:#fff; font-family:'Faruuma'; font-size:45px; margin-bottom:10px; text-shadow:0 2px 5px #000;">Royal Graduation V16.5</h1>
+            <h1 style="color:#fff; font-family:'Faruuma'; font-size:45px; margin-bottom:10px; text-shadow:0 2px 5px #000;">Royal Graduation V17.0</h1>
             <p style="color:#a0c4ff; font-size:16px; margin-bottom:30px; font-family:sans-serif;">🔒 PRO EDITION - ENTER LICENSE KEY</p>
             <input type="password" id="licenseKey" class="sec-input" placeholder="Enter Key...">
             <button class="sec-btn" onclick="verifyLicense()">AUTHENTICATE</button>
@@ -299,7 +317,7 @@
             
             <div class="dev-credits">
                 <span style="display:block; margin-bottom:3px;">ޕްރޮގްރާމް ޑިޒައިންކޮށް އުފެއްދީ:</span>
-                <span class="dev-name">ޑިވެލޮޕަރ ޢަލީ އިބްރާހީމް ދީދީ</span>
+                <span class="dev-name">ޑިވެލޮޕަރ ޢަލީ އިބްރާހީމް ދީދީ (7791550)</span>
                 <span class="company-name">ZAAD RESEARCH AND PUBLISHING CONSULTANCY FIRM</span>
             </div>
         </div>
@@ -515,7 +533,7 @@
                     <span class="group-title">👑 Main Screen Titles</span>
                     
                     <span class="d-label">1. Main Title & Position:</span>
-                    <input type="text" id="jLine1" placeholder="Main Title Text..." class="font-dv" oninput="updateJalsaText()" style="font-weight:bold; font-size:18px;">
+                    <input type="text" id="jLine1" placeholder="Main Title Text..." class="font-dv" oninput="updateJalsaText()">
                     
                     <div style="display:flex; align-items:center; gap:15px; margin-top:8px; background:#fff; padding:10px; border-radius:8px; border:1px solid #bbdefb;">
                         <div style="flex:1;">
@@ -687,7 +705,7 @@
 
     function downloadConfig() {
         const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(designState));
-        const a = document.createElement('a'); a.href = dataStr; a.download = "royal_config_v16.json"; document.body.appendChild(a); a.click(); a.remove();
+        const a = document.createElement('a'); a.href = dataStr; a.download = "royal_config_v17.json"; document.body.appendChild(a); a.click(); a.remove();
     }
 
     function loadConfig(input) {
