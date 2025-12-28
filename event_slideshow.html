@@ -2,7 +2,7 @@
 <html lang="dv" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>Royal Graduation System (V10.3 - Auto-Refine)</title>
+    <title>Royal Graduation System (V10.9 - YT Fixed)</title>
     <style>
         /* --- GLOBAL --- */
         body {
@@ -104,9 +104,9 @@
         #stuList { flex-grow: 1; min-height: 0; margin-bottom: 5px; }
 
         .btn-vid { font-size: 12px; padding: 4px; margin-top: 2px; border:none; border-radius:3px; color:white; width: 100%; }
-        .controls { display: flex; gap: 5px; margin-top: 5px; flex-shrink: 0; }
-        button.action { flex: 1; padding: 8px; font-size: 14px; border: none; border-radius: 4px; color: white; transition: 0.2s; }
-        .btn-live { background: #004d40; flex: 2; border: 2px solid #ffd700; color: #ffd700; }
+        .controls { display: flex; gap: 5px; margin-top: 0; flex-shrink: 0; margin-bottom: 10px; }
+        button.action { flex: 1; padding: 12px; font-size: 16px; border: none; border-radius: 4px; color: white; transition: 0.2s; }
+        .btn-live { background: #004d40; flex: 2; border: 2px solid #ffd700; color: #ffd700; font-size: 18px; }
         .btn-nav { background: #455a64; }
         .btn-clear { background: #b71c1c; flex: 0.5; }
 
@@ -114,9 +114,9 @@
         #previewImg { height: 50px; width: 50px; object-fit: cover; border-radius: 50%; border: 2px solid #d4af37; background: #ddd; }
         #logoPreview { height: 30px; object-fit: contain; }
         
-        .video-panel { background: #e3f2fd; padding: 5px; border-radius: 5px; margin-top: 5px; flex-shrink: 0; }
+        .video-panel { background: #e3f2fd; padding: 5px; border-radius: 5px; margin-top: 0; flex-shrink: 0; border: 1px solid #90caf9; }
 
-        #statusMsg { text-align: center; margin-top: 5px; font-weight: bold; color: green; font-size: 12px; background: #e8f5e9; padding: 2px; border-radius: 4px; flex-shrink: 0; }
+        #statusMsg { text-align: center; margin-top: 5px; font-weight: bold; color: green; font-size: 14px; background: #e8f5e9; padding: 5px; border-radius: 4px; flex-shrink: 0; border: 1px solid #a5d6a7; }
         .copyright-text { text-align: center; font-size: 10px; color: #d4af37; background: #00281c; margin-top: auto; padding: 5px; border-radius: 4px; flex-shrink: 0; font-family: sans-serif; font-weight: bold; }
     </style>
 </head>
@@ -124,7 +124,7 @@
 
     <div id="securityOverlay">
         <div class="sec-box">
-            <h1 style="color:#d4af37; font-family:'Faruuma'; font-size:30px;">Royal Graduation V10.3</h1>
+            <h1 style="color:#d4af37; font-family:'Faruuma'; font-size:30px;">Royal Graduation V10.9</h1>
             <p style="color:#fff; font-size:14px; margin-bottom:20px;">🔒 Protected Software. Enter License Key:</p>
             <input type="password" id="licenseKey" class="sec-input" placeholder="Paste Generated Key">
             <button class="sec-btn" onclick="verifyLicense()">UNLOCK</button>
@@ -165,8 +165,70 @@
         <div class="editor" id="editorPanel">
             <button id="lockBtn" class="btn-lock" onclick="toggleLock()">🔓 Lock Settings (For Live)</button>
 
+            <div class="controls">
+                <button class="action btn-nav" onclick="move(-1)">◀</button>
+                <button class="action btn-live" onclick="updateTV()">📺 LIVE</button>
+                <button class="action btn-nav" onclick="move(1)">▶</button>
+                <button class="action btn-clear" onclick="clearTV()">X</button>
+            </div>
+
+            <div class="video-panel">
+                <div style="display:flex; gap:5px;">
+                    <input type="file" id="videoLocal" accept="video/*" style="width:70%">
+                    <button class="btn-vid" style="background:#e65100; width:30%;" onclick="playLocalVideo()">▶ Local</button>
+                </div>
+                <div style="display:flex; gap:5px; margin-top:2px;">
+                    <input type="text" id="ytLink" placeholder="YouTube Link..." style="width:70%; text-align:left;" class="font-en">
+                    <button class="btn-vid" style="background:#c62828; width:30%;" onclick="playYoutube()">▶ YT</button>
+                </div>
+                <button class="btn-vid" style="background:#333; margin-top:2px;" onclick="stopVideo()">⏹ STOP VIDEO</button>
+            </div>
+
+            <div id="statusMsg">Ready</div>
+
+            <hr style="margin:10px 0; border:2px solid #ddd;">
+
+            <h3 style="margin-top:5px;">🎓 Student Info</h3>
+            <div class="row"><div class="col"><input id="nD" class="font-dv" placeholder="Name Dv"></div><div class="col"><input id="nE" class="eng" placeholder="Name En"></div></div>
+            <div class="row"><div class="col"><input id="fD" class="font-dv" placeholder="Detail 1 Dv"></div><div class="col"><input id="fE" class="eng" placeholder="Detail 1 En"></div></div>
+            <div class="row"><div class="col"><input id="cD" class="font-dv" placeholder="Detail 2 Dv"></div><div class="col"><input id="cE" class="eng" placeholder="Detail 2 En"></div></div>
+            <textarea id="cm" rows="1" class="font-dv" placeholder="Comment" style="text-align:center;"></textarea>
+
+            <div class="preview-container">
+                <div><img id="logoPreview" alt="-"></div>
+                <div style="text-align:center;">
+                    <span id="pStat" style="font-size:10px;">No Photo</span>
+                    <img id="previewImg" src="https://via.placeholder.com/150">
+                    <button class="manual-btn" onclick="document.getElementById('singlePhoto').click()">📷</button>
+                    <input type="file" id="singlePhoto" accept="image/*" style="display:none" onchange="manualPhoto(this)">
+                </div>
+            </div>
+
+            <hr style="margin:10px 0; border:2px dashed #aaa;">
+            <div style="text-align:center; font-size:10px; color:#aaa; margin-bottom:5px;">⬇ SETUP & DESIGN ZONE (LOCK BEFORE LIVE) ⬇</div>
+
+            <div id="globalTitles">
+                <div style="display:flex; gap:5px; margin-bottom:5px;">
+                    <input type="file" id="jalsaBgFile" accept="video/*, image/*" style="width:33%">
+                    <select id="bgLoopSel" onchange="liveUpdate('bgLoop', this.value)" style="width:33%; background:#c8e6c9;">
+                        <option value="on">Loop: ON</option>
+                        <option value="off">Loop: OFF</option>
+                    </select>
+                    <button class="btn-vid" style="background:#1b5e20; width:33%; margin:0;" onclick="showJalsaScreen()">🖼️ Title Screen</button>
+                </div>
+                <div style="display:flex; gap:5px; margin-bottom:2px;">
+                    <button class="btn-vid" style="background:#2e7d32; width:100%; margin:0;" onclick="updateJalsaText()">Update Titles</button>
+                </div>
+                <input type="text" id="jLine1" placeholder="Main Title" class="font-dv" style="font-weight:bold; color:#00281c;">
+                <input type="text" id="jLine2" placeholder="Sub 1" class="font-dv">
+                <input type="text" id="jLine3" placeholder="Sub 2" class="font-dv">
+                <input type="text" id="jLine4" placeholder="Sub 3" class="font-dv">
+            </div>
+
+            <br>
+
             <div class="design-panel" id="designPanel">
-                <h3 style="margin-top:0; border:none; font-size:14px;">🎨 Live Design Controls (V10.3)</h3>
+                <h3 style="margin-top:0; border:none; font-size:14px;">🎨 Live Design Controls (V10.9)</h3>
                 
                 <div class="design-row">
                     <div class="design-col">
@@ -225,6 +287,20 @@
                         </select>
                          <div style="display:flex; gap:2px; margin-top:2px;">
                             <span style="font-size:10px;">Thm:</span><input type="color" id="bdColorPick" value="#d4af37" oninput="liveUpdate('bdColor', this.value)" title="Border/Theme Color">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="design-row" style="background:#ffecb3; padding:5px; border-radius:5px;">
+                    <div class="design-col">
+                        <span class="d-label" style="color:#e65100;">🖼️ Card Size (Zoom for Big Screens):</span>
+                        <div style="display:flex; gap:2px; margin-top:2px; align-items:center;">
+                            <span style="font-size:9px; width:40px;">Width:</span>
+                            <input type="range" id="cardWRange" min="50" max="100" value="90" oninput="liveUpdate('cardW', this.value)" style="flex:1;" title="Card Width %">
+                        </div>
+                        <div style="display:flex; gap:2px; margin-top:2px; align-items:center;">
+                            <span style="font-size:9px; width:40px;">Height:</span>
+                            <input type="range" id="cardHRange" min="50" max="100" value="80" oninput="liveUpdate('cardH', this.value)" style="flex:1;" title="Card Height %">
                         </div>
                     </div>
                 </div>
@@ -329,69 +405,10 @@
                     </div>
                 </div>
             </div>
-
-            <div id="globalTitles">
-                <div style="display:flex; gap:5px; margin-bottom:5px;">
-                    <input type="file" id="jalsaBgFile" accept="video/*, image/*" style="width:33%">
-                    <select id="bgLoopSel" onchange="liveUpdate('bgLoop', this.value)" style="width:33%; background:#c8e6c9;">
-                        <option value="on">Loop: ON</option>
-                        <option value="off">Loop: OFF</option>
-                    </select>
-                    <button class="btn-vid" style="background:#1b5e20; width:33%; margin:0;" onclick="showJalsaScreen()">🖼️ Title Screen</button>
-                </div>
-                <div style="display:flex; gap:5px; margin-bottom:2px;">
-                    <button class="btn-vid" style="background:#2e7d32; width:100%; margin:0;" onclick="updateJalsaText()">Update Titles</button>
-                </div>
-                <input type="text" id="jLine1" placeholder="Main Title" class="font-dv" style="font-weight:bold; color:#00281c;">
-                <input type="text" id="jLine2" placeholder="Sub 1" class="font-dv">
-                <input type="text" id="jLine3" placeholder="Sub 2" class="font-dv">
-                <input type="text" id="jLine4" placeholder="Sub 3" class="font-dv">
-            </div>
-
-            <hr style="margin:5px 0; border:1px solid #ddd;">
-
-            <h3 style="margin-top:5px;">🎓 Student Info</h3>
-            <div class="row"><div class="col"><input id="nD" class="font-dv" placeholder="Name Dv"></div><div class="col"><input id="nE" class="eng" placeholder="Name En"></div></div>
-            <div class="row"><div class="col"><input id="fD" class="font-dv" placeholder="Detail 1 Dv"></div><div class="col"><input id="fE" class="eng" placeholder="Detail 1 En"></div></div>
-            <div class="row"><div class="col"><input id="cD" class="font-dv" placeholder="Detail 2 Dv"></div><div class="col"><input id="cE" class="eng" placeholder="Detail 2 En"></div></div>
-            <textarea id="cm" rows="1" class="font-dv" placeholder="Comment" style="text-align:center;"></textarea>
-
-            <div class="preview-container">
-                <div><img id="logoPreview" alt="-"></div>
-                <div style="text-align:center;">
-                    <span id="pStat" style="font-size:10px;">No Photo</span>
-                    <img id="previewImg" src="https://via.placeholder.com/150">
-                    <button class="manual-btn" onclick="document.getElementById('singlePhoto').click()">📷</button>
-                    <input type="file" id="singlePhoto" accept="image/*" style="display:none" onchange="manualPhoto(this)">
-                </div>
-            </div>
-
-            <div class="controls">
-                <button class="action btn-nav" onclick="move(-1)">◀</button>
-                <button class="action btn-live" onclick="updateTV()">📺 LIVE</button>
-                <button class="action btn-nav" onclick="move(1)">▶</button>
-                <button class="action btn-clear" onclick="clearTV()">X</button>
-            </div>
-
-            <div class="video-panel">
-                <div style="display:flex; gap:5px;">
-                    <input type="file" id="videoLocal" accept="video/*" style="width:70%">
-                    <button class="btn-vid" style="background:#e65100; width:30%;" onclick="playLocalVideo()">▶ Local</button>
-                </div>
-                <div style="display:flex; gap:5px; margin-top:2px;">
-                    <input type="text" id="ytLink" placeholder="YouTube Link..." style="width:70%; text-align:left;" class="font-en">
-                    <button class="btn-vid" style="background:#c62828; width:30%;" onclick="playYoutube()">▶ YT</button>
-                </div>
-                <button class="btn-vid" style="background:#333; margin-top:2px;" onclick="stopVideo()">⏹ STOP VIDEO</button>
-            </div>
-            <div id="statusMsg">Ready</div>
         </div>
     </div>
 
 <script>
-    /* =========================================
-       SECTION 1: SECURITY (OFFLINE VERIFICATION)
-       ========================================= */
     document.addEventListener('contextmenu', event => event.preventDefault());
     document.onkeydown = function(e) {
         if(e.keyCode == 123) { return false; } 
@@ -421,10 +438,6 @@
     }
     document.getElementById('licenseKey').addEventListener("keyup", e => { if (e.key === "Enter") verifyLicense(); });
 
-    /* =========================================
-       SECTION 2: APP LOGIC (V10.3 FEATURES)
-       ========================================= */
-
     function toggleControlFS() {
         if (!document.fullscreenElement) document.documentElement.requestFullscreen().catch(e => console.log(e));
         else document.exitFullscreen();
@@ -440,6 +453,7 @@
     let currentJalsaBgType = 'none';
     let customBorderData = null;
     let isLocked = false;
+    let lastActiveState = 'title'; // 'title' or 'card' to resume
 
     // Default State
     let designState = {
@@ -451,11 +465,11 @@
         layoutDir: 'rtl', textAlign: 'right', bgLoop: 'on',
         txtX: 0, txtY: 0,
         nLine: 'show', nameColor: '#ffffff', detColor: '#fff9c4', commColor: '#ffffff',
-        // INDIVIDUAL TEXT CONTROLS
         tnDSize: 5, tnDColor: '#ffffff',
         tnESize: 3, tnEColor: '#ffffff',
         tfDSize: 2, tfDColor: '#fff9c4',
-        tcDSize: 2.5, tcDColor: '#fff9c4'
+        tcDSize: 2.5, tcDColor: '#fff9c4',
+        cardW: 90, cardH: 80
     };
 
     function toggleLock() {
@@ -494,7 +508,8 @@
                 setVal('bgLoopSel', designState.bgLoop);
                 setVal('nameColorPick', designState.nameColor); setVal('detColorPick', designState.detColor); setVal('commColorPick', designState.commColor);
                 setVal('nLineSel', designState.nLine);
-                
+                setVal('cardWRange', designState.cardW || 90);
+                setVal('cardHRange', designState.cardH || 80);
                 if(tvWindow && !tvWindow.closed) { for (const key in designState) { liveUpdate(key, designState[key]); } }
                 alert("Settings Loaded Successfully!");
             } catch(err) { alert("Invalid Config File"); }
@@ -510,6 +525,19 @@
         if(!tvWindow || tvWindow.closed) return;
         const doc = tvWindow.document;
 
+        if(key === 'cardW') {
+            const c = doc.getElementById('card');
+            if(c) {
+                c.style.width = value + 'vw';
+                if(value > 90) c.style.maxWidth = 'none'; 
+                else c.style.maxWidth = '1500px';
+            }
+        }
+        if(key === 'cardH') {
+            const c = doc.getElementById('card');
+            if(c) c.style.height = value + 'vh';
+        }
+
         if(key === 'pVis') { 
             const el = doc.querySelector('.photo-col'); 
             if(el) {
@@ -519,7 +547,6 @@
         }
         if(key === 'lVis') { const el = doc.getElementById('logoWrap'); if(el) el.style.display = (value === 'show') ? 'block' : 'none'; }
         
-        // LOGO UPDATE
         if(key === 'logoX' || key === 'logoY') {
             const logo = doc.getElementById('logoWrap');
             if(logo) {
@@ -545,7 +572,6 @@
         if(key === 'bgPreset') { const bg = doc.getElementById('bgLayer'); if(bg) { bg.className = ''; bg.classList.add(value); } }
         if(key === 'bdColor') { doc.documentElement.style.setProperty('--theme-color', value); }
         
-        // MAIN TITLE CONTROLS
         if(key === 'mtY' || key === 'mtX') { 
             doc.getElementById('titleContainer').style.transform = `translate(${designState.mtX}px, ${designState.mtY}px)`;
             doc.getElementById('titleContainer').style.marginTop = "0"; 
@@ -566,13 +592,11 @@
             doc.getElementById('jt1').style.textAlign = value;
         }
 
-        // SUB TITLE CONTROLS
         if(key === 'stY') { doc.getElementById('subTitleWrap').style.marginTop = value + 'px'; }
         if(key === 'stSize') { doc.querySelectorAll('.sub-title').forEach(e => e.style.fontSize = value + 'em'); }
         if(key === 'stColor') { doc.querySelectorAll('.sub-title').forEach(e => e.style.color = value); }
         if(key === 'stAlign') { doc.getElementById('subTitleWrap').style.textAlign = value; }
         
-        // STUDENT INFO COLORS (GLOBAL)
         if(key === 'nameColor') {
             doc.getElementById('tnD').style.color = value;
             doc.getElementById('tnE').style.color = value;
@@ -589,7 +613,6 @@
             else el.style.borderBottom = 'none';
         }
 
-        // INDIVIDUAL TEXT CONTROLS
         if(key === 'tnDSize') doc.getElementById('tnD').style.fontSize = value + 'em';
         if(key === 'tnDColor') doc.getElementById('tnD').style.color = value;
         if(key === 'tnESize') doc.getElementById('tnE').style.fontSize = value + 'em';
@@ -651,7 +674,6 @@
         let fontCSS = `url('Fonts/faruuma.ttf') format('truetype')`;
         if (currentFontData) fontCSS = `url('${currentFontData}') format('truetype')`;
 
-        // GENERATE CSS FOR 50 THEMES & 50 BORDERS
         let cssGen = "";
         const gradients = [
             "radial-gradient(circle, #004d40 0%, #001a12 100%)", "radial-gradient(circle, #0d47a1 0%, #000022 100%)", "radial-gradient(circle, #b71c1c 0%, #220000 100%)",
@@ -665,7 +687,6 @@
             "linear-gradient(-20deg, #b721ff 0%, #21d4fd 100%)", "linear-gradient(to top, #1e3c72 0%, #2a5298 100%)", "linear-gradient(to right, #243949 0%, #517fa4 100%)",
             "radial-gradient(circle, #d4af37, #000)", "linear-gradient(to right, #868f96 0%, #596164 100%)", "radial-gradient(circle at bottom, #1b2735 0%, #090a0f 100%)",
             "linear-gradient(to top, #000000 0%, #434343 74%)", "linear-gradient(to right, #92fe9d 0%, #00c9ff 100%)",
-             // ... More simulated gradients
              "linear-gradient(45deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%)", "linear-gradient(to top, #fbc2eb 0%, #a6c1ee 100%)", "linear-gradient(120deg, #a1c4fd 0%, #c2e9fb 100%)",
              "linear-gradient(to top, #5f72bd 0%, #9b23ea 100%)", "radial-gradient(circle, #330000, #000)", "radial-gradient(circle, #000033, #000)",
              "conic-gradient(#d4af37, #f0e68c, #d4af37)", "linear-gradient(to bottom, #323232 0%, #3f3f3f 40%, #1c1c1c 150%), linear-gradient(to top, rgba(255,255,255,0.40) 0%, rgba(0,0,0,0.25) 200%)",
@@ -677,58 +698,57 @@
         ];
         for(let i=0; i<50; i++) { cssGen += `.bg${i+1} { background: ${gradients[i % gradients.length]}; }\n`; }
         
-        // Generate 50 Unique Card Themes (Borders/Effects)
         const borderStyles = [
-            "border:none; box-shadow:0 0 100px #000;", // b1
+            "border:none; box-shadow:0 0 100px #000;", 
             "border: 4px dashed var(--theme-color); box-shadow: 0 0 20px var(--theme-color); border-radius: 20px;",
             "border: 15px solid var(--theme-color); border-radius: 10px; box-shadow: inset 0 0 40px #000;",
             "border: 8px solid transparent; border-image: linear-gradient(45deg, var(--theme-color), #fff, var(--theme-color)) 1;",
-            "outline: 4px solid var(--theme-color); outline-offset: 10px; border: 2px solid var(--theme-color); margin: 15px;", // b5
+            "outline: 4px solid var(--theme-color); outline-offset: 10px; border: 2px solid var(--theme-color); margin: 15px;", 
             "border-top: 5px double var(--theme-color); border-bottom: 5px double var(--theme-color);",
             "box-shadow: 0 20px 50px rgba(0,0,0,0.8); border: 1px solid rgba(255,255,255,0.1);",
             "border: 20px solid #111; outline: 2px solid var(--theme-color); outline-offset: -10px;",
             "border: 1px solid var(--theme-color); padding: 5px; outline: 1px solid var(--theme-color);",
-            "border-bottom: 3px solid var(--theme-color); border-top: 3px solid var(--theme-color); border-left: 1px solid var(--theme-color); border-right: 1px solid var(--theme-color);", // b10
+            "border-bottom: 3px solid var(--theme-color); border-top: 3px solid var(--theme-color); border-left: 1px solid var(--theme-color); border-right: 1px solid var(--theme-color);", 
             "background: radial-gradient(circle at top left, transparent 30px, rgba(0,20,15,0.92) 31px); border: 2px solid var(--theme-color);",
             "border: 4px solid var(--theme-color); border-radius: 15px 0 15px 0;",
             "border: 2px solid #fff; box-shadow: 0 0 10px var(--theme-color), 0 0 20px var(--theme-color), inset 0 0 20px var(--theme-color);",
             "border: 30px solid rgba(255,255,255,0.05);",
-            "border: 10px ridge var(--theme-color);", // b15
+            "border: 10px ridge var(--theme-color);", 
             "border: 10px groove var(--theme-color);",
             "border-top: 10px solid var(--theme-color); border-bottom: 10px solid var(--theme-color);",
             "border-left: 20px solid var(--theme-color); border-right: 20px solid var(--theme-color);",
             "transform: perspective(1000px) rotateX(2deg); border-bottom: 5px solid var(--theme-color);",
-            "background: rgba(255,255,255,0.1) !important; backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.2);", // b20
+            "background: rgba(255,255,255,0.1) !important; backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.2);", 
             "border: 5px dotted var(--theme-color); border-radius: 30px;",
             "box-shadow: inset 0 0 50px var(--theme-color); border: 2px solid var(--theme-color);",
             "border-image: linear-gradient(to right, var(--theme-color), transparent) 1; border-bottom: 5px solid;",
             "background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(0,0,0,0.5)); border: 1px solid var(--theme-color);",
-            "border: 3px solid var(--theme-color); border-radius: 50px 0 50px 0;", // b25
+            "border: 3px solid var(--theme-color); border-radius: 50px 0 50px 0;", 
             "border-left: 15px solid var(--theme-color); background: rgba(0,0,0,0.3);",
             "border: 1px solid var(--theme-color); box-shadow: 10px 10px 0 var(--theme-color);",
             "border: 2px solid var(--theme-color); outline: 2px dashed #fff; outline-offset: -10px;",
             "background: rgba(0,0,0,0.8); border: 1px solid #444; box-shadow: 0 0 20px #000;",
-            "border-top: 2px solid var(--theme-color); border-bottom: 2px solid var(--theme-color); background: linear-gradient(to right, transparent, rgba(255,255,255,0.05), transparent);", // b30
+            "border-top: 2px solid var(--theme-color); border-bottom: 2px solid var(--theme-color); background: linear-gradient(to right, transparent, rgba(255,255,255,0.05), transparent);", 
             "border: 1px solid rgba(255,255,255,0.3); backdrop-filter: blur(5px); box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);",
             "border: 8px solid var(--theme-color); border-radius: 0 40px 0 40px;",
             "border: 5px double #fff; outline: 2px solid var(--theme-color);",
             "box-shadow: 0 0 15px var(--theme-color), inset 0 0 15px var(--theme-color); border-radius: 10px;",
-            "border-right: 10px solid var(--theme-color); border-bottom: 10px solid var(--theme-color); border-radius: 0 0 20px 0;", // b35
+            "border-right: 10px solid var(--theme-color); border-bottom: 10px solid var(--theme-color); border-radius: 0 0 20px 0;", 
             "border: 1px solid var(--theme-color); background: repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(255,255,255,0.05) 10px, rgba(255,255,255,0.05) 20px);",
             "border: 10px inset var(--theme-color);",
             "border: 10px outset var(--theme-color);",
             "border-top: 20px solid var(--theme-color); border-radius: 20px 20px 0 0;",
-            "border-bottom: 20px solid var(--theme-color); border-radius: 0 0 20px 20px;", // b40
+            "border-bottom: 20px solid var(--theme-color); border-radius: 0 0 20px 20px;", 
             "border: 2px solid var(--theme-color); box-shadow: 5px 5px 0 #fff, 10px 10px 0 var(--theme-color);",
             "background: linear-gradient(to bottom right, rgba(255,255,255,0.2), rgba(255,255,255,0.05)); border: 1px solid rgba(255,255,255,0.3); border-radius: 15px;",
             "border-left: 5px solid var(--theme-color); border-right: 5px solid var(--theme-color); transform: skew(-10deg);",
             "border: 3px dashed #fff; border-radius: 50%; width: 80vh; height: 80vh;",
-            "border: 20px solid transparent; border-image: url('https://via.placeholder.com/50') 30 stretch;", // Placeholder for texture
+            "border: 20px solid transparent; border-image: url('https://via.placeholder.com/50') 30 stretch;",
             "box-shadow: 0 -10px 20px rgba(0,0,0,0.5); border-top: 2px solid var(--theme-color);",
             "border: 1px solid var(--theme-color); outline: 1px solid var(--theme-color); outline-offset: 5px;",
             "background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(0,0,0,0.8) 100%); border: 1px solid #555;",
             "border: 6px solid var(--theme-color); border-radius: 20px; box-shadow: 0 0 0 5px #000, 0 0 0 10px var(--theme-color);",
-            "border: none; background: linear-gradient(to right, transparent, rgba(212,175,55,0.2), transparent);" // b50
+            "border: none; background: linear-gradient(to right, transparent, rgba(212,175,55,0.2), transparent);" 
         ];
         for(let i=0; i<50; i++) { cssGen += `.b${i+1} { ${borderStyles[i] || borderStyles[0]} }\n`; }
 
@@ -744,15 +764,14 @@
                 #fsBtn { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); z-index:9999; padding:20px; font-size:20px; cursor:pointer; background:var(--theme-color); border:2px solid #fff; }
                 
                 #bgLayer { position:fixed; top:0; left:0; width:100%; height:100%; z-index:0; transition: background 0.5s ease; }
-                /* GENERATED CSS */
                 ${cssGen}
 
                 #jalsaContent { position:absolute; top:0; left:0; width:100%; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; z-index:10; transition: opacity 0.8s ease; opacity:1; }
                 #jalsaContent.hidden { opacity: 0; pointer-events:none; }
                 
-                #titleContainer { width: 90%; max-width: 1600px; text-align: center; } /* ADDED WIDTH FIX */
-                #mainTitleWrap { width: 100%; text-align: ${designState.mtAlign}; } /* ADDED WIDTH FIX */
-                #subTitleWrap { width: 100%; text-align: ${designState.stAlign}; } /* ADDED WIDTH FIX */
+                #titleContainer { width: 90%; max-width: 1600px; text-align: center; } 
+                #mainTitleWrap { width: 100%; text-align: ${designState.mtAlign}; } 
+                #subTitleWrap { width: 100%; text-align: ${designState.stAlign}; } 
 
                 .jalsa-text { font-family: 'Faruuma', 'Amiri', serif; direction: rtl; display:block; width:100%; }
                 .main-title { font-size: ${designState.mtSize}em; color: ${designState.mtColor}; text-shadow: 2px 2px 10px black; margin-bottom: 20px; border-bottom: 3px solid ${designState.mtColor}; padding-bottom:10px; }
@@ -766,7 +785,15 @@
                 .logo-circle { border-radius: 50%; }
                 .logo-egg { border-radius: 50% / 60% 40% 40% 60%; }
 
-                #card { position:absolute; top:54%; left:50%; transform:translate(-50%,-50%); width:90vw; max-width:1500px; height:80vh; display:flex; flex-direction:${designState.layoutDir === 'rtl' ? 'row-reverse' : 'row'}; align-items:center; background:rgba(0,20,15,0.92); padding:3vh; box-sizing:border-box; opacity:0; transition:opacity 0.5s ease; z-index:15; }
+                #card { 
+                    position:absolute; top:54%; left:50%; transform:translate(-50%,-50%); 
+                    width:${designState.cardW}vw; 
+                    height:${designState.cardH}vh; 
+                    max-width: ${designState.cardW > 90 ? 'none' : '1500px'};
+                    display:flex; flex-direction:${designState.layoutDir === 'rtl' ? 'row-reverse' : 'row'}; 
+                    align-items:center; background:rgba(0,20,15,0.92); padding:3vh; box-sizing:border-box; 
+                    opacity:0; transition:opacity 0.5s ease; z-index:15; 
+                }
                 #card.active { opacity:1; }
 
                 .b0 { border: none; background: transparent !important; box-shadow: none; }
@@ -782,12 +809,10 @@
                 .crs-en { font-size: 2em; color:#fff9c4; font-style:italic; margin-bottom:20px; text-align:inherit; }
                 .comm { background:rgba(212,175,55,0.15); border:2px solid var(--theme-color); padding:20px; font-size:2.2em; color:white; border-radius:10px; text-align:center; width:100%; box-sizing:border-box; transition: all 0.3s ease; }
                 
-                /* TINY COMMENT LINE STYLE */
                 .comm-tiny { padding: 0 !important; height: 3px !important; min-height: 0 !important; overflow: hidden; border:none !important; background: var(--theme-color); opacity: 0.6; margin-top:20px; }
 
                 .photo-col { flex:0 0 auto; min-width: 200px; display:flex; justify-content:center; align-items:center; transform:translate(${designState.pX}px, ${designState.pY}px); transition: transform 0.2s ease; height: 100%; }
                 
-                /* TINY PHOTO DOT STYLE */
                 .shrink-photo img { width: 8px !important; height: 8px !important; min-width: 0 !important; min-height: 0 !important; border-radius: 50% !important; border: none !important; box-shadow: 0 0 5px var(--theme-color) !important; background: var(--theme-color); padding: 0 !important; }
                 
                 #stuImg { width:${designState.pSize}px; height:${designState.pSize}px; object-fit:cover; border-radius:${designState.pShape}; border:5px solid var(--theme-color); background:#000; box-shadow:0 15px 40px rgba(0,0,0,0.8); transition: all 0.3s ease; }
@@ -797,10 +822,18 @@
                 #videoLayer { position:fixed; top:0; left:0; width:100%; height:100%; background:#000; z-index:5000; display:none; justify-content:center; align-items:center; }
                 #videoLayer video, #videoLayer iframe { width:100%; height:100%; border:none; }
                 .copyright { position:absolute; bottom:10px; right:10px; font-size:10px; color:rgba(255,255,255,0.3); font-family:sans-serif; z-index:900; }
+                
+                /* CLICK TO ACTIVATE OVERLAY */
+                #activateOverlay { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:99999; display:flex; flex-direction:column; justify-content:center; align-items:center; color:white; font-family:sans-serif; text-align:center; cursor:pointer; }
             </style>
             <script>function goFS(btn){document.documentElement.requestFullscreen(); btn.style.display='none';}<\/script>
         </head>
         <body>
+            <div id="activateOverlay" onclick="this.style.display='none'">
+                <h1 style="font-size:50px;">CLICK HERE TO ACTIVATE SCREEN</h1>
+                <p>This is required for Audio/Video to play automatically.</p>
+            </div>
+
             <button id="fsBtn" onclick="goFS(this)">⛶ FULL SCREEN</button>
             <div id="videoLayer"></div>
             <div id="bgLayer" class="${designState.bgPreset}"></div>
@@ -855,7 +888,6 @@
         liveUpdate('stSize', designState.stSize);
         liveUpdate('stColor', designState.stColor);
 
-        // Update Individual Text Sizes/Colors
         liveUpdate('tnDSize', designState.tnDSize); liveUpdate('tnDColor', designState.tnDColor);
         liveUpdate('tnESize', designState.tnESize); liveUpdate('tnEColor', designState.tnEColor);
         liveUpdate('tfDSize', designState.tfDSize); liveUpdate('tfDColor', designState.tfDColor);
@@ -902,11 +934,14 @@
         const logo = tvWindow.document.getElementById('logoWrap');
         logo.style.display = (designState.lVis === 'show') ? 'block' : 'none';
         document.getElementById('statusMsg').innerText = "Mode: Jalsa";
+        lastActiveState = 'title'; // Remember state
     }
 
     function updateTV() {
         if(!tvWindow || tvWindow.closed) { alert("TV Closed!"); return; }
+        // FIX 2: Hide Jalsa Content immediately
         tvWindow.document.getElementById('jalsaContent').classList.add('hidden');
+        
         const logo = tvWindow.document.getElementById('logoWrap');
         logo.style.display = (designState.lVis === 'show') ? 'block' : 'none';
 
@@ -918,7 +953,6 @@
         doc.getElementById('tcD').textContent = document.getElementById('cD').value;
         doc.getElementById('tcE').textContent = document.getElementById('cE').value;
         
-        // AUTO COMMENT COLLAPSE (Refined Logic)
         const cmText = document.getElementById('cm').value;
         const commBox = doc.getElementById('tcm');
         if(!cmText || cmText.trim() === "") {
@@ -932,19 +966,20 @@
         const img = doc.getElementById('stuImg');
         const pCol = doc.querySelector('.photo-col');
         
+        // FIX 1: Restore Photo Dot Logic
         if(currentPhotoData) { 
             img.src = currentPhotoData; 
             img.style.display='block'; 
             pCol.classList.remove('shrink-photo');
         } else { 
-            // AUTO PHOTO DOT (Refined Logic)
-            img.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'; // Empty pixel
+            img.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'; 
             pCol.classList.add('shrink-photo');
         }
 
         setTimeout(() => doc.getElementById('card').classList.add('active'), 300);
         stopVideo(); 
         document.getElementById('statusMsg').innerText = "On Air: " + document.getElementById('nE').value;
+        lastActiveState = 'card'; // Remember state
     }
 
     function clearTV() {
@@ -957,7 +992,10 @@
     // --- VIDEO PLAYER ---
     function playLocalVideo() {
         if(!tvWindow || tvWindow.closed) { alert("TV Closed!"); return; }
+        // Hide Everything Else
         tvWindow.document.getElementById('jalsaContent').classList.add('hidden');
+        tvWindow.document.getElementById('card').classList.remove('active');
+
         const file = document.getElementById('videoLocal').files[0];
         if(!file) { alert("Select video!"); return; }
         const url = URL.createObjectURL(file);
@@ -971,14 +1009,33 @@
 
     function playYoutube() {
         if(!tvWindow || tvWindow.closed) { alert("TV Closed!"); return; }
+        // Hide Everything Else
         tvWindow.document.getElementById('jalsaContent').classList.add('hidden');
+        tvWindow.document.getElementById('card').classList.remove('active');
+
         const url = document.getElementById('ytLink').value;
         if(!url) return;
-        const match = url.match(/^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/);
-        const id = (match && match[2].length === 11) ? match[2] : null;
-        if(!id) return;
+        
+        // ULTIMATE YOUTUBE ID EXTRACTOR
+        let videoId = null;
+        try {
+            // Handle various formats (Standard, Short, Embedded, etc)
+            let splitUrl = url.split(/(vi\/|v=|\/v\/|youtu\.be\/|\/embed\/)/);
+            if(splitUrl[2] !== undefined) {
+                videoId = splitUrl[2].split(/[^0-9a-z_\-]/i)[0];
+            } else {
+                videoId = url; // Fallback if user pasted ID only
+            }
+        } catch(e) { videoId = null; }
+        
+        if(!videoId || videoId.length < 10) { alert("Invalid YouTube Link!"); return; }
+
         const vl = tvWindow.document.getElementById('videoLayer');
-        vl.innerHTML = `<iframe src="https://www.youtube.com/embed/${id}?autoplay=1&mute=0" allow="autoplay; encrypted-media" style="width:100%;height:100%;border:none;"></iframe>`;
+        
+        // ADDED 'origin' to help with local files
+        // ADDED 'mute=0' but it requires the 'Click Overlay' to work
+        vl.innerHTML = `<iframe id="ytFrame" src="https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&mute=0&controls=0&modestbranding=1&rel=0" referrerpolicy="no-referrer" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen style="width:100%;height:100%;border:none;"></iframe>`;
+        
         vl.style.display = 'flex';
         document.getElementById('statusMsg').innerText = "Playing YouTube...";
     }
@@ -987,7 +1044,14 @@
         if(!tvWindow || tvWindow.closed) return;
         const vl = tvWindow.document.getElementById('videoLayer');
         vl.innerHTML = ''; vl.style.display = 'none';
-        if(!tvWindow.document.getElementById('card').classList.contains('active')) { showJalsaScreen(); }
+        
+        // SMART RESUME LOGIC
+        if(lastActiveState === 'title') {
+            showJalsaScreen();
+        } else if (lastActiveState === 'card') {
+            tvWindow.document.getElementById('card').classList.add('active');
+            tvWindow.document.getElementById('jalsaContent').classList.add('hidden');
+        }
     }
 
     // --- FILES ---
