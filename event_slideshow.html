@@ -27,6 +27,32 @@
             src: local('Faruuma'), local('Faruumaa'), url('Fonts/faruuma.ttf') format('truetype');
         }
 
+        /* --- SECURITY OVERLAY (CENTERED) --- */
+        #securityOverlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            background: #000;
+            z-index: 99999;
+            display: flex; /* Flexbox for centering */
+            justify-content: center; /* Horizontal Center */
+            align-items: center; /* Vertical Center */
+        }
+
+        .sec-box { 
+            background: rgba(0, 26, 18, 0.95); 
+            padding: 50px; 
+            border-radius: 20px; 
+            border: 3px solid var(--royal-gold); 
+            text-align: center; 
+            box-shadow: 0 0 50px rgba(212, 175, 55, 0.3);
+            max-width: 500px;
+            width: 90%;
+        }
+        .sec-input { padding: 15px; font-size: 20px; text-align: center; width: 100%; margin-top: 20px; background: #fff; color: #000; box-sizing: border-box; }
+        .sec-btn { margin-top: 20px; padding: 15px 50px; font-size: 20px; background: var(--royal-gold); color: #000; border: none; cursor: pointer; font-weight: bold; }
+        .sec-btn:hover { background: #fff; }
+
         /* --- UI LAYOUT --- */
         .main-layout { 
             display: none; gap: 15px; height: 100vh; width: 100vw; 
@@ -36,7 +62,7 @@
         /* SIDEBAR (LEFT) */
         .sidebar {
             flex: 0 0 320px; 
-            background: var(--royal-gold); /* Gold Background */
+            background: var(--royal-gold);
             padding: 15px; border-radius: 12px;
             display: flex; flex-direction: column; height: 100%; overflow: hidden;
             box-shadow: var(--panel-shadow);
@@ -77,7 +103,7 @@
         input[type=range] { width: 100%; cursor: pointer; height: 15px; accent-color: var(--royal-dark); }
         input[type=color] { width: 40px; height: 30px; border: 2px solid #fff; border-radius: 4px; cursor: pointer; vertical-align: middle; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
 
-        /* --- SETTINGS GROUPS (ROYAL CARDS) --- */
+        /* --- SETTINGS GROUPS --- */
         .group-box {
             border: 2px solid #ccc;
             border-radius: 10px;
@@ -90,23 +116,14 @@
         }
         .group-box:hover { transform: translateY(-2px); box-shadow: 0 6px 15px rgba(0,0,0,0.1); }
         
-        /* Categories Header Style */
         .group-title {
-            position: absolute;
-            top: -16px;
-            right: 15px;
-            background: var(--royal-dark);
-            color: var(--royal-gold);
-            padding: 5px 15px;
-            font-size: 16px;
-            font-weight: bold;
-            border: 2px solid var(--royal-gold);
-            border-radius: 20px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
-            z-index: 10;
+            position: absolute; top: -16px; right: 15px;
+            background: var(--royal-dark); color: var(--royal-gold);
+            padding: 5px 15px; font-size: 16px; font-weight: bold;
+            border: 2px solid var(--royal-gold); border-radius: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3); z-index: 10;
         }
 
-        .design-row { display: flex; gap: 15px; margin-bottom: 10px; padding-bottom: 5px; }
         .design-col { flex: 1; }
 
         /* --- BUTTONS --- */
@@ -128,6 +145,29 @@
         .btn-nav { background: #546e7a; color: white; padding: 15px; font-size: 20px; border: none; border-radius: 8px; width: 60px; }
         .controls { display: flex; gap: 10px; margin-bottom: 15px; }
 
+        /* --- LOCK BUTTON STYLES (NEW) --- */
+        #lockBtn {
+            background: #43a047; /* Green - Unlocked */
+            color: white; padding: 12px; width: 100%; border: 2px solid #fff;
+            border-radius: 8px; margin-bottom: 15px; font-size: 16px; 
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+        }
+        #lockBtn.active {
+            background: #b71c1c; /* Red - Locked */
+            border-color: #ff8a80;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(183, 28, 28, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(183, 28, 28, 0); } 100% { box-shadow: 0 0 0 0 rgba(183, 28, 28, 0); } }
+
+        /* --- LOCKED ZONE STYLE (NEW) --- */
+        .locked-zone {
+            opacity: 0.4;
+            pointer-events: none;
+            filter: grayscale(100%);
+            user-select: none;
+            transition: all 0.3s ease;
+        }
+
         /* --- PREVIEW & EXTRAS --- */
         .preview-container { 
             display: flex; gap: 15px; align-items: center; justify-content: center; 
@@ -144,11 +184,6 @@
         .arrow-row { display:flex; gap:5px; }
         .btn-arr { width:35px; height:30px; font-size:16px; padding:0; background:#fff; border:1px solid #777; border-radius: 4px; }
         .btn-arr:hover { background: var(--royal-gold); color: #000; border-color: #000; }
-
-        /* --- SECURITY SCREEN --- */
-        .sec-box { background: rgba(0, 26, 18, 0.95); padding: 50px; border-radius: 20px; border: 3px solid var(--royal-gold); text-align: center; }
-        .sec-input { padding: 15px; font-size: 20px; text-align: center; width: 100%; margin-top: 20px; background: #fff; color: #000; }
-        .sec-btn { margin-top: 20px; padding: 15px 50px; font-size: 20px; background: var(--royal-gold); color: #000; }
 
     </style>
 </head>
@@ -178,7 +213,7 @@
                 <input type="file" id="confInput" accept=".json" style="display:none" onchange="loadConfig(this)">
             </div>
 
-            <div class="file-box" id="sidebarFiles" style="background:#fff; border:2px solid #bcaaa4;">
+            <div class="file-box" id="sidebarFiles" style="background:#fff; border:2px solid #bcaaa4; border-radius:5px; padding:10px;">
                 <label>📂 Data Files:</label>
                 <label style="font-size:11px">1. CSV List:</label><input type="file" id="csvFile" accept=".csv">
                 <label style="font-size:11px">2. Photos:</label><input type="file" id="photoFolder" webkitdirectory directory multiple>
@@ -195,7 +230,7 @@
         </div>
 
         <div class="editor" id="editorPanel">
-            <button id="lockBtn" class="btn-lock" style="border-radius:8px;" onclick="toggleLock()">🔓 UNLOCKED (Click to Lock for Live)</button>
+            <button id="lockBtn" onclick="toggleLock()">🔓 UNLOCKED (Edit Mode)</button>
 
             <div class="controls">
                 <button class="action btn-nav" onclick="move(-1)">◀</button>
@@ -221,9 +256,9 @@
 
             <div style="background:#fff; padding:15px; border-radius:10px; border:1px solid #ccc; margin:10px 0;">
                 <h3 style="margin-top:0;">🎓 Student Details</h3>
-                <div class="row"><div class="col"><input id="nD" class="font-dv" placeholder="Name (Dhivehi)"></div><div class="col"><input id="nE" class="eng" placeholder="Name (English)"></div></div>
-                <div class="row"><div class="col"><input id="fD" class="font-dv" placeholder="Detail 1 (Dv)"></div><div class="col"><input id="fE" class="eng" placeholder="Detail 1 (En)"></div></div>
-                <div class="row"><div class="col"><input id="cD" class="font-dv" placeholder="Detail 2 (Dv)"></div><div class="col"><input id="cE" class="eng" placeholder="Detail 2 (En)"></div></div>
+                <div class="row" style="display:flex; gap:5px;"><div class="col" style="flex:1"><input id="nD" class="font-dv" placeholder="Name (Dhivehi)"></div><div class="col" style="flex:1"><input id="nE" class="eng" placeholder="Name (English)"></div></div>
+                <div class="row" style="display:flex; gap:5px;"><div class="col" style="flex:1"><input id="fD" class="font-dv" placeholder="Detail 1 (Dv)"></div><div class="col" style="flex:1"><input id="fE" class="eng" placeholder="Detail 1 (En)"></div></div>
+                <div class="row" style="display:flex; gap:5px;"><div class="col" style="flex:1"><input id="cD" class="font-dv" placeholder="Detail 2 (Dv)"></div><div class="col" style="flex:1"><input id="cE" class="eng" placeholder="Detail 2 (En)"></div></div>
                 <textarea id="cm" rows="1" class="font-dv" placeholder="Comment / Extra Info"></textarea>
 
                 <div class="preview-container">
@@ -401,7 +436,7 @@
 
                     <hr style="border:1px dashed #999; margin:10px 0;">
 
-                    <span class="d-label">2. Sub Titles (Alignment Restored):</span>
+                    <span class="d-label">2. Sub Titles:</span>
                     <input type="text" id="jLine2" placeholder="Sub Title 1" class="font-dv">
                     <input type="text" id="jLine3" placeholder="Sub Title 2" class="font-dv">
                     <input type="text" id="jLine4" placeholder="Sub Title 3" class="font-dv">
@@ -476,11 +511,6 @@
     }
     document.getElementById('licenseKey').addEventListener("keyup", e => { if (e.key === "Enter") verifyLicense(); });
 
-    function toggleControlFS() {
-        if (!document.fullscreenElement) document.documentElement.requestFullscreen().catch(e => console.log(e));
-        else document.exitFullscreen();
-    }
-
     let tvWindow = null;
     let students = [];
     let photoFiles = {};
@@ -507,16 +537,26 @@
         cardW: 90, cardH: 80
     };
 
+    // --- UPDATED LOCK FUNCTION ---
     function toggleLock() {
         isLocked = !isLocked;
         const btn = document.getElementById('lockBtn');
-        const els = [document.getElementById('designPanel'), document.getElementById('sidebarFiles')];
+        const designPanel = document.getElementById('designPanel');
+        const sidebarFiles = document.getElementById('sidebarFiles');
+        const searchInput = document.getElementById('search');
+
         if (isLocked) {
-            btn.innerHTML = "🔒 LOCKED (LIVE MODE)"; btn.classList.add('active');
-            els.forEach(el => el.classList.add('locked-zone'));
+            btn.innerHTML = "🔒 SYSTEM LOCKED (LIVE MODE)";
+            btn.classList.add('active');
+            designPanel.classList.add('locked-zone');
+            sidebarFiles.classList.add('locked-zone');
+            if(searchInput) searchInput.disabled = true;
         } else {
-            btn.innerHTML = "🔓 UNLOCKED"; btn.classList.remove('active');
-            els.forEach(el => el.classList.remove('locked-zone'));
+            btn.innerHTML = "🔓 UNLOCKED (Edit Mode)";
+            btn.classList.remove('active');
+            designPanel.classList.remove('locked-zone');
+            sidebarFiles.classList.remove('locked-zone');
+            if(searchInput) searchInput.disabled = false;
         }
     }
 
@@ -596,10 +636,10 @@
             if(img) {
                 if(key === 'pfShadow') img.style.boxShadow = value;
                 else {
-                   img.style.borderWidth = designState.pfWidth + 'px';
-                   img.style.borderColor = designState.pfColor;
-                   img.style.borderStyle = designState.pfStyle;
-                   img.style.borderRadius = designState.pfRadius + '%';
+                    img.style.borderWidth = designState.pfWidth + 'px';
+                    img.style.borderColor = designState.pfColor;
+                    img.style.borderStyle = designState.pfStyle;
+                    img.style.borderRadius = designState.pfRadius + '%';
                 }
             }
         }
@@ -631,9 +671,9 @@
         if(key === 'stY') doc.getElementById('subTitleWrap').style.marginTop = value + 'px';
         if(key === 'stSize') doc.querySelectorAll('.sub-title').forEach(e => e.style.fontSize = value + 'em');
         if(key === 'stColor') doc.querySelectorAll('.sub-title').forEach(e => e.style.color = value);
-        if(key === 'stAlign') doc.getElementById('subTitleWrap').style.textAlign = value; // RESTORED
+        if(key === 'stAlign') doc.getElementById('subTitleWrap').style.textAlign = value;
         
-        // TEXT SIZES (RESTORED)
+        // TEXT SIZES
         if(key === 'tnDColor') doc.getElementById('tnD').style.color = value;
         if(key === 'tnDSize') doc.getElementById('tnD').style.fontSize = value + 'em';
         if(key === 'tnESize') doc.getElementById('tnE').style.fontSize = value + 'em';
