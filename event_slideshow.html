@@ -42,6 +42,7 @@
             margin-bottom: 10px; 
             justify-content: center; 
             direction: ltr !important; 
+            flex-shrink: 0; /* Prevent shrinking */
         }
         .lang-btn {
             flex: 1; 
@@ -130,6 +131,7 @@
             box-shadow: 0 5px 15px rgba(0,0,0,0.5);
             margin-bottom: 10px;
             border-radius: 8px;
+            flex-shrink: 0; /* Prevent shrinking */
         }
         .banner-main { font-family: 'Times New Roman', serif !important; font-weight: bold; font-size: 14px; letter-spacing: 2px; color: #a0c4ff; display: block; }
         .banner-sub { font-size: 24px; color: var(--royal-accent); text-shadow: 0 2px 4px #000; display: block; margin-top: 5px; }
@@ -140,12 +142,13 @@
             padding: 15px; box-sizing: border-box; 
         }
 
-        /* SIDEBAR */
+        /* SIDEBAR (FIXED SCROLLING ISSUE) */
         .sidebar {
             flex: 0 0 360px; 
             background: #f8fbff; 
             padding: 15px; border-radius: 12px;
-            display: flex; flex-direction: column; height: 100%; overflow: hidden;
+            display: flex; flex-direction: column; height: 100%; 
+            overflow-y: auto; /* Enable vertical scrolling */
             box-shadow: var(--panel-shadow);
             border: 3px solid var(--royal-blue-dark);
         }
@@ -154,7 +157,7 @@
         
         /* DEVELOPER CREDITS */
         .dev-credits {
-            margin-top: auto;
+            margin-top: 20px; /* Ensure space above */
             text-align: center;
             font-size: 13px;
             color: #555;
@@ -164,6 +167,7 @@
             border: 1px solid #bbdefb;
             font-weight: bold;
             line-height: 1.4;
+            flex-shrink: 0; /* Prevent shrinking */
         }
         .dev-name { color: var(--royal-blue-dark); font-size: 14px; display: block; margin-bottom: 2px; }
         .company-name { color: var(--royal-green); font-size: 12px; display: block; letter-spacing: 0.5px; }
@@ -1372,7 +1376,7 @@
                 let c = l.split(',');
                 if(c.length>1) {
                     students.push({
-                        nD: c[0]?.trim(), nE: c[1]?.trim(), cD: c[2]?.trim(), cE: c[3]?.trim(), 
+                        nD: c[0]?.trim(), nE: c[1]?.trim(), cD: c[2]?.trim(), cE: c[3]?.trim(), 
                         fD: c[4]?.trim(), fE: c[5]?.trim(), cm: c[6]?.trim(), ph: c[7]?.trim()
                     });
                 }
@@ -1385,9 +1389,9 @@
         photoFiles = {};
         for(let f of e.target.files) {
             let name = f.name.toLowerCase();
-            photoFiles[name] = f; 
+            photoFiles[name] = f; 
             let nameNoExt = name.split('.').slice(0, -1).join('.');
-            if(nameNoExt) photoFiles[nameNoExt] = f; 
+            if(nameNoExt) photoFiles[nameNoExt] = f; 
         }
         alert("Photos: " + e.target.files.length);
     };
@@ -1429,15 +1433,15 @@
         let pName = s.ph ? s.ph.trim().toLowerCase() : "";
         let prev = document.getElementById('previewImg');
         let stat = document.getElementById('pStat');
-        let foundFile = photoFiles[pName]; 
+        let foundFile = photoFiles[pName]; 
         if(foundFile) {
             stat.innerText = "Loading...";
             processPhoto(foundFile, d => {
-                currentPhotoData = d; prev.src = d; 
+                currentPhotoData = d; prev.src = d; 
                 stat.innerText = "✅ Found"; stat.style.color="green";
             });
         } else {
-            currentPhotoData = null; prev.src = "https://via.placeholder.com/150"; 
+            currentPhotoData = null; prev.src = "https://via.placeholder.com/150"; 
             stat.innerText = "❌ Missing"; stat.style.color="red";
         }
     }
