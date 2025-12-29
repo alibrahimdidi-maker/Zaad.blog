@@ -9,7 +9,7 @@
     <link rel="shortcut icon" type="image/png" href="logo.png">
 
     <meta property="og:title" content="ޒާދް އެކަޑެމީ - Zaad Academy">
-    <meta property="og:description" content="ރިސާރޗް އެންޑް ޕަބްލިޝިންގ ކޮންސަލްޓެންސީ ފާމް - ޢިލްމު ހޯދުމަކީ ކޮންމެ މުސްލިމެއްގެ މައްޗަށް ވާޖިބެކެވެ.">
+    <meta property="og:description" content="ރިސާރޗް އެންޑް ޕަބްލިޝިންގ ކޮންސަލްޓެންސީ ފާމް">
     <meta property="og:image" content="logo.png"> 
     <meta property="og:type" content="website">
 
@@ -103,7 +103,6 @@
         .main-menu li a:hover { color: var(--royal-gold); border-bottom: 3px solid var(--royal-gold); background: #fcfcfc; }
         .nav-right-group { display: flex; align-items: center; gap: 15px; }
         
-        /* Buttons */
         .resource-btn { background-color: #1a5c2d; color: white !important; font-weight: 800 !important; font-size: 1em !important; border-radius: 5px; padding: 8px 15px !important; font-family: var(--font-en); border-bottom: 4px solid red !important; }
         .event-btn { background-color: var(--royal-gold); color: white !important; font-weight: 800 !important; font-size: 1em !important; border-radius: 5px; padding: 8px 15px !important; font-family: var(--font-en); border-bottom: 4px solid red !important; }
         .website-btn { background-color: var(--royal-blue); color: white; padding: 8px 20px; border-radius: 5px; font-weight: bold; display: flex; align-items: center; gap: 10px; white-space: nowrap; font-size: 0.9em; border: 2px solid var(--royal-gold); }
@@ -127,7 +126,7 @@
             100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(192, 57, 43, 0); }
         }
 
-        /* --- ADVERTISING BANNER (NEW) --- */
+        /* --- ADVERTISING BANNER --- */
         .ad-banner-section { background: #f0f2f5; padding: 20px 0; border-bottom: 2px solid var(--royal-gold); overflow: hidden; }
         .ad-container { max-width: 1600px; margin: 0 auto; padding: 0 2%; display: flex; gap: 20px; overflow-x: auto; scroll-behavior: smooth; padding-bottom: 10px; }
         .ad-card { 
@@ -154,20 +153,21 @@
         .event-date { background: var(--royal-blue); color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.8em; font-weight: bold; display: inline-block; margin-bottom: 5px; }
         .event-title { font-weight: bold; color: #333; display: block; line-height: 1.4; }
 
-        /* Main Content */
+        /* --- MAIN CONTENT & NEW VIDEO GRID --- */
         .hero-banner { position: relative; border-radius: 12px; overflow: hidden; height: 350px; margin-bottom: 30px; box-shadow: 0 5px 20px rgba(0,0,0,0.1); }
-        .hero-banner iframe { width: 100%; height: 100%; pointer-events: none; }
         
-        /* 8-VIDEO GRID STYLES */
+        /* 9-CARD ROYAL VIDEO GRID */
         .video-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 15px; margin-bottom: 40px; }
         .vid-card { 
-            background: white; border: 1px solid #e0e0e0; border-radius: 8px; overflow: hidden; 
-            transition: all 0.3s ease; position: relative; border-bottom: 3px solid var(--royal-gold);
-            height: 180px; /* Fixed height */
+            background: white; border: 2px solid var(--royal-gold); border-radius: 10px; overflow: hidden; 
+            transition: all 0.3s ease; position: relative; height: 180px; display:flex; flex-direction:column;
         }
-        .vid-card:hover { transform: translateY(-5px); box-shadow: 0 8px 15px rgba(12, 45, 72, 0.15); }
-        .vid-frame { width: 100%; height: 110px; background: #000; }
-        .vid-title { font-size: 0.85em; font-weight: bold; color: var(--royal-blue); padding: 8px; line-height: 1.3; text-align: right; height: 70px; overflow: hidden; }
+        .vid-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(12, 45, 72, 0.2); border-color: var(--royal-blue); }
+        .vid-thumb { position: relative; width: 100%; height: 110px; background: #000; overflow:hidden; }
+        .vid-thumb img { width:100%; height:100%; object-fit:cover; opacity:0.8; transition:0.3s; }
+        .vid-card:hover .vid-thumb img { opacity:1; transform:scale(1.05); }
+        .play-icon { position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); color:white; font-size:2em; opacity:0.8; }
+        .vid-title { font-size: 0.85em; font-weight: bold; color: var(--royal-blue); padding: 8px; line-height: 1.3; text-align: right; flex-grow:1; background:#fcfcfc; border-top:1px solid #eee; }
 
         /* --- ARTICLE SYSTEM STYLES --- */
         .article-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; margin-bottom: 40px; }
@@ -190,7 +190,7 @@
         .art-btn { 
             background: transparent; color: var(--royal-gold); border: 1px solid var(--royal-gold); 
             padding: 5px 15px; border-radius: 5px; text-align: center; cursor: pointer; font-weight: bold; font-size: 0.9em;
-            transition: 0.3s; display: flex; justify-content: center; align-items: center; gap:10px;
+            transition: 0.3s; display: flex; justify-content: center; align-items: center; gap:10px; margin-top: auto;
         }
         .art-btn:hover { background: var(--royal-gold); color: white; }
 
@@ -201,7 +201,35 @@
         body.admin-active .add-art-btn { display: inline-block; }
         body.admin-active [contenteditable="true"] { border: 1px dashed #ccc; background: #fffbe6; cursor: text; }
 
-        /* NEW FULL PAGE READER LAYOUT (Split View) */
+        /* --- SIDEBAR EXTERNAL LINK CARDS --- */
+        .external-link-card {
+            display: flex; align-items: center; gap: 12px;
+            background: #ffffff;
+            border: 1px solid #e0e0e0;
+            border-right: 4px solid var(--royal-gold);
+            padding: 12px; border-radius: 8px; margin-bottom: 12px;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.03);
+            text-decoration: none;
+        }
+        .external-link-card:hover {
+            transform: translateX(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border-right-color: var(--royal-blue);
+        }
+        .link-icon-box {
+            width: 45px; height: 45px; 
+            background: #f9f9f9; border-radius: 50%;
+            display: flex; justify-content: center; align-items: center;
+            border: 1px solid #eee; overflow: hidden; flex-shrink: 0;
+        }
+        .link-icon-box img { width: 100%; height: 100%; object-fit: cover; }
+        .link-icon-box i { font-size: 1.5em; }
+        
+        .link-info h4 { margin: 0; font-size: 0.9em; color: var(--royal-blue); font-weight: bold; line-height: 1.2; }
+        .link-info span { font-size: 0.75em; color: #888; font-family: var(--font-en); }
+
+        /* --- FULL PAGE READER LAYOUT --- */
         .full-article-view { 
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
             background: #f4f6f8; z-index: 9999; overflow: hidden; 
@@ -221,37 +249,20 @@
             padding: 40px; overflow-y: auto; 
         }
         
-        .reader-card-mini {
-            display: flex; gap: 10px; margin-bottom: 15px; cursor: pointer; padding: 10px; border-radius: 8px; transition: 0.2s; border: 1px solid transparent;
-        }
-        .reader-card-mini:hover { background: #f9f9f9; border-color: var(--royal-gold); }
-        .mini-img { width: 80px; height: 60px; object-fit: cover; border-radius: 5px; background: #eee; }
-        .mini-info h4 { font-size: 0.9em; margin: 0; color: var(--royal-blue); line-height: 1.3; }
-        .mini-info span { font-size: 0.8em; color: #888; }
-
         .art-content-box { 
             background: white; padding: 50px; border-radius: 10px; max-width: 900px; margin: 0 auto; 
             box-shadow: 0 5px 30px rgba(0,0,0,0.05); border-top: 5px solid var(--royal-gold);
         }
         .art-full-img { width: 100%; height: 400px; object-fit: cover; border-radius: 8px; margin-bottom: 30px; }
-        .art-content { font-family: 'Faruma', sans-serif; font-size: 1.6em; line-height: 2.2; color: #333; text-align: justify; }
+        .art-content { font-family: 'Faruma', sans-serif !important; font-size: 1.6em; line-height: 2.2; color: #333; text-align: justify; }
 
         /* Other Styles */
-        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 30px; }
-        .post-card { background: white; border-radius: 10px; overflow: hidden; border: 1px solid #eee; display: flex; flex-direction: column; transition: 0.3s; }
-        .post-card:hover { transform: translateY(-5px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); border-color: var(--royal-gold); }
-        .post-img { height: 180px; width: 100%; object-fit: cover; }
-        .post-content { padding: 15px; }
-        .post-tag { background: var(--royal-gold); color: white; padding: 2px 10px; font-size: 0.75em; border-radius: 20px; }
-        .post-title { font-size: 1.1em; margin: 10px 0; color: var(--royal-blue); line-height: 1.4; font-weight: bold; }
-        
         .royal-info-box {
             background: linear-gradient(135deg, var(--royal-blue) 0%, #0a1f33 100%);
             color: white; padding: 35px; border-radius: 15px;
             border: 2px solid var(--royal-gold); box-shadow: 0 10px 30px rgba(0,0,0,0.15);
             text-align: center; margin-bottom: 30px; position: relative; overflow: hidden;
         }
-        .royal-info-box::before { content: "\f559"; font-family: "Font Awesome 5 Free"; font-weight: 900; position: absolute; top: -20px; right: -20px; font-size: 8em; color: var(--royal-gold); opacity: 0.1; }
         .royal-info-title { color: var(--royal-gold); font-size: 1.8em; margin-bottom: 15px; font-weight: bold; text-shadow: 1px 1px 2px rgba(0,0,0,0.5); }
         
         .vision-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 20px; margin-bottom: 30px; }
@@ -269,10 +280,7 @@
         .arabic-word-box { background: linear-gradient(135deg, #1a5c2d, #0d3819); color: white; padding: 20px; border-radius: 10px; text-align: center; margin-bottom: 25px; border: 2px solid #2ecc71; }
         .ar-word { font-family: 'Amiri', serif; font-size: 2.5em; font-weight: bold; color: #f1c40f; display: block; margin: 10px 0; }
         
-        .poll-box { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 3px 10px rgba(0,0,0,0.05); margin-bottom: 25px; border-top: 4px solid var(--royal-blue); }
-        .poll-opt { display: block; padding: 10px; border: 1px solid #eee; margin-top: 8px; border-radius: 5px; cursor: pointer; transition: 0.2s; }
-
-        .weather-box { background: linear-gradient(135deg, #4b6cb7, #182848); color: white; text-align: center; padding: 20px; border-radius: 10px; margin-bottom: 20px; border: 2px solid var(--royal-gold); }
+        .weather-box { background: linear-gradient(135deg, #4b6cb7, #182848); color: white; text-align: center; padding: 20px; border-radius: 10px; margin-bottom: 20px; border: 2px solid var(--royal-gold); cursor:pointer; }
         .prayer-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px dashed rgba(0,0,0,0.1); font-size: 0.9em; }
 
         footer { background: var(--royal-blue); color: #ccc; padding: 50px 5%; margin-top: 50px; text-align: center; border-top: 5px solid var(--royal-gold); }
@@ -307,19 +315,13 @@
         @media (max-width: 900px) {
             .container { grid-template-columns: 1fr; gap: 20px; } 
             .top-bar, .header-content, .logo-box { flex-direction: column; text-align: center; gap: 10px; }
-            .desktop-ad { display: none !important; }
             .nav-inner { justify-content: space-between; }
             .menu-btn { display: block; order: 1; } 
             .main-menu { display: none; flex-direction: column; width: 100%; background: white; position: absolute; top: 100%; left: 0; box-shadow: 0 10px 30px rgba(0,0,0,0.15); border-top: 3px solid var(--royal-gold); z-index: 2000; }
             .main-menu.active { display: flex; }
-            .grid-2 { grid-template-columns: 1fr; }
-            .nav-right-group { display: none; } 
             .footer-content-grid { text-align: center; }
-            .sub-menu-list { flex-direction: column; text-align: center; }
-            .sub-menu-list li a { border-left: none; border-bottom: 1px solid rgba(255,255,255,0.1); padding: 10px; }
-            
             .reader-layout { grid-template-columns: 1fr; }
-            .reader-sidebar { display: none; } /* Hide sidebar on mobile for better view */
+            .reader-sidebar { display: none; } 
         }
     </style>
 </head>
@@ -343,9 +345,6 @@
                     <h1 contenteditable="false">ޒާދް އެކަޑެމީ</h1>
                     <span contenteditable="false">ZAAD RESEARCH AND PUBLISHING CONSULTANCY FIRM</span>
                 </div>
-            </div>
-            <div class="desktop-ad">
-                <span contenteditable="false" style="color:var(--royal-gold); font-size:1.1em; border:1px solid var(--royal-gold); padding:8px 20px; border-radius:30px; font-weight:bold;">🎓 ޢިލްމު ހޯދުމަކީ ކޮންމެ މުސްލިމެއްގެ މައްޗަށް ވާޖިބެކެވެ</span>
             </div>
         </div>
     </header>
@@ -419,15 +418,9 @@
                     <h3 style="font-size:1em; margin:0; line-height:1.2;">ޒަމާނީ ތަޢުލީމީ ވަސީލަތް</h3>
                 </div>
             </div>
-            <div class="ad-card">
-                <img src="https://images.unsplash.com/photo-1501504905252-473c47e087f8?w=300" class="ad-img">
-                <div class="ad-content">
-                    <span class="ad-badge">ސްކޮލަރޝިޕް</span>
-                    <h3 style="font-size:1em; margin:0; line-height:1.2;">2025 ގެ ސްކޮލަރޝިޕް ފުރުޞަތު</h3>
-                </div>
-            </div>
         </div>
     </div>
+    
     <div class="container">
         
         <aside class="left-sidebar">
@@ -458,22 +451,32 @@
                 </div>
             </div>
 
-            <div class="widget">
-                <h3 class="widget-title"><i class="fas fa-file-download"></i> ފޯމުތައް</h3>
-                <ul class="side-links">
-                    <li><a href="downloads/application.pdf" download contenteditable="false"><i class="fas fa-file-pdf"></i> އެޕްލިކޭޝަން ފޯމު</a></li>
-                    <li><a href="downloads/scholarship.pdf" download contenteditable="false"><i class="fas fa-file-pdf"></i> ސްކޮލަރޝިޕް ފޯމު</a></li>
-                </ul>
-            </div>
+            <div class="widget" style="border-top: 4px solid #27ae60;">
+                <h3 class="widget-title"><i class="fas fa-university"></i> މުހިންމު މުއައްސަސާތައް</h3>
+                
+                <a href="https://www.islamicaffairs.gov.mv" target="_blank" class="external-link-card">
+                    <div class="link-icon-box"><i class="fas fa-moon" style="color:#27ae60;"></i></div>
+                    <div class="link-info">
+                        <h4>އިސްލާމިކް މިނިސްޓްރީ</h4>
+                        <span>ދިވެހިރާއްޖެ</span>
+                    </div>
+                </a>
 
-            <div class="widget">
-                <h3 class="widget-title"><i class="fas fa-link"></i> މުހިންމު ލިންކުތައް</h3>
-                <ul class="side-links">
-                    <li><a href="https://www.moe.gov.mv" target="_blank" contenteditable="false">އެޑިއުކޭޝަން މިނިސްޓްރީ</a></li>
-                    <li><a href="https://www.ium.edu.mv" target="_blank" contenteditable="false">އިސްލާމިކް ޔުނިވަރސިޓީ</a></li>
-                    <li><a href="https://www.mqa.gov.mv" target="_blank" contenteditable="false">އެމް.ކިއު.އޭ</a></li>
-                    <li><a href="https://www.islamicaffairs.gov.mv" target="_blank" contenteditable="false">އިސްލާމިކް މިނިސްޓްރީ</a></li>
-                </ul>
+                <a href="https://www.ium.edu.mv" target="_blank" class="external-link-card">
+                    <div class="link-icon-box"><i class="fas fa-graduation-cap" style="color:#2980b9;"></i></div>
+                    <div class="link-info">
+                        <h4>އިސްލާމިކް ޔުނިވަރސިޓީ</h4>
+                        <span>އައި.ޔޫ.އެމް</span>
+                    </div>
+                </a>
+
+                <a href="http://www.azhar.edu.eg" target="_blank" class="external-link-card">
+                    <div class="link-icon-box"><i class="fas fa-mosque" style="color:#f39c12;"></i></div>
+                    <div class="link-info">
+                        <h4>އަލް އަޒްހަރު ޔުނިވަރސިޓީ</h4>
+                        <span>މިޞްރު</span>
+                    </div>
+                </a>
             </div>
 
             <div class="widget">
@@ -483,85 +486,88 @@
                 <button style="width:100%; background:var(--royal-gold); color:white; border:none; padding:8px; border-radius:4px; font-weight:bold; cursor:pointer;">ސަބްސްކްރައިބް</button>
             </div>
 
-            <div class="widget">
-                <h3 class="widget-title"><i class="fas fa-info-circle"></i> އިތުރު މަޢުލޫމާތު</h3>
-                <ul class="side-links">
-                    <li><a href="#" contenteditable="false"><i class="fas fa-question-circle"></i> އެހީ (Help)</a></li>
-                    <li><a href="#" contenteditable="false"><i class="fas fa-shield-alt"></i> ޕްރައިވެސީ ޕޮލިސީ</a></li>
-                    <li><a href="#" contenteditable="false"><i class="fas fa-file-contract"></i> ޚިދުމަތުގެ އުޞޫލުތައް</a></li>
-                    <li><a href="#" contenteditable="false"><i class="fas fa-briefcase"></i> ވަޒީފާގެ ފުރުޞަތު</a></li>
-                </ul>
-            </div>
-
         </aside>
 
         <main class="main-content">
-            <div class="hero-banner" style="position: relative; overflow: hidden;">
+            <div class="hero-banner">
                 <iframe 
                     src="https://www.youtube.com/embed/JfyAPfnztY8?autoplay=1&mute=1&loop=1&playlist=JfyAPfnztY8&controls=0&showinfo=0&rel=0&modestbranding=1&iv_load_policy=3" 
                     title="Zaad Academy Hero Video" 
-                    width="100%" 
-                    height="100%" 
-                    frameborder="0" 
+                    width="100%" height="100%" frameborder="0" 
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
                     allowfullscreen
                     style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; pointer-events: none;">
                 </iframe>
             </div>
+            
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; border-bottom:2px solid var(--royal-blue);">
-                <h2 style="color:var(--royal-blue);">ޒަމާނީ ތަޢުލީމް</h2>
-                <a href="news.html" style="color:var(--royal-gold); font-weight:bold;">ހުރިހާ ލިޔުމެއް ›</a>
+                <h2 style="color:var(--royal-blue);">ވީޑިއޯ ގެލެރީ</h2>
+                <a href="news.html" style="color:var(--royal-gold); font-weight:bold;">ހުރިހާ ވީޑިއޯއެއް ›</a>
             </div>
 
             <div class="video-grid">
                 <div class="vid-card">
-                    <iframe class="vid-frame" src="https://www.youtube.com/embed/JfyAPfnztY8" frameborder="0" allowfullscreen loading="lazy"></iframe>
+                    <div class="vid-thumb">
+                        <img src="https://img.youtube.com/vi/JfyAPfnztY8/hqdefault.jpg">
+                        <i class="fas fa-play-circle play-icon"></i>
+                    </div>
                     <div class="vid-title" contenteditable="false">އޮންލައިން ކްލާސް ހިންގާނެގޮތް</div>
                 </div>
                 <div class="vid-card">
-                    <iframe class="vid-frame" src="https://www.youtube.com/embed/JfyAPfnztY8" frameborder="0" allowfullscreen loading="lazy"></iframe>
+                    <div class="vid-thumb">
+                        <img src="https://img.youtube.com/vi/d1dM5b8gVq8/hqdefault.jpg">
+                        <i class="fas fa-play-circle play-icon"></i>
+                    </div>
                     <div class="vid-title" contenteditable="false">ދަރިވަރުންގެ ތަރުބިއްޔަތު</div>
                 </div>
                 <div class="vid-card">
-                    <iframe class="vid-frame" src="https://www.youtube.com/embed/JfyAPfnztY8" frameborder="0" allowfullscreen loading="lazy"></iframe>
+                    <div class="vid-thumb">
+                        <img src="https://img.youtube.com/vi/_sI_Ps7JSEk/hqdefault.jpg">
+                        <i class="fas fa-play-circle play-icon"></i>
+                    </div>
                     <div class="vid-title" contenteditable="false">އަރަބި ބަހުގެ މުހިންމުކަން</div>
                 </div>
                 <div class="vid-card">
-                    <iframe class="vid-frame" src="https://www.youtube.com/embed/JfyAPfnztY8" frameborder="0" allowfullscreen loading="lazy"></iframe>
+                    <div class="vid-thumb">
+                        <img src="https://img.youtube.com/vi/S-sJp1FfG7Q/hqdefault.jpg">
+                        <i class="fas fa-play-circle play-icon"></i>
+                    </div>
                     <div class="vid-title" contenteditable="false">ޤުރުއާން ކިޔެވުމުގެ ފައިދާ</div>
                 </div>
                 <div class="vid-card">
-                    <iframe class="vid-frame" src="https://www.youtube.com/embed/JfyAPfnztY8" frameborder="0" allowfullscreen loading="lazy"></iframe>
+                    <div class="vid-thumb">
+                        <img src="https://img.youtube.com/vi/F-9Ff8y8of8/hqdefault.jpg">
+                        <i class="fas fa-play-circle play-icon"></i>
+                    </div>
                     <div class="vid-title" contenteditable="false">އިސްލާމީ ތާރީޚް</div>
                 </div>
                 <div class="vid-card">
-                    <iframe class="vid-frame" src="https://www.youtube.com/embed/JfyAPfnztY8" frameborder="0" allowfullscreen loading="lazy"></iframe>
+                    <div class="vid-thumb">
+                        <img src="https://img.youtube.com/vi/kJQP7kiw5Fk/hqdefault.jpg">
+                        <i class="fas fa-play-circle play-icon"></i>
+                    </div>
                     <div class="vid-title" contenteditable="false">ޓެކްނޮލޮޖީ އާއި އިސްލާމްދީން</div>
                 </div>
                 <div class="vid-card">
-                    <iframe class="vid-frame" src="https://www.youtube.com/embed/JfyAPfnztY8" frameborder="0" allowfullscreen loading="lazy"></iframe>
+                    <div class="vid-thumb">
+                        <img src="https://img.youtube.com/vi/9bZkp7q19f0/hqdefault.jpg">
+                        <i class="fas fa-play-circle play-icon"></i>
+                    </div>
                     <div class="vid-title" contenteditable="false">ނަފްސާނީ ދުޅަހެޔޮކަން</div>
                 </div>
                 <div class="vid-card">
-                    <iframe class="vid-frame" src="https://www.youtube.com/embed/JfyAPfnztY8" frameborder="0" allowfullscreen loading="lazy"></iframe>
+                    <div class="vid-thumb">
+                        <img src="https://img.youtube.com/vi/OpQFFLBMEPI/hqdefault.jpg">
+                        <i class="fas fa-play-circle play-icon"></i>
+                    </div>
                     <div class="vid-title" contenteditable="false">ރަމަޟާން މަހުގެ ތައްޔާރީ</div>
                 </div>
-            </div>
-
-            <div class="grid-2">
-                <div class="post-card">
-                    <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=400" class="post-img" onclick="changeImage(this)">
-                    <div class="post-content">
-                        <span class="post-tag" contenteditable="false">ޓެކްނޮލޮޖީ</span>
-                        <h3 class="post-title" contenteditable="false"><a href="secure_news.html">ކްލާސްރޫމްގައި ޓެބްލެޓް ބޭނުންކުރުން</a></h3>
+                <div class="vid-card">
+                    <div class="vid-thumb">
+                        <img src="https://img.youtube.com/vi/LXb3EKWsInQ/hqdefault.jpg">
+                        <i class="fas fa-play-circle play-icon"></i>
                     </div>
-                </div>
-                <div class="post-card">
-                    <img src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=400" class="post-img" onclick="changeImage(this)">
-                    <div class="post-content">
-                        <span class="post-tag" contenteditable="false">ތަރުބިއްޔަތު</span>
-                        <h3 class="post-title" contenteditable="false"><a href="secure_news.html">ކުދިންގެ ނަފްސާނީ ދުޅަހެޔޮކަން</a></h3>
-                    </div>
+                    <div class="vid-title" contenteditable="false">ޒާދް އެކަޑެމީ ޕްރޮމޯ</div>
                 </div>
             </div>
 
@@ -605,6 +611,7 @@
 
                 </div>
             </div>
+            
             <div class="royal-info-box">
                 <h3 class="royal-info-title" contenteditable="false">ޒާދް އެކަޑަމީގެ ތަޞައްވުރު</h3>
                 <div class="royal-info-text" contenteditable="false">
@@ -638,7 +645,6 @@
             </div>
 
             <h2 style="color:var(--royal-blue); margin-top:30px; margin-bottom:15px; border-bottom:2px solid var(--royal-gold); display:inline-block; padding-bottom:5px;">އާންމު ސުވާލުތައް (FAQ)</h2>
-            
             <div class="faq-item">
                 <div class="faq-q" onclick="this.parentNode.classList.toggle('active')">
                     <span>1. ކޯސްތަކަށް ވަންނާނީ ކިހިނެއް؟</span>
@@ -648,7 +654,6 @@
                     ވެބްސައިޓުގައިވާ "އެޕްލިކޭޝަން ފޯމު" ޑައުންލޯޑް ކުރެއްވުމަށްފަހު ފުރިހަމަކުރައްވާ މެއިލްކުރައްވާށެވެ. ނުވަތަ އޮންލައިން ޕޯޓަލް މެދުވެރިކޮށް ހުށަހެޅޭނެއެވެ.
                 </div>
             </div>
-
             <div class="faq-item">
                 <div class="faq-q" onclick="this.parentNode.classList.toggle('active')">
                     <span>2. ކިޔަވައިދެނީ ކޮން ގަޑިތަކެއްގައި؟</span>
@@ -659,64 +664,17 @@
                 </div>
             </div>
 
-            <div class="faq-item">
-                <div class="faq-q" onclick="this.parentNode.classList.toggle('active')">
-                    <span>3. ކޯސް ފީ ދައްކާނީ ކިހިނެއް؟</span>
-                    <i class="fas fa-chevron-down"></i>
-                </div>
-                <div class="faq-a">
-                    ކޯސް ފީ ދެއްކެވުމަށް ބޭންކް އޮފް މޯލްޑިވްސް މެދުވެރިކޮށް ޓްރާންސްފަރ ކުރެއްވޭނެއެވެ. ސްލިޕްކޮޅު ޕޯޓަލްއަށް އަޕްލޯޑް ކުރައްވާށެވެ.
-                </div>
-            </div>
-
-            <div class="faq-item">
-                <div class="faq-q" onclick="this.parentNode.classList.toggle('active')">
-                    <span>4. މި ކޯސްތަކަކީ އެމް.ކިއު.އޭ އިން ޤަބޫލުކުރާ ކޯސްތަކެއްތަ؟</span>
-                    <i class="fas fa-chevron-down"></i>
-                </div>
-                <div class="faq-a">
-                    އާދެ! ޒާދް އެކަޑެމީން ހިންގާ ހުރިހާ ސެޓްފިކެޓް ލެވެލްގެ ކޯސްތަކަކީ މޯލްޑިވްސް ކޮލިފިކޭޝަން އޮތޯރިޓީ (MQA) އިން އެކްރެޑިޓް ކޮށްފައިވާ ކޯސްތަކެކެވެ.
-                </div>
-            </div>
-
-            <div class="faq-item">
-                <div class="faq-q" onclick="this.parentNode.classList.toggle('active')">
-                    <span>5. ކްލާހެއް ގެއްލިއްޖެނަމަ ހަދާނީ ކިހިނެއް؟</span>
-                    <i class="fas fa-chevron-down"></i>
-                </div>
-                <div class="faq-a">
-                    ހުރިހާ އޮންލައިން ކްލާސްތަކެއް ރެކޯޑް ކުރެވޭނެއެވެ. ދަރިވަރުންގެ ޕޯޓަލް މެދުވެރިކޮށް ރެކޯޑިންގ ބައްލަވާލެއްވޭނެއެވެ.
-                </div>
-            </div>
-
-            <div class="faq-item">
-                <div class="faq-q" onclick="this.parentNode.classList.toggle('active')">
-                    <span>6. ކިޔެވުމަށް ބޭނުންވާ ފޮތްތައް ލިބޭނީ ކިހިނެއް؟</span>
-                    <i class="fas fa-chevron-down"></i>
-                </div>
-                <div class="faq-a">
-                    ކޯހުގެ ފޮތްތަކާއި ނޯޓުތައް ޑިޖިޓަލްކޮށް (PDF) ޕޯޓަލްއިން ލިބެން ހުންނާނެއެވެ. ޕްރިންޓް ކޮޕީ ބޭނުންވާނަމަ ގަނެވޭނެ އިންތިޒާމު ހަމަޖެހިފައިވެއެވެ.
-                </div>
-            </div>
-
-            <div class="faq-item">
-                <div class="faq-q" onclick="this.parentNode.classList.toggle('active')">
-                    <span>7. ކޯސްތަކުގައި ބައިވެރިވުމަށް ޢުމުރުގެ ޝަރުޠަކީ ކޮބާ؟</span>
-                    <i class="fas fa-chevron-down"></i>
-                </div>
-                <div class="faq-a">
-                    އާންމުކޮށް 16 އަހަރު ފުރިފައިވާ ކޮންމެ ފަރާތަކަށްވެސް ބައިވެރިވެވޭނެއެވެ. ނަމަވެސް ބައެއް ޚާއްޞަ ކޯސްތަކުގައި ޝަރުޠު ތަފާތުވެދާނެއެވެ.
-                </div>
-            </div>
-
         </main>
 
         <aside class="right-sidebar">
-            <div class="weather-box">
-                <div id="live-clock" style="font-size:2.5em; font-weight:bold; font-family:var(--font-en);">--:--</div>
-                <div style="font-size:1.2em;">މާލެ, ދިވެހިރާއްޖެ</div>
-                <div style="margin-top:10px;">30°C | 🌤️</div>
-            </div>
+            <a href="https://www.meteorology.gov.mv" target="_blank" style="text-decoration:none;">
+                <div class="weather-box">
+                    <div id="live-clock" style="font-size:2.5em; font-weight:bold; font-family:var(--font-en);">--:--</div>
+                    <div style="font-size:1.2em;">މާލެ, ދިވެހިރާއްޖެ</div>
+                    <div style="margin-top:10px;">30°C | 🌤️</div>
+                    <div style="font-size:0.8em; margin-top:5px; color:#ddd;">މޫސުމާބެހޭ ޤައުމީ އިދާރާ ></div>
+                </div>
+            </a>
 
             <div class="widget">
                 <h3 class="widget-title"><i class="fas fa-mosque"></i> ނަމާދު ވަގުތު</h3>
@@ -725,6 +683,50 @@
                 <div class="prayer-row"><span>ޢަޞްރު</span> <span class="prayer-time" id="asr" contenteditable="false">--:--</span></div>
                 <div class="prayer-row"><span>މަޣްރިބް</span> <span class="prayer-time" id="maghrib" contenteditable="false">--:--</span></div>
                 <div class="prayer-row"><span>ޢިޝާ</span> <span class="prayer-time" id="isha" contenteditable="false">--:--</span></div>
+            </div>
+
+            <div class="widget" style="border-top: 4px solid #c0392b;">
+                <h3 class="widget-title"><i class="fas fa-newspaper"></i> ޚަބަރާއި މަޢުލޫމާތު</h3>
+                
+                <a href="https://presidency.gov.mv" target="_blank" class="external-link-card">
+                    <div class="link-icon-box"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/Emblem_of_Maldives.svg/1200px-Emblem_of_Maldives.svg.png"></div>
+                    <div class="link-info">
+                        <h4>ރައީސުލްޖުމްހޫރިއްޔާގެ އޮފީސް</h4>
+                        <span>Official Website</span>
+                    </div>
+                </a>
+
+                <a href="https://www.aljazeera.net" target="_blank" class="external-link-card">
+                    <div class="link-icon-box" style="background:#fa7e00;"><i class="fas fa-globe-arabic" style="color:white; font-size:1.5em;"></i></div>
+                    <div class="link-info">
+                        <h4>Al Jazeera Arabic</h4>
+                        <span>Live News</span>
+                    </div>
+                </a>
+
+                <a href="https://www.aljazeera.com" target="_blank" class="external-link-card">
+                    <div class="link-icon-box" style="background:#fa7e00;"><i class="fas fa-globe" style="color:white; font-size:1.5em;"></i></div>
+                    <div class="link-info">
+                        <h4>Al Jazeera English</h4>
+                        <span>Live News</span>
+                    </div>
+                </a>
+
+                <a href="https://www.bbc.com" target="_blank" class="external-link-card">
+                    <div class="link-icon-box" style="background:#b80000; color:white; font-weight:bold; font-size:0.8em; align-items:center;">BBC</div>
+                    <div class="link-info">
+                        <h4>BBC News</h4>
+                        <span>World News</span>
+                    </div>
+                </a>
+
+                <a href="https://edition.cnn.com" target="_blank" class="external-link-card">
+                    <div class="link-icon-box" style="background:#cc0000; color:white; font-weight:bold; font-size:0.8em; align-items:center;">CNN</div>
+                    <div class="link-info">
+                        <h4>CNN International</h4>
+                        <span>Breaking News</span>
+                    </div>
+                </a>
             </div>
 
             <div class="widget">
@@ -739,41 +741,10 @@
                 </div>
             </div>
 
-            <div class="widget">
-                <h3 class="widget-title"><i class="fas fa-bullhorn"></i> މުހިންމު އެންގުން</h3>
-                <div contenteditable="false" style="background:#eef7ff; padding:10px; border-radius:5px; border-left:3px solid var(--royal-blue); font-size:0.95em;">
-                    <strong>ސަމާލުކަމަށް:</strong><br>
-                    ޖަނަވަރީ އިންޓޭކްގެ އެޕްލިކޭޝަންތައް ބަލައިގަތުމުގެ އެންމެ ފަހު ތާރީޚަކީ 31 ޑިސެމްބަރެވެ.
-                </div>
-            </div>
-
-            <div class="widget">
-                <h3 class="widget-title"><i class="fas fa-play-circle"></i> ވީޑިއޯ ގެލެރީ</h3>
-                <div style="position: relative; width: 100%; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 5px;">
-                    <iframe 
-                        style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
-                        src="https://www.youtube.com/embed/JfyAPfnztY8?rel=0&modestbranding=1" 
-                        title="Zaad Academy Video" 
-                        frameborder="0" 
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                        allowfullscreen>
-                    </iframe>
-                </div>
-                <div style="text-align:center; margin-top:5px; font-size:0.9em; font-weight:bold;">އެކަޑެމީ ތަޢާރަފް</div>
-            </div>
-
             <div class="arabic-word-box">
                 <h4 style="border-bottom:1px dashed rgba(255,255,255,0.3); padding-bottom:5px; margin-bottom:10px;">ދުވަހުގެ ޢަރަބި ބަސް</h4>
                 <span class="ar-word" contenteditable="false">العِلْمُ</span>
                 <div style="font-weight:bold; font-size:1.2em;" contenteditable="false">ޢިލްމު / Knowledge</div>
-            </div>
-
-            <div class="poll-box">
-                <h3 class="widget-title" style="font-size:1em; margin-bottom:10px;"><i class="fas fa-poll"></i> ޚިޔާލު ހޯދުން</h3>
-                <p style="font-size:0.9em; margin-bottom:10px;" contenteditable="false">އެންމެ ބޭނުންވާ ކޯހަކީ ކޮބާ؟</p>
-                <label class="poll-opt"><input type="radio" name="poll"> ޢަރަބި ބަސް</label>
-                <label class="poll-opt"><input type="radio" name="poll"> ޤުރުއާން</label>
-                <label class="poll-opt"><input type="radio" name="poll"> އިސްލާމިކް ސްޓަޑީޒް</label>
             </div>
 
             <div class="widget">
@@ -809,7 +780,6 @@
                     <li><a href="#" contenteditable="false">» ސްޓޫޑެންޓް ޕޯޓަލް</a></li>
                     <li><a href="#" contenteditable="false">» އިމްތިޙާނު ނަތީޖާ</a></li>
                     <li><a href="downloads.html" contenteditable="false">» ޑައުންލޯޑްސް</a></li>
-                    <li><a href="#" contenteditable="false">» ކަލަންޑަރު</a></li>
                 </ul>
             </div>
 
@@ -849,7 +819,7 @@
 
     <div id="articleReader" class="full-article-view">
         <div class="art-header">
-            <div class="back-btn" onclick="closeArticle()">
+            <div class="back-btn" onclick="closeArticle()" style="cursor:pointer; display:flex; align-items:center; gap:10px;">
                 <i class="fas fa-arrow-right"></i> އެނބުރި ހޯމް އަށް
             </div>
             <div style="color:var(--royal-gold); font-weight:bold; font-family:var(--font-en);">ZAAD READER</div>
@@ -863,17 +833,16 @@
                 <div class="art-content-box">
                     <h1 id="readerTitle" style="color:var(--royal-blue); font-size:2em; margin-bottom:10px; font-family:'Faruma',sans-serif;"></h1>
                     
-                    <div class="art-meta">
-                        <span id="readerDate"><i class="far fa-calendar-alt"></i> --</span>
+                    <div class="art-meta" style="margin-bottom:15px; color:#777; font-size:0.9em;">
+                        <span id="readerDate"><i class="far fa-calendar-alt"></i> --</span> | 
                         <span id="readerAuthor"><i class="fas fa-user-edit"></i> --</span>
-                        <span id="readerViews"><i class="far fa-eye"></i> --</span>
                     </div>
 
                     <img id="readerImg" src="" class="art-full-img">
                     
                     <div id="readerContent" class="art-content"></div>
 
-                    <div class="comment-sec">
+                    <div class="comment-sec" style="margin-top:40px; padding-top:20px; border-top:1px solid #eee;">
                         <h3 style="color:var(--royal-blue); margin-bottom:20px;"><i class="fas fa-comments"></i> ޚިޔާލުތައް</h3>
                         
                         <div style="margin-bottom:30px;">
@@ -891,39 +860,27 @@
 
     <script>
         // --- 1. OPEN ARTICLE FUNCTION ---
-        let currentArtId = null;
-
         function openArticle(btn) {
-            // Find parent card data from DOM
             const card = btn.closest('.art-card');
             const title = card.querySelector('.art-title').innerText;
             const img = card.querySelector('img').src;
             const desc = card.querySelector('.art-desc').innerText;
             const hidden = card.querySelector('.hidden-content') ? card.querySelector('.hidden-content').innerText : "މި ލިޔުމުގެ އިތުރު ތަފްޞީލު އަދި ނެތެވެ...";
 
-            // Populate Data
             document.getElementById('readerTitle').innerText = title;
             document.getElementById('readerImg').src = img;
             document.getElementById('readerAuthor').innerText = "ލިޔުނީ: ޒާދް އެޑިޓޯރިއަލް";
             document.getElementById('readerContent').innerText = desc + "\n\n" + hidden;
             
-            // Auto Update Date (Today)
             const date = new Date();
             const dateStr = `${date.getDate()}/${date.getMonth()+1}/${date.getFullYear()}`;
             document.getElementById('readerDate').innerText = "ތާރީޚް: " + dateStr;
 
-            // Auto Update Views (Simulated increase)
-            let views = Math.floor(Math.random() * 500) + 50; 
-            document.getElementById('readerViews').innerText = "ބެލިމީހުން: " + views;
-
-            // Populate Sidebar List
             populateReaderSidebar();
 
-            // Show Reader / Hide Main
             document.getElementById('articleReader').style.display = 'block';
-            document.body.style.overflow = 'hidden'; // Stop background scrolling
+            document.body.style.overflow = 'hidden'; 
             
-            // Clear comments for demo
             document.getElementById('commentsList').innerHTML = "";
         }
 
@@ -937,17 +894,17 @@
                 const title = card.querySelector('.art-title').innerText;
                 const img = card.querySelector('img').src;
                 
-                // Create Mini Card
                 const mini = document.createElement('div');
-                mini.className = 'reader-card-mini';
+                mini.style.cssText = "display:flex; gap:10px; margin-bottom:15px; cursor:pointer; padding:10px; border-radius:8px; border:1px solid #eee; transition:0.2s;";
                 mini.innerHTML = `
-                    <img src="${img}" class="mini-img">
-                    <div class="mini-info">
-                        <h4>${title}</h4>
-                        <span>ކިޔާލައްވާ...</span>
+                    <img src="${img}" style="width:80px; height:60px; object-fit:cover; border-radius:5px; background:#eee;">
+                    <div>
+                        <h4 style="font-size:0.9em; margin:0; color:#0C2D48; line-height:1.3;">${title}</h4>
+                        <span style="font-size:0.8em; color:#888;">ކިޔާލައްވާ...</span>
                     </div>
                 `;
-                // Add click event to load this article
+                mini.onmouseover = function() { this.style.backgroundColor = "#f9f9f9"; this.style.borderColor = "#B49658"; }
+                mini.onmouseout = function() { this.style.backgroundColor = "transparent"; this.style.borderColor = "#eee"; }
                 mini.onclick = function() {
                     const btn = card.querySelector('.art-btn');
                     openArticle(btn);
@@ -956,13 +913,11 @@
             });
         }
 
-        // --- 3. CLOSE ARTICLE FUNCTION ---
         function closeArticle() {
             document.getElementById('articleReader').style.display = 'none';
             document.body.style.overflow = 'auto';
         }
 
-        // --- 4. ADD NEW ARTICLE ---
         function addNewArticle() {
             const grid = document.getElementById('articleGrid');
             const newCard = document.createElement('div');
@@ -979,7 +934,6 @@
             grid.insertBefore(newCard, grid.firstChild);
         }
 
-        // --- 5. COMMENT SYSTEM (Basic Demo) ---
         function postComment() {
             const name = document.getElementById('comName').value;
             const text = document.getElementById('comText').value;
@@ -988,11 +942,11 @@
 
             const list = document.getElementById('commentsList');
             const newCom = document.createElement('div');
-            newCom.className = 'comment-box';
+            newCom.style.cssText = "background:#f9f9f9; padding:15px; border-radius:8px; margin-bottom:10px; border:1px solid #eee;";
             newCom.innerHTML = `
-                <div class="com-header">
-                    <span class="com-author">${name}</span>
-                    <span class="del-com" onclick="this.parentElement.parentElement.remove()">[Delete]</span>
+                <div style="display:flex; justify-content:space-between; margin-bottom:5px;">
+                    <span style="font-weight:bold; color:#0C2D48;">${name}</span>
+                    <span style="color:red; cursor:pointer; font-size:0.8em;" onclick="this.parentElement.parentElement.remove()">[Delete]</span>
                 </div>
                 <div>${text}</div>
             `;
@@ -1002,94 +956,7 @@
             document.getElementById('comText').value = '';
         }
 
-        // --- 6. VISITOR COUNTER LOGIC ---
-        // Simulates a counter using local storage to persist somewhat
-        let count = localStorage.getItem('page_visitors');
-        if(!count) {
-            count = 15400; // Starting number
-        } else {
-            count = parseInt(count) + 1; // Increment on load
-        }
-        localStorage.setItem('page_visitors', count);
-        document.getElementById('visit-count').innerText = count.toLocaleString();
-
-        // --- 7. SECURITY & UTILS ---
-        document.onkeydown = function(e) {
-            if(document.body.classList.contains('admin-active')) return true; 
-            if(e.keyCode == 123 || (e.ctrlKey && (e.keyCode == 'U'.charCodeAt(0) || e.keyCode == 'S'.charCodeAt(0)))) return false;
-        }
-        document.addEventListener('contextmenu', e => !document.body.classList.contains('admin-active') && e.preventDefault());
-        document.getElementById('year').innerText = new Date().getFullYear();
-
-        // --- 8. ADMIN FUNCTIONS ---
-        function activateAdmin() {
-            if(document.body.classList.contains('admin-active')) return;
-            let pass = prompt("Enter Admin Password:");
-            if(pass === "admin123") {
-                document.body.classList.add('admin-active');
-                document.getElementById('adminToolbar').style.display = 'flex';
-                
-                // Make existing content editable
-                let textElements = document.querySelectorAll('.art-title, .art-desc, .hidden-content, .vid-title');
-                textElements.forEach(el => el.contentEditable = "true");
-                
-                let imgs = document.querySelectorAll('img');
-                imgs.forEach(img => {
-                    img.onclick = function() {
-                        if(document.body.classList.contains('admin-active')) {
-                            let url = prompt("Enter new Image URL:", img.src);
-                            if(url) img.src = url;
-                        }
-                    }
-                });
-
-                let links = document.querySelectorAll('a');
-                links.forEach(link => {
-                    link.addEventListener('click', function(e) {
-                        if(document.body.classList.contains('admin-active')) {
-                            e.preventDefault();
-                            alert("Link navigation disabled in Admin Mode.");
-                        }
-                    });
-                });
-
-                alert("Admin Mode Active!");
-            } else {
-                alert("Incorrect Password!");
-            }
-        }
-
-        function savePage() {
-            let clone = document.documentElement.cloneNode(true);
-            clone.querySelector('body').classList.remove('admin-active');
-            
-            // Remove contenteditable attributes
-            let editables = clone.querySelectorAll('[contenteditable]');
-            editables.forEach(el => {
-                el.contentEditable = "false";
-                el.removeAttribute('contenteditable'); 
-                el.setAttribute('contenteditable', 'false'); 
-            });
-
-            // Clean up event listeners on images in clone
-            let imgs = clone.querySelectorAll('img');
-            imgs.forEach(img => img.removeAttribute('onclick'));
-
-            clone.querySelector('#adminToolbar').style.display = 'none';
-
-            let htmlContent = "<!DOCTYPE html>\n" + clone.outerHTML;
-            let blob = new Blob([htmlContent], { type: "text/html" });
-            let link = document.createElement("a");
-            link.href = URL.createObjectURL(blob);
-            link.download = "index.html"; 
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            
-            alert("File Downloaded! Please upload 'index.html' to your server.");
-        }
-
-        // --- 9. CLOCK & API ---
+        // --- 3. CLOCK & PRAYER TIMES & COUNTER ---
         setInterval(() => {
             document.getElementById('live-clock').innerText = new Date().toLocaleTimeString('en-US', {hour12:true});
         }, 1000);
@@ -1107,6 +974,95 @@
                 if(document.getElementById('maghrib')) document.getElementById('maghrib').innerText = t.Maghrib;
                 if(document.getElementById('isha')) document.getElementById('isha').innerText = t.Isha;
             });
+
+        // Visitor Counter
+        let count = localStorage.getItem('page_visitors');
+        if(!count) {
+            count = 15400; 
+        } else {
+            count = parseInt(count) + 1;
+        }
+        localStorage.setItem('page_visitors', count);
+        document.getElementById('visit-count').innerText = count.toLocaleString();
+
+        document.getElementById('year').innerText = new Date().getFullYear();
+
+        // --- 4. ADMIN & SAVE ---
+        document.onkeydown = function(e) {
+            if(document.body.classList.contains('admin-active')) return true; 
+            if(e.keyCode == 123 || (e.ctrlKey && (e.keyCode == 'U'.charCodeAt(0) || e.keyCode == 'S'.charCodeAt(0)))) return false;
+        }
+        document.addEventListener('contextmenu', e => !document.body.classList.contains('admin-active') && e.preventDefault());
+
+        function activateAdmin() {
+            if(document.body.classList.contains('admin-active')) return;
+            let pass = prompt("Enter Admin Password:");
+            if(pass === "admin123") {
+                document.body.classList.add('admin-active');
+                document.getElementById('adminToolbar').style.display = 'flex';
+                
+                let textElements = document.querySelectorAll('.art-title, .art-desc, .hidden-content, .vid-title, .ticker-item, h1, h2, h3, p, span, div');
+                textElements.forEach(el => {
+                     // Only make text-containing elements editable to avoid breaking layout
+                     if(el.children.length === 0 && el.innerText.trim() !== "") {
+                        el.contentEditable = "true";
+                     }
+                });
+                
+                let imgs = document.querySelectorAll('img');
+                imgs.forEach(img => {
+                    img.onclick = function() {
+                        if(document.body.classList.contains('admin-active')) {
+                            let url = prompt("Enter new Image URL:", img.src);
+                            if(url) img.src = url;
+                        }
+                    }
+                });
+
+                let links = document.querySelectorAll('a');
+                links.forEach(link => {
+                    link.addEventListener('click', function(e) {
+                        if(document.body.classList.contains('admin-active')) {
+                            e.preventDefault();
+                            let newHref = prompt("Edit Link URL:", link.href);
+                            if(newHref) link.href = newHref;
+                        }
+                    });
+                });
+
+                alert("Admin Mode Active!");
+            } else {
+                alert("Incorrect Password!");
+            }
+        }
+
+        function savePage() {
+            let clone = document.documentElement.cloneNode(true);
+            clone.querySelector('body').classList.remove('admin-active');
+            
+            let editables = clone.querySelectorAll('[contenteditable]');
+            editables.forEach(el => {
+                el.contentEditable = "false";
+                el.removeAttribute('contenteditable'); 
+                el.setAttribute('contenteditable', 'false'); 
+            });
+
+            let imgs = clone.querySelectorAll('img');
+            imgs.forEach(img => img.removeAttribute('onclick'));
+
+            clone.querySelector('#adminToolbar').style.display = 'none';
+
+            let htmlContent = "<!DOCTYPE html>\n" + clone.outerHTML;
+            let blob = new Blob([htmlContent], { type: "text/html" });
+            let link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = "index.html"; 
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            alert("File Downloaded! Please upload 'index.html' to your server.");
+        }
 
         function toggleMenu() {
             document.querySelector('.main-menu').classList.toggle('active');
