@@ -2,18 +2,18 @@
 <html lang="dv" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>ރޯޔަލް ގުރެޖުއޭޝަން (V17.0 - އަލްޓިމޭޓް ޕްރޯ)</title>
+    <title>Royal Graduation (V17.0 - Ultimate Pro)</title>
     <style>
-        /* 1. ގޫގުލް ފޮންޓް އިމްޕޯޓް (މިއީ ފަރުމާ ފައިލް ނެތަސް މަސައްކަތް ކުރާނެ ގޮތް) */
+        /* 1. Google Font (Backup for Dhivehi) */
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Thaana:wght@400;700&display=swap');
 
-        /* 2. ފަރުމާ ފޮންޓް (ސަރވަރގައި ފައިލް ހުރިނަމަ ނަގާނެ) */
+        /* 2. Faruuma Font (Local) */
         @font-face {
             font-family: 'Faruuma';
             src: local('Faruuma'), local('Faruumaa'), url('Fonts/faruuma.ttf') format('truetype');
         }
 
-        /* --- GLOBAL & PRO PALETTE --- */
+        /* --- GLOBAL VARIABLES --- */
         :root {
             --royal-accent: #c5a059;      
             --royal-blue-dark: #001b3d;   
@@ -24,32 +24,40 @@
             --panel-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
         }
 
-        /* މުޅި ސިސްޓަމްގެ ފޮންޓް ސެޓިންގްސް */
-        /* ތަރުތީބު: ފަރުމާ > އެމްވީ ބޮލީ > ނޯޓޯ ސާންސް (ގޫގުލް) */
-        body, button, input, select, textarea, h1, h2, h3, p, span, div {
-            font-family: 'Faruuma', 'MV Boli', 'Noto Sans Thaana', 'Times New Roman', serif !important;
-        }
-
+        /* DEFAULT BODY STYLE (DHIVEHI) */
         body {
             -webkit-user-select: none; user-select: none;
             margin: 0; padding: 0;
             background: linear-gradient(135deg, #000c1a 0%, #00281c 100%);
             overflow: hidden; height: 100vh; width: 100vw;
             color: #333;
+            /* Default Font for the App is Dhivehi */
+            font-family: 'Faruuma', 'MV Boli', 'Noto Sans Thaana', serif;
         }
 
-        /* --- SECURITY OVERLAY (FIXED) --- */
+        /* --- SECURITY OVERLAY (ENGLISH STYLING) --- */
         #securityOverlay {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
             background: rgba(0,0,0,0.98); z-index: 99999;
             display: flex; justify-content: center; align-items: center;
+            
+            /* FORCE ENGLISH SETTINGS FOR THIS WINDOW */
+            direction: ltr !important;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
+            text-align: center;
+        }
+
+        /* Ensure all text inside security box is English Font */
+        #securityOverlay * {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
+            direction: ltr !important;
         }
 
         .sec-box { 
             background: linear-gradient(135deg, var(--royal-blue-dark), var(--royal-green)); 
             padding: 60px; border-radius: 20px; 
             border: 2px solid var(--royal-accent); 
-            text-align: center; box-shadow: 0 0 50px rgba(13, 71, 161, 0.5);
+            box-shadow: 0 0 50px rgba(13, 71, 161, 0.5);
             max-width: 600px; width: 90%;
         }
         
@@ -63,37 +71,27 @@
             color: #000; 
             border-radius:5px; 
             border:none; 
-            
-            /* ދިވެހި ބަހަށް ޚާއްޞަ ސެޓިންގްސް */
-            direction: rtl; 
-            font-family: 'Faruuma', 'MV Boli', 'Noto Sans Thaana', serif !important;
         }
         
-        /* ޕްލޭސްހޯލްޑަރ ޓެކްސްޓް ސްޓައިލް */
-        ::-webkit-input-placeholder { font-family: 'Faruuma', 'MV Boli', 'Noto Sans Thaana', serif !important; color: #555; }
-        :-ms-input-placeholder { font-family: 'Faruuma', 'MV Boli', 'Noto Sans Thaana', serif !important; color: #555; }
-        ::placeholder { font-family: 'Faruuma', 'MV Boli', 'Noto Sans Thaana', serif !important; color: #555; }
-
         .sec-btn { 
             margin-top: 25px; 
             padding: 15px 50px; 
-            font-size: 22px; 
+            font-size: 20px; 
             background: var(--royal-blue-mid); 
             color: #fff; 
             border: 1px solid #fff; 
             cursor: pointer; 
             font-weight: bold; 
             border-radius:8px; 
-            
-            /* ފޮންޓް މަޖުބޫރު ކުރުން */
-            font-family: 'Faruuma', 'MV Boli', 'Noto Sans Thaana', serif !important;
+            text-transform: uppercase;
         }
         .sec-btn:hover { background: #fff; color: var(--royal-blue-mid); }
 
-        /* --- UI LAYOUT --- */
-        .main-layout { 
-            display: none; gap: 20px; height: 100vh; width: 100vw; 
-            padding: 15px; box-sizing: border-box; 
+        /* --- REST OF APP (DHIVEHI STYLING) --- */
+        
+        /* Force Dhivehi Font on these elements */
+        .sidebar, .editor, button:not(.sec-btn), input:not(.sec-input), select, textarea, h1, h2, h3, label, span, div {
+             font-family: 'Faruuma', 'MV Boli', 'Noto Sans Thaana', serif;
         }
 
         /* --- TOP BANNER --- */
@@ -109,6 +107,12 @@
         }
         .banner-main { font-family: 'Times New Roman', serif !important; font-weight: bold; font-size: 14px; letter-spacing: 2px; color: #a0c4ff; display: block; }
         .banner-sub { font-size: 24px; color: var(--royal-accent); text-shadow: 0 2px 4px #000; display: block; margin-top: 5px; }
+
+        /* --- UI LAYOUT --- */
+        .main-layout { 
+            display: none; gap: 20px; height: 100vh; width: 100vw; 
+            padding: 15px; box-sizing: border-box; 
+        }
 
         /* SIDEBAR */
         .sidebar {
@@ -320,11 +324,11 @@
 
     <div id="securityOverlay">
         <div class="sec-box">
-            <h1 style="color:#fff; font-size:45px; margin-bottom:10px; text-shadow:0 2px 5px #000;">ރޯޔަލް ގްރެޖުއޭޝަން V17.0</h1>
-            <p style="color:#a0c4ff; font-size:18px; margin-bottom:30px;">🔒 ޕްރޯ އެޑިޝަން - ލައިސަންސް ކީ ޖައްސަވާ</p>
+            <h1 style="color:#fff; font-size:45px; margin-bottom:10px; text-shadow:0 2px 5px #000;">Royal Graduation V17.0</h1>
+            <p style="color:#a0c4ff; font-size:18px; margin-bottom:30px;">🔒 PRO EDITION - ENTER LICENSE KEY</p>
             
-            <input type="password" id="licenseKey" class="sec-input" placeholder="ލައިސަންސް ކީ މިތަނަށް..." dir="rtl">
-            <button class="sec-btn" onclick="verifyLicense()">ވަދެވަޑައިގަންނަވާ</button>
+            <input type="password" id="licenseKey" class="sec-input" placeholder="Enter Key...">
+            <button class="sec-btn" onclick="verifyLicense()">AUTHENTICATE</button>
             <p id="secMsg" style="color:#ff5252; font-size:16px; margin-top:20px; font-weight:bold;"></p>
         </div>
     </div>
@@ -682,8 +686,8 @@
         const inputKey = document.getElementById('licenseKey').value.trim();
         const msg = document.getElementById('secMsg');
         const btn = document.querySelector('.sec-btn');
-        if(!inputKey) { msg.innerText = "ލައިސަންސް ކީ ޖައްސަވާ."; return; }
-        btn.innerText = "ޗެކް ކުރަނީ...";
+        if(!inputKey) { msg.innerText = "Please enter a key."; return; }
+        btn.innerText = "VERIFYING...";
         setTimeout(() => {
             try {
                 const reversed = inputKey.split('').reverse().join('');
@@ -691,9 +695,9 @@
                 if(payload.s !== "ROYAL_V5_SECURE") throw new Error("Invalid License Key!");
                 document.getElementById('securityOverlay').style.display = 'none';
                 document.getElementById('mainApp').style.display = 'flex';
-                document.getElementById('licenseStatus').innerText = "✅ ޕްރީމިއަމް ލައިސަންސް | މުއްދަތު ހަމަވަނީ: " + new Date(payload.e).toLocaleDateString();
+                document.getElementById('licenseStatus').innerText = "✅ PREMIUM LICENSE | EXP: " + new Date(payload.e).toLocaleDateString();
             } catch(e) {
-                console.error(e); msg.innerText = "❌ ލައިސަންސް ކަމުނުދިޔަ: " + (e.message || "Invalid Key"); btn.innerText = "އަލުން ޓްރައިކުރޭ"; document.getElementById('licenseKey').value = "";
+                console.error(e); msg.innerText = "❌ ACCESS DENIED: " + (e.message || "Invalid Key"); btn.innerText = "TRY AGAIN"; document.getElementById('licenseKey').value = "";
             }
         }, 800);
     }
