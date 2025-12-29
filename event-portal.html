@@ -171,101 +171,38 @@
 
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        /* --- ROYAL FOOTER STYLE --- */
+        /* FOOTER */
         footer {
-            background: #081b2e; /* Darker Royal Blue */
-            color: #ccc;
-            margin-top: auto;
-            border-top: 6px solid var(--royal-gold);
-            font-size: 0.95em;
+            background: #081b2e; color: #ccc; margin-top: auto;
+            border-top: 6px solid var(--royal-gold); font-size: 0.95em;
         }
         .footer-content {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 60px 20px;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 40px;
-            text-align: right;
+            max-width: 1400px; margin: 0 auto; padding: 60px 20px;
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px; text-align: right;
         }
         .footer-col h3 {
-            color: var(--royal-gold);
-            font-size: 1.3em;
-            margin-bottom: 20px;
-            border-bottom: 2px solid rgba(180, 150, 88, 0.3);
-            padding-bottom: 10px;
-            display: inline-block;
+            color: var(--royal-gold); font-size: 1.3em; margin-bottom: 20px;
+            border-bottom: 2px solid rgba(180, 150, 88, 0.3); padding-bottom: 10px;
+            display: inline-block; font-family: var(--font-dv);
         }
-        .footer-logo-text {
-            font-size: 1.8em;
-            font-weight: bold;
-            color: var(--white);
-            margin-bottom: 15px;
-            display: block;
-        }
-        .footer-desc {
-            line-height: 1.8;
-            opacity: 0.9;
-            margin-bottom: 20px;
-        }
-        .footer-links {
-            list-style: none;
-            padding: 0;
-        }
-        .footer-links li {
-            margin-bottom: 12px;
-            border-bottom: 1px dashed rgba(255,255,255,0.1);
-            padding-bottom: 5px;
-        }
-        .footer-links a {
-            color: #ddd;
-            text-decoration: none;
-            transition: 0.3s;
-            display: block;
-        }
-        .footer-links a:hover {
-            color: var(--royal-gold);
-            padding-right: 10px;
-        }
-        .footer-contact-item {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 15px;
-            color: #eee;
-        }
-        .footer-contact-item i {
-            color: var(--royal-gold);
-            font-size: 1.2em;
-        }
-        .social-icons {
-            display: flex;
-            gap: 15px;
-            margin-top: 20px;
-        }
+        .footer-logo-text { font-size: 1.8em; font-weight: bold; color: var(--white); margin-bottom: 15px; display: block; font-family: var(--font-dv); }
+        .footer-desc { line-height: 1.8; opacity: 0.9; margin-bottom: 20px; font-family: var(--font-dv); }
+        .footer-links { list-style: none; padding: 0; }
+        .footer-links li { margin-bottom: 12px; border-bottom: 1px dashed rgba(255,255,255,0.1); padding-bottom: 5px; }
+        .footer-links a { color: #ddd; text-decoration: none; transition: 0.3s; display: block; font-family: var(--font-dv); }
+        .footer-links a:hover { color: var(--royal-gold); padding-right: 10px; }
+        .footer-contact-item { display: flex; align-items: center; gap: 15px; margin-bottom: 15px; color: #eee; }
+        .footer-contact-item i { color: var(--royal-gold); font-size: 1.2em; }
+        .social-icons { display: flex; gap: 15px; margin-top: 20px; }
         .social-btn {
-            width: 40px; height: 40px;
-            background: rgba(255,255,255,0.1);
-            border-radius: 50%;
+            width: 40px; height: 40px; background: rgba(255,255,255,0.1); border-radius: 50%;
             display: flex; justify-content: center; align-items: center;
-            color: var(--royal-gold);
-            text-decoration: none;
-            transition: 0.3s;
+            color: var(--royal-gold); text-decoration: none; transition: 0.3s;
             border: 1px solid var(--royal-gold);
         }
-        .social-btn:hover {
-            background: var(--royal-gold);
-            color: #000;
-            transform: translateY(-3px);
-        }
-        .footer-bottom {
-            background: #05131f;
-            padding: 20px;
-            text-align: center;
-            font-size: 0.9em;
-            border-top: 1px solid rgba(255,255,255,0.05);
-            font-family: var(--font-en);
-        }
+        .social-btn:hover { background: var(--royal-gold); color: #000; transform: translateY(-3px); }
+        .footer-bottom { background: #05131f; padding: 20px; text-align: center; font-size: 0.9em; border-top: 1px solid rgba(255,255,255,0.05); font-family: var(--font-en); }
     </style>
 </head>
 <body>
@@ -297,9 +234,8 @@
     </div>
 
     <div class="portal-container">
-        <div class="grid" id="gridContainer">
-            </div>
-
+        <div class="grid" id="gridContainer"></div>
+        
         <div class="pagination" id="paginationControls">
             <button class="page-btn" onclick="changePage(-1)" id="prevBtn">Previous</button>
             <span class="page-info" id="pageInfo">Page 1 of 10</span>
@@ -322,7 +258,6 @@
                     <a href="#" class="social-btn"><i class="fab fa-youtube"></i></a>
                 </div>
             </div>
-
             <div class="footer-col">
                 <h3>މުހިންމު ލިންކުތައް</h3>
                 <ul class="footer-links">
@@ -332,24 +267,13 @@
                     <li><a href="library.html">» ޑިޖިޓަލް ލައިބްރަރީ</a></li>
                 </ul>
             </div>
-
             <div class="footer-col">
                 <h3>ގުޅުއްވުމަށް</h3>
-                <div class="footer-contact-item">
-                    <i class="fas fa-phone-alt"></i>
-                    <span style="font-family:var(--font-en); font-weight:bold;">9901550</span>
-                </div>
-                <div class="footer-contact-item">
-                    <i class="fas fa-envelope"></i>
-                    <span style="font-family:var(--font-en);">info@zaad.edu.mv</span>
-                </div>
-                <div class="footer-contact-item">
-                    <i class="fas fa-map-marker-alt"></i>
-                    <span>މާލެ، ދިވެހިރާއްޖެ</span>
-                </div>
+                <div class="footer-contact-item"><i class="fas fa-phone-alt"></i><span style="font-family:var(--font-en); font-weight:bold;">9901550</span></div>
+                <div class="footer-contact-item"><i class="fas fa-envelope"></i><span style="font-family:var(--font-en);">info@zaad.edu.mv</span></div>
+                <div class="footer-contact-item"><i class="fas fa-map-marker-alt"></i><span>މާލެ، ދިވެހިރާއްޖެ</span></div>
             </div>
         </div>
-
         <div class="footer-bottom">
             <div ondblclick="openAdminMode()" style="cursor: pointer; display:inline-block;">
                 &copy; 2025 Zaad Academy. All Rights Reserved. (Double Click here for Admin)
@@ -360,7 +284,7 @@
     <div class="admin-bar" id="adminToolbar">
         <div>
             <strong>ADMIN MODE ACTIVE</strong><br>
-            <small>Search for a customer to edit their key.</small>
+            <small>Search user -> Unlock -> Paste Key -> Update -> SAVE FILE</small>
         </div>
         <div>
             <button class="admin-btn" onclick="downloadMasterList()">1. Download CSV List</button>
@@ -368,11 +292,7 @@
         </div>
     </div>
 
-    <script id="db-storage">
-        // If this array is empty, the system will generate 500 new cards.
-        // When you save via Admin Mode, this array will be populated with your data.
-        var storedData = []; 
-    </script>
+    <textarea id="db_storage" style="display:none;"></textarea>
 
     <script>
         // --- DATABASE ---
@@ -382,6 +302,7 @@
         
         let currentPage = 1;
         let currentData = []; 
+        let adminMode = false;
 
         function randStr(len) {
             const c = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
@@ -391,24 +312,38 @@
 
         // --- 1. INITIALIZE ---
         function init() {
-            // Check if we have saved data in the script tag
-            if(window.storedData && window.storedData.length > 0) {
-                db = window.storedData;
-            } else {
-                // Generate new data if empty
-                for(let i=1; i<=TOTAL_CARDS; i++) {
-                    let num = i.toString().padStart(3,'0');
-                    db.push({
-                        id: `CUS-${num}`,
-                        user: `USER${num}`,
-                        pass: randStr(6),
-                        key: "NO-KEY-ASSIGNED-YET",
-                        index: i-1 
-                    });
+            // Check the hidden storage
+            const storedJSON = document.getElementById('db_storage').value;
+            
+            if(storedJSON && storedJSON.length > 10) {
+                // If data exists (after you saved), load it
+                try {
+                    db = JSON.parse(storedJSON);
+                } catch(e) {
+                    console.error("Data Parse Error, generating new");
+                    generateNewDB();
                 }
+            } else {
+                // First time run
+                generateNewDB();
             }
+            
             currentData = db; 
             renderPage();
+        }
+
+        function generateNewDB() {
+            db = [];
+            for(let i=1; i<=TOTAL_CARDS; i++) {
+                let num = i.toString().padStart(3,'0');
+                db.push({
+                    id: `CUS-${num}`,
+                    user: `USER${num}`,
+                    pass: randStr(6),
+                    key: "NO-KEY-ASSIGNED-YET",
+                    index: i-1 
+                });
+            }
         }
 
         // --- 2. RENDER PAGINATED CARDS ---
@@ -423,7 +358,6 @@
             let html = '';
             pageItems.forEach((item) => {
                 const idx = item.index; 
-                
                 html += `
                 <div class="card" id="card-${idx}" data-id="${item.id}">
                     <div class="card-header" onclick="toggleCard(${idx})">
@@ -431,39 +365,27 @@
                         <div class="status"><i class="fas fa-lock"></i> Locked</div>
                     </div>
                     <div class="card-body">
-                        
                         <div class="login-box" id="login-${idx}">
                             <p class="login-title-text">ލޮގިން ކުރައްވާ:</p>
                             <input type="text" class="login-input" id="u-${idx}" placeholder="Username">
                             <input type="password" class="login-input" id="p-${idx}" placeholder="Password">
                             <button class="login-btn" onclick="checkLogin(${idx})">UNLOCK</button>
                         </div>
-
                         <div class="secure-key-area" id="secure-${idx}">
                             <span class="key-title">ACCESS GRANTED</span>
                             <p style="font-size:0.9em; margin-bottom:5px; font-family:var(--font-dv);">ތިރީގައިވާ ކޯޑު ކޮޕީކުރައްވާ:</p>
-                            
                             <input type="text" class="key-val" id="key-field-${idx}" value="${item.key}" readonly>
-                            
-                            <button class="copy-btn" id="btn-${idx}" onclick="copyKey(${idx})">
-                                <i class="fas fa-copy"></i> COPY KEY
-                            </button>
-                            
-                            <button class="login-btn" id="adm-save-${idx}" style="display:none; margin-top:10px; background:#e67e22;" onclick="updateKey(${idx})">
-                                UPDATE KEY IN DB
-                            </button>
+                            <button class="copy-btn" id="btn-${idx}" onclick="copyKey(${idx})"><i class="fas fa-copy"></i> COPY KEY</button>
+                            <button class="login-btn" id="adm-save-${idx}" style="display:none; margin-top:10px; background:#e67e22;" onclick="updateKey(${idx})">UPDATE KEY IN DB</button>
                         </div>
-
                     </div>
                 </div>`;
             });
             grid.innerHTML = html;
             updatePaginationInfo();
-            
             if(adminMode) enableAdminFeatures();
         }
 
-        // --- 3. PAGINATION & SEARCH LOGIC ---
         function updatePaginationInfo() {
             const totalPages = Math.ceil(currentData.length / CARDS_PER_PAGE);
             document.getElementById('pageInfo').innerText = `Page ${currentPage} of ${totalPages || 1}`;
@@ -479,16 +401,13 @@
 
         function handleSearch() {
             const q = document.getElementById('searchBox').value.toUpperCase();
-            if(q === "") {
-                currentData = db;
-            } else {
-                currentData = db.filter(item => item.id.includes(q));
-            }
+            if(q === "") { currentData = db; } 
+            else { currentData = db.filter(item => item.id.includes(q)); }
             currentPage = 1; 
             renderPage();
         }
 
-        // --- 4. CARD ACTIONS ---
+        // --- 3. INTERACTIONS ---
         function toggleCard(index) {
             document.getElementById(`card-${index}`).classList.toggle('active');
         }
@@ -496,8 +415,7 @@
         function checkLogin(index) {
             const u = document.getElementById(`u-${index}`).value;
             const p = document.getElementById(`p-${index}`).value;
-            
-            if(u === db[index].user && p === db[index].pass) {
+            if((u === db[index].user && p === db[index].pass) || adminMode) {
                 document.getElementById(`login-${index}`).style.display = 'none';
                 document.getElementById(`secure-${index}`).style.display = 'block';
                 document.querySelector(`#card-${index} .status`).innerHTML = '<i class="fas fa-unlock"></i> Open';
@@ -514,14 +432,10 @@
             const b = document.getElementById(`btn-${index}`);
             b.innerHTML = '<i class="fas fa-check"></i> COPIED!';
             b.style.background = '#27ae60';
-            setTimeout(() => { 
-                b.innerHTML = '<i class="fas fa-copy"></i> COPY KEY'; 
-            }, 2000);
+            setTimeout(() => { b.innerHTML = '<i class="fas fa-copy"></i> COPY KEY'; }, 2000);
         }
 
-        // --- 5. ADMIN FUNCTIONS ---
-        let adminMode = false;
-
+        // --- 4. ADMIN & SAVING (THE IMPORTANT PART) ---
         function openAdminMode() {
             if(adminMode) return;
             const p = prompt("Enter Admin Password:");
@@ -546,49 +460,43 @@
         function updateKey(index) {
             const newKey = document.getElementById(`key-field-${index}`).value;
             db[index].key = newKey; 
-            alert("Key Saved! Click 'Save & Download HTML' to make permanent.");
+            alert("Key Saved to Memory! Don't forget to click 'Save & Download HTML' below.");
         }
 
         function downloadMasterList() {
             let csv = "Customer ID,Username,Password,Current Key\n";
-            db.forEach(row => {
-                csv += `${row.id},${row.user},${row.pass},${row.key}\n`;
-            });
+            db.forEach(row => { csv += `${row.id},${row.user},${row.pass},${row.key}\n`; });
             const link = document.createElement("a");
             link.href = 'data:text/csv;charset=utf-8,' + encodeURI(csv);
             link.download = "zaad_master_list.csv";
             link.click();
         }
 
-        // --- ROBUST SAVE FUNCTION ---
         function saveAndDownload() {
-            // 1. Get current Full HTML
-            let html = "<!DOCTYPE html>\n" + document.documentElement.outerHTML;
-            
-            // 2. Prepare the new Data String
-            const newDataString = `\n        var storedData = ${JSON.stringify(db)}; \n    `;
-            
-            // 3. Find the script tag by ID and replace its content
-            // We use Regex to find <script id="db-storage"> ... </script>
-            // [\s\S]*? means match everything including newlines non-greedily
-            const regex = /(<script id="db-storage">)([\s\S]*?)(<\/script>)/;
-            
-            if(html.match(regex)) {
-                html = html.replace(regex, `$1${newDataString}$3`);
-                
-                // 4. Download
-                const blob = new Blob([html], {type: "text/html"});
-                const a = document.createElement("a");
-                a.href = URL.createObjectURL(blob);
-                a.download = "event-portal.html";
-                a.click();
-            } else {
-                alert("Error: Could not find database storage block to update.");
-            }
+            // 1. Write the current DB to the hidden textarea
+            const storageBox = document.getElementById('db_storage');
+            storageBox.textContent = JSON.stringify(db); // Update DOM text
+            storageBox.value = JSON.stringify(db);       // Update Value attribute
+
+            // 2. Hide admin panel temporarily to clean up view (optional, but good)
+            document.getElementById('adminToolbar').style.display = 'none';
+
+            // 3. Get the Full HTML. 
+            // Note: textarea.textContent is now part of the HTML string!
+            let htmlContent = "<!DOCTYPE html>\n" + document.documentElement.outerHTML;
+
+            // 4. Download
+            const blob = new Blob([htmlContent], {type: "text/html"});
+            const a = document.createElement("a");
+            a.href = URL.createObjectURL(blob);
+            a.download = "event-portal.html";
+            a.click();
+
+            // 5. Restore Admin view
+            document.getElementById('adminToolbar').style.display = 'flex';
         }
 
         window.onload = init;
-
     </script>
 </body>
 </html>
