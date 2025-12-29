@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
+        /* --- THEME VARIABLES --- */
         :root {
             --royal-blue: #0C2D48;
             --royal-dark: #051626;
@@ -39,7 +40,7 @@
             line-height: 1.8;
         }
 
-        /* HEADER & NAV */
+        /* --- HEADER & NAV --- */
         .top-bar {
             background: var(--royal-dark); color: #ddd; padding: 8px 2%;
             display: flex; justify-content: space-between; font-family: var(--font-en); font-size: 0.9em;
@@ -67,7 +68,7 @@
         .main-menu li a { display: block; padding: 15px; color: var(--royal-blue); font-weight: bold; text-decoration: none; font-size: 1.1em; }
         .main-menu li a:hover { color: var(--royal-gold); }
 
-        /* SEARCH BAR */
+        /* --- SEARCH BAR --- */
         .search-area {
             background: var(--royal-dark); padding: 20px; text-align: center;
             border-bottom: 2px solid var(--royal-gold);
@@ -79,23 +80,24 @@
             font-family: var(--font-en);
         }
 
-        /* GRID LAYOUT */
+        /* --- GRID LAYOUT --- */
         .portal-container {
             max-width: 1600px; margin: 30px auto; padding: 0 20px;
             flex: 1; width: 100%;
         }
         .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
             gap: 20px;
         }
 
-        /* CARD DESIGN */
+        /* --- CARD DESIGN --- */
         .card {
             background: white; border: 1px solid #ddd; border-radius: 8px;
             overflow: hidden; box-shadow: 0 3px 6px rgba(0,0,0,0.05);
             transition: 0.3s; position: relative;
             display: flex; flex-direction: column;
+            border-right: 5px solid var(--royal-blue);
         }
         .card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(12, 45, 72, 0.15); border-color: var(--royal-gold); }
 
@@ -116,7 +118,7 @@
 
         /* LOGIN FORM */
         .login-box { text-align: center; }
-        .login-title-text { font-family: var(--font-dv); font-size: 1.2em; margin-bottom: 15px; color: var(--royal-blue); }
+        .login-title-text { font-family: var(--font-dv); font-size: 1.1em; margin-bottom: 15px; color: var(--royal-blue); }
         
         .login-input {
             width: 100%; padding: 10px; margin-bottom: 10px;
@@ -170,7 +172,101 @@
 
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        footer { background: var(--royal-blue); color: #aaa; padding: 20px; text-align: center; margin-top: auto; border-top: 4px solid var(--royal-gold); font-family: var(--font-en); }
+        /* --- ROYAL FOOTER STYLE --- */
+        footer {
+            background: #081b2e; /* Darker Royal Blue */
+            color: #ccc;
+            margin-top: auto;
+            border-top: 6px solid var(--royal-gold);
+            font-size: 0.95em;
+        }
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 60px 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            text-align: right;
+        }
+        .footer-col h3 {
+            color: var(--royal-gold);
+            font-size: 1.3em;
+            margin-bottom: 20px;
+            border-bottom: 2px solid rgba(180, 150, 88, 0.3);
+            padding-bottom: 10px;
+            display: inline-block;
+        }
+        .footer-logo-text {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: var(--white);
+            margin-bottom: 15px;
+            display: block;
+        }
+        .footer-desc {
+            line-height: 1.8;
+            opacity: 0.9;
+            margin-bottom: 20px;
+        }
+        .footer-links {
+            list-style: none;
+            padding: 0;
+        }
+        .footer-links li {
+            margin-bottom: 12px;
+            border-bottom: 1px dashed rgba(255,255,255,0.1);
+            padding-bottom: 5px;
+        }
+        .footer-links a {
+            color: #ddd;
+            text-decoration: none;
+            transition: 0.3s;
+            display: block;
+        }
+        .footer-links a:hover {
+            color: var(--royal-gold);
+            padding-right: 10px;
+        }
+        .footer-contact-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+            color: #eee;
+        }
+        .footer-contact-item i {
+            color: var(--royal-gold);
+            font-size: 1.2em;
+        }
+        .social-icons {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .social-btn {
+            width: 40px; height: 40px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            display: flex; justify-content: center; align-items: center;
+            color: var(--royal-gold);
+            text-decoration: none;
+            transition: 0.3s;
+            border: 1px solid var(--royal-gold);
+        }
+        .social-btn:hover {
+            background: var(--royal-gold);
+            color: #000;
+            transform: translateY(-3px);
+        }
+        .footer-bottom {
+            background: #05131f;
+            padding: 20px;
+            text-align: center;
+            font-size: 0.9em;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            font-family: var(--font-en);
+        }
     </style>
 </head>
 <body>
@@ -213,8 +309,52 @@
     </div>
 
     <footer>
-        <div ondblclick="openAdminMode()" style="cursor: pointer;">
-            &copy; 2025 Zaad Academy. All Rights Reserved. (Double Click for Admin)
+        <div class="footer-content">
+            <div class="footer-col">
+                <span class="footer-logo-text">ޒާދް އެކަޑެމީ</span>
+                <p class="footer-desc">
+                    ޒަމާނީ ޓެކްނޮލޮޖީގެ އެހީގައި އިވެންޓްތައް ފުރިހަމަކުރުމަށް އެހީތެރިވެދޭ ބައިވެރިޔާ. 
+                    އަޅުގަނޑުމެންގެ އަމާޒަކީ ފަސޭހަ އަދި އިތުބާރު ހުރި ޑިޖިޓަލް ޚިދުމަތްތަކެއް ފޯރުކޮށްދިނުމެވެ.
+                </p>
+                <div class="social-icons">
+                    <a href="#" class="social-btn"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="social-btn"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="social-btn"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="social-btn"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+
+            <div class="footer-col">
+                <h3>މުހިންމު ލިންކުތައް</h3>
+                <ul class="footer-links">
+                    <li><a href="index.html">» ޒާދް ހޯމް ޕޭޖް</a></li>
+                    <li><a href="event_slideshow.html">» އިވެންޓް ސްލައިޑްޝޯ</a></li>
+                    <li><a href="zaad-Judge-Portal.html">» ޖަޖިންގ ސިސްޓަމް</a></li>
+                    <li><a href="library.html">» ޑިޖިޓަލް ލައިބްރަރީ</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h3>ގުޅުއްވުމަށް</h3>
+                <div class="footer-contact-item">
+                    <i class="fas fa-phone-alt"></i>
+                    <span style="font-family:var(--font-en); font-weight:bold;">9901550</span>
+                </div>
+                <div class="footer-contact-item">
+                    <i class="fas fa-envelope"></i>
+                    <span style="font-family:var(--font-en);">info@zaad.edu.mv</span>
+                </div>
+                <div class="footer-contact-item">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span>މާލެ، ދިވެހިރާއްޖެ</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <div ondblclick="openAdminMode()" style="cursor: pointer; display:inline-block;">
+                &copy; 2025 Zaad Academy. All Rights Reserved. (Authorized Access Only)
+            </div>
         </div>
     </footer>
 
@@ -233,10 +373,10 @@
         // --- DATABASE ---
         var db = []; 
         const TOTAL_CARDS = 500;
-        const CARDS_PER_PAGE = 50; // Show 50 cards at a time for speed
+        const CARDS_PER_PAGE = 50; // Optimized for Speed
         
         let currentPage = 1;
-        let currentData = []; // Data currently being displayed (filtered or full)
+        let currentData = []; 
 
         function randStr(len) {
             const c = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
@@ -254,27 +394,25 @@
                         user: `USER${num}`,
                         pass: randStr(6),
                         key: "NO-KEY-ASSIGNED-YET",
-                        index: i-1 // Keep track of original index
+                        index: i-1 
                     });
                 }
             }
-            currentData = db; // Start with full data
+            currentData = db; 
             renderPage();
         }
 
         // --- 2. RENDER PAGINATED CARDS ---
         function renderPage() {
             const grid = document.getElementById('gridContainer');
-            grid.innerHTML = ''; // Clear current
+            grid.innerHTML = ''; 
 
-            // Calculate Start & End
             const startIndex = (currentPage - 1) * CARDS_PER_PAGE;
             const endIndex = startIndex + CARDS_PER_PAGE;
             const pageItems = currentData.slice(startIndex, endIndex);
 
             let html = '';
             pageItems.forEach((item) => {
-                // We use item.index to ensure actions (login/save) map to the correct item in main DB
                 const idx = item.index; 
                 
                 html += `
@@ -313,7 +451,6 @@
             grid.innerHTML = html;
             updatePaginationInfo();
             
-            // If admin mode is on, re-enable edit fields for rendered cards
             if(adminMode) enableAdminFeatures();
         }
 
@@ -338,7 +475,7 @@
             } else {
                 currentData = db.filter(item => item.id.includes(q));
             }
-            currentPage = 1; // Reset to page 1 on search
+            currentPage = 1; 
             renderPage();
         }
 
@@ -388,7 +525,6 @@
         }
 
         function enableAdminFeatures() {
-            // Only affect currently rendered cards
             const inputs = document.querySelectorAll('.key-val');
             inputs.forEach(input => {
                 input.removeAttribute('readonly');
@@ -400,7 +536,7 @@
 
         function updateKey(index) {
             const newKey = document.getElementById(`key-field-${index}`).value;
-            db[index].key = newKey; // Update MAIN DB
+            db[index].key = newKey; 
             alert("Key Saved! Click 'Save & Download HTML' to make permanent.");
         }
 
@@ -419,7 +555,6 @@
             const dbString = JSON.stringify(db);
             let html = document.documentElement.outerHTML;
             
-            // Robust replacement logic
             const startMarker = 'var db = ';
             const endMarker = '; const TOTAL_CARDS';
             const startPos = html.indexOf(startMarker);
