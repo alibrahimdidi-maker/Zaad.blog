@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>ރޯޔަލް ގުރެޖުއޭޝަން (V17.0 - އަލްޓިމޭޓް ޕްރޯ)</title>
     <style>
-        /* --- GLOBAL & PRO PALETTE --- */
+        /* --- GLOBAL VARIABLES --- */
         :root {
             --royal-accent: #c5a059;      
             --royal-blue-dark: #001b3d;   
@@ -15,24 +15,82 @@
             --panel-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
         }
 
-        /* ފަރުމާ ފޮންޓް ލޯޑުކުރުން */
+        /* 1. LOCAL FONT (If file exists) */
         @font-face {
             font-family: 'Faruuma';
             src: local('Faruuma'), local('Faruumaa'), url('Fonts/faruuma.ttf') format('truetype');
         }
         
-        /* ގޫގުލް ފޮންޓް (ބެކަޕް ފޮންޓެއްގެ ގޮތުގައި) */
-        @import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&display=swap');
+        /* 2. GOOGLE FONT (Backup for Dhivehi) */
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Thaana:wght@400;700&display=swap');
+
+        /* 3. UNIVERSAL FONT STACK */
+        /* ތިރީގައިވާ ކޯޑުން، ފަރުމާ ނެތިއްޔާ އެމްވީ ބޮލީ، އެ ނެތިއްޔާ ގޫގުލް ފޮންޓް ނަގާނެ */
+        * {
+            font-family: 'Faruuma', 'MV Boli', 'Noto Sans Thaana', 'Times New Roman', serif;
+        }
 
         body {
             -webkit-user-select: none; user-select: none;
             margin: 0; padding: 0;
             background: linear-gradient(135deg, #000c1a 0%, #00281c 100%);
-            /* މުޅި ސިސްޓަމަށް ފަރުމާ ފޮންޓު ބޭނުންކުރުމަށް */
-            font-family: 'Faruuma', 'Amiri', serif;
             overflow: hidden; height: 100vh; width: 100vw;
             color: #333;
         }
+
+        /* --- SECURITY OVERLAY (FIXED) --- */
+        #securityOverlay {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(0,0,0,0.98); z-index: 99999;
+            display: flex; justify-content: center; align-items: center;
+        }
+
+        .sec-box { 
+            background: linear-gradient(135deg, var(--royal-blue-dark), var(--royal-green)); 
+            padding: 60px; border-radius: 20px; 
+            border: 2px solid var(--royal-accent); 
+            text-align: center; box-shadow: 0 0 50px rgba(13, 71, 161, 0.5);
+            max-width: 600px; width: 90%;
+        }
+        
+        /* SPECIFIC STYLING FOR INPUT & BUTTON TO FORCE FONT */
+        .sec-input { 
+            padding: 15px; 
+            font-size: 24px; 
+            text-align: center; 
+            width: 100%; 
+            margin-top: 20px; 
+            background: #fff; 
+            color: #000; 
+            border-radius:5px; 
+            border:none; 
+            direction: rtl; /* Forces Right-to-Left typing */
+            
+            /* FORCE FONT FAMILY IMPORTANCE */
+            font-family: 'Faruuma', 'MV Boli', 'Noto Sans Thaana', serif !important;
+        }
+        
+        .sec-input::placeholder {
+            color: #555;
+            font-family: 'Faruuma', 'MV Boli', 'Noto Sans Thaana', serif !important;
+            opacity: 0.8;
+        }
+        
+        .sec-btn { 
+            margin-top: 25px; 
+            padding: 15px 50px; 
+            font-size: 22px; 
+            background: var(--royal-blue-mid); 
+            color: #fff; 
+            border: 1px solid #fff; 
+            cursor: pointer; 
+            font-weight: bold; 
+            border-radius:8px; 
+            
+            /* FORCE FONT FAMILY IMPORTANCE */
+            font-family: 'Faruuma', 'MV Boli', 'Noto Sans Thaana', serif !important;
+        }
+        .sec-btn:hover { background: #fff; color: var(--royal-blue-mid); }
 
         /* --- TOP BANNER --- */
         .royal-banner {
@@ -46,49 +104,8 @@
             border-radius: 8px;
         }
         .banner-main { font-family: 'Times New Roman', serif; font-weight: bold; font-size: 14px; letter-spacing: 2px; color: #a0c4ff; display: block; }
-        .banner-sub { font-family: 'Faruuma'; font-size: 24px; color: var(--royal-accent); text-shadow: 0 2px 4px #000; display: block; margin-top: 5px; }
+        .banner-sub { font-size: 24px; color: var(--royal-accent); text-shadow: 0 2px 4px #000; display: block; margin-top: 5px; }
 
-        /* --- SECURITY OVERLAY (FIXED FONT) --- */
-        #securityOverlay {
-            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            background: rgba(0,0,0,0.98); z-index: 99999;
-            display: flex; justify-content: center; align-items: center;
-        }
-
-        /* === މުހިންމު ބައި: ޕާސްވޯޑް ވިންޑޯގެ ހުރިހާ އެއްޗަކަށް ފޮންޓް މަޖުބޫރުކުރުން === */
-        #securityOverlay * {
-            font-family: 'Faruuma', 'Amiri', serif !important;
-        }
-
-        .sec-box { 
-            background: linear-gradient(135deg, var(--royal-blue-dark), var(--royal-green)); 
-            padding: 60px; border-radius: 20px; 
-            border: 2px solid var(--royal-accent); 
-            text-align: center; box-shadow: 0 0 50px rgba(13, 71, 161, 0.5);
-            max-width: 600px; width: 90%;
-        }
-        
-        .sec-input { 
-            padding: 15px; font-size: 24px; text-align: center; width: 100%; 
-            margin-top: 20px; background: #fff; color: #000; 
-            border-radius:5px; border:none; 
-            /* Input ތަކަށް ފޮންޓް ނެގުމަށް */
-            font-family: 'Faruuma', 'Amiri', serif !important;
-        }
-        
-        .sec-input::placeholder {
-            font-family: 'Faruuma', 'Amiri', serif !important;
-            opacity: 0.7;
-        }
-        
-        .sec-btn { 
-            margin-top: 25px; padding: 15px 50px; font-size: 22px; 
-            background: var(--royal-blue-mid); color: #fff; border: 1px solid #fff; 
-            cursor: pointer; font-weight: bold; border-radius:8px; 
-            /* Button އަށް ފޮންޓް ނެގުމަށް */
-            font-family: 'Faruuma', 'Amiri', serif !important;
-        }
-        .sec-btn:hover { background: #fff; color: var(--royal-blue-mid); }
 
         /* --- UI LAYOUT --- */
         .main-layout { 
@@ -141,7 +158,6 @@
         ::-webkit-scrollbar-thumb { background: var(--royal-blue-mid); border-radius: 6px; }
 
         /* --- STYLING CONTROLS --- */
-        h1, h2, h3, h4, h5, h6, span, div, p, label, button, select, input { font-family: 'Faruuma', serif; }
         
         h2, h3 { margin: 5px 0; }
         label { display: block; font-weight: bold; font-size: 16px; margin-bottom: 5px; color: var(--royal-blue-dark); }
@@ -166,7 +182,6 @@
             background: var(--input-bg);
             color: #000;
             margin-bottom: 8px; 
-            font-family: 'Faruuma', 'Times New Roman';
             font-size: 16px;
             box-sizing: border-box; transition: all 0.3s;
         }
@@ -227,7 +242,7 @@
         .design-col { flex: 1; }
 
         /* --- BUTTONS --- */
-        button { cursor: pointer; font-family: 'Faruuma'; font-weight: bold; transition: all 0.2s; }
+        button { cursor: pointer; font-weight: bold; transition: all 0.2s; }
         
         .launch-btn { 
             background: linear-gradient(to bottom, #d32f2f, #b71c1c);
@@ -311,7 +326,8 @@
         <div class="sec-box">
             <h1 style="color:#fff; font-size:45px; margin-bottom:10px; text-shadow:0 2px 5px #000;">ރޯޔަލް ގްރެޖުއޭޝަން V17.0</h1>
             <p style="color:#a0c4ff; font-size:18px; margin-bottom:30px;">🔒 ޕްރޯ އެޑިޝަން - ލައިސަންސް ކީ ޖައްސަވާ</p>
-            <input type="password" id="licenseKey" class="sec-input" placeholder="ލައިސަންސް ކީ މިތަނަށް...">
+            
+            <input type="password" id="licenseKey" class="sec-input" placeholder="ލައިސަންސް ކީ މިތަނަށް..." dir="rtl">
             <button class="sec-btn" onclick="verifyLicense()">ވަދެވަޑައިގަންނަވާ</button>
             <p id="secMsg" style="color:#ff5252; font-size:16px; margin-top:20px; font-weight:bold;"></p>
         </div>
