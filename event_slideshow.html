@@ -15,6 +15,11 @@
             --panel-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
         }
 
+        @font-face {
+            font-family: 'Faruuma';
+            src: local('Faruuma'), local('Faruumaa'), url('Fonts/faruuma.ttf') format('truetype');
+        }
+
         body {
             -webkit-user-select: none; user-select: none;
             margin: 0; padding: 0;
@@ -23,11 +28,6 @@
             font-family: 'Faruuma', 'Times New Roman', serif;
             overflow: hidden; height: 100vh; width: 100vw;
             color: #333;
-        }
-
-        @font-face {
-            font-family: 'Faruuma';
-            src: local('Faruuma'), local('Faruumaa'), url('Fonts/faruuma.ttf') format('truetype');
         }
 
         /* --- TOP BANNER --- */
@@ -44,11 +44,16 @@
         .banner-main { font-family: 'Times New Roman', serif; font-weight: bold; font-size: 14px; letter-spacing: 2px; color: #a0c4ff; display: block; }
         .banner-sub { font-family: 'Faruuma'; font-size: 24px; color: var(--royal-accent); text-shadow: 0 2px 4px #000; display: block; margin-top: 5px; }
 
-        /* --- SECURITY OVERLAY --- */
+        /* --- SECURITY OVERLAY (FIXED FONT) --- */
         #securityOverlay {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
             background: rgba(0,0,0,0.98); z-index: 99999;
             display: flex; justify-content: center; align-items: center;
+        }
+
+        /* Force Faruuma font on all security elements */
+        #securityOverlay * {
+            font-family: 'Faruuma', serif !important;
         }
 
         .sec-box { 
@@ -58,8 +63,20 @@
             text-align: center; box-shadow: 0 0 50px rgba(13, 71, 161, 0.5);
             max-width: 600px; width: 90%;
         }
-        .sec-input { padding: 15px; font-size: 24px; text-align: center; width: 100%; margin-top: 20px; background: #fff; color: #000; border-radius:5px; border:none; font-family: 'Faruuma'; }
-        .sec-btn { margin-top: 25px; padding: 15px 50px; font-size: 22px; background: var(--royal-blue-mid); color: #fff; border: 1px solid #fff; cursor: pointer; font-weight: bold; border-radius:8px; font-family: 'Faruuma'; }
+        
+        .sec-input { 
+            padding: 15px; font-size: 24px; text-align: center; width: 100%; 
+            margin-top: 20px; background: #fff; color: #000; 
+            border-radius:5px; border:none; 
+            font-family: 'Faruuma', serif !important; /* Force Font */
+        }
+        
+        .sec-btn { 
+            margin-top: 25px; padding: 15px 50px; font-size: 22px; 
+            background: var(--royal-blue-mid); color: #fff; border: 1px solid #fff; 
+            cursor: pointer; font-weight: bold; border-radius:8px; 
+            font-family: 'Faruuma', serif !important; /* Force Font */
+        }
         .sec-btn:hover { background: #fff; color: var(--royal-blue-mid); }
 
         /* --- UI LAYOUT --- */
@@ -281,11 +298,11 @@
 
     <div id="securityOverlay">
         <div class="sec-box">
-            <h1 style="color:#fff; font-family:'Faruuma'; font-size:45px; margin-bottom:10px; text-shadow:0 2px 5px #000;">ރޯޔަލް ގްރެޖުއޭޝަން V17.0</h1>
-            <p style="color:#a0c4ff; font-size:18px; margin-bottom:30px; font-family:'Faruuma';">🔒 ޕްރޯ އެޑިޝަން - ލައިސަންސް ކީ ޖައްސަވާ</p>
+            <h1 style="color:#fff; font-size:45px; margin-bottom:10px; text-shadow:0 2px 5px #000;">ރޯޔަލް ގްރެޖުއޭޝަން V17.0</h1>
+            <p style="color:#a0c4ff; font-size:18px; margin-bottom:30px;">🔒 ޕްރޯ އެޑިޝަން - ލައިސަންސް ކީ ޖައްސަވާ</p>
             <input type="password" id="licenseKey" class="sec-input" placeholder="ލައިސަންސް ކީ މިތަނަށް...">
             <button class="sec-btn" onclick="verifyLicense()">ޗެކް ކުރައްވާ</button>
-            <p id="secMsg" style="color:#ff5252; font-size:16px; margin-top:20px; font-weight:bold; font-family:'Faruuma';"></p>
+            <p id="secMsg" style="color:#ff5252; font-size:16px; margin-top:20px; font-weight:bold;"></p>
         </div>
     </div>
 
