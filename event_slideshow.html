@@ -2,15 +2,15 @@
 <html lang="dv" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>Royal Graduation System (V17.0 - Ultimate Pro)</title>
+    <title>ރޯޔަލް ގުރެޖުއޭޝަން (V17.0 - އަލްޓިމޭޓް ޕްރޯ)</title>
     <style>
         /* --- GLOBAL & PRO PALETTE --- */
         :root {
             --royal-accent: #c5a059;      
             --royal-blue-dark: #001b3d;   
             --royal-blue-mid: #0d47a1;    
-            --royal-green: #003322;       
-            --input-bg: #e3f2fd;          
+            --royal-green: #003322;        
+            --input-bg: #e3f2fd;           
             --input-border: #90caf9;
             --panel-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
         }
@@ -19,6 +19,7 @@
             -webkit-user-select: none; user-select: none;
             margin: 0; padding: 0;
             background: linear-gradient(135deg, #000c1a 0%, #00281c 100%);
+            /* މުޅި ސިސްޓަމަށް ފަރުމާ ފޮންޓު ބޭނުންކުރުމަށް */
             font-family: 'Faruuma', 'Times New Roman', serif;
             overflow: hidden; height: 100vh; width: 100vw;
             color: #333;
@@ -57,8 +58,8 @@
             text-align: center; box-shadow: 0 0 50px rgba(13, 71, 161, 0.5);
             max-width: 600px; width: 90%;
         }
-        .sec-input { padding: 15px; font-size: 24px; text-align: center; width: 100%; margin-top: 20px; background: #fff; color: #000; border-radius:5px; border:none; }
-        .sec-btn { margin-top: 25px; padding: 15px 50px; font-size: 22px; background: var(--royal-blue-mid); color: #fff; border: 1px solid #fff; cursor: pointer; font-weight: bold; border-radius:8px; }
+        .sec-input { padding: 15px; font-size: 24px; text-align: center; width: 100%; margin-top: 20px; background: #fff; color: #000; border-radius:5px; border:none; font-family: 'Faruuma'; }
+        .sec-btn { margin-top: 25px; padding: 15px 50px; font-size: 22px; background: var(--royal-blue-mid); color: #fff; border: 1px solid #fff; cursor: pointer; font-weight: bold; border-radius:8px; font-family: 'Faruuma'; }
         .sec-btn:hover { background: #fff; color: var(--royal-blue-mid); }
 
         /* --- UI LAYOUT --- */
@@ -83,7 +84,7 @@
         .dev-credits {
             margin-top: auto;
             text-align: center;
-            font-size: 11px;
+            font-size: 13px;
             color: #555;
             background: #e3f2fd;
             padding: 10px;
@@ -92,8 +93,8 @@
             font-weight: bold;
             line-height: 1.4;
         }
-        .dev-name { color: var(--royal-blue-dark); font-size: 13px; display: block; margin-bottom: 2px; }
-        .company-name { color: var(--royal-green); font-size: 10px; display: block; letter-spacing: 0.5px; }
+        .dev-name { color: var(--royal-blue-dark); font-size: 14px; display: block; margin-bottom: 2px; }
+        .company-name { color: var(--royal-green); font-size: 12px; display: block; letter-spacing: 0.5px; }
 
         /* EDITOR (RIGHT) */
         .editor {
@@ -112,12 +113,14 @@
         ::-webkit-scrollbar-thumb { background: var(--royal-blue-mid); border-radius: 6px; }
 
         /* --- STYLING CONTROLS --- */
-        h2, h3 { margin: 5px 0; font-family: 'Faruuma'; }
-        label { display: block; font-weight: bold; font-size: 14px; margin-bottom: 5px; color: var(--royal-blue-dark); }
+        h1, h2, h3, h4, h5, h6, span, div, p, label, button, select, input { font-family: 'Faruuma', serif; }
+        
+        h2, h3 { margin: 5px 0; }
+        label { display: block; font-weight: bold; font-size: 16px; margin-bottom: 5px; color: var(--royal-blue-dark); }
         
         /* CATEGORY HEADERS */
         .d-label { 
-            font-size: 16px; 
+            font-size: 18px; 
             font-weight: 900; 
             color: var(--royal-blue-mid);
             display: block; 
@@ -136,6 +139,7 @@
             color: #000;
             margin-bottom: 8px; 
             font-family: 'Faruuma', 'Times New Roman';
+            font-size: 16px;
             box-sizing: border-box; transition: all 0.3s;
         }
         input[type="text"]:focus, select:focus, textarea:focus { 
@@ -200,11 +204,11 @@
         .launch-btn { 
             background: linear-gradient(to bottom, #d32f2f, #b71c1c);
             color: white; padding: 12px; width: 100%; border: 1px solid #ffcdd2; 
-            border-radius: 6px; margin-bottom: 10px; font-size: 16px; box-shadow: 0 3px 5px rgba(0,0,0,0.2); 
+            border-radius: 6px; margin-bottom: 10px; font-size: 18px; box-shadow: 0 3px 5px rgba(0,0,0,0.2); 
         }
         .launch-btn:hover { filter: brightness(1.1); }
 
-        .conf-btn { flex: 1; padding: 8px; font-size: 12px; border-radius: 4px; border: 1px solid #1565c0; color: #fff; background: var(--royal-blue-mid); }
+        .conf-btn { flex: 1; padding: 8px; font-size: 14px; border-radius: 4px; border: 1px solid #1565c0; color: #fff; background: var(--royal-blue-mid); }
         .conf-btn:hover { background: var(--royal-blue-dark); }
         .config-btn-row { display: flex; gap: 5px; margin-bottom: 10px; }
 
@@ -220,7 +224,7 @@
 
         #lockBtn {
             background: #fbc02d; color: #000; padding: 12px; width: 100%; border: 2px solid #fff;
-            border-radius: 8px; margin-bottom: 15px; font-size: 16px; box-shadow: 0 3px 6px rgba(0,0,0,0.2);
+            border-radius: 8px; margin-bottom: 15px; font-size: 18px; box-shadow: 0 3px 6px rgba(0,0,0,0.2);
         }
         #lockBtn.active { background: #c62828; color: white; animation: pulse 2s infinite; }
         @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(198, 40, 40, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(198, 40, 40, 0); } 100% { box-shadow: 0 0 0 0 rgba(198, 40, 40, 0); } }
@@ -236,25 +240,27 @@
         #previewImg { height: 90px; width: 90px; object-fit: cover; border-radius: 50%; border: 3px solid var(--royal-blue-mid); background: #eee; }
         
         .video-panel { background: #e1f5fe; padding: 15px; border-radius: 10px; border: 1px solid #81d4fa; margin-bottom: 20px; }
-        .btn-vid { font-size: 13px; padding: 8px; margin-top: 5px; border:none; border-radius:4px; color:white; width: 100%; cursor: pointer; font-weight:bold; }
+        .btn-vid { font-size: 14px; padding: 8px; margin-top: 5px; border:none; border-radius:4px; color:white; width: 100%; cursor: pointer; font-weight:bold; }
 
-        /* --- SYSTEM FILES (LTR OVERRIDE) --- */
+        /* --- SYSTEM FILES --- */
         #sidebarFiles {
             background: #fff; 
             border: 1px solid #90caf9; 
             border-radius: 8px; 
             padding: 10px;
-            direction: ltr !important; /* Forces Left-to-Right */
-            text-align: left !important;
+            /* RTL set for Dhivehi interface */
+            direction: rtl !important; 
+            text-align: right !important;
         }
         #sidebarFiles label {
-            font-size: 13px; /* Bigger size */
+            font-size: 14px; 
             color: #444;
             margin-bottom: 3px;
         }
         #sidebarFiles input[type="file"] {
             font-size: 12px;
             padding: 5px;
+            direction: ltr; /* Keeps filenames readable */
         }
 
         /* --- FULL SCREEN BUTTON --- */
@@ -271,15 +277,15 @@
 </head>
 <body oncontextmenu="return false;">
 
-    <button id="cpFsBtn" onclick="toggleControlFS()" title="Full Screen Control Panel">⛶</button>
+    <button id="cpFsBtn" onclick="toggleControlFS()" title="ފުލް ސްކްރީން">⛶</button>
 
     <div id="securityOverlay">
         <div class="sec-box">
-            <h1 style="color:#fff; font-family:'Faruuma'; font-size:45px; margin-bottom:10px; text-shadow:0 2px 5px #000;">Royal Graduation V17.0</h1>
-            <p style="color:#a0c4ff; font-size:16px; margin-bottom:30px; font-family:sans-serif;">🔒 PRO EDITION - ENTER LICENSE KEY</p>
-            <input type="password" id="licenseKey" class="sec-input" placeholder="Enter Key...">
-            <button class="sec-btn" onclick="verifyLicense()">AUTHENTICATE</button>
-            <p id="secMsg" style="color:#ff5252; font-size:14px; margin-top:20px; font-weight:bold; font-family:sans-serif;"></p>
+            <h1 style="color:#fff; font-family:'Faruuma'; font-size:45px; margin-bottom:10px; text-shadow:0 2px 5px #000;">ރޯޔަލް ގްރެޖުއޭޝަން V17.0</h1>
+            <p style="color:#a0c4ff; font-size:18px; margin-bottom:30px; font-family:'Faruuma';">🔒 ޕްރޯ އެޑިޝަން - ލައިސަންސް ކީ ޖައްސަވާ</p>
+            <input type="password" id="licenseKey" class="sec-input" placeholder="ލައިސަންސް ކީ މިތަނަށް...">
+            <button class="sec-btn" onclick="verifyLicense()">ޗެކް ކުރައްވާ</button>
+            <p id="secMsg" style="color:#ff5252; font-size:16px; margin-top:20px; font-weight:bold; font-family:'Faruuma';"></p>
         </div>
     </div>
 
@@ -290,29 +296,29 @@
                 <span class="banner-sub">ރޯޔަލް ގުރެޖުއޭޝަން ސިސްޓަމް</span>
             </div>
 
-            <div id="licenseStatus" style="font-size:11px; color:#0d47a1; text-align:center; margin-bottom:10px; font-weight:bold;"></div>
+            <div id="licenseStatus" style="font-size:13px; color:#0d47a1; text-align:center; margin-bottom:10px; font-weight:bold;"></div>
 
-            <button class="launch-btn" onclick="openTV()">🖥️ 1. OPEN TV DISPLAY</button>
-            <div id="connStatus" style="font-size:12px; color:red; text-align:center; background:#ffebee; padding:4px; border-radius:4px; margin-bottom:10px; border:1px solid #ffcdd2;">Not Connected</div>
+            <button class="launch-btn" onclick="openTV()">🖥️ 1. ޓީވީ ސްކްރީން ހުޅުއްވާ</button>
+            <div id="connStatus" style="font-size:14px; color:red; text-align:center; background:#ffebee; padding:4px; border-radius:4px; margin-bottom:10px; border:1px solid #ffcdd2;">ކަނެކްޓް ނުވޭ</div>
 
             <div class="config-btn-row">
-                <button class="conf-btn" onclick="downloadConfig()">⬇ Save Settings</button>
-                <button class="conf-btn" onclick="document.getElementById('confInput').click()">⬆ Load Settings</button>
+                <button class="conf-btn" onclick="downloadConfig()">⬇ ސޭވް ސެޓިންގްސް</button>
+                <button class="conf-btn" onclick="document.getElementById('confInput').click()">⬆ ލޯޑް ސެޓިންގްސް</button>
                 <input type="file" id="confInput" accept=".json" style="display:none" onchange="loadConfig(this)">
             </div>
 
             <div id="sidebarFiles">
-                <label style="color:#0d47a1; border-bottom:1px solid #e3f2fd; padding-bottom:5px; margin-bottom:8px; font-size:15px; font-weight:bold;">📂 System Files</label>
-                <label>1. CSV Student List:</label><input type="file" id="csvFile" accept=".csv">
-                <label>2. Photos Folder:</label><input type="file" id="photoFolder" webkitdirectory directory multiple>
-                <label>3. Logo Image:</label><input type="file" id="logoFile" accept="image/*">
-                <label>4. Custom Font (TTF):</label><input type="file" id="fontFile" accept=".ttf, .otf">
-                <label>5. Titles CSV:</label><input type="file" id="jalsaCsvFile" accept=".csv">
-                <label style="color:#d84315;">6. Custom Frame:</label><input type="file" id="customBorderFile" accept="image/*">
+                <label style="color:#0d47a1; border-bottom:1px solid #e3f2fd; padding-bottom:5px; margin-bottom:8px; font-size:16px; font-weight:bold;">📂 ސިސްޓަމް ފައިލްތައް</label>
+                <label>1. ކުދިންގެ ލިސްޓު (CSV):</label><input type="file" id="csvFile" accept=".csv">
+                <label>2. ފޮޓޯ ފޯލްޑަރ:</label><input type="file" id="photoFolder" webkitdirectory directory multiple>
+                <label>3. ލޯގޯ ފައިލް:</label><input type="file" id="logoFile" accept="image/*">
+                <label>4. ކަސްޓަމް ފޮންޓް (TTF):</label><input type="file" id="fontFile" accept=".ttf, .otf">
+                <label>5. ޖަލްސާގެ ނަންތައް (CSV):</label><input type="file" id="jalsaCsvFile" accept=".csv">
+                <label style="color:#d84315;">6. ކަސްޓަމް ފްރޭމް:</label><input type="file" id="customBorderFile" accept="image/*">
             </div>
 
-            <label style="margin-top:15px; color:#00281c;">🔍 Search Student:</label>
-            <input type="text" id="search" placeholder="Type name..." onkeyup="filterList()">
+            <label style="margin-top:15px; color:#00281c;">🔍 ދަރިވަރުން ހޯއްދަވާ:</label>
+            <input type="text" id="search" placeholder="ނަން ޖައްސަވާ..." onkeyup="filterList()">
             <select id="stuList" size="2" style="flex-grow:1; border:1px solid #ccc;" onchange="loadStudent()"></select>
             
             <div class="dev-credits">
@@ -323,11 +329,11 @@
         </div>
 
         <div class="editor" id="editorPanel">
-            <button id="lockBtn" onclick="toggleLock()">🔓 UNLOCKED (Edit Mode)</button>
+            <button id="lockBtn" onclick="toggleLock()">🔓 ހުޅުވިފައި (ބަދަލުކުރެވޭ މޯޑު)</button>
 
             <div class="controls">
                 <button class="action btn-nav" onclick="move(-1)">◀</button>
-                <button class="action btn-live" onclick="updateTV()">📺 GO LIVE</button>
+                <button class="action btn-live" onclick="updateTV()">📺 ލައިވް ކުރޭ</button>
                 <button class="action btn-nav" onclick="move(1)">▶</button>
                 <button class="action btn-nav" style="background:#c62828; font-size:16px;" onclick="clearTV()">X</button>
             </div>
@@ -335,28 +341,28 @@
             <div class="video-panel">
                 <div style="display:flex; gap:8px;">
                     <input type="file" id="videoLocal" accept="video/*" style="width:70%">
-                    <button class="btn-vid" style="background:#ef6c00; width:30%;" onclick="playLocalVideo()">▶ Local Video</button>
+                    <button class="btn-vid" style="background:#ef6c00; width:30%;" onclick="playLocalVideo()">▶ ވީޑިއޯ ޖައްސާ</button>
                 </div>
                 <div style="display:flex; gap:8px; margin-top:5px;">
-                    <input type="text" id="ytLink" placeholder="YouTube Link..." style="width:50%; text-align:left;" class="font-en">
-                    <button class="btn-vid" style="background:#c62828; width:30%;" onclick="playYoutube()">▶ Play YT</button>
-                    <button class="btn-vid" style="background:#0277bd; width:20%;" onclick="openYTPopup()">⚠️ Pop</button>
+                    <input type="text" id="ytLink" placeholder="ޔޫޓިއުބް ލިންކް..." style="width:50%; text-align:left;" class="font-en">
+                    <button class="btn-vid" style="background:#c62828; width:30%;" onclick="playYoutube()">▶ ޔޫޓިއުބް</button>
+                    <button class="btn-vid" style="background:#0277bd; width:20%;" onclick="openYTPopup()">⚠️ ޕޮޕްއަޕް</button>
                 </div>
-                <button class="btn-vid" style="background:#37474f; margin-top:5px; padding:10px;" onclick="stopVideo()">⏹ STOP VIDEO PLAYER</button>
+                <button class="btn-vid" style="background:#37474f; margin-top:5px; padding:10px;" onclick="stopVideo()">⏹ ވީޑިއޯ ޕްލޭޔަރ ހުއްޓާލާ</button>
             </div>
 
-            <div id="statusMsg" style="font-weight:bold; color:#00695c; text-align:center; font-size:16px; margin:5px 0;">System Ready</div>
+            <div id="statusMsg" style="font-weight:bold; color:#00695c; text-align:center; font-size:18px; margin:5px 0;">ސިސްޓަމް ރެޑީ</div>
 
             <div style="background:#fff; padding:20px; border-radius:10px; border:2px solid #90caf9; margin:15px 0; box-shadow:0 3px 10px rgba(0,0,0,0.05);">
-                <h3 style="margin-top:0; font-size:22px; color:#0d47a1; border-bottom:1px solid #e3f2fd; padding-bottom:5px;">🎓 Student Details Input</h3>
+                <h3 style="margin-top:0; font-size:22px; color:#0d47a1; border-bottom:1px solid #e3f2fd; padding-bottom:5px;">🎓 ދަރިވަރުގެ މަޢުލޫމާތު</h3>
                 
                 <div style="margin-bottom: 10px;">
-                    <label style="font-size:12px; color:#555;">Dhivehi Name (RTL):</label>
+                    <label style="font-size:14px; color:#555;">ނަން (ދިވެހި):</label>
                     <input id="nD" class="font-dv" placeholder="ނަން (ދިވެހި)" style="width:100%;">
                 </div>
                 
                 <div style="margin-bottom: 15px;">
-                    <label style="font-size:12px; color:#555; text-align:left; display:block;">English Name (LTR):</label>
+                    <label style="font-size:14px; color:#555; text-align:right; display:block;">ނަން (އިނގިރޭސި):</label>
                     <input id="nE" class="eng" placeholder="Name (English)" style="width:100%; text-align:left;">
                 </div>
                 
@@ -375,171 +381,171 @@
                 <div class="preview-container">
                     <div><img id="logoPreview" alt="Logo" style="height:50px; opacity:0.5;"></div>
                     <div style="text-align:center;">
-                        <span id="pStat" style="font-size:12px; font-weight:bold; color:#777;">No Photo</span><br>
+                        <span id="pStat" style="font-size:14px; font-weight:bold; color:#777;">ފޮޓޯއެއް ނެތް</span><br>
                         <img id="previewImg" src="https://via.placeholder.com/150">
-                        <br><button style="font-size:11px; padding:3px 8px; margin-top:5px; background:#607d8b; color:#fff; border:none; border-radius:4px;" onclick="document.getElementById('singlePhoto').click()">Change</button>
+                        <br><button style="font-size:12px; padding:3px 8px; margin-top:5px; background:#607d8b; color:#fff; border:none; border-radius:4px;" onclick="document.getElementById('singlePhoto').click()">ބަދަލުކުރޭ</button>
                         <input type="file" id="singlePhoto" accept="image/*" style="display:none" onchange="manualPhoto(this)">
                     </div>
                 </div>
             </div>
 
-            <div style="text-align:center; font-size:13px; color:#777; margin:20px 0; font-weight:bold; letter-spacing:1px; background:#eceff1; padding:5px; border-radius:20px;">⬇ SETTINGS & DESIGN CONTROL ⬇</div>
+            <div style="text-align:center; font-size:15px; color:#777; margin:20px 0; font-weight:bold; letter-spacing:1px; background:#eceff1; padding:5px; border-radius:20px;">⬇ ސެޓިންގްސް އަދި ޑިޒައިން ކޮންޓްރޯލް ⬇</div>
 
             <div id="designPanel">
                 
                 <div class="group-box">
-                    <span class="group-title">🌍 Global Theme & Wall</span>
+                    <span class="group-title">🌍 ތީމް އަދި ބެކްގްރައުންޑް</span>
                     <div class="design-col">
-                        <span class="d-label">1. Background Wallpaper:</span>
+                        <span class="d-label">1. ވޯލްޕޭޕަރ ބެކްގްރައުންޑް:</span>
                         <div style="display:flex; gap:10px;">
                             <select id="bgPresetSel" onchange="liveUpdate('bgPreset', this.value)" style="width:70%;">
-                                 <script> for(let i=1; i<=50; i++) document.write(`<option value="bg${i}">Royal Theme ${i}</option>`); </script>
+                                 <script> for(let i=1; i<=50; i++) document.write(`<option value="bg${i}">ރޯޔަލް ތީމް ${i}</option>`); </script>
                             </select>
                             <input type="file" id="jalsaBgFile" accept="video/*, image/*" style="width:30%" title="Upload Custom BG">
                         </div>
                         <div style="margin-top:8px;">
                             <select id="bgLoopSel" onchange="liveUpdate('bgLoop', this.value)" style="background:#fff;">
-                                <option value="on">Video Loop: ON</option>
-                                <option value="off">Video Loop: OFF</option>
+                                <option value="on">ވީޑިއޯ ތަކުރާރު: އާނ</option>
+                                <option value="off">ވީޑިއޯ ތަކުރާރު: ނޫން</option>
                             </select>
                         </div>
 
-                        <span class="d-label">2. Student Card Design:</span>
+                        <span class="d-label">2. ދަރިވަރުގެ ކާޑު ޑިޒައިން:</span>
                         <div style="display:flex; gap:10px;">
                             <select id="cBorderSel" onchange="liveUpdate('cBorder', this.value)" style="width:75%;">
-                                <option value="custom">🖼️ Custom Image Frame</option>
-                                <script> for(let i=1; i<=50; i++) document.write(`<option value="b${i}">Card Style ${i}</option>`); </script>
-                                <option value="b0">🚫 No Border (Transparent)</option>
+                                <option value="custom">🖼️ އަމިއްލަ ފްރޭމް (Image)</option>
+                                <script> for(let i=1; i<=50; i++) document.write(`<option value="b${i}">ކާޑު ސްޓައިލް ${i}</option>`); </script>
+                                <option value="b0">🚫 ބޯޑަރެއް ނެތް (ޓްރާންސްޕޭރެންޓް)</option>
                             </select>
                             <input type="color" id="bdColorPick" value="#d4af37" oninput="liveUpdate('bdColor', this.value)" title="Theme Color">
                         </div>
 
-                        <span class="d-label">3. Whole Card Position (Adjust Layout):</span>
+                        <span class="d-label">3. ކާޑުގެ މަޤާމް (ޕޮޒިޝަން):</span>
                         <div style="display:flex; gap:10px; align-items:center; background:#fff; padding:10px; border-radius:8px; border:1px solid #ccc;">
-                            <span style="font-size:12px; font-weight:bold;">Left/Right:</span>
+                            <span style="font-size:14px; font-weight:bold;">ކަނާތް/ވާތް:</span>
                             <input type="range" id="cardXRange" min="-600" max="600" value="0" oninput="liveUpdate('cardX', this.value)">
-                            <span style="font-size:12px; font-weight:bold;">Up/Down:</span>
+                            <span style="font-size:14px; font-weight:bold;">މަތި/ތިރި:</span>
                             <input type="range" id="cardYRange" min="-450" max="450" value="0" oninput="liveUpdate('cardY', this.value)">
                         </div>
 
-                        <span class="d-label">4. Card Size & Layout:</span>
+                        <span class="d-label">4. ކާޑުގެ ސައިޒް:</span>
                         <div style="display:flex; gap:15px; align-items:center;">
-                            <span style="font-size:12px; font-weight:bold;">Width:</span>
+                            <span style="font-size:14px; font-weight:bold;">ފުޅާމިން:</span>
                             <input type="range" id="cardWRange" min="50" max="100" value="90" oninput="liveUpdate('cardW', this.value)">
-                            <span style="font-size:12px; font-weight:bold;">Height:</span>
+                            <span style="font-size:14px; font-weight:bold;">އުސްމިން:</span>
                             <input type="range" id="cardHRange" min="50" max="100" value="80" oninput="liveUpdate('cardH', this.value)">
                         </div>
                         <div style="display:flex; gap:10px; margin-top:8px;">
                             <select id="layoutDirSel" onchange="liveUpdate('layoutDir', this.value)" style="width:50%;">
-                                <option value="rtl">Photo Right (RTL)</option>
-                                <option value="ltr">Photo Left (LTR)</option>
+                                <option value="rtl">ފޮޓޯ ކަނާތް ފަރާތުގައި (RTL)</option>
+                                <option value="ltr">ފޮޓޯ ވާތް ފަރާތުގައި (LTR)</option>
                             </select>
                             <select id="textAlignSel" onchange="liveUpdate('textAlign', this.value)" style="width:50%;">
-                                <option value="right">Text: Right</option>
-                                <option value="center">Text: Center</option>
-                                <option value="left">Text: Left</option>
+                                <option value="right">ލިޔުން: ކަނާތަށް</option>
+                                <option value="center">ލިޔުން: މެދަށް</option>
+                                <option value="left">ލިޔުން: ވާތަށް</option>
                             </select>
                         </div>
                     </div>
                 </div>
 
                 <div class="group-box">
-                    <span class="group-title">📸 Photo Studio Controls</span>
+                    <span class="group-title">📸 ފޮޓޯ ސްޓޫޑިއޯ</span>
                     
-                    <span class="d-label">1. Frame Style:</span>
+                    <span class="d-label">1. ފްރޭމް ސްޓައިލް:</span>
                     <select id="photoPresetSel" onchange="applyPhotoPreset(this.value)" style="width:100%; font-weight:bold; font-size:15px; padding:10px;">
-                        <option value="0">--- Select a Frame Style ---</option>
-                        <optgroup label="No Border / Shadow">
-                            <option value="1">1. Plain (No Border)</option>
-                            <option value="2">2. Soft Shadow</option>
-                            <option value="3">3. Hard Shadow</option>
-                            <option value="4">4. Glow Effect</option>
+                        <option value="0">--- ފްރޭމް ސްޓައިލް ނަގާ ---</option>
+                        <optgroup label="ބޯޑަރެއް ނުވަތަ ޝެޑޯއެއް ނެތް">
+                            <option value="1">1. އާދައިގެ (ބޯޑަރެއް ނެތް)</option>
+                            <option value="2">2. މަޑު ހިޔަނި (Soft Shadow)</option>
+                            <option value="3">3. ގަދަ ހިޔަނި (Hard Shadow)</option>
+                            <option value="4">4. ދިއްލޭ ގޮތަށް (Glow)</option>
                         </optgroup>
-                        <optgroup label="Simple Borders">
-                            <option value="5">5. Thin Black Line</option>
-                            <option value="6">6. Thick Blue Frame</option>
-                            <option value="7">7. Dotted Line</option>
-                            <option value="8">8. Dashed Line</option>
-                            <option value="9">9. Double Line</option>
-                            <option value="10">10. Rounded Corners</option>
-                            <option value="11">11. Circle Cut</option>
+                        <optgroup label="އާދައިގެ ބޯޑަރު">
+                            <option value="5">5. ހިމަ ކަޅު ރޮނގު</option>
+                            <option value="6">6. ބޯ ނޫ ފްރޭމް</option>
+                            <option value="7">7. ތިކި ޖެހި ރޮނގު</option>
+                            <option value="8">8. ކެނޑިފައިވާ ރޮނގު</option>
+                            <option value="9">9. ޑަބަލް ލައިން</option>
+                            <option value="10">10. ވަށް ކަނެއް (Rounded)</option>
+                            <option value="11">11. ވަށް ބުރު (Circle)</option>
                         </optgroup>
-                        <optgroup label="Creative">
-                            <option value="12">12. Inset 3D</option>
-                            <option value="13">13. Outset 3D</option>
-                            <option value="14">14. Polaroid Style</option>
-                            <option value="15">15. Gold Groove</option>
-                            <option value="16">16. Card Style</option>
+                        <optgroup label="ކްރިއޭޓިވް">
+                            <option value="12">12. އެތެރެއަށް ވަދެފައި (Inset 3D)</option>
+                            <option value="13">13. ބޭރަށް ނުކުމެފައި (Outset 3D)</option>
+                            <option value="14">14. ޕޮލަރޮއިޑް ސްޓައިލް</option>
+                            <option value="15">15. ރަން ކުލައިގެ ގްރޫވް</option>
+                            <option value="16">16. ކާޑު ސްޓައިލް</option>
                         </optgroup>
                     </select>
 
-                    <span class="d-label">2. Manual Frame Adjustments:</span>
+                    <span class="d-label">2. ފްރޭމް އެޖަސްޓްމަންޓް:</span>
                     <div style="display:flex; gap:10px; align-items:center; background:#fff; padding:10px; border-radius:8px; border:1px solid #b2dfdb;">
-                        <span style="font-size:12px;">Color:</span><input type="color" id="pfColorPick" value="#000000" oninput="liveUpdate('pfColor', this.value)">
-                        <span style="font-size:12px;">Width:</span><input type="range" id="pfWidthRange" min="0" max="30" value="0" oninput="liveUpdate('pfWidth', this.value)">
-                        <span style="font-size:12px;">Round:</span><input type="range" id="pfRadiusRange" min="0" max="50" value="0" oninput="liveUpdate('pfRadius', this.value)">
+                        <span style="font-size:14px;">ކުލަ:</span><input type="color" id="pfColorPick" value="#000000" oninput="liveUpdate('pfColor', this.value)">
+                        <span style="font-size:14px;">ފުޅާމިން:</span><input type="range" id="pfWidthRange" min="0" max="30" value="0" oninput="liveUpdate('pfWidth', this.value)">
+                        <span style="font-size:14px;">ވަށް:</span><input type="range" id="pfRadiusRange" min="0" max="50" value="0" oninput="liveUpdate('pfRadius', this.value)">
                     </div>
                     
-                    <span class="d-label">3. Photo Position & Zoom:</span>
+                    <span class="d-label">3. ފޮޓޯގެ މަޤާމް އަދި ޒޫމް:</span>
                     <div style="display:flex; gap:10px; align-items:center;">
-                        <span style="font-size:12px; width:50px;">Zoom:</span>
+                        <span style="font-size:14px; width:50px;">ޒޫމް:</span>
                         <input type="range" id="pSizeRange" min="150" max="800" value="260" oninput="liveUpdate('pSize', this.value)">
-                        <select id="pVisSel" onchange="liveUpdate('pVis', this.value)" style="width:100px;"><option value="show">Show</option><option value="hide">Hide</option></select>
+                        <select id="pVisSel" onchange="liveUpdate('pVis', this.value)" style="width:100px;"><option value="show">ދައްކާ</option><option value="hide">ފޮރުވާ</option></select>
                     </div>
                     <div style="display:flex; gap:10px; margin-top:8px; align-items:center;">
-                        <span style="font-size:12px; width:50px;">Move:</span>
+                        <span style="font-size:14px; width:50px;">މޫވް:</span>
                         <input type="range" id="pXRange" min="-600" max="600" value="0" title="X" oninput="liveUpdate('pX', this.value)">
                         <input type="range" id="pYRange" min="-400" max="400" value="0" title="Y" oninput="liveUpdate('pY', this.value)">
                     </div>
                 </div>
 
                 <div class="group-box">
-                    <span class="group-title">🔤 Student Text Styling</span>
+                    <span class="group-title">🔤 ލިޔުންތަކުގެ ޑިޒައިން</span>
                     
-                    <span class="d-label">1. Student Name Size & Color:</span>
+                    <span class="d-label">1. ދަރިވަރުގެ ނަން (ސައިޒް/ކުލަ):</span>
                     <div style="display:flex; gap:10px; align-items:center; margin-bottom:8px;">
-                        <span style="font-size:12px; width:60px;">Dhivehi:</span>
+                        <span style="font-size:14px; width:60px;">ދިވެހި:</span>
                         <input type="range" min="2" max="10" step="0.1" value="6.5" oninput="liveUpdate('tnDSize', this.value)">
                         <input type="color" value="#ffffff" oninput="liveUpdate('tnDColor', this.value)">
                     </div>
                     <div style="display:flex; gap:10px; align-items:center; margin-bottom:8px;">
-                        <span style="font-size:12px; width:60px;">English:</span>
+                        <span style="font-size:14px; width:60px;">އިނގިރޭސި:</span>
                         <input type="range" min="1" max="8" step="0.1" value="4.5" oninput="liveUpdate('tnESize', this.value)">
                         <input type="color" value="#ffffff" oninput="liveUpdate('tnEColor', this.value)">
                     </div>
                     <div style="margin-top:5px;">
                         <select onchange="liveUpdate('nLine', this.value)" style="background:#fff;">
-                            <option value="off">Name Underline: OFF</option>
-                            <option value="on">Name Underline: ON</option>
+                            <option value="off">ނަމުގެ ތިރީ ރޮނގު: ނުލާ</option>
+                            <option value="on">ނަމުގެ ތިރީ ރޮނގު: ލާ</option>
                         </select>
                     </div>
                     
                     <hr style="border:1px dashed #aaa; margin:12px 0;">
 
-                    <span class="d-label">2. Details Lines Size & Color:</span>
+                    <span class="d-label">2. ތަފްސީލު ލައިންތައް:</span>
                     <div style="display:flex; gap:10px; align-items:center; margin-bottom:8px;">
-                        <span style="font-size:12px; width:60px;">Line 1:</span>
+                        <span style="font-size:14px; width:60px;">ލައިން 1:</span>
                         <input type="range" min="1" max="6" step="0.1" value="2.5" oninput="liveUpdate('tfDSize', this.value)">
                         <input type="color" value="#fff9c4" oninput="liveUpdate('tfDColor', this.value)">
                     </div>
                     <div style="display:flex; gap:10px; align-items:center;">
-                        <span style="font-size:12px; width:60px;">Line 2:</span>
+                        <span style="font-size:14px; width:60px;">ލައިން 2:</span>
                         <input type="range" min="1" max="6" step="0.1" value="3.0" oninput="liveUpdate('tcDSize', this.value)">
                         <input type="color" value="#fff9c4" oninput="liveUpdate('tcDColor', this.value)">
                     </div>
                 </div>
 
                 <div class="group-box">
-                    <span class="group-title">👑 Main Screen Titles</span>
+                    <span class="group-title">👑 ޖަލްސާގެ ޓައިޓްލްތައް</span>
                     
-                    <span class="d-label">1. Main Title & Position:</span>
-                    <input type="text" id="jLine1" placeholder="Main Title Text..." class="font-dv" oninput="updateJalsaText()">
+                    <span class="d-label">1. މައި ޓައިޓްލް:</span>
+                    <input type="text" id="jLine1" placeholder="މައި ޓައިޓްލް..." class="font-dv" oninput="updateJalsaText()">
                     
                     <div style="display:flex; align-items:center; gap:15px; margin-top:8px; background:#fff; padding:10px; border-radius:8px; border:1px solid #bbdefb;">
                         <div style="flex:1;">
-                            <span style="font-size:11px; color:#555; display:block;">Vertical (Y):</span>
+                            <span style="font-size:13px; color:#555; display:block;">މަތި/ތިރި (Y):</span>
                             <input type="range" id="mtYRange" min="-600" max="600" value="210" oninput="liveUpdate('mtY', this.value)">
-                            <span style="font-size:11px; color:#555; display:block;">Horizontal (X):</span>
+                            <span style="font-size:13px; color:#555; display:block;">ކަނާތް/ވާތް (X):</span>
                             <input type="range" id="mtXRange" min="-800" max="800" value="0" oninput="liveUpdate('mtX', this.value)">
                         </div>
                         <div class="arrow-controls">
@@ -553,62 +559,62 @@
                     </div>
 
                     <div style="display:flex; gap:10px; margin-top:10px; align-items:center;">
-                        <span style="font-size:12px;">Size:</span>
+                        <span style="font-size:14px;">ސައިޒް:</span>
                         <input type="range" id="mtSizeRange" min="2" max="10" step="0.1" value="5.6" oninput="liveUpdate('mtSize', this.value)">
                         <input type="color" id="mtColorPick" value="#d4af37" oninput="liveUpdate('mtColor', this.value)">
-                        <select id="mtAlignSel" onchange="liveUpdate('mtAlign', this.value)" style="width:100px;"><option value="center">Center</option><option value="right">Right</option><option value="left">Left</option></select>
+                        <select id="mtAlignSel" onchange="liveUpdate('mtAlign', this.value)" style="width:100px;"><option value="center">މެދަށް</option><option value="right">ކަނާތަށް</option><option value="left">ވާތަށް</option></select>
                     </div>
                     <div style="margin-top:5px;">
                         <select onchange="liveUpdate('tLine', this.value)" style="background:#fff;">
-                            <option value="on">Title Underline: ON</option>
-                            <option value="off">Title Underline: OFF</option>
+                            <option value="on">ޓައިޓްލް ތިރީ ރޮނގު: ލާ</option>
+                            <option value="off">ޓައިޓްލް ތިރީ ރޮނގު: ނުލާ</option>
                         </select>
                     </div>
 
                     <hr style="border:1px dashed #999; margin:15px 0;">
 
-                    <span class="d-label">2. Sub Titles:</span>
-                    <input type="text" id="jLine2" placeholder="Sub Title 1" class="font-dv">
-                    <input type="text" id="jLine3" placeholder="Sub Title 2" class="font-dv">
-                    <input type="text" id="jLine4" placeholder="Sub Title 3" class="font-dv">
+                    <span class="d-label">2. ސަބް ޓައިޓްލްތައް:</span>
+                    <input type="text" id="jLine2" placeholder="ސަބް ޓައިޓްލް 1" class="font-dv">
+                    <input type="text" id="jLine3" placeholder="ސަބް ޓައިޓްލް 2" class="font-dv">
+                    <input type="text" id="jLine4" placeholder="ސަބް ޓައިޓްލް 3" class="font-dv">
                     
                     <div style="display:flex; gap:10px; margin-top:8px; align-items:center;">
-                        <span style="font-size:12px;">Size:</span>
+                        <span style="font-size:14px;">ސައިޒް:</span>
                         <input type="range" id="stSizeRange" min="1" max="6" step="0.1" value="2.6" oninput="liveUpdate('stSize', this.value)">
                         <input type="color" id="stColorPick" value="#ffffff" oninput="liveUpdate('stColor', this.value)">
                     </div>
                     <div style="display:flex; gap:10px; margin-top:8px; align-items:center;">
-                        <span style="font-size:12px;">Align:</span>
+                        <span style="font-size:14px;">އެލައިން:</span>
                         <select id="stAlignSel" onchange="liveUpdate('stAlign', this.value)" style="width:100%; background:#fff;">
-                            <option value="center">Center</option>
-                            <option value="right">Right</option>
-                            <option value="left">Left</option>
+                            <option value="center">މެދަށް</option>
+                            <option value="right">ކަނާތަށް</option>
+                            <option value="left">ވާތަށް</option>
                         </select>
-                        <span style="font-size:12px;">Gap:</span>
+                        <span style="font-size:14px;">ދުރުމިން:</span>
                         <input type="range" id="stYRange" min="0" max="100" value="0" title="Space" oninput="liveUpdate('stY', this.value)">
                     </div>
                     
-                    <button class="btn-vid" style="background:#2e7d32; width:100%; margin-top:15px; font-weight:bold; font-size:16px; padding:12px;" onclick="updateJalsaText()">UPDATE ALL TITLES</button>
+                    <button class="btn-vid" style="background:#2e7d32; width:100%; margin-top:15px; font-weight:bold; font-size:18px; padding:12px;" onclick="updateJalsaText()">ޓައިޓްލްތައް އަޕްޑޭޓް ކުރޭ</button>
                 </div>
 
                 <div class="group-box">
-                    <span class="group-title">🖼️ Logo Controls</span>
+                    <span class="group-title">🖼️ ލޯގޯ ކޮންޓްރޯލް</span>
                     <div style="display:flex; gap:10px;">
                         <select id="lShapeSel" onchange="liveUpdate('lShape', this.value)" style="width:50%;">
-                            <option value="square">Square</option>
-                            <option value="rounded">Rounded</option>
-                            <option value="circle">Circle</option>
+                            <option value="square">ހަތަރެސްކަނ (Square)</option>
+                            <option value="rounded">ރައުންޑެޑް</option>
+                            <option value="circle">ވަށް (Circle)</option>
                         </select>
                         <select id="lVisSel" onchange="liveUpdate('lVis', this.value)" style="width:50%;">
-                            <option value="show">Show</option>
-                            <option value="hide">Hide</option>
+                            <option value="show">ދައްކާ</option>
+                            <option value="hide">ފޮރުވާ</option>
                         </select>
                     </div>
                     <div style="display:flex; gap:10px; margin-top:10px; align-items:center;">
-                        <span style="font-size:12px;">Move:</span>
+                        <span style="font-size:14px;">މޫވް:</span>
                         <input type="range" id="logoXRange" min="-1200" max="1200" value="0" oninput="liveUpdate('logoX', this.value)" title="X">
                         <input type="range" id="logoYRange" min="0" max="900" value="40" oninput="liveUpdate('logoY', this.value)" title="Y">
-                        <span style="font-size:12px;">Size:</span>
+                        <span style="font-size:14px;">ސައިޒް:</span>
                         <input type="range" id="lSizeRange" min="50" max="500" value="145" oninput="liveUpdate('lSize', this.value)" title="Size">
                     </div>
                 </div>
@@ -636,8 +642,8 @@
         const inputKey = document.getElementById('licenseKey').value.trim();
         const msg = document.getElementById('secMsg');
         const btn = document.querySelector('.sec-btn');
-        if(!inputKey) { msg.innerText = "Please enter a key."; return; }
-        btn.innerText = "VERIFYING...";
+        if(!inputKey) { msg.innerText = "ލައިސަންސް ކީ ޖައްސަވާ."; return; }
+        btn.innerText = "ޗެކް ކުރަނީ...";
         setTimeout(() => {
             try {
                 const reversed = inputKey.split('').reverse().join('');
@@ -645,9 +651,9 @@
                 if(payload.s !== "ROYAL_V5_SECURE") throw new Error("Invalid License Key!");
                 document.getElementById('securityOverlay').style.display = 'none';
                 document.getElementById('mainApp').style.display = 'flex';
-                document.getElementById('licenseStatus').innerText = "✅ PREMIUM LICENSE | EXP: " + new Date(payload.e).toLocaleDateString();
+                document.getElementById('licenseStatus').innerText = "✅ ޕްރީމިއަމް ލައިސަންސް | މުއްދަތު ހަމަވަނީ: " + new Date(payload.e).toLocaleDateString();
             } catch(e) {
-                console.error(e); msg.innerText = "❌ ACCESS DENIED: " + (e.message || "Invalid Key"); btn.innerText = "UNLOCK SYSTEM"; document.getElementById('licenseKey').value = "";
+                console.error(e); msg.innerText = "❌ ލައިސަންސް ކަމުނުދިޔަ: " + (e.message || "Invalid Key"); btn.innerText = "އަލުން ޓްރައިކުރޭ"; document.getElementById('licenseKey').value = "";
             }
         }, 800);
     }
@@ -689,13 +695,13 @@
         const searchInput = document.getElementById('search');
 
         if (isLocked) {
-            btn.innerHTML = "🔒 SYSTEM LOCKED (LIVE MODE)";
+            btn.innerHTML = "🔒 ލޮކް ކުރެވިފައި (ލައިވް މޯޑް)";
             btn.classList.add('active');
             designPanel.classList.add('locked-zone');
             sidebarFiles.classList.add('locked-zone');
             if(searchInput) searchInput.disabled = true;
         } else {
-            btn.innerHTML = "🔓 UNLOCKED (Edit Mode)";
+            btn.innerHTML = "🔓 ހުޅުވިފައި (ބަދަލުކުރެވޭ މޯޑު)";
             btn.classList.remove('active');
             designPanel.classList.remove('locked-zone');
             sidebarFiles.classList.remove('locked-zone');
@@ -717,7 +723,7 @@
                 if(tvWindow && !tvWindow.closed) { for (const key in designState) { liveUpdate(key, designState[key]); } }
                 setVal('mtSizeRange', designState.mtSize); setVal('mtColorPick', designState.mtColor); 
                 setVal('mtYRange', designState.mtY); setVal('mtXRange', designState.mtX);
-                alert("Settings Loaded Successfully!");
+                alert("ސެޓިންގްސް ލޯޑް ކުރެވިއްޖެ!");
             } catch(err) { alert("Invalid Config File"); }
         };
         reader.readAsText(file);
@@ -859,7 +865,7 @@
     // --- TV WINDOW ---
     function openTV() {
         tvWindow = window.open('', 'GradTV', 'width=1280,height=720,menubar=no,toolbar=no');
-        if(!tvWindow) { alert("Please Allow Popups!"); return; }
+        if(!tvWindow) { alert("ޕޮޕްއަޕް ބްލޮކް ވެފައި! ހުއްދަ ދެއްވާ."); return; }
 
         let fontCSS = `url('Fonts/faruuma.ttf') format('truetype')`;
         if (currentFontData) fontCSS = `url('${currentFontData}') format('truetype')`;
@@ -1027,11 +1033,11 @@
         </head>
         <body>
             <div id="activateOverlay" onclick="this.style.display='none'">
-                <h1 style="font-size:50px;">CLICK HERE TO ACTIVATE SCREEN</h1>
+                <h1 style="font-size:50px;">ސްކްރީން އެކްޓިވޭޓް ކުރުމަށް މިތަނަށް ފިއްތަވާ</h1>
                 <p>This is required for Audio/Video to play automatically.</p>
             </div>
 
-            <button id="fsBtn" onclick="goFS(this)">⛶ FULL SCREEN</button>
+            <button id="fsBtn" onclick="goFS(this)">⛶ ފުލް ސްކްރީން</button>
             <div id="videoLayer"></div>
             <div id="bgLayer" class="${designState.bgPreset}"></div>
             <div id="logoWrap"><img id="logoImg" class="logo-${designState.lShape}" src="https://via.placeholder.com/180x180/00281c/d4af37?text=LOGO"></div>
@@ -1069,7 +1075,7 @@
         
         for (const key in designState) { liveUpdate(key, designState[key]); }
 
-        document.getElementById('connStatus').innerText = "✅ ONLINE";
+        document.getElementById('connStatus').innerText = "✅ އޮންލައިން";
         document.getElementById('connStatus').style.color = "#00e676";
         document.getElementById('connStatus').style.background = "rgba(0,0,0,0.8)";
     }
@@ -1106,12 +1112,12 @@
         tvWindow.document.getElementById('jalsaContent').classList.remove('hidden');
         const logo = tvWindow.document.getElementById('logoWrap');
         logo.style.display = (designState.lVis === 'show') ? 'block' : 'none';
-        document.getElementById('statusMsg').innerText = "MODE: Jalsa Titles";
+        document.getElementById('statusMsg').innerText = "މޯޑް: ޖަލްސާގެ ޓައިޓްލްތައް";
         lastActiveState = 'title'; 
     }
 
     function updateTV() {
-        if(!tvWindow || tvWindow.closed) { alert("TV Closed!"); return; }
+        if(!tvWindow || tvWindow.closed) { alert("ޓީވީ ވިންޑޯ ވަނީ ބަންދުވެފަ!"); return; }
         tvWindow.document.getElementById('jalsaContent').classList.add('hidden');
         
         const logo = tvWindow.document.getElementById('logoWrap');
@@ -1149,7 +1155,7 @@
 
         setTimeout(() => doc.getElementById('card').classList.add('active'), 300);
         stopVideo(); 
-        document.getElementById('statusMsg').innerText = "LIVE: " + document.getElementById('nE').value;
+        document.getElementById('statusMsg').innerText = "ލައިވް: " + document.getElementById('nE').value;
         lastActiveState = 'card'; 
     }
 
@@ -1157,27 +1163,27 @@
         if(!tvWindow || tvWindow.closed) return;
         showJalsaScreen();
         stopVideo();
-        document.getElementById('statusMsg').innerText = "CLEARED";
+        document.getElementById('statusMsg').innerText = "ސްކްރީން ހުސްކުރެވިއްޖެ";
     }
 
     function playLocalVideo() {
-        if(!tvWindow || tvWindow.closed) { alert("TV Closed!"); return; }
+        if(!tvWindow || tvWindow.closed) { alert("ޓީވީ ވިންޑޯ ވަނީ ބަންދުވެފަ!"); return; }
         tvWindow.document.getElementById('jalsaContent').classList.add('hidden');
         tvWindow.document.getElementById('card').classList.remove('active');
 
         const file = document.getElementById('videoLocal').files[0];
-        if(!file) { alert("Select video!"); return; }
+        if(!file) { alert("ވީޑިއޯ ފައިލެއް ނަގާ!"); return; }
         const url = URL.createObjectURL(file);
         
         const vl = tvWindow.document.getElementById('videoLayer');
         vl.innerHTML = `<video id="mainVid" src="${url}" autoplay controls style="width:100%;height:100%;"></video>`;
         vl.style.display = 'flex';
-        setTimeout(() => { const v = tvWindow.document.getElementById('mainVid'); if(v) v.play().catch(e => { alert("Click TV screen to enable audio."); }); }, 100);
-        document.getElementById('statusMsg').innerText = "VIDEO PLAYING";
+        setTimeout(() => { const v = tvWindow.document.getElementById('mainVid'); if(v) v.play().catch(e => { alert("އޯޑިއޯ ޖެއްސުމަށް ޓީވީ ސްކްރީނަށް ކްލިކް ކޮށްލައްވާ."); }); }, 100);
+        document.getElementById('statusMsg').innerText = "ވީޑިއޯ ޕްލޭ ވަނީ";
     }
 
     function playYoutube() {
-        if(!tvWindow || tvWindow.closed) { alert("TV Closed!"); return; }
+        if(!tvWindow || tvWindow.closed) { alert("ޓީވީ ވިންޑޯ ވަނީ ބަންދުވެފަ!"); return; }
         tvWindow.document.getElementById('jalsaContent').classList.add('hidden');
         tvWindow.document.getElementById('card').classList.remove('active');
 
@@ -1199,7 +1205,7 @@
         const vl = tvWindow.document.getElementById('videoLayer');
         vl.innerHTML = `<iframe id="ytFrame" src="https://www.youtube.com/embed/${videoId}?autoplay=1&controls=0&rel=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen style="width:100%;height:100%;"></iframe>`;
         vl.style.display = 'flex';
-        document.getElementById('statusMsg').innerText = "YOUTUBE PLAYING";
+        document.getElementById('statusMsg').innerText = "ޔޫޓިއުބް ޕްލޭ ވަނީ";
     }
     
     function openYTPopup() {
@@ -1232,7 +1238,7 @@
                 if(cols[1]) document.getElementById('jLine2').value = cols[1].trim();
                 if(cols[2]) document.getElementById('jLine3').value = cols[2].trim();
                 if(cols[3]) document.getElementById('jLine4').value = cols[3].trim();
-                updateJalsaText(); alert("Titles Loaded!");
+                updateJalsaText(); alert("ޓައިޓްލްތައް ލޯޑް ވެއްޖެ!");
             }
         }; r.readAsText(file);
     };
@@ -1246,7 +1252,7 @@
             newFont.load().then(f => {
                 document.fonts.add(f);
                 document.querySelectorAll('.font-dv, input, h2').forEach(el => el.style.fontFamily = "'Faruuma', serif");
-                alert("Font Loaded! Re-open TV.");
+                alert("ފޮންޓް ލޯޑް ވެއްޖެ! ޓީވީ އަލުން ހުޅުވާލައްވާ.");
             });
         }; r.readAsDataURL(file);
     };
@@ -1257,7 +1263,7 @@
         r.onload = evt => {
             currentJalsaBgData = evt.target.result;
             currentJalsaBgType = file.type.startsWith('video') ? 'video' : 'image';
-            updateJalsaBackground(); alert("Background Set");
+            updateJalsaBackground(); alert("ބެކްގްރައުންޑް ސެޓްވެއްޖެ");
         }; r.readAsDataURL(file);
     };
 
@@ -1274,7 +1280,7 @@
         r.onload = evt => {
             customBorderData = evt.target.result;
             if(designState.cBorder === 'custom') liveUpdate('cBorder', 'custom');
-            alert("Custom Border Loaded!");
+            alert("ކަސްޓަމް ބޯޑަރ ލޯޑް ވެއްޖެ!");
         }; r.readAsDataURL(e.target.files[0]);
     };
 
@@ -1293,7 +1299,7 @@
                     });
                 }
             });
-            filterList(); alert("Loaded: " + students.length);
+            filterList(); alert("ލޯޑް ވީ: " + students.length + " ދަރިވަރުން");
         }; r.readAsText(e.target.files[0]);
     };
 
@@ -1305,7 +1311,7 @@
             let nameNoExt = name.split('.').slice(0, -1).join('.');
             if(nameNoExt) photoFiles[nameNoExt] = f; 
         }
-        alert("Photos: " + e.target.files.length);
+        alert("ފޮޓޯތައް: " + e.target.files.length);
     };
 
     function processPhoto(file, cb) {
@@ -1319,7 +1325,7 @@
              processPhoto(input.files[0], d => {
                 currentPhotoData = d;
                 document.getElementById('previewImg').src = d;
-                document.getElementById('pStat').innerText = "Manual";
+                document.getElementById('pStat').innerText = "މެނުއަލް";
                 document.getElementById('pStat').style.color = "blue";
              });
         }
@@ -1347,14 +1353,14 @@
         let stat = document.getElementById('pStat');
         let foundFile = photoFiles[pName]; 
         if(foundFile) {
-            stat.innerText = "Loading...";
+            stat.innerText = "ލޯޑް ވަނީ...";
             processPhoto(foundFile, d => {
                 currentPhotoData = d; prev.src = d; 
-                stat.innerText = "✅ Found"; stat.style.color="green";
+                stat.innerText = "✅ ލިބިއްޖެ"; stat.style.color="green";
             });
         } else {
             currentPhotoData = null; prev.src = "https://via.placeholder.com/150"; 
-            stat.innerText = "❌ Missing"; stat.style.color="red";
+            stat.innerText = "❌ ނުފެނުނު"; stat.style.color="red";
         }
     }
 
