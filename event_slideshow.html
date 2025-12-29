@@ -4,7 +4,16 @@
     <meta charset="UTF-8">
     <title>ރޯޔަލް ގުރެޖުއޭޝަން (V17.0 - އަލްޓިމޭޓް ޕްރޯ)</title>
     <style>
-        /* --- GLOBAL VARIABLES --- */
+        /* 1. ގޫގުލް ފޮންޓް އިމްޕޯޓް (މިއީ ފަރުމާ ފައިލް ނެތަސް މަސައްކަތް ކުރާނެ ގޮތް) */
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Thaana:wght@400;700&display=swap');
+
+        /* 2. ފަރުމާ ފޮންޓް (ސަރވަރގައި ފައިލް ހުރިނަމަ ނަގާނެ) */
+        @font-face {
+            font-family: 'Faruuma';
+            src: local('Faruuma'), local('Faruumaa'), url('Fonts/faruuma.ttf') format('truetype');
+        }
+
+        /* --- GLOBAL & PRO PALETTE --- */
         :root {
             --royal-accent: #c5a059;      
             --royal-blue-dark: #001b3d;   
@@ -15,19 +24,10 @@
             --panel-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
         }
 
-        /* 1. LOCAL FONT (If file exists) */
-        @font-face {
-            font-family: 'Faruuma';
-            src: local('Faruuma'), local('Faruumaa'), url('Fonts/faruuma.ttf') format('truetype');
-        }
-        
-        /* 2. GOOGLE FONT (Backup for Dhivehi) */
-        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Thaana:wght@400;700&display=swap');
-
-        /* 3. UNIVERSAL FONT STACK */
-        /* ތިރީގައިވާ ކޯޑުން، ފަރުމާ ނެތިއްޔާ އެމްވީ ބޮލީ، އެ ނެތިއްޔާ ގޫގުލް ފޮންޓް ނަގާނެ */
-        * {
-            font-family: 'Faruuma', 'MV Boli', 'Noto Sans Thaana', 'Times New Roman', serif;
+        /* މުޅި ސިސްޓަމްގެ ފޮންޓް ސެޓިންގްސް */
+        /* ތަރުތީބު: ފަރުމާ > އެމްވީ ބޮލީ > ނޯޓޯ ސާންސް (ގޫގުލް) */
+        body, button, input, select, textarea, h1, h2, h3, p, span, div {
+            font-family: 'Faruuma', 'MV Boli', 'Noto Sans Thaana', 'Times New Roman', serif !important;
         }
 
         body {
@@ -53,7 +53,6 @@
             max-width: 600px; width: 90%;
         }
         
-        /* SPECIFIC STYLING FOR INPUT & BUTTON TO FORCE FONT */
         .sec-input { 
             padding: 15px; 
             font-size: 24px; 
@@ -64,18 +63,17 @@
             color: #000; 
             border-radius:5px; 
             border:none; 
-            direction: rtl; /* Forces Right-to-Left typing */
             
-            /* FORCE FONT FAMILY IMPORTANCE */
+            /* ދިވެހި ބަހަށް ޚާއްޞަ ސެޓިންގްސް */
+            direction: rtl; 
             font-family: 'Faruuma', 'MV Boli', 'Noto Sans Thaana', serif !important;
         }
         
-        .sec-input::placeholder {
-            color: #555;
-            font-family: 'Faruuma', 'MV Boli', 'Noto Sans Thaana', serif !important;
-            opacity: 0.8;
-        }
-        
+        /* ޕްލޭސްހޯލްޑަރ ޓެކްސްޓް ސްޓައިލް */
+        ::-webkit-input-placeholder { font-family: 'Faruuma', 'MV Boli', 'Noto Sans Thaana', serif !important; color: #555; }
+        :-ms-input-placeholder { font-family: 'Faruuma', 'MV Boli', 'Noto Sans Thaana', serif !important; color: #555; }
+        ::placeholder { font-family: 'Faruuma', 'MV Boli', 'Noto Sans Thaana', serif !important; color: #555; }
+
         .sec-btn { 
             margin-top: 25px; 
             padding: 15px 50px; 
@@ -87,10 +85,16 @@
             font-weight: bold; 
             border-radius:8px; 
             
-            /* FORCE FONT FAMILY IMPORTANCE */
+            /* ފޮންޓް މަޖުބޫރު ކުރުން */
             font-family: 'Faruuma', 'MV Boli', 'Noto Sans Thaana', serif !important;
         }
         .sec-btn:hover { background: #fff; color: var(--royal-blue-mid); }
+
+        /* --- UI LAYOUT --- */
+        .main-layout { 
+            display: none; gap: 20px; height: 100vh; width: 100vw; 
+            padding: 15px; box-sizing: border-box; 
+        }
 
         /* --- TOP BANNER --- */
         .royal-banner {
@@ -103,15 +107,8 @@
             margin-bottom: 10px;
             border-radius: 8px;
         }
-        .banner-main { font-family: 'Times New Roman', serif; font-weight: bold; font-size: 14px; letter-spacing: 2px; color: #a0c4ff; display: block; }
+        .banner-main { font-family: 'Times New Roman', serif !important; font-weight: bold; font-size: 14px; letter-spacing: 2px; color: #a0c4ff; display: block; }
         .banner-sub { font-size: 24px; color: var(--royal-accent); text-shadow: 0 2px 4px #000; display: block; margin-top: 5px; }
-
-
-        /* --- UI LAYOUT --- */
-        .main-layout { 
-            display: none; gap: 20px; height: 100vh; width: 100vw; 
-            padding: 15px; box-sizing: border-box; 
-        }
 
         /* SIDEBAR */
         .sidebar {
@@ -158,7 +155,6 @@
         ::-webkit-scrollbar-thumb { background: var(--royal-blue-mid); border-radius: 6px; }
 
         /* --- STYLING CONTROLS --- */
-        
         h2, h3 { margin: 5px 0; }
         label { display: block; font-weight: bold; font-size: 16px; margin-bottom: 5px; color: var(--royal-blue-dark); }
         
@@ -997,10 +993,11 @@
         <html lang="dv" dir="rtl">
         <head>
             <style>
+                @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Thaana:wght@400;700&display=swap');
                 @font-face { font-family: 'Faruuma'; src: ${fontCSS}; }
-                @import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&display=swap');
                 :root { --theme-color: ${designState.bdColor}; }
-                body { margin:0; overflow:hidden; background:#000; font-family:'Faruuma', serif; user-select:none; }
+                body, h1, h2, div, span { font-family: 'Faruuma', 'MV Boli', 'Noto Sans Thaana', serif !important; }
+                body { margin:0; overflow:hidden; background:#000; user-select:none; }
                 #fsBtn { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); z-index:9999; padding:20px; font-size:20px; cursor:pointer; background:var(--theme-color); border:2px solid #fff; }
                 
                 #bgLayer { position:fixed; top:0; left:0; width:100%; height:100%; z-index:0; transition: background 0.5s ease; }
@@ -1013,7 +1010,7 @@
                 #mainTitleWrap { width: 100%; text-align: ${designState.mtAlign}; } 
                 #subTitleWrap { width: 100%; text-align: ${designState.stAlign}; } 
 
-                .jalsa-text { font-family: 'Faruuma', 'Amiri', serif; direction: rtl; display:block; width:100%; }
+                .jalsa-text { direction: rtl; display:block; width:100%; }
                 .main-title { font-size: ${designState.mtSize}em; color: ${designState.mtColor}; text-shadow: 2px 2px 10px black; margin-bottom: 20px; border-bottom: 3px solid ${designState.mtColor}; padding-bottom:10px; }
                 .sub-title { font-size: ${designState.stSize}em; color: ${designState.stColor}; text-shadow: 1px 1px 5px black; margin: 8px 0; }
 
@@ -1039,7 +1036,7 @@
                 .b0 { border: none; background: transparent !important; box-shadow: none; }
                 .custom { border: none !important; box-shadow: none !important; }
 
-                .font-dv { font-family: 'Faruuma', 'Amiri', serif; }
+                .font-dv { font-family: 'Faruuma', 'MV Boli', 'Noto Sans Thaana', serif; }
                 .font-en { font-family: 'Times New Roman', serif; direction:ltr; }
                 h1 { font-size: 5em; margin:0; color:#fff; line-height:1.1; }
                 h2 { font-size: 3em; margin:10px 0; color:var(--theme-color); text-transform:uppercase; border-bottom:2px solid var(--theme-color); display:inline-block; width:100%; text-align:inherit; }
