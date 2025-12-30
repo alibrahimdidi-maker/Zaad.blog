@@ -444,14 +444,149 @@
     </div>
 </div>
 
-            <div class="widget">
-                <h3 class="widget-title"><i class="fas fa-graduation-cap"></i> ކަސްޓަމަރުންގެ ސަމާލުކަމަށް!</h3>
-                <ul class="side-links">
-                    <li><a href="https://portal.academyzaad.com" target="_blank" contenteditable="false"><i class="fas fa-user-lock"></i> ސްޓޫޑެންޓް ޕޯޓަލް</a></li>
-                    <li><a href="#" contenteditable="false"><i class="fas fa-calendar-alt"></i> ޕްރޮގްރާމްތަކުގެ ތާވަލު</a></li>
-                    <li><a href="#" contenteditable="false"><i class="fas fa-file-invoice"></i> ޕްރޮގްރާމްތަކުގެ ނަތީޖާ</a></li>
-                </ul>
-            </div>
+            <div class="widget" style="padding:0; border:none; background:transparent; box-shadow:none;">
+    <style>
+        .royal-arabic-card {
+            position: relative;
+            width: 100%;
+            height: 380px; /* Adjust height if needed */
+            background: radial-gradient(circle at center, #0C2D48 0%, #000000 100%);
+            border: 2px solid #B49658;
+            border-radius: 12px;
+            overflow: hidden;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        /* Animated Spotlight Effect */
+        .spotlight-beam {
+            position: absolute;
+            top: -50%; left: -50%;
+            width: 200%; height: 200%;
+            background: radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.15) 0%, transparent 60%);
+            animation: swing-light 6s infinite ease-in-out;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* Background Pattern/GIF */
+        .arabic-bg {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: url('https://i.pinimg.com/originals/3d/08/e0/3d08e03cb40252526fee20e6a67f96b7.gif'); 
+            background-size: cover;
+            background-position: center;
+            opacity: 0.15;
+            z-index: 0;
+        }
+
+        .ad-content {
+            position: relative;
+            z-index: 2;
+            padding: 20px;
+        }
+
+        .ad-crown {
+            font-size: 2em;
+            color: #B49658;
+            margin-bottom: 10px;
+            animation: float-crown 3s infinite ease-in-out;
+        }
+
+        .ad-headline {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8em;
+            color: #ffffff;
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 15px;
+            text-shadow: 0 0 10px #B49658;
+        }
+
+        .ad-features {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 20px 0;
+            text-align: center;
+        }
+
+        .ad-features li {
+            font-family: 'Roboto', sans-serif;
+            color: #ddd;
+            font-size: 0.95em;
+            margin-bottom: 8px;
+            border-bottom: 1px solid rgba(180, 150, 88, 0.3);
+            padding-bottom: 5px;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .ad-features i { color: #B49658; margin-right: 8px; }
+
+        .ad-btn {
+            background: linear-gradient(90deg, #B49658, #F9D976, #B49658);
+            background-size: 200% auto;
+            color: #000;
+            font-family: 'Playfair Display', serif;
+            font-weight: bold;
+            text-decoration: none;
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-size: 1.1em;
+            transition: 0.5s;
+            box-shadow: 0 0 20px rgba(180, 150, 88, 0.4);
+            animation: shimmer-btn 3s infinite linear;
+            display: inline-block;
+        }
+        .ad-btn:hover {
+            transform: scale(1.05);
+            background-position: right center;
+        }
+
+        /* Animations */
+        @keyframes swing-light {
+            0% { transform: rotate(-15deg) translateY(0); opacity: 0.5; }
+            50% { transform: rotate(15deg) translateY(-20px); opacity: 0.8; }
+            100% { transform: rotate(-15deg) translateY(0); opacity: 0.5; }
+        }
+        @keyframes float-crown {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        @keyframes shimmer-btn {
+            to { background-position: 200% center; }
+        }
+    </style>
+
+    <div class="royal-arabic-card">
+        <div class="spotlight-beam"></div>
+        
+        <div class="arabic-bg"></div>
+
+        <div class="ad-content">
+            <div class="ad-crown"><i class="fas fa-crown"></i></div>
+            
+            <h2 class="ad-headline">
+                Master Arabic<br>
+                <span style="color:#B49658; font-size:0.8em;">Fluently & Confidently</span>
+            </h2>
+
+            <ul class="ad-features">
+                <li><i class="fas fa-laptop-house"></i> 100% Online Classes</li>
+                <li><i class="fas fa-users"></i> Group & 1-on-1 Sessions</li>
+                <li><i class="fas fa-door-open"></i> Join Anytime - Flexible</li>
+            </ul>
+
+            <a href="https://zaad-academy.com/arabic-course" class="ad-btn">
+                Enroll Now <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+    </div>
+</div>
 
             <div class="widget">
                 <h3 class="widget-title"><i class="fas fa-star"></i> ކޮންސްލްޓެންސީ ސެޝަންތައް</h3>
