@@ -4,12 +4,11 @@
     <meta charset="UTF-8">
     <title>نظام التخرج الملكي (V17.0 - النسخة الاحترافية)</title>
     <style>
-        /* --- 1. FONTS SETUP --- */
-        
-        /* Arabic Font (Primary) */
+        /* 1. Arabic Font (Primary) */
         @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap');
-
-        /* Faruuma Font (Retained for mixed usage if needed) */
+        
+        /* 2. English/Dhivehi Fonts (Backup/Mixed use) */
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
         @font-face {
             font-family: 'Faruuma';
             src: local('Faruuma'), local('Faruumaa'), url('Fonts/faruuma.ttf') format('truetype');
@@ -33,7 +32,8 @@
             background: linear-gradient(135deg, #000c1a 0%, #00281c 100%);
             overflow: hidden; height: 100vh; width: 100vw;
             color: #333;
-            font-family: 'Cairo', 'Segoe UI', sans-serif; /* Arabic Font Priority */
+            /* Arabic Font Priority */
+            font-family: 'Cairo', 'Segoe UI', sans-serif;
         }
 
         /* --- LANGUAGE SWITCHER TABS --- */
@@ -43,6 +43,7 @@
             margin-bottom: 10px; 
             justify-content: center; 
             direction: ltr !important; 
+            flex-shrink: 0;
         }
         .lang-btn {
             flex: 1; 
@@ -61,17 +62,14 @@
         .lang-btn:hover { background: var(--royal-accent); color: #000; }
         .lang-btn.active { background: var(--royal-blue-mid); border: 1px solid #fff; pointer-events: none; }
 
-        /* --- SECURITY OVERLAY (ENGLISH - Standard) --- */
+        /* --- SECURITY OVERLAY (Keep English/Universal) --- */
         #securityOverlay {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
             background: rgba(0,0,0,0.98); z-index: 99999;
             display: flex; justify-content: center; align-items: center;
-            direction: ltr !important; /* Passcodes usually typed LTR */
+            direction: ltr !important; /* Passcodes are LTR */
             text-align: center;
         }
-
-        /* Force English font for Security Box */
-        #securityOverlay * { font-family: sans-serif !important; }
 
         .sec-box { 
             background: linear-gradient(135deg, var(--royal-blue-dark), var(--royal-green)); 
@@ -84,14 +82,14 @@
         .sec-input { 
             padding: 15px; font-size: 24px; text-align: center; width: 100%; 
             margin-top: 20px; background: #fff; color: #000; 
-            border-radius:5px; border:none; 
+            border-radius:5px; border:none; font-family: 'Roboto', sans-serif;
         }
         
         .sec-btn { 
             margin-top: 25px; padding: 15px 50px; font-size: 20px; 
             background: var(--royal-blue-mid); color: #fff; 
             border: 1px solid #fff; cursor: pointer; font-weight: bold; 
-            border-radius:8px; text-transform: uppercase;
+            border-radius:8px; text-transform: uppercase; font-family: 'Roboto', sans-serif;
         }
         .sec-btn:hover { background: #fff; color: var(--royal-blue-mid); }
 
@@ -101,14 +99,13 @@
             padding: 15px; box-sizing: border-box; 
         }
 
-        /* SIDEBAR */
+        /* SIDEBAR (SCROLLABLE) */
         .sidebar {
             flex: 0 0 360px; 
             background: #f8fbff; 
             padding: 15px; border-radius: 12px;
             display: flex; flex-direction: column; height: 100%; 
-            /* Improved scrolling for smaller screens */
-            overflow-y: auto; 
+            overflow-y: auto; /* Allow scrolling for Arabic interface */
             box-shadow: var(--panel-shadow);
             border: 3px solid var(--royal-blue-dark);
         }
@@ -117,18 +114,22 @@
         
         /* DEVELOPER CREDITS */
         .dev-credits {
-            margin-top: auto; text-align: center; font-size: 11px; color: #555;
+            margin-top: 20px; text-align: center; font-size: 11px; color: #555;
             background: #e3f2fd; padding: 10px; border-radius: 6px;
             border: 1px solid #bbdefb; font-weight: bold; line-height: 1.4;
+            flex-shrink: 0;
         }
         .dev-name { color: var(--royal-blue-dark); font-size: 13px; display: block; margin-bottom: 2px; }
         .company-name { color: var(--royal-green); font-size: 10px; display: block; letter-spacing: 0.5px; }
 
         /* EDITOR (RIGHT) */
         .editor {
-            flex: 1; background: #fff; padding: 25px; border-radius: 12px;
+            flex: 1; 
+            background: #fff; 
+            padding: 25px; border-radius: 12px;
             display: flex; flex-direction: column; height: 100%; overflow-y: auto; 
-            position: relative; box-shadow: var(--panel-shadow);
+            position: relative;
+            box-shadow: var(--panel-shadow);
             border: 3px solid var(--royal-green);
         }
 
@@ -150,14 +151,21 @@
 
         /* INPUTS */
         input[type="text"], textarea, select { 
-            width: 100%; padding: 10px; border: 1px solid var(--input-border); 
-            border-radius: 6px; background: var(--input-bg); color: #000;
-            margin-bottom: 8px; font-size: 15px; font-family: 'Cairo', sans-serif;
+            width: 100%; padding: 10px; 
+            border: 1px solid var(--input-border); 
+            border-radius: 6px; 
+            background: var(--input-bg);
+            color: #000;
+            margin-bottom: 8px; 
+            font-size: 15px;
+            font-family: 'Cairo', sans-serif;
             box-sizing: border-box; transition: all 0.3s;
         }
         input[type="text"]:focus, select:focus, textarea:focus { 
-            border-color: var(--royal-blue-mid); background: #fff;
-            outline: none; box-shadow: 0 0 8px rgba(13, 71, 161, 0.3); 
+            border-color: var(--royal-blue-mid); 
+            background: #fff;
+            outline: none; 
+            box-shadow: 0 0 8px rgba(13, 71, 161, 0.3); 
         }
 
         /* --- SPECIAL STYLING FOR JALSA TITLES --- */
@@ -172,25 +180,32 @@
         }
 
         /* FONT SIZES & ALIGNMENT */
-        .font-dv { font-size: 20px !important; direction: rtl; text-align: right; font-family: 'Faruuma', serif !important; }
-        .eng { font-size: 18px !important; direction: ltr; text-align: left; font-family: sans-serif !important; font-weight: bold; }
+        .font-dv { font-size: 20px !important; direction: rtl; text-align: right; }
+        .eng { font-size: 18px !important; direction: ltr; text-align: left; font-family: 'Roboto', serif !important; font-weight: bold; }
 
         input[type=range] { width: 100%; cursor: pointer; height: 15px; accent-color: var(--royal-blue-mid); margin: 5px 0; }
         input[type=color] { width: 45px; height: 35px; border: 2px solid #fff; border-radius: 6px; cursor: pointer; vertical-align: middle; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
 
         /* --- SETTINGS GROUPS --- */
         .group-box {
-            border: 1px solid #bbdefb; border-radius: 10px;
-            padding: 30px 20px 20px 20px; margin-bottom: 35px; 
-            background: #f1f8e9; position: relative;
+            border: 1px solid #bbdefb;
+            border-radius: 10px;
+            padding: 30px 20px 20px 20px;
+            margin-bottom: 35px; 
+            background: #f1f8e9;
+            position: relative;
             box-shadow: 0 4px 10px rgba(0,0,0,0.05);
         }
         
         .group-title {
             position: absolute; top: -20px; right: 20px;
-            background: var(--royal-blue-dark); color: #fff;
-            padding: 8px 25px; font-size: 16px; font-weight: bold;
-            border-radius: 20px; box-shadow: 0 4px 8px rgba(0,0,0,0.3); z-index: 10;
+            background: var(--royal-blue-dark);
+            color: #fff;
+            padding: 8px 25px; 
+            font-size: 16px; 
+            font-weight: bold;
+            border-radius: 20px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3); z-index: 10;
         }
 
         .design-col { flex: 1; }
@@ -201,7 +216,7 @@
         .launch-btn { 
             background: linear-gradient(to bottom, #d32f2f, #b71c1c);
             color: white; padding: 12px; width: 100%; border: 1px solid #ffcdd2; 
-            border-radius: 6px; margin-bottom: 10px; font-size: 16px; box-shadow: 0 3px 5px rgba(0,0,0,0.2); 
+            border-radius: 6px; margin-bottom: 10px; font-size: 18px; box-shadow: 0 3px 5px rgba(0,0,0,0.2); 
         }
         .launch-btn:hover { filter: brightness(1.1); }
 
@@ -221,7 +236,7 @@
 
         #lockBtn {
             background: #fbc02d; color: #000; padding: 12px; width: 100%; border: 2px solid #fff;
-            border-radius: 8px; margin-bottom: 15px; font-size: 16px; box-shadow: 0 3px 6px rgba(0,0,0,0.2);
+            border-radius: 8px; margin-bottom: 15px; font-size: 18px; box-shadow: 0 3px 6px rgba(0,0,0,0.2);
         }
         #lockBtn.active { background: #c62828; color: white; animation: pulse 2s infinite; }
         @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(198, 40, 40, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(198, 40, 40, 0); } 100% { box-shadow: 0 0 0 0 rgba(198, 40, 40, 0); } }
@@ -237,23 +252,29 @@
         #previewImg { height: 90px; width: 90px; object-fit: cover; border-radius: 50%; border: 3px solid var(--royal-blue-mid); background: #eee; }
         
         .video-panel { background: #e1f5fe; padding: 15px; border-radius: 10px; border: 1px solid #81d4fa; margin-bottom: 20px; }
-        .btn-vid { font-size: 13px; padding: 8px; margin-top: 5px; border:none; border-radius:4px; color:white; width: 100%; cursor: pointer; font-weight:bold; }
+        .btn-vid { font-size: 14px; padding: 8px; margin-top: 5px; border:none; border-radius:4px; color:white; width: 100%; cursor: pointer; font-weight:bold; }
 
         /* --- SYSTEM FILES --- */
         #sidebarFiles {
-            background: #fff; border: 1px solid #90caf9; 
-            border-radius: 8px; padding: 10px;
+            background: #fff; 
+            border: 1px solid #90caf9; 
+            border-radius: 8px; 
+            padding: 10px;
         }
         #sidebarFiles label {
-            font-size: 13px; color: #444; margin-bottom: 3px;
+            font-size: 14px; 
+            color: #444;
+            margin-bottom: 3px;
         }
         #sidebarFiles input[type="file"] {
-            font-size: 12px; padding: 5px; direction: ltr;
+            font-size: 12px;
+            padding: 5px;
+            direction: ltr; /* Keeps filenames readable */
         }
 
         /* --- FULL SCREEN BUTTON --- */
         #cpFsBtn {
-            position: fixed; bottom: 20px; right: 20px; width: 45px; height: 45px; /* RTL placement */
+            position: fixed; bottom: 20px; right: 20px; width: 45px; height: 45px; /* Right side for RTL */
             background: var(--royal-blue-dark); color: #fff; border-radius: 50%;
             border: 2px solid #fff; box-shadow: 0 0 15px rgba(0,0,0,0.5);
             z-index: 1000; font-size: 20px; display: flex; align-items: center; justify-content: center;
@@ -270,10 +291,11 @@
     <div id="securityOverlay">
         <div class="sec-box">
             <h1 style="color:#fff; font-size:45px; margin-bottom:10px; text-shadow:0 2px 5px #000;">Royal Graduation V17.0</h1>
-            <p style="color:#a0c4ff; font-size:16px; margin-bottom:30px;">🔒 PRO EDITION - ENTER LICENSE KEY</p>
+            <p style="color:#a0c4ff; font-size:18px; margin-bottom:30px;">🔒 PRO EDITION - ENTER LICENSE KEY</p>
+            
             <input type="password" id="licenseKey" class="sec-input" placeholder="Enter Key...">
             <button class="sec-btn" onclick="verifyLicense()">AUTHENTICATE</button>
-            <p id="secMsg" style="color:#ff5252; font-size:14px; margin-top:20px; font-weight:bold;"></p>
+            <p id="secMsg" style="color:#ff5252; font-size:16px; margin-top:20px; font-weight:bold;"></p>
         </div>
     </div>
 
@@ -281,8 +303,8 @@
         <div class="sidebar">
             
             <div class="lang-tabs">
-                <a href="event_slideshow.html" class="lang-btn">ދިވެހި</a>
-                <a href="event_slideshow-eng.html" class="lang-btn">English</a>
+                <a href="index.html" class="lang-btn">ދިވެހި</a>
+                <a href="english.html" class="lang-btn">English</a>
                 <a href="#" class="lang-btn active">عربي</a>
             </div>
 
@@ -291,10 +313,10 @@
                 <span class="banner-sub">برنامج إدارة الفعاليات والحفلات</span>
             </div>
 
-            <div id="licenseStatus" style="font-size:11px; color:#0d47a1; text-align:center; margin-bottom:10px; font-weight:bold;"></div>
+            <div id="licenseStatus" style="font-size:13px; color:#0d47a1; text-align:center; margin-bottom:10px; font-weight:bold;"></div>
 
             <button class="launch-btn" onclick="openTV()">🖥️ 1. فتح شاشة العرض (TV)</button>
-            <div id="connStatus" style="font-size:12px; color:red; text-align:center; background:#ffebee; padding:4px; border-radius:4px; margin-bottom:10px; border:1px solid #ffcdd2;">غير متصل</div>
+            <div id="connStatus" style="font-size:14px; color:red; text-align:center; background:#ffebee; padding:4px; border-radius:4px; margin-bottom:10px; border:1px solid #ffcdd2;">غير متصل</div>
 
             <div class="config-btn-row">
                 <button class="conf-btn" onclick="downloadConfig()">⬇ حفظ الإعدادات</button>
@@ -303,7 +325,7 @@
             </div>
 
             <div id="sidebarFiles">
-                <label style="color:#0d47a1; border-bottom:1px solid #e3f2fd; padding-bottom:5px; margin-bottom:8px; font-size:15px; font-weight:bold;">📂 ملفات النظام</label>
+                <label style="color:#0d47a1; border-bottom:1px solid #e3f2fd; padding-bottom:5px; margin-bottom:8px; font-size:16px; font-weight:bold;">📂 ملفات النظام</label>
                 <label>1. قائمة الطلاب (CSV):</label><input type="file" id="csvFile" accept=".csv">
                 <label>2. مجلد الصور:</label><input type="file" id="photoFolder" webkitdirectory directory multiple>
                 <label>3. صورة الشعار:</label><input type="file" id="logoFile" accept="image/*">
@@ -314,6 +336,7 @@
 
             <label style="margin-top:15px; color:#00281c;">🔍 بحث عن طالب:</label>
             <input type="text" id="search" placeholder="اكتب الاسم..." onkeyup="filterList()">
+            
             <select id="stuList" size="10" style="flex-grow:1; border:1px solid #ccc; min-height: 200px;" onchange="loadStudent()"></select>
             
             <div class="dev-credits">
@@ -346,29 +369,29 @@
                 <button class="btn-vid" style="background:#37474f; margin-top:5px; padding:10px;" onclick="stopVideo()">⏹ إيقاف الفيديو</button>
             </div>
 
-            <div id="statusMsg" style="font-weight:bold; color:#00695c; text-align:center; font-size:16px; margin:5px 0;">النظام جاهز</div>
+            <div id="statusMsg" style="font-weight:bold; color:#00695c; text-align:center; font-size:18px; margin:5px 0;">النظام جاهز</div>
 
             <div style="background:#fff; padding:20px; border-radius:10px; border:2px solid #90caf9; margin:15px 0; box-shadow:0 3px 10px rgba(0,0,0,0.05);">
                 <h3 style="margin-top:0; font-size:22px; color:#0d47a1; border-bottom:1px solid #e3f2fd; padding-bottom:5px;">🎓 بيانات الطالب</h3>
                 
                 <div style="margin-bottom: 10px;">
-                    <label style="font-size:12px; color:#555;">الاسم (باللغة المحلية - RTL):</label>
+                    <label style="font-size:14px; color:#555;">الاسم (محلي/عربي - RTL):</label>
                     <input id="nD" class="font-dv" placeholder="الاسم (محلي)" style="width:100%;">
                 </div>
                 
                 <div style="margin-bottom: 15px;">
-                    <label style="font-size:12px; color:#555; text-align:left; display:block; direction:ltr;">Name (English - LTR):</label>
+                    <label style="font-size:14px; color:#555; text-align:left; display:block; direction:ltr;">Name (English - LTR):</label>
                     <input id="nE" class="eng" placeholder="Name (English)" style="width:100%; text-align:left; direction:ltr;">
                 </div>
                 
-                <div class="row" style="display:flex; gap:10px;">
-                    <div class="col" style="flex:1"><input id="fD" class="font-dv" placeholder="تفاصيل 1 (محلي)"></div>
-                    <div class="col" style="flex:1"><input id="fE" class="eng" placeholder="Detail 1 (English)" style="direction:ltr; text-align:left;"></div>
+                <div class="row" style="display:flex; gap:10px; width:100%;">
+                    <div class="col" style="flex:1;"><input id="fD" class="font-dv" placeholder="تفاصيل 1 (محلي)" style="width:100%;"></div>
+                    <div class="col" style="flex:1;"><input id="fE" class="eng" placeholder="Detail 1 (English)" style="width:100%; direction:ltr; text-align:left;"></div>
                 </div>
                 
-                <div class="row" style="display:flex; gap:10px;">
-                    <div class="col" style="flex:1"><input id="cD" class="font-dv" placeholder="تفاصيل 2 (محلي)"></div>
-                    <div class="col" style="flex:1"><input id="cE" class="eng" placeholder="Detail 2 (English)" style="direction:ltr; text-align:left;"></div>
+                <div class="row" style="display:flex; gap:10px; width:100%; margin-top:5px;">
+                    <div class="col" style="flex:1;"><input id="cD" class="font-dv" placeholder="تفاصيل 2 (محلي)" style="width:100%;"></div>
+                    <div class="col" style="flex:1;"><input id="cE" class="eng" placeholder="Detail 2 (English)" style="width:100%; direction:ltr; text-align:left;"></div>
                 </div>
                 
                 <textarea id="cm" rows="2" class="font-dv" placeholder="معلومات إضافية..."></textarea>
@@ -376,15 +399,15 @@
                 <div class="preview-container">
                     <div><img id="logoPreview" alt="Logo" style="height:50px; opacity:0.5;"></div>
                     <div style="text-align:center;">
-                        <span id="pStat" style="font-size:12px; font-weight:bold; color:#777;">لا توجد صورة</span><br>
+                        <span id="pStat" style="font-size:14px; font-weight:bold; color:#777;">لا توجد صورة</span><br>
                         <img id="previewImg" src="https://via.placeholder.com/150">
-                        <br><button style="font-size:11px; padding:3px 8px; margin-top:5px; background:#607d8b; color:#fff; border:none; border-radius:4px;" onclick="document.getElementById('singlePhoto').click()">تغيير</button>
+                        <br><button style="font-size:12px; padding:3px 8px; margin-top:5px; background:#607d8b; color:#fff; border:none; border-radius:4px;" onclick="document.getElementById('singlePhoto').click()">تغيير</button>
                         <input type="file" id="singlePhoto" accept="image/*" style="display:none" onchange="manualPhoto(this)">
                     </div>
                 </div>
             </div>
 
-            <div style="text-align:center; font-size:13px; color:#777; margin:20px 0; font-weight:bold; letter-spacing:1px; background:#eceff1; padding:5px; border-radius:20px;">⬇ إعدادات التصميم والتحكم ⬇</div>
+            <div style="text-align:center; font-size:15px; color:#777; margin:20px 0; font-weight:bold; letter-spacing:1px; background:#eceff1; padding:5px; border-radius:20px;">⬇ إعدادات التصميم والتحكم ⬇</div>
 
             <div id="designPanel">
                 
@@ -417,17 +440,17 @@
 
                         <span class="d-label">3. موقع البطاقة:</span>
                         <div style="display:flex; gap:10px; align-items:center; background:#fff; padding:10px; border-radius:8px; border:1px solid #ccc;">
-                            <span style="font-size:12px; font-weight:bold;">أفقي (X):</span>
+                            <span style="font-size:14px; font-weight:bold;">أفقي (X):</span>
                             <input type="range" id="cardXRange" min="-600" max="600" value="0" oninput="liveUpdate('cardX', this.value)">
-                            <span style="font-size:12px; font-weight:bold;">عمودي (Y):</span>
+                            <span style="font-size:14px; font-weight:bold;">عمودي (Y):</span>
                             <input type="range" id="cardYRange" min="-450" max="450" value="0" oninput="liveUpdate('cardY', this.value)">
                         </div>
 
                         <span class="d-label">4. حجم البطاقة والتخطيط:</span>
                         <div style="display:flex; gap:15px; align-items:center;">
-                            <span style="font-size:12px; font-weight:bold;">العرض:</span>
+                            <span style="font-size:14px; font-weight:bold;">العرض:</span>
                             <input type="range" id="cardWRange" min="50" max="100" value="90" oninput="liveUpdate('cardW', this.value)">
-                            <span style="font-size:12px; font-weight:bold;">الارتفاع:</span>
+                            <span style="font-size:14px; font-weight:bold;">الارتفاع:</span>
                             <input type="range" id="cardHRange" min="50" max="100" value="80" oninput="liveUpdate('cardH', this.value)">
                         </div>
                         <div style="display:flex; gap:10px; margin-top:8px;">
@@ -483,12 +506,12 @@
                     
                     <span class="d-label">3. موقع الصورة والتقريب:</span>
                     <div style="display:flex; gap:10px; align-items:center;">
-                        <span style="font-size:12px; width:50px;">تقريب:</span>
+                        <span style="font-size:14px; width:50px;">تقريب:</span>
                         <input type="range" id="pSizeRange" min="150" max="800" value="260" oninput="liveUpdate('pSize', this.value)">
                         <select id="pVisSel" onchange="liveUpdate('pVis', this.value)" style="width:100px;"><option value="show">إظهار</option><option value="hide">إخفاء</option></select>
                     </div>
                     <div style="display:flex; gap:10px; margin-top:8px; align-items:center;">
-                        <span style="font-size:12px; width:50px;">تحريك:</span>
+                        <span style="font-size:14px; width:50px;">تحريك:</span>
                         <input type="range" id="pXRange" min="-600" max="600" value="0" title="X" oninput="liveUpdate('pX', this.value)">
                         <input type="range" id="pYRange" min="-400" max="400" value="0" title="Y" oninput="liveUpdate('pY', this.value)">
                     </div>
@@ -499,12 +522,12 @@
                     
                     <span class="d-label">1. حجم ولون اسم الطالب:</span>
                     <div style="display:flex; gap:10px; align-items:center; margin-bottom:8px;">
-                        <span style="font-size:12px; width:60px;">محلي:</span>
+                        <span style="font-size:14px; width:60px;">محلي:</span>
                         <input type="range" min="2" max="10" step="0.1" value="6.5" oninput="liveUpdate('tnDSize', this.value)">
                         <input type="color" value="#ffffff" oninput="liveUpdate('tnDColor', this.value)">
                     </div>
                     <div style="display:flex; gap:10px; align-items:center; margin-bottom:8px;">
-                        <span style="font-size:12px; width:60px;">إنجليزي:</span>
+                        <span style="font-size:14px; width:60px;">إنجليزي:</span>
                         <input type="range" min="1" max="8" step="0.1" value="4.5" oninput="liveUpdate('tnESize', this.value)">
                         <input type="color" value="#ffffff" oninput="liveUpdate('tnEColor', this.value)">
                     </div>
@@ -519,12 +542,12 @@
 
                     <span class="d-label">2. خطوط التفاصيل:</span>
                     <div style="display:flex; gap:10px; align-items:center; margin-bottom:8px;">
-                        <span style="font-size:12px; width:60px;">سطر 1:</span>
+                        <span style="font-size:14px; width:60px;">سطر 1:</span>
                         <input type="range" min="1" max="6" step="0.1" value="2.5" oninput="liveUpdate('tfDSize', this.value)">
                         <input type="color" value="#fff9c4" oninput="liveUpdate('tfDColor', this.value)">
                     </div>
                     <div style="display:flex; gap:10px; align-items:center;">
-                        <span style="font-size:12px; width:60px;">سطر 2:</span>
+                        <span style="font-size:14px; width:60px;">سطر 2:</span>
                         <input type="range" min="1" max="6" step="0.1" value="3.0" oninput="liveUpdate('tcDSize', this.value)">
                         <input type="color" value="#fff9c4" oninput="liveUpdate('tcDColor', this.value)">
                     </div>
@@ -609,7 +632,7 @@
                         <span style="font-size:12px;">تحريك:</span>
                         <input type="range" id="logoXRange" min="-1200" max="1200" value="0" oninput="liveUpdate('logoX', this.value)" title="X">
                         <input type="range" id="logoYRange" min="0" max="900" value="40" oninput="liveUpdate('logoY', this.value)" title="Y">
-                        <span style="font-size:12px;">الحجم:</span>
+                        <span style="font-size:14px;">الحجم:</span>
                         <input type="range" id="lSizeRange" min="50" max="500" value="145" oninput="liveUpdate('lSize', this.value)" title="Size">
                     </div>
                 </div>
@@ -1290,7 +1313,7 @@
                 let c = l.split(',');
                 if(c.length>1) {
                     students.push({
-                        nD: c[0]?.trim(), nE: c[1]?.trim(), cD: c[2]?.trim(), cE: c[3]?.trim(), 
+                        nD: c[0]?.trim(), nE: c[1]?.trim(), cD: c[2]?.trim(), cE: c[3]?.trim(), 
                         fD: c[4]?.trim(), fE: c[5]?.trim(), cm: c[6]?.trim(), ph: c[7]?.trim()
                     });
                 }
@@ -1303,9 +1326,9 @@
         photoFiles = {};
         for(let f of e.target.files) {
             let name = f.name.toLowerCase();
-            photoFiles[name] = f; 
+            photoFiles[name] = f; 
             let nameNoExt = name.split('.').slice(0, -1).join('.');
-            if(nameNoExt) photoFiles[nameNoExt] = f; 
+            if(nameNoExt) photoFiles[nameNoExt] = f; 
         }
         alert("Photos: " + e.target.files.length);
     };
@@ -1347,15 +1370,15 @@
         let pName = s.ph ? s.ph.trim().toLowerCase() : "";
         let prev = document.getElementById('previewImg');
         let stat = document.getElementById('pStat');
-        let foundFile = photoFiles[pName]; 
+        let foundFile = photoFiles[pName]; 
         if(foundFile) {
             stat.innerText = "Loading...";
             processPhoto(foundFile, d => {
-                currentPhotoData = d; prev.src = d; 
+                currentPhotoData = d; prev.src = d; 
                 stat.innerText = "✅ Found"; stat.style.color="green";
             });
         } else {
-            currentPhotoData = null; prev.src = "https://via.placeholder.com/150"; 
+            currentPhotoData = null; prev.src = "https://via.placeholder.com/150"; 
             stat.innerText = "❌ Missing"; stat.style.color="red";
         }
     }
@@ -1369,7 +1392,4 @@
     }
 </script>
 </body>
-
 </html>
-
-
