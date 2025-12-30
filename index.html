@@ -589,16 +589,169 @@
 </div>   
     
 
-            <div class="widget">
-                <h3 class="widget-title"><i class="fas fa-star"></i> ކޮންސްލްޓެންސީ ސެޝަންތައް</h3>
-                <img src="https://images.unsplash.com/photo-1546410531-bb4caa6b424d?w=300" onclick="changeImage(this)" style="margin-bottom:10px;">
-                <div contenteditable="false">
-                    <strong>ޢުމްރާ،ޙައްޖުގެ އަޅުކަމަށް ދާފަރާތްތަކގެ ޢަރަބި ކްލާސް</strong><br>
-                    މުއްދަތު: 3 މަސް<br>
-                    ފީ: 500ރ<br>
-                    <a href="courses.html" style="color:var(--royal-gold); font-weight:bold;">އިތުރަށް ބައްލަވާ...</a>
-                </div>
+            <div class="widget" style="padding:0; border:none; background:transparent; box-shadow:none;">
+    <style>
+        .royal-web-card {
+            position: relative;
+            width: 100%;
+            min-height: 400px;
+            background-color: #051626; /* Deep Royal Blue Background */
+            border: 3px solid #B49658; /* Royal Gold Border */
+            border-radius: 15px;
+            overflow: hidden;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.6);
+            transition: transform 0.3s ease;
+        }
+        .royal-web-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 50px rgba(180, 150, 88, 0.3); /* Gold Glow on Hover */
+        }
+
+        /* Animated Background GIF */
+        .web-bg-anim {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            /* High quality Tech/Network GIF */
+            background-image: url('https://i.pinimg.com/originals/24/a5/3d/24a53d9221199a6d9134a66a157c917b.gif'); 
+            background-size: cover;
+            background-position: center;
+            opacity: 0.2; /* Darkened to make text readable */
+            z-index: 0;
+        }
+
+        /* Content Overlay */
+        .web-content {
+            position: relative;
+            z-index: 2;
+            padding: 25px;
+            width: 100%;
+            background: linear-gradient(to top, rgba(5, 22, 38, 0.95) 10%, rgba(12, 45, 72, 0.4) 100%);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .web-icon {
+            font-size: 3em;
+            background: linear-gradient(45deg, #B49658, #F9D976);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 15px;
+            animation: pulse-gold 3s infinite;
+        }
+
+        .web-title {
+            font-family: 'Faruuma', 'Amiri', serif;
+            color: #ffffff;
+            font-size: 1.8em;
+            line-height: 1.3;
+            margin-bottom: 15px;
+            text-shadow: 0 2px 4px #000;
+            border-bottom: 2px solid #B49658;
+            padding-bottom: 10px;
+            display: inline-block;
+        }
+
+        .web-desc {
+            color: #e0e0e0;
+            font-size: 1em;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            font-family: 'Faruuma', sans-serif;
+            text-shadow: 1px 1px 2px black;
+        }
+
+        .lang-badges {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .l-badge {
+            background: rgba(180, 150, 88, 0.2);
+            border: 1px solid #B49658;
+            color: #B49658;
+            padding: 3px 10px;
+            border-radius: 15px;
+            font-size: 0.8em;
+            font-weight: bold;
+        }
+
+        /* Contact Buttons */
+        .contact-row {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            width: 100%;
+        }
+        .call-btn {
+            background: linear-gradient(90deg, #B49658, #8e733b);
+            color: white;
+            padding: 12px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            font-family: sans-serif;
+            font-size: 1.1em;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            transition: 0.3s;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+        .call-btn:hover {
+            background: linear-gradient(90deg, #F9D976, #B49658);
+            color: #051626;
+            transform: scale(1.02);
+        }
+
+        @keyframes pulse-gold {
+            0% { transform: scale(1); filter: drop-shadow(0 0 5px rgba(180, 150, 88, 0.5)); }
+            50% { transform: scale(1.1); filter: drop-shadow(0 0 15px rgba(249, 217, 118, 0.8)); }
+            100% { transform: scale(1); filter: drop-shadow(0 0 5px rgba(180, 150, 88, 0.5)); }
+        }
+    </style>
+
+    <div class="royal-web-card">
+        <div class="web-bg-anim"></div>
+        
+        <div class="web-content">
+            <div class="web-icon"><i class="fas fa-laptop-code"></i></div>
+            
+            <h2 class="web-title">
+                ޕްރޮފެޝަނަލް ވެބްސައިޓް<br>
+                <span style="color:#B49658; font-size:0.7em;">ޑިޒައިން ކުރުމުގެ ޚިދުމަތް</span>
+            </h2>
+
+            <div class="lang-badges">
+                <span class="l-badge">ދިވެހި</span>
+                <span class="l-badge">English</span>
+                <span class="l-badge">عربي</span>
             </div>
+
+            <div class="web-desc">
+                އެންމެ ޒަމާނީ ފެންވަރަށް ވެބްސައިޓް ފަރުމާކޮށް، ހުރިހާ ސަރވިސްއެއް އެއްކޮށްދީ އަދި އަޕްޑޭޓްކޮށް ބަލަހައްޓައިދެމެވެ.
+            </div>
+
+            <div class="contact-row">
+                <a href="tel:7791550" class="call-btn">
+                    <i class="fas fa-phone-alt"></i> 7791550
+                </a>
+                <a href="tel:9901550" class="call-btn" style="background: transparent; border: 1px solid #B49658; color: #B49658;">
+                    <i class="fas fa-mobile-alt"></i> 9901550
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
 
             <div class="widget">
                 <h3 class="widget-title"><i class="fas fa-file-download"></i> ފޯމުތައް</h3>
