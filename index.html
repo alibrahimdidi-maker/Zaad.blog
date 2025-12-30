@@ -1124,74 +1124,95 @@
             </div>
             <div class="v-title" contenteditable="false">ކީރިތި ޤުރްއާން</div>
         </div>
-           <style>
+          <style>
     :root {
         --art-gold: #B49658;
         --art-dark: #051626;
         --art-bg: #fdfbf7;
+        /* Using Faruma font globally for Dhivehi */
+        --font-dv: 'Faruma', 'Mv Galan', 'Noto Sans Thaana', sans-serif;
     }
 
     .article-section-container {
-        margin: 60px 0;
-        padding: 0 10px;
+        margin: 50px auto;
+        padding: 0;
+        width: 100%;
+        max-width: 100%; /* Ensures full width usage */
     }
 
     /* --- 1. ROYAL BANNER TITLE --- */
     .royal-banner-title {
         background: linear-gradient(90deg, var(--art-dark) 0%, #0C2D48 100%);
         color: var(--art-gold);
-        padding: 20px;
-        text-align: center;
-        font-family: 'Amiri', 'Faruuma', serif;
-        font-size: 2em;
-        border-top: 4px solid var(--art-gold);
-        border-bottom: 4px solid var(--art-gold);
-        box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-        margin-bottom: 40px;
+        padding: 15px 20px;
+        text-align: right; /* Aligned right for Dhivehi flow */
+        font-family: var(--font-dv);
+        font-size: 1.8em;
+        border-right: 5px solid var(--art-gold); /* Side accent instead of full border */
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        margin-bottom: 30px;
         position: relative;
         overflow: hidden;
+        border-radius: 5px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
     }
     
-    .royal-banner-title::before {
+    .royal-banner-title span {
+        position: relative;
+        z-index: 2;
+    }
+
+    .royal-banner-title::after {
         content: '\f02d'; /* Book Icon */
         font-family: "Font Awesome 5 Free";
         font-weight: 900;
+        font-size: 3em;
+        opacity: 0.1;
         position: absolute;
         left: 20px;
         top: 50%;
         transform: translateY(-50%);
-        font-size: 1.5em;
-        opacity: 0.3;
     }
 
-    /* --- 2. ARTICLE GRID --- */
+    /* --- 2. ARTICLE GRID (2 COLUMNS) --- */
     .article-card-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-        gap: 30px;
+        grid-template-columns: 1fr 1fr; /* Exact 2 columns */
+        gap: 25px; /* Spacing between cards */
+    }
+
+    /* Responsive for Mobile */
+    @media (max-width: 768px) {
+        .article-card-grid {
+            grid-template-columns: 1fr; /* 1 column on mobile */
+        }
     }
 
     /* --- 3. ROYAL CARD DESIGN --- */
     .royal-art-card {
         background: white;
         border: 1px solid #e0e0e0;
-        border-radius: 15px;
+        border-radius: 12px;
         overflow: hidden;
         transition: all 0.4s ease;
         position: relative;
         display: flex;
-        flex-direction: column;
-        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        flex-direction: row; /* Horizontal layout for desktop cards */
+        box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        height: 220px; /* Fixed height for uniformity */
     }
 
     .royal-art-card:hover {
-        transform: translateY(-10px);
-        box-shadow: 0 15px 30px rgba(180, 150, 88, 0.2);
+        transform: translateY(-5px);
+        box-shadow: 0 12px 25px rgba(180, 150, 88, 0.25);
         border-color: var(--art-gold);
     }
 
     .art-img-wrapper {
-        height: 200px;
+        width: 40%; /* Image takes 40% width */
+        height: 100%;
         overflow: hidden;
         position: relative;
     }
@@ -1208,39 +1229,58 @@
     }
 
     .art-content {
-        padding: 25px;
-        flex-grow: 1;
+        padding: 20px;
+        width: 60%; /* Content takes 60% width */
         display: flex;
         flex-direction: column;
+        justify-content: space-between;
         background: var(--art-bg);
     }
 
     .art-category {
-        font-size: 0.8em;
+        font-size: 0.75em;
         color: var(--art-gold);
         text-transform: uppercase;
         letter-spacing: 1px;
-        margin-bottom: 10px;
         font-weight: bold;
+        font-family: sans-serif; /* English text */
     }
 
     .art-title {
-        font-family: 'Amiri', 'Faruuma', serif;
-        font-size: 1.4em;
+        font-family: var(--font-dv);
+        font-size: 1.3em;
         color: var(--art-dark);
-        margin-bottom: 15px;
-        line-height: 1.6;
+        line-height: 1.5;
         font-weight: bold;
+        margin: 5px 0;
+        /* Limit to 2 lines */
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    .art-excerpt {
+        font-family: var(--font-dv);
+        font-size: 0.9em;
+        color: #666;
+        line-height: 1.6;
+        /* Limit to 3 lines */
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
     }
 
     .art-meta {
         display: flex;
         justify-content: space-between;
-        font-size: 0.85em;
-        color: #777;
+        font-size: 0.8em;
+        color: #888;
         border-top: 1px solid #ddd;
-        padding-top: 15px;
-        margin-top: auto;
+        padding-top: 10px;
+        margin-top: 10px;
+        font-family: sans-serif;
     }
 
     .art-meta i {
@@ -1248,64 +1288,84 @@
         color: var(--art-gold);
     }
 
-    /* --- 4. BUTTON --- */
-    .read-more-btn {
-        display: block;
-        width: 100%;
-        text-align: center;
-        background: var(--art-dark);
-        color: white;
-        padding: 12px;
-        margin-top: 20px;
-        text-decoration: none;
-        border-radius: 5px;
-        transition: 0.3s;
-        font-family: 'Amiri', serif;
-    }
-
-    .read-more-btn:hover {
-        background: var(--art-gold);
-        color: var(--art-dark);
-        font-weight: bold;
+    /* --- 4. BUTTON (Hidden link that covers card) --- */
+    .card-link {
+        position: absolute;
+        top: 0; left: 0; width: 100%; height: 100%;
+        z-index: 10;
     }
 </style>
 
 <div class="article-section-container">
     
     <div class="royal-banner-title">
-        ޢިލްމީ ޚަޒާނާ - Academic Treasury
+        <span>ޢިލްމީ ޚަޒާނާ - Academic Treasury</span>
     </div>
 
     <div class="article-card-grid">
         
         <div class="royal-art-card">
             <div class="art-img-wrapper">
-                <img src="https://images.unsplash.com/photo-1532012197267-da84d127e765?w=500&auto=format&fit=crop" alt="Article 1">
+                <img src="https://images.unsplash.com/photo-1532012197267-da84d127e765?w=500" alt="Article 1">
             </div>
             <div class="art-content">
                 <span class="art-category">ISLAMIC FINANCE</span>
                 <h3 class="art-title">އިސްލާމީ އިޤްތިޞާދުގެ މައިގަނޑު އަސާސްތައް</h3>
+                <div class="art-excerpt">އިސްލާމީ އިޤްތިޞާދަކީ އިންސާފުވެރިކަމާއި ހަމަހަމަކަމުގެ މައްޗަށް ބިނާވެފައިވާ ނިޒާމެކެވެ. މިކަމުގެ ތަފްޞީލު...</div>
                 <div class="art-meta">
-                    <span><i class="far fa-calendar-alt"></i> 31 Dec 2025</span>
-                    <span><i class="far fa-eye"></i> <span id="view-count-1">1,245</span> Views</span>
+                    <span><i class="far fa-calendar-alt"></i> 31 Dec</span>
+                    <span><i class="far fa-eye"></i> 1,245</span>
                 </div>
-                <a href="zaad_articles.html?id=1" class="read-more-btn">ތަފްޞީލު ކިޔުއްވާ</a>
             </div>
+            <a href="zaad_articles.html?id=1" class="card-link"></a>
         </div>
 
         <div class="royal-art-card">
             <div class="art-img-wrapper">
-                <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=500&auto=format&fit=crop" alt="Article 2">
+                <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=500" alt="Article 2">
             </div>
             <div class="art-content">
                 <span class="art-category">MODERN EDUCATION</span>
                 <h3 class="art-title">ޒަމާނީ ޓެކްނޮލޮޖީ އާއި ކިޔަވައިދިނުން</h3>
+                <div class="art-excerpt">ކުދިންގެ ތަރުބިއްޔަތުގައި ސްކްރީން ޓައިމް ކޮންޓްރޯލް ކުރާނެ ގޮތާއި، އޭގެ ނޭދެވޭ އަސަރު...</div>
                 <div class="art-meta">
-                    <span><i class="far fa-calendar-alt"></i> 30 Dec 2025</span>
-                    <span><i class="far fa-eye"></i> <span id="view-count-2">890</span> Views</span>
+                    <span><i class="far fa-calendar-alt"></i> 30 Dec</span>
+                    <span><i class="far fa-eye"></i> 890</span>
                 </div>
-                <a href="zaad_articles.html?id=2" class="read-more-btn">ތަފްޞީލު ކިޔުއްވާ</a>
             </div>
+            <a href="zaad_articles.html?id=2" class="card-link"></a>
+        </div>
+
+        <div class="royal-art-card">
+            <div class="art-img-wrapper">
+                <img src="https://images.unsplash.com/photo-1594192622793-6c8a2b37077e?w=500" alt="Article 3">
+            </div>
+            <div class="art-content">
+                <span class="art-category">RELIGIOUS STUDIES</span>
+                <h3 class="art-title">ރަމަޟާން މަހުގެ ޙަޤީޤީ މަޤްޞަދު</h3>
+                <div class="art-excerpt">ރޯދައަކީ ހަމައެކަނި ކެއިން ބުއިމުން ދުރުހެލިވުމެއް ނޫނެވެ. އެއީ ރޫޙާނީ ތަރުބިއްޔަތެކެވެ...</div>
+                <div class="art-meta">
+                    <span><i class="far fa-calendar-alt"></i> 28 Dec</span>
+                    <span><i class="far fa-eye"></i> 3,400</span>
+                </div>
+            </div>
+            <a href="zaad_articles.html?id=3" class="card-link"></a>
+        </div>
+
+        <div class="royal-art-card">
+            <div class="art-img-wrapper">
+                <img src="https://images.unsplash.com/photo-1584634731339-252c581abfc5?w=500" alt="Article 4">
+            </div>
+            <div class="art-content">
+                <span class="art-category">QURANIC STUDIES</span>
+                <h3 class="art-title">ކުޑަކުދިންނަށް ޤުރުއާން އުނގަންނައިދިނުން</h3>
+                <div class="art-excerpt">ޅަފަތުގައި ކުދިންގެ ހިތްތަކުގައި ޤުރުއާނަށް ލޯބި ޖެއްސުމަށްޓަކައި ބެލެނިވެރިން ކުރެވިދާނެ ކަންކަން...</div>
+                <div class="art-meta">
+                    <span><i class="far fa-calendar-alt"></i> 25 Dec</span>
+                    <span><i class="far fa-eye"></i> 2,100</span>
+                </div>
+            </div>
+            <a href="zaad_articles.html?id=4" class="card-link"></a>
         </div>
 
     </div>
