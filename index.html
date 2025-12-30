@@ -643,15 +643,13 @@
 </div>
             <div class="royal-services-wrapper" style="display: flex; flex-direction: column; gap: 30px;">
     
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Montserrat:wght@300;600&display=swap" rel="stylesheet">
 
     <style>
         .ultra-royal-card {
             position: relative;
             width: 100%;
-            height: 420px;
+            height: 440px; /* Slightly taller for better spacing */
             border-radius: 16px;
             overflow: hidden;
             display: flex;
@@ -677,7 +675,7 @@
             object-fit: cover;
             z-index: 0;
             transition: transform 8s ease;
-            filter: brightness(0.6);
+            filter: brightness(0.5);
         }
         .ultra-royal-card:hover .ur-bg {
             transform: scale(1.15);
@@ -688,8 +686,8 @@
             position: relative;
             z-index: 2;
             width: 90%;
-            height: 90%;
-            background: rgba(0, 0, 0, 0.75); /* Dark Glass */
+            height: 92%;
+            background: rgba(0, 0, 0, 0.8); /* Darker Glass */
             backdrop-filter: blur(8px);
             border-radius: 12px;
             padding: 20px;
@@ -697,12 +695,12 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            border: 1px solid rgba(197, 160, 89, 0.3); /* Gold Tint Border */
+            border: 1px solid rgba(197, 160, 89, 0.3);
         }
 
-        /* Typography & Icons */
+        /* SVG Icons Styling */
         .ur-icon-box {
-            width: 60px; height: 60px;
+            width: 65px; height: 65px;
             border-radius: 50%;
             display: flex;
             justify-content: center;
@@ -712,14 +710,15 @@
             border: 1px solid #C5A059;
             box-shadow: 0 0 15px rgba(197, 160, 89, 0.2);
         }
-        .ur-icon-box i {
-            font-size: 1.8em;
-            color: #C5A059; /* Royal Gold */
+        .ur-icon-box svg {
+            width: 32px;
+            height: 32px;
+            fill: #C5A059; /* Royal Gold Fill */
         }
 
         .ur-title {
             font-family: 'Cinzel', serif;
-            font-size: 1.4em;
+            font-size: 1.3em;
             font-weight: 700;
             color: #fff;
             text-transform: uppercase;
@@ -728,6 +727,7 @@
             border-bottom: 2px solid #C5A059;
             padding-bottom: 8px;
             text-shadow: 0 2px 10px rgba(0,0,0,1);
+            line-height: 1.3;
         }
 
         .ur-list {
@@ -746,7 +746,12 @@
             align-items: center;
             gap: 10px;
         }
-        .ur-list li i { color: #C5A059; font-size: 0.8em; }
+        .ur-list li svg { 
+            width: 16px; 
+            height: 16px; 
+            fill: #C5A059; 
+            min-width: 16px;
+        }
 
         /* Buttons */
         .ur-btn {
@@ -770,19 +775,22 @@
             color: #fff;
             transform: scale(1.05);
         }
+        .ur-btn svg { width: 14px; height: 14px; fill: currentColor; }
 
-        /* --- THEME COLORS (Borders & Glows) --- */
+        /* --- THEME COLORS --- */
         
         /* 1. Deep Emerald Green */
         .theme-emerald { border-color: #004d40; }
         .theme-emerald .ur-icon-box { border-color: #2ecc71; box-shadow: 0 0 15px rgba(46, 204, 113, 0.3); }
-        .theme-emerald .ur-icon-box i { color: #2ecc71; }
+        .theme-emerald .ur-icon-box svg { fill: #2ecc71; }
+        .theme-emerald .ur-list li svg { fill: #2ecc71; }
         .theme-emerald .ur-title { border-color: #2ecc71; }
 
         /* 2. Deep Royal Blue */
         .theme-sapphire { border-color: #001b3d; }
         .theme-sapphire .ur-icon-box { border-color: #4fc3f7; box-shadow: 0 0 15px rgba(79, 195, 247, 0.3); }
-        .theme-sapphire .ur-icon-box i { color: #4fc3f7; }
+        .theme-sapphire .ur-icon-box svg { fill: #4fc3f7; }
+        .theme-sapphire .ur-list li svg { fill: #4fc3f7; }
         .theme-sapphire .ur-title { border-color: #4fc3f7; }
 
         /* 3. Royal Gold */
@@ -795,16 +803,19 @@
         <img src="https://i.pinimg.com/originals/1d/17/2d/1d172d7335602937583626e2e4b09c5a.gif" class="ur-bg" style="filter: hue-rotate(90deg);">
         
         <div class="ur-content">
-            <div class="ur-icon-box"><i class="fas fa-brain"></i></div>
+            <div class="ur-icon-box">
+                <svg viewBox="0 0 24 24"><path d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,4A8,8 0 0,1 20,12C20,13.84 19.37,15.53 18.32,16.88C17.39,15.26 15.67,14.15 13.68,14.15C13.06,14.15 12.5,14.6 12.33,15.17L11.62,17.65C11.45,18.23 10.92,18.65 10.32,18.65C9.72,18.65 9.19,18.23 9.03,17.65L8.33,15.17C8.16,14.6 7.59,14.15 6.97,14.15C4.98,14.15 3.26,15.26 2.34,16.88C1.28,15.53 0.65,13.84 0.65,12A8,8 0 0,1 8.65,4H12M9,7.5A1.5,1.5 0 0,0 7.5,9A1.5,1.5 0 0,0 9,10.5A1.5,1.5 0 0,0 10.5,9A1.5,1.5 0 0,0 9,7.5M15,7.5A1.5,1.5 0 0,0 13.5,9A1.5,1.5 0 0,0 15,10.5A1.5,1.5 0 0,0 16.5,9A1.5,1.5 0 0,0 15,7.5Z"/></svg>
+            </div>
+            
             <h3 class="ur-title">Advanced AI Research</h3>
             <ul class="ur-list">
-                <li><i class="fas fa-check"></i> Master NotebookLM & Google Gemini</li>
-                <li><i class="fas fa-check"></i> Ensure Reliability & Credibility</li>
-                <li><i class="fas fa-check"></i> Literature Review from References</li>
-                <li><i class="fas fa-check"></i> Expert Citation & Referencing</li>
+                <li><svg viewBox="0 0 24 24"><path d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"/></svg> Master NotebookLM & Google Gemini</li>
+                <li><svg viewBox="0 0 24 24"><path d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"/></svg> Ensure Reliability & Credibility</li>
+                <li><svg viewBox="0 0 24 24"><path d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"/></svg> Literature Review from References</li>
+                <li><svg viewBox="0 0 24 24"><path d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"/></svg> Expert Citation & Referencing</li>
             </ul>
             <a href="tel:7791550" class="ur-btn">
-                <i class="fas fa-phone-alt"></i> Call 779-1550
+                <svg viewBox="0 0 24 24"><path d="M6.62,10.79C8.06,13.62 10.38,15.94 13.21,17.38L15.41,15.18C15.69,14.9 16.08,14.82 16.43,14.93C17.55,15.3 18.75,15.5 20,15.5A1,1 0 0,1 21,16.5V20A1,1 0 0,1 20,21A17,17 0 0,1 3,4A1,1 0 0,1 4,3H7.5A1,1 0 0,1 8.5,4C8.5,5.25 8.7,6.45 9.07,7.57C9.18,7.92 9.1,8.31 8.82,8.59L6.62,10.79Z"/></svg> Call 779-1550
             </a>
         </div>
     </div>
@@ -813,16 +824,19 @@
         <img src="https://i.pinimg.com/originals/90/10/7b/90107b38d3ca3414902271897c768910.gif" class="ur-bg">
         
         <div class="ur-content">
-            <div class="ur-icon-box"><i class="fas fa-laptop-code"></i></div>
+            <div class="ur-icon-box">
+                <svg viewBox="0 0 24 24"><path d="M4,6H20V16H4M20,18A2,2 0 0,0 22,16V6C22,4.89 21.1,4 20,4H4C2.89,4 2,4.89 2,6V16A2,2 0 0,0 4,18H0V20H24V18H20Z"/></svg>
+            </div>
+            
             <h3 class="ur-title">Edu-Tech Software</h3>
             <ul class="ur-list">
-                <li><i class="fas fa-check"></i> Gamer Education Software Training</li>
-                <li><i class="fas fa-check"></i> Lumi Interactive Tools</li>
-                <li><i class="fas fa-check"></i> Modern Digital Teaching Methods</li>
-                <li><i class="fas fa-check"></i> Professional Certification</li>
+                <li><svg viewBox="0 0 24 24"><path d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"/></svg> Gamer Education Software Training</li>
+                <li><svg viewBox="0 0 24 24"><path d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"/></svg> Lumi Interactive Tools</li>
+                <li><svg viewBox="0 0 24 24"><path d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"/></svg> Modern Digital Teaching Methods</li>
+                <li><svg viewBox="0 0 24 24"><path d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"/></svg> Professional Certification</li>
             </ul>
             <a href="tel:9901550" class="ur-btn">
-                <i class="fas fa-mobile-alt"></i> Call 990-1550
+                <svg viewBox="0 0 24 24"><path d="M17,19H7V5H17M17,1H7C5.89,1 5,1.89 5,3V21A2,2 0 0,0 7,23H17A2,2 0 0,0 19,21V3C19,1.89 18.1,1 17,1Z"/></svg> Call 990-1550
             </a>
         </div>
     </div>
@@ -831,22 +845,26 @@
         <img src="https://i.pinimg.com/originals/bc/6c/2f/bc6c2f9d8544d187289f666f7f022784.gif" class="ur-bg" style="filter: sepia(100%) hue-rotate(5deg);">
         
         <div class="ur-content">
-            <div class="ur-icon-box"><i class="fas fa-server"></i></div>
+            <div class="ur-icon-box">
+                <svg viewBox="0 0 24 24"><path d="M4,1H20A1,1 0 0,1 21,2V6A1,1 0 0,1 20,7H4A1,1 0 0,1 3,6V2A1,1 0 0,1 4,1M4,9H20A1,1 0 0,1 21,10V14A1,1 0 0,1 20,15H4A1,1 0 0,1 3,14V10A1,1 0 0,1 4,9M4,17H20A1,1 0 0,1 21,18V22A1,1 0 0,1 20,23H4A1,1 0 0,1 3,22V18A1,1 0 0,1 4,17M9,5H10V3H9V5M9,13H10V11H9V13M9,21H10V19H9V21Z"/></svg>
+            </div>
+            
             <h3 class="ur-title">LMS & Content Creation</h3>
             <ul class="ur-list">
-                <li><i class="fas fa-check"></i> LMS Functionality Training</li>
-                <li><i class="fas fa-check"></i> High-Quality Material Creation</li>
-                <li><i class="fas fa-check"></i> Course Structuring & Design</li>
-                <li><i class="fas fa-check"></i> Student Management Tools</li>
+                <li><svg viewBox="0 0 24 24"><path d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"/></svg> LMS Functionality Training</li>
+                <li><svg viewBox="0 0 24 24"><path d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"/></svg> High-Quality Material Creation</li>
+                <li><svg viewBox="0 0 24 24"><path d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"/></svg> Course Structuring & Design</li>
+                <li><svg viewBox="0 0 24 24"><path d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"/></svg> Student Management Tools</li>
             </ul>
             <div style="display:flex; gap:10px;">
-                <a href="tel:7791550" class="ur-btn"><i class="fas fa-phone"></i> 779-1550</a>
+                <a href="tel:7791550" class="ur-btn">
+                    <svg viewBox="0 0 24 24"><path d="M6.62,10.79C8.06,13.62 10.38,15.94 13.21,17.38L15.41,15.18C15.69,14.9 16.08,14.82 16.43,14.93C17.55,15.3 18.75,15.5 20,15.5A1,1 0 0,1 21,16.5V20A1,1 0 0,1 20,21A17,17 0 0,1 3,4A1,1 0 0,1 4,3H7.5A1,1 0 0,1 8.5,4C8.5,5.25 8.7,6.45 9.07,7.57C9.18,7.92 9.1,8.31 8.82,8.59L6.62,10.79Z"/></svg> 779-1550
+                </a>
             </div>
         </div>
     </div>
 
 </div>
-            
             <div class="widget" style="padding:0; border:none; background:transparent; box-shadow:none; margin-bottom: 30px;">
     
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Montserrat:wght@300;600&display=swap" rel="stylesheet">
