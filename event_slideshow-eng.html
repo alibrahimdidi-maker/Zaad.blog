@@ -4,10 +4,9 @@
     <meta charset="UTF-8">
     <title>Royal Graduation (V17.0 - Ultimate Pro)</title>
     <style>
-        /* 1. Google Font (Primary for English) */
+        /* 1. English Font (Primary) */
         @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
-
-        /* 2. Faruuma Font (Local - Kept for Dhivehi Name Input) */
+        /* 2. Faruuma Font (Local - For mixed Dhivehi content) */
         @font-face {
             font-family: 'Faruuma';
             src: local('Faruuma'), local('Faruumaa'), url('Fonts/faruuma.ttf') format('truetype');
@@ -24,39 +23,26 @@
             --panel-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
         }
 
-        /* DEFAULT BODY STYLE (ENGLISH) */
+        /* BODY (ENGLISH STYLE) */
         body {
             -webkit-user-select: none; user-select: none;
             margin: 0; padding: 0;
             background: linear-gradient(135deg, #000c1a 0%, #00281c 100%);
             overflow: hidden; height: 100vh; width: 100vw;
             color: #333;
-            /* Default Font for English Interface */
-            font-family: 'Roboto', 'Segoe UI', sans-serif;
+            font-family: 'Roboto', 'Segoe UI', sans-serif; /* English Font */
         }
 
-        /* --- LANGUAGE SWITCHER TABS --- */
+        /* --- LANGUAGE SWITCHER --- */
         .lang-tabs { 
-            display: flex; 
-            gap: 5px; 
-            margin-bottom: 10px; 
-            justify-content: center; 
-            direction: ltr !important;
-            flex-shrink: 0;
+            display: flex; gap: 5px; margin-bottom: 10px; 
+            justify-content: center; direction: ltr !important; flex-shrink: 0;
         }
         .lang-btn {
-            flex: 1; 
-            padding: 8px; 
-            text-align: center; 
-            text-decoration: none;
-            background: #37474f; 
-            color: #fff; 
-            border-radius: 4px; 
-            font-size: 13px; 
-            font-weight: bold; 
-            border: 1px solid #555; 
-            transition: 0.3s;
-            font-family: 'Roboto', sans-serif;
+            flex: 1; padding: 8px; text-align: center; text-decoration: none;
+            background: #37474f; color: #fff; border-radius: 4px; 
+            font-size: 13px; font-weight: bold; border: 1px solid #555; 
+            transition: 0.3s; font-family: 'Roboto', sans-serif;
         }
         .lang-btn:hover { background: var(--royal-accent); color: #000; }
         .lang-btn.active { background: var(--royal-blue-mid); border: 1px solid #fff; pointer-events: none; }
@@ -66,57 +52,33 @@
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
             background: rgba(0,0,0,0.98); z-index: 99999;
             display: flex; justify-content: center; align-items: center;
-            direction: ltr !important;
-            text-align: center;
+            direction: ltr !important; text-align: center;
         }
-
         .sec-box { 
             background: linear-gradient(135deg, var(--royal-blue-dark), var(--royal-green)); 
-            padding: 60px; border-radius: 20px; 
-            border: 2px solid var(--royal-accent); 
-            box-shadow: 0 0 50px rgba(13, 71, 161, 0.5);
-            max-width: 600px; width: 90%;
+            padding: 60px; border-radius: 20px; border: 2px solid var(--royal-accent); 
+            box-shadow: 0 0 50px rgba(13, 71, 161, 0.5); max-width: 600px; width: 90%;
         }
-        
-        .sec-input { 
-            padding: 15px; font-size: 24px; text-align: center; width: 100%; 
-            margin-top: 20px; background: #fff; color: #000; 
-            border-radius:5px; border:none; font-family: 'Roboto', sans-serif;
-        }
-        
-        .sec-btn { 
-            margin-top: 25px; padding: 15px 50px; font-size: 20px; 
-            background: var(--royal-blue-mid); color: #fff; 
-            border: 1px solid #fff; cursor: pointer; font-weight: bold; 
-            border-radius:8px; text-transform: uppercase; font-family: 'Roboto', sans-serif;
-        }
+        .sec-input { padding: 15px; font-size: 24px; text-align: center; width: 100%; margin-top: 20px; background: #fff; color: #000; border-radius:5px; border:none; font-family: 'Roboto'; }
+        .sec-btn { margin-top: 25px; padding: 15px 50px; font-size: 20px; background: var(--royal-blue-mid); color: #fff; border: 1px solid #fff; cursor: pointer; font-weight: bold; border-radius:8px; text-transform: uppercase; font-family: 'Roboto'; }
         .sec-btn:hover { background: #fff; color: var(--royal-blue-mid); }
 
         /* --- UI LAYOUT --- */
-        .main-layout { 
-            display: none; gap: 20px; height: 100vh; width: 100vw; 
-            padding: 15px; box-sizing: border-box; 
-        }
+        .main-layout { display: none; gap: 20px; height: 100vh; width: 100vw; padding: 15px; box-sizing: border-box; }
 
-        /* SIDEBAR (SCROLLABLE FIX) */
+        /* SIDEBAR (SCROLLABLE) */
         .sidebar {
-            flex: 0 0 360px; 
-            background: #f8fbff; 
-            padding: 15px; border-radius: 12px;
-            display: flex; flex-direction: column; height: 100%; 
-            overflow-y: auto; /* Allow vertical scrolling */
-            box-shadow: var(--panel-shadow);
-            border: 3px solid var(--royal-blue-dark);
+            flex: 0 0 360px; background: #f8fbff; padding: 15px; border-radius: 12px;
+            display: flex; flex-direction: column; height: 100%; overflow-y: auto;
+            box-shadow: var(--panel-shadow); border: 3px solid var(--royal-blue-dark);
         }
         
         .sidebar h2 { color: var(--royal-blue-dark); text-align:center; margin-bottom: 10px; border-bottom: 2px solid var(--royal-blue-mid); padding-bottom: 5px; font-size: 22px; }
         
-        /* DEVELOPER CREDITS */
         .dev-credits {
             margin-top: 20px; text-align: center; font-size: 11px; color: #555;
             background: #e3f2fd; padding: 10px; border-radius: 6px;
-            border: 1px solid #bbdefb; font-weight: bold; line-height: 1.4;
-            flex-shrink: 0;
+            border: 1px solid #bbdefb; font-weight: bold; line-height: 1.4; flex-shrink: 0;
         }
         .dev-name { color: var(--royal-blue-dark); font-size: 13px; display: block; margin-bottom: 2px; }
         .company-name { color: var(--royal-green); font-size: 10px; display: block; letter-spacing: 0.5px; }
@@ -125,8 +87,7 @@
         .editor {
             flex: 1; background: #fff; padding: 25px; border-radius: 12px;
             display: flex; flex-direction: column; height: 100%; overflow-y: auto; 
-            position: relative; box-shadow: var(--panel-shadow);
-            border: 3px solid var(--royal-green);
+            position: relative; box-shadow: var(--panel-shadow); border: 3px solid var(--royal-green);
         }
 
         /* SCROLLBAR */
@@ -138,7 +99,6 @@
         h2, h3 { margin: 5px 0; font-family: 'Roboto', sans-serif; }
         label { display: block; font-weight: bold; font-size: 14px; margin-bottom: 5px; color: var(--royal-blue-dark); }
         
-        /* CATEGORY HEADERS */
         .d-label { 
             font-size: 16px; font-weight: 900; color: var(--royal-blue-mid);
             display: block; margin-top: 15px; margin-bottom: 8px; 
@@ -149,121 +109,65 @@
         input[type="text"], textarea, select { 
             width: 100%; padding: 10px; border: 1px solid var(--input-border); 
             border-radius: 6px; background: var(--input-bg); color: #000;
-            margin-bottom: 8px; font-size: 14px;
+            margin-bottom: 8px; font-size: 14px; font-family: 'Roboto', 'Faruuma', sans-serif;
             box-sizing: border-box; transition: all 0.3s;
-            font-family: 'Roboto', 'Faruuma', sans-serif; /* Allow Dhivehi typing */
         }
         input[type="text"]:focus, select:focus, textarea:focus { 
-            border-color: var(--royal-blue-mid); background: #fff;
-            outline: none; box-shadow: 0 0 8px rgba(13, 71, 161, 0.3); 
+            border-color: var(--royal-blue-mid); background: #fff; outline: none; 
+            box-shadow: 0 0 8px rgba(13, 71, 161, 0.3); 
         }
 
-        /* --- SPECIAL STYLING FOR JALSA TITLES --- */
-        #jLine1 {
-            font-size: 24px !important; font-weight: 900 !important;
-            text-align: center !important; color: var(--royal-blue-dark);
-            border: 2px solid var(--royal-accent); background: #fff8e1; height: 60px;
-        }
-        #jLine2, #jLine3, #jLine4 {
-            font-size: 18px !important; font-weight: bold !important;
-            text-align: center !important; color: var(--royal-blue-mid); height: 45px;
-        }
-
-        /* FONT SIZES & ALIGNMENT */
+        #jLine1 { font-size: 24px !important; font-weight: 900 !important; text-align: center !important; background: #fff8e1; height: 50px; }
+        
+        /* FONT SIZES */
         .font-dv { font-size: 20px !important; direction: rtl; text-align: right; font-family: 'Faruuma', serif !important; }
-        .eng { font-size: 18px !important; direction: ltr; text-align: left; font-family: 'Times New Roman', serif !important; font-weight: bold; }
+        .eng { font-size: 16px !important; direction: ltr; text-align: left; font-family: 'Roboto', serif !important; font-weight: bold; }
 
         input[type=range] { width: 100%; cursor: pointer; height: 15px; accent-color: var(--royal-blue-mid); margin: 5px 0; }
-        input[type=color] { width: 45px; height: 35px; border: 2px solid #fff; border-radius: 6px; cursor: pointer; vertical-align: middle; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+        input[type=color] { width: 45px; height: 35px; border: 2px solid #fff; border-radius: 6px; cursor: pointer; vertical-align: middle; }
 
-        /* --- SETTINGS GROUPS --- */
         .group-box {
-            border: 1px solid #bbdefb; border-radius: 10px;
-            padding: 30px 20px 20px 20px; margin-bottom: 35px; 
-            background: #f1f8e9; position: relative;
+            border: 1px solid #bbdefb; border-radius: 10px; padding: 30px 20px 20px 20px;
+            margin-bottom: 35px; background: #f1f8e9; position: relative;
             box-shadow: 0 4px 10px rgba(0,0,0,0.05);
         }
-        
         .group-title {
-            position: absolute; top: -20px; right: 20px;
-            background: var(--royal-blue-dark); color: #fff;
-            padding: 8px 25px; font-size: 16px; font-weight: bold;
-            border-radius: 20px; box-shadow: 0 4px 8px rgba(0,0,0,0.3); z-index: 10;
+            position: absolute; top: -20px; right: 20px; background: var(--royal-blue-dark); color: #fff;
+            padding: 8px 25px; font-size: 16px; font-weight: bold; border-radius: 20px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3); z-index: 10;
         }
-
         .design-col { flex: 1; }
 
-        /* --- BUTTONS --- */
-        button { cursor: pointer; font-weight: bold; transition: all 0.2s; font-family: 'Roboto', sans-serif; }
-        
-        .launch-btn { 
-            background: linear-gradient(to bottom, #d32f2f, #b71c1c);
-            color: white; padding: 12px; width: 100%; border: 1px solid #ffcdd2; 
-            border-radius: 6px; margin-bottom: 10px; font-size: 16px; box-shadow: 0 3px 5px rgba(0,0,0,0.2); 
-        }
+        /* BUTTONS */
+        button { cursor: pointer; font-weight: bold; transition: all 0.2s; font-family: 'Roboto'; }
+        .launch-btn { background: linear-gradient(to bottom, #d32f2f, #b71c1c); color: white; padding: 12px; width: 100%; border: 1px solid #ffcdd2; border-radius: 6px; margin-bottom: 10px; font-size: 16px; }
         .launch-btn:hover { filter: brightness(1.1); }
-
         .conf-btn { flex: 1; padding: 8px; font-size: 12px; border-radius: 4px; border: 1px solid #1565c0; color: #fff; background: var(--royal-blue-mid); }
-        .conf-btn:hover { background: var(--royal-blue-dark); }
         .config-btn-row { display: flex; gap: 5px; margin-bottom: 10px; }
-
-        .btn-live { 
-            background: linear-gradient(to bottom, #2e7d32, #1b5e20);
-            flex: 2; border: 2px solid #a5d6a7; 
-            color: #fff; font-size: 20px; padding: 12px; border-radius: 8px; 
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-        }
-        .btn-live:hover { filter: brightness(1.1); }
-        
-        .btn-nav { background: #546e7a; color: white; padding: 12px; font-size: 20px; border: none; border-radius: 8px; width: 60px; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
-
-        #lockBtn {
-            background: #fbc02d; color: #000; padding: 12px; width: 100%; border: 2px solid #fff;
-            border-radius: 8px; margin-bottom: 15px; font-size: 16px; box-shadow: 0 3px 6px rgba(0,0,0,0.2);
-        }
+        .btn-live { background: linear-gradient(to bottom, #2e7d32, #1b5e20); flex: 2; border: 2px solid #a5d6a7; color: #fff; font-size: 20px; padding: 12px; border-radius: 8px; }
+        .btn-nav { background: #546e7a; color: white; padding: 12px; font-size: 20px; border: none; border-radius: 8px; width: 60px; }
+        #lockBtn { background: #fbc02d; color: #000; padding: 12px; width: 100%; border: 2px solid #fff; border-radius: 8px; margin-bottom: 15px; font-size: 16px; }
         #lockBtn.active { background: #c62828; color: white; animation: pulse 2s infinite; }
         @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(198, 40, 40, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(198, 40, 40, 0); } 100% { box-shadow: 0 0 0 0 rgba(198, 40, 40, 0); } }
+        .locked-zone { opacity: 0.5; pointer-events: none; filter: grayscale(80%); }
 
-        .locked-zone { opacity: 0.5; pointer-events: none; filter: grayscale(80%); user-select: none; transition: all 0.3s ease; }
-
-        /* --- PREVIEW --- */
-        .preview-container { 
-            display: flex; gap: 15px; align-items: center; justify-content: center; 
-            background: #fff; padding: 15px; border: 2px solid #b2dfdb; 
-            border-radius: 10px; margin-top: 15px; 
-        }
+        .preview-container { display: flex; gap: 15px; align-items: center; justify-content: center; background: #fff; padding: 15px; border: 2px solid #b2dfdb; border-radius: 10px; margin-top: 15px; }
         #previewImg { height: 90px; width: 90px; object-fit: cover; border-radius: 50%; border: 3px solid var(--royal-blue-mid); background: #eee; }
-        
         .video-panel { background: #e1f5fe; padding: 15px; border-radius: 10px; border: 1px solid #81d4fa; margin-bottom: 20px; }
         .btn-vid { font-size: 13px; padding: 8px; margin-top: 5px; border:none; border-radius:4px; color:white; width: 100%; cursor: pointer; font-weight:bold; }
 
-        /* --- SYSTEM FILES --- */
-        #sidebarFiles {
-            background: #fff; border: 1px solid #90caf9; 
-            border-radius: 8px; padding: 10px;
-        }
-        #sidebarFiles label {
-            font-size: 13px; color: #444; margin-bottom: 3px;
-        }
-        #sidebarFiles input[type="file"] {
-            font-size: 12px; padding: 5px;
-        }
+        /* SYSTEM FILES */
+        #sidebarFiles { background: #fff; border: 1px solid #90caf9; border-radius: 8px; padding: 10px; }
+        #sidebarFiles label { font-size: 13px; color: #444; margin-bottom: 3px; }
+        #sidebarFiles input[type="file"] { font-size: 12px; padding: 5px; }
 
-        /* --- FULL SCREEN BUTTON --- */
-        #cpFsBtn {
-            position: fixed; bottom: 20px; right: 20px; width: 45px; height: 45px;
-            background: var(--royal-blue-dark); color: #fff; border-radius: 50%;
-            border: 2px solid #fff; box-shadow: 0 0 15px rgba(0,0,0,0.5);
-            z-index: 1000; font-size: 20px; display: flex; align-items: center; justify-content: center;
-            cursor: pointer; transition: transform 0.3s;
-        }
+        #cpFsBtn { position: fixed; bottom: 20px; left: 20px; width: 45px; height: 45px; background: var(--royal-blue-dark); color: #fff; border-radius: 50%; border: 2px solid #fff; box-shadow: 0 0 15px rgba(0,0,0,0.5); z-index: 1000; font-size: 20px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: transform 0.3s; }
         #cpFsBtn:hover { transform: scale(1.1); background: var(--royal-green); }
-
     </style>
 </head>
 <body oncontextmenu="return false;">
 
-    <button id="cpFsBtn" onclick="toggleControlFS()" title="Full Screen Control Panel">⛶</button>
+    <button id="cpFsBtn" onclick="toggleControlFS()" title="Full Screen">⛶</button>
 
     <div id="securityOverlay">
         <div class="sec-box">
@@ -271,16 +175,16 @@
             <p style="color:#a0c4ff; font-size:16px; margin-bottom:30px;">🔒 PRO EDITION - ENTER LICENSE KEY</p>
             <input type="password" id="licenseKey" class="sec-input" placeholder="Enter Key...">
             <button class="sec-btn" onclick="verifyLicense()">AUTHENTICATE</button>
-            <p id="secMsg" style="color:#ff5252; font-size:14px; margin-top:20px; font-weight:bold; font-family:sans-serif;"></p>
+            <p id="secMsg" style="color:#ff5252; font-size:14px; margin-top:20px; font-weight:bold;"></p>
         </div>
     </div>
 
     <div class="main-layout" id="mainApp">
         <div class="sidebar">
             <div class="lang-tabs">
-                <a href="event_slideshow.html" class="lang-btn">ދިވެހި</a>
+                <a href="index.html" class="lang-btn">ދިވެހި</a>
                 <a href="#" class="lang-btn active">English</a>
-                <a href="event_slideshow-ara.html" class="lang-btn">عربي</a>
+                <a href="arabic.html" class="lang-btn">عربي</a>
             </div>
 
             <div class="royal-banner">
@@ -290,7 +194,7 @@
 
             <div id="licenseStatus" style="font-size:11px; color:#0d47a1; text-align:center; margin-bottom:10px; font-weight:bold;"></div>
 
-            <button class="launch-btn" onclick="openTV()">🖥️ 1. OPEN TV DISPLAY</button>
+            <button class="launch-btn" onclick="openTV()">🖥️ 1. OPEN TV SCREEN</button>
             <div id="connStatus" style="font-size:12px; color:red; text-align:center; background:#ffebee; padding:4px; border-radius:4px; margin-bottom:10px; border:1px solid #ffcdd2;">Not Connected</div>
 
             <div class="config-btn-row">
@@ -310,8 +214,8 @@
             </div>
 
             <label style="margin-top:15px; color:#00281c;">🔍 Search Student:</label>
-<input type="text" id="search" placeholder="Type name..." onkeyup="filterList()">
-<select id="stuList" size="10" style="flex-grow:1; border:1px solid #ccc; min-height: 200px;" onchange="loadStudent()"></select>
+            <input type="text" id="search" placeholder="Type name..." onkeyup="filterList()">
+            <select id="stuList" size="10" style="flex-grow:1; border:1px solid #ccc; min-height: 200px;" onchange="loadStudent()"></select>
             
             <div class="dev-credits">
                 <span style="display:block; margin-bottom:3px;">Designed & Developed By:</span>
@@ -350,33 +254,25 @@
                 
                 <div style="margin-bottom: 10px;">
                     <label style="font-size:12px; color:#555;">Name (Local/Dhivehi - RTL):</label>
-                    <input id="nD" style="direction:rtl; font-family:'Faruuma';" placeholder="Name (Local)">
+                    <input id="nD" class="font-dv" placeholder="Name (Local)" style="width:100%;">
                 </div>
                 
                 <div style="margin-bottom: 15px;">
                     <label style="font-size:12px; color:#555; text-align:left; display:block;">Name (English - LTR):</label>
-                    <input id="nE" placeholder="Name (English)" style="width:100%; text-align:left;">
+                    <input id="nE" class="eng" placeholder="Name (English)" style="width:100%; text-align:left;">
                 </div>
                 
-               <div class="row" style="display:flex; gap:10px; width:100%;">
-    <div class="col" style="flex:1;">
-        <input id="fD" class="font-dv" placeholder="ތަފްސީލު 1 (ދިވެހި)" style="width:100%; text-align:right;">
-    </div>
-    <div class="col" style="flex:1;">
-        <input id="fE" class="eng" placeholder="Detail 1 (English)" style="width:100%; direction:ltr; text-align:left;">
-    </div>
-</div>
-
-<div class="row" style="display:flex; gap:10px; width:100%; margin-top:5px;">
-    <div class="col" style="flex:1;">
-        <input id="cD" class="font-dv" placeholder="ތަފްސީލު 2 (ދިވެހި)" style="width:100%; text-align:right;">
-    </div>
-    <div class="col" style="flex:1;">
-        <input id="cE" class="eng" placeholder="Detail 2 (English)" style="width:100%; direction:ltr; text-align:left;">
-    </div>
-</div>
+                <div class="row" style="display:flex; gap:10px;">
+                    <div class="col" style="flex:1"><input id="fD" class="font-dv" placeholder="Detail 1 (Local)"></div>
+                    <div class="col" style="flex:1"><input id="fE" class="eng" placeholder="Detail 1 (English)"></div>
+                </div>
                 
-                <textarea id="cm" rows="2" style="direction:rtl; font-family:'Faruuma';" placeholder="Extra Info..."></textarea>
+                <div class="row" style="display:flex; gap:10px;">
+                    <div class="col" style="flex:1"><input id="cD" class="font-dv" placeholder="Detail 2 (Local)"></div>
+                    <div class="col" style="flex:1"><input id="cE" class="eng" placeholder="Detail 2 (English)"></div>
+                </div>
+                
+                <textarea id="cm" rows="2" class="font-dv" placeholder="Extra Info..."></textarea>
 
                 <div class="preview-container">
                     <div><img id="logoPreview" alt="Logo" style="height:50px; opacity:0.5;"></div>
@@ -394,7 +290,7 @@
             <div id="designPanel">
                 
                 <div class="group-box">
-                    <span class="group-title">🌍 Global Theme</span>
+                    <span class="group-title">🌍 Global Theme & Wall</span>
                     <div class="design-col">
                         <span class="d-label">1. Background Wallpaper:</span>
                         <div style="display:flex; gap:10px;">
@@ -420,11 +316,11 @@
                             <input type="color" id="bdColorPick" value="#d4af37" oninput="liveUpdate('bdColor', this.value)" title="Theme Color">
                         </div>
 
-                        <span class="d-label">3. Card Position:</span>
+                        <span class="d-label">3. Card Position (Adjust Layout):</span>
                         <div style="display:flex; gap:10px; align-items:center; background:#fff; padding:10px; border-radius:8px; border:1px solid #ccc;">
-                            <span style="font-size:12px; font-weight:bold;">Horizontal:</span>
+                            <span style="font-size:12px; font-weight:bold;">Left/Right:</span>
                             <input type="range" id="cardXRange" min="-600" max="600" value="0" oninput="liveUpdate('cardX', this.value)">
-                            <span style="font-size:12px; font-weight:bold;">Vertical:</span>
+                            <span style="font-size:12px; font-weight:bold;">Up/Down:</span>
                             <input type="range" id="cardYRange" min="-450" max="450" value="0" oninput="liveUpdate('cardY', this.value)">
                         </div>
 
@@ -450,11 +346,11 @@
                 </div>
 
                 <div class="group-box">
-                    <span class="group-title">📸 Photo Studio</span>
+                    <span class="group-title">📸 Photo Studio Controls</span>
                     
                     <span class="d-label">1. Frame Style:</span>
                     <select id="photoPresetSel" onchange="applyPhotoPreset(this.value)" style="width:100%; font-weight:bold; font-size:15px; padding:10px;">
-                        <option value="0">--- Select Frame ---</option>
+                        <option value="0">--- Select a Frame Style ---</option>
                         <optgroup label="No Border / Shadow">
                             <option value="1">1. Plain (No Border)</option>
                             <option value="2">2. Soft Shadow</option>
@@ -479,7 +375,7 @@
                         </optgroup>
                     </select>
 
-                    <span class="d-label">2. Manual Frame Adjust:</span>
+                    <span class="d-label">2. Manual Frame Adjustments:</span>
                     <div style="display:flex; gap:10px; align-items:center; background:#fff; padding:10px; border-radius:8px; border:1px solid #b2dfdb;">
                         <span style="font-size:12px;">Color:</span><input type="color" id="pfColorPick" value="#000000" oninput="liveUpdate('pfColor', this.value)">
                         <span style="font-size:12px;">Width:</span><input type="range" id="pfWidthRange" min="0" max="30" value="0" oninput="liveUpdate('pfWidth', this.value)">
@@ -500,7 +396,7 @@
                 </div>
 
                 <div class="group-box">
-                    <span class="group-title">🔤 Text Styles</span>
+                    <span class="group-title">🔤 Student Text Styling</span>
                     
                     <span class="d-label">1. Student Name Size & Color:</span>
                     <div style="display:flex; gap:10px; align-items:center; margin-bottom:8px;">
@@ -515,14 +411,14 @@
                     </div>
                     <div style="margin-top:5px;">
                         <select onchange="liveUpdate('nLine', this.value)" style="background:#fff;">
-                            <option value="off">Underline: OFF</option>
-                            <option value="on">Underline: ON</option>
+                            <option value="off">Name Underline: OFF</option>
+                            <option value="on">Name Underline: ON</option>
                         </select>
                     </div>
                     
                     <hr style="border:1px dashed #aaa; margin:12px 0;">
 
-                    <span class="d-label">2. Details Lines:</span>
+                    <span class="d-label">2. Details Lines Size & Color:</span>
                     <div style="display:flex; gap:10px; align-items:center; margin-bottom:8px;">
                         <span style="font-size:12px; width:60px;">Line 1:</span>
                         <input type="range" min="1" max="6" step="0.1" value="2.5" oninput="liveUpdate('tfDSize', this.value)">
@@ -536,9 +432,9 @@
                 </div>
 
                 <div class="group-box">
-                    <span class="group-title">👑 Screen Titles</span>
+                    <span class="group-title">👑 Main Screen Titles</span>
                     
-                    <span class="d-label">1. Main Title:</span>
+                    <span class="d-label">1. Main Title & Position:</span>
                     <input type="text" id="jLine1" placeholder="Main Title Text..." class="font-dv" oninput="updateJalsaText()">
                     
                     <div style="display:flex; align-items:center; gap:15px; margin-top:8px; background:#fff; padding:10px; border-radius:8px; border:1px solid #bbdefb;">
@@ -1374,9 +1270,4 @@
     }
 </script>
 </body>
-
 </html>
-
-
-
-
