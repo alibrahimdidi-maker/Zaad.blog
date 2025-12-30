@@ -1445,75 +1445,118 @@
 </div>
             <h2 style="color:var(--royal-blue); margin-top:30px; margin-bottom:15px; border-bottom:2px solid var(--royal-gold); display:inline-block; padding-bottom:5px;">އާންމު ސުވާލުތައް (FAQ)</h2>
             
-            <div class="faq-item">
-                <div class="faq-q" onclick="this.parentNode.classList.toggle('active')">
-                    <span>1. ސެޝަންތަކުގައި ބައިވެރިވާނީ ކިހިނެއް؟</span>
-                    <i class="fas fa-chevron-down"></i>
-                </div>
-                <div class="faq-a">
-                    ވެބްސައިޓުގައިވާ "އެޕްލިކޭޝަން ފޯމު" ޑައުންލޯޑް ކުރެއްވުމަށްފަހު ފުރިހަމަކުރައްވާ މެއިލްކުރައްވާށެވެ. ނުވަތަ އޮންލައިން ޕޯޓަލް މެދުވެރިކޮށް ހުށަހެޅޭނެއެވެ.
-                </div>
-            </div>
+            <div class="royal-intro-section" style="margin-bottom: 40px;">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Amiri:wght@400;700&family=Playfair+Display:ital@0;1&display=swap" rel="stylesheet">
 
-            <div class="faq-item">
-                <div class="faq-q" onclick="this.parentNode.classList.toggle('active')">
-                    <span>2. ކިޔަވައިދެނީ ކޮން ގަޑިތަކެއްގައި؟</span>
-                    <i class="fas fa-chevron-down"></i>
-                </div>
-                <div class="faq-a">
-                    ގިނަ ސެޝަންތައް ކުރިއަށްދާނީ ރޭގަނޑު ވަގުތުތަކުގައެވެ. ނަމަވެސް ބައެއް ކޯސްތައް ހަވީރު ވެސް އޮންނާނެއެވެ.
-                </div>
-            </div>
+    <style>
+        .royal-banner-card {
+            position: relative;
+            background: linear-gradient(145deg, #051626, #000000);
+            border: 2px solid #B49658;
+            border-radius: 15px;
+            padding: 40px 25px;
+            text-align: center;
+            overflow: hidden;
+            /* LED Glow Effect at the bottom */
+            box-shadow: 0 15px 40px -5px rgba(180, 150, 88, 0.4), 
+                        inset 0 0 20px rgba(0, 0, 0, 0.8);
+            transition: transform 0.3s ease;
+        }
 
-            <div class="faq-item">
-                <div class="faq-q" onclick="this.parentNode.classList.toggle('active')">
-                    <span>3. ސެޝަންތަކަށް ފީ ދައްކާނީ ކިހިނެއް؟</span>
-                    <i class="fas fa-chevron-down"></i>
-                </div>
-                <div class="faq-a">
-                    ކްލާސްތަކުގެ ފީ ދެއްކެވުމަށް ބޭންކް އޮފް މޯލްޑިވްސް މެދުވެރިކޮށް ޓްރާންސްފަރ ކުރެއްވޭނެއެވެ. ސްލިޕްކޮޅު ޕޯޓަލްއަށް އަޕްލޯޑް ކުރައްވާށެވެ.
-                </div>
-            </div>
+        .royal-banner-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 20px 50px -5px rgba(180, 150, 88, 0.6), 
+                        inset 0 0 20px rgba(0, 0, 0, 0.8);
+        }
 
-            <div class="faq-item">
-                <div class="faq-q" onclick="this.parentNode.classList.toggle('active')">
-                    <span>4. ޒާދް އެކަޑެމީގެ ކޯސްތަކަކީ އެމް.ކިއު.އޭ އިން ޤަބޫލުކުރާ ކޯސްތަކެއްތަ؟</span>
-                    <i class="fas fa-chevron-down"></i>
-                </div>
-                <div class="faq-a">
-                    އާދެ! ޒާދް އެކަޑެމީން ހިންގާ ހުރިހާ ސެޓްފިކެޓް ލެވެލްގެ ކޯސްތަކަކީ މޯލްޑިވްސް ކޮލިފިކޭޝަން އޮތޯރިޓީ (MQA) އިން އެކްރެޑިޓް ކޮށްފައިވާ ކޯސްތަކެކެވެ.
-                </div>
-            </div>
+        /* Animated Golden Line */
+        .gold-laser-line {
+            height: 3px;
+            width: 80%;
+            margin: 20px auto;
+            background: linear-gradient(90deg, transparent, #B49658, #FFF, #B49658, transparent);
+            background-size: 200% 100%;
+            animation: shine-line 3s infinite linear;
+            border-radius: 50%;
+            box-shadow: 0 0 15px #B49658;
+        }
 
-            <div class="faq-item">
-                <div class="faq-q" onclick="this.parentNode.classList.toggle('active')">
-                    <span>5. ސެޝަނެއް ގެއްލިއްޖެނަމަ ހަދާނީ ކިހިނެއް؟</span>
-                    <i class="fas fa-chevron-down"></i>
-                </div>
-                <div class="faq-a">
-                    ހުރިހާ އޮންލައިން ކްލާސްތަކެއް ރެކޯޑް ކުރެވޭނެއެވެ. ދަރިވަރުންގެ ޕޯޓަލް މެދުވެރިކޮށް ރެކޯޑިންގ ބައްލަވާލެއްވޭނެއެވެ.
-                </div>
-            </div>
+        /* Decorative Crown Icon */
+        .crown-icon {
+            font-size: 3em;
+            background: linear-gradient(to bottom, #F9D976, #B49658);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 15px;
+            filter: drop-shadow(0 0 5px rgba(180, 150, 88, 0.5));
+            animation: float-crown 4s ease-in-out infinite;
+        }
 
-            <div class="faq-item">
-                <div class="faq-q" onclick="this.parentNode.classList.toggle('active')">
-                    <span>6. ކިޔެވުމަށް ބޭނުންވާ މެޓީރިއަލް ލިބޭނީ ކިހިނެއް؟</span>
-                    <i class="fas fa-chevron-down"></i>
-                </div>
-                <div class="faq-a">
-                    ކޯހުގެ ފޮތްތަކާއި ނޯޓުތައް ޑިޖިޓަލްކޮށް (PDF) ޕޯޓަލްއިން ލިބެން ހުންނާނެއެވެ. ޕްރިންޓް ކޮޕީ ބޭނުންވާނަމަ ގަނެވޭނެ އިންތިޒާމު ހަމަޖެހިފައިވެއެވެ.
-                </div>
-            </div>
+        /* Text Styles */
+        .txt-dv {
+            font-family: 'Faruuma', 'MV Boli', serif;
+            color: #ffffff;
+            font-size: 1.4em;
+            line-height: 1.8;
+            margin-bottom: 15px;
+            direction: rtl;
+            text-shadow: 0 2px 4px black;
+        }
 
-            <div class="faq-item">
-                <div class="faq-q" onclick="this.parentNode.classList.toggle('active')">
-                    <span>7. ސެޝަންތަކުގައި ބައިވެރިވުމަށް ޝަރުޠަކީ ކޮބާ؟</span>
-                    <i class="fas fa-chevron-down"></i>
-                </div>
-                <div class="faq-a">
-                   ކޯސްތަކަށް ކޮންމެ ކޯހެއްގެ ޝަރުޠުތައް އޮވެއެވެ. ސެޝަންތަކާއި ކްލާސްތަކަށް ވަކި ޝަރުޠެއް ނޯވެއެވެ..
-                </div>
-            </div>
+        .txt-en {
+            font-family: 'Cinzel', serif; /* Royal English Font */
+            color: #e0e0e0;
+            font-size: 1.1em;
+            line-height: 1.6;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-top: 1px solid rgba(180, 150, 88, 0.3);
+            border-bottom: 1px solid rgba(180, 150, 88, 0.3);
+            padding: 15px 0;
+        }
+
+        .txt-ar {
+            font-family: 'Amiri', serif; /* Arabic Font */
+            color: #F9D976; /* Gold text for Arabic */
+            font-size: 1.5em;
+            line-height: 1.8;
+            direction: rtl;
+            font-weight: bold;
+        }
+
+        /* Animations */
+        @keyframes shine-line {
+            0% { background-position: 100% 0; }
+            100% { background-position: -100% 0; }
+        }
+        @keyframes float-crown {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+    </style>
+
+    <div class="royal-banner-card">
+        
+        <i class="fas fa-crown crown-icon"></i>
+
+        <div class="txt-dv">
+            ޒާދް އެކަޑެމީ އާއި ޒާދް ކޮންސަލްޓެންސީ ފާމަކީ ތަފާތު ހުނަރުތަކާއި، ޢަރަބި އަދި އިނގިރޭސި ބަހުގެ އިތުރުން ޒަމާނީ ޢިލްމާއި ތަމްރީނު ފޯރުކޮށްދޭ ޝާމިލު މަރުކަޒެކެވެ.
+        </div>
+
+        <div class="gold-laser-line"></div>
+
+        <div class="txt-en">
+            Zaad Academy & Consultancy Firm: A Premier Hub for Diverse Skills, Arabic, English, Modern Education, and Professional Training.
+        </div>
+
+        <div class="txt-ar">
+            أكاديمية زاد ومؤسسة زاد للاستشارات: منارة لتقديم المهارات المتنوعة، واللغتين العربية والإنجليزية، والعلوم الحديثة والتدريب المهني.
+        </div>
+
+    </div>
+</div>
 
         </main>
 
