@@ -1444,122 +1444,108 @@
     </div>
 </div>
         
-            <div class="royal-intro-section" style="margin-bottom: 40px;">
+         <div class="royal-intro-section" style="margin-bottom: 40px;">
     
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Amiri:wght@400;700&family=Playfair+Display:ital@0;1&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
 
     <style>
-        /* --- 1. LOAD FARUUMA FONT MANUALLY --- */
-        @font-face {
-            font-family: 'Faruuma';
-            /* Ensure you have a 'fonts' folder with 'Faruuma.ttf' inside */
-            src: url('fonts/Faruuma.ttf') format('truetype');
-            font-weight: normal;
-            font-style: normal;
-        }
-
-        .royal-banner-card {
+        .royal-burgundy-card {
             position: relative;
-            background: linear-gradient(145deg, #051626, #000000);
-            border: 2px solid #B49658;
-            border-radius: 15px;
-            padding: 40px 25px;
+            /* Royal Burgundy Gradient Background */
+            background: linear-gradient(135deg, #2c0413 0%, #1a020a 100%);
+            border: 3px solid #FFD700; /* Bright Gold Border */
+            border-radius: 12px;
+            padding: 40px 30px;
             text-align: center;
             overflow: hidden;
-            box-shadow: 0 15px 40px -5px rgba(180, 150, 88, 0.4), 
-                        inset 0 0 20px rgba(0, 0, 0, 0.8);
-            transition: transform 0.3s ease;
+            /* Static Gold Glow */
+            box-shadow: 0 0 25px rgba(255, 215, 0, 0.3), inset 0 0 30px rgba(0,0,0,0.8);
+            z-index: 1;
         }
 
-        .royal-banner-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 20px 50px -5px rgba(180, 150, 88, 0.6), 
-                        inset 0 0 20px rgba(0, 0, 0, 0.8);
+        /* --- STRONG SIDE LED LIGHT ANIMATION --- */
+        .royal-burgundy-card::before, .royal-burgundy-card::after {
+            content: '';
+            position: absolute;
+            width: 6px;
+            height: 100%;
+            top: 0;
+            background: linear-gradient(to top, transparent, #FFD700, #fff, #FFD700, transparent);
+            background-size: 100% 200%;
+            animation: side-light-up 2s linear infinite;
+            box-shadow: 0 0 20px #FFD700; /* Strong LED Glow */
+            z-index: 2;
         }
 
-        /* Animated Golden Line */
-        .gold-laser-line {
-            height: 3px;
-            width: 80%;
-            margin: 20px auto;
-            background: linear-gradient(90deg, transparent, #B49658, #FFF, #B49658, transparent);
-            background-size: 200% 100%;
-            animation: shine-line 3s infinite linear;
-            border-radius: 50%;
-            box-shadow: 0 0 15px #B49658;
+        /* Left Side Light */
+        .royal-burgundy-card::before {
+            left: 0;
         }
 
-        /* Decorative Crown Icon */
-        .crown-icon {
-            font-size: 3em;
-            background: linear-gradient(to bottom, #F9D976, #B49658);
+        /* Right Side Light */
+        .royal-burgundy-card::after {
+            right: 0;
+            animation-delay: 1s; /* Offset for better effect */
+        }
+
+        @keyframes side-light-up {
+            0% { background-position: 0% 200%; opacity: 0; }
+            50% { opacity: 1; }
+            100% { background-position: 0% -100%; opacity: 0; }
+        }
+
+        /* Crown Icon */
+        .royal-icon {
+            font-size: 3.5em;
+            background: linear-gradient(to bottom, #FFF8DC, #FFD700, #B8860B);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            margin-bottom: 15px;
-            filter: drop-shadow(0 0 5px rgba(180, 150, 88, 0.5));
-            animation: float-crown 4s ease-in-out infinite;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.6));
+            animation: pulse-crown 3s infinite alternate;
         }
 
-        /* Text Styles */
-        .txt-dv {
-            /* Priority given to Faruuma */
-            font-family: 'Faruuma', 'MV Boli', 'Noto Sans Thaana', serif;
+        /* English Text Styling */
+        .txt-eng {
+            font-family: 'Cinzel', serif;
             color: #ffffff;
-            font-size: 1.6em; /* Increased size slightly for Faruuma */
-            line-height: 1.8;
-            margin-bottom: 15px;
-            direction: rtl;
-            text-shadow: 0 2px 4px black;
-        }
-
-        .txt-en {
-            font-family: 'Cinzel', serif; /* Royal English Font */
-            color: #e0e0e0;
-            font-size: 1.1em;
+            font-size: 1.3em;
             line-height: 1.6;
-            margin-bottom: 15px;
+            font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            border-top: 1px solid rgba(180, 150, 88, 0.3);
-            border-bottom: 1px solid rgba(180, 150, 88, 0.3);
-            padding: 15px 0;
+            letter-spacing: 2px;
+            margin-bottom: 20px;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.8);
+            border-bottom: 1px solid rgba(255, 215, 0, 0.3);
+            padding-bottom: 20px;
         }
 
-        .txt-ar {
-            font-family: 'Amiri', serif; /* Arabic Font */
-            color: #F9D976; /* Gold text for Arabic */
-            font-size: 1.5em;
+        /* Arabic Text Styling */
+        .txt-ara {
+            font-family: 'Amiri', serif;
+            color: #FFD700; /* Gold Color */
+            font-size: 1.8em;
             line-height: 1.8;
-            direction: rtl;
             font-weight: bold;
+            direction: rtl;
+            text-shadow: 0 0 5px rgba(255, 215, 0, 0.3);
         }
 
-        /* Animations */
-        @keyframes shine-line {
-            0% { background-position: 100% 0; }
-            100% { background-position: -100% 0; }
-        }
-        @keyframes float-crown {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-8px); }
+        @keyframes pulse-crown {
+            from { transform: scale(1); filter: drop-shadow(0 0 5px #FFD700); }
+            to { transform: scale(1.1); filter: drop-shadow(0 0 20px #FFD700); }
         }
     </style>
 
-    <div class="royal-banner-card">
+    <div class="royal-burgundy-card">
         
-        <i class="fas fa-crown crown-icon"></i>
+        <i class="fas fa-crown royal-icon"></i>
 
-        <div class="txt-dv">
-            ޒާދް އެކަޑެމީ އާއި ޒާދް ކޮންސަލްޓެންސީ ފާމަކީ ތަފާތު ހުނަރުތަކާއި، ޢަރަބި އަދި އިނގިރޭސި ބަހުގެ އިތުރުން ޒަމާނީ ޢިލްމާއި ތަމްރީނު ފޯރުކޮށްދޭ ޝާމިލު މަރުކަޒެކެވެ.
-        </div>
-
-        <div class="gold-laser-line"></div>
-
-        <div class="txt-en">
+        <div class="txt-eng">
             Zaad Academy & Consultancy Firm: A Premier Hub for Diverse Skills, Arabic, English, Modern Education, and Professional Training.
         </div>
 
-        <div class="txt-ar">
+        <div class="txt-ara">
             أكاديمية زاد ومؤسسة زاد للاستشارات: منارة لتقديم المهارات المتنوعة، واللغتين العربية والإنجليزية، والعلوم الحديثة والتدريب المهني.
         </div>
 
