@@ -445,301 +445,167 @@
 </div>
 
         <div class="widget" style="padding:0; border:none; background:transparent; box-shadow:none;">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+
     <style>
         .royal-web-card {
             position: relative;
             width: 100%;
-            min-height: 400px;
-            background-color: #051626; /* Deep Royal Blue Background */
-            border: 3px solid #B49658; /* Royal Gold Border */
-            border-radius: 15px;
+            min-height: 420px;
+            background-color: #020b14; /* Midnight Blue */
+            border: 2px solid #C5A059; /* Royal Gold */
+            border-radius: 12px;
             overflow: hidden;
             text-align: center;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.6);
-            transition: transform 0.3s ease;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.7);
+            transition: all 0.4s ease;
         }
-        .royal-web-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 50px rgba(180, 150, 88, 0.3); /* Gold Glow on Hover */
-        }
-
-        /* Animated Background GIF */
-        .web-bg-anim {
-            position: absolute;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            /* High quality Tech/Network GIF */
-            background-image: url('https://i.pinimg.com/originals/24/a5/3d/24a53d9221199a6d9134a66a157c917b.gif'); 
-            background-size: cover;
-            background-position: center;
-            opacity: 0.2; /* Darkened to make text readable */
-            z-index: 0;
-        }
-
-        /* Content Overlay */
-        .web-content {
-            position: relative;
-            z-index: 2;
-            padding: 25px;
-            width: 100%;
-            background: linear-gradient(to top, rgba(5, 22, 38, 0.95) 10%, rgba(12, 45, 72, 0.4) 100%);
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-
-        .web-icon {
-            font-size: 3em;
-            background: linear-gradient(45deg, #B49658, #F9D976);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 15px;
-            animation: pulse-gold 3s infinite;
-        }
-
-        .web-title {
-            /* Added Faruuma Font Priority */
-            font-family: 'Faruuma', 'MV Boli', 'Amiri', serif;
-            color: #ffffff;
-            font-size: 1.8em;
-            line-height: 1.4;
-            margin-bottom: 15px;
-            text-shadow: 0 2px 4px #000;
-            border-bottom: 2px solid #B49658;
-            padding-bottom: 10px;
-            display: inline-block;
-        }
-
-        .web-desc {
-            color: #e0e0e0;
-            font-size: 1.1em;
-            line-height: 1.8;
-            margin-bottom: 20px;
-            /* Added Faruuma Font Priority */
-            font-family: 'Faruuma', 'MV Boli', sans-serif;
-            text-shadow: 1px 1px 2px black;
-        }
-
-        .lang-badges {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-        .l-badge {
-            background: rgba(180, 150, 88, 0.2);
-            border: 1px solid #B49658;
-            color: #B49658;
-            padding: 5px 12px;
-            border-radius: 15px;
-            font-size: 0.9em;
-            font-weight: bold;
-            /* Added Faruuma Font Priority */
-            font-family: 'Faruuma', 'Roboto', sans-serif;
-        }
-
-        /* Contact Buttons */
-        .contact-row {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            width: 100%;
-        }
-        .call-btn {
-            background: linear-gradient(90deg, #B49658, #8e733b);
-            color: white;
-            padding: 12px;
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: bold;
-            /* Added Faruuma Font Priority */
-            font-family: 'Faruuma', sans-serif; 
-            font-size: 1.2em;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 10px;
-            transition: 0.3s;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-        }
-        .call-btn:hover {
-            background: linear-gradient(90deg, #F9D976, #B49658);
-            color: #051626;
-            transform: scale(1.02);
-        }
-
-        @keyframes pulse-gold {
-            0% { transform: scale(1); filter: drop-shadow(0 0 5px rgba(180, 150, 88, 0.5)); }
-            50% { transform: scale(1.1); filter: drop-shadow(0 0 15px rgba(249, 217, 118, 0.8)); }
-            100% { transform: scale(1); filter: drop-shadow(0 0 5px rgba(180, 150, 88, 0.5)); }
-        }
-    </style>
-
-    <div class="royal-web-card">
-        <div class="web-bg-anim"></div>
         
-        <div class="web-content">
-            <div class="web-icon"><i class="fas fa-laptop-code"></i></div>
-            
-            <h2 class="web-title">
-                ޕްރޮފެޝަނަލް ވެބްސައިޓް<br>
-                <span style="color:#B49658; font-size:0.8em;">ޑިޒައިން ކުރުމުގެ ޚިދުމަތް</span>
-            </h2>
-
-            <div class="lang-badges">
-                <span class="l-badge">ދިވެހި</span>
-                <span class="l-badge">English</span>
-                <span class="l-badge">عربي</span>
-            </div>
-
-            <div class="web-desc">
-                އެންމެ ޒަމާނީ ފެންވަރަށް ވެބްސައިޓް ފަރުމާކޮށް، ހުރިހާ ސަރވިސްއެއް އެއްކޮށްދީ އަދި އަޕްޑޭޓްކޮށް ބަލަހައްޓައިދެމެވެ.
-            </div>
-
-            <div class="contact-row">
-                <a href="tel:7791550" class="call-btn">
-                    <i class="fas fa-phone-alt"></i> 7791550
-                </a>
-                <a href="tel:9901550" class="call-btn" style="background: transparent; border: 1px solid #B49658; color: #B49658;">
-                    <i class="fas fa-mobile-alt"></i> 9901550
-                </a>
-            </div>
-        </div>
-    </div>
-</div>
-            <div class="widget" style="padding:0; border:none; background:transparent; box-shadow:none;">
-    <style>
-        .royal-web-card {
-            position: relative;
-            width: 100%;
-            min-height: 400px;
-            background-color: #051626; /* Deep Royal Blue Background */
-            border: 3px solid #B49658; /* Royal Gold Border */
-            border-radius: 15px;
-            overflow: hidden;
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.6);
-            transition: transform 0.3s ease;
-        }
         .royal-web-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 20px 50px rgba(180, 150, 88, 0.3); /* Gold Glow on Hover */
+            border-color: #ffffff;
+            box-shadow: 0 0 30px rgba(197, 160, 89, 0.4);
         }
 
-        /* Animated Background GIF */
+        /* Background Animation */
         .web-bg-anim {
             position: absolute;
             top: 0; left: 0;
             width: 100%; height: 100%;
-            /* High quality Tech/Network GIF */
-            background-image: url('https://i.pinimg.com/originals/24/a5/3d/24a53d9221199a6d9134a66a157c917b.gif'); 
+            /* High-tech abstract network background */
+            background-image: url('https://i.pinimg.com/originals/6e/0f/5d/6e0f5d47530c3453303d8df552278453.gif'); 
             background-size: cover;
             background-position: center;
-            opacity: 0.2; /* Darkened to make text readable */
+            opacity: 0.25;
             z-index: 0;
+            filter: grayscale(40%) sepia(20%) hue-rotate(180deg);
         }
 
-        /* Content Overlay */
+        /* Glassmorphism Overlay */
         .web-content {
             position: relative;
             z-index: 2;
-            padding: 25px;
+            padding: 30px 20px;
             width: 100%;
-            background: linear-gradient(to top, rgba(5, 22, 38, 0.95) 10%, rgba(12, 45, 72, 0.4) 100%);
             height: 100%;
+            background: linear-gradient(to bottom, rgba(5, 22, 38, 0.8) 0%, rgba(2, 11, 20, 0.95) 100%);
             display: flex;
             flex-direction: column;
             justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(2px);
         }
 
-        .web-icon {
-            font-size: 3em;
-            background: linear-gradient(45deg, #B49658, #F9D976);
+        /* Gold Icon */
+        .web-icon-box {
+            width: 70px; height: 70px;
+            background: rgba(197, 160, 89, 0.1);
+            border: 1px solid #C5A059;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 15px;
+            box-shadow: 0 0 15px rgba(197, 160, 89, 0.3);
+            animation: pulse-ring 3s infinite;
+        }
+        .web-icon-box i {
+            font-size: 30px;
+            color: #F9D976;
+        }
+
+        /* Typography */
+        .web-title {
+            font-family: 'Cinzel', serif; /* Cinematic Royal Font */
+            color: #ffffff;
+            font-size: 1.6em;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 5px;
+            background: linear-gradient(to right, #C5A059, #F9D976, #C5A059);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            margin-bottom: 15px;
-            animation: pulse-gold 3s infinite;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
         }
 
-        .web-title {
-            font-family: 'Faruuma', 'Amiri', serif;
-            color: #ffffff;
-            font-size: 1.8em;
-            line-height: 1.3;
+        .web-subtitle {
+            font-family: 'Playfair Display', serif;
+            color: #dddddd;
+            font-size: 1em;
+            font-style: italic;
             margin-bottom: 15px;
-            text-shadow: 0 2px 4px #000;
-            border-bottom: 2px solid #B49658;
-            padding-bottom: 10px;
-            display: inline-block;
+            letter-spacing: 1px;
         }
 
         .web-desc {
-            color: #e0e0e0;
-            font-size: 1em;
+            font-family: 'Roboto', sans-serif;
+            color: #aaaaaa;
+            font-size: 0.9em;
             line-height: 1.6;
             margin-bottom: 20px;
-            font-family: 'Faruuma', sans-serif;
-            text-shadow: 1px 1px 2px black;
+            padding: 0 10px;
         }
 
-        .lang-badges {
+        /* Features List */
+        .web-features {
             display: flex;
-            justify-content: center;
             gap: 10px;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
         }
-        .l-badge {
-            background: rgba(180, 150, 88, 0.2);
-            border: 1px solid #B49658;
-            color: #B49658;
-            padding: 3px 10px;
-            border-radius: 15px;
-            font-size: 0.8em;
-            font-weight: bold;
-        }
-
-        /* Contact Buttons */
-        .contact-row {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            width: 100%;
-        }
-        .call-btn {
-            background: linear-gradient(90deg, #B49658, #8e733b);
-            color: white;
-            padding: 12px;
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: bold;
+        .wf-badge {
+            background: transparent;
+            border: 1px solid rgba(255,255,255,0.2);
+            color: #C5A059;
+            padding: 4px 10px;
+            font-size: 0.75em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
             font-family: sans-serif;
+        }
+
+        /* Call to Action */
+        .web-contact-btn {
+            background: linear-gradient(90deg, #8E733B 0%, #C5A059 50%, #8E733B 100%);
+            background-size: 200% auto;
+            color: #000;
+            text-decoration: none;
+            padding: 12px 30px;
+            font-family: 'Cinzel', serif;
+            font-weight: bold;
             font-size: 1.1em;
+            border-radius: 0; /* Sharp edges for royal feel */
+            border: 1px solid #F9D976;
+            transition: 0.4s;
             display: flex;
-            justify-content: center;
             align-items: center;
             gap: 10px;
-            transition: 0.3s;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            box-shadow: 0 5px 20px rgba(197, 160, 89, 0.3);
         }
-        .call-btn:hover {
-            background: linear-gradient(90deg, #F9D976, #B49658);
-            color: #051626;
-            transform: scale(1.02);
+        .web-contact-btn:hover {
+            background-position: right center;
+            color: #fff;
+            letter-spacing: 1px;
         }
 
-        @keyframes pulse-gold {
-            0% { transform: scale(1); filter: drop-shadow(0 0 5px rgba(180, 150, 88, 0.5)); }
-            50% { transform: scale(1.1); filter: drop-shadow(0 0 15px rgba(249, 217, 118, 0.8)); }
-            100% { transform: scale(1); filter: drop-shadow(0 0 5px rgba(180, 150, 88, 0.5)); }
+        .secondary-contact {
+            margin-top: 10px;
+            font-size: 0.9em;
+            color: #888;
+            font-family: 'Roboto', sans-serif;
+        }
+        .secondary-contact a { color: #C5A059; text-decoration: none; transition: 0.3s; }
+        .secondary-contact a:hover { color: #fff; }
+
+        @keyframes pulse-ring {
+            0% { box-shadow: 0 0 0 0 rgba(197, 160, 89, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(197, 160, 89, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(197, 160, 89, 0); }
         }
     </style>
 
@@ -747,35 +613,34 @@
         <div class="web-bg-anim"></div>
         
         <div class="web-content">
-            <div class="web-icon"><i class="fas fa-laptop-code"></i></div>
-            
-            <h2 class="web-title">
-                ޕްރޮފެޝަނަލް ވެބްސައިޓް<br>
-                <span style="color:#B49658; font-size:0.7em;">ޑިޒައިން ކުރުމުގެ ޚިދުމަތް</span>
-            </h2>
-
-            <div class="lang-badges">
-                <span class="l-badge">ދިވެހި</span>
-                <span class="l-badge">English</span>
-                <span class="l-badge">عربي</span>
+            <div class="web-icon-box">
+                <i class="fas fa-layer-group"></i>
             </div>
+
+            <div class="web-title">Elite Web Design</div>
+            <div class="web-subtitle">Research & Publishing Firm</div>
 
             <div class="web-desc">
-                އެންމެ ޒަމާނީ ފެންވަރަށް ވެބްސައިޓް ފަރުމާކޮށް، ހުރިހާ ސަރވިސްއެއް އެއްކޮށްދީ އަދި އަޕްޑޭޓްކޮށް ބަލަހައްޓައިދެމެވެ.
+                We design premium websites, integrate all services, and provide lifetime updates. <br>
+                <span style="color:#fff; display:block; margin-top:5px;">Professional • Secure • Modern</span>
             </div>
 
-            <div class="contact-row">
-                <a href="tel:7791550" class="call-btn">
-                    <i class="fas fa-phone-alt"></i> 7791550
-                </a>
-                <a href="tel:9901550" class="call-btn" style="background: transparent; border: 1px solid #B49658; color: #B49658;">
-                    <i class="fas fa-mobile-alt"></i> 9901550
-                </a>
+            <div class="web-features">
+                <span class="wf-badge">ENG</span>
+                <span class="wf-badge">ARA</span>
+                <span class="wf-badge">DHI</span>
+            </div>
+
+            <a href="tel:7791550" class="web-contact-btn">
+                <i class="fas fa-phone"></i> 779-1550
+            </a>
+            
+            <div class="secondary-contact">
+                or call <a href="tel:9901550">990-1550</a>
             </div>
         </div>
     </div>
 </div>
-
             <div class="widget">
                 <h3 class="widget-title"><i class="fas fa-file-download"></i> ފޯމުތައް</h3>
                 <ul class="side-links">
