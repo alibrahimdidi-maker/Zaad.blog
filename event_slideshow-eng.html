@@ -6,7 +6,8 @@
     <style>
         /* 1. English Font (Primary) */
         @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
-        /* 2. Faruuma Font (Local - For mixed Dhivehi content) */
+
+        /* 2. Faruuma Font (Local - Kept for mixed Dhivehi Input) */
         @font-face {
             font-family: 'Faruuma';
             src: local('Faruuma'), local('Faruumaa'), url('Fonts/faruuma.ttf') format('truetype');
@@ -23,26 +24,39 @@
             --panel-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
         }
 
-        /* BODY (ENGLISH STYLE) */
+        /* DEFAULT BODY STYLE (ENGLISH) */
         body {
             -webkit-user-select: none; user-select: none;
             margin: 0; padding: 0;
             background: linear-gradient(135deg, #000c1a 0%, #00281c 100%);
             overflow: hidden; height: 100vh; width: 100vw;
             color: #333;
-            font-family: 'Roboto', 'Segoe UI', sans-serif; /* English Font */
+            /* Default Font for English Interface */
+            font-family: 'Roboto', 'Segoe UI', sans-serif;
         }
 
-        /* --- LANGUAGE SWITCHER --- */
+        /* --- LANGUAGE SWITCHER TABS --- */
         .lang-tabs { 
-            display: flex; gap: 5px; margin-bottom: 10px; 
-            justify-content: center; direction: ltr !important; flex-shrink: 0;
+            display: flex; 
+            gap: 5px; 
+            margin-bottom: 10px; 
+            justify-content: center; 
+            direction: ltr !important; 
+            flex-shrink: 0;
         }
         .lang-btn {
-            flex: 1; padding: 8px; text-align: center; text-decoration: none;
-            background: #37474f; color: #fff; border-radius: 4px; 
-            font-size: 13px; font-weight: bold; border: 1px solid #555; 
-            transition: 0.3s; font-family: 'Roboto', sans-serif;
+            flex: 1; 
+            padding: 8px; 
+            text-align: center; 
+            text-decoration: none;
+            background: #37474f; 
+            color: #fff; 
+            border-radius: 4px; 
+            font-size: 13px; 
+            font-weight: bold; 
+            border: 1px solid #555; 
+            transition: 0.3s;
+            font-family: 'Roboto', sans-serif;
         }
         .lang-btn:hover { background: var(--royal-accent); color: #000; }
         .lang-btn.active { background: var(--royal-blue-mid); border: 1px solid #fff; pointer-events: none; }
@@ -52,42 +66,77 @@
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
             background: rgba(0,0,0,0.98); z-index: 99999;
             display: flex; justify-content: center; align-items: center;
-            direction: ltr !important; text-align: center;
+            direction: ltr !important;
+            text-align: center;
         }
+
         .sec-box { 
             background: linear-gradient(135deg, var(--royal-blue-dark), var(--royal-green)); 
-            padding: 60px; border-radius: 20px; border: 2px solid var(--royal-accent); 
-            box-shadow: 0 0 50px rgba(13, 71, 161, 0.5); max-width: 600px; width: 90%;
+            padding: 60px; border-radius: 20px; 
+            border: 2px solid var(--royal-accent); 
+            box-shadow: 0 0 50px rgba(13, 71, 161, 0.5);
+            max-width: 600px; width: 90%;
         }
-        .sec-input { padding: 15px; font-size: 24px; text-align: center; width: 100%; margin-top: 20px; background: #fff; color: #000; border-radius:5px; border:none; font-family: 'Roboto'; }
-        .sec-btn { margin-top: 25px; padding: 15px 50px; font-size: 20px; background: var(--royal-blue-mid); color: #fff; border: 1px solid #fff; cursor: pointer; font-weight: bold; border-radius:8px; text-transform: uppercase; font-family: 'Roboto'; }
+        
+        .sec-input { 
+            padding: 15px; font-size: 24px; text-align: center; width: 100%; 
+            margin-top: 20px; background: #fff; color: #000; 
+            border-radius:5px; border:none; font-family: 'Roboto', sans-serif;
+        }
+        
+        .sec-btn { 
+            margin-top: 25px; padding: 15px 50px; font-size: 20px; 
+            background: var(--royal-blue-mid); color: #fff; 
+            border: 1px solid #fff; cursor: pointer; font-weight: bold; 
+            border-radius:8px; text-transform: uppercase; font-family: 'Roboto', sans-serif;
+        }
         .sec-btn:hover { background: #fff; color: var(--royal-blue-mid); }
 
         /* --- UI LAYOUT --- */
-        .main-layout { display: none; gap: 20px; height: 100vh; width: 100vw; padding: 15px; box-sizing: border-box; }
+        .main-layout { 
+            display: none; gap: 20px; height: 100vh; width: 100vw; 
+            padding: 15px; box-sizing: border-box; 
+        }
 
         /* SIDEBAR (SCROLLABLE) */
         .sidebar {
-            flex: 0 0 360px; background: #f8fbff; padding: 15px; border-radius: 12px;
-            display: flex; flex-direction: column; height: 100%; overflow-y: auto;
-            box-shadow: var(--panel-shadow); border: 3px solid var(--royal-blue-dark);
+            flex: 0 0 360px; 
+            background: #f8fbff; 
+            padding: 15px; border-radius: 12px;
+            display: flex; flex-direction: column; height: 100%; 
+            overflow-y: auto; /* Allow vertical scrolling */
+            box-shadow: var(--panel-shadow);
+            border: 3px solid var(--royal-blue-dark);
         }
         
         .sidebar h2 { color: var(--royal-blue-dark); text-align:center; margin-bottom: 10px; border-bottom: 2px solid var(--royal-blue-mid); padding-bottom: 5px; font-size: 22px; }
         
+        /* DEVELOPER CREDITS */
         .dev-credits {
-            margin-top: 20px; text-align: center; font-size: 11px; color: #555;
-            background: #e3f2fd; padding: 10px; border-radius: 6px;
-            border: 1px solid #bbdefb; font-weight: bold; line-height: 1.4; flex-shrink: 0;
+            margin-top: 20px; 
+            text-align: center; 
+            font-size: 11px; 
+            color: #555;
+            background: #e3f2fd; 
+            padding: 10px; 
+            border-radius: 6px;
+            border: 1px solid #bbdefb; 
+            font-weight: bold; 
+            line-height: 1.4;
+            flex-shrink: 0;
         }
         .dev-name { color: var(--royal-blue-dark); font-size: 13px; display: block; margin-bottom: 2px; }
         .company-name { color: var(--royal-green); font-size: 10px; display: block; letter-spacing: 0.5px; }
 
         /* EDITOR (RIGHT) */
         .editor {
-            flex: 1; background: #fff; padding: 25px; border-radius: 12px;
+            flex: 1; 
+            background: #fff; 
+            padding: 25px; border-radius: 12px;
             display: flex; flex-direction: column; height: 100%; overflow-y: auto; 
-            position: relative; box-shadow: var(--panel-shadow); border: 3px solid var(--royal-green);
+            position: relative;
+            box-shadow: var(--panel-shadow);
+            border: 3px solid var(--royal-green);
         }
 
         /* SCROLLBAR */
@@ -99,70 +148,157 @@
         h2, h3 { margin: 5px 0; font-family: 'Roboto', sans-serif; }
         label { display: block; font-weight: bold; font-size: 14px; margin-bottom: 5px; color: var(--royal-blue-dark); }
         
+        /* CATEGORY HEADERS */
         .d-label { 
-            font-size: 16px; font-weight: 900; color: var(--royal-blue-mid);
-            display: block; margin-top: 15px; margin-bottom: 8px; 
-            border-bottom: 2px solid #b3e5fc; padding-bottom: 4px; 
+            font-size: 16px; 
+            font-weight: 900; 
+            color: var(--royal-blue-mid);
+            display: block; 
+            margin-top: 15px; 
+            margin-bottom: 8px; 
+            border-bottom: 2px solid #b3e5fc; 
+            padding-bottom: 4px; 
         }
 
         /* INPUTS */
         input[type="text"], textarea, select { 
-            width: 100%; padding: 10px; border: 1px solid var(--input-border); 
-            border-radius: 6px; background: var(--input-bg); color: #000;
-            margin-bottom: 8px; font-size: 14px; font-family: 'Roboto', 'Faruuma', sans-serif;
+            width: 100%; padding: 10px; 
+            border: 1px solid var(--input-border); 
+            border-radius: 6px; 
+            background: var(--input-bg);
+            color: #000;
+            margin-bottom: 8px; 
+            font-size: 14px;
             box-sizing: border-box; transition: all 0.3s;
+            font-family: 'Roboto', 'Faruuma', sans-serif; /* Allow Dhivehi typing */
         }
         input[type="text"]:focus, select:focus, textarea:focus { 
-            border-color: var(--royal-blue-mid); background: #fff; outline: none; 
+            border-color: var(--royal-blue-mid); 
+            background: #fff;
+            outline: none; 
             box-shadow: 0 0 8px rgba(13, 71, 161, 0.3); 
         }
 
-        #jLine1 { font-size: 24px !important; font-weight: 900 !important; text-align: center !important; background: #fff8e1; height: 50px; }
-        
-        /* FONT SIZES */
+        /* --- SPECIAL STYLING FOR JALSA TITLES --- */
+        #jLine1 {
+            font-size: 24px !important; 
+            font-weight: 900 !important;
+            text-align: center !important; 
+            color: var(--royal-blue-dark);
+            border: 2px solid var(--royal-accent); 
+            background: #fff8e1; 
+            height: 60px;
+        }
+        #jLine2, #jLine3, #jLine4 {
+            font-size: 18px !important; 
+            font-weight: bold !important;
+            text-align: center !important; 
+            color: var(--royal-blue-mid);
+            height: 45px;
+        }
+
+        /* FONT SIZES & ALIGNMENT */
         .font-dv { font-size: 20px !important; direction: rtl; text-align: right; font-family: 'Faruuma', serif !important; }
-        .eng { font-size: 16px !important; direction: ltr; text-align: left; font-family: 'Roboto', serif !important; font-weight: bold; }
+        .eng { font-size: 18px !important; direction: ltr; text-align: left; font-family: 'Times New Roman', serif !important; font-weight: bold; }
 
         input[type=range] { width: 100%; cursor: pointer; height: 15px; accent-color: var(--royal-blue-mid); margin: 5px 0; }
-        input[type=color] { width: 45px; height: 35px; border: 2px solid #fff; border-radius: 6px; cursor: pointer; vertical-align: middle; }
+        input[type=color] { width: 45px; height: 35px; border: 2px solid #fff; border-radius: 6px; cursor: pointer; vertical-align: middle; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
 
+        /* --- SETTINGS GROUPS --- */
         .group-box {
-            border: 1px solid #bbdefb; border-radius: 10px; padding: 30px 20px 20px 20px;
-            margin-bottom: 35px; background: #f1f8e9; position: relative;
+            border: 1px solid #bbdefb;
+            border-radius: 10px;
+            padding: 30px 20px 20px 20px;
+            margin-bottom: 35px; 
+            background: #f1f8e9;
+            position: relative;
             box-shadow: 0 4px 10px rgba(0,0,0,0.05);
         }
+        
         .group-title {
-            position: absolute; top: -20px; right: 20px; background: var(--royal-blue-dark); color: #fff;
-            padding: 8px 25px; font-size: 16px; font-weight: bold; border-radius: 20px;
+            position: absolute; top: -20px; right: 20px;
+            background: var(--royal-blue-dark);
+            color: #fff;
+            padding: 8px 25px; 
+            font-size: 16px; 
+            font-weight: bold;
+            border-radius: 20px;
             box-shadow: 0 4px 8px rgba(0,0,0,0.3); z-index: 10;
         }
+
         .design-col { flex: 1; }
 
-        /* BUTTONS */
-        button { cursor: pointer; font-weight: bold; transition: all 0.2s; font-family: 'Roboto'; }
-        .launch-btn { background: linear-gradient(to bottom, #d32f2f, #b71c1c); color: white; padding: 12px; width: 100%; border: 1px solid #ffcdd2; border-radius: 6px; margin-bottom: 10px; font-size: 16px; }
+        /* --- BUTTONS --- */
+        button { cursor: pointer; font-weight: bold; transition: all 0.2s; font-family: 'Roboto', sans-serif; }
+        
+        .launch-btn { 
+            background: linear-gradient(to bottom, #d32f2f, #b71c1c);
+            color: white; padding: 12px; width: 100%; border: 1px solid #ffcdd2; 
+            border-radius: 6px; margin-bottom: 10px; font-size: 16px; box-shadow: 0 3px 5px rgba(0,0,0,0.2); 
+        }
         .launch-btn:hover { filter: brightness(1.1); }
+
         .conf-btn { flex: 1; padding: 8px; font-size: 12px; border-radius: 4px; border: 1px solid #1565c0; color: #fff; background: var(--royal-blue-mid); }
+        .conf-btn:hover { background: var(--royal-blue-dark); }
         .config-btn-row { display: flex; gap: 5px; margin-bottom: 10px; }
-        .btn-live { background: linear-gradient(to bottom, #2e7d32, #1b5e20); flex: 2; border: 2px solid #a5d6a7; color: #fff; font-size: 20px; padding: 12px; border-radius: 8px; }
-        .btn-nav { background: #546e7a; color: white; padding: 12px; font-size: 20px; border: none; border-radius: 8px; width: 60px; }
-        #lockBtn { background: #fbc02d; color: #000; padding: 12px; width: 100%; border: 2px solid #fff; border-radius: 8px; margin-bottom: 15px; font-size: 16px; }
+
+        .btn-live { 
+            background: linear-gradient(to bottom, #2e7d32, #1b5e20);
+            flex: 2; border: 2px solid #a5d6a7; 
+            color: #fff; font-size: 20px; padding: 12px; border-radius: 8px; 
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+        .btn-live:hover { filter: brightness(1.1); }
+        
+        .btn-nav { background: #546e7a; color: white; padding: 12px; font-size: 20px; border: none; border-radius: 8px; width: 60px; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+
+        #lockBtn {
+            background: #fbc02d; color: #000; padding: 12px; width: 100%; border: 2px solid #fff;
+            border-radius: 8px; margin-bottom: 15px; font-size: 16px; box-shadow: 0 3px 6px rgba(0,0,0,0.2);
+        }
         #lockBtn.active { background: #c62828; color: white; animation: pulse 2s infinite; }
         @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(198, 40, 40, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(198, 40, 40, 0); } 100% { box-shadow: 0 0 0 0 rgba(198, 40, 40, 0); } }
-        .locked-zone { opacity: 0.5; pointer-events: none; filter: grayscale(80%); }
 
-        .preview-container { display: flex; gap: 15px; align-items: center; justify-content: center; background: #fff; padding: 15px; border: 2px solid #b2dfdb; border-radius: 10px; margin-top: 15px; }
+        .locked-zone { opacity: 0.5; pointer-events: none; filter: grayscale(80%); user-select: none; transition: all 0.3s ease; }
+
+        /* --- PREVIEW --- */
+        .preview-container { 
+            display: flex; gap: 15px; align-items: center; justify-content: center; 
+            background: #fff; padding: 15px; border: 2px solid #b2dfdb; 
+            border-radius: 10px; margin-top: 15px; 
+        }
         #previewImg { height: 90px; width: 90px; object-fit: cover; border-radius: 50%; border: 3px solid var(--royal-blue-mid); background: #eee; }
+        
         .video-panel { background: #e1f5fe; padding: 15px; border-radius: 10px; border: 1px solid #81d4fa; margin-bottom: 20px; }
         .btn-vid { font-size: 13px; padding: 8px; margin-top: 5px; border:none; border-radius:4px; color:white; width: 100%; cursor: pointer; font-weight:bold; }
 
-        /* SYSTEM FILES */
-        #sidebarFiles { background: #fff; border: 1px solid #90caf9; border-radius: 8px; padding: 10px; }
-        #sidebarFiles label { font-size: 13px; color: #444; margin-bottom: 3px; }
-        #sidebarFiles input[type="file"] { font-size: 12px; padding: 5px; }
+        /* --- SYSTEM FILES --- */
+        #sidebarFiles {
+            background: #fff; 
+            border: 1px solid #90caf9; 
+            border-radius: 8px; 
+            padding: 10px;
+        }
+        #sidebarFiles label {
+            font-size: 13px; 
+            color: #444;
+            margin-bottom: 3px;
+        }
+        #sidebarFiles input[type="file"] {
+            font-size: 12px;
+            padding: 5px;
+        }
 
-        #cpFsBtn { position: fixed; bottom: 20px; left: 20px; width: 45px; height: 45px; background: var(--royal-blue-dark); color: #fff; border-radius: 50%; border: 2px solid #fff; box-shadow: 0 0 15px rgba(0,0,0,0.5); z-index: 1000; font-size: 20px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: transform 0.3s; }
+        /* --- FULL SCREEN BUTTON --- */
+        #cpFsBtn {
+            position: fixed; bottom: 20px; left: 20px; width: 45px; height: 45px;
+            background: var(--royal-blue-dark); color: #fff; border-radius: 50%;
+            border: 2px solid #fff; box-shadow: 0 0 15px rgba(0,0,0,0.5);
+            z-index: 1000; font-size: 20px; display: flex; align-items: center; justify-content: center;
+            cursor: pointer; transition: transform 0.3s;
+        }
         #cpFsBtn:hover { transform: scale(1.1); background: var(--royal-green); }
+
     </style>
 </head>
 <body oncontextmenu="return false;">
@@ -173,6 +309,7 @@
         <div class="sec-box">
             <h1 style="color:#fff; font-size:45px; margin-bottom:10px; text-shadow:0 2px 5px #000;">Royal Graduation V17.0</h1>
             <p style="color:#a0c4ff; font-size:16px; margin-bottom:30px;">🔒 PRO EDITION - ENTER LICENSE KEY</p>
+            
             <input type="password" id="licenseKey" class="sec-input" placeholder="Enter Key...">
             <button class="sec-btn" onclick="verifyLicense()">AUTHENTICATE</button>
             <p id="secMsg" style="color:#ff5252; font-size:14px; margin-top:20px; font-weight:bold;"></p>
@@ -181,6 +318,7 @@
 
     <div class="main-layout" id="mainApp">
         <div class="sidebar">
+            
             <div class="lang-tabs">
                 <a href="index.html" class="lang-btn">ދިވެހި</a>
                 <a href="#" class="lang-btn active">English</a>
@@ -205,7 +343,7 @@
 
             <div id="sidebarFiles">
                 <label style="color:#0d47a1; border-bottom:1px solid #e3f2fd; padding-bottom:5px; margin-bottom:8px; font-size:15px; font-weight:bold;">📂 System Files</label>
-                <label>1. CSV Student List:</label><input type="file" id="csvFile" accept=".csv">
+                <label>1. Student List (CSV):</label><input type="file" id="csvFile" accept=".csv">
                 <label>2. Photos Folder:</label><input type="file" id="photoFolder" webkitdirectory directory multiple>
                 <label>3. Logo Image:</label><input type="file" id="logoFile" accept="image/*">
                 <label>4. Custom Font (TTF):</label><input type="file" id="fontFile" accept=".ttf, .otf">
@@ -215,6 +353,7 @@
 
             <label style="margin-top:15px; color:#00281c;">🔍 Search Student:</label>
             <input type="text" id="search" placeholder="Type name..." onkeyup="filterList()">
+            
             <select id="stuList" size="10" style="flex-grow:1; border:1px solid #ccc; min-height: 200px;" onchange="loadStudent()"></select>
             
             <div class="dev-credits">
@@ -250,7 +389,7 @@
             <div id="statusMsg" style="font-weight:bold; color:#00695c; text-align:center; font-size:16px; margin:5px 0;">System Ready</div>
 
             <div style="background:#fff; padding:20px; border-radius:10px; border:2px solid #90caf9; margin:15px 0; box-shadow:0 3px 10px rgba(0,0,0,0.05);">
-                <h3 style="margin-top:0; font-size:22px; color:#0d47a1; border-bottom:1px solid #e3f2fd; padding-bottom:5px;">🎓 Student Details Input</h3>
+                <h3 style="margin-top:0; font-size:20px; color:#0d47a1; border-bottom:1px solid #e3f2fd; padding-bottom:5px;">🎓 Student Details</h3>
                 
                 <div style="margin-bottom: 10px;">
                     <label style="font-size:12px; color:#555;">Name (Local/Dhivehi - RTL):</label>
@@ -262,14 +401,22 @@
                     <input id="nE" class="eng" placeholder="Name (English)" style="width:100%; text-align:left;">
                 </div>
                 
-                <div class="row" style="display:flex; gap:10px;">
-                    <div class="col" style="flex:1"><input id="fD" class="font-dv" placeholder="Detail 1 (Local)"></div>
-                    <div class="col" style="flex:1"><input id="fE" class="eng" placeholder="Detail 1 (English)"></div>
+                <div class="row" style="display:flex; gap:10px; width:100%;">
+                    <div class="col" style="flex:1;">
+                        <input id="fD" class="font-dv" placeholder="Detail 1 (Local)" style="width:100%; text-align:right;">
+                    </div>
+                    <div class="col" style="flex:1;">
+                        <input id="fE" class="eng" placeholder="Detail 1 (English)" style="width:100%; text-align:left; direction:ltr;">
+                    </div>
                 </div>
-                
-                <div class="row" style="display:flex; gap:10px;">
-                    <div class="col" style="flex:1"><input id="cD" class="font-dv" placeholder="Detail 2 (Local)"></div>
-                    <div class="col" style="flex:1"><input id="cE" class="eng" placeholder="Detail 2 (English)"></div>
+
+                <div class="row" style="display:flex; gap:10px; width:100%; margin-top:5px;">
+                    <div class="col" style="flex:1;">
+                        <input id="cD" class="font-dv" placeholder="Detail 2 (Local)" style="width:100%; text-align:right;">
+                    </div>
+                    <div class="col" style="flex:1;">
+                        <input id="cE" class="eng" placeholder="Detail 2 (English)" style="width:100%; text-align:left; direction:ltr;">
+                    </div>
                 </div>
                 
                 <textarea id="cm" rows="2" class="font-dv" placeholder="Extra Info..."></textarea>
@@ -318,9 +465,9 @@
 
                         <span class="d-label">3. Card Position (Adjust Layout):</span>
                         <div style="display:flex; gap:10px; align-items:center; background:#fff; padding:10px; border-radius:8px; border:1px solid #ccc;">
-                            <span style="font-size:12px; font-weight:bold;">Left/Right:</span>
+                            <span style="font-size:12px; font-weight:bold;">Horizontal:</span>
                             <input type="range" id="cardXRange" min="-600" max="600" value="0" oninput="liveUpdate('cardX', this.value)">
-                            <span style="font-size:12px; font-weight:bold;">Up/Down:</span>
+                            <span style="font-size:12px; font-weight:bold;">Vertical:</span>
                             <input type="range" id="cardYRange" min="-450" max="450" value="0" oninput="liveUpdate('cardY', this.value)">
                         </div>
 
