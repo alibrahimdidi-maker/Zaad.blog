@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Royal Key Generator</title>
+    <style>
+        body { background: #111; color: #d4af37; font-family: sans-serif; text-align: center; padding-top: 50px; }
+        .box { border: 2px solid #d4af37; display: inline-block; padding: 40px; border-radius: 10px; background: #222; }
+        input, button { padding: 10px; font-size: 16px; border-radius: 5px; border: 1px solid #d4af37; margin-top: 10px; }
+        button { background: #d4af37; color: #000; font-weight: bold; cursor: pointer; margin-top: 20px; width: 100%; }
+        button:hover { background: #fff; }
+        textarea { width: 400px; height: 100px; margin-top: 20px; background: #000; color: #0f0; border: 1px solid #555; padding: 10px; font-family: monospace; }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <h2>🔐 Royal License Generator</h2>
+        <p>Select Expiry Date & Time (Valid Until):</p>
+        <input type="datetime-local" id="expDate">
+        <br>
+        <button onclick="genKey()">GENERATE KEY</button>
+        <br>
+        <p>Copy this Code:</p>
+        <textarea id="output" placeholder="Key will appear here..."></textarea>
+    </div>
+
+    <script>
+        function genKey() {
+            const dateStr = document.getElementById('expDate').value;
+            if(!dateStr) { alert("Please select a date!"); return; }
+            
+            // 1. Get Timestamp
+            const expiry = new Date(dateStr).getTime();
+            
+            // 2. Secret Salt (Must match the Main System code exactly)
+            const salt = "ROYAL_V5_SECURE"; 
+            
+            // 3. Create JSON Payload
+            const payload = JSON.stringify({ e: expiry, s: salt });
+            
+            // 4. Encode: Base64 -> Reverse String (To look like a complex key)
+            const key = btoa(payload).split('').reverse().join('');
+            
+            document.getElementById('output').value = key;
+        }
+    </script>
+</body>
+</html>
