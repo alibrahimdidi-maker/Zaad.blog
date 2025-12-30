@@ -506,23 +506,112 @@
     </div>
 </div>
 
-            <h2 style="color:var(--royal-blue); margin-bottom:15px;">އިސްލާމީ އިޤްތިޞާދު</h2>
-            <div class="economy-box">
-                <a href="#" class="eco-link">
-                    <div>
-                        <span class="eco-val" contenteditable="false">85.00g</span>
-                        <span class="eco-label">ރަނުގެ ނިޞާބު</span>
-                    </div>
-                </a>
-                <div style="border-right:1px dashed #555; height:40px;"></div>
-                <a href="#" class="eco-link">
-                    <div>
-                        <span class="eco-val" contenteditable="false">595.00g</span>
-                        <span class="eco-label">ރިހީގެ ނިޞާބު</span>
-                    </div>
-                </a>
-            </div>
+           <style>
+    .royal-promo-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+        margin-bottom: 35px;
+    }
+    .promo-card {
+        position: relative;
+        height: 180px;
+        border-radius: 12px;
+        overflow: hidden;
+        border: 2px solid var(--royal-gold);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        cursor: pointer;
+        text-decoration: none;
+        display: block;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .promo-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(180, 150, 88, 0.4);
+        border-color: var(--white);
+    }
+    /* Animated Background Effect */
+    .promo-bg {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 8s ease; /* Slow zoom animation */
+    }
+    .promo-card:hover .promo-bg {
+        transform: scale(1.2);
+    }
+    /* Gradient Overlay for Text Readability */
+    .promo-overlay {
+        position: absolute;
+        top: 0; left: 0; width: 100%; height: 100%;
+        background: linear-gradient(to top, rgba(5, 22, 38, 0.95) 15%, rgba(12, 45, 72, 0.2) 100%);
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        align-items: center;
+        padding: 15px;
+        text-align: center;
+    }
+    .promo-text {
+        color: var(--royal-gold);
+        font-family: 'Amiri', serif; /* Arabic Font */
+        font-size: 1.3em;
+        font-weight: bold;
+        line-height: 1.4;
+        text-shadow: 0 2px 5px rgba(0,0,0,1);
+        margin-bottom: 5px;
+    }
+    .promo-icon {
+        color: white;
+        font-size: 2em;
+        margin-bottom: 10px;
+        opacity: 0.8;
+        animation: float-icon 3s ease-in-out infinite;
+    }
+    @keyframes float-icon {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-8px); }
+    }
+    @media (max-width: 600px) {
+        .royal-promo-grid { grid-template-columns: 1fr; }
+    }
+</style>
 
+<div class="royal-promo-grid">
+    
+    <a href="#" class="promo-card">
+        <img src="https://i.pinimg.com/originals/e8/35/66/e8356619557256191986423407987258.gif" class="promo-bg" alt="Arabic">
+        <div class="promo-overlay">
+            <i class="fas fa-book-open promo-icon"></i>
+            <span class="promo-text">اختر "أكاديمية زاد" لتعلم<br>اللغة العربية بإتقان</span>
+        </div>
+    </a>
+
+    <a href="#" class="promo-card">
+        <img src="https://i.gifer.com/7S7F.gif" class="promo-bg" alt="Subscribe" style="filter: hue-rotate(180deg);">
+        <div class="promo-overlay">
+            <i class="fab fa-youtube promo-icon"></i>
+            <span class="promo-text">اشترك الآن في القنوات<br>التعليمية المرئية</span>
+        </div>
+    </a>
+
+    <a href="#" class="promo-card">
+        <img src="https://i.pinimg.com/originals/52/af/45/52af452fa5422472097728f9a2394541.gif" class="promo-bg" alt="Ramadan">
+        <div class="promo-overlay">
+            <i class="fas fa-moon promo-icon"></i>
+            <span class="promo-text">كن من الفائزين<br>في شهر رمضان المبارك</span>
+        </div>
+    </a>
+
+    <a href="#" class="promo-card">
+        <img src="https://i.pinimg.com/originals/2c/80/d3/2c80d3215243890f5c12361730046522.gif" class="promo-bg" alt="Salawat">
+        <div class="promo-overlay">
+            <i class="fas fa-mosque promo-icon"></i>
+            <span class="promo-text">أكثروا من الصلاة<br>على النبي الكريم ﷺ</span>
+        </div>
+    </a>
+
+</div>
             <div class="royal-info-box">
                 <h3 class="royal-info-title" contenteditable="false">ޒާދް އެކަޑަމީގެ ތަޞައްވުރު</h3>
                 <div class="royal-info-text" contenteditable="false">
