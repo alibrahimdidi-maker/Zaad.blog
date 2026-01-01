@@ -2,7 +2,7 @@
 <html lang="dv" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>Royal Graduation (V26.0 - Diamond Edition - Top5 Fixed)</title>
+    <title>Royal Graduation (V26.1 - Bug Fixes & Performance Boost)</title>
     <style>
         /* 1. Google Font (Backup for Dhivehi) */
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Thaana:wght@400;700&display=swap');
@@ -15,11 +15,11 @@
 
         /* --- GLOBAL VARIABLES --- */
         :root {
-            --royal-accent: #c5a059;       
-            --royal-blue-dark: #001b3d;   
-            --royal-blue-mid: #0d47a1;    
-            --royal-green: #003322;        
-            --input-bg: #e3f2fd;            
+            --royal-accent: #c5a059;        
+            --royal-blue-dark: #001b3d;    
+            --royal-blue-mid: #0d47a1;      
+            --royal-green: #003322;          
+            --input-bg: #e3f2fd;              
             --input-border: #90caf9;
             --panel-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
         }
@@ -245,7 +245,7 @@
 
     <div id="securityOverlay">
         <div class="sec-box">
-            <h1 style="color:#fff; font-size:45px; margin-bottom:10px; text-shadow:0 2px 5px #000;">Royal Graduation V26.0</h1>
+            <h1 style="color:#fff; font-size:45px; margin-bottom:10px; text-shadow:0 2px 5px #000;">Royal Graduation V26.1</h1>
             <p style="color:#a0c4ff; font-size:18px; margin-bottom:30px;">🔒 TITANIUM EDITION - TOP 5 + WEB FIX</p>
             <input type="password" id="licenseKey" class="sec-input" placeholder="Enter Key...">
             <button class="sec-btn" onclick="verifyLicense()">AUTHENTICATE</button>
@@ -357,12 +357,12 @@
                 <div style="font-weight:bold; font-size:14px; margin-bottom:5px;">WEB & PRESENTATION:</div>
                 <div style="display:flex; gap:8px; margin-top:5px;">
                     <input type="text" id="presLink" placeholder="Canva/Gamma Link (Auto-Fix)..." style="width:60%; text-align:left;" class="font-en">
-                     <select id="presType" style="width:20%; font-size:12px;">
-                         <option value="auto">Auto-Detect</option>
-                         <option value="gamma">Gamma</option>
-                         <option value="canva">Canva</option>
-                         <option value="google">Google Slides</option>
-                     </select>
+                      <select id="presType" style="width:20%; font-size:12px;">
+                          <option value="auto">Auto-Detect</option>
+                          <option value="gamma">Gamma</option>
+                          <option value="canva">Canva</option>
+                          <option value="google">Google Slides</option>
+                      </select>
                     <button class="btn-vid" style="background:#6a1b9a; width:20%;" onclick="showPresentation()">Open</button>
                 </div>
                 <div style="margin-top:5px;">
@@ -681,7 +681,7 @@
                           <span style="font-size:14px;">Y-Pos:</span>
                           <input type="range" id="stYRange" min="0" max="400" value="0" title="Space" oninput="liveUpdate('stY', this.value)">
                     </div>
-                     <div style="display:flex; gap:10px; margin-top:8px; align-items:center;">
+                      <div style="display:flex; gap:10px; margin-top:8px; align-items:center;">
                           <span style="font-size:14px;">Gap:</span>
                           <input type="range" id="stGapRange" min="0" max="100" value="5" title="Gap" oninput="liveUpdate('stGap', this.value)">
                     </div>
@@ -721,7 +721,7 @@
                         <input type="range" id="mlY" min="-500" max="500" value="0" oninput="updateLogoStyle('y', this.value)">
                     </div>
                     
-                     <div style="margin-top:8px;">
+                      <div style="margin-top:8px;">
                         <label style="font-size:12px; display:inline-flex; align-items:center;">
                             <input type="checkbox" id="logoAutoHideCheck" checked onchange="liveUpdate('logoAutoHide', this.checked)"> ދަރިވަރު ކާޑު އަރާއިރު މެއިން ލޯގޯތައް ފޮރުވާ
                         </label>
@@ -730,23 +730,23 @@
                     
                     <hr>
                     <span class="d-label" style="font-size:14px;">Partner Logos Settings:</span>
-                     <div style="margin-bottom:8px;">
-                         <label style="font-size:12px; display:inline-flex; align-items:center;">
-                             <input type="checkbox" id="plAutoHideCheck" checked onchange="liveUpdate('plAutoHide', this.checked)"> ދަރިވަރު ކާޑު އަރާއިރު ޕާޓްނަރ ލޯގޯތައް ފޮރުވާ
-                         </label>
-                     </div>
-                     <div style="margin-bottom:8px;">
-                         <button class="btn-vid" style="background:#455a64;" onclick="togglePartnerLogos()">👁️ Toggle Partner Logos</button>
-                     </div>
+                      <div style="margin-bottom:8px;">
+                          <label style="font-size:12px; display:inline-flex; align-items:center;">
+                              <input type="checkbox" id="plAutoHideCheck" checked onchange="liveUpdate('plAutoHide', this.checked)"> ދަރިވަރު ކާޑު އަރާއިރު ޕާޓްނަރ ލޯގޯތައް ފޮރުވާ
+                          </label>
+                      </div>
+                      <div style="margin-bottom:8px;">
+                          <button class="btn-vid" style="background:#455a64;" onclick="togglePartnerLogos()">👁️ Toggle Partner Logos</button>
+                      </div>
                     <div style="display:flex; gap:5px;">
                          <span>Gap:</span><input type="range" oninput="liveUpdate('plGap', this.value)" min="0" max="100" value="20">
                          <span>Size:</span><input type="range" oninput="liveUpdate('plSize', this.value)" min="50" max="300" value="100">
                     </div>
-                     <div style="display:flex; gap:5px; margin-top:5px;">
-                         <span>Y-Pos:</span><input type="range" oninput="liveUpdate('plY', this.value)" min="-600" max="600" value="0">
-                    </div>
+                      <div style="display:flex; gap:5px; margin-top:5px;">
+                          <span>Y-Pos:</span><input type="range" oninput="liveUpdate('plY', this.value)" min="-600" max="600" value="0">
+                     </div>
                     <div style="display:flex; gap:5px; margin-top:5px;">
-                         <span>X-Pos:</span><input type="range" oninput="liveUpdate('plX', this.value)" min="-800" max="800" value="0">
+                          <span>X-Pos:</span><input type="range" oninput="liveUpdate('plX', this.value)" min="-800" max="800" value="0">
                     </div>
                 </div>
 
@@ -1184,8 +1184,9 @@
                 #bgLayer { position:fixed; top:0; left:0; width:100%; height:100%; z-index:0; transition: background 0.5s ease; }
                 ${cssGen}
 
+                /* FIXED: Added display:none to hidden class to remove watermark effect */
                 #jalsaContent { position:absolute; top:0; left:0; width:100%; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; z-index:10; transition: opacity 0.8s ease; opacity:1; }
-                #jalsaContent.hidden { opacity: 0; pointer-events:none; }
+                #jalsaContent.hidden { opacity: 0; pointer-events:none; visibility: hidden; }
                 
                 #titleContainer { width: 90%; max-width: 1600px; text-align: center; } 
                 #mainTitleWrap { width: 100%; text-align: ${designState.mtAlign}; } 
@@ -1300,6 +1301,8 @@
                     border: none; 
                     border-top: 4px solid var(--theme-color);
                     box-shadow: 0 -10px 30px rgba(0,0,0,0.5);
+                    /* FIXED: Increased Z-Index to show above Video */
+                    z-index: 6000 !important;
                 }
 
                 .top5-mode .photo-col {
