@@ -2,7 +2,7 @@
 <html lang="dv" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>Royal Graduation (V25.0 - Top5 Control Edition)</title>
+    <title>Royal Graduation (V26.0 - Diamond Edition)</title>
     <style>
         /* 1. Google Font (Backup for Dhivehi) */
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Thaana:wght@400;700&display=swap');
@@ -238,7 +238,7 @@
 
     <div id="securityOverlay">
         <div class="sec-box">
-            <h1 style="color:#fff; font-size:45px; margin-bottom:10px; text-shadow:0 2px 5px #000;">Royal Graduation V25.0</h1>
+            <h1 style="color:#fff; font-size:45px; margin-bottom:10px; text-shadow:0 2px 5px #000;">Royal Graduation V26.0</h1>
             <p style="color:#a0c4ff; font-size:18px; margin-bottom:30px;">🔒 TITANIUM EDITION - TOP 5 + WEB FIX</p>
             <input type="password" id="licenseKey" class="sec-input" placeholder="Enter Key...">
             <button class="sec-btn" onclick="verifyLicense()">AUTHENTICATE</button>
@@ -428,6 +428,22 @@
                         <div style="display:flex; gap:10px; align-items:center;">
                             <span style="font-size:14px; width:100px;">Photo Size:</span>
                             <input type="range" min="80" max="300" value="160" oninput="liveUpdate('t5PhotoSize', this.value)">
+                        </div>
+                        
+                        <hr style="border:1px dashed #ffd54f; margin:10px 0;">
+                        <span style="display:block; font-weight:bold; margin-bottom:5px; color:#ff6f00;">Top 5 Font Sizes:</span>
+                        
+                        <div style="display:flex; gap:5px; margin-bottom:5px;">
+                            <span style="font-size:12px; width:80px;">Name (DV):</span>
+                            <input type="range" min="1" max="5" step="0.1" value="3.0" oninput="liveUpdate('t5NameSize', this.value)">
+                        </div>
+                        <div style="display:flex; gap:5px; margin-bottom:5px;">
+                            <span style="font-size:12px; width:80px;">Name (EN):</span>
+                            <input type="range" min="1" max="5" step="0.1" value="2.0" oninput="liveUpdate('t5EngSize', this.value)">
+                        </div>
+                        <div style="display:flex; gap:5px;">
+                            <span style="font-size:12px; width:80px;">Details:</span>
+                            <input type="range" min="0.5" max="3" step="0.1" value="1.5" oninput="liveUpdate('t5DetSize', this.value)">
                         </div>
                     </div>
                 </div>
@@ -792,7 +808,8 @@
         tfDSize: 2.5, tfDColor: '#fff9c4', tcDSize: 3.0, tcDColor: '#fff9c4',
         cardW: 90, cardH: 80, cardX: 0, cardY: 0,
         // TOP 5 SPECIFIC VARIABLES
-        t5CardW: 95, t5CardH: 22, t5Bottom: 2, t5PhotoSize: 160
+        t5CardW: 95, t5CardH: 22, t5Bottom: 2, t5PhotoSize: 160,
+        t5NameSize: 3.0, t5EngSize: 2.0, t5DetSize: 1.5
     };
 
     // --- MAIN LOGO MANAGER ---
@@ -940,6 +957,11 @@
         if(key === 't5CardH') root.style.setProperty('--t5-h', value + '%');
         if(key === 't5Bottom') root.style.setProperty('--t5-b', value + '%');
         if(key === 't5PhotoSize') root.style.setProperty('--t5-p', value + 'px');
+        
+        // TOP 5 FONTS
+        if(key === 't5NameSize') root.style.setProperty('--t5-n-s', value + 'em');
+        if(key === 't5EngSize') root.style.setProperty('--t5-e-s', value + 'em');
+        if(key === 't5DetSize') root.style.setProperty('--t5-d-s', value + 'em');
 
         if(key === 'pfWidth' || key === 'pfColor' || key === 'pfStyle' || key === 'pfRadius' || key === 'pfShadow') {
             const img = doc.getElementById('stuImg');
@@ -1129,6 +1151,7 @@
                     /* TOP 5 VARIABLES */
                     --t5-w: ${designState.t5CardW}%; --t5-h: ${designState.t5CardH}%; 
                     --t5-b: ${designState.t5Bottom}%; --t5-p: ${designState.t5PhotoSize}px;
+                    --t5-n-s: ${designState.t5NameSize}em; --t5-e-s: ${designState.t5EngSize}em; --t5-d-s: ${designState.t5DetSize}em;
                 }
                 body, h1, h2, div, span { font-family: 'Faruuma', 'MV Boli', 'Noto Sans Thaana', serif !important; }
                 body { margin:0; overflow:hidden; background:#000; user-select:none; }
@@ -1261,12 +1284,12 @@
                 }
                 .top5-mode #stuImg {
                     width: var(--t5-p) !important; height: var(--t5-p) !important;
-                    object-fit: cover !important;
+                    object-fit: cover !important; /* Auto Fix Frame */
                 }
                 
-                .top5-mode h1 { font-size: 3em !important; }
-                .top5-mode h2 { font-size: 2em !important; margin: 5px 0 !important; }
-                .top5-mode .fac-dv, .top5-mode .crs-dv { font-size: 1.5em !important; }
+                .top5-mode h1 { font-size: var(--t5-n-s) !important; }
+                .top5-mode h2 { font-size: var(--t5-e-s) !important; margin: 5px 0 !important; }
+                .top5-mode .fac-dv, .top5-mode .crs-dv { font-size: var(--t5-d-s) !important; }
                 .top5-mode .text-col { text-align: right !important; }
 
                 .copyright { position:absolute; bottom:10px; right:10px; font-size:10px; color:rgba(255,255,255,0.3); font-family:sans-serif; z-index:900; }
@@ -1637,12 +1660,13 @@
     
     // 4. PRESENTATION & SMART LINK CONVERTER
     function getSmartLink(url, type) {
-        // Handle YouTube conversion
+        // Handle YouTube conversion (Fixing the Error)
         if(url.includes('youtube.com') || url.includes('youtu.be')) {
             const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
             const match = url.match(regExp);
             if (match && match[2].length == 11) {
-                return `https://www.youtube.com/embed/${match[2]}?autoplay=1&controls=1`;
+                // Use youtube-nocookie for better privacy/security handling in some browsers
+                return `https://www.youtube-nocookie.com/embed/${match[2]}?autoplay=1&controls=1&rel=0`;
             }
         }
         
@@ -1723,7 +1747,8 @@
         
         if(!embedUrl) { alert("Invalid YT Link"); return; }
         const vl = tvWindow.document.getElementById('videoLayer');
-        vl.innerHTML = `<iframe id="ytFrame" src="${embedUrl}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen style="width:100%;height:100%;"></iframe>`;
+        // Added allow attributes for maximum compatibility
+        vl.innerHTML = `<iframe id="ytFrame" src="${embedUrl}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="width:100%;height:100%;"></iframe>`;
         vl.style.display = 'flex';
     }
     
