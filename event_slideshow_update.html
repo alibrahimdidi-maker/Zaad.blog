@@ -2,7 +2,7 @@
 <html lang="dv" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>Royal Graduation (V28.0 - Ultimate Edition - Dedicated Top5 Video)</title>
+    <title>Royal Graduation (V29.0 - Royal Gold Edition - Badges & Trophy)</title>
     <style>
         /* 1. Google Font (Backup for Dhivehi) */
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Thaana:wght@400;700&display=swap');
@@ -245,8 +245,8 @@
 
     <div id="securityOverlay">
         <div class="sec-box">
-            <h1 style="color:#fff; font-size:45px; margin-bottom:10px; text-shadow:0 2px 5px #000;">Royal Graduation V28.0</h1>
-            <p style="color:#a0c4ff; font-size:18px; margin-bottom:30px;">🔒 ULTIMATE EDITION - TOP 5 VIDEO FIXED</p>
+            <h1 style="color:#fff; font-size:45px; margin-bottom:10px; text-shadow:0 2px 5px #000;">Royal Graduation V29.0</h1>
+            <p style="color:#a0c4ff; font-size:18px; margin-bottom:30px;">🔒 ROYAL GOLD EDITION - TROPHY & BADGE</p>
             <input type="password" id="licenseKey" class="sec-input" placeholder="Enter Key...">
             <button class="sec-btn" onclick="verifyLicense()">AUTHENTICATE</button>
             <p id="secMsg" style="color:#ff5252; font-size:16px; margin-top:20px; font-weight:bold;"></p>
@@ -308,6 +308,13 @@
                 
                 <label style="color:#ff6f00; font-weight:900;">13. TOP 5 VIDEOS:</label>
                 <input type="file" id="top5VideoFiles" accept="video/*" multiple onchange="loadTop5Videos(this)">
+                
+                <hr style="border: 2px dashed #ffb300;">
+                <label style="color:#ffd700; font-weight:900;">14. ROYAL STAR ICON (PNG):</label>
+                <input type="file" id="royalStarFile" accept="image/*" onchange="loadRoyalStar(this)">
+                
+                <label style="color:#ffd700; font-weight:900;">15. TROPHY ICON (PNG):</label>
+                <input type="file" id="trophyFile" accept="image/*" onchange="loadTrophy(this)">
             </div>
 
             <label style="margin-top:15px; color:#00281c;">🔍 ދަރިވަރުން ހޯއްދަވާ:</label>
@@ -411,6 +418,11 @@
                     <div class="col" style="flex:1;">
                         <input id="cE" class="eng" placeholder="Detail 2 (English)" style="width:100%; direction:ltr; text-align:left;">
                     </div>
+                </div>
+                
+                <div class="row" style="margin-top:5px;">
+                    <label style="font-size:14px; color:#d84315;">🏆 Rank/Position (Optional):</label>
+                    <input id="rankInput" placeholder="1, 2, 3..." style="width:100%;">
                 </div>
                 
                 <textarea id="cm" rows="2" class="font-dv" placeholder="އިތުރު މަޢުލޫމާތު..."></textarea>
@@ -794,7 +806,7 @@
     function verifyLicense() {
         document.getElementById('securityOverlay').style.display = 'none';
         document.getElementById('mainApp').style.display = 'flex';
-        document.getElementById('licenseStatus').innerText = "✅ ULTIMATE LICENSE | TOP 5 FREEDOM";
+        document.getElementById('licenseStatus').innerText = "✅ ROYAL GOLD EDITION | BADGES ACTIVE";
     }
     document.getElementById('licenseKey').addEventListener("keyup", e => { if (e.key === "Enter") verifyLicense(); });
 
@@ -806,7 +818,7 @@
     let top5Students = [];
     let top5PhotoFiles = {};
     let activeListMode = 'general'; 
-    let top5VideoPlaylist = []; // New dedicated playlist
+    let top5VideoPlaylist = []; 
     
     let partnerLogosData = [];
     let mainLogosData = [];
@@ -819,6 +831,9 @@
     let currentJalsaBgType = 'none';
     let customBorderData = null;
     let customCardBgData = null;
+    let royalStarData = null;
+    let trophyData = null;
+    
     let isLocked = false;
     let lastActiveState = 'title'; 
     let playlist = [];
@@ -936,7 +951,7 @@
 
     function downloadConfig() {
         const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(designState));
-        const a = document.createElement('a'); a.href = dataStr; a.download = "royal_config_v28.json"; document.body.appendChild(a); a.click(); a.remove();
+        const a = document.createElement('a'); a.href = dataStr; a.download = "royal_config_v29.json"; document.body.appendChild(a); a.click(); a.remove();
     }
 
     function loadConfig(input) {
@@ -1270,7 +1285,7 @@
                 .comm { background:rgba(212,175,55,0.15); border:2px solid var(--theme-color); padding:20px; font-size:2.2em; color:white; border-radius:10px; text-align:center; width:100%; box-sizing:border-box; transition: all 0.3s ease; }
                 .comm-tiny { padding: 0 !important; height: 3px !important; min-height: 0 !important; overflow: hidden; border:none !important; background: var(--theme-color); opacity: 0.6; margin-top:20px; }
 
-                .photo-col { flex:0 0 auto; min-width: 200px; display:flex; justify-content:center; align-items:center; transform:translate(${designState.pX}px, ${designState.pY}px); transition: transform 0.2s ease; height: 100%; }
+                .photo-col { position:relative; flex:0 0 auto; min-width: 200px; display:flex; justify-content:center; align-items:center; transform:translate(${designState.pX}px, ${designState.pY}px); transition: transform 0.2s ease; height: 100%; }
                 .shrink-photo img { width: 8px !important; height: 8px !important; min-width: 0 !important; min-height: 0 !important; border-radius: 50% !important; border: none !important; box-shadow: 0 0 5px var(--theme-color) !important; background: var(--theme-color); padding: 0 !important; }
                 
                 #stuImg { 
@@ -1285,6 +1300,22 @@
                     border-radius: ${designState.pfRadius}%;
                     box-shadow: ${designState.pfShadow};
                 }
+
+                /* BADGES */
+                .royal-star-badge {
+                    position: absolute; top: -20px; left: -20px; width: 80px; z-index: 10;
+                    display: none; /* Toggled by JS */
+                    filter: drop-shadow(0 5px 5px rgba(0,0,0,0.5));
+                }
+                .trophy-badge {
+                    position: absolute; bottom: -10px; right: -10px; z-index: 10;
+                    display: none; /* Toggled by JS */
+                    align-items: center; background: linear-gradient(45deg, #FFD700, #ffb300);
+                    border: 3px solid #fff; border-radius: 50px; padding: 5px 15px;
+                    box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+                }
+                .trophy-badge img { height: 40px; margin-right: 5px; }
+                .rank-num { font-size: 30px; font-weight: 900; color: #3e2723; font-family: 'Times New Roman', serif; }
 
                 .text-col { flex:1; text-align:${designState.textAlign}; padding:0 30px; color:white; display:flex; flex-direction:column; justify-content:center; }
                 
@@ -1418,7 +1449,14 @@
             </div>
 
             <div id="card" class="${designState.cBorder}">
-                <div class="photo-col"><img id="stuImg" src=""></div>
+                <div class="photo-col">
+                    <img id="stuImg" src="">
+                    <img id="royalStar" class="royal-star-badge" src="">
+                    <div id="trophyWrap" class="trophy-badge">
+                        <img id="trophyImg" src="">
+                        <span id="rankNum" class="rank-num"></span>
+                    </div>
+                </div>
                 <div class="text-col">
                     <h1 id="tnD" class="font-dv"></h1><h2 id="tnE" class="font-en"></h2>
                     <div id="tfD" class="fac-dv font-dv"></div><div id="tfE" class="fac-en font-en"></div>
@@ -1555,10 +1593,29 @@
         if(activeListMode === 'top5') {
             doc.body.classList.add('top5-mode');
             document.getElementById('top5ModeCheck').checked = true;
-            // Apply Layout Class
             doc.getElementById('card').classList.add('t5-' + designState.t5Layout);
+            // SHOW ROYAL STAR
+            if(royalStarData) {
+                const rs = doc.getElementById('royalStar');
+                rs.src = royalStarData;
+                rs.style.display = 'block';
+            }
         } else {
-             if(!document.getElementById('top5ModeCheck').checked) doc.body.classList.remove('top5-mode');
+             if(!document.getElementById('top5ModeCheck').checked) {
+                 doc.body.classList.remove('top5-mode');
+                 doc.getElementById('royalStar').style.display = 'none';
+             }
+        }
+        
+        // SHOW TROPHY IF RANK EXISTS
+        const rankTxt = document.getElementById('rankInput').value;
+        const trophyWrap = doc.getElementById('trophyWrap');
+        if(rankTxt && rankTxt.trim() !== "") {
+            doc.getElementById('rankNum').innerText = rankTxt;
+            if(trophyData) doc.getElementById('trophyImg').src = trophyData;
+            trophyWrap.style.display = 'flex';
+        } else {
+            trophyWrap.style.display = 'none';
         }
 
         setTimeout(() => doc.getElementById('card').classList.add('active'), 100);
@@ -1575,7 +1632,22 @@
         document.getElementById('statusMsg').innerText = "CLEARED";
     }
 
-    // --- VIDEO & ADS & PRESENTATION V28 ---
+    // --- NEW BADGE LOADERS ---
+    function loadRoyalStar(input) {
+        if(input.files && input.files[0]) {
+            royalStarData = URL.createObjectURL(input.files[0]);
+            alert("Royal Star Loaded!");
+        }
+    }
+    
+    function loadTrophy(input) {
+        if(input.files && input.files[0]) {
+            trophyData = URL.createObjectURL(input.files[0]);
+            alert("Trophy Icon Loaded!");
+        }
+    }
+
+    // --- VIDEO & ADS & PRESENTATION V29 ---
     
     function loadPartnerLogos(input) {
         partnerLogosData = [];
@@ -1894,6 +1966,7 @@
         }; r.readAsDataURL(input.files[0]);
     }
 
+    // UPDATED CSV PARSER FOR RANK
     function parseCSV(text) {
         let lines = text.split('\n');
         let data = [];
@@ -1902,7 +1975,8 @@
             if(c.length>1) {
                 data.push({
                     nD: c[0]?.trim(), nE: c[1]?.trim(), cD: c[2]?.trim(), cE: c[3]?.trim(), 
-                    fD: c[4]?.trim(), fE: c[5]?.trim(), cm: c[6]?.trim(), ph: c[7]?.trim()
+                    fD: c[4]?.trim(), fE: c[5]?.trim(), cm: c[6]?.trim(), ph: c[7]?.trim(),
+                    rank: c[8]?.trim() // New Column for Rank
                 });
             }
         });
@@ -1963,7 +2037,6 @@
         }
         
         filterList();
-        // Reset Video Index when switching modes
         currentVidIdx = 0;
     }
 
@@ -2010,6 +2083,7 @@
         document.getElementById('fD').value = s.fD || ""; document.getElementById('fE').value = s.fE || "";
         document.getElementById('cD').value = s.cD || ""; document.getElementById('cE').value = s.cE || "";
         document.getElementById('cm').value = s.cm || "";
+        document.getElementById('rankInput').value = s.rank || "";
         
         let pName = s.ph ? s.ph.trim().toLowerCase() : "";
         let prev = document.getElementById('previewImg');
