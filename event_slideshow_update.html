@@ -2,7 +2,7 @@
 <html lang="dv" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>Royal Graduation (V18.0 - Platinum Edition)</title>
+    <title>Royal Graduation (V20.0 - Ultimate Edition)</title>
     <style>
         /* 1. Google Font (Backup for Dhivehi) */
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Thaana:wght@400;700&display=swap');
@@ -35,88 +35,47 @@
             font-family: 'Faruuma', 'MV Boli', 'Noto Sans Thaana', serif;
         }
 
-        /* --- LANGUAGE SWITCHER TABS (ADDED SECTION) --- */
+        /* --- LANGUAGE SWITCHER TABS --- */
         .lang-tabs { 
-            display: flex; 
-            gap: 5px; 
-            margin-bottom: 10px; 
-            justify-content: center; 
-            direction: ltr !important; 
-            flex-shrink: 0; /* Prevent shrinking */
+            display: flex; gap: 5px; margin-bottom: 10px; justify-content: center; 
+            direction: ltr !important; flex-shrink: 0; 
         }
         .lang-btn {
-            flex: 1; 
-            padding: 8px; 
-            text-align: center; 
-            text-decoration: none;
-            background: #37474f; 
-            color: #fff; 
-            border-radius: 4px; 
-            font-size: 13px; 
-            font-weight: bold; 
-            border: 1px solid #555; 
-            transition: 0.3s;
-            font-family: sans-serif !important; /* Force readable font */
+            flex: 1; padding: 8px; text-align: center; text-decoration: none;
+            background: #37474f; color: #fff; border-radius: 4px; 
+            font-size: 13px; font-weight: bold; border: 1px solid #555; transition: 0.3s;
+            font-family: sans-serif !important;
         }
         .lang-btn:hover { background: var(--royal-accent); color: #000; }
         .lang-btn.active { background: var(--royal-blue-mid); border: 1px solid #fff; pointer-events: none; }
 
 
-        /* --- SECURITY OVERLAY (ENGLISH STYLING) --- */
+        /* --- SECURITY OVERLAY --- */
         #securityOverlay {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
             background: rgba(0,0,0,0.98); z-index: 99999;
             display: flex; justify-content: center; align-items: center;
-            
-            /* FORCE ENGLISH SETTINGS FOR THIS WINDOW */
-            direction: ltr !important;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
-            text-align: center;
+            direction: ltr !important; font-family: 'Segoe UI', sans-serif !important; text-align: center;
         }
-
-        /* Ensure all text inside security box is English Font */
-        #securityOverlay * {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
-            direction: ltr !important;
-        }
+        #securityOverlay * { font-family: 'Segoe UI', sans-serif !important; direction: ltr !important; }
 
         .sec-box { 
             background: linear-gradient(135deg, var(--royal-blue-dark), var(--royal-green)); 
-            padding: 60px; border-radius: 20px; 
-            border: 2px solid var(--royal-accent); 
-            box-shadow: 0 0 50px rgba(13, 71, 161, 0.5);
-            max-width: 600px; width: 90%;
+            padding: 60px; border-radius: 20px; border: 2px solid var(--royal-accent); 
+            box-shadow: 0 0 50px rgba(13, 71, 161, 0.5); max-width: 600px; width: 90%;
         }
-        
         .sec-input { 
-            padding: 15px; 
-            font-size: 24px; 
-            text-align: center; 
-            width: 100%; 
-            margin-top: 20px; 
-            background: #fff; 
-            color: #000; 
-            border-radius:5px; 
-            border:none; 
+            padding: 15px; font-size: 24px; text-align: center; width: 100%; margin-top: 20px; 
+            background: #fff; color: #000; border-radius:5px; border:none; 
         }
-        
         .sec-btn { 
-            margin-top: 25px; 
-            padding: 15px 50px; 
-            font-size: 20px; 
-            background: var(--royal-blue-mid); 
-            color: #fff; 
-            border: 1px solid #fff; 
-            cursor: pointer; 
-            font-weight: bold; 
-            border-radius:8px; 
-            text-transform: uppercase;
+            margin-top: 25px; padding: 15px 50px; font-size: 20px; background: var(--royal-blue-mid); 
+            color: #fff; border: 1px solid #fff; cursor: pointer; font-weight: bold; 
+            border-radius:8px; text-transform: uppercase;
         }
         .sec-btn:hover { background: #fff; color: var(--royal-blue-mid); }
 
-        /* --- REST OF APP (DHIVEHI STYLING) --- */
-        
-        /* Force Dhivehi Font on these elements */
+        /* --- REST OF APP --- */
         .sidebar, .editor, button:not(.sec-btn, .lang-btn), input:not(.sec-input), select, textarea, h1, h2, h3, label, span, div:not(.lang-tabs) {
              font-family: 'Faruuma', 'MV Boli', 'Noto Sans Thaana', serif;
         }
@@ -124,14 +83,9 @@
         /* --- TOP BANNER --- */
         .royal-banner {
             background: linear-gradient(to right, var(--royal-blue-dark), var(--royal-green));
-            color: #fff;
-            text-align: center;
-            padding: 15px;
+            color: #fff; text-align: center; padding: 15px;
             border-bottom: 3px solid var(--royal-accent);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
-            margin-bottom: 10px;
-            border-radius: 8px;
-            flex-shrink: 0; /* Prevent shrinking */
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5); margin-bottom: 10px; border-radius: 8px; flex-shrink: 0;
         }
         .banner-main { font-family: 'Times New Roman', serif !important; font-weight: bold; font-size: 14px; letter-spacing: 2px; color: #a0c4ff; display: block; }
         .banner-sub { font-size: 24px; color: var(--royal-accent); text-shadow: 0 2px 4px #000; display: block; margin-top: 5px; }
@@ -142,131 +96,76 @@
             padding: 15px; box-sizing: border-box; 
         }
 
-        /* SIDEBAR (FIXED SCROLLING ISSUE) */
         .sidebar {
-            flex: 0 0 380px; 
-            background: #f8fbff; 
-            padding: 15px; border-radius: 12px;
-            display: flex; flex-direction: column; height: 100%; 
-            overflow-y: auto; /* Enable vertical scrolling */
-            box-shadow: var(--panel-shadow);
-            border: 3px solid var(--royal-blue-dark);
+            flex: 0 0 380px; background: #f8fbff; padding: 15px; border-radius: 12px;
+            display: flex; flex-direction: column; height: 100%; overflow-y: auto; 
+            box-shadow: var(--panel-shadow); border: 3px solid var(--royal-blue-dark);
         }
-        
         .sidebar h2 { color: var(--royal-blue-dark); text-align:center; margin-bottom: 10px; border-bottom: 2px solid var(--royal-blue-mid); padding-bottom: 5px; font-size: 22px; }
         
-        /* DEVELOPER CREDITS */
         .dev-credits {
-            margin-top: 20px; /* Ensure space above */
-            text-align: center;
-            font-size: 13px;
-            color: #555;
-            background: #e3f2fd;
-            padding: 10px;
-            border-radius: 6px;
-            border: 1px solid #bbdefb;
-            font-weight: bold;
-            line-height: 1.4;
-            flex-shrink: 0; /* Prevent shrinking */
+            margin-top: 20px; text-align: center; font-size: 13px; color: #555;
+            background: #e3f2fd; padding: 10px; border-radius: 6px; border: 1px solid #bbdefb;
+            font-weight: bold; line-height: 1.4; flex-shrink: 0;
         }
         .dev-name { color: var(--royal-blue-dark); font-size: 14px; display: block; margin-bottom: 2px; }
         .company-name { color: var(--royal-green); font-size: 12px; display: block; letter-spacing: 0.5px; }
 
-        /* EDITOR (RIGHT) */
         .editor {
-            flex: 1; 
-            background: #fff; 
-            padding: 25px; border-radius: 12px;
+            flex: 1; background: #fff; padding: 25px; border-radius: 12px;
             display: flex; flex-direction: column; height: 100%; overflow-y: auto; 
-            position: relative;
-            box-shadow: var(--panel-shadow);
-            border: 3px solid var(--royal-green);
+            position: relative; box-shadow: var(--panel-shadow); border: 3px solid var(--royal-green);
         }
 
-        /* SCROLLBAR */
         ::-webkit-scrollbar { width: 12px; }
         ::-webkit-scrollbar-track { background: #eee; }
         ::-webkit-scrollbar-thumb { background: var(--royal-blue-mid); border-radius: 6px; }
 
-        /* --- STYLING CONTROLS --- */
+        /* --- CONTROLS --- */
         h2, h3 { margin: 5px 0; }
         label { display: block; font-weight: bold; font-size: 16px; margin-bottom: 5px; color: var(--royal-blue-dark); }
         
-        /* CATEGORY HEADERS */
         .d-label { 
-            font-size: 18px; 
-            font-weight: 900; 
-            color: var(--royal-blue-mid);
-            display: block; 
-            margin-top: 15px;
-            margin-bottom: 8px; 
-            border-bottom: 2px solid #b3e5fc; 
-            padding-bottom: 4px; 
+            font-size: 18px; font-weight: 900; color: var(--royal-blue-mid);
+            display: block; margin-top: 15px; margin-bottom: 8px; 
+            border-bottom: 2px solid #b3e5fc; padding-bottom: 4px; 
         }
 
-        /* INPUTS */
         input[type="text"], textarea, select { 
-            width: 100%; padding: 10px; 
-            border: 1px solid var(--input-border); 
-            border-radius: 6px; 
-            background: var(--input-bg);
-            color: #000;
-            margin-bottom: 8px; 
-            font-size: 16px;
-            box-sizing: border-box; transition: all 0.3s;
+            width: 100%; padding: 10px; border: 1px solid var(--input-border); 
+            border-radius: 6px; background: var(--input-bg); color: #000;
+            margin-bottom: 8px; font-size: 16px; box-sizing: border-box; transition: all 0.3s;
         }
         input[type="text"]:focus, select:focus, textarea:focus { 
-            border-color: var(--royal-blue-mid); 
-            background: #fff;
-            outline: none; 
+            border-color: var(--royal-blue-mid); background: #fff; outline: none; 
             box-shadow: 0 0 8px rgba(13, 71, 161, 0.3); 
         }
 
-        /* --- SPECIAL STYLING FOR JALSA TITLES --- */
         #jLine1 {
-            font-size: 28px !important;
-            font-weight: 900 !important;
-            text-align: center !important;
-            color: var(--royal-blue-dark);
-            border: 2px solid var(--royal-accent);
-            background: #fff8e1; /* Light gold tint background */
-            height: 60px;
+            font-size: 28px !important; font-weight: 900 !important; text-align: center !important;
+            color: var(--royal-blue-dark); border: 2px solid var(--royal-accent);
+            background: #fff8e1; height: 60px;
         }
         .sub-title-input {
-            font-size: 18px !important;
-            font-weight: bold !important;
-            text-align: center !important;
-            color: var(--royal-blue-mid);
-            height: 40px;
+            font-size: 18px !important; font-weight: bold !important; text-align: center !important;
+            color: var(--royal-blue-mid); height: 40px;
         }
 
-        /* FONT SIZES & ALIGNMENT */
         .font-dv { font-size: 20px !important; direction: rtl; text-align: right; }
         .eng { font-size: 18px !important; direction: ltr; text-align: left; font-family: 'Times New Roman', serif !important; font-weight: bold; }
 
         input[type=range] { width: 100%; cursor: pointer; height: 15px; accent-color: var(--royal-blue-mid); margin: 5px 0; }
         input[type=color] { width: 45px; height: 35px; border: 2px solid #fff; border-radius: 6px; cursor: pointer; vertical-align: middle; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
 
-        /* --- SETTINGS GROUPS --- */
         .group-box {
-            border: 1px solid #bbdefb;
-            border-radius: 10px;
-            padding: 30px 20px 20px 20px;
-            margin-bottom: 35px; 
-            background: #f1f8e9;
-            position: relative;
+            border: 1px solid #bbdefb; border-radius: 10px; padding: 30px 20px 20px 20px;
+            margin-bottom: 35px; background: #f1f8e9; position: relative;
             box-shadow: 0 4px 10px rgba(0,0,0,0.05);
         }
-        
         .group-title {
-            position: absolute; top: -20px; right: 20px;
-            background: var(--royal-blue-dark);
-            color: #fff;
-            padding: 8px 25px; 
-            font-size: 18px; 
-            font-weight: bold;
-            border-radius: 20px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.3); z-index: 10;
+            position: absolute; top: -20px; right: 20px; background: var(--royal-blue-dark);
+            color: #fff; padding: 8px 25px; font-size: 18px; font-weight: bold;
+            border-radius: 20px; box-shadow: 0 4px 8px rgba(0,0,0,0.3); z-index: 10;
         }
 
         .design-col { flex: 1; }
@@ -287,8 +186,7 @@
 
         .btn-live { 
             background: linear-gradient(to bottom, #2e7d32, #1b5e20);
-            flex: 2; border: 2px solid #a5d6a7; 
-            color: #fff; font-size: 20px; padding: 12px; border-radius: 8px; 
+            flex: 2; border: 2px solid #a5d6a7; color: #fff; font-size: 20px; padding: 12px; border-radius: 8px; 
             box-shadow: 0 4px 10px rgba(0,0,0,0.3);
         }
         .btn-live:hover { filter: brightness(1.1); }
@@ -317,24 +215,11 @@
 
         /* --- SYSTEM FILES --- */
         #sidebarFiles {
-            background: #fff; 
-            border: 1px solid #90caf9; 
-            border-radius: 8px; 
-            padding: 10px;
-            /* RTL set for Dhivehi interface */
-            direction: rtl !important; 
-            text-align: right !important;
+            background: #fff; border: 1px solid #90caf9; border-radius: 8px; padding: 10px;
+            direction: rtl !important; text-align: right !important;
         }
-        #sidebarFiles label {
-            font-size: 14px; 
-            color: #444;
-            margin-bottom: 3px;
-        }
-        #sidebarFiles input[type="file"] {
-            font-size: 12px;
-            padding: 5px;
-            direction: ltr; /* Keeps filenames readable */
-        }
+        #sidebarFiles label { font-size: 14px; color: #444; margin-bottom: 3px; }
+        #sidebarFiles input[type="file"] { font-size: 12px; padding: 5px; direction: ltr; }
 
         /* --- FULL SCREEN BUTTON --- */
         #cpFsBtn {
@@ -354,9 +239,8 @@
 
     <div id="securityOverlay">
         <div class="sec-box">
-            <h1 style="color:#fff; font-size:45px; margin-bottom:10px; text-shadow:0 2px 5px #000;">Royal Graduation V18.0</h1>
+            <h1 style="color:#fff; font-size:45px; margin-bottom:10px; text-shadow:0 2px 5px #000;">Royal Graduation V20.0</h1>
             <p style="color:#a0c4ff; font-size:18px; margin-bottom:30px;">🔒 PLATINUM EDITION - ENTER LICENSE KEY</p>
-            
             <input type="password" id="licenseKey" class="sec-input" placeholder="Enter Key...">
             <button class="sec-btn" onclick="verifyLicense()">AUTHENTICATE</button>
             <p id="secMsg" style="color:#ff5252; font-size:16px; margin-top:20px; font-weight:bold;"></p>
@@ -365,7 +249,6 @@
 
     <div class="main-layout" id="mainApp">
         <div class="sidebar">
-            
             <div class="lang-tabs">
                 <a href="#" class="lang-btn active">ދިވެހި</a>
                 <a href="#" class="lang-btn">English</a>
@@ -401,11 +284,14 @@
                 <label style="color:#2e7d32;">7. ޕާޓްނަރުންގެ ލޯގޯތައް:</label>
                 <input type="file" id="partnerLogos" accept="image/*" multiple onchange="loadPartnerLogos(this)">
                 
-                <label style="color:#c62828;">8. އިޝްތިހާރު / ބެނާ ފޮޓޯތައް:</label>
-                <input type="file" id="adFolder" accept="image/*" multiple onchange="loadAds(this)">
+                <label style="color:#c62828;">8. އިޝްތިހާރު / ބެނާ (Photo/Video):</label>
+                <input type="file" id="adFolder" accept="image/*, video/*" multiple onchange="loadAds(this)">
                 
                 <label style="color:#6a1b9a;">9. ކަސްޓަމް ކާޑު ބެކްގްރައުންޑް:</label>
                 <input type="file" id="customCardBgFile" accept="image/*" onchange="loadCustomCardBg(this)">
+                
+                <label style="color:#d32f2f;">10. ޕީޑީއެފް (PDF) ޕްރެޒެންޓޭޝަން:</label>
+                <input type="file" id="pdfFile" accept="application/pdf" onchange="loadPDF(this)">
             </div>
 
             <label style="margin-top:15px; color:#00281c;">🔍 ދަރިވަރުން ހޯއްދަވާ:</label>
@@ -449,8 +335,11 @@
                 <hr style="border:1px dashed #ccc;">
                 
                 <div style="display:flex; gap:8px; margin-top:5px;">
-                    <input type="text" id="presLink" placeholder="Google Slides / Canva Link..." style="width:70%; text-align:left;" class="font-en">
+                    <input type="text" id="presLink" placeholder="Google Slides / Gamma Link..." style="width:70%; text-align:left;" class="font-en">
                     <button class="btn-vid" style="background:#6a1b9a; width:30%;" onclick="showPresentation()">🌐 Show Web</button>
+                </div>
+                <div style="margin-top:5px;">
+                     <button class="btn-vid" style="background:#d32f2f;" onclick="showPDFScreen()">📄 Show PDF</button>
                 </div>
                 
                 <div style="display:flex; gap:8px; margin-top:5px;">
@@ -717,8 +606,20 @@
                             <option value="right">ކަނާތަށް</option>
                             <option value="left">ވާތަށް</option>
                         </select>
-                        <span style="font-size:14px;">ދުރުމިން:</span>
-                        <input type="range" id="stYRange" min="0" max="400" value="0" title="Space" oninput="liveUpdate('stY', this.value)">
+                    </div>
+                    <div style="display:flex; gap:10px; margin-top:8px; align-items:center;">
+                         <span style="font-size:14px;">Y-Pos:</span>
+                         <input type="range" id="stYRange" min="0" max="400" value="0" title="Space" oninput="liveUpdate('stY', this.value)">
+                    </div>
+                     <div style="display:flex; gap:10px; margin-top:8px; align-items:center;">
+                         <span style="font-size:14px;">Gap:</span>
+                         <input type="range" id="stGapRange" min="0" max="100" value="5" title="Gap" oninput="liveUpdate('stGap', this.value)">
+                    </div>
+                    <div style="margin-top:5px;">
+                        <select onchange="liveUpdate('stLine', this.value)" style="background:#fff;">
+                            <option value="off">ސަބް ޓައިޓްލް ރޮނގު: ނުލާ</option>
+                            <option value="on">ސަބް ޓައިޓްލް ރޮނގު: ލާ</option>
+                        </select>
                     </div>
                     
                     <button class="btn-vid" style="background:#2e7d32; width:100%; margin-top:15px; font-weight:bold; font-size:18px; padding:12px;" onclick="updateJalsaText()">ޓައިޓްލްތައް އަޕްޑޭޓް ކުރޭ</button>
@@ -747,6 +648,14 @@
                     
                     <hr>
                     <span class="d-label" style="font-size:14px;">Partner Logos Settings:</span>
+                     <div style="margin-bottom:8px;">
+                         <label style="font-size:12px; display:inline-flex; align-items:center;">
+                             <input type="checkbox" id="plAutoHideCheck" checked onchange="liveUpdate('plAutoHide', this.checked)"> ދަރިވަރު ކާޑު އަރާއިރު ލޯގޯތައް ފޮރުވާ
+                         </label>
+                     </div>
+                     <div style="margin-bottom:8px;">
+                         <button class="btn-vid" style="background:#455a64;" onclick="togglePartnerLogos()">👁️ Toggle Logos On/Off</button>
+                     </div>
                     <div style="display:flex; gap:5px;">
                          <span>Gap:</span><input type="range" oninput="liveUpdate('plGap', this.value)" min="0" max="100" value="20">
                          <span>Size:</span><input type="range" oninput="liveUpdate('plSize', this.value)" min="50" max="300" value="100">
@@ -799,6 +708,7 @@
     let partnerLogosData = [];
     let adFiles = [];
     let adInterval = null;
+    let adIndex = 0;
     let currentPhotoData = null;
     let currentLogoData = null;
     let currentFontData = null;
@@ -810,6 +720,7 @@
     let lastActiveState = 'title'; 
     let playlist = [];
     let currentVidIdx = 0;
+    let pdfUrl = null;
 
     // Subtitle Styles Logic (V18)
     let stStyles = {};
@@ -823,12 +734,11 @@
     }
 
     // --- STATE MANAGER ---
-    // DEFAULT FONT SIZES INCREASED HERE (tnDSize: 6.5, tnESize: 4.5)
     let designState = {
         mtY: 210, mtX: 0, mtSize: 5.6, mtColor: '#d4af37', mtAlign: 'center', tLine: 'on',
-        stY: 0, stX: 0, stSize: 2.6, stColor: '#ffffff', stAlign: 'center',
+        stY: 0, stX: 0, stGap: 5, stLine: 'off', stAlign: 'center',
         logoY: 40, logoX: 0, lVis: 'show', lShape: 'square', lSize: 145,
-        plGap: 20, plSize: 100,
+        plGap: 20, plSize: 100, plAutoHide: true, plVisible: true,
         pSize: 260, pX: 0, pY: 0, pVis: 'show',
         pfWidth: 0, pfColor: '#000000', pfStyle: 'solid', pfRadius: 0, pfShadow: 'none',
         cBorder: 'b1', bdColor: '#d4af37', bgPreset: 'bg1',
@@ -863,7 +773,7 @@
 
     function downloadConfig() {
         const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(designState));
-        const a = document.createElement('a'); a.href = dataStr; a.download = "royal_config_v18.json"; document.body.appendChild(a); a.click(); a.remove();
+        const a = document.createElement('a'); a.href = dataStr; a.download = "royal_config_v19.json"; document.body.appendChild(a); a.click(); a.remove();
     }
 
     function loadConfig(input) {
@@ -875,6 +785,7 @@
                 if(tvWindow && !tvWindow.closed) { for (const key in designState) { liveUpdate(key, designState[key]); } }
                 setVal('mtSizeRange', designState.mtSize); setVal('mtColorPick', designState.mtColor); 
                 setVal('mtYRange', designState.mtY); setVal('mtXRange', designState.mtX);
+                if(designState.plAutoHide !== undefined) document.getElementById('plAutoHideCheck').checked = designState.plAutoHide;
                 alert("Settings Loaded Successfully!");
             } catch(err) { alert("Invalid Config File"); }
         };
@@ -964,7 +875,12 @@
         if(key === 'mtAlign') { doc.getElementById('mainTitleWrap').style.textAlign = value; doc.getElementById('jt1').style.textAlign = value; }
 
         if(key === 'stY') doc.getElementById('subTitleWrap').style.marginTop = value + 'px';
+        if(key === 'stGap') doc.getElementById('subTitleWrap').style.gap = value + 'px';
         if(key === 'stAlign') doc.getElementById('subTitleWrap').style.textAlign = value;
+        if(key === 'stLine') {
+             // Re-render to apply underline class or style
+             updateJalsaText();
+        }
         
         // PARTNER LOGOS
         if(key === 'plSize') doc.querySelectorAll('.pl-img').forEach(el => el.style.height = value + 'px');
@@ -977,7 +893,7 @@
         if(key === 'tnEColor') doc.getElementById('tnE').style.color = value;
         
         if(key === 'nLine') {
-            const h2 = doc.getElementById('tnE'); // English name usually below
+            const h2 = doc.getElementById('tnE'); 
             if(value === 'on') { h2.style.borderBottom = '2px solid var(--theme-color)'; h2.style.display='inline-block'; }
             else { h2.style.borderBottom = 'none'; }
         }
@@ -1111,7 +1027,7 @@
                 
                 #titleContainer { width: 90%; max-width: 1600px; text-align: center; } 
                 #mainTitleWrap { width: 100%; text-align: ${designState.mtAlign}; } 
-                #subTitleWrap { width: 100%; text-align: ${designState.stAlign}; display:flex; flex-direction:column; gap:5px; } 
+                #subTitleWrap { width: 100%; text-align: ${designState.stAlign}; display:flex; flex-direction:column; gap:${designState.stGap}px; } 
 
                 .jalsa-text { direction: rtl; display:block; width:100%; }
                 .main-title { font-size: ${designState.mtSize}em; color: ${designState.mtColor}; text-shadow: 2px 2px 10px black; margin-bottom: 20px; border-bottom: 3px solid ${designState.mtColor}; padding-bottom:10px; }
@@ -1121,9 +1037,8 @@
                 #logoWrap { position:absolute; top:0; left:50%; transform:translate(calc(-50% + ${designState.logoX}px), ${designState.logoY}px); z-index:20; transition: all 0.3s ease; }
                 #logoImg { height:${designState.lSize}px; filter: drop-shadow(0 5px 15px rgba(0,0,0,0.5)); transition:all 0.3s ease; }
                 
-                /* PARTNER LOGOS V18 */
-                #plContainer { position:absolute; bottom:20px; width:100%; display:flex; justify-content:center; gap:20px; z-index:25; padding:0 20px; flex-wrap:wrap; }
-                .pl-img { height:100px; object-fit:contain; filter:drop-shadow(0 2px 5px #000); transition:all 0.3s; }
+                #plContainer { position:absolute; bottom:20px; width:100%; display:flex; justify-content:center; gap:${designState.plGap}px; z-index:25; padding:0 20px; flex-wrap:wrap; transition: opacity 0.5s ease; }
+                .pl-img { height:${designState.plSize}px; object-fit:contain; filter:drop-shadow(0 2px 5px #000); transition:all 0.3s; }
 
                 .logo-square { border-radius: 0; }
                 .logo-rounded { border-radius: 15px; }
@@ -1176,8 +1091,8 @@
                 #videoLayer { position:fixed; top:0; left:0; width:100%; height:100%; background:#000; z-index:5000; display:none; justify-content:center; align-items:center; }
                 #videoLayer video, #videoLayer iframe { width:100%; height:100%; border:none; }
                 
-                #adLayer { position:fixed; top:0; left:0; width:100%; height:100%; background:#000; z-index:6000; display:none; }
-                #adImg { width:100%; height:100%; object-fit:contain; }
+                #adLayer { position:fixed; top:0; left:0; width:100%; height:100%; background:#000; z-index:6000; display:none; justify-content:center; align-items:center; }
+                #adImg, #adVid { width:100%; height:100%; object-fit:contain; position:absolute; top:0; left:0; }
 
                 /* OVERLAY MODE FOR VIDEO (V18) */
                 .overlay-mode #card { 
@@ -1205,7 +1120,11 @@
 
             <button id="fsBtn" onclick="goFS(this)">⛶ FULL SCREEN</button>
             
-            <div id="adLayer"><img id="adImg" src=""></div>
+            <div id="adLayer">
+                <img id="adImg" style="display:none;">
+                <video id="adVid" style="display:none;" muted autoplay></video>
+            </div>
+            
             <div id="videoLayer"></div>
             
             <div id="bgLayer" class="${designState.bgPreset}"></div>
@@ -1283,6 +1202,14 @@
                  el.style.fontSize = stStyles[i-1].size + 'em';
                  el.style.color = stStyles[i-1].color;
              }
+             // Apply Underline (New)
+             if(designState.stLine === 'on') {
+                 el.style.borderBottom = `2px solid ${stStyles[i-1].color}`;
+                 el.style.display = 'inline-block';
+             } else {
+                 el.style.borderBottom = 'none';
+                 el.style.display = 'block';
+             }
         }
         
         if(currentFontData) {
@@ -1298,6 +1225,12 @@
         tvWindow.document.getElementById('jalsaContent').classList.remove('hidden');
         const logo = tvWindow.document.getElementById('logoWrap');
         logo.style.display = (designState.lVis === 'show') ? 'block' : 'none';
+        
+        // Restore Partner Logos if auto-hide is on
+        if(designState.plAutoHide && designState.plVisible) {
+             tvWindow.document.getElementById('plContainer').style.opacity = '1';
+        }
+        
         document.getElementById('statusMsg').innerText = "MODE: Jalsa Titles";
         lastActiveState = 'title'; 
     }
@@ -1311,6 +1244,11 @@
         
         const logo = tvWindow.document.getElementById('logoWrap');
         logo.style.display = (designState.lVis === 'show') ? 'block' : 'none';
+        
+        // Hide Partner Logos if AutoHide is On
+        if(designState.plAutoHide) {
+             tvWindow.document.getElementById('plContainer').style.opacity = '0';
+        }
 
         const doc = tvWindow.document;
         doc.getElementById('tnD').textContent = document.getElementById('nD').value;
@@ -1356,7 +1294,7 @@
         document.getElementById('statusMsg').innerText = "CLEARED";
     }
 
-    // --- VIDEO & ADS & PRESENTATION V18 ---
+    // --- VIDEO & ADS & PRESENTATION V19 ---
     
     // 1. PARTNER LOGOS
     function loadPartnerLogos(input) {
@@ -1378,11 +1316,22 @@
         });
         c.style.gap = designState.plGap + 'px';
     }
+    
+    function togglePartnerLogos() {
+        designState.plVisible = !designState.plVisible;
+        if(tvWindow && !tvWindow.closed) {
+             tvWindow.document.getElementById('plContainer').style.display = designState.plVisible ? 'flex' : 'none';
+        }
+    }
 
-    // 2. ADS MODE
+    // 2. ADS MODE (UPDATED FOR VIDEO & IMAGE)
     function loadAds(input) {
-        adFiles = Array.from(input.files);
-        alert(adFiles.length + " Ads/Banner Photos Loaded.");
+        adFiles = [];
+        for(let f of input.files) {
+             let type = f.type.startsWith('video') ? 'video' : 'image';
+             adFiles.push({ file: f, type: type, url: URL.createObjectURL(f) });
+        }
+        alert(adFiles.length + " Ads (Photos/Videos) Loaded.");
     }
     
     function toggleAdsMode() {
@@ -1393,25 +1342,52 @@
         if(!tvWindow || tvWindow.closed || adFiles.length === 0) { alert("No Ads Loaded or TV Closed!"); return; }
         const adLayer = tvWindow.document.getElementById('adLayer');
         const adImg = tvWindow.document.getElementById('adImg');
-        adLayer.style.display = 'block';
+        const adVid = tvWindow.document.getElementById('adVid');
         
-        let idx = 0;
-        const show = () => {
-            adImg.src = URL.createObjectURL(adFiles[idx]);
-            idx = (idx + 1) % adFiles.length;
-        };
-        show();
-        adInterval = setInterval(show, 5000); // 5 Seconds slide
+        adLayer.style.display = 'flex';
+        adIndex = 0;
+        
+        function playAd() {
+            if(!adInterval) return; // Stopped
+            let currentAd = adFiles[adIndex];
+            
+            if(currentAd.type === 'image') {
+                adVid.pause(); adVid.style.display = 'none';
+                adImg.src = currentAd.url;
+                adImg.style.display = 'block';
+                // Show image for 5 seconds then next
+                setTimeout(() => { if(adInterval) { nextAdIndex(); playAd(); } }, 5000);
+            } else {
+                adImg.style.display = 'none';
+                adVid.src = currentAd.url;
+                adVid.style.display = 'block';
+                adVid.currentTime = 0;
+                adVid.muted = false; // Try unmuted
+                adVid.play().catch(() => { adVid.muted=true; adVid.play(); }); // Fallback to muted
+                
+                adVid.onended = () => { if(adInterval) { nextAdIndex(); playAd(); } };
+            }
+        }
+        
+        function nextAdIndex() {
+            adIndex = (adIndex + 1) % adFiles.length;
+        }
+
+        adInterval = true; // Just a flag now, logic handles timeout
+        playAd();
         document.getElementById('statusMsg').innerText = "ADS MODE ON";
     }
     
     function stopAds() {
-        clearInterval(adInterval); adInterval = null;
-        if(tvWindow && !tvWindow.closed) tvWindow.document.getElementById('adLayer').style.display = 'none';
+        adInterval = false;
+        if(tvWindow && !tvWindow.closed) {
+             tvWindow.document.getElementById('adLayer').style.display = 'none';
+             tvWindow.document.getElementById('adVid').pause();
+        }
         if(document.getElementById('statusMsg').innerText === "ADS MODE ON") document.getElementById('statusMsg').innerText = "ADS STOPPED";
     }
 
-    // 3. VIDEO PLAYLIST + OVERLAY
+    // 3. VIDEO PLAYLIST
     document.getElementById('videoPlaylist').onchange = e => {
         playlist = Array.from(e.target.files);
         currentVidIdx = 0;
@@ -1433,7 +1409,7 @@
         // Handle Overlay
         if(document.getElementById('vidOverlayCheck').checked) {
             tvWindow.document.body.classList.add('overlay-mode');
-            tvWindow.document.getElementById('card').classList.add('active'); // Keep active but scaled down via CSS
+            tvWindow.document.getElementById('card').classList.add('active'); 
         } else {
             tvWindow.document.body.classList.remove('overlay-mode');
             tvWindow.document.getElementById('card').classList.remove('active');
@@ -1461,15 +1437,33 @@
         }
     }
     
-    // 4. PRESENTATION
+    // 4. PRESENTATION (Web & PDF)
     function showPresentation() {
         if(!tvWindow || tvWindow.closed) return;
         const url = document.getElementById('presLink').value;
         if(!url) return;
         
         const vl = tvWindow.document.getElementById('videoLayer');
-        // Use Iframe for slides
-        vl.innerHTML = `<iframe src="${url}" style="width:100%; height:100%; border:none;"></iframe>`;
+        // Gamma/Web Frame
+        vl.innerHTML = `<iframe src="${url}" allow="fullscreen" style="width:100%; height:100%; border:none;"></iframe>`;
+        vl.style.display = 'flex';
+        tvWindow.document.getElementById('jalsaContent').classList.add('hidden');
+        tvWindow.document.getElementById('card').classList.remove('active');
+    }
+    
+    function loadPDF(input) {
+        if(input.files && input.files[0]) {
+            pdfUrl = URL.createObjectURL(input.files[0]);
+            alert("PDF Loaded. Click 'Show PDF' to display.");
+        }
+    }
+    
+    function showPDFScreen() {
+        if(!tvWindow || tvWindow.closed) return;
+        if(!pdfUrl) { alert("No PDF Loaded!"); return; }
+        
+        const vl = tvWindow.document.getElementById('videoLayer');
+        vl.innerHTML = `<iframe src="${pdfUrl}" style="width:100%; height:100%; border:none;"></iframe>`;
         vl.style.display = 'flex';
         tvWindow.document.getElementById('jalsaContent').classList.add('hidden');
         tvWindow.document.getElementById('card').classList.remove('active');
@@ -1492,7 +1486,8 @@
         
         if(!videoId) { alert("Invalid YT Link"); return; }
         const vl = tvWindow.document.getElementById('videoLayer');
-        vl.innerHTML = `<iframe id="ytFrame" src="https://www.youtube.com/embed/${videoId}?autoplay=1&controls=0&rel=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen style="width:100%;height:100%;"></iframe>`;
+        // Added mute=1 to force play if browser blocks autoplay
+        vl.innerHTML = `<iframe id="ytFrame" src="https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&controls=1&rel=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen style="width:100%;height:100%;"></iframe>`;
         vl.style.display = 'flex';
     }
     
