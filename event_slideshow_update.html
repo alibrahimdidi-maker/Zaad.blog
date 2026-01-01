@@ -2,37 +2,37 @@
 <html lang="dv" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Royal Graduation System (V24.0 - Enterprise Final)</title>
+    <title>Royal Graduation System (V25.0 - Ultimate Enterprise)</title>
     <style>
-        /* --- GLOBAL VARIABLES --- */
+        /* --- 1. FONTS & VARS --- */
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Thaana:wght@400;700&display=swap');
+        @font-face { font-family: 'Faruuma'; src: local('Faruuma'), url('Fonts/faruuma.ttf') format('truetype'); }
+
         :root {
             --gold: #d4af37; --gold-light: #f9fbe7; --dark: #001a12;
-            --green: #004d40; --blue: #0d47a1; --red: #c62828;
-            --shadow: 0 10px 30px rgba(0,0,0,0.4);
+            --green: #004d40; --blue: #0d47a1; --red: #b71c1c;
+            --shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
 
         body {
             margin: 0; padding: 0;
             background: radial-gradient(circle at center, #00281c 0%, #000 100%);
             font-family: 'Faruuma', 'Times New Roman', serif;
-            overflow: hidden; height: 100vh; width: 100vw; color: #333; user-select: none;
+            overflow: hidden; height: 100vh; width: 100vw;
+            color: #333; user-select: none;
         }
 
-        @font-face { font-family: 'Faruuma'; src: local('Faruuma'), url('Fonts/faruuma.ttf') format('truetype'); }
-        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Thaana:wght@400;700&display=swap');
-
-        /* --- SECURITY SCREEN (CENTERED) --- */
+        /* --- 2. SECURITY SCREEN (CENTERED) --- */
         #securityOverlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.95); backdrop-filter: blur(10px);
+            background: rgba(0, 0, 0, 0.95); backdrop-filter: blur(15px);
             z-index: 99999; display: flex; flex-direction: column; 
             justify-content: center; align-items: center;
         }
         .sec-box {
             background: rgba(0, 26, 18, 0.9); padding: 50px; border-radius: 20px;
             border: 3px solid var(--gold); text-align: center; width: 450px;
-            box-shadow: 0 0 50px var(--gold);
+            box-shadow: 0 0 60px rgba(212, 175, 55, 0.4);
         }
         .sec-input {
             padding: 15px; font-size: 24px; text-align: center; width: 100%; 
@@ -45,93 +45,91 @@
         }
         .sec-btn:hover { background: #fff; }
 
-        /* --- MAIN LAYOUT --- */
-        .main-layout { display: none; gap: 20px; height: 100vh; padding: 20px; box-sizing: border-box; }
+        /* --- 3. MAIN LAYOUT --- */
+        .main-layout { display: flex; gap: 15px; height: 100vh; padding: 15px; box-sizing: border-box; }
 
         .sidebar {
             flex: 0 0 360px; 
-            background: linear-gradient(180deg, var(--gold) 0%, #8d6e63 100%);
-            padding: 15px; border-radius: 15px; display: flex; flex-direction: column; 
-            overflow: hidden; border: 3px solid #fff; box-shadow: var(--shadow);
+            background: linear-gradient(180deg, #d4af37 0%, #8d6e63 100%);
+            padding: 15px; border-radius: 12px; display: flex; flex-direction: column; 
+            overflow-y: auto; border: 3px solid #fff; box-shadow: var(--shadow);
         }
 
         .editor {
-            flex: 1; background: #fffde7; padding: 25px; border-radius: 15px;
+            flex: 1; background: #fffde7; padding: 20px; border-radius: 12px;
             display: flex; flex-direction: column; overflow-y: auto; 
             border: 5px solid var(--gold); box-shadow: var(--shadow); position: relative;
         }
 
-        /* --- CONTROLS --- */
+        /* --- 4. CONTROLS --- */
         h2 { margin: 5px 0; color: var(--dark); text-align: center; font-family:'Faruuma'; text-shadow: 1px 1px 0 #fff; }
-        label { display: block; font-weight: bold; font-size: 14px; margin-bottom: 3px; color: #000; }
+        h3 { border-bottom: 2px solid var(--gold); padding-bottom: 5px; color: var(--green); text-align: right; font-size: 20px; margin-top: 0; }
+        
+        label { display: block; font-weight: bold; font-size: 14px; margin-bottom: 3px; }
         .d-label { 
             font-size: 16px; font-weight: bold; color: var(--green); 
-            display: block; margin: 15px 0 5px 0; border-bottom: 2px dotted #aaa; 
+            margin: 15px 0 5px 0; border-bottom: 1px dotted #999; display: block;
         }
 
         input, select, textarea { 
             width: 100%; padding: 8px; border: 1px solid #777; border-radius: 5px; 
-            font-size: 14px; margin-bottom: 5px; font-family: 'Faruuma', 'Times New Roman';
-            box-sizing: border-box; background: #fff;
+            font-size: 14px; margin-bottom: 5px; font-family: 'Faruuma'; box-sizing: border-box;
         }
         input[type=range] { height: 15px; accent-color: var(--green); margin: 5px 0; }
-        input[type=color] { width: 40px; height: 35px; padding: 0; cursor: pointer; }
+        input[type=color] { width: 40px; height: 30px; padding: 0; cursor: pointer; border: 2px solid #fff; }
 
         .group-box {
-            border: 2px solid var(--gold); border-radius: 12px;
-            padding: 30px 20px 20px; margin-bottom: 30px;
-            background: #fff; position: relative;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            border: 2px solid var(--gold); border-radius: 10px; padding: 20px 15px; 
+            margin-bottom: 20px; background: #fff; position: relative;
         }
         .group-title {
-            position: absolute; top: -18px; right: 20px;
-            background: var(--green); color: var(--gold);
-            padding: 5px 25px; font-size: 16px; font-weight: bold;
-            border: 2px solid var(--gold); border-radius: 20px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            position: absolute; top: -15px; right: 15px; background: var(--green); 
+            color: var(--gold); padding: 4px 20px; font-size: 16px; border-radius: 15px;
+            border: 2px solid var(--gold); font-weight: bold;
         }
 
-        /* --- BUTTONS --- */
-        button { cursor: pointer; font-family: 'Faruuma'; font-weight: bold; border-radius: 6px; transition:0.2s; }
-        .launch-btn { background: var(--red); color: #fff; padding: 12px; width: 100%; font-size: 18px; border: 2px solid #fff; margin-bottom: 10px; }
-        .conf-btn { padding: 8px; background: #333; color: #fff; border: 1px solid #fff; flex: 1; }
+        /* --- 5. BUTTONS --- */
+        button { cursor: pointer; font-family: 'Faruuma'; font-weight: bold; border-radius: 6px; transition: 0.2s; }
+        .launch-btn { background: var(--red); color: #fff; padding: 12px; width: 100%; font-size: 18px; margin-bottom: 10px; border: 2px solid #fff; }
+        .conf-btn { padding: 8px; background: #333; color: #fff; border: 1px solid #fff; flex: 1; font-size: 13px; }
         .btn-live { background: var(--green); flex: 2; border: 3px solid var(--gold); color: var(--gold); font-size: 22px; padding: 10px; }
-        .btn-nav { background: #455a64; color: #fff; padding: 10px; font-size: 20px; width: 60px; border:none; }
-        .feature-btn { background: var(--blue); color: #fff; padding: 8px; width: 100%; margin-top: 5px; border: 1px solid #fff; }
+        .btn-nav { background: #455a64; color: #fff; padding: 10px; width: 60px; font-size: 20px; border: none; }
+        .feature-btn { background: var(--blue); color: #fff; width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #fff; font-size: 14px; text-align: center; }
         
-        .lang-bar { display:flex; justify-content:center; gap:10px; margin-bottom:10px; background:rgba(255,255,255,0.3); padding:5px; border-radius:20px; }
-        .lang-btn { font-size:24px; background:transparent; border:none; padding:5px; cursor:pointer; }
-        .lang-btn:hover { transform:scale(1.2); }
+        .lang-bar { display: flex; justify-content: center; gap: 10px; margin-bottom: 10px; background: rgba(255,255,255,0.3); padding: 5px; border-radius: 20px; }
+        .lang-btn { font-size: 24px; background: transparent; border: none; padding: 5px; cursor: pointer; transition: 0.2s; }
+        .lang-btn:hover { transform: scale(1.2); }
 
-        /* LTR SUPPORT */
-        html[dir="ltr"] .group-title { right: auto; left: 20px; }
+        /* --- EXTRAS --- */
+        .preview-container { display: flex; gap: 10px; background: #fff3e0; padding: 10px; border-radius: 10px; justify-content: center; align-items: center; border: 1px solid var(--gold); }
+        #previewImg { height: 80px; width: 80px; object-fit: cover; border-radius: 50%; border: 3px solid var(--gold); background: #ccc; }
+        
+        .video-panel { background: #e1f5fe; padding: 10px; border-radius: 10px; margin-bottom: 15px; border: 1px solid #29b6f6; }
+        
+        .arrow-controls { display: flex; flex-direction: column; align-items: center; background: #eee; padding: 5px; border-radius: 8px; border: 1px solid #999; }
+        .arrow-row { display: flex; gap: 5px; }
+        .btn-arr { width: 35px; height: 30px; font-size: 16px; background: #fff; border: 1px solid #555; }
+        .btn-arr:hover { background: var(--gold); }
+
+        /* LTR Support */
+        html[dir="ltr"] .group-title { right: auto; left: 15px; }
         html[dir="ltr"] .sidebar { background: linear-gradient(180deg, #8d6e63 0%, #d4af37 100%); }
         .input-row { display: flex; gap: 10px; }
         html[dir="ltr"] .input-row { flex-direction: row-reverse; }
 
-        /* SCROLLBAR */
-        ::-webkit-scrollbar { width: 10px; }
-        ::-webkit-scrollbar-track { background: #eee; }
-        ::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 5px; }
-
-        /* ARROWS & VIDEO PANEL */
-        .arrow-controls { display:flex; flex-direction:column; align-items:center; gap:2px; background:#eee; padding:5px; border-radius:8px; }
-        .arrow-row { display:flex; gap:5px; }
-        .btn-arr { width:35px; height:30px; font-size:16px; background:#fff; border:1px solid #555; border-radius:4px; }
-        .btn-arr:hover { background: var(--gold); }
-        .video-panel { background: #e3f2fd; padding: 10px; border-radius: 10px; border: 1px solid #90caf9; margin-bottom: 15px; }
-        .preview-container { display: flex; gap: 15px; align-items: center; justify-content: center; background: #fff3e0; padding: 10px; border: 2px solid #ffb74d; border-radius: 10px; margin-top: 10px; }
-        #previewImg { height: 80px; width: 80px; object-fit: cover; border-radius: 50%; border: 3px solid var(--gold); background: #ddd; }
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 4px; }
     </style>
 </head>
 <body oncontextmenu="return false;">
     <div id="securityOverlay">
         <div class="sec-box">
-            <h1 style="color:var(--gold); font-size:40px; margin-bottom:20px;">Royal System V24.0</h1>
-            <p id="lbl_sec" style="color:#fff; font-size:18px;">🔒 System Locked</p>
-            <input type="password" id="licenseKey" class="sec-input" placeholder="***">
-            <button id="btn_unlock" class="sec-btn" onclick="verifyLicense()">UNLOCK</button>
-            <p id="secMsg" style="color:#ff5252; margin-top:15px; font-weight:bold;"></p>
+            <h1 style="color:var(--gold); font-size:40px;">Royal Graduation V25.0</h1>
+            <p id="lbl_sec" style="color:#fff; font-size:18px;">ސިސްޓަމް ވަނީ ލޮކްކުރެވިފައި</p>
+            <input type="password" id="licenseKey" class="sec-input" placeholder="********">
+            <button id="btn_unlock" class="sec-btn" onclick="verifyLicense()">ހުޅުވާ</button>
+            <p id="secMsg" style="color:#ff5252; margin-top:10px;"></p>
         </div>
     </div>
 
@@ -143,49 +141,49 @@
                 <button class="lang-btn" onclick="setLang('en')" title="English">🇬🇧</button>
             </div>
             
-            <h2 id="lbl_ctrl">Control Center</h2>
+            <h2 id="lbl_ctrl">ކޮންޓްރޯލް ޕެނަލް</h2>
             <div id="licenseStatus" style="font-size:11px; color:var(--green); text-align:center; font-weight:bold; margin-bottom:5px;"></div>
             
-            <button class="launch-btn" onclick="openTV()">🖥️ 1. OPEN TV DISPLAY</button>
-            <div id="connStatus" style="font-size:13px; color:red; text-align:center; background:#fff; padding:4px; border-radius:4px; font-weight:bold; margin-bottom:10px;">Offline</div>
+            <button class="launch-btn" onclick="openTV()">🖥️ 1. ޓީވީ ސްކްރީން ހުޅުވާ</button>
+            <div id="connStatus" style="font-size:13px; color:red; text-align:center; background:#fff; padding:4px; margin-bottom:10px; border-radius:4px;">ކަނެކްޓް ނުވޭ</div>
 
             <div style="display:flex; gap:5px; margin-bottom:10px;">
-                <button class="conf-btn" onclick="downloadConfig()">⬇ Save</button>
-                <button class="conf-btn" onclick="document.getElementById('confInput').click()">⬆ Load</button>
+                <button class="conf-btn" onclick="downloadConfig()">⬇ ސޭވް</button>
+                <button class="conf-btn" onclick="document.getElementById('confInput').click()">⬆ ލޯޑް</button>
                 <input type="file" id="confInput" accept=".json" style="display:none" onchange="loadConfig(this)">
             </div>
 
             <div style="background:#fff; border:2px solid #5d4037; border-radius:10px; padding:10px; overflow-y:auto; flex:1;">
-                <label id="lbl_files" style="color:#d84315; border-bottom:1px solid #ccc;">📂 System Files:</label>
-                <label style="font-size:12px">1. CSV List:</label><input type="file" id="csvFile" accept=".csv">
-                <label style="font-size:12px">2. Photos:</label><input type="file" id="photoFolder" webkitdirectory directory multiple>
-                <label style="font-size:12px">3. Logo:</label><input type="file" id="logoFile" accept="image/*">
-                <label style="font-size:12px">4. Font:</label><input type="file" id="fontFile" accept=".ttf,.otf">
-                <label style="font-size:12px">5. Titles:</label><input type="file" id="jalsaCsvFile" accept=".csv">
-                <label style="font-size:12px; color:red;">6. Frame:</label><input type="file" id="customBorderFile" accept="image/*">
+                <label id="lbl_files" style="color:#d84315; border-bottom:1px solid #ccc;">📂 ސިސްޓަމް ފައިލްތައް:</label>
+                <label style="font-size:12px">1. ލިސްޓް (CSV):</label><input type="file" id="csvFile" accept=".csv">
+                <label style="font-size:12px">2. ފޮޓޯ ފޯލްޑަރ:</label><input type="file" id="photoFolder" webkitdirectory directory multiple>
+                <label style="font-size:12px">3. މެއިން ލޯގޯ:</label><input type="file" id="logoFile" accept="image/*">
+                <label style="font-size:12px">4. ފޮންޓް (TTF):</label><input type="file" id="fontFile" accept=".ttf,.otf">
+                <label style="font-size:12px">5. ސުރުޚީތައް (CSV):</label><input type="file" id="jalsaCsvFile" accept=".csv">
+                <label style="font-size:12px; color:red;">6. ކަސްޓަމް ފްރޭމް:</label><input type="file" id="customBorderFile" accept="image/*">
                 <hr>
-                <label style="font-size:12px; color:var(--green);">7. Sponsors:</label><input type="file" id="sponsorFolder" webkitdirectory directory multiple>
-                <label style="font-size:12px; color:var(--green);">8. Ads:</label><input type="file" id="adsFolder" webkitdirectory directory multiple>
-                <label style="font-size:12px; color:var(--green);">9. Top 5 Vids:</label><input type="file" id="top5Folder" webkitdirectory directory multiple>
+                <label style="font-size:12px; color:var(--green);">7. ސްޕޮންސަރ ލޯގޯތައް:</label><input type="file" id="sponsorFolder" webkitdirectory directory multiple>
+                <label style="font-size:12px; color:var(--green);">8. އިޝްތިހާރު/ފޮޓޯތައް:</label><input type="file" id="adsFolder" webkitdirectory directory multiple>
+                <label style="font-size:12px; color:var(--green);">9. ޓޮޕް 5 ވީޑިއޯތައް:</label><input type="file" id="top5Folder" webkitdirectory directory multiple>
             </div>
             
-            <label id="lbl_search" style="margin-top:10px;">🔍 Search:</label>
+            <label style="margin-top:10px;">🔍 ދަރިވަރުން ހޯދާ:</label>
             <input type="text" id="search" placeholder="..." onkeyup="filterList()">
-            <select id="stuList" size="2" style="height:100px; border:2px solid var(--green); font-size:13px;" onchange="loadStudent()"></select>
+            <select id="stuList" size="2" style="height:150px; border:2px solid var(--green); font-size:13px;" onchange="loadStudent()"></select>
             
             <div style="background:#e8eaf6; padding:10px; margin-top:10px; border-radius:8px; border:1px solid #3f51b5;">
-                <label style="color:#1a237e; font-size:12px;">📽️ Presentation:</label>
-                <input type="text" id="pptLink" placeholder="Google Slides Link...">
-                <button class="feature-btn" onclick="togglePPT()">Mode: ON/OFF</button>
+                <label style="color:#1a237e; font-size:12px;">📽️ ޕްރެޒެންޓޭޝަން:</label>
+                <input type="text" id="pptLink" placeholder="ގޫގުލް ސްލައިޑް ލިންކް...">
+                <button class="feature-btn" onclick="togglePPT()">ޕްރެޒެންޓޭޝަން މޯޑް (ON/OFF)</button>
             </div>
         </div>
 
         <div class="editor" id="editorPanel">
-            <button id="lockBtn" style="background:#455a64; color:#fff; width:100%; padding:10px; border:none; border-radius:6px; margin-bottom:15px;" onclick="toggleLock()">🔓 EDIT MODE</button>
+            <button id="lockBtn" style="background:#455a64; color:#fff; width:100%; padding:10px; border-radius:6px; margin-bottom:15px; border:none;" onclick="toggleLock()">🔓 އެޑިޓް މޯޑް (ލޮކްކުރޭ)</button>
 
-            <div class="controls">
+            <div class="controls" style="display:flex; gap:10px;">
                 <button class="action btn-nav" onclick="move(-1)">◀</button>
-                <button class="action btn-live" onclick="updateTV()">📺 GO LIVE</button>
+                <button class="action btn-live" onclick="updateTV()">📺 ލައިވް (ކާޑު)</button>
                 <button class="action btn-nav" onclick="move(1)">▶</button>
                 <button class="action btn-nav" style="background:#b71c1c;" onclick="clearTV()">X</button>
             </div>
@@ -202,78 +200,125 @@
                 <button style="background:#333; color:#fff; width:100%; margin-top:5px; padding:8px; border:none; border-radius:4px;" onclick="stopVideo()">⏹ STOP VIDEO</button>
             </div>
 
-            <div style="background:#fff; padding:15px; border-radius:12px; border:2px solid #ccc; margin-bottom:25px;">
-                <h3 id="lbl_stu_det">🎓 Student Details</h3>
-                <div class="input-row"><div style="flex:1"><input id="nD" class="font-dv" placeholder="Name (Dv)"></div><div style="flex:1"><input id="nE" class="eng" placeholder="Name (En)"></div></div>
-                <div class="input-row"><div style="flex:1"><input id="fD" class="font-dv" placeholder="Detail 1 (Dv)"></div><div style="flex:1"><input id="fE" class="eng" placeholder="Detail 1 (En)"></div></div>
-                <div class="input-row"><div style="flex:1"><input id="cD" class="font-dv" placeholder="Detail 2 (Dv)"></div><div style="flex:1"><input id="cE" class="eng" placeholder="Detail 2 (En)"></div></div>
+            <div style="background:#fff; padding:15px; border-radius:12px; border:2px solid #ccc; margin-bottom:20px;">
+                <h3 id="lbl_stu_det">🎓 ދަރިވަރުގެ މަޢުލޫމާތު</h3>
+                <div class="input-row"><div style="flex:1"><input id="nD" class="font-dv" placeholder="ނަން (ދިވެހި)"></div><div style="flex:1"><input id="nE" style="direction:ltr; text-align:left;" placeholder="Name (En)"></div></div>
+                <div class="input-row"><div style="flex:1"><input id="fD" class="font-dv" placeholder="ތަފްސީލު 1"></div><div style="flex:1"><input id="fE" style="direction:ltr; text-align:left;" placeholder="Detail 1"></div></div>
+                <div class="input-row"><div style="flex:1"><input id="cD" class="font-dv" placeholder="ތަފްސީލު 2"></div><div style="flex:1"><input id="cE" style="direction:ltr; text-align:left;" placeholder="Detail 2"></div></div>
                 <textarea id="cm" rows="2" placeholder="Comment"></textarea>
 
                 <div class="preview-container">
                     <div><img id="logoPreview" alt="Logo" style="height:60px;"></div>
                     <div style="text-align:center;">
-                        <span id="pStat" style="font-size:12px; font-weight:bold;">No Photo</span><br>
+                        <span id="pStat" style="font-size:12px;">ފޮޓޯ ނެތް</span><br>
                         <img id="previewImg" src="https://via.placeholder.com/150">
-                        <br><button style="font-size:11px; margin-top:5px;" onclick="document.getElementById('singlePhoto').click()">Change</button>
+                        <br><button onclick="document.getElementById('singlePhoto').click()" style="font-size:10px;">ބަދަލުކުރޭ</button>
                         <input type="file" id="singlePhoto" accept="image/*" style="display:none" onchange="manualPhoto(this)">
                     </div>
                 </div>
             </div>
 
             <div class="group-box" style="background:#e0f7fa; border-color:#006064;">
-                <span class="group-title" id="grp_ads">🌟 Enterprise Features</span>
+                <span class="group-title" id="grp_ads">🌟 ޚާއްޞަ ފީޗާސް (އެންޓަޕްރައިޒް)</span>
                 <div style="display:flex; gap:10px;">
-                    <button class="feature-btn" style="background:var(--blue);" onclick="toggleAdsMode()">🖼️ Ads/Gallery Mode</button>
-                    <button class="feature-btn" style="background:var(--green);" onclick="toggleSponsors()">🤝 Sponsor Bar</button>
+                    <button class="feature-btn" style="background:var(--blue);" onclick="toggleAdsMode()">🖼️ އިޝްތިހާރު / ފޮޓޯތައް</button>
+                    <button class="feature-btn" style="background:var(--green);" onclick="toggleSponsors()">🤝 ސްޕޮންސަރ ބާ</button>
                 </div>
                 <hr>
-                <label>🏆 Top 5 Video Player:</label>
+                <label>🏆 ޓޮޕް 5 ވީޑިއޯ ޕްލޭޔަރ:</label>
                 <div style="display:flex; gap:5px;">
-                    <button class="feature-btn" style="background:#e65100;" onclick="playNextTop5()">▶ Next Video</button>
-                    <button class="feature-btn" style="background:#333;" onclick="stopTop5()">⏹ Stop</button>
+                    <button class="feature-btn" style="background:#e65100;" onclick="playNextTop5()">▶ ނެކްސްޓް ވީޑިއޯ</button>
+                    <button class="feature-btn" style="background:#333;" onclick="stopTop5()">⏹ ހުއްޓާލާ</button>
                 </div>
-                <div style="margin-top:5px;"><label><input type="checkbox" id="chk_top5_overlay" checked> Show Card Overlay</label></div>
+                <div style="margin-top:5px;"><label><input type="checkbox" id="chk_top5_overlay" checked> ކާޑު އޯވަލޭ ދައްކާ</label></div>
             </div>
 
             <div id="designPanel">
-                <div class="group-box" style="background:#fffde7; border-color:#fbc02d;">
-                    <span class="group-title" id="grp_theme">🌍 Global Theme</span>
-                    <span class="d-label">1. Wallpaper & Card:</span>
+                <div class="group-box">
+                    <span class="group-title" id="grp_theme">🌍 ތީމް & ކާޑު</span>
+                    <span class="d-label">1. ބެކްގްރައުންޑް:</span>
                     <div style="display:flex; gap:10px;">
-                        <select id="bgPresetSel" onchange="liveUpdate('bgPreset', this.value)" style="width:50%;"><script>for(let i=1;i<=50;i++)document.write(`<option value="bg${i}">Theme ${i}</option>`);</script></select>
-                        <input type="file" id="jalsaBgFile" accept="video/*,image/*" style="width:50%">
+                        <select id="bgPresetSel" onchange="liveUpdate('bgPreset', this.value)" style="width:60%;"><script>for(let i=1;i<=50;i++)document.write(`<option value="bg${i}">Theme ${i}</option>`);</script></select>
+                        <input type="file" id="jalsaBgFile" accept="video/*,image/*" style="width:40%">
                     </div>
                     <div style="display:flex; gap:10px; margin-top:5px;">
-                         <select id="cBorderSel" onchange="liveUpdate('cBorder', this.value)" style="width:70%;"><option value="custom">Custom Frame (Image)</option><script>for(let i=1;i<=50;i++)document.write(`<option value="b${i}">Card ${i}</option>`);</script><option value="b0">None</option></select>
+                         <select id="cBorderSel" onchange="liveUpdate('cBorder', this.value)" style="width:70%;"><option value="custom">ކަސްޓަމް ފްރޭމް (Image)</option><script>for(let i=1;i<=50;i++)document.write(`<option value="b${i}">Card ${i}</option>`);</script><option value="b0">None</option></select>
                          <input type="color" id="bdColorPick" value="#d4af37" oninput="liveUpdate('bdColor',this.value)">
                     </div>
-                    <span class="d-label">2. Card Size/Pos:</span>
-                    <div style="display:flex; gap:10px; align-items:center;"><span>W:</span><input type="range" id="cardWRange" min="50" max="100" value="90" oninput="liveUpdate('cardW',this.value)"><span>H:</span><input type="range" id="cardHRange" min="50" max="100" value="80" oninput="liveUpdate('cardH',this.value)"></div>
-                    <div style="display:flex; gap:10px; margin-top:5px;"><select id="layoutDirSel" onchange="liveUpdate('layoutDir',this.value)"><option value="rtl">RTL (Photo Right)</option><option value="ltr">LTR</option></select><select id="textAlignSel" onchange="liveUpdate('textAlign',this.value)"><option value="right">Right</option><option value="center">Center</option><option value="left">Left</option></select></div>
+                    <span class="d-label">2. ކާޑު ސައިޒް/ތަން:</span>
+                    <div style="display:flex; gap:5px;"><span>W:</span><input type="range" id="cardWRange" min="50" max="100" value="90" oninput="liveUpdate('cardW',this.value)"><span>H:</span><input type="range" id="cardHRange" min="50" max="100" value="80" oninput="liveUpdate('cardH',this.value)"></div>
+                    <div style="display:flex; gap:5px; margin-top:5px;"><select id="layoutDirSel" onchange="liveUpdate('layoutDir',this.value)"><option value="rtl">ފޮޓޯ ކަނާތް</option><option value="ltr">ފޮޓޯ ވާތް</option></select><select id="textAlignSel" onchange="liveUpdate('textAlign',this.value)"><option value="right">ލިޔުން ކަނާތް</option><option value="center">މެދު</option></select></div>
                     <div style="display:flex; gap:10px; margin-top:5px;"><span>X:</span><input type="range" id="cardXRange" min="-600" max="600" value="0" oninput="liveUpdate('cardX',this.value)"><span>Y:</span><input type="range" id="cardYRange" min="-450" max="450" value="0" oninput="liveUpdate('cardY',this.value)"></div>
                 </div>
 
-                <div class="group-box" style="background:#e3f2fd; border-color:#1e88e5;">
-                    <span class="group-title" id="grp_titles">👑 Titles (7 Lines)</span>
-                    <input type="text" id="jLine1" placeholder="Main Title" class="font-dv" oninput="updateJalsaText()" style="font-weight:bold; font-size:16px;">
-                    <div style="display:flex; gap:5px;"><span>Y:</span><input type="range" id="mtYRange" min="-600" max="600" value="210" oninput="liveUpdate('mtY',this.value)"><span>X:</span><input type="range" id="mtXRange" min="-800" max="800" value="0" oninput="liveUpdate('mtX',this.value)"></div>
-                    <div style="display:flex; gap:5px; margin-top:5px;"><span>Sz:</span><input type="range" id="mtSizeRange" min="2" max="10" step="0.1" value="5.6" oninput="liveUpdate('mtSize',this.value)"><input type="color" id="mtColorPick" value="#d4af37" oninput="liveUpdate('mtColor',this.value)"><select id="mtAlignSel" onchange="liveUpdate('mtAlign',this.value)" style="width:80px;"><option value="center">C</option><option value="right">R</option></select></div>
+                <div class="group-box">
+                    <span class="group-title" id="grp_titles">👑 ޖަލްސާގެ ސުރުޚީތައް (7 ލައިން)</span>
+                    <input type="text" id="jLine1" placeholder="މައި ސުރުޚީ" oninput="updateJalsaText()" style="font-weight:bold; font-size:16px;">
+                    <div style="display:flex; gap:5px;">
+                         <input type="range" id="mtYRange" min="-600" max="600" value="210" oninput="liveUpdate('mtY',this.value)">
+                         <button onclick="adjT('y',-10)">⬆</button><button onclick="adjT('y',10)">⬇</button>
+                    </div>
                     <hr>
-                    <div id="subTitlesArea"><script>for(let i=1;i<=7;i++)document.write(`<div style="margin-bottom:5px;"><input type="text" id="sub${i}Text" placeholder="Sub ${i}" oninput="updateJalsaText()"><div style="display:flex; gap:5px;"><input type="range" id="sub${i}Size" min="1" max="5" step="0.1" value="2.0" oninput="updateJalsaText()"><input type="color" id="sub${i}Color" value="#ffffff" oninput="updateJalsaText()"></div></div>`);</script></div>
+                    <div id="subTitlesArea">
+                        <script>
+                            for(let i=1; i<=7; i++) {
+                                document.write(`
+                                    <div style="margin-bottom:5px; border-bottom:1px dashed #ccc; padding-bottom:5px;">
+                                        <input type="text" id="sub${i}Text" placeholder="ސަބް ޓައިޓްލް ${i}" oninput="updateJalsaText()">
+                                        <div style="display:flex; gap:5px;">
+                                            <span style="font-size:10px;">ސައިޒް:</span><input type="range" id="sub${i}Size" min="1" max="5" step="0.1" value="2.0" oninput="updateJalsaText()">
+                                            <input type="color" id="sub${i}Color" value="#ffffff" oninput="updateJalsaText()">
+                                        </div>
+                                    </div>
+                                `);
+                            }
+                        </script>
+                    </div>
+                    <div style="display:flex; gap:10px; margin-top:10px;">
+                        <span>ގްރޫޕް ތަން:</span><input type="range" id="stYRange" min="0" max="200" value="0" oninput="liveUpdate('stY',this.value)">
+                    </div>
                 </div>
 
-                <div class="group-box" style="background:#e0f2f1; border-color:#00897b;">
-                    <span class="group-title" id="grp_photo">📸 Photo Style</span>
-                    <select id="photoPresetSel" onchange="applyPhotoPreset(this.value)"><option value="0">-- Select --</option><option value="1">Plain</option><option value="2">Shadow</option><option value="6">Blue Frame</option><option value="10">Rounded</option><option value="11">Circle</option><option value="14">Polaroid</option><option value="15">Gold</option></select>
-                    <div style="display:flex; gap:5px; margin-top:5px;"><span>Col:</span><input type="color" id="pfColorPick" value="#000000" oninput="liveUpdate('pfColor',this.value)"><span>Wid:</span><input type="range" id="pfWidthRange" min="0" max="30" value="0" oninput="liveUpdate('pfWidth',this.value)"></div>
-                    <div style="display:flex; gap:5px; margin-top:5px;"><span>Pos:</span><input type="range" id="pXRange" min="-600" max="600" value="0" oninput="liveUpdate('pX',this.value)"><input type="range" id="pYRange" min="-400" max="400" value="0" oninput="liveUpdate('pY',this.value)"></div>
+                <div class="group-box">
+                    <span class="group-title" id="grp_photo">📸 ފޮޓޯ ސްޓައިލް</span>
+                    <select id="photoPresetSel" onchange="applyPhotoPreset(this.value)"><option value="0">-- ނަގާ --</option><option value="1">Plain</option><option value="2">Shadow</option><option value="6">Blue Frame</option><option value="10">Rounded</option><option value="11">Circle</option><option value="14">Polaroid</option><option value="15">Gold</option></select>
+                    <div style="display:flex; gap:5px; margin-top:5px;"><span>ކުލަ:</span><input type="color" id="pfColorPick" value="#000000" oninput="liveUpdate('pfColor',this.value)"><span>ފުޅާމިން:</span><input type="range" id="pfWidthRange" min="0" max="30" value="0" oninput="liveUpdate('pfWidth',this.value)"></div>
+                    <div style="display:flex; gap:5px; margin-top:5px;"><span>ތަން:</span><input type="range" id="pXRange" min="-600" max="600" value="0" oninput="liveUpdate('pX',this.value)"><input type="range" id="pYRange" min="-400" max="400" value="0" oninput="liveUpdate('pY',this.value)"></div>
                 </div>
             </div>
         </div>
     </div>
     <script>
     document.addEventListener('contextmenu', e=>e.preventDefault());
-    const txts={en:{lock:"🔒 Locked",unl:"UNLOCK",files:"📂 Files",srch:"🔍 Search",det:"🎓 Details",thm:"🌍 Theme",photo:"📸 Photo",tit:"👑 Titles", ads:"📢 Ads/Sponsor"},dv:{lock:"🔒 ލޮކް",unl:"ހުޅުވާ",files:"📂 ފައިލް",srch:"🔍 ހޯދާ",det:"🎓 ދަރިވަރު",thm:"🌍 ތީމް",photo:"📸 ފޮޓޯ",tit:"👑 ސުރުޚީ", ads:"📢 އިޝްތިހާރު"},ar:{lock:"🔒 مقفل",unl:"فتح",files:"📂 ملفات",srch:"🔍 بحث",det:"🎓 طالب",thm:"🌍 سمة",photo:"📸 صور",tit:"👑 عناوين", ads:"📢 إعلانات"}};
+
+    // --- LICENSE ---
+    function verifyLicense(){
+        const k=document.getElementById('licenseKey').value; 
+        if(k==="ROYAL2025" || k) { 
+            document.getElementById('securityOverlay').style.display='none';
+            document.getElementById('mainApp').style.display='flex';
+            document.getElementById('licenseStatus').innerText="✅ SYSTEM UNLOCKED";
+        }
+    }
+
+    let tv=null, students=[], photoFiles={}, sponsorFiles=[], adFiles=[], top5Files=[], top5Index=0;
+    let currentPhoto=null, currentLogo=null, customBorder=null, currentBG=null, bgType='none';
+    let isLocked=false, isAds=false, isSponsor=false, isPPT=false;
+    
+    // --- SETTINGS DEFAULTS ---
+    let ds = {
+        mtY:210, mtX:0, mtSize:5.6, mtColor:'#d4af37', tLine:'on', 
+        stY:0, cardW:90, cardH:80, layoutDir:'rtl', textAlign:'right',
+        pfWidth:0, pfColor:'#000', pfStyle:'solid', pfRadius:0, pfShadow:'none',
+        cBorder:'b1', bdColor:'#d4af37', bgPreset:'bg1', bgLoop:'on',
+        pSize:260, pX:0, pY:0, pVis:'show',
+        tnDSize:5, tnDColor:'#fff', tnESize:3, tnEColor:'#fff', 
+        tfDSize:2, tfDColor:'#fff9c4', tcDSize:2.5, tcDColor:'#fff9c4',
+        adCols:4, adGap:10, logoX:0, logoY:40, lSize:145
+    };
+
+    // --- LANG ---
+    const txts={en:{lock:"🔒 Locked",unl:"UNLOCK",files:"📂 Files",srch:"🔍 Search",det:"🎓 Details",thm:"🌍 Theme",photo:"📸 Photo",tit:"👑 Titles", ads:"📢 Ads"},dv:{lock:"🔒 ލޮކް",unl:"ހުޅުވާ",files:"📂 ފައިލް",srch:"🔍 ހޯދާ",det:"🎓 ދަރިވަރު",thm:"🌍 ތީމް",photo:"📸 ފޮޓޯ",tit:"👑 ސުރުޚީ", ads:"📢 އިޝްތިހާރު"},ar:{lock:"🔒 مقفل",unl:"فتح",files:"📂 ملفات",srch:"🔍 بحث",det:"🎓 طالب",thm:"🌍 سمة",photo:"📸 صور",tit:"👑 عناوين", ads:"📢 إعلانات"}};
     
     function setLang(l) {
         document.getElementById('lbl_sec').innerText=txts[l].lock; document.getElementById('btn_unlock').innerText=txts[l].unl; document.getElementById('lbl_files').innerText=txts[l].files;
@@ -282,18 +327,29 @@
         const h=document.documentElement; if(l==='en'){h.setAttribute('dir','ltr');h.setAttribute('lang','en');liveUpdate('layoutDir','ltr');}else{h.setAttribute('dir','rtl');h.setAttribute('lang',l);liveUpdate('layoutDir','rtl');}
     }
 
-    function verifyLicense(){const k=document.getElementById('licenseKey').value; if(k){try{if(JSON.parse(atob(k.split('').reverse().join(''))).s==="ROYAL_V5_SECURE"){document.getElementById('securityOverlay').style.display='none';document.getElementById('mainApp').style.display='flex';document.getElementById('licenseStatus').innerText="✅ VALID";}}catch(e){document.getElementById('secMsg').innerText="❌ Invalid";}}}
-    document.getElementById('licenseKey').addEventListener("keyup", e => { if (e.key === "Enter") verifyLicense(); });
+    // --- CORE FUNCTIONS ---
+    function toggleLock(){ isLocked=!isLocked; document.getElementById('lockBtn').innerText=isLocked?"🔒 LOCKED":"🔓 EDIT MODE"; }
+    function setVal(id,v){const e=document.getElementById(id);if(e)e.value=v;}
+    function adjT(a,v){ if(a=='y'){ds.mtY=parseInt(ds.mtY)+v; setVal('mtYRange',ds.mtY); liveUpdate('mtY',ds.mtY);} }
 
-    let tv=null, students=[], photoFiles={}, sponsorFiles=[], adFiles=[], top5Files=[], top5Index=0;
-    let cP=null, cL=null, cF=null, cBG=null, cBGT='none', cB=null, isAds=false, isPPT=false, lck=false;
-    let ds={mtY:210, mtX:0, mtSize:5.6, mtColor:'#d4af37', mtAlign:'center', tLine:'on', stY:0, logoY:40, logoX:0, lVis:'show', lShape:'square', lSize:145, pSize:260, pX:0, pY:0, pVis:'show', pfWidth:0, pfColor:'#000', pfStyle:'solid', pfRadius:0, pfShadow:'none', cBorder:'b1', bdColor:'#d4af37', bgPreset:'bg1', bgLoop:'on', layoutDir:'rtl', textAlign:'right', cardX:0, cardY:0, cardW:90, cardH:80, tnDSize:5, tnDColor:'#fff', tnESize:3, tnEColor:'#fff', tfDSize:2, tfDColor:'#fff9c4', tcDSize:2.5, tcDColor:'#fff9c4'};
-
-    function toggleLock(){lck=!lck; document.getElementById('lockBtn').innerHTML=lck?"🔒 LOCKED":"🔓 EDIT"; document.getElementById('designPanel').style.pointerEvents=lck?'none':'auto'; document.getElementById('designPanel').style.opacity=lck?0.5:1;}
-    function downloadConfig(){const a=document.createElement('a');a.href="data:text/json;charset=utf-8,"+encodeURIComponent(JSON.stringify(ds));a.download="conf.json";a.click();}
-    function loadConfig(i){const f=i.files[0];if(f){const r=new FileReader();r.onload=e=>{ds=JSON.parse(e.target.result);if(tv&&!tv.closed)for(const k in ds)liveUpdate(k,ds[k]);alert("Loaded!");};r.readAsText(f);}}
-    function setVal(i,v){const e=document.getElementById(i);if(e)e.value=v;}
-    function adjT(a,v){if(a=='y'){ds.mtY=parseInt(ds.mtY)+v;setVal('mtYRange',ds.mtY);liveUpdate('mtY',ds.mtY);}else{ds.mtX=parseInt(ds.mtX)+v;setVal('mtXRange',ds.mtX);liveUpdate('mtX',ds.mtX);}}
+    function liveUpdate(k,v){
+        if(isLocked)return; ds[k]=v; if(!tv||tv.closed)return; const d=tv.document;
+        if(k=='bgPreset')d.getElementById('bgLayer').className=v;
+        if(k=='cBorder'){const c=d.getElementById('card'); c.className=v+' active'; if(v=='custom'&&customBorder)c.style.backgroundImage=`url(${customBorder})`; else c.style.backgroundImage='none';}
+        if(k.startsWith('pf')){const i=d.getElementById('stuImg'); if(i){i.style.borderWidth=ds.pfWidth+'px'; i.style.borderColor=ds.pfColor; i.style.borderRadius=ds.pfRadius+'%'; i.style.boxShadow=ds.pfShadow;}}
+        if(k=='pSize'){const i=d.getElementById('stuImg'); if(i){i.style.width=v+'px';i.style.height=v+'px';}}
+        if(k=='pX'||k=='pY')d.querySelector('.photo-col').style.transform=`translate(${ds.pX}px,${ds.pY}px)`;
+        if(k=='cardW')d.getElementById('card').style.width=v+'vw'; if(k=='cardH')d.getElementById('card').style.height=v+'vh';
+        if(k=='cardX'||k=='cardY')d.getElementById('card').style.transform=`translate(calc(-50% + ${ds.cardX}px),calc(-50% + ${ds.cardY}px))`;
+        if(k=='layoutDir')d.getElementById('card').style.flexDirection=(v=='rtl')?'row-reverse':'row';
+        if(k=='textAlign')d.querySelector('.text-col').style.textAlign=v;
+        if(k=='mtY')d.getElementById('titleContainer').style.marginTop=v+'px';
+        if(k=='stY')d.getElementById('subTitleContainer').style.marginTop=v+'px';
+        if(k.startsWith('tn')||k.startsWith('tf')||k.startsWith('tc')){
+            d.getElementById('tnD').style.fontSize=ds.tnDSize+'em'; d.getElementById('tnD').style.color=ds.tnDColor;
+            d.getElementById('tnE').style.fontSize=ds.tnESize+'em'; d.getElementById('tnE').style.color=ds.tnEColor;
+        }
+    }
 
     function applyPhotoPreset(v){
         let w=0,c='#000',r=0,sh='none';
@@ -315,47 +371,86 @@
         d.getElementById('subTitleContainer').innerHTML = subHTML;
     }
 
+    // --- TV WINDOW GENERATOR ---
     function openTV(){
-        tv=window.open('','GradTV','width=1280,height=720,menubar=no'); if(!tv){alert("Popups Disabled!");return;}
-        let css=""; const g=["radial-gradient(circle,#004d40,#001a12)","linear-gradient(135deg,#000,#333)"]; for(let i=0;i<50;i++)css+=`.bg${i+1}{background:${g[i%g.length]}}\n`;
-        const b=["border:none","border:10px solid var(--tc)","border:5px double #fff"]; for(let i=0;i<50;i++)css+=`.b${i+1}{${b[i%b.length]}}\n`;
-        const h=`<!DOCTYPE html><html lang="dv" dir="rtl"><head><style>@font-face{font-family:'Faruuma';src:url('Fonts/faruuma.ttf');} :root{--tc:${ds.bdColor};} body{margin:0;overflow:hidden;background:#000;font-family:'Faruuma';} #bgLayer{position:fixed;width:100%;height:100%;z-index:0;} ${css} #jalsaContent{position:absolute;width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:10;transition:0.5s;} #titleContainer{text-align:center; transition:0.3s;} .main-title{font-size:${ds.mtSize}em;color:${ds.mtColor};text-shadow:2px 2px 10px #000;} #card{position:absolute;top:54%;left:50%;transform:translate(-50%,-50%);width:${ds.cardW}vw;height:${ds.cardH}vh;display:flex;align-items:center;background:rgba(0,20,15,0.92);padding:3vh;opacity:0;transition:0.5s;z-index:20;} #card.active{opacity:1;} .photo-col{flex:0 0 auto;min-width:200px;display:flex;justify-content:center;height:100%;} #stuImg{width:${ds.pSize}px;height:${ds.pSize}px;object-fit:cover;border:5px solid #000;transition:0.3s;} .text-col{flex:1;text-align:right;padding:0 30px;color:white;} .custom{border:none!important;background-size:100% 100%!important;} #videoLayer,#adsLayer,#pptLayer{position:fixed;top:0;left:0;width:100%;height:100%;background:#000;z-index:5000;display:none;} #sponsorBar{position:fixed;bottom:0;left:0;width:100%;height:80px;background:#fff;z-index:6000;display:none;justify-content:center;align-items:center;gap:30px;box-shadow:0 -5px 15px rgba(0,0,0,0.5);} .sp-img{height:60px;object-fit:contain;} #adsGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;padding:20px;width:100%;height:100%;box-sizing:border-box;} .ad-item{width:100%;height:100%;object-fit:contain;} #logoWrap{position:absolute;top:0;left:50%;transform:translate(-50%,0);z-index:30;} h1{font-size:5em;margin:0;color:#fff;} h2{font-size:3em;color:var(--tc);}</style></head><body><div id="videoLayer"></div><div id="adsLayer"><div id="adsGrid"></div></div><div id="pptLayer"></div><div id="bgLayer" class="${ds.bgPreset}"></div><div id="logoWrap"><img id="logoImg" src="" style="height:150px;"></div><div id="jalsaContent"><div id="titleContainer"><div id="mainT" class="main-title"></div><div id="subTitleContainer"></div></div></div><div id="card" class="${ds.cBorder}"><div class="photo-col"><img id="stuImg" src=""></div><div class="text-col"><h1 id="tnD"></h1><h2 id="tnE"></h2><div id="tfD" style="font-size:2em;color:#fff9c4"></div><div id="tfE" style="font-size:1.6em;color:#fff9c4"></div><div id="tcD" style="font-size:2.5em;color:#fff9c4"></div><div id="tcE" style="font-size:2em;color:#fff9c4"></div><div id="tcm" style="font-size:2.2em;margin-top:20px;"></div></div></div><div id="sponsorBar"></div></body></html>`;
-        tv.document.write(h); tv.document.close();
-        document.getElementById('connStatus').innerText="✅ LIVE"; document.getElementById('connStatus').style.color="green";
-        updateJalsaText(); liveUpdate('cBorder',ds.cBorder);
+        tv=window.open('','GradTV','width=1280,height=720,menubar=no');
+        if(!tv){alert("Popups Disabled!");return;}
+        
+        let css=""; 
+        const grads=["radial-gradient(circle,#004d40,#001a12)","linear-gradient(135deg,#000,#333)"];
+        for(let i=0;i<50;i++) css+=`.bg${i+1}{background:${grads[i%grads.length]}}\n`;
+        const brds=["border:none","border:10px solid var(--gold)","border:5px double #fff"];
+        for(let i=0;i<50;i++) css+=`.b${i+1}{${brds[i%brds.length]}}\n`;
+
+        const html = `
+        <!DOCTYPE html><html lang="dv" dir="rtl"><head>
+        <style>
+            @font-face{font-family:'Faruuma';src:url('Fonts/faruuma.ttf');} :root{--gold:#d4af37;}
+            body{margin:0;overflow:hidden;background:#000;font-family:'Faruuma';}
+            #bgLayer{position:fixed;width:100%;height:100%;z-index:0;} ${css}
+            #jalsaContent{position:absolute;width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:10;transition:0.5s;}
+            #titleContainer{text-align:center; transition:0.3s;}
+            .main-title{font-size:5em; color:var(--gold); text-shadow:2px 2px 10px #000; border-bottom:3px solid var(--gold);}
+            .sub-title{text-shadow:1px 1px 5px #000; margin:5px 0;}
+            
+            #card{position:absolute;top:54%;left:50%;transform:translate(-50%,-50%);width:90vw;height:80vh;display:flex;align-items:center;background:rgba(0,20,15,0.92);padding:3vh;opacity:0;transition:0.5s;z-index:20;}
+            #card.active{opacity:1;}
+            .photo-col{flex:0 0 auto;min-width:200px;display:flex;justify-content:center;height:100%;}
+            #stuImg{width:260px;height:260px;object-fit:cover;border:5px solid #000;transition:0.3s;}
+            .text-col{flex:1;text-align:right;padding:0 30px;color:white;}
+            h1{font-size:5em;margin:0;color:#fff;} h2{font-size:3em;color:var(--gold);}
+            
+            /* LAYERS */
+            #videoLayer, #adsLayer, #pptLayer {position:fixed;top:0;left:0;width:100%;height:100%;background:#000;z-index:5000;display:none;}
+            #sponsorBar {position:fixed;bottom:0;left:0;width:100%;height:80px;background:#fff;z-index:6000;display:none;justify-content:center;align-items:center;gap:30px;box-shadow:0 -5px 15px rgba(0,0,0,0.5); animation: scroll 20s linear infinite;}
+            .sp-img {height:60px; object-fit:contain;}
+            #adsGrid {display:grid; grid-template-columns:repeat(4,1fr); gap:10px; padding:20px; width:100%; height:100%; box-sizing:border-box;}
+            .ad-item {width:100%; height:100%; object-fit:contain;}
+            #logoWrap {position:absolute;top:0;left:50%;transform:translate(-50%,0);z-index:30;}
+            .custom{border:none!important; background-size:100% 100%!important;}
+        </style></head><body>
+        <div id="videoLayer"></div><div id="adsLayer"><div id="adsGrid"></div></div><div id="pptLayer"></div>
+        <div id="bgLayer" class="bg1"></div>
+        <div id="logoWrap"><img id="logoImg" src="" style="height:150px;"></div>
+        
+        <div id="jalsaContent">
+            <div id="titleContainer">
+                <div id="mainT" class="main-title"></div>
+                <div id="subTitleContainer"></div>
+            </div>
+        </div>
+
+        <div id="card" class="b1">
+            <div class="photo-col"><img id="stuImg" src=""></div>
+            <div class="text-col">
+                <h1 id="tnD"></h1><h2 id="tnE"></h2>
+                <div id="tfD" style="font-size:2em;color:#fff9c4"></div><div id="tfE" style="font-size:1.6em;color:#fff9c4"></div>
+                <div id="tcD" style="font-size:2.5em;color:#fff9c4"></div><div id="tcE" style="font-size:2em;color:#fff9c4"></div>
+                <div id="tcm" style="font-size:2.2em;margin-top:20px;"></div>
+            </div>
+        </div>
+        <div id="sponsorBar"></div>
+        </body></html>`;
+        
+        tv.document.write(html); tv.document.close();
+        document.getElementById('connStatus').innerText="✅ ލައިވް"; document.getElementById('connStatus').style.color="green";
+        updateJalsaText();
     }
 
-    // --- LIVE UPDATES ---
-    function liveUpdate(k,v){
-        if(isLocked)return; ds[k]=v; if(!tv||tv.closed)return; const d=tv.document;
-        if(k=='bgPreset')d.getElementById('bgLayer').className=v;
-        if(k=='cBorder'){const c=d.getElementById('card'); c.className=v+' active'; if(v=='custom'&&cB)c.style.backgroundImage=`url(${cB})`; else c.style.backgroundImage='none';}
-        if(k.startsWith('pf')){const i=d.getElementById('stuImg'); if(i){i.style.borderWidth=ds.pfWidth+'px'; i.style.borderColor=ds.pfColor; i.style.borderRadius=ds.pfRadius+'%'; i.style.boxShadow=ds.pfShadow;}}
-        if(k=='pSize'){const i=d.getElementById('stuImg'); if(i){i.style.width=v+'px';i.style.height=v+'px';}}
-        if(k=='pX'||k=='pY')d.querySelector('.photo-col').style.transform=`translate(${ds.pX}px,${ds.pY}px)`;
-        if(k=='cardW')d.getElementById('card').style.width=v+'vw'; if(k=='cardH')d.getElementById('card').style.height=v+'vh';
-        if(k=='cardX'||k=='cardY')d.getElementById('card').style.transform=`translate(calc(-50% + ${ds.cardX}px),calc(-50% + ${ds.cardY}px))`;
-        if(k=='layoutDir')d.getElementById('card').style.flexDirection=(v=='rtl')?'row-reverse':'row';
-        if(k=='textAlign')d.querySelector('.text-col').style.textAlign=v;
-        if(k=='mtY')d.getElementById('titleContainer').style.marginTop=v+'px';
-        if(k=='stY')d.getElementById('subTitleContainer').style.marginTop=v+'px';
-        if(k.startsWith('tn')||k.startsWith('tf')||k.startsWith('tc')){
-            d.getElementById('tnD').style.fontSize=ds.tnDSize+'em'; d.getElementById('tnD').style.color=ds.tnDColor;
-            d.getElementById('tnE').style.fontSize=ds.tnESize+'em'; d.getElementById('tnE').style.color=ds.tnEColor;
-        }
-    }
-
-    // --- DATA ---
-    document.getElementById('csvFile').onchange=e=>{const r=new FileReader();r.onload=v=>{const l=v.target.result.split('\n');students=[];l.forEach(x=>{const c=x.split(',');if(c.length>1)students.push({nD:c[0],nE:c[1],fD:c[4],fE:c[5],cD:c[2],cE:c[3],cm:c[6],ph:c[7]});});filterList();alert("Loaded");};r.readAsText(e.target.files[0]);}
+    // --- DATA HANDLING ---
+    document.getElementById('csvFile').onchange=e=>{const r=new FileReader();r.onload=v=>{const l=v.target.result.split('\n');students=[];l.forEach(x=>{const c=x.split(',');if(c.length>1)students.push({nD:c[0],nE:c[1],fD:c[4],fE:c[5],cD:c[2],cE:c[3],cm:c[6],ph:c[7]});});filterList();alert("Students Loaded");};r.readAsText(e.target.files[0]);}
     document.getElementById('photoFolder').onchange=e=>{photoFiles={};for(let f of e.target.files)photoFiles[f.name.toLowerCase()]=f; alert("Photos Loaded");}
-    document.getElementById('customBorderFile').onchange=e=>{const r=new FileReader();r.onload=v=>{cB=v.target.result;liveUpdate('cBorder','custom');};r.readAsDataURL(e.target.files[0]);}
+    document.getElementById('customBorderFile').onchange=e=>{const r=new FileReader();r.onload=v=>{customBorder=v.target.result;liveUpdate('cBorder','custom');};r.readAsDataURL(e.target.files[0]);}
     document.getElementById('logoFile').onchange=e=>{const r=new FileReader();r.onload=v=>{if(tv)tv.document.getElementById('logoImg').src=v.target.result;};r.readAsDataURL(e.target.files[0]);}
-    document.getElementById('sponsorFolder').onchange=e=>{sponsorFiles=[]; for(let f of e.target.files)if(f.type.startsWith('image'))sponsorFiles.push(f); renderSponsors();}
-    document.getElementById('adsFolder').onchange=e=>{adFiles=[]; for(let f of e.target.files)if(f.type.startsWith('image'))adFiles.push(f); renderAds();}
-    document.getElementById('top5Folder').onchange=e=>{top5Files=[]; for(let f of e.target.files)if(f.type.startsWith('video'))top5Files.push(f); alert(`Top 5: ${top5Files.length}`);}
+    
+    // --- ADVANCED FEATURES ---
+    document.getElementById('sponsorFolder').onchange=e=>{sponsorFiles=[]; for(let f of e.target.files)if(f.type.startsWith('image'))sponsorFiles.push(f); alert("Sponsors: "+sponsorFiles.length); if(tv)renderSponsors();}
+    document.getElementById('adsFolder').onchange=e=>{adFiles=[]; for(let f of e.target.files)if(f.type.startsWith('image'))adFiles.push(f); alert("Ads: "+adFiles.length); if(tv)renderAds();}
+    document.getElementById('top5Folder').onchange=e=>{top5Files=[]; for(let f of e.target.files)if(f.type.startsWith('video'))top5Files.push(f); alert(`Top 5: ${top5Files.length} videos`);}
 
     function renderSponsors(){if(!tv)return; const b=tv.document.getElementById('sponsorBar'); b.innerHTML=''; sponsorFiles.forEach(f=>{const r=new FileReader();r.onload=e=>{const i=tv.document.createElement('img');i.src=e.target.result;i.className='sp-img';b.appendChild(i);};r.readAsDataURL(f);});}
     function renderAds(){if(!tv)return; const g=tv.document.getElementById('adsGrid'); g.innerHTML=''; adFiles.forEach(f=>{const r=new FileReader();r.onload=e=>{const i=tv.document.createElement('img');i.src=e.target.result;i.className='ad-item';g.appendChild(i);};r.readAsDataURL(f);});}
+
     function toggleSponsors(){if(tv){const b=tv.document.getElementById('sponsorBar'); b.style.display = b.style.display=='flex'?'none':'flex';}}
     function toggleAdsMode(){isAds=!isAds; if(tv){tv.document.getElementById('jalsaContent').style.display=isAds?'none':'flex'; tv.document.getElementById('adsLayer').style.display=isAds?'grid':'none';}}
     
