@@ -2,7 +2,7 @@
 <html lang="dv" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>Royal Graduation (V21.0 - Ultimate Presentation Edition)</title>
+    <title>Royal Graduation (V22.0 - Titanium Edition)</title>
     <style>
         /* 1. Google Font (Backup for Dhivehi) */
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Thaana:wght@400;700&display=swap');
@@ -238,8 +238,8 @@
 
     <div id="securityOverlay">
         <div class="sec-box">
-            <h1 style="color:#fff; font-size:45px; margin-bottom:10px; text-shadow:0 2px 5px #000;">Royal Graduation V21.0</h1>
-            <p style="color:#a0c4ff; font-size:18px; margin-bottom:30px;">🔒 PLATINUM EDITION - ENTER LICENSE KEY</p>
+            <h1 style="color:#fff; font-size:45px; margin-bottom:10px; text-shadow:0 2px 5px #000;">Royal Graduation V22.0</h1>
+            <p style="color:#a0c4ff; font-size:18px; margin-bottom:30px;">🔒 TITANIUM EDITION - ENTER LICENSE KEY</p>
             <input type="password" id="licenseKey" class="sec-input" placeholder="Enter Key...">
             <button class="sec-btn" onclick="verifyLicense()">AUTHENTICATE</button>
             <p id="secMsg" style="color:#ff5252; font-size:16px; margin-top:20px; font-weight:bold;"></p>
@@ -274,7 +274,7 @@
                 <label style="color:#0d47a1; border-bottom:1px solid #e3f2fd; padding-bottom:5px; margin-bottom:8px; font-size:16px; font-weight:bold;">📂 ސިސްޓަމް ފައިލްތައް</label>
                 <label>1. ކުދިންގެ ލިސްޓު (CSV):</label><input type="file" id="csvFile" accept=".csv">
                 <label>2. ފޮޓޯ ފޯލްޑަރ:</label><input type="file" id="photoFolder" webkitdirectory directory multiple>
-                <label>3. ލޯގޯ ފައިލް (މެއިން):</label><input type="file" id="logoFile" accept="image/*">
+                <label style="color:#2e7d32;">3. މެއިން ލޯގޯތައް (Max 5):</label><input type="file" id="mainLogosInput" accept="image/*" multiple onchange="loadMainLogos(this)">
                 <label>4. ކަސްޓަމް ފޮންޓް (TTF):</label><input type="file" id="fontFile" accept=".ttf, .otf">
                 <label>5. ޖަލްސާގެ ނަންތައް (CSV):</label><input type="file" id="jalsaCsvFile" accept=".csv">
                 <label style="color:#d84315;">6. ކަސްޓަމް ފްރޭމް:</label><input type="file" id="customBorderFile" accept="image/*">
@@ -335,12 +335,12 @@
                 
                 <div style="font-weight:bold; font-size:14px; margin-bottom:5px;">WEB & PRESENTATION:</div>
                 <div style="display:flex; gap:8px; margin-top:5px;">
-                    <input type="text" id="presLink" placeholder="Presentation Link (Canva/Gamma/Slides)..." style="width:60%; text-align:left;" class="font-en">
+                    <input type="text" id="presLink" placeholder="Canva/Gamma/Slides Link..." style="width:60%; text-align:left;" class="font-en">
                      <select id="presType" style="width:20%; font-size:12px;">
+                         <option value="auto">Auto-Detect</option>
                          <option value="gamma">Gamma</option>
                          <option value="canva">Canva</option>
                          <option value="google">Google Slides</option>
-                         <option value="web">Website</option>
                      </select>
                     <button class="btn-vid" style="background:#6a1b9a; width:20%;" onclick="showPresentation()">Open</button>
                 </div>
@@ -349,7 +349,7 @@
                 </div>
                 
                 <div style="display:flex; gap:8px; margin-top:10px;">
-                    <input type="text" id="ytLink" placeholder="ޔޫޓިއުބް ލިންކް..." style="width:50%; text-align:left;" class="font-en">
+                    <input type="text" id="ytLink" placeholder="ޔޫޓިއުބް ލިންކް (Any Format)..." style="width:50%; text-align:left;" class="font-en">
                     <button class="btn-vid" style="background:#c62828; width:30%;" onclick="playYoutube()">▶ ޔޫޓިއުބް</button>
                     <button class="btn-vid" style="background:#0277bd; width:20%;" onclick="openYTPopup()">⚠️ ޕޮޕްއަޕް</button>
                 </div>
@@ -638,29 +638,36 @@
                 </div>
 
                 <div class="group-box">
-                    <span class="group-title">🖼️ ލޯގޯ ކޮންޓްރޯލް</span>
-                    <div style="display:flex; gap:10px;">
-                        <select id="lShapeSel" onchange="liveUpdate('lShape', this.value)" style="width:50%;">
-                            <option value="square">ހަތަރެސްކަނ (Square)</option>
-                            <option value="rounded">ރައުންޑެޑް</option>
-                            <option value="circle">ވަށް (Circle)</option>
-                        </select>
-                        <select id="lVisSel" onchange="liveUpdate('lVis', this.value)" style="width:50%;">
-                            <option value="show">ދައްކާ</option>
-                            <option value="hide">ފޮރުވާ</option>
+                    <span class="group-title">🖼️ 5 މެއިން ލޯގޯ މެނޭޖަރ</span>
+                    <div style="background:#fff; padding:10px; border-radius:5px; margin-bottom:10px;">
+                        <label style="font-size:12px;">Select Logo to Move:</label>
+                        <select id="activeLogoIdx" onchange="refreshLogoInputs()" style="width:100%;">
+                            <option value="0">Logo 1</option>
+                            <option value="1">Logo 2</option>
+                            <option value="2">Logo 3</option>
+                            <option value="3">Logo 4</option>
+                            <option value="4">Logo 5</option>
                         </select>
                     </div>
-                    <div style="display:flex; gap:10px; margin-top:10px; align-items:center;">
-                        <span style="font-size:14px;">މޫވް:</span>
-                        <input type="range" id="logoXRange" min="-1200" max="1200" value="0" oninput="liveUpdate('logoX', this.value)" title="X">
-                        <input type="range" id="logoYRange" min="0" max="900" value="40" oninput="liveUpdate('logoY', this.value)" title="Y">
-                        <span style="font-size:14px;">ސައިޒް:</span>
-                        <input type="range" id="lSizeRange" min="50" max="500" value="145" oninput="liveUpdate('lSize', this.value)" title="Size">
+                    
+                    <div style="display:flex; gap:10px; align-items:center;">
+                        <span style="font-size:12px;">Size:</span>
+                        <input type="range" id="mlSize" min="20" max="500" value="100" oninput="updateLogoStyle('size', this.value)">
                     </div>
+                    <div style="display:flex; gap:10px; align-items:center;">
+                        <span style="font-size:12px;">X-Pos:</span>
+                        <input type="range" id="mlX" min="-950" max="950" value="0" oninput="updateLogoStyle('x', this.value)">
+                    </div>
+                    <div style="display:flex; gap:10px; align-items:center;">
+                        <span style="font-size:12px;">Y-Pos:</span>
+                        <input type="range" id="mlY" min="-500" max="500" value="0" oninput="updateLogoStyle('y', this.value)">
+                    </div>
+                    
                      <div style="margin-top:8px;">
                         <label style="font-size:12px; display:inline-flex; align-items:center;">
-                            <input type="checkbox" id="logoAutoHideCheck" onchange="liveUpdate('logoAutoHide', this.checked)"> ދަރިވަރު ކާޑު އަރާއިރު މެއިން ލޯގޯ ފޮރުވާ
+                            <input type="checkbox" id="logoAutoHideCheck" checked onchange="liveUpdate('logoAutoHide', this.checked)"> ދަރިވަރު ކާޑު އަރާއިރު މެއިން ލޯގޯތައް ފޮރުވާ
                         </label>
+                        <button class="btn-vid" style="background:#37474f; margin-top:5px;" onclick="toggleMainLogos()">👁️ Toggle Main Logos</button>
                     </div>
                     
                     <hr>
@@ -671,14 +678,17 @@
                          </label>
                      </div>
                      <div style="margin-bottom:8px;">
-                         <button class="btn-vid" style="background:#455a64;" onclick="togglePartnerLogos()">👁️ Toggle Partner Logos On/Off</button>
+                         <button class="btn-vid" style="background:#455a64;" onclick="togglePartnerLogos()">👁️ Toggle Partner Logos</button>
                      </div>
                     <div style="display:flex; gap:5px;">
                          <span>Gap:</span><input type="range" oninput="liveUpdate('plGap', this.value)" min="0" max="100" value="20">
                          <span>Size:</span><input type="range" oninput="liveUpdate('plSize', this.value)" min="50" max="300" value="100">
                     </div>
                      <div style="display:flex; gap:5px; margin-top:5px;">
-                         <span>Pos:</span><input type="range" oninput="liveUpdate('plY', this.value)" min="0" max="300" value="20">
+                         <span>Y-Pos:</span><input type="range" oninput="liveUpdate('plY', this.value)" min="-600" max="600" value="0">
+                    </div>
+                    <div style="display:flex; gap:5px; margin-top:5px;">
+                         <span>X-Pos:</span><input type="range" oninput="liveUpdate('plX', this.value)" min="-800" max="800" value="0">
                     </div>
                 </div>
 
@@ -726,11 +736,11 @@
     let students = [];
     let photoFiles = {};
     let partnerLogosData = [];
+    let mainLogosData = [];
     let adFiles = [];
     let adInterval = null;
     let adIndex = 0;
     let currentPhotoData = null;
-    let currentLogoData = null;
     let currentFontData = null;
     let currentJalsaBgData = null;
     let currentJalsaBgType = 'none';
@@ -757,8 +767,12 @@
     let designState = {
         mtY: 210, mtX: 0, mtSize: 5.6, mtColor: '#d4af37', mtAlign: 'center', tLine: 'on',
         stY: 0, stX: 0, stGap: 5, stLine: 'off', stAlign: 'center',
-        logoY: 40, logoX: 0, lVis: 'show', lShape: 'square', lSize: 145, logoAutoHide: false,
-        plGap: 20, plSize: 100, plAutoHide: true, plVisible: true, plY: 20,
+        // Main Logos Array (Up to 5)
+        logos: [
+            {x:0, y:-300, s:150}, {x:-400, y:-300, s:100}, {x:400, y:-300, s:100}, {x:0, y:300, s:100}, {x:0, y:0, s:100}
+        ],
+        logoVisible: true, logoAutoHide: true,
+        plGap: 20, plSize: 100, plAutoHide: true, plVisible: true, plY: 20, plX: 0,
         pSize: 260, pX: 0, pY: 0, pVis: 'show', pFit: 'cover',
         pfWidth: 0, pfColor: '#000000', pfStyle: 'solid', pfRadius: 0, pfShadow: 'none',
         cBorder: 'b1', bdColor: '#d4af37', bgPreset: 'bg1',
@@ -767,6 +781,59 @@
         tfDSize: 2.5, tfDColor: '#fff9c4', tcDSize: 3.0, tcDColor: '#fff9c4',
         cardW: 90, cardH: 80, cardX: 0, cardY: 0
     };
+
+    // --- MAIN LOGO MANAGER ---
+    function loadMainLogos(input) {
+        mainLogosData = [];
+        for(let f of input.files) mainLogosData.push(URL.createObjectURL(f));
+        renderMainLogos();
+        alert(mainLogosData.length + " Main Logos Loaded.");
+    }
+
+    function renderMainLogos() {
+        if(!tvWindow || tvWindow.closed) return;
+        const container = tvWindow.document.getElementById('mainLogosContainer');
+        container.innerHTML = '';
+        mainLogosData.forEach((src, idx) => {
+            if(idx >= 5) return;
+            const img = tvWindow.document.createElement('img');
+            img.src = src;
+            img.id = 'ml-'+idx;
+            img.className = 'main-logo-img';
+            // Apply current state
+            const st = designState.logos[idx];
+            img.style.width = st.s + 'px';
+            img.style.transform = `translate(${st.x}px, ${st.y}px)`;
+            container.appendChild(img);
+        });
+    }
+
+    function refreshLogoInputs() {
+        const idx = document.getElementById('activeLogoIdx').value;
+        const st = designState.logos[idx];
+        document.getElementById('mlSize').value = st.s;
+        document.getElementById('mlX').value = st.x;
+        document.getElementById('mlY').value = st.y;
+    }
+
+    function updateLogoStyle(prop, val) {
+        const idx = document.getElementById('activeLogoIdx').value;
+        designState.logos[idx][prop.replace('size', 's')] = parseInt(val); // s, x, or y
+        
+        if(!tvWindow || tvWindow.closed) return;
+        const img = tvWindow.document.getElementById('ml-'+idx);
+        if(img) {
+            const st = designState.logos[idx];
+            img.style.width = st.s + 'px';
+            img.style.transform = `translate(${st.x}px, ${st.y}px)`;
+        }
+    }
+
+    function toggleMainLogos() {
+        designState.logoVisible = !designState.logoVisible;
+        if(!tvWindow || tvWindow.closed) return;
+        tvWindow.document.getElementById('mainLogosContainer').style.opacity = designState.logoVisible ? '1' : '0';
+    }
 
     // --- LOCK FUNCTION ---
     function toggleLock() {
@@ -793,7 +860,7 @@
 
     function downloadConfig() {
         const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(designState));
-        const a = document.createElement('a'); a.href = dataStr; a.download = "royal_config_v21.json"; document.body.appendChild(a); a.click(); a.remove();
+        const a = document.createElement('a'); a.href = dataStr; a.download = "royal_config_v22.json"; document.body.appendChild(a); a.click(); a.remove();
     }
 
     function loadConfig(input) {
@@ -801,12 +868,19 @@
         const reader = new FileReader();
         reader.onload = (e) => {
             try {
-                designState = JSON.parse(e.target.result);
-                if(tvWindow && !tvWindow.closed) { for (const key in designState) { liveUpdate(key, designState[key]); } }
-                setVal('mtSizeRange', designState.mtSize); setVal('mtColorPick', designState.mtColor); 
-                setVal('mtYRange', designState.mtY); setVal('mtXRange', designState.mtX);
+                const loaded = JSON.parse(e.target.result);
+                // Merge loaded config into designState carefully
+                Object.assign(designState, loaded);
+                
+                if(tvWindow && !tvWindow.closed) { 
+                    for (const key in designState) { liveUpdate(key, designState[key]); }
+                    renderMainLogos(); // Re-render logos with new positions
+                }
+                // Update UI elements
                 if(designState.plAutoHide !== undefined) document.getElementById('plAutoHideCheck').checked = designState.plAutoHide;
                 if(designState.logoAutoHide !== undefined) document.getElementById('logoAutoHideCheck').checked = designState.logoAutoHide;
+                refreshLogoInputs();
+                
                 alert("Settings Loaded Successfully!");
             } catch(err) { alert("Invalid Config File"); }
         };
@@ -859,7 +933,6 @@
             }
         }
 
-        // CARD GEOMETRY & ALIGNMENT
         if(key === 'cardW') { const c = doc.getElementById('card'); if(c) { c.style.width = value + 'vw'; if(value>90) c.style.maxWidth='none'; else c.style.maxWidth='1500px'; } }
         if(key === 'cardH') { const c = doc.getElementById('card'); if(c) c.style.height = value + 'vh'; }
         if(key === 'cardX' || key === 'cardY') { 
@@ -869,12 +942,7 @@
 
         if(key === 'pVis') { const el = doc.querySelector('.photo-col'); if(el) el.style.visibility = (value === 'show') ? 'visible' : 'hidden'; }
         
-        if(key === 'logoX' || key === 'logoY') {
-            const logo = doc.getElementById('logoWrap');
-            if(logo) logo.style.transform = `translate(calc(-50% + ${designState.logoX}px), ${designState.logoY}px)`;
-        }
         if(key === 'lSize') { const logoImg = doc.getElementById('logoImg'); if(logoImg) logoImg.style.height = value + 'px'; }
-        if(key === 'lShape') { const logoImg = doc.getElementById('logoImg'); if(logoImg) { logoImg.className=''; logoImg.classList.add('logo-'+value); } }
         if(key === 'bgLoop') { const vid = doc.getElementById('bgVid'); if(vid) vid.style.display = (value === 'on') ? 'block' : 'none'; }
         if(key === 'layoutDir') { const card = doc.getElementById('card'); if(card) card.style.flexDirection = (value === 'rtl') ? 'row-reverse' : 'row'; }
         if(key === 'textAlign') { const txt = doc.querySelector('.text-col'); if(txt) txt.style.textAlign = value; }
@@ -898,15 +966,13 @@
         if(key === 'stY') doc.getElementById('subTitleWrap').style.marginTop = value + 'px';
         if(key === 'stGap') doc.getElementById('subTitleWrap').style.gap = value + 'px';
         if(key === 'stAlign') doc.getElementById('subTitleWrap').style.textAlign = value;
-        if(key === 'stLine') {
-             // Re-render to apply underline class or style
-             updateJalsaText();
-        }
+        if(key === 'stLine') { updateJalsaText(); }
         
         // PARTNER LOGOS
         if(key === 'plSize') doc.querySelectorAll('.pl-img').forEach(el => el.style.height = value + 'px');
         if(key === 'plGap') doc.getElementById('plContainer').style.gap = value + 'px';
         if(key === 'plY') doc.getElementById('plContainer').style.bottom = value + 'px';
+        if(key === 'plX') doc.getElementById('plContainer').style.transform = `translateX(${value}px)`;
 
         // TEXT SIZES & UNDERLINE
         if(key === 'tnDColor') doc.getElementById('tnD').style.color = value;
@@ -1057,15 +1123,19 @@
                 .sub-title { font-size: ${designState.stSize}em; color: ${designState.stColor}; text-shadow: 1px 1px 5px black; margin: 0; line-height:1.2; }
                 .sub-title:empty { display:none; }
 
-                #logoWrap { position:absolute; top:0; left:50%; transform:translate(calc(-50% + ${designState.logoX}px), ${designState.logoY}px); z-index:20; transition: all 0.3s ease; }
-                #logoImg { height:${designState.lSize}px; object-fit:contain; filter: drop-shadow(0 5px 15px rgba(0,0,0,0.5)); transition:all 0.3s ease; }
+                #mainLogosContainer { 
+                    position:absolute; top:50%; left:50%; width:0; height:0; z-index:20; 
+                    transition: opacity 0.5s ease;
+                }
+                .main-logo-img { position:absolute; transform:translate(-50%, -50%); object-fit:contain; filter: drop-shadow(0 5px 15px rgba(0,0,0,0.5)); transition: all 0.3s ease; }
                 
-                #plContainer { position:absolute; bottom:${designState.plY}px; width:100%; display:flex; justify-content:center; gap:${designState.plGap}px; z-index:25; padding:0 20px; flex-wrap:wrap; transition: opacity 0.5s ease; }
+                #plContainer { 
+                    position:absolute; bottom:${designState.plY}px; width:100%; 
+                    display:flex; justify-content:center; gap:${designState.plGap}px; z-index:25; padding:0 20px; flex-wrap:wrap; 
+                    transition: opacity 0.1s linear; /* Instant Hide */
+                    transform: translateX(${designState.plX}px);
+                }
                 .pl-img { height:${designState.plSize}px; object-fit:contain; filter:drop-shadow(0 2px 5px #000); transition:all 0.3s; }
-
-                .logo-square { border-radius: 0; }
-                .logo-rounded { border-radius: 15px; }
-                .logo-circle { border-radius: 50%; }
 
                 #card { 
                     position:absolute; top:54%; left:50%; transform:translate(-50%,-50%); 
@@ -1151,7 +1221,7 @@
             <div id="videoLayer"></div>
             
             <div id="bgLayer" class="${designState.bgPreset}"></div>
-            <div id="logoWrap"><img id="logoImg" class="logo-${designState.lShape}" src="https://via.placeholder.com/180x180/00281c/d4af37?text=LOGO"></div>
+            <div id="mainLogosContainer"></div>
             <div id="plContainer"></div>
 
             <div id="jalsaContent">
@@ -1185,7 +1255,7 @@
         tvWindow.document.write(html);
         tvWindow.document.close();
 
-        if(currentLogoData) tvWindow.document.getElementById('logoImg').src = currentLogoData;
+        renderMainLogos(); // Initial render of 5 logos
         updateJalsaBackground();
         updateJalsaText();
         updatePartnerLogos();
@@ -1244,9 +1314,8 @@
         tvWindow.document.getElementById('jalsaContent').classList.remove('hidden');
         
         // Restore Main Logo if it was hidden
-        const logo = tvWindow.document.getElementById('logoWrap');
-        if(designState.lVis === 'show') logo.style.display = 'block';
-        logo.style.opacity = '1';
+        const mainLogoContainer = tvWindow.document.getElementById('mainLogosContainer');
+        if(designState.logoVisible) mainLogoContainer.style.opacity = '1';
         
         // Restore Partner Logos if auto-hide is on
         if(designState.plVisible) {
@@ -1263,18 +1332,16 @@
         stopAds();
         tvWindow.document.getElementById('jalsaContent').classList.add('hidden');
         
-        // Hide Main Logo if AutoHide is On
-        const logo = tvWindow.document.getElementById('logoWrap');
+        // Instant Hide: AutoHide Logic for Main Logos
+        const mainLogoContainer = tvWindow.document.getElementById('mainLogosContainer');
         if(designState.logoAutoHide) {
-             logo.style.opacity = '0';
-        } else {
-             if(designState.lVis === 'show') logo.style.display = 'block';
-             logo.style.opacity = '1';
+             mainLogoContainer.style.opacity = '0';
         }
         
-        // Hide Partner Logos if AutoHide is On
+        // Instant Hide: AutoHide Logic for Partner Logos
+        const plContainer = tvWindow.document.getElementById('plContainer');
         if(designState.plAutoHide) {
-             tvWindow.document.getElementById('plContainer').style.opacity = '0';
+             plContainer.style.opacity = '0';
         }
 
         const doc = tvWindow.document;
@@ -1307,7 +1374,7 @@
             pCol.classList.add('shrink-photo');
         }
 
-        setTimeout(() => doc.getElementById('card').classList.add('active'), 300);
+        setTimeout(() => doc.getElementById('card').classList.add('active'), 100);
         stopVideo(); 
         document.getElementById('statusMsg').innerText = "LIVE: " + document.getElementById('nE').value;
         lastActiveState = 'card'; 
@@ -1321,7 +1388,7 @@
         document.getElementById('statusMsg').innerText = "CLEARED";
     }
 
-    // --- VIDEO & ADS & PRESENTATION V21 ---
+    // --- VIDEO & ADS & PRESENTATION V22 ---
     
     // 1. PARTNER LOGOS
     function loadPartnerLogos(input) {
@@ -1352,7 +1419,7 @@
         }
     }
 
-    // 2. ADS MODE (UPDATED)
+    // 2. ADS MODE
     function loadAds(input) {
         adFiles = [];
         for(let f of input.files) {
@@ -1383,7 +1450,7 @@
                 adVid.pause(); adVid.style.display = 'none';
                 adImg.src = currentAd.url;
                 adImg.style.display = 'block';
-                // Show image for 10 seconds (Requested)
+                // Show image for 10 seconds
                 setTimeout(() => { if(adInterval) { nextAdIndex(); playAd(); } }, 10000);
             } else {
                 adImg.style.display = 'none';
@@ -1475,20 +1542,19 @@
         }
     }
     
-    // 4. PRESENTATION (Web, Gamma, Canva, PDF)
+    // 4. PRESENTATION (Smart Embed Handling)
     function showPresentation() {
         if(!tvWindow || tvWindow.closed) return;
         let url = document.getElementById('presLink').value;
         const type = document.getElementById('presType').value;
         if(!url) return;
         
-        // Handle Embed Links for Gamma/Canva
-        if(type === 'gamma' && !url.includes('embed')) {
-             // Gamma links usually work directly but embed mode is cleaner
-        }
-        if(type === 'canva') {
-             // Basic check to encourage embed mode or view mode
-             if(!url.includes('view') && !url.includes('embed')) alert("Recommended: Use Canva 'Embed' or 'View-only' link.");
+        // Auto-fix Canva & Gamma links for embedding
+        if(type === 'auto' || type === 'canva') {
+            if(url.includes('canva.com') && !url.includes('embed')) {
+                // Try converting standard view link to embed
+                if(url.includes('/view')) url = url.replace('/view', '/view?embed');
+            }
         }
         
         const vl = tvWindow.document.getElementById('videoLayer');
@@ -1521,14 +1587,15 @@
         tvWindow.document.getElementById('jalsaContent').classList.add('hidden');
         tvWindow.document.getElementById('card').classList.remove('active');
 
-        const url = document.getElementById('ytLink').value;
+        let url = document.getElementById('ytLink').value;
         if(!url) return;
         let videoId = null;
+        
+        // Robust YouTube ID Extraction
         try {
-            let splitUrl = url.split(/(vi\/|v=|\/v\/|youtu\.be\/|\/embed\/)/);
-            if(splitUrl[2] !== undefined) {
-                videoId = splitUrl[2].split(/[^0-9a-z_\-]/i)[0];
-            } else { videoId = url; }
+            const regex = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/;
+            const match = url.match(regex);
+            if(match && match[1]) videoId = match[1];
         } catch(e) { videoId = null; }
         
         if(!videoId) { alert("Invalid YT Link"); return; }
@@ -1581,14 +1648,6 @@
             currentJalsaBgType = file.type.startsWith('video') ? 'video' : 'image';
             updateJalsaBackground(); alert("Background Set");
         }; r.readAsDataURL(file);
-    };
-
-    document.getElementById('logoFile').onchange = e => {
-        const r = new FileReader();
-        r.onload = evt => {
-            currentLogoData = evt.target.result;
-            if(tvWindow && !tvWindow.closed) tvWindow.document.getElementById('logoImg').src = currentLogoData;
-        }; r.readAsDataURL(e.target.files[0]);
     };
 
     document.getElementById('customBorderFile').onchange = e => {
