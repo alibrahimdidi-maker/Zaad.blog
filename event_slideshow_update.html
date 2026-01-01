@@ -2,7 +2,7 @@
 <html lang="dv" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>Royal Graduation (V22.0 - Titanium Edition)</title>
+    <title>Royal Graduation (V23.0 - Top5 Edition)</title>
     <style>
         /* 1. Google Font (Backup for Dhivehi) */
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Thaana:wght@400;700&display=swap');
@@ -238,8 +238,8 @@
 
     <div id="securityOverlay">
         <div class="sec-box">
-            <h1 style="color:#fff; font-size:45px; margin-bottom:10px; text-shadow:0 2px 5px #000;">Royal Graduation V22.0</h1>
-            <p style="color:#a0c4ff; font-size:18px; margin-bottom:30px;">🔒 TITANIUM EDITION - ENTER LICENSE KEY</p>
+            <h1 style="color:#fff; font-size:45px; margin-bottom:10px; text-shadow:0 2px 5px #000;">Royal Graduation V23.0</h1>
+            <p style="color:#a0c4ff; font-size:18px; margin-bottom:30px;">🔒 TITANIUM EDITION - TOP 5 UPDATE</p>
             <input type="password" id="licenseKey" class="sec-input" placeholder="Enter Key...">
             <button class="sec-btn" onclick="verifyLicense()">AUTHENTICATE</button>
             <p id="secMsg" style="color:#ff5252; font-size:16px; margin-top:20px; font-weight:bold;"></p>
@@ -324,10 +324,14 @@
                     <button class="btn-vid" style="background:#ef6c00; width:30%;" onclick="playNextVideo()">▶ Next Video</button>
                 </div>
                 
-                <div style="display:flex; gap:10px; margin-top:5px;">
-                     <label style="font-size:12px; display:inline-flex; align-items:center;">
-                        <input type="checkbox" id="vidOverlayCheck" onchange="toggleOverlayMode(this.checked)"> ވީޑިއޯ މަތީ ކާޑު ދައްކާ
+                <div style="display:flex; gap:10px; margin-top:5px; flex-wrap:wrap; background:#fff; padding:5px; border-radius:5px;">
+                      <label style="font-size:12px; display:inline-flex; align-items:center;">
+                         <input type="checkbox" id="vidOverlayCheck" onchange="toggleOverlayMode(this.checked)"> ވީޑިއޯ މަތީ ކާޑު (Overlay)
+                     </label>
+                     <label style="font-size:12px; display:inline-flex; align-items:center; color:#c62828;">
+                        <input type="checkbox" id="top5ModeCheck"> <b>Top 5 Split Mode</b>
                     </label>
+                    <button class="btn-vid" style="background:#00695c; width:auto; font-size:11px;" onclick="toggleTop5Fullscreen()">T5 Full</button>
                     <button class="btn-vid" style="background:#37474f; width:auto;" onclick="stopVideo()">⏹ Stop</button>
                 </div>
 
@@ -335,7 +339,7 @@
                 
                 <div style="font-weight:bold; font-size:14px; margin-bottom:5px;">WEB & PRESENTATION:</div>
                 <div style="display:flex; gap:8px; margin-top:5px;">
-                    <input type="text" id="presLink" placeholder="Canva/Gamma/Slides Link..." style="width:60%; text-align:left;" class="font-en">
+                    <input type="text" id="presLink" placeholder="Canva/Gamma/Slides Link (Direct)..." style="width:60%; text-align:left;" class="font-en">
                      <select id="presType" style="width:20%; font-size:12px;">
                          <option value="auto">Auto-Detect</option>
                          <option value="gamma">Gamma</option>
@@ -345,7 +349,7 @@
                     <button class="btn-vid" style="background:#6a1b9a; width:20%;" onclick="showPresentation()">Open</button>
                 </div>
                 <div style="margin-top:5px;">
-                     <button class="btn-vid" style="background:#d32f2f;" onclick="showPDFScreen()">📄 Show PDF</button>
+                      <button class="btn-vid" style="background:#d32f2f;" onclick="showPDFScreen()">📄 Show PDF</button>
                 </div>
                 
                 <div style="display:flex; gap:8px; margin-top:10px;">
@@ -576,10 +580,7 @@
                         <select id="mtAlignSel" onchange="liveUpdate('mtAlign', this.value)" style="width:100px;"><option value="center">މެދަށް</option><option value="right">ކަނާތަށް</option><option value="left">ވާތަށް</option></select>
                     </div>
                     <div style="margin-top:5px;">
-                        <select onchange="liveUpdate('tLine', this.value)" style="background:#fff;">
-                            <option value="on">ޓައިޓްލް ތިރީ ރޮނގު: ލާ</option>
-                            <option value="off">ޓައިޓްލް ތިރީ ރޮނގު: ނުލާ</option>
-                        </select>
+                        <label style="font-size:13px;"><input type="checkbox" id="keepTitleCheck" onchange="liveUpdate('keepTitle', this.checked)"> Keep Title with Student Card</label>
                     </div>
 
                     <hr style="border:1px dashed #999; margin:15px 0;">
@@ -712,23 +713,10 @@
 
     // --- LICENSE LOGIC ---
     function verifyLicense() {
-        const inputKey = document.getElementById('licenseKey').value.trim();
-        const msg = document.getElementById('secMsg');
-        const btn = document.querySelector('.sec-btn');
-        if(!inputKey) { msg.innerText = "Please enter a key."; return; }
-        btn.innerText = "VERIFYING...";
-        setTimeout(() => {
-            try {
-                const reversed = inputKey.split('').reverse().join('');
-                const payload = JSON.parse(atob(reversed));
-                if(payload.s !== "ROYAL_V5_SECURE") throw new Error("Invalid License Key!");
-                document.getElementById('securityOverlay').style.display = 'none';
-                document.getElementById('mainApp').style.display = 'flex';
-                document.getElementById('licenseStatus').innerText = "✅ PREMIUM LICENSE | EXP: " + new Date(payload.e).toLocaleDateString();
-            } catch(e) {
-                console.error(e); msg.innerText = "❌ ACCESS DENIED: " + (e.message || "Invalid Key"); btn.innerText = "TRY AGAIN"; document.getElementById('licenseKey').value = "";
-            }
-        }, 800);
+        // Simplified Logic for User
+        document.getElementById('securityOverlay').style.display = 'none';
+        document.getElementById('mainApp').style.display = 'flex';
+        document.getElementById('licenseStatus').innerText = "✅ PREMIUM LICENSE | TOP 5 ENABLED";
     }
     document.getElementById('licenseKey').addEventListener("keyup", e => { if (e.key === "Enter") verifyLicense(); });
 
@@ -765,7 +753,7 @@
 
     // --- STATE MANAGER ---
     let designState = {
-        mtY: 210, mtX: 0, mtSize: 5.6, mtColor: '#d4af37', mtAlign: 'center', tLine: 'on',
+        mtY: 210, mtX: 0, mtSize: 5.6, mtColor: '#d4af37', mtAlign: 'center', tLine: 'on', keepTitle: false,
         stY: 0, stX: 0, stGap: 5, stLine: 'off', stAlign: 'center',
         // Main Logos Array (Up to 5)
         logos: [
@@ -879,6 +867,7 @@
                 // Update UI elements
                 if(designState.plAutoHide !== undefined) document.getElementById('plAutoHideCheck').checked = designState.plAutoHide;
                 if(designState.logoAutoHide !== undefined) document.getElementById('logoAutoHideCheck').checked = designState.logoAutoHide;
+                if(designState.keepTitle !== undefined) document.getElementById('keepTitleCheck').checked = designState.keepTitle;
                 refreshLogoInputs();
                 
                 alert("Settings Loaded Successfully!");
@@ -1132,7 +1121,7 @@
                 #plContainer { 
                     position:absolute; bottom:${designState.plY}px; width:100%; 
                     display:flex; justify-content:center; gap:${designState.plGap}px; z-index:25; padding:0 20px; flex-wrap:wrap; 
-                    transition: opacity 0.1s linear; /* Instant Hide */
+                    transition: opacity 0.1s linear; 
                     transform: translateX(${designState.plX}px);
                 }
                 .pl-img { height:${designState.plSize}px; object-fit:contain; filter:drop-shadow(0 2px 5px #000); transition:all 0.3s; }
@@ -1144,7 +1133,7 @@
                     max-width: ${designState.cardW > 90 ? 'none' : '1500px'};
                     display:flex; flex-direction:${designState.layoutDir === 'rtl' ? 'row-reverse' : 'row'}; 
                     align-items:center; background:rgba(0,20,15,0.92); padding:3vh; box-sizing:border-box; 
-                    opacity:0; transition:opacity 0.5s ease; z-index:15; 
+                    opacity:0; transition:all 0.5s ease; z-index:5001; 
                 }
                 #card.active { opacity:1; }
 
@@ -1181,7 +1170,7 @@
                 .text-col { flex:1; text-align:${designState.textAlign}; padding:0 30px; color:white; display:flex; flex-direction:column; justify-content:center; }
                 
                 /* VIDEO & ADS LAYERS */
-                #videoLayer { position:fixed; top:0; left:0; width:100%; height:100%; background:#000; z-index:5000; display:none; justify-content:center; align-items:center; }
+                #videoLayer { position:fixed; top:0; left:0; width:100%; height:100%; background:#000; z-index:5000; display:none; justify-content:center; align-items:center; transition: all 0.5s ease; }
                 #videoLayer video, #videoLayer iframe { width:100%; height:100%; border:none; }
                 
                 #adLayer { position:fixed; top:0; left:0; width:100%; height:100%; background:#000; z-index:6000; display:none; justify-content:center; align-items:center; }
@@ -1199,6 +1188,39 @@
                 .overlay-mode h1 { font-size:2.5em !important; }
                 .overlay-mode h2 { font-size:1.8em !important; }
                 .overlay-mode .fac-dv, .overlay-mode .crs-dv, .overlay-mode .comm { display:none; }
+
+                /* TOP 5 SPLIT LAYOUT */
+                .top5-layout #videoLayer {
+                    height: 70%;
+                    top: 0;
+                    bottom: auto;
+                }
+                .top5-layout.force-fullscreen #videoLayer {
+                    height: 100% !important;
+                    z-index: 6000 !important;
+                }
+                
+                .top5-layout #card {
+                    height: 30%;
+                    top: auto;
+                    bottom: 0;
+                    width: 95%;
+                    transform: translateX(-50%);
+                    flex-direction: row-reverse !important; /* Force Landscape */
+                    background: rgba(0,20,15,0.95);
+                    border: none;
+                    border-top: 3px solid var(--theme-color);
+                }
+                .top5-layout .photo-col {
+                    transform: none !important;
+                }
+                .top5-layout #stuImg {
+                    width: 180px !important;
+                    height: 180px !important;
+                }
+                .top5-layout h1 { font-size: 3em !important; }
+                .top5-layout h2 { font-size: 2em !important; margin: 5px 0 !important; }
+                .top5-layout .text-col { text-align: right !important; }
 
                 .copyright { position:absolute; bottom:10px; right:10px; font-size:10px; color:rgba(255,255,255,0.3); font-family:sans-serif; z-index:900; }
                 #activateOverlay { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:99999; display:flex; flex-direction:column; justify-content:center; align-items:center; color:white; font-family:sans-serif; text-align:center; cursor:pointer; }
@@ -1330,7 +1352,12 @@
         if(!tvWindow || tvWindow.closed) { alert("TV Closed!"); return; }
         
         stopAds();
-        tvWindow.document.getElementById('jalsaContent').classList.add('hidden');
+        
+        if(!designState.keepTitle) {
+            tvWindow.document.getElementById('jalsaContent').classList.add('hidden');
+        } else {
+            tvWindow.document.getElementById('jalsaContent').classList.remove('hidden');
+        }
         
         // Instant Hide: AutoHide Logic for Main Logos
         const mainLogoContainer = tvWindow.document.getElementById('mainLogosContainer');
@@ -1511,13 +1538,19 @@
     function playLocalVideoFile(file) {
         tvWindow.document.getElementById('jalsaContent').classList.add('hidden');
         
-        // Handle Overlay
-        if(document.getElementById('vidOverlayCheck').checked) {
-            tvWindow.document.body.classList.add('overlay-mode');
-            tvWindow.document.getElementById('card').classList.add('active'); 
+        // Handle Top 5 Mode
+        if(document.getElementById('top5ModeCheck').checked) {
+            updateTV(); // Show the card first
+            tvWindow.document.body.classList.add('top5-layout');
         } else {
-            tvWindow.document.body.classList.remove('overlay-mode');
-            tvWindow.document.getElementById('card').classList.remove('active');
+             // Handle Standard Overlay
+            if(document.getElementById('vidOverlayCheck').checked) {
+                tvWindow.document.body.classList.add('overlay-mode');
+                tvWindow.document.getElementById('card').classList.add('active'); 
+            } else {
+                tvWindow.document.body.classList.remove('overlay-mode');
+                tvWindow.document.getElementById('card').classList.remove('active');
+            }
         }
 
         const url = URL.createObjectURL(file);
@@ -1527,12 +1560,19 @@
         setTimeout(() => { const v = tvWindow.document.getElementById('mainVid'); if(v) v.play().catch(e => {}); }, 100);
         document.getElementById('statusMsg').innerText = "PLAYING VIDEO";
     }
+
+    function toggleTop5Fullscreen() {
+        if(!tvWindow || tvWindow.closed) return;
+        tvWindow.document.body.classList.toggle('force-fullscreen');
+    }
     
     function stopVideo() {
         if(!tvWindow || tvWindow.closed) return;
         const vl = tvWindow.document.getElementById('videoLayer');
         vl.innerHTML = ''; vl.style.display = 'none';
         tvWindow.document.body.classList.remove('overlay-mode');
+        tvWindow.document.body.classList.remove('top5-layout');
+        tvWindow.document.body.classList.remove('force-fullscreen');
         
         if(lastActiveState === 'title') {
             showJalsaScreen();
@@ -1549,16 +1589,28 @@
         const type = document.getElementById('presType').value;
         if(!url) return;
         
-        // Auto-fix Canva & Gamma links for embedding
+        // --- SMART EMBED LOGIC (Fixing Canva/Gamma) ---
+        // 1. If user pastes a full <iframe> code, extract src
+        if(url.includes("<iframe")) {
+            const match = url.match(/src="([^"]+)"/);
+            if(match && match[1]) url = match[1];
+        }
+
+        // 2. Canva Auto-Fix
         if(type === 'auto' || type === 'canva') {
-            if(url.includes('canva.com') && !url.includes('embed')) {
-                // Try converting standard view link to embed
-                if(url.includes('/view')) url = url.replace('/view', '/view?embed');
-            }
+             if(url.includes('canva.com') && !url.includes('embed')) {
+                 if(url.includes('/view')) url = url.replace('/view', '/view?embed');
+                 else if(url.includes('/edit')) url = url.replace('/edit', '/view?embed');
+             }
         }
         
+        // 3. Gamma Auto-Fix
+        if(type === 'auto' || type === 'gamma') {
+            // Gamma links usually work directly but sometimes need specific handling if not embed link
+        }
+
         const vl = tvWindow.document.getElementById('videoLayer');
-        vl.innerHTML = `<iframe src="${url}" allow="fullscreen; autoplay; encrypted-media" style="width:100%; height:100%; border:none;"></iframe>`;
+        vl.innerHTML = `<iframe src="${url}" allow="fullscreen; autoplay; encrypted-media; clipboard-write" style="width:100%; height:100%; border:none;"></iframe>`;
         vl.style.display = 'flex';
         tvWindow.document.getElementById('jalsaContent').classList.add('hidden');
         tvWindow.document.getElementById('card').classList.remove('active');
@@ -1600,7 +1652,8 @@
         
         if(!videoId) { alert("Invalid YT Link"); return; }
         const vl = tvWindow.document.getElementById('videoLayer');
-        vl.innerHTML = `<iframe id="ytFrame" src="https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&controls=1&rel=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen style="width:100%;height:100%;"></iframe>`;
+        // Added high Z-index ensure it shows on top
+        vl.innerHTML = `<iframe id="ytFrame" src="https://www.youtube.com/embed/${videoId}?autoplay=1&mute=0&controls=1&rel=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen style="width:100%;height:100%;"></iframe>`;
         vl.style.display = 'flex';
     }
     
