@@ -2,7 +2,7 @@
 <html lang="dv" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>Royal Graduation (V36.0 - Diamond Ultra - Wide LED Support)</title>
+    <title>Royal Graduation (V35.0 - Platinum Rescue Edition)</title>
     <style>
         /* 1. Google Font (Backup for Dhivehi) */
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Thaana:wght@400;700&display=swap');
@@ -245,8 +245,8 @@
 
     <div id="securityOverlay">
         <div class="sec-box">
-            <h1 style="color:#fff; font-size:45px; margin-bottom:10px; text-shadow:0 2px 5px #000;">Royal Graduation V36.0</h1>
-            <p style="color:#a0c4ff; font-size:18px; margin-bottom:30px;">🔒 DIAMOND ULTRA - WIDE LED SUPPORT</p>
+            <h1 style="color:#fff; font-size:45px; margin-bottom:10px; text-shadow:0 2px 5px #000;">Royal Graduation V35.0</h1>
+            <p style="color:#a0c4ff; font-size:18px; margin-bottom:30px;">🔒 PLATINUM RESCUE EDITION</p>
             <input type="password" id="licenseKey" class="sec-input" placeholder="Enter Key...">
             <button class="sec-btn" onclick="verifyLicense()">AUTHENTICATE</button>
             <p id="secMsg" style="color:#ff5252; font-size:16px; margin-top:20px; font-weight:bold;"></p>
@@ -455,26 +455,6 @@
 
             <div id="designPanel">
                 
-                <div class="group-box" style="border-color:#7b1fa2; background:#f3e5f5;">
-                    <span class="group-title" style="background:#6a1b9a;">🖥️ SIDE SCREEN MANAGER (8ft)</span>
-                    <div class="design-col">
-                        <p style="font-size:12px; color:#555; margin-bottom:10px;">Control the LEFT and RIGHT LED screens independently. Upload banners/designs here.</p>
-                        
-                        <label style="font-size:13px; color:#4a148c;">◀ Left Screen Image:</label>
-                        <input type="file" accept="image/*" onchange="loadSideBanner('left', this)">
-                        
-                        <label style="font-size:13px; color:#4a148c; margin-top:5px;">▶ Right Screen Image:</label>
-                        <input type="file" accept="image/*" onchange="loadSideBanner('right', this)">
-                        
-                        <div style="margin-top:10px; display:flex; gap:10px; align-items:center;">
-                            <span style="font-size:12px;">Width %:</span>
-                            <input type="range" min="10" max="40" value="20" oninput="liveUpdate('sideW', this.value)">
-                        </div>
-                        
-                        <button class="btn-vid" style="background:#7b1fa2; margin-top:10px;" onclick="toggleSideBanners()">👁️ Toggle Side Banners</button>
-                    </div>
-                </div>
-
                 <div class="group-box" style="border-color:#ffca28; background:#fffde7;">
                     <span class="group-title" style="background:#ff6f00;">🏆 Top 5 Mode & Video</span>
                     <div class="design-col">
@@ -900,7 +880,7 @@
     function verifyLicense() {
         document.getElementById('securityOverlay').style.display = 'none';
         document.getElementById('mainApp').style.display = 'flex';
-        document.getElementById('licenseStatus').innerText = "✅ DIAMOND ULTRA | V36.0 ACTIVE";
+        document.getElementById('licenseStatus').innerText = "✅ PLATINUM EDITION | RESCUE SYSTEM ACTIVE";
     }
     document.getElementById('licenseKey').addEventListener("keyup", e => { if (e.key === "Enter") verifyLicense(); });
 
@@ -927,10 +907,6 @@
     let customCardBgData = null;
     let royalStarData = null;
     let trophyData = null;
-    
-    // SIDE BANNER DATA
-    let sideBannerLeft = null;
-    let sideBannerRight = null;
     
     let isLocked = false;
     let lastActiveState = 'title'; 
@@ -973,9 +949,7 @@
         tvX: 10, tvY: 5, tvW: 80, tvH: 65, // Top 5 Video Position
         // BADGES & ANIMATIONS (INCREASED RANGE)
         badgeX: -20, badgeY: -20, badgeAnim: 'none',
-        trophyX: -10, trophyY: -10, trophyAnim: 'none',
-        // SIDE BANNERS
-        sideW: 20, sideVisible: true
+        trophyX: -10, trophyY: -10, trophyAnim: 'none'
     };
 
     // --- MAIN LOGO MANAGER ---
@@ -1057,7 +1031,7 @@
 
     function downloadConfig() {
         const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(designState));
-        const a = document.createElement('a'); a.href = dataStr; a.download = "royal_config_v36.json"; document.body.appendChild(a); a.click(); a.remove();
+        const a = document.createElement('a'); a.href = dataStr; a.download = "royal_config_v35.json"; document.body.appendChild(a); a.click(); a.remove();
     }
 
     function loadConfig(input) {
@@ -1245,9 +1219,6 @@
                 if(value !== 'b1' && value !== 'b0') card.classList.add('active');
             }
         }
-        
-        // SIDE BANNER UPDATES
-        if(key === 'sideW') root.style.setProperty('--side-w', value + '%');
     }
 
     // --- TV WINDOW ---
@@ -1358,8 +1329,6 @@
                     /* BADGE VARIABLES */
                     --star-x: ${designState.badgeX}px; --star-y: ${designState.badgeY}px;
                     --troph-x: ${designState.trophyX}px; --troph-y: ${designState.trophyY}px;
-                    /* SIDE BANNERS */
-                    --side-w: ${designState.sideW}%;
                 }
                 body, h1, h2, div, span { font-family: 'Faruuma', 'MV Boli', 'Noto Sans Thaana', serif !important; }
                 body { margin:0; overflow:hidden; background:#000; user-select:none; }
@@ -1572,17 +1541,6 @@
                 .top5-mode h2 { font-size: var(--t5-e-s) !important; margin: 5px 0 !important; }
                 .top5-mode .fac-dv, .top5-mode .crs-dv { font-size: var(--t5-d-s) !important; }
 
-                /* --- SIDE BANNERS --- */
-                .side-banner {
-                    position: absolute; top: 0; height: 100vh;
-                    width: var(--side-w);
-                    z-index: 5; /* Above BG, below content */
-                    object-fit: cover;
-                    display: none;
-                }
-                #leftSideBanner { left: 0; border-right: 2px solid var(--royal-accent); }
-                #rightSideBanner { right: 0; border-left: 2px solid var(--royal-accent); }
-
                 .copyright { position:absolute; bottom:10px; right:10px; font-size:10px; color:rgba(255,255,255,0.3); font-family:sans-serif; z-index:900; }
                 #activateOverlay { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:99999; display:flex; flex-direction:column; justify-content:center; align-items:center; color:white; font-family:sans-serif; text-align:center; cursor:pointer; }
             </style>
@@ -1612,10 +1570,6 @@
             <div id="videoLayer"></div>
             
             <div id="bgLayer" class="${designState.bgPreset}"></div>
-            
-            <img id="leftSideBanner" class="side-banner" src="">
-            <img id="rightSideBanner" class="side-banner" src="">
-
             <div id="mainLogosContainer"></div>
             <div id="plContainer"></div>
 
@@ -1665,42 +1619,11 @@
         setTimeout(() => {
             updateJalsaText();
             for (const key in designState) { liveUpdate(key, designState[key]); }
-            updateSideBanners(); // Ensure banners load
         }, 500);
 
         document.getElementById('connStatus').innerText = "✅ ONLINE";
         document.getElementById('connStatus').style.color = "#00e676";
         document.getElementById('connStatus').style.background = "rgba(0,0,0,0.8)";
-    }
-
-    // --- NEW: SIDE BANNER LOGIC ---
-    function loadSideBanner(side, input) {
-        if(input.files && input.files[0]) {
-            const url = URL.createObjectURL(input.files[0]);
-            if(side === 'left') sideBannerLeft = url;
-            else sideBannerRight = url;
-            updateSideBanners();
-        }
-    }
-
-    function updateSideBanners() {
-        if(!tvWindow || tvWindow.closed) return;
-        const left = tvWindow.document.getElementById('leftSideBanner');
-        const right = tvWindow.document.getElementById('rightSideBanner');
-        
-        if(sideBannerLeft) left.src = sideBannerLeft;
-        if(sideBannerRight) right.src = sideBannerRight;
-        
-        toggleSideBanners(true); // Auto show when loading
-    }
-
-    function toggleSideBanners(forceShow = false) {
-        if(forceShow !== true) designState.sideVisible = !designState.sideVisible;
-        if(!tvWindow || tvWindow.closed) return;
-        
-        const display = designState.sideVisible ? 'block' : 'none';
-        if(sideBannerLeft) tvWindow.document.getElementById('leftSideBanner').style.display = display;
-        if(sideBannerRight) tvWindow.document.getElementById('rightSideBanner').style.display = display;
     }
 
     // --- NEW: MASTER RESET FUNCTION (THE CONFLICT KILLER) ---
@@ -1725,12 +1648,6 @@
         
         const plContainer = doc.getElementById('plContainer');
         plContainer.style.opacity = designState.plVisible ? '1' : '0';
-        
-        // 5. Ensure Side Banners persist
-        if(designState.sideVisible) {
-            if(sideBannerLeft) doc.getElementById('leftSideBanner').style.display = 'block';
-            if(sideBannerRight) doc.getElementById('rightSideBanner').style.display = 'block';
-        }
     }
     
     // --- EMERGENCY RESCUE ---
@@ -1746,8 +1663,6 @@
         updateJalsaText();
         // Re-apply current background
         updateJalsaBackground();
-        // Re-apply Side Banners
-        updateSideBanners();
         
         alert("System Reset Complete! Elements restored.");
     }
