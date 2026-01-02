@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="dv" dir="rtl">
 <head>
@@ -866,7 +867,7 @@
     let pdfUrl = null;
     // Subtitle Styles Logic
     let stStyles = {};
-    for(let i=1; i<=7; i++) stStyles[i] = { size: 2.6, color: '#ffffff' };
+    for(let i=1; i<=8; i++) stStyles[i] = { size: 2.6, color: '#ffffff' };
     function setSubtitleStyle(prop, val) {
         let line = document.getElementById('stStyleSelector').value;
         if(prop === 'size') stStyles[line].size = val;
@@ -1037,17 +1038,13 @@
        
         if(key === 'badgeAnim') {
             const el = doc.getElementById('royalStar');
-            if(el) {
-                el.className = 'royal-star-badge'; // reset
-                if(value !== 'none') el.classList.add('royal-anim-' + value);
-            }
+            el.className = 'royal-star-badge'; // reset
+            if(value !== 'none') el.classList.add('royal-anim-' + value);
         }
         if(key === 'trophyAnim') {
             const el = doc.getElementById('trophyWrap');
-            if(el) {
-                el.className = 'trophy-badge'; // reset
-                if(value !== 'none') el.classList.add('royal-anim-' + value);
-            }
+            el.className = 'trophy-badge'; // reset
+            if(value !== 'none') el.classList.add('royal-anim-' + value);
         }
         // TOP 5 VARIABLES & VIDEO POS
         if(key === 't5CardW') root.style.setProperty('--t5-w', value + (designState.t5Layout==='bottom'?'%':'vw'));
@@ -1063,15 +1060,15 @@
        
         if(key === 't5Layout') {
             const card = doc.getElementById('card');
-            if(card) {
-                card.classList.remove('t5-bottom', 't5-left', 't5-right');
-                card.classList.add('t5-' + value);
-                liveUpdate('t5CardW', designState.t5CardW);
-                liveUpdate('t5CardH', designState.t5CardH);
-            }
+            card.classList.remove('t5-bottom', 't5-left', 't5-right');
+            card.classList.add('t5-' + value);
+            liveUpdate('t5CardW', designState.t5CardW);
+            liveUpdate('t5CardH', designState.t5CardH);
         }
        
         if(key === 't5NameSize') root.style.setProperty('--t5-n-s', value + 'em');
+        if(key === 'pfDColor') root.style.setProperty('--t5-d-c', value);
+        if(key === 'pfDColor') root.style.setProperty('--t5-d-c', value);
         if(key === 't5EngSize') root.style.setProperty('--t5-e-s', value + 'em');
         if(key === 't5DetSize') root.style.setProperty('--t5-d-s', value + 'em');
         if(key === 'pfWidth' || key === 'pfColor' || key === 'pfStyle' || key === 'pfRadius' || key === 'pfShadow') {
@@ -1094,117 +1091,48 @@
         }
         if(key === 'pVis') { const el = doc.querySelector('.photo-col'); if(el) el.style.visibility = (value === 'show') ? 'visible' : 'hidden'; }
        
+        if(key === 'lSize') { const logoImg = doc.getElementById('logoImg'); if(logoImg) logoImg.style.height = value + 'px'; }
         if(key === 'bgLoop') { const vid = doc.getElementById('bgVid'); if(vid) vid.style.display = (value === 'on') ? 'block' : 'none'; }
         if(key === 'layoutDir') { const card = doc.getElementById('card'); if(card) card.style.flexDirection = (value === 'rtl') ? 'row-reverse' : 'row'; }
         if(key === 'textAlign') { const txt = doc.querySelector('.text-col'); if(txt) txt.style.textAlign = value; }
         if(key === 'bgPreset') { const bg = doc.getElementById('bgLayer'); if(bg) { bg.className = ''; bg.classList.add(value); } }
         if(key === 'bdColor') { doc.documentElement.style.setProperty('--theme-color', value); }
        
-        if(key === 'mtY' || key === 'mtX') {
-            const tc = doc.getElementById('titleContainer');
-            if(tc) tc.style.transform = `translate(${designState.mtX}px, ${designState.mtY}px)`;
-        }
-        if(key === 'mtSize') {
-            const jt1 = doc.getElementById('jt1');
-            if(jt1) jt1.style.fontSize = value + 'em';
-        }
+        if(key === 'mtY' || key === 'mtX') doc.getElementById('titleContainer').style.transform = `translate(${designState.mtX}px, ${designState.mtY}px)`;
+        if(key === 'mtSize') doc.getElementById('jt1').style.fontSize = value + 'em';
         if(key === 'mtColor') {
-            const el = doc.getElementById('jt1'); 
-            if(el) {
-                el.style.color = value;
-                if(designState.tLine === 'on') el.style.borderBottomColor = value;
-            }
+            const el = doc.getElementById('jt1'); el.style.color = value;
+            if(designState.tLine === 'on') el.style.borderBottomColor = value;
         }
         if(key === 'tLine') {
             const el = doc.getElementById('jt1');
-            if(el) {
-                if(value === 'on') { el.style.borderBottom = '3px solid ' + designState.mtColor; el.style.paddingBottom = '10px'; }
-                else { el.style.borderBottom = 'none'; el.style.paddingBottom = '0'; }
-            }
+            if(value === 'on') { el.style.borderBottom = '3px solid ' + designState.mtColor; el.style.paddingBottom = '10px'; }
+            else { el.style.borderBottom = 'none'; el.style.paddingBottom = '0'; }
         }
-        if(key === 'mtAlign') { 
-            const mtw = doc.getElementById('mainTitleWrap');
-            if(mtw) mtw.style.textAlign = value;
-            const jt1 = doc.getElementById('jt1');
-            if(jt1) jt1.style.textAlign = value;
-        }
-        if(key === 'stY') {
-            const stw = doc.getElementById('subTitleWrap');
-            if(stw) stw.style.marginTop = value + 'px';
-        }
-        if(key === 'stGap') {
-            const stw = doc.getElementById('subTitleWrap');
-            if(stw) stw.style.gap = value + 'px';
-        }
-        if(key === 'stAlign') {
-            const stw = doc.getElementById('subTitleWrap');
-            if(stw) stw.style.textAlign = value;
-        }
+        if(key === 'mtAlign') { doc.getElementById('mainTitleWrap').style.textAlign = value; doc.getElementById('jt1').style.textAlign = value; }
+        if(key === 'stY') doc.getElementById('subTitleWrap').style.marginTop = value + 'px';
+        if(key === 'stGap') doc.getElementById('subTitleWrap').style.gap = value + 'px';
+        if(key === 'stAlign') doc.getElementById('subTitleWrap').style.textAlign = value;
         if(key === 'stLine') { updateJalsaText(); }
        
-        if(key === 'plSize') {
-            doc.querySelectorAll('.pl-img').forEach(el => el.style.height = value + 'px');
-        }
-        if(key === 'plGap') {
-            const plc = doc.getElementById('plContainer');
-            if(plc) plc.style.gap = value + 'px';
-        }
-        if(key === 'plY') {
-            const plc = doc.getElementById('plContainer');
-            if(plc) plc.style.bottom = value + 'px';
-        }
-        if(key === 'plX') {
-            const plc = doc.getElementById('plContainer');
-            if(plc) plc.style.transform = `translateX(${value}px)`;
-        }
-        if(key === 'tnDColor') {
-            const tnd = doc.getElementById('tnD');
-            if(tnd) tnd.style.color = value;
-        }
-        if(key === 'tnDSize') {
-            const tnd = doc.getElementById('tnD');
-            if(tnd) tnd.style.fontSize = value + 'em';
-        }
-        if(key === 'tnESize') {
-            const tne = doc.getElementById('tnE');
-            if(tne) tne.style.fontSize = value + 'em';
-        }
-        if(key === 'tnEColor') {
-            const tne = doc.getElementById('tnE');
-            if(tne) tne.style.color = value;
-        }
+        if(key === 'plSize') doc.querySelectorAll('.pl-img').forEach(el => el.style.height = value + 'px');
+        if(key === 'plGap') doc.getElementById('plContainer').style.gap = value + 'px';
+        if(key === 'plY') doc.getElementById('plContainer').style.bottom = value + 'px';
+        if(key === 'plX') doc.getElementById('plContainer').style.transform = `translateX(${value}px)`;
+        if(key === 'tnDColor') doc.getElementById('tnD').style.color = value;
+        if(key === 'tnDSize') doc.getElementById('tnD').style.fontSize = value + 'em';
+        if(key === 'tnESize') doc.getElementById('tnE').style.fontSize = value + 'em';
+        if(key === 'tnEColor') doc.getElementById('tnE').style.color = value;
        
         if(key === 'nLine') {
             const h2 = doc.getElementById('tnE');
-            if(h2) {
-                if(value === 'on') { h2.style.borderBottom = '2px solid var(--theme-color)'; h2.style.display='inline-block'; }
-                else { h2.style.borderBottom = 'none'; }
-            }
+            if(value === 'on') { h2.style.borderBottom = '2px solid var(--theme-color)'; h2.style.display='inline-block'; }
+            else { h2.style.borderBottom = 'none'; }
         }
-        if(key === 'tfDSize') { 
-            const tfd = doc.getElementById('tfD');
-            if(tfd) tfd.style.fontSize = value + 'em';
-            const tfe = doc.getElementById('tfE');
-            if(tfe) tfe.style.fontSize = (value*0.8) + 'em'; 
-        }
-        if(key === 'tfDColor') { 
-            const tfd = doc.getElementById('tfD');
-            if(tfd) tfd.style.color = value; 
-            const tfe = doc.getElementById('tfE');
-            if(tfe) tfe.style.color = value;
-        }
-        if(key === 'tcDSize') { 
-            const tcd = doc.getElementById('tcD');
-            if(tcd) tcd.style.fontSize = value + 'em'; 
-            const tce = doc.getElementById('tcE');
-            if(tce) tce.style.fontSize = (value*0.8) + 'em'; 
-        }
-        if(key === 'tcDColor') { 
-            const tcd = doc.getElementById('tcD');
-            if(tcd) tcd.style.color = value; 
-            const tce = doc.getElementById('tcE');
-            if(tce) tce.style.color = value; 
-        }
+        if(key === 'tfDSize') { doc.getElementById('tfD').style.fontSize = value + 'em'; doc.getElementById('tfE').style.fontSize = (value*0.8) + 'em'; }
+        if(key === 'tfDColor') { doc.getElementById('tfD').style.color = value; doc.getElementById('tfE').style.color = value; }
+        if(key === 'tcDSize') { doc.getElementById('tcD').style.fontSize = value + 'em'; doc.getElementById('tcE').style.fontSize = (value*0.8) + 'em'; }
+        if(key === 'tcDColor') { doc.getElementById('tcD').style.color = value; doc.getElementById('tcE').style.color = value; }
        
         if(key === 'pSize') { const img = doc.getElementById('stuImg'); if(img) { img.style.width = value+'px'; img.style.height = value+'px'; } }
         if(key === 'pX' || key === 'pY') { const el = doc.querySelector('.photo-col'); if(el) el.style.transform = `translate(${designState.pX}px, ${designState.pY}px)`; }
@@ -1238,10 +1166,10 @@
         const gradients = [
             "radial-gradient(circle, #004d40 0%, #001a12 100%)", "radial-gradient(circle, #0d47a1 0%, #000022 100%)", "radial-gradient(circle, #b71c1c 0%, #220000 100%)",
             "linear-gradient(135deg, #000 0%, #333 50%, #000 100%)", "radial-gradient(circle, #4a148c 0%, #1a0033 100%)", "#010b14",
-            "conic-gradient(from 180deg at 50% 50%, #004d40 0deg, #00281c 360deg)", "radial-gradient(circle, #880e4f, #000)",
+            "conic-gradient(from 180deg at 50% 50%, #004d40 0deg, #00281c 360deg)", "radial-gradient(circle at 50% 100%, #880e4f, #000)",
             "repeating-linear-gradient(45deg, #111, #111 10px, #222 10px, #222 20px)", "#000",
             "linear-gradient(to right, #0f2027, #203a43, #2c5364)", "linear-gradient(to right, #373b44, #4286f4)", "linear-gradient(to right, #8e2de2, #4a00e0)",
-            "radial-gradient(circle, #665c00, #000)", "radial-gradient(circle, #003300, #000)", "linear-gradient(120deg, #fdfbfb 0%, #ebedee 100%)",
+            "radial-gradient(circle at center, #665c00, #000)", "radial-gradient(circle at center, #003300, #000)", "linear-gradient(120deg, #fdfbfb 0%, #ebedee 100%)",
             "linear-gradient(to top, #30cfd0 0%, #330867 100%)", "linear-gradient(to top, #c471f5 0%, #fa71cd 100%)", "linear-gradient(to right, #f83600 0%, #f9d423 100%)",
             "radial-gradient(circle, #555, #000)", "linear-gradient(to right, #43e97b 0%, #38f9d7 100%)", "linear-gradient(to top, #09203f 0%, #537895 100%)",
             "linear-gradient(-20deg, #b721ff 0%, #21d4fd 100%)", "linear-gradient(to top, #1e3c72 0%, #2a5298 100%)", "linear-gradient(to right, #243949 0%, #517fa4 100%)",
@@ -1550,58 +1478,6 @@
                     }
                 });
             <\/script>
-        </head>
-        <body>
-            <div id="activateOverlay" onclick="this.style.display='none'">
-                <h1 style="font-size:50px;">CLICK HERE TO ACTIVATE SCREEN</h1>
-                <p>This is required for Audio/Video to play automatically.</p>
-            </div>
-            <button id="fsBtn" onclick="goFS(this)">⛶ FULL SCREEN</button>
-           
-            <div id="adLayer">
-                <img id="adImg" style="display:none;">
-                <video id="adVid" style="display:none;" muted autoplay></video>
-            </div>
-           
-            <div id="videoLayer"></div>
-           
-            <div id="bgLayer" class="${designState.bgPreset}"></div>
-           
-            <img id="leftSideBanner" class="side-banner" src="">
-            <img id="rightSideBanner" class="side-banner" src="">
-            <div id="mainLogosContainer"></div>
-            <div id="plContainer"></div>
-            <div id="jalsaContent">
-                <div id="titleContainer" style="margin-top:${designState.mtY}px;">
-                    <div id="mainTitleWrap"><div id="jt1" class="main-title jalsa-text"></div></div>
-                    <div id="subTitleWrap">
-                        <div id="jt2" class="sub-title jalsa-text"></div>
-                        <div id="jt3" class="sub-title jalsa-text"></div>
-                        <div id="jt4" class="sub-title jalsa-text"></div>
-                        <div id="jt5" class="sub-title jalsa-text"></div>
-                        <div id="jt6" class="sub-title jalsa-text"></div>
-                        <div id="jt7" class="sub-title jalsa-text"></div>
-                        <div id="jt8" class="sub-title jalsa-text"></div>
-                    </div>
-                </div>
-            </div>
-            <div id="card" class="${designState.cBorder}">
-                <div class="photo-col">
-                    <img id="stuImg" src="">
-                    <img id="royalStar" class="royal-star-badge" src="">
-                    <div id="trophyWrap" class="trophy-badge">
-                        <img id="trophyImg" src="">
-                        <span id="rankNum" class="rank-num"></span>
-                    </div>
-                </div>
-                <div class="text-col">
-                    <h1 id="tnD" class="font-dv"></h1><h2 id="tnE" class="font-en"></h2>
-                    <div id="tfD" class="fac-dv font-dv"></div><div id="tfE" class="fac-en font-en"></div>
-                    <div id="tcD" class="crs-dv font-dv"></div><div id="tcE" class="crs-en font-en"></div>
-                    <div id="tcm" class="comm font-dv"></div>
-                </div>
-            </div>
-            <div class="copyright">© Ali Ibrahim Didi (7791550)</div>
         </body>
         </html>`;
         tvWindow.document.write(html);
@@ -1717,20 +1593,10 @@
     }
     function forceStudentCard() {
         switchListMode('general');
-        const l = document.getElementById('stuList');
-        if(l.options.length > 0 && l.selectedIndex === -1) {
-            l.selectedIndex = 0;
-            loadStudent();
-        }
         updateTV();
     }
     function forceTop5() {
         switchListMode('top5');
-        const l = document.getElementById('stuList');
-        if(l.options.length > 0 && l.selectedIndex === -1) {
-            l.selectedIndex = 0;
-            loadStudent();
-        }
         updateTV();
     }
    
@@ -1762,6 +1628,124 @@
         // Force logos visible
         if(designState.logoVisible) tvWindow.document.getElementById('mainLogosContainer').style.opacity = '1';
         if(designState.plVisible) tvWindow.document.getElementById('plContainer').style.opacity = '1';
+    }
+    // --- LOGIC ---
+    function updateJalsaText() {
+        if(!tvWindow || tvWindow.closed) return;
+        const doc = tvWindow.document;
+        doc.getElementById('jt1').innerText = document.getElementById('jLine1').value;
+       
+        for(let i=2; i<=8; i++) {
+             let txt = document.getElementById('jLine'+i).value;
+             let el = doc.getElementById('jt'+i);
+             el.innerText = txt;
+             if(stStyles[i-1]) {
+                 el.style.fontSize = stStyles[i-1].size + 'em';
+                 el.style.color = stStyles[i-1].color;
+             }
+             if(designState.stLine === 'on') {
+                 el.style.borderBottom = `2px solid ${stStyles[i-1].color}`;
+                 el.style.display = 'inline-block';
+             } else {
+                 el.style.borderBottom = 'none';
+                 el.style.display = 'block';
+             }
+        }
+       
+        if(currentFontData) {
+             const style = doc.createElement('style');
+             style.innerHTML = `@font-face { font-family: 'Faruuma'; src: url('${currentFontData}') format('truetype'); } .jalsa-text, .font-dv { font-family: 'Faruuma', 'Amiri', serif !important; }`;
+             doc.head.appendChild(style);
+        }
+    }
+    function updateTV() {
+        if(!tvWindow || tvWindow.closed) { alert("TV Closed!"); return; }
+       
+        // 1. Reset conflicts partially
+        stopAds();
+        stopVideo();
+        tvWindow.document.body.classList.remove('overlay-mode'); // Clear overlay
+       
+        // 2. Handle Title Visibility
+        if(!designState.keepTitle) {
+            tvWindow.document.getElementById('jalsaContent').classList.add('hidden');
+        } else {
+            tvWindow.document.getElementById('jalsaContent').classList.remove('hidden');
+        }
+       
+        // 3. Handle Auto-Hide Logos
+        const mainLogoContainer = tvWindow.document.getElementById('mainLogosContainer');
+        if(designState.logoAutoHide) mainLogoContainer.style.opacity = '0';
+       
+        const plContainer = tvWindow.document.getElementById('plContainer');
+        if(designState.plAutoHide) plContainer.style.opacity = '0';
+        const doc = tvWindow.document;
+        // Text Updates
+        doc.getElementById('tnD').textContent = document.getElementById('nD').value;
+        doc.getElementById('tnE').textContent = document.getElementById('nE').value;
+        doc.getElementById('tfD').textContent = document.getElementById('fD').value;
+        doc.getElementById('tfE').textContent = document.getElementById('fE').value;
+        doc.getElementById('tcD').textContent = document.getElementById('cD').value;
+        doc.getElementById('tcE').textContent = document.getElementById('cE').value;
+       
+        const cmText = document.getElementById('cm').value;
+        const commBox = doc.getElementById('tcm');
+        if(!cmText || cmText.trim() === "") {
+            commBox.textContent = "";
+            commBox.classList.add('comm-tiny');
+        } else {
+            commBox.textContent = cmText;
+            commBox.classList.remove('comm-tiny');
+        }
+        const img = doc.getElementById('stuImg');
+        const pCol = doc.querySelector('.photo-col');
+       
+        if(currentPhotoData) {
+            img.src = currentPhotoData;
+            img.style.display='block';
+            pCol.classList.remove('shrink-photo');
+        } else {
+            img.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
+            pCol.classList.add('shrink-photo');
+        }
+        // 4. Mode Specific Handling
+        if(activeListMode === 'top5') {
+            doc.body.classList.add('top5-mode');
+            document.getElementById('top5ModeCheck').checked = true;
+            doc.getElementById('card').classList.add('t5-' + designState.t5Layout);
+            if(royalStarData) {
+                const rs = doc.getElementById('royalStar');
+                rs.src = royalStarData;
+                rs.style.display = 'block';
+            }
+        } else {
+             // If manual override isn't checked, remove Top 5 mode
+             if(!document.getElementById('top5ModeCheck').checked) {
+                 doc.body.classList.remove('top5-mode');
+                 doc.getElementById('royalStar').style.display = 'none';
+             }
+        }
+       
+        // 5. Trophy Logic
+        const rankTxt = document.getElementById('rankInput').value;
+        const trophyWrap = doc.getElementById('trophyWrap');
+        if(rankTxt && rankTxt.trim() !== "") {
+            doc.getElementById('rankNum').innerText = rankTxt;
+            if(trophyData) doc.getElementById('trophyImg').src = trophyData;
+            trophyWrap.style.display = 'flex';
+        } else {
+            trophyWrap.style.display = 'none';
+        }
+        // 6. Show Card
+        setTimeout(() => doc.getElementById('card').classList.add('active'), 100);
+       
+        document.getElementById('statusMsg').innerText = "LIVE: " + document.getElementById('nE').value;
+        lastActiveState = 'card';
+    }
+    function clearTV() {
+        if(!tvWindow || tvWindow.closed) return;
+        showJalsaScreen(); // This calls resetScene() internally now
+        document.getElementById('statusMsg').innerText = "CLEARED";
     }
     // --- NEW BADGE LOADERS ---
     function loadRoyalStar(input) {
@@ -1961,9 +1945,17 @@
                  return cleanUrl + '/view?embed';
              }
         }
-        // Gamma (Fix: Gamma links work directly, but sometimes need cleaning)
+        // Gamma (Fixed)
         if(type === 'gamma' || (type === 'auto' && url.includes('gamma.app'))) {
-             return url;
+            if (url.includes('/embed/')) {
+                return url;
+            } else if (url.includes('/public/')) {
+                const parts = url.split('/public/')[1].split('-');
+                const id = parts.pop(); // last part is id
+                return `https://gamma.app/embed/${id}`;
+            } else {
+                return url;
+            }
         }
         return url;
     }
@@ -2025,7 +2017,7 @@
     // --- FILE HANDLERS ---
     document.getElementById('jalsaCsvFile').onchange = e => {
         const file = e.target.files[0]; if(!file) return;
-        const reader = new FileReader();
+        const r = new FileReader();
         r.onload = evt => {
             const lines = evt.target.result.split('\n');
             if(lines.length > 0) {
@@ -2040,8 +2032,8 @@
     };
     document.getElementById('fontFile').onchange = e => {
         const file = e.target.files[0]; if(!file) return;
-        const reader = new FileReader();
-        reader.onload = evt => {
+        const r = new FileReader();
+        r.onload = evt => {
             currentFontData = evt.target.result;
             const newFont = new FontFace('Faruuma', `url(${currentFontData})`);
             newFont.load().then(f => {
@@ -2049,34 +2041,34 @@
                 document.querySelectorAll('.font-dv, input, h2').forEach(el => el.style.fontFamily = "'Faruuma', serif");
                 alert("Font Loaded! Re-open TV.");
             });
-        }; reader.readAsDataURL(file);
+        }; r.readAsDataURL(file);
     };
     document.getElementById('jalsaBgFile').onchange = e => {
         const file = e.target.files[0]; if(!file) return;
-        const reader = new FileReader();
-        reader.onload = evt => {
+        const r = new FileReader();
+        r.onload = evt => {
             currentJalsaBgData = evt.target.result;
             currentJalsaBgType = file.type.startsWith('video') ? 'video' : 'image';
             updateJalsaBackground(); alert("Background Set");
-        }; reader.readAsDataURL(file);
+        }; r.readAsDataURL(file);
     };
     document.getElementById('customBorderFile').onchange = e => {
-        const reader = new FileReader();
-        reader.onload = evt => {
+        const r = new FileReader();
+        r.onload = evt => {
             customBorderData = evt.target.result;
             if(designState.cBorder === 'custom') liveUpdate('cBorder', 'custom');
             alert("Custom Frame Loaded!");
-        }; reader.readAsDataURL(e.target.files[0]);
+        }; r.readAsDataURL(e.target.files[0]);
     };
    
     function loadCustomCardBg(input) {
-        const reader = new FileReader();
-        reader.onload = evt => {
+        const r = new FileReader();
+        r.onload = evt => {
             customCardBgData = evt.target.result;
             liveUpdate('cBorder', 'custom_bg');
             document.getElementById('cBorderSel').value = 'custom_bg';
             alert("Custom Card Background Loaded!");
-        }; reader.readAsDataURL(input.files[0]);
+        }; r.readAsDataURL(input.files[0]);
     }
     // UPDATED CSV PARSER FOR RANK
     function parseCSV(text) {
@@ -2095,13 +2087,13 @@
         return data;
     }
     document.getElementById('csvFile').onchange = e => {
-        const reader = new FileReader();
-        reader.onload = ev => {
+        const r = new FileReader();
+        r.onload = ev => {
             let txt = ev.target.result; if(txt.charCodeAt(0)===0xFEFF) txt=txt.substr(1);
             students = parseCSV(txt);
             if(activeListMode === 'general') filterList();
             alert("General List Loaded: " + students.length);
-        }; reader.readAsText(e.target.files[0]);
+        }; r.readAsText(e.target.files[0]);
     };
     document.getElementById('photoFolder').onchange = e => {
         photoFiles = {};
@@ -2114,13 +2106,13 @@
         alert("General Photos: " + e.target.files.length);
     };
     function loadTop5Csv(input) {
-        const reader = new FileReader();
-        reader.onload = ev => {
+        const r = new FileReader();
+        r.onload = ev => {
             let txt = ev.target.result; if(txt.charCodeAt(0)===0xFEFF) txt=txt.substr(1);
             top5Students = parseCSV(txt);
             if(activeListMode === 'top5') filterList();
             alert("Top 5 List Loaded: " + top5Students.length);
-        }; reader.readAsText(input.files[0]);
+        }; r.readAsText(input.files[0]);
     }
     function loadTop5Photos(input) {
         top5PhotoFiles = {};
@@ -2216,3 +2208,4 @@
 </script>
 </body>
 </html>
+```
