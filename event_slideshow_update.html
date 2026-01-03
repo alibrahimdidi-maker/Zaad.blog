@@ -1893,6 +1893,7 @@
     }
 
     // --- SMART SEARCH VIDEO FUNCTION ---
+    // --- SMART SEARCH (DUAL LANGUAGE: DHIVEHI & ENGLISH) ---
     function playNextVideo() {
         if(!tvWindow || tvWindow.closed) return;
 
@@ -1907,22 +1908,31 @@
         // Reset index if we reached the end
         if(currentVidIdx >= targetStudentList.length) currentVidIdx = 0;
 
-        // 3. Get the Student Name (English)
+        // 3. Get Student Data
         let studentData = targetStudentList[currentVidIdx];
         if(!studentData) return;
 
-        let searchName = studentData.nE.trim().toLowerCase(); 
+        // Prepare Search Terms (Both Dhivehi and English)
+        let nameDhivehi = studentData.nD ? studentData.nD.trim() : "";
+        let nameEnglish = studentData.nE ? studentData.nE.trim().toLowerCase() : "";
         
-        // Clean name to remove extra spaces for better matching
-        // Example: "Ahmed  Ali" -> "ahmed ali"
-        searchName = searchName.replace(/\s+/g, ' ');
+        // Remove extra spaces from names to improve matching
+        nameDhivehi = nameDhivehi.replace(/\s+/g, ' ');
+        nameEnglish = nameEnglish.replace(/\s+/g, ' ');
 
-        console.log("Looking for video for: " + searchName);
+        console.log("Searching for video: " + nameDhivehi + " OR " + nameEnglish);
 
-        // 4. FIND VIDEO: Check if file name contains the student's name
+        // 4. FIND VIDEO: Check if filename matches EITHER Dhivehi OR English name
         let foundVideo = targetVideoFiles.find(file => {
-            let fileName = file.name.toLowerCase().replace(/\s+/g, ' '); // Clean filename too
-            return fileName.includes(searchName);
+            // Decode file name (fixes some Dhivehi character issues)
+            let fileName = decodeURIComponent(file.name);
+            let fileNameLower = fileName.toLowerCase().replace(/\s+/g, ' ');
+
+            // Check match
+            let matchDhivehi = (nameDhivehi.length > 0) && fileName.includes(nameDhivehi);
+            let matchEnglish = (nameEnglish.length > 0) && fileNameLower.includes(nameEnglish);
+
+            return matchDhivehi || matchEnglish;
         });
 
         if(foundVideo) {
@@ -1936,13 +1946,14 @@
                 loadStudent(); // Show text/photo on card
             }
 
-            document.getElementById('statusMsg').innerText = "PLAYING: " + studentData.nE;
+            // Update status
+            document.getElementById('statusMsg').innerText = "PLAYING: " + studentData.nD;
             
             // Move to next student for next click
             currentVidIdx++; 
         } else {
-            // Error Message if video not found
-            alert("⚠️ ވީޑިއޯއެއް ނުފެނުނު!\n\nStudent: " + studentData.nE + "\n\nPlease rename the video file to include this name.");
+            // Error Message
+            alert("⚠️ ވީޑިއޯއެއް ނުފެނުނު!\n\nދަރިވަރު: " + studentData.nD + " (" + studentData.nE + ")\n\nވީޑިއޯ ފައިލްގެ ނަމުގައި ކުއްޖާގެ ދިވެހި ނަން ނުވަތަ އިނގިރޭސި ނަން ހިމަނުއްވާ!");
         }
     }
 
