@@ -2268,36 +2268,62 @@
 
     function loadStudent() {
         let idx = document.getElementById('stuList').value;
+        // Check which list and photo set to use
         let targetArray = activeListMode === 'top5' ? top5Students : students;
         let targetPhotos = activeListMode === 'top5' ? top5PhotoFiles : photoFiles;
         
         if(!targetArray[idx]) return;
 
         let s = targetArray[idx];
-        document.getElementById('nD').value = s.nD || ""; document.getElementById('nE').value = s.nE || "";
-        document.getElementById('fD').value = s.fD || ""; document.getElementById('fE').value = s.fE || "";
-        document.getElementById('cD').value = s.cD || ""; document.getElementById('cE').value = s.cE || "";
+        // Populate text fields
+        document.getElementById('nD').value = s.nD || ""; 
+        document.getElementById('nE').value = s.nE || "";
+        document.getElementById('fD').value = s.fD || ""; 
+        document.getElementById('fE').value = s.fE || "";
+        document.getElementById('cD').value = s.cD || ""; 
+        document.getElementById('cE').value = s.cE || "";
         document.getElementById('cm').value = s.cm || "";
         document.getElementById('rankInput').value = s.rank || "";
         
-        let pName = s.ph ? s.ph.trim().toLowerCase() : "";
+        // --- IMPROVED PHOTO FINDER ---
+        let pNameRaw = s.ph ? s.ph.trim() : ""; // Name from CSV
+        let pName = pNameRaw.toLowerCase(); // Lowercase version
+        let pNameNoExt = pName.split('.').slice(0, -1).join('.'); // Remove .jpg if present
+
         let prev = document.getElementById('previewImg');
         let stat = document.getElementById('pStat');
         
-        let foundFile = targetPhotos[pName]; 
+        // Try matching in 3 ways: Exact, Lowercase, or No Extension
+        let foundFile = targetPhotos[pNameRaw] || targetPhotos[pName] || targetPhotos[pNameNoExt];
         
         if(foundFile) {
             stat.innerText = "Loading...";
             processPhoto(foundFile, d => {
-                currentPhotoData = d; prev.src = d; 
-                stat.innerText = "✅ Found"; stat.style.color="green";
+                currentPhotoData = d; 
+                prev.src = d; 
+                stat.innerText = "✅ Found"; 
+                stat.style.color="green";
+                
+                // If TV is already open, auto-update the photo on screen immediately
+                if(tvWindow && !tvWindow.closed) {
+                    let tvImg = tvWindow.document.getElementById('stuImg');
+                    if(tvImg) tvImg.src = d;
+                }
             });
         } else {
-            currentPhotoData = null; prev.src = "https://via.placeholder.com/150"; 
-            stat.innerText = "❌ Missing"; stat.style.color="red";
+            currentPhotoData = null; 
+            prev.src = "https://via.placeholder.com/150"; 
+            
+            // Show error in the preview box
+            if(pNameRaw === "") {
+                stat.innerText = "No Photo Name"; 
+                stat.style.color="grey";
+            } else {
+                stat.innerText = "❌ Missing: " + pNameRaw; 
+                stat.style.color="red";
+            }
         }
     }
-
     function move(d) {
         let l = document.getElementById('stuList');
         if(l.options.length) {
