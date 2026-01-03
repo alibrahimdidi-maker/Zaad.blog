@@ -252,7 +252,9 @@
             <p id="secMsg" style="color:#ff5252; font-size:16px; margin-top:20px; font-weight:bold;"></p>
         </div>
     </div>
-
+<div style="margin-top:10px;">
+                            <button class="btn-vid" style="background:#2e7d32;" onclick="forceShowTitles()">🔄 Force Refresh Titles</button>
+                        </div>
     <div class="main-layout" id="mainApp">
         <div class="sidebar">
             <div class="lang-tabs">
@@ -600,10 +602,6 @@
                             </select>
                         </div>
                         
-                        <div style="margin-top:10px;">
-                            <button class="btn-vid" style="background:#2e7d32;" onclick="forceShowTitles()">🔄 Force Refresh Titles</button>
-                        </div>
-
                         <span class="d-label">2. ދަރިވަރުގެ ކާޑު ޑިޒައިން (Normal Mode):</span>
                         <div style="display:flex; gap:10px;">
                             <select id="cBorderSel" onchange="liveUpdate('cBorder', this.value)" style="width:75%;">
