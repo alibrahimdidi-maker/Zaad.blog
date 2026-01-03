@@ -2,7 +2,7 @@
 <html lang="dv" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>Royal Graduation (V36.0 - Diamond Ultra - Wide LED Support)</title>
+    <title>Royal Graduation (V33.0 - Platinum Edition - Navigation & Flex)</title>
     <style>
         /* 1. Google Font (Backup for Dhivehi) */
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Thaana:wght@400;700&display=swap');
@@ -245,8 +245,8 @@
 
     <div id="securityOverlay">
         <div class="sec-box">
-            <h1 style="color:#fff; font-size:45px; margin-bottom:10px; text-shadow:0 2px 5px #000;">Royal Graduation V36.0</h1>
-            <p style="color:#a0c4ff; font-size:18px; margin-bottom:30px;">🔒 DIAMOND ULTRA - WIDE LED SUPPORT</p>
+            <h1 style="color:#fff; font-size:45px; margin-bottom:10px; text-shadow:0 2px 5px #000;">Royal Graduation V33.0</h1>
+            <p style="color:#a0c4ff; font-size:18px; margin-bottom:30px;">🔒 PLATINUM EDITION - NAVIGATION & FLEX</p>
             <input type="password" id="licenseKey" class="sec-input" placeholder="Enter Key...">
             <button class="sec-btn" onclick="verifyLicense()">AUTHENTICATE</button>
             <p id="secMsg" style="color:#ff5252; font-size:16px; margin-top:20px; font-weight:bold;"></p>
@@ -335,15 +335,11 @@
 
         <div class="editor" id="editorPanel">
             <div style="background:#fff; padding:10px; border-radius:8px; border:2px solid #000; margin-bottom:15px; text-align:center;">
-                <label style="color:#d32f2f;">🚀 SCENE SWITCHER (ސީން ބަދަލުކުރައްވާ):</label>
-                <div style="display:flex; gap:5px; margin-top:5px; flex-wrap:wrap;">
+                <label style="color:#d32f2f;">🚀 SCENE SWITCHER (ގަޑި ނުޖެހި ބަދަލުކުރައްވާ):</label>
+                <div style="display:flex; gap:5px; margin-top:5px;">
                     <button class="btn-live" style="background:#455a64; border-color:#37474f;" onclick="showJalsaScreen()">🏠 TITLE SCREEN</button>
                     <button class="btn-live" style="background:#0d47a1; border-color:#002171;" onclick="forceStudentCard()">🎓 STUDENT</button>
                     <button class="btn-live" style="background:#ff6f00; border-color:#c43e00;" onclick="forceTop5()">🏆 TOP 5</button>
-                </div>
-                <div style="display:flex; gap:5px; margin-top:5px;">
-                    <button onclick="triggerTVFullScreen()" style="flex:1; background:#000; color:white; padding:5px; font-size:12px; border:1px solid #444; cursor:pointer;">⛶ TV FULL SCREEN</button>
-                    <button onclick="emergencyReset()" style="flex:1; background:#b71c1c; color:white; padding:5px; font-size:12px; border:1px solid #ff5252; cursor:pointer; font-weight:bold;">🆘 RESCUE (FIX)</button>
                 </div>
             </div>
 
@@ -455,26 +451,6 @@
 
             <div id="designPanel">
                 
-                <div class="group-box" style="border-color:#7b1fa2; background:#f3e5f5;">
-                    <span class="group-title" style="background:#6a1b9a;">🖥️ SIDE SCREEN MANAGER (8ft)</span>
-                    <div class="design-col">
-                        <p style="font-size:12px; color:#555; margin-bottom:10px;">Control the LEFT and RIGHT LED screens independently. Upload banners/designs here.</p>
-                        
-                        <label style="font-size:13px; color:#4a148c;">◀ Left Screen Image:</label>
-                        <input type="file" accept="image/*" onchange="loadSideBanner('left', this)">
-                        
-                        <label style="font-size:13px; color:#4a148c; margin-top:5px;">▶ Right Screen Image:</label>
-                        <input type="file" accept="image/*" onchange="loadSideBanner('right', this)">
-                        
-                        <div style="margin-top:10px; display:flex; gap:10px; align-items:center;">
-                            <span style="font-size:12px;">Width %:</span>
-                            <input type="range" min="10" max="40" value="20" oninput="liveUpdate('sideW', this.value)">
-                        </div>
-                        
-                        <button class="btn-vid" style="background:#7b1fa2; margin-top:10px;" onclick="toggleSideBanners()">👁️ Toggle Side Banners</button>
-                    </div>
-                </div>
-
                 <div class="group-box" style="border-color:#ffca28; background:#fffde7;">
                     <span class="group-title" style="background:#ff6f00;">🏆 Top 5 Mode & Video</span>
                     <div class="design-col">
@@ -683,12 +659,12 @@
                     
                     <span class="d-label">3. ފޮޓޯގެ މަޤާމް އަދި ޒޫމް:</span>
                     <div style="display:flex; gap:10px; align-items:center;">
-                        <span style="font-size:14px;">ޒޫމް:</span>
+                        <span style="font-size:14px; width:50px;">ޒޫމް:</span>
                         <input type="range" id="pSizeRange" min="150" max="800" value="260" oninput="liveUpdate('pSize', this.value)">
                         <select id="pVisSel" onchange="liveUpdate('pVis', this.value)" style="width:100px;"><option value="show">ދައްކާ</option><option value="hide">ފޮރުވާ</option></select>
                     </div>
                     <div style="display:flex; gap:10px; margin-top:8px; align-items:center;">
-                        <span style="font-size:14px;">މޫވް:</span>
+                        <span style="font-size:14px; width:50px;">މޫވް:</span>
                         <input type="range" id="pXRange" min="-600" max="600" value="0" title="X" oninput="liveUpdate('pX', this.value)">
                         <input type="range" id="pYRange" min="-400" max="400" value="0" title="Y" oninput="liveUpdate('pY', this.value)">
                     </div>
@@ -900,7 +876,7 @@
     function verifyLicense() {
         document.getElementById('securityOverlay').style.display = 'none';
         document.getElementById('mainApp').style.display = 'flex';
-        document.getElementById('licenseStatus').innerText = "✅ DIAMOND ULTRA | V36.0 ACTIVE";
+        document.getElementById('licenseStatus').innerText = "✅ PLATINUM EDITION | V33.0 ACTIVE";
     }
     document.getElementById('licenseKey').addEventListener("keyup", e => { if (e.key === "Enter") verifyLicense(); });
 
@@ -927,10 +903,6 @@
     let customCardBgData = null;
     let royalStarData = null;
     let trophyData = null;
-    
-    // SIDE BANNER DATA
-    let sideBannerLeft = null;
-    let sideBannerRight = null;
     
     let isLocked = false;
     let lastActiveState = 'title'; 
@@ -973,9 +945,7 @@
         tvX: 10, tvY: 5, tvW: 80, tvH: 65, // Top 5 Video Position
         // BADGES & ANIMATIONS (INCREASED RANGE)
         badgeX: -20, badgeY: -20, badgeAnim: 'none',
-        trophyX: -10, trophyY: -10, trophyAnim: 'none',
-        // SIDE BANNERS
-        sideW: 20, sideVisible: true
+        trophyX: -10, trophyY: -10, trophyAnim: 'none'
     };
 
     // --- MAIN LOGO MANAGER ---
@@ -1027,9 +997,7 @@
     function toggleMainLogos() {
         designState.logoVisible = !designState.logoVisible;
         if(!tvWindow || tvWindow.closed) return;
-        // Direct DOM update to ensure sync
-        const c = tvWindow.document.getElementById('mainLogosContainer');
-        c.style.opacity = designState.logoVisible ? '1' : '0';
+        tvWindow.document.getElementById('mainLogosContainer').style.opacity = designState.logoVisible ? '1' : '0';
     }
 
     // --- LOCK FUNCTION ---
@@ -1057,7 +1025,7 @@
 
     function downloadConfig() {
         const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(designState));
-        const a = document.createElement('a'); a.href = dataStr; a.download = "royal_config_v36.json"; document.body.appendChild(a); a.click(); a.remove();
+        const a = document.createElement('a'); a.href = dataStr; a.download = "royal_config_v33.json"; document.body.appendChild(a); a.click(); a.remove();
     }
 
     function loadConfig(input) {
@@ -1245,9 +1213,6 @@
                 if(value !== 'b1' && value !== 'b0') card.classList.add('active');
             }
         }
-        
-        // SIDE BANNER UPDATES
-        if(key === 'sideW') root.style.setProperty('--side-w', value + '%');
     }
 
     // --- TV WINDOW ---
@@ -1358,17 +1323,10 @@
                     /* BADGE VARIABLES */
                     --star-x: ${designState.badgeX}px; --star-y: ${designState.badgeY}px;
                     --troph-x: ${designState.trophyX}px; --troph-y: ${designState.trophyY}px;
-                    /* SIDE BANNERS */
-                    --side-w: ${designState.sideW}%;
                 }
                 body, h1, h2, div, span { font-family: 'Faruuma', 'MV Boli', 'Noto Sans Thaana', serif !important; }
                 body { margin:0; overflow:hidden; background:#000; user-select:none; }
-                #fsBtn { 
-                    position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); z-index:9999; 
-                    padding:20px; font-size:20px; cursor:pointer; 
-                    background:var(--theme-color); border:2px solid #fff; 
-                    transition: opacity 0.5s ease;
-                }
+                #fsBtn { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); z-index:9999; padding:20px; font-size:20px; cursor:pointer; background:var(--theme-color); border:2px solid #fff; }
                 
                 #bgLayer { position:fixed; top:0; left:0; width:100%; height:100%; z-index:0; transition: background 0.5s ease; }
                 ${cssGen}
@@ -1572,29 +1530,10 @@
                 .top5-mode h2 { font-size: var(--t5-e-s) !important; margin: 5px 0 !important; }
                 .top5-mode .fac-dv, .top5-mode .crs-dv { font-size: var(--t5-d-s) !important; }
 
-                /* --- SIDE BANNERS --- */
-                .side-banner {
-                    position: absolute; top: 0; height: 100vh;
-                    width: var(--side-w);
-                    z-index: 5; /* Above BG, below content */
-                    object-fit: cover;
-                    display: none;
-                }
-                #leftSideBanner { left: 0; border-right: 2px solid var(--royal-accent); }
-                #rightSideBanner { right: 0; border-left: 2px solid var(--royal-accent); }
-
                 .copyright { position:absolute; bottom:10px; right:10px; font-size:10px; color:rgba(255,255,255,0.3); font-family:sans-serif; z-index:900; }
                 #activateOverlay { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:99999; display:flex; flex-direction:column; justify-content:center; align-items:center; color:white; font-family:sans-serif; text-align:center; cursor:pointer; }
             </style>
-            <script>
-                function goFS(btn){document.documentElement.requestFullscreen(); btn.style.display='none';}
-                // Keyboard Shortcut for TV Window: Press 'F' or 'Enter'
-                document.addEventListener('keydown', (e) => {
-                    if(e.key === 'f' || e.key === 'F' || e.key === 'Enter') {
-                        if(!document.fullscreenElement) document.documentElement.requestFullscreen().catch(e=>{});
-                    }
-                });
-            <\/script>
+            <script>function goFS(btn){document.documentElement.requestFullscreen(); btn.style.display='none';}<\/script>
         </head>
         <body>
             <div id="activateOverlay" onclick="this.style.display='none'">
@@ -1612,10 +1551,6 @@
             <div id="videoLayer"></div>
             
             <div id="bgLayer" class="${designState.bgPreset}"></div>
-            
-            <img id="leftSideBanner" class="side-banner" src="">
-            <img id="rightSideBanner" class="side-banner" src="">
-
             <div id="mainLogosContainer"></div>
             <div id="plContainer"></div>
 
@@ -1665,91 +1600,11 @@
         setTimeout(() => {
             updateJalsaText();
             for (const key in designState) { liveUpdate(key, designState[key]); }
-            updateSideBanners(); // Ensure banners load
         }, 500);
 
         document.getElementById('connStatus').innerText = "✅ ONLINE";
         document.getElementById('connStatus').style.color = "#00e676";
         document.getElementById('connStatus').style.background = "rgba(0,0,0,0.8)";
-    }
-
-    // --- NEW: SIDE BANNER LOGIC ---
-    function loadSideBanner(side, input) {
-        if(input.files && input.files[0]) {
-            const url = URL.createObjectURL(input.files[0]);
-            if(side === 'left') sideBannerLeft = url;
-            else sideBannerRight = url;
-            updateSideBanners();
-        }
-    }
-
-    function updateSideBanners() {
-        if(!tvWindow || tvWindow.closed) return;
-        const left = tvWindow.document.getElementById('leftSideBanner');
-        const right = tvWindow.document.getElementById('rightSideBanner');
-        
-        if(sideBannerLeft) left.src = sideBannerLeft;
-        if(sideBannerRight) right.src = sideBannerRight;
-        
-        toggleSideBanners(true); // Auto show when loading
-    }
-
-    function toggleSideBanners(forceShow = false) {
-        if(forceShow !== true) designState.sideVisible = !designState.sideVisible;
-        if(!tvWindow || tvWindow.closed) return;
-        
-        const display = designState.sideVisible ? 'block' : 'none';
-        if(sideBannerLeft) tvWindow.document.getElementById('leftSideBanner').style.display = display;
-        if(sideBannerRight) tvWindow.document.getElementById('rightSideBanner').style.display = display;
-    }
-
-    // --- NEW: MASTER RESET FUNCTION (THE CONFLICT KILLER) ---
-    function resetScene() {
-        if(!tvWindow || tvWindow.closed) return;
-        const doc = tvWindow.document;
-        
-        // 1. Kill Videos & Overlays
-        stopVideo(); 
-        stopAds();
-        
-        // 2. Remove Special Modes
-        doc.body.classList.remove('top5-mode', 'overlay-mode');
-        
-        // 3. Reset Elements visibility
-        doc.getElementById('jalsaContent').classList.remove('hidden');
-        doc.getElementById('card').classList.remove('active');
-        
-        // 4. Reset Logos based on user preference
-        const mainLogoContainer = doc.getElementById('mainLogosContainer');
-        mainLogoContainer.style.opacity = designState.logoVisible ? '1' : '0';
-        
-        const plContainer = doc.getElementById('plContainer');
-        plContainer.style.opacity = designState.plVisible ? '1' : '0';
-        
-        // 5. Ensure Side Banners persist
-        if(designState.sideVisible) {
-            if(sideBannerLeft) doc.getElementById('leftSideBanner').style.display = 'block';
-            if(sideBannerRight) doc.getElementById('rightSideBanner').style.display = 'block';
-        }
-    }
-    
-    // --- EMERGENCY RESCUE ---
-    function emergencyReset() {
-        if(!tvWindow || tvWindow.closed) return;
-        // Force full reset of logic
-        resetScene();
-        showJalsaScreen();
-        // Force Re-render Logos
-        renderMainLogos();
-        updatePartnerLogos();
-        // Force Update Text
-        updateJalsaText();
-        // Re-apply current background
-        updateJalsaBackground();
-        // Re-apply Side Banners
-        updateSideBanners();
-        
-        alert("System Reset Complete! Elements restored.");
     }
 
     // --- LOGIC ---
@@ -1770,32 +1625,9 @@
         tvWindow.document.getElementById('jalsaContent').classList.remove('hidden');
         tvWindow.document.getElementById('card').classList.remove('active');
         tvWindow.document.body.classList.remove('overlay-mode', 'top5-mode');
-        // Force logos visible
-        if(designState.logoVisible) tvWindow.document.getElementById('mainLogosContainer').style.opacity = '1';
-        if(designState.plVisible) tvWindow.document.getElementById('plContainer').style.opacity = '1';
     }
 
-    // --- NEW NAVIGATION FUNCTIONS (CLEAN SWITCHING) ---
-    function showJalsaScreen() {
-        if(!tvWindow || tvWindow.closed) return;
-        
-        // 1. Reset Everything First
-        resetScene(); 
-        
-        // 2. Ensure Jalsa Content is visible
-        const jContent = tvWindow.document.getElementById('jalsaContent');
-        jContent.classList.remove('hidden');
-        jContent.style.opacity = '1'; 
-        jContent.style.display = 'flex'; 
-        
-        // 3. Force Logos Visible (Critical Fix)
-        if(designState.logoVisible) tvWindow.document.getElementById('mainLogosContainer').style.opacity = '1';
-        if(designState.plVisible) tvWindow.document.getElementById('plContainer').style.opacity = '1';
-        
-        document.getElementById('statusMsg').innerText = "MODE: Jalsa Titles";
-        lastActiveState = 'title'; 
-    }
-
+    // --- NEW NAVIGATION FUNCTIONS ---
     function forceStudentCard() {
         switchListMode('general');
         updateTV();
@@ -1804,16 +1636,6 @@
     function forceTop5() {
         switchListMode('top5');
         updateTV();
-    }
-    
-    function triggerTVFullScreen() {
-        if(!tvWindow || tvWindow.closed) return;
-        // Attempt to trigger fullscreen
-        try {
-            tvWindow.document.documentElement.requestFullscreen();
-        } catch(e) {
-            alert("Browser blocked remote Fullscreen. Please click the button on the TV screen once, OR press 'F' key on the TV window.");
-        }
     }
 
     function updateJalsaText() {
@@ -1845,22 +1667,35 @@
         }
     }
 
+    function showJalsaScreen() {
+        if(!tvWindow || tvWindow.closed) return;
+        tvWindow.document.getElementById('card').classList.remove('active');
+        const jContent = tvWindow.document.getElementById('jalsaContent');
+        jContent.classList.remove('hidden');
+        jContent.style.opacity = '1'; 
+        jContent.style.display = 'flex'; 
+        
+        const mainLogoContainer = tvWindow.document.getElementById('mainLogosContainer');
+        if(designState.logoVisible) mainLogoContainer.style.opacity = '1';
+        
+        if(designState.plVisible) {
+             tvWindow.document.getElementById('plContainer').style.opacity = '1';
+        }
+        
+        document.getElementById('statusMsg').innerText = "MODE: Jalsa Titles";
+        lastActiveState = 'title'; 
+    }
+
     function updateTV() {
         if(!tvWindow || tvWindow.closed) { alert("TV Closed!"); return; }
-        
-        // 1. Reset conflicts partially
         stopAds();
-        stopVideo();
-        tvWindow.document.body.classList.remove('overlay-mode'); // Clear overlay
         
-        // 2. Handle Title Visibility
         if(!designState.keepTitle) {
             tvWindow.document.getElementById('jalsaContent').classList.add('hidden');
         } else {
             tvWindow.document.getElementById('jalsaContent').classList.remove('hidden');
         }
         
-        // 3. Handle Auto-Hide Logos
         const mainLogoContainer = tvWindow.document.getElementById('mainLogosContainer');
         if(designState.logoAutoHide) mainLogoContainer.style.opacity = '0';
         
@@ -1868,7 +1703,6 @@
         if(designState.plAutoHide) plContainer.style.opacity = '0';
 
         const doc = tvWindow.document;
-        // Text Updates
         doc.getElementById('tnD').textContent = document.getElementById('nD').value;
         doc.getElementById('tnE').textContent = document.getElementById('nE').value;
         doc.getElementById('tfD').textContent = document.getElementById('fD').value;
@@ -1898,25 +1732,25 @@
             pCol.classList.add('shrink-photo');
         }
 
-        // 4. Mode Specific Handling
+        // Auto Toggle Top 5 Mode
         if(activeListMode === 'top5') {
             doc.body.classList.add('top5-mode');
             document.getElementById('top5ModeCheck').checked = true;
             doc.getElementById('card').classList.add('t5-' + designState.t5Layout);
+            // SHOW ROYAL STAR
             if(royalStarData) {
                 const rs = doc.getElementById('royalStar');
                 rs.src = royalStarData;
                 rs.style.display = 'block';
             }
         } else {
-             // If manual override isn't checked, remove Top 5 mode
              if(!document.getElementById('top5ModeCheck').checked) {
                  doc.body.classList.remove('top5-mode');
                  doc.getElementById('royalStar').style.display = 'none';
              }
         }
         
-        // 5. Trophy Logic
+        // SHOW TROPHY IF RANK EXISTS
         const rankTxt = document.getElementById('rankInput').value;
         const trophyWrap = doc.getElementById('trophyWrap');
         if(rankTxt && rankTxt.trim() !== "") {
@@ -1927,16 +1761,17 @@
             trophyWrap.style.display = 'none';
         }
 
-        // 6. Show Card
         setTimeout(() => doc.getElementById('card').classList.add('active'), 100);
-        
+        stopVideo(); 
         document.getElementById('statusMsg').innerText = "LIVE: " + document.getElementById('nE').value;
         lastActiveState = 'card'; 
     }
 
     function clearTV() {
         if(!tvWindow || tvWindow.closed) return;
-        showJalsaScreen(); // This calls resetScene() internally now
+        stopAds();
+        showJalsaScreen();
+        stopVideo();
         document.getElementById('statusMsg').innerText = "CLEARED";
     }
 
@@ -1955,7 +1790,7 @@
         }
     }
 
-    // --- VIDEO & ADS & PRESENTATION ---
+    // --- VIDEO & ADS & PRESENTATION V29 ---
     
     function loadPartnerLogos(input) {
         partnerLogosData = [];
