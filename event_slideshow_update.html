@@ -2326,11 +2326,9 @@
                 stat.innerText = "✅ Found"; 
                 stat.style.color="green";
                 
-                // If TV is already open, auto-update the photo on screen immediately
-                if(tvWindow && !tvWindow.closed) {
-                    let tvImg = tvWindow.document.getElementById('stuImg');
-                    if(tvImg) tvImg.src = d;
-                }
+                // --- FIX: REMOVED AUTO TV UPDATE CODE FROM HERE ---
+                // The lines that forced the photo to TV immediately have been removed.
+                // Now photo only goes to TV when you click 'Live'.
             });
         } else {
             currentPhotoData = null; 
