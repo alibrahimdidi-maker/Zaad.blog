@@ -1544,6 +1544,55 @@
             <script>function goFS(btn){document.documentElement.requestFullscreen(); btn.style.display='none';}<\/script>
         </head>
         <body>
+        /* ===> 3-SCREEN SETUP (840px - 3360px - 840px) <=== */
+
+/* 1. Side Screen Zones */
+.screen-zone {
+    position: fixed; 
+    top: 0; 
+    height: 100%;
+    /* Calculation: 840 / 5040 = 16.666% */
+    width: 16.666%; 
+    background-size: cover; 
+    background-position: center;
+    z-index: 6000; /* On top of background, below alerts */
+    display: none; /* Hidden by default */
+    align-items: center; 
+    justify-content: center;
+    background-color: #000;
+}
+
+/* 2. Positioning Left & Right */
+#zoneLeft { 
+    left: 0; 
+    border-right: 2px solid rgba(255,255,255,0.2); 
+}
+#zoneRight { 
+    right: 0; 
+    border-left: 2px solid rgba(255,255,255,0.2); 
+}
+
+/* 3. Activation Logic */
+body.triple-active #zoneLeft, 
+body.triple-active #zoneRight { 
+    display: flex; 
+}
+
+/* 4. Center Screen Logic (The Main Card) */
+/* When 3-screen mode is ON, force card to center screen only */
+body.triple-active #card {
+    left: 50% !important; 
+    transform: translate(-50%, -50%) !important;
+    /* Center screen width is approx 66%. We set max-width to 60vw to be safe */
+    max-width: 60vw !important; 
+}
+
+/* 5. Image Fit */
+.zone-img { 
+    width: 100%; 
+    height: 100%; 
+    object-fit: fill; /* Forces image to fill the 840x840 box exactly */
+}
             <div id="activateOverlay" onclick="this.style.display='none'">
                 <h1 style="font-size:50px;">CLICK HERE TO ACTIVATE SCREEN</h1>
                 <p>This is required for Audio/Video to play automatically.</p>
