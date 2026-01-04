@@ -2375,23 +2375,69 @@ body.triple-active #card {
         document.getElementById('statusMsg').innerText = "PLAYING VIDEO";
     }
     
-    function stopVideo() {
+    // =======================================================
+    // 1. FORCE MAIN SCREEN FUNCTION (REPLACES EXISTING ONE)
+    // =======================================================
+    function showJalsaScreen() {
         if(!tvWindow || tvWindow.closed) return;
-        const vl = tvWindow.document.getElementById('videoLayer');
-        vl.innerHTML = ''; vl.style.display = 'none';
-        tvWindow.document.body.classList.remove('overlay-mode');
-        if(!document.getElementById('top5ModeCheck').checked) tvWindow.document.body.classList.remove('top5-mode');
-        
-        if(lastActiveState === 'title') {
-            showJalsaScreen();
-        } else if (lastActiveState === 'card') {
-            tvWindow.document.getElementById('card').classList.add('active');
-            if(designState.keepTitle) {
-                tvWindow.document.getElementById('jalsaContent').classList.remove('hidden');
-            } else {
-                 tvWindow.document.getElementById('jalsaContent').classList.add('hidden');
-            }
+        const doc = tvWindow.document;
+
+        // 1. ވީޑިއޯ ވަގުތުން މަރާލުން (KILL VIDEO INSTANTLY)
+        const vl = doc.getElementById('videoLayer');
+        if(vl) {
+            vl.innerHTML = ''; // ވީޑިއޯ އެލިމެންޓް ފުނޑުފުނޑު ކޮށްލުން
+            vl.style.display = 'none'; // ލޭޔަރު ފޮރުވުން
         }
+
+        // 2. ހުރިހާ ސްޕެޝަލް މޯޑްތައް ނިއްވާލުން
+        // Top 5 Mode ގައި ހުރެގެން މެއިން އަށް ނުދެވެނީ މި ކްލާސް ނުނެގޭތީ
+        doc.body.classList.remove('top5-mode', 'overlay-mode');
+
+        // 3. ޓައިޓްލް ކޮންޓެއިނަރ ގަދަކަމުން ދެއްކުން
+        // (Top 5 ގައި މީތި ހުންނަނީ ފޮރުވިފަ)
+        const tCont = doc.getElementById('titleContainer');
+        if(tCont) tCont.style.display = 'block';
+
+        // 4. ޖަލްސާ ކޮންޓެންޓް (ޓައިޓްލްސް) ގެނައުން
+        const jContent = doc.getElementById('jalsaContent');
+        if(jContent) {
+            jContent.classList.remove('hidden');
+            jContent.style.display = 'flex';
+            // ކުޑަ ވަގުތުކޮޅެއް ނުނަގާ ސީދާ 1 އަށް ލުން
+            jContent.style.opacity = '1'; 
+        }
+
+        // 5. ދަރިވަރު ކާޑު ގެއްލުވާލުން
+        const card = doc.getElementById('card');
+        if(card) {
+            card.classList.remove('active');
+            card.className = designState.cBorder || 'b1'; // ސްޓައިލް ރީސެޓް
+        }
+
+        // 6. ކޮންޓްރޯލް ޕެނަލް ޗެކްބޮކްސްތައް ރީސެޓް ކުރުން
+        if(document.getElementById('top5ModeCheck')) document.getElementById('top5ModeCheck').checked = false;
+        if(document.getElementById('vidOverlayCheck')) document.getElementById('vidOverlayCheck').checked = false;
+
+        // 7. ލޯގޯތައް އަނބުރާ ގެނައުން
+        if(designState.logoVisible && doc.getElementById('mainLogosContainer')) doc.getElementById('mainLogosContainer').style.opacity = '1';
+        if(designState.plVisible && doc.getElementById('plContainer')) doc.getElementById('plContainer').style.opacity = '1';
+
+        // ސްޓޭޓަސް މެސެޖު
+        document.getElementById('statusMsg').innerText = "MODE: Main Title Screen";
+        lastActiveState = 'title'; 
+    }
+
+    // =======================================================
+    // 2. STOP BUTTON FUNCTION (LINKS TO MAIN SCREEN)
+    // =======================================================
+    function stopVideo() {
+        // ސްޓޮޕް އަށް ފިއްތާލުމުންވެސް ދާނީ މެއިން ސްކްރީނަށް
+        showJalsaScreen();
+        
+        // އެޑްސް ހިނގާނަމަ އެވެސް ހުއްޓުވާލުން
+        stopAds();
+        
+        document.getElementById('statusMsg').innerText = "🛑 STOPPED -> Main Screen";
     }
     
     // --- SMART LINK CONVERTER (UPDATED FOR GAMMA) ---
