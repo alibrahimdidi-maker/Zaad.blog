@@ -1112,7 +1112,14 @@
              root.style.setProperty('--star-s', value + 'px');
         }
         // -------------------------------------------
-
+// ޓޮޕް 5 ޓެކްސްޓް އެލައިންމަންޓް
+        if(key === 't5Align') {
+             root.style.setProperty('--t5-align', value);
+             
+             if(value === 'left') root.style.setProperty('--t5-flex-align', 'flex-start');
+             else if(value === 'right') root.style.setProperty('--t5-flex-align', 'flex-end');
+             else root.style.setProperty('--t5-flex-align', 'center');
+        }
         // BADGE & TROPHY UPDATES
         if(key === 'badgeX') root.style.setProperty('--star-x', value + 'px');
         if(key === 'badgeY') root.style.setProperty('--star-y', value + 'px');
