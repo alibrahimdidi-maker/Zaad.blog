@@ -2153,34 +2153,43 @@ body.triple-active #card {
     }
 
     // =======================================================
-    // STOP BUTTON (LINKED TO FORCE RESET)
+    // INTERNAL HELPER: KILL VIDEO ONLY (WITHOUT RESETTING UI)
     // =======================================================
-    function stopVideo() {
-        console.log("🛑 STOP PRESSED -> EXECUTE FORCE RESET");
-        // ސީދާ ރީސެޓް ފަންކްޝަން ހިންގާލަނީ (Go directly to Main Screen)
-        showJalsaScreen(); 
-        document.getElementById('statusMsg').innerText = "🛑 STOPPED -> Main Screen";
-    }
-        document.getElementById('statusMsg').innerText = "MODE: Jalsa Titles";
-        lastActiveState = 'title'; 
+    function killVideoPlayer() {
+        if(!tvWindow || tvWindow.closed) return;
+        const doc = tvWindow.document;
+        const vl = doc.getElementById('videoLayer');
+        if(vl) {
+            vl.innerHTML = ''; 
+            vl.style.display = 'none'; 
+        }
     }
 
+    // =======================================================
+    // UPDATE TV (LIVE BUTTON) - FIXED
+    // =======================================================
     function updateTV() {
         if(!tvWindow || tvWindow.closed) { alert("TV Closed!"); return; }
-        stopAds();
         
+        // 1. ހަމައެކަނި ވީޑިއޯ މަރާލަނީ (stopVideo() ބޭނުން ނުކުރޭ)
+        killVideoPlayer(); 
+        stopAds(); // އެޑް ހުއްޓުވުން
+        
+        // 2. ޓައިޓްލް ކޮންޓްރޯލް
         if(!designState.keepTitle) {
             tvWindow.document.getElementById('jalsaContent').classList.add('hidden');
         } else {
             tvWindow.document.getElementById('jalsaContent').classList.remove('hidden');
         }
         
+        // 3. ލޯގޯ ކޮންޓްރޯލް
         const mainLogoContainer = tvWindow.document.getElementById('mainLogosContainer');
         if(designState.logoAutoHide) mainLogoContainer.style.opacity = '0';
         
         const plContainer = tvWindow.document.getElementById('plContainer');
         if(designState.plAutoHide) plContainer.style.opacity = '0';
 
+        // 4. ޑޭޓާ އަޕްޑޭޓް
         const doc = tvWindow.document;
         doc.getElementById('tnD').textContent = document.getElementById('nD').value;
         doc.getElementById('tnE').textContent = document.getElementById('nE').value;
@@ -2199,6 +2208,7 @@ body.triple-active #card {
             commBox.classList.remove('comm-tiny');
         }
 
+        // 5. ފޮޓޯ ސެޓިންގ
         const img = doc.getElementById('stuImg');
         const pCol = doc.querySelector('.photo-col');
         
@@ -2211,11 +2221,12 @@ body.triple-active #card {
             pCol.classList.add('shrink-photo');
         }
 
-        // Auto Toggle Top 5 Mode
+        // 6. TOP 5 MODE HANDLING
         if(activeListMode === 'top5') {
             doc.body.classList.add('top5-mode');
             document.getElementById('top5ModeCheck').checked = true;
             doc.getElementById('card').classList.add('t5-' + designState.t5Layout);
+            
             // SHOW ROYAL STAR
             if(royalStarData) {
                 const rs = doc.getElementById('royalStar');
@@ -2229,7 +2240,7 @@ body.triple-active #card {
              }
         }
         
-        // SHOW TROPHY IF RANK EXISTS
+        // 7. RANK & TROPHY
         const rankTxt = document.getElementById('rankInput').value;
         const trophyWrap = doc.getElementById('trophyWrap');
         if(rankTxt && rankTxt.trim() !== "") {
@@ -2240,20 +2251,25 @@ body.triple-active #card {
             trophyWrap.style.display = 'none';
         }
 
-        setTimeout(() => doc.getElementById('card').classList.add('active'), 100);
-        stopVideo(); 
+        // 8. SHOW CARD (ANIMATION)
+        // ކާޑު ދައްކާއިރު ޑިސްޕްލޭ ބްލޮކްކޮށްފައި އޮޕޭސިޓީ ގެންނަނީ
+        doc.getElementById('card').style.display = 'flex';
+        setTimeout(() => doc.getElementById('card').classList.add('active'), 50);
+        setTimeout(() => doc.getElementById('card').style.opacity = '1', 60);
+
         document.getElementById('statusMsg').innerText = "LIVE: " + document.getElementById('nE').value;
         lastActiveState = 'card'; 
     }
 
+    // =======================================================
+    // CLEAR TV (X BUTTON)
+    // =======================================================
     function clearTV() {
         if(!tvWindow || tvWindow.closed) return;
-        stopAds();
+        // ސީދާ މެއިން ސްކްރީނަށް ދާ ފަންކްޝަން ހިންގާލަނީ
         showJalsaScreen();
-        stopVideo();
         document.getElementById('statusMsg').innerText = "CLEARED";
     }
-
     // --- NEW BADGE LOADERS ---
     function loadRoyalStar(input) {
         if(input.files && input.files[0]) {
