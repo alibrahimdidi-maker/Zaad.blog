@@ -1996,18 +1996,51 @@ body.triple-active #card {
 
     function showJalsaScreen() {
         if(!tvWindow || tvWindow.closed) return;
-        tvWindow.document.getElementById('card').classList.remove('active');
-        const jContent = tvWindow.document.getElementById('jalsaContent');
-        jContent.classList.remove('hidden');
-        jContent.style.opacity = '1'; 
-        jContent.style.display = 'flex'; 
-        
-        const mainLogoContainer = tvWindow.document.getElementById('mainLogosContainer');
-        if(designState.logoVisible) mainLogoContainer.style.opacity = '1';
-        
-        if(designState.plVisible) {
-             tvWindow.document.getElementById('plContainer').style.opacity = '1';
+
+        // 1. ހިނގަމުންދާ ވީޑިއޯއެއް ހުރިނަމަ ހުއްޓުވާ ފޮރުވުން (FORCE STOP VIDEO)
+        const vl = tvWindow.document.getElementById('videoLayer');
+        if(vl) {
+            vl.innerHTML = '';
+            vl.style.display = 'none';
         }
+
+        // 2. Top 5 މޯޑް އަދި Overlay މޯޑް ނިއްވާލުން (Reset CSS)
+        tvWindow.document.body.classList.remove('top5-mode');
+        tvWindow.document.body.classList.remove('overlay-mode');
+
+        // 3. ކޮންޓްރޯލް ޕެނަލްގައި އިންނަ Top 5 ޗެކްބޮކްސް ފާހަގަ ނެގުން
+        const t5Check = document.getElementById('top5ModeCheck');
+        if(t5Check) {
+            t5Check.checked = false;
+        }
+
+        // 4. ދަރިވަރު ކާޑު ފޮރުވުން (Hide Card)
+        const card = tvWindow.document.getElementById('card');
+        if(card) card.classList.remove('active');
+
+        // 5. ޖަލްސާގެ ޓައިޓްލްތައް ދެއްކުން
+        const jContent = tvWindow.document.getElementById('jalsaContent');
+        if(jContent) {
+            jContent.classList.remove('hidden');
+            jContent.style.opacity = '1'; 
+            jContent.style.display = 'flex'; 
+        }
+        
+        // 6. ލޯގޯތައް އަލުން ދެއްކުން (ސެޓިންގްސް އިން އޮން ކޮށްފަ ހުރިނަމަ)
+        const mainLogoContainer = tvWindow.document.getElementById('mainLogosContainer');
+        if(designState.logoVisible && mainLogoContainer) mainLogoContainer.style.opacity = '1';
+        
+        const plContainer = tvWindow.document.getElementById('plContainer');
+        if(designState.plVisible && plContainer) {
+             plContainer.style.opacity = '1';
+        }
+        
+        // 7. ސްޓޭޓަސް އަޕްޑޭޓް ކުރުން
+        const statusMsg = document.getElementById('statusMsg');
+        if(statusMsg) statusMsg.innerText = "MODE: Jalsa Titles";
+        
+        lastActiveState = 'title'; 
+    }
         
         document.getElementById('statusMsg').innerText = "MODE: Jalsa Titles";
         lastActiveState = 'title'; 
