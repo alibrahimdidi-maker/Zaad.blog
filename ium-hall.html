@@ -2118,53 +2118,87 @@ body.triple-active #card {
     // =======================================================
     // 2. STOP BUTTON FUNCTION (LINKS TO MAIN SCREEN)
     // =======================================================
-    function stopVideo() {
-        // ސްޓޮޕް އަށް ފިއްތާލުމުންވެސް ދާނީ ސީދާ މެއިން ސްކްރީނަށް
-        console.log("Stopping Video and Forcing Title Screen...");
-        showJalsaScreen();
-        document.getElementById('statusMsg').innerText = "🛑 STOPPED -> Main Screen";
-    }
+   // =======================================================
+    // EMERGENCY RESET FUNCTION (SUPER AGGRESSIVE - FORCE MAIN TITLE)
+    // =======================================================
+    function showJalsaScreen() {
+        if(!tvWindow || tvWindow.closed) return;
+        const doc = tvWindow.document;
+        console.log("🔥 FORCE RESET TRIGGERED 🔥");
 
-        // 2. ހުރިހާ މޯޑްތަކެއް ނިއްވާލުން (Top 5 & Overlay)
-        // މިއީ އެންމެ މުހިއްމު ބައި. މިކަން ނުކޮށްފިނަމަ ޓައިޓްލް ނުފެންނާނެ.
+        // 1. KILL VIDEO INSTANTLY (ވީޑިއޯ ވަގުތުން ފޮހެލުން)
+        const vl = doc.getElementById('videoLayer');
+        if(vl) {
+            vl.innerHTML = ''; 
+            vl.style.display = 'none';
+        }
+
+        // 2. STOP ADS
+        stopAds();
+
+        // 3. REMOVE ALL MODES (Top 5 & Overlay - CLEAN UP)
+        doc.body.className = ''; 
         doc.body.classList.remove('top5-mode', 'overlay-mode');
 
-        // 3. ކޮންޓްރޯލް ޕެނަލް ރީސެޓް ކުރުން
-        const t5Check = document.getElementById('top5ModeCheck');
-        if(t5Check) t5Check.checked = false;
+        // 4. HIDE TOP 5 ELEMENTS MANUALLY (މިއީ މުހިއްމު ބައެއް)
+        const star = doc.getElementById('royalStar');
+        if(star) star.style.display = 'none';
 
-        const overlayCheck = document.getElementById('vidOverlayCheck');
-        if(overlayCheck) overlayCheck.checked = false;
+        const trophy = doc.getElementById('trophyWrap');
+        if(trophy) trophy.style.display = 'none';
 
-        // 4. ދަރިވަރު ކާޑު ގެއްލުވާލުން (Deactivate Card)
+        // 5. CARD HIDE (ކާޑު ގަދަކަމުން ފޮރުވުން)
         const card = doc.getElementById('card');
         if(card) {
             card.classList.remove('active');
-            // ޓޮޕް 5 ގެ ލޭއައުޓް ކްލާސްތައް ވެސް ނަގާލުން
-            card.classList.remove('t5-bottom', 't5-left', 't5-right');
+            card.style.opacity = '0';
+            card.style.display = 'none'; // ވަގުތީގޮތުން ގެއްލުވާލުން
+            
+            // ސްޓައިލް ރީސެޓް (Reset to default border)
+            setTimeout(() => {
+                if(designState.cBorder) card.className = designState.cBorder;
+                else card.className = 'b1';
+                card.style.display = 'flex'; // އަލުން ރެޑީ ކޮށްފައި ބެހެއްޓުން
+            }, 300);
         }
 
-        // 5. ޓައިޓްލް ސްކްރީން (Jalsa Content) ގަދަކަމުން ގެނައުން
+        // 6. FORCE SHOW TITLES (ޓައިޓްލް ގަދަކަމުން އެންމެ ކުރިއަށް ނެރުން)
+        const tCont = doc.getElementById('titleContainer');
+        if(tCont) {
+            tCont.style.display = 'block';
+            tCont.style.opacity = '1';
+        }
+
         const jContent = doc.getElementById('jalsaContent');
         if(jContent) {
             jContent.classList.remove('hidden');
-            jContent.style.opacity = '1';
             jContent.style.display = 'flex';
-            jContent.style.zIndex = '100'; // އެހެން އެއްޗެހީގެ މައްޗަށް އެރުވުން
+            jContent.style.opacity = '1';
+            jContent.style.visibility = 'visible';
+            jContent.style.zIndex = '9999'; // އެހެން ހުރިހާ އެއްޗެއްގެ މައްޗަށް އެރުވުން
         }
 
-        // 6. ލޯގޯތައް އަލުން ގެނައުން
-        const mainLogoContainer = doc.getElementById('mainLogosContainer');
-        if(designState.logoVisible && mainLogoContainer) mainLogoContainer.style.opacity = '1';
-        
-        const plContainer = doc.getElementById('plContainer');
-        if(designState.plVisible && plContainer) plContainer.style.opacity = '1';
+        // 7. RESET UI CONTROLS
+        if(document.getElementById('top5ModeCheck')) document.getElementById('top5ModeCheck').checked = false;
+        if(document.getElementById('vidOverlayCheck')) document.getElementById('vidOverlayCheck').checked = false;
 
-        // 7. ސްޓޭޓަސް އަޕްޑޭޓް
-        const statusMsg = document.getElementById('statusMsg');
-        if(statusMsg) statusMsg.innerText = "MODE: Jalsa Titles (Reset)";
-        
-        lastActiveState = 'title';
+        // 8. LOGOS RESTORE
+        if(designState.logoVisible && doc.getElementById('mainLogosContainer')) doc.getElementById('mainLogosContainer').style.opacity = '1';
+        if(designState.plVisible && doc.getElementById('plContainer')) doc.getElementById('plContainer').style.opacity = '1';
+
+        // STATUS UPDATE
+        document.getElementById('statusMsg').innerText = "✅ SYSTEM RESET: Main Screen";
+        lastActiveState = 'title'; 
+    }
+
+    // =======================================================
+    // STOP BUTTON (LINKED TO FORCE RESET)
+    // =======================================================
+    function stopVideo() {
+        console.log("🛑 STOP PRESSED -> EXECUTE FORCE RESET");
+        // ސީދާ ރީސެޓް ފަންކްޝަން ހިންގާލަނީ (Go directly to Main Screen)
+        showJalsaScreen(); 
+        document.getElementById('statusMsg').innerText = "🛑 STOPPED -> Main Screen";
     }
         document.getElementById('statusMsg').innerText = "MODE: Jalsa Titles";
         lastActiveState = 'title'; 
