@@ -1100,13 +1100,22 @@
         liveUpdate('pfRadius', r); liveUpdate('pfShadow', sh);
     }
 
-    function liveUpdate(key, value) {
+   function liveUpdate(key, value) {
         if(isLocked) return; 
         designState[key] = value;
         if(!tvWindow || tvWindow.closed) return;
         const doc = tvWindow.document;
         const root = doc.documentElement;
 
+        // --- މިއީ އަލަށް އިތުރުކުރި ބައި (STAR SIZE) ---
+        if(key === 'starSize') {
+             root.style.setProperty('--star-s', value + 'px');
+        }
+        // -------------------------------------------
+
+        // BADGE & TROPHY UPDATES
+        if(key === 'badgeX') root.style.setProperty('--star-x', value + 'px');
+        if(key === 'badgeY') root.style.setProperty('--star-y', value + 'px');
         // BADGE & TROPHY UPDATES
         if(key === 'badgeX') root.style.setProperty('--star-x', value + 'px');
         if(key === 'badgeY') root.style.setProperty('--star-y', value + 'px');
