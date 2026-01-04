@@ -1514,7 +1514,7 @@
 
                 /* T5 BOTTOM LAYOUT */
                 /* --- T5 FINAL FIX: Layout & Photo Force --- */
-/* --- T5 STAR MODE (NO PHOTO) --- */
+/* --- T5 STAR MODE & ALIGNMENT FIX --- */
 .top5-mode #card.t5-bottom {
     width: 95vw !important;
     height: 22vh !important;
@@ -1523,11 +1523,11 @@
     left: 50% !important;
     transform: translateX(-50%) !important;
     
-    /* Layout: Center everything */
+    /* Layout */
     flex-direction: row !important;
     align-items: center !important;
-    justify-content: center !important; /* Center content */
-    gap: 10px !important;
+    justify-content: center !important;
+    gap: 0 !important;
 
     /* Design */
     background: linear-gradient(90deg, rgba(0,10,5,0.95) 0%, rgba(0,30,50,0.95) 100%);
@@ -1538,61 +1538,46 @@
     z-index: 6000 !important;
 }
 
-/* 1. HIDE STUDENT PHOTO (ފޮޓޯ ފޮރުވުން) */
-.top5-mode .photo-col { display: none !important; }
+/* 1. PHOTO COLUMN: Keep logic but zero size (so Star works) */
+.top5-mode .photo-col {
+    display: block !important;  
+    width: 0 !important;        
+    height: 0 !important;
+    overflow: visible !important; 
+    margin: 0 !important;
+    padding: 0 !important;
+    position: relative !important;
+}
+
+/* 2. Hide STUDENT PHOTO only */
 .top5-mode #stuImg { display: none !important; }
 
-/* 2. FORCE SHOW STAR & SPIN (ސްޓާރ އެރުވުމާއި އެނބުރުން) */
+/* 3. SHOW STAR (Movable) */
 .top5-mode #royalStar {
     display: block !important;
     position: absolute !important; 
+    top: 0 !important; left: 0 !important;
     /* Use controls to move it (X, Y) */
     transform: translate(var(--star-x), var(--star-y)) !important;
     width: var(--star-s) !important;
-    z-index: 6010 !important;
-    animation: royalSpin 10s linear infinite !important; /* Always Spin */
+    z-index: 6020 !important; 
+    animation: royalSpin 10s linear infinite !important;
 }
 
-/* 3. Text Styling (ލިޔުން މެދަށް) */
+/* 4. Text Styling & Alignment Control */
 .top5-mode .text-col {
-    text-align: center !important;
     width: 100% !important;
+    text-align: var(--t5-align, center) !important; /* Variable */
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: var(--t5-flex-align, center) !important; 
+    justify-content: center !important;
     padding: 0 !important;
 }
+
 .top5-mode h1 { font-size: 3em !important; margin: 0 !important; line-height: 1.2 !important; }
 .top5-mode h2 { font-size: 2em !important; color: #ffd54f !important; border: none !important; margin-top: 5px !important; }
 .top5-mode .fac-dv, .top5-mode .crs-dv, .top5-mode .comm { display: none !important; }
-
-/* 2. Force Image Size & Visibility */
-.top5-mode #stuImg {
-    display: block !important;
-    visibility: visible !important;
-    opacity: 1 !important;
-    width: 160px !important;  /* Fixed size */
-    height: 160px !important;
-    object-fit: cover !important;
-    border-radius: 50% !important;
-    border: 3px solid var(--royal-accent) !important;
-    box-shadow: 0 0 15px var(--royal-accent) !important;
-    margin: 0 !important;
-}
-
-/* 3. Fix Text Alignment */
-.top5-mode .text-col {
-    order: 2 !important; /* Text comes second */
-    text-align: left !important;
-    align-items: flex-start !important;
-    justify-content: center !important;
-    transform: none !important;
-    padding: 0 !important;
-    width: auto !important;
-}
-
-/* 4. Text Sizes inside Banner */
-.top5-mode h1 { font-size: 2.5em !important; margin: 0 !important; line-height: 1.2 !important; text-shadow: 2px 2px 0 #000; }
-.top5-mode h2 { font-size: 1.8em !important; margin: 5px 0 !important; color: #fff !important; text-shadow: 1px 1px 0 #000; display: block !important; border: none !important; }
-.top5-mode .fac-dv { font-size: 1.4em !important; color: #ffd54f !important; display: block !important; }
-.top5-mode .crs-dv, .top5-mode .comm { display: none !important; } /* Hide extra details to keep it clean */
                 
                 /* T5 LEFT SIDEBAR LAYOUT */
                 .top5-mode #card.t5-left {
