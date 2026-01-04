@@ -1994,69 +1994,62 @@ body.triple-active #card {
         }
     }
 
-  // =======================================================
-    // FINAL ULTIMATE FIX: FORCE RESET TO MAIN TITLES
+// =======================================================
+    // FINAL ULTIMATE FIX: SUPER FORCE MAIN SCREEN
     // =======================================================
     function showJalsaScreen() {
         if(!tvWindow || tvWindow.closed) return;
         const doc = tvWindow.document;
-        console.log("🔥 EMERGENCY RESET: KILLING EVERYTHING 🔥");
+        console.log("🔥 SUPER FORCE RESET EXECUTED 🔥");
 
-        // 1. ވީޑިއޯ ލޭޔަރު އެއްކޮށް ފޮހެލާ، ނިއްވާލުން (CRITICAL FIX)
+        // 1. ވީޑިއޯ ލޭޔަރު އެއްކޮށް ހުސްކޮށް ފޮރުވުން
         const vl = doc.getElementById('videoLayer');
         if(vl) {
-            // ތެރޭގައި ހުރި ވީޑިއޯ/އައިފްރޭމް ޓެގްތައް ހޯދައި ސޯސް ހުސްކޮށްލުން
-            const vids = vl.querySelectorAll('video, iframe');
-            vids.forEach(v => { v.src = ""; });
-            
-            vl.innerHTML = ''; // ލޭޔަރު ހުސްކޮށްލުން
-            vl.style.display = 'none'; // ލޭޔަރު ފޮރުވުން
-            vl.style.zIndex = '-1'; // އެންމެ ފަހަތަށް ލުން
+            vl.innerHTML = ''; // ވީޑިއޯ ފުނޑުފުނޑުކޮށްލުން
+            vl.style.display = 'none';
         }
 
         // 2. އެޑްސް ހުއްޓުވުން
         stopAds();
 
         // 3. ހުރިހާ މޯޑެއް ފޮހެލުން (Top5 / Overlay)
-        // މިއީ ޓައިޓްލް ނުފެންނަ މައްސަލައިގެ މައިގަނޑު ހައްލެވެ.
+        doc.body.className = ''; 
         doc.body.classList.remove('top5-mode', 'overlay-mode');
 
         // 4. TOP 5 ގެ ބެޖުތައް ގަދަކަމުން ފޮރުވުން
         const star = doc.getElementById('royalStar');
-        if(star) star.style.display = 'none';
+        if(star) star.style.setProperty('display', 'none', 'important');
 
         const trophy = doc.getElementById('trophyWrap');
-        if(trophy) trophy.style.display = 'none';
+        if(trophy) trophy.style.setProperty('display', 'none', 'important');
 
-        // 5. ދަރިވަރު ކާޑު ވަގުތުން ގެއްލުވާލުން
+        // 5. ދަރިވަރު ކާޑު ގެއްލުވާލުން
         const card = doc.getElementById('card');
         if(card) {
             card.classList.remove('active');
-            card.classList.remove('t5-bottom', 't5-left', 't5-right'); // ޓޮޕް 5 ލޭއައުޓް ފޮހެލުން
+            card.style.display = 'none'; // ވަގުތުން ގެއްލުވާލުން
             
-            card.style.display = 'none'; // ވަގުތުން ފޮރުވުން
-            card.style.opacity = '0';
-            
-            // ސްޓައިލް ރީސެޓް ކޮށްފައި ބެހެއްޓުން (To avoid layout glitch later)
+            // ކާޑު ރީސެޓް ކުރުން
             setTimeout(() => {
                 if(designState.cBorder) card.className = designState.cBorder;
                 else card.className = 'b1';
+                // Note: We keep display none until needed again
                 card.style.display = 'flex'; 
-            }, 500);
+            }, 300);
         }
 
         // 6. ޓައިޓްލް ކޮންޓެއިނަރ ގަދަކަމުން ދެއްކުން (DIRECT STYLE INJECTION)
-        // CSS Class އަށް ބެލުމެއް ނެތި، ސްޓައިލް ޓެގް ބަދަލުކޮށްގެން ދެއްކުން
+        // މިއީ އެންމެ މުހިއްމު ބައި. CSS Class އަށް ނުބަލާ ގަދަކަމުން ދައްކަނީ.
         const tCont = doc.getElementById('titleContainer');
         if(tCont) {
-            tCont.style.cssText = 'display: block !important; opacity: 1 !important; visibility: visible !important; margin-top: ' + designState.mtY + 'px;';
+            tCont.setAttribute('style', 'display: block !important; opacity: 1 !important; visibility: visible !important; margin-top: ' + designState.mtY + 'px;');
         }
 
         const jContent = doc.getElementById('jalsaContent');
         if(jContent) {
             jContent.classList.remove('hidden');
-            // މިއީ އެންމެ މުހިއްމު ތަން: Z-Index މަތިކޮށް، ގަދަކަމުން ދެއްކުން
-            jContent.style.cssText = 'display: flex !important; opacity: 1 !important; visibility: visible !important; z-index: 99999 !important;';
+            // Z-Index މަތިކޮށް، ގަދަކަމުން ދެއްކުން
+            jContent.setAttribute('style', 'display: flex !important; opacity: 1 !important; visibility: visible !important; z-index: 20000 !important;');
         }
 
         // 7. ކޮންޓްރޯލް ޕެނަލް ޗެކްބޮކްސްތައް ރީސެޓް
@@ -2067,77 +2060,19 @@ body.triple-active #card {
         if(designState.logoVisible && doc.getElementById('mainLogosContainer')) doc.getElementById('mainLogosContainer').style.opacity = '1';
         if(designState.plVisible && doc.getElementById('plContainer')) doc.getElementById('plContainer').style.opacity = '1';
 
-        document.getElementById('statusMsg').innerText = "✅ MAIN TITLES (FORCE RESET)";
+        document.getElementById('statusMsg').innerText = "✅ SYSTEM RESET: Main Screen";
         lastActiveState = 'title'; 
     }
 
     // =======================================================
-    // STOP BUTTON (LINKED TO FORCE RESET)
+    // STOP BUTTON (LINKED TO SUPER FORCE RESET)
     // =======================================================
     function stopVideo() {
-        console.log("🛑 STOP CLICKED -> EXECUTING FORCE RESET");
+        console.log("🛑 STOP CLICKED -> EXECUTING SUPER FORCE RESET");
         // ސީދާ މެއިން ސްކްރީން ފަންކްޝަން ހިންގާލަނީ
         showJalsaScreen(); 
         document.getElementById('statusMsg').innerText = "🛑 STOPPED -> Main Screen";
     }
-        // 7. RANK & TROPHY
-        const rankTxt = document.getElementById('rankInput').value;
-        const trophyWrap = doc.getElementById('trophyWrap');
-        if(rankTxt && rankTxt.trim() !== "") {
-            doc.getElementById('rankNum').innerText = rankTxt;
-            if(trophyData) doc.getElementById('trophyImg').src = trophyData;
-            trophyWrap.style.display = 'flex';
-        } else {
-            trophyWrap.style.display = 'none';
-        }
-
-        // 8. SHOW CARD (ANIMATION)
-        // ކާޑު ދައްކާއިރު ޑިސްޕްލޭ ބްލޮކްކޮށްފައި އޮޕޭސިޓީ ގެންނަނީ
-        doc.getElementById('card').style.display = 'flex';
-        setTimeout(() => doc.getElementById('card').classList.add('active'), 50);
-        setTimeout(() => doc.getElementById('card').style.opacity = '1', 60);
-
-        document.getElementById('statusMsg').innerText = "LIVE: " + document.getElementById('nE').value;
-        lastActiveState = 'card'; 
-    }
-
-    // =======================================================
-    // CLEAR TV (X BUTTON)
-    // =======================================================
-    function clearTV() {
-        if(!tvWindow || tvWindow.closed) return;
-        // ސީދާ މެއިން ސްކްރީނަށް ދާ ފަންކްޝަން ހިންގާލަނީ
-        showJalsaScreen();
-        document.getElementById('statusMsg').innerText = "CLEARED";
-    }
-    // --- NEW BADGE LOADERS ---
-    function loadRoyalStar(input) {
-        if(input.files && input.files[0]) {
-            royalStarData = URL.createObjectURL(input.files[0]);
-            alert("Royal Star Loaded!");
-        }
-    }
-    
-    function loadTrophy(input) {
-        if(input.files && input.files[0]) {
-            trophyData = URL.createObjectURL(input.files[0]);
-            alert("Trophy Icon Loaded!");
-        }
-    }
-
-    // --- VIDEO & ADS & PRESENTATION V29 ---
-    
-    function loadPartnerLogos(input) {
-        partnerLogosData = [];
-        for(let f of input.files) partnerLogosData.push(URL.createObjectURL(f));
-        updatePartnerLogos();
-        alert(partnerLogosData.length + " Partner Logos Loaded.");
-    }
-    
-    function updatePartnerLogos() {
-        if(!tvWindow || tvWindow.closed) return;
-        const c = tvWindow.document.getElementById('plContainer');
-        c.innerHTML = '';
         partnerLogosData.forEach(src => {
             let img = tvWindow.document.createElement('img');
             img.src = src; img.className = 'pl-img';
