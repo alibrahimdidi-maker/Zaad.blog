@@ -608,8 +608,28 @@
                         <span class="d-label">1. ވޯލްޕޭޕަރ ބެކްގްރައުންޑް:</span>
                         <div style="display:flex; gap:10px;">
                             <select id="bgPresetSel" onchange="liveUpdate('bgPreset', this.value)" style="width:70%;">
-                                 <script> for(let i=1; i<=50; i++) document.write(`<option value="bg${i}">ރޯޔަލް ތީމް ${i}</option>`); </script>
-                            </select>
+    
+    <optgroup label="👑 ޝާހީ ފެހި (Royal Green)">
+        <script> for(let i=1; i<=20; i++) document.write(`<option value="bg${i}">Royal Green ${i}</option>`); </script>
+    </optgroup>
+
+    <optgroup label="👑 ޝާހީ ނޫ (Royal Blue)">
+        <script> for(let i=21; i<=40; i++) document.write(`<option value="bg${i}">Royal Blue ${i}</option>`); </script>
+    </optgroup>
+
+    <optgroup label="👑 ޝާހީ ރަތް (Royal Red)">
+        <script> for(let i=41; i<=60; i++) document.write(`<option value="bg${i}">Royal Red ${i}</option>`); </script>
+    </optgroup>
+
+    <optgroup label="⚫ ލަގްޒަރީ ކަޅު (Luxury Black)">
+        <script> for(let i=61; i<=80; i++) document.write(`<option value="bg${i}">Luxury Dark ${i}</option>`); </script>
+    </optgroup>
+
+    <optgroup label="🌐 އެހެނިހެން (Modern/Mixed)">
+        <script> for(let i=81; i<=200; i++) document.write(`<option value="bg${i}">Theme ${i}</option>`); </script>
+    </optgroup>
+
+</select>
                             <input type="file" id="jalsaBgFile" accept="video/*, image/*" style="width:30%" title="Upload Custom BG">
                         </div>
                         <div style="margin-top:8px;">
