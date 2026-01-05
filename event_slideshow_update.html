@@ -345,23 +345,61 @@
                 </div>
             </div>
 <div style="background:#ede7f6; padding:10px; border-radius:8px; border:1px solid #b39ddb; margin-bottom:15px;">
-                <label style="color:#512da8; font-size:14px; margin-bottom:5px;">🖥️ 3-Screen Controls:</label>
-                
-                <div style="display:flex; gap:5px; margin-bottom:5px;">
-                    <div style="flex:1;">
-                        <span style="font-size:10px; font-weight:bold;">Left (ވާތް):</span>
-                        <input type="file" accept="image/*" onchange="loadScreenBG('left', this)" style="font-size:11px;">
-                    </div>
-                    <div style="flex:1;">
-                        <span style="font-size:10px; font-weight:bold;">Right (ކަނާތް):</span>
-                        <input type="file" accept="image/*" onchange="loadScreenBG('right', this)" style="font-size:11px;">
-                    </div>
-                </div>
+               <div style="background:#ede7f6; padding:10px; border-radius:8px; border:1px solid #b39ddb; margin-bottom:15px;">
+   <div style="background:#ede7f6; padding:10px; border-radius:8px; border:1px solid #b39ddb; margin-bottom:15px;">
+    <label style="color:#512da8; font-size:14px; margin-bottom:5px;">🖥️ 3-Screen Controls & Calibration:</label>
 
-                <button class="btn-vid" style="background:#673ab7; font-weight:bold;" onclick="toggleTripleMode()">
-                    Toggle 3-Screen Mode (On/Off)
-                </button>
-            </div>
+    <div style="display:flex; gap:5px; margin-bottom:5px;">
+        <div style="flex:1;">
+            <span style="font-size:10px; font-weight:bold;">Left Image:</span>
+            <input type="file" accept="image/*" onchange="loadScreenBG('left', this)" style="font-size:11px;">
+        </div>
+        <div style="flex:1;">
+            <span style="font-size:10px; font-weight:bold;">Right Image:</span>
+            <input type="file" accept="image/*" onchange="loadScreenBG('right', this)" style="font-size:11px;">
+        </div>
+    </div>
+
+    <button class="btn-vid" style="background:#673ab7; font-weight:bold; margin-bottom:10px;" onclick="toggleTripleMode()">
+        Toggle 3-Screen Mode (On/Off)
+    </button>
+
+    <div style="border-top: 1px dashed #9575cd; padding-top: 5px;">
+        <label style="font-size:11px; color:#512da8; font-weight:bold;">🔭 Monitor Zoom (View Only):</label>
+        <input type="range" min="0.2" max="1" step="0.05" value="1" oninput="setTVZoom(this.value)" style="height:10px;">
+    </div>
+
+    <div style="background:#fff; padding:5px; border-radius:5px; margin-top:5px; border:1px solid #d1c4e9;">
+        <label style="font-size:11px; font-weight:bold; color:#311b92;">🛠️ Screen Calibration (Position):</label>
+        
+        <div style="display:flex; gap:5px; align-items:center; margin-top:3px;">
+            <span style="font-size:10px; width:30px;">Left:</span>
+            <input type="range" min="10" max="30" step="0.1" value="16.6" title="Width" oninput="adjustZone('left', 'width', this.value)">
+            <input type="range" min="-100" max="100" step="1" value="0" title="Move X" oninput="adjustZone('left', 'left', this.value)">
+        </div>
+
+        <div style="display:flex; gap:5px; align-items:center; margin-top:3px;">
+            <span style="font-size:10px; width:30px;">Right:</span>
+            <input type="range" min="10" max="30" step="0.1" value="16.6" title="Width" oninput="adjustZone('right', 'width', this.value)">
+            <input type="range" min="-100" max="100" step="1" value="0" title="Move X" oninput="adjustZone('right', 'right', this.value)">
+        </div>
+    </div>
+</div>
+
+    <button class="btn-vid" style="background:#673ab7; font-weight:bold; margin-bottom:10px;" onclick="toggleTripleMode()">
+        Toggle 3-Screen Mode (On/Off)
+    </button>
+
+    <div style="border-top: 1px dashed #9575cd; padding-top: 5px; margin-top: 5px;">
+        <label style="font-size:12px; color:#512da8; font-weight:bold;">🔭 Monitor View Zoom (Fit to TV):</label>
+        <div style="display:flex; align-items:center; gap:5px;">
+            <span style="font-size:10px;">Out</span>
+            <input type="range" min="0.2" max="1" step="0.05" value="1" oninput="setTVZoom(this.value)">
+            <span style="font-size:10px;">In</span>
+        </div>
+        <div style="font-size:10px; color:#666; text-align:center;">(މިއިން އަސްލު ސްކްރީނަށް ބަދަލެއް ނާންނާނެ)</div>
+    </div>
+</div>
             <button id="lockBtn" onclick="toggleLock()">🔓 ހުޅުވިފައި (ބަދަލުކުރެވޭ މޯޑު)</button>
 
             <div class="controls">
@@ -2871,6 +2909,59 @@ body.triple-active #card {
             alert("⚠️ ވީޑިއޯއެއް ނުފެނުނު (Back to): " + studentData.nD);
         }
     }
+
+    // --- NEW FUNCTIONS (ZOOM & SCREEN CONTROL) ---
+
+    // 1. ޓީވީ ވިންޑޯ ޒޫމް ކުރާ ފަންކްޝަން
+    function setTVZoom(val) {
+        if(tvWindow && !tvWindow.closed) {
+            tvWindow.document.body.style.zoom = val;
+        }
+    }
+
+    // 2. އަރިމަތީ ސްކްރީންތަކަށް ފޮޓޯ ލާ ފަންކްޝަން
+    function loadScreenBG(side, input) {
+        if(!tvWindow || tvWindow.closed) return;
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const zoneId = (side === 'left') ? 'zoneLeft' : 'zoneRight';
+                const zoneDiv = tvWindow.document.getElementById(zoneId);
+                if(zoneDiv) {
+                    zoneDiv.style.backgroundImage = `url(${e.target.result})`;
+                    zoneDiv.style.backgroundSize = "cover";
+                    document.getElementById('statusMsg').innerText = side.toUpperCase() + " SCREEN UPDATED";
+                }
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    // 3. ތިން ސްކްރީން މޯޑު ޖައްސާ ފަންކްޝަން
+   // ... (މަތީގައި، ކުރިން އިތުރުކުރި toggleTripleMode ފަންކްޝަން އިންނާނެ) ...
+
+    function toggleTripleMode() {
+        if(!tvWindow || tvWindow.closed) return;
+        tvWindow.document.body.classList.toggle('triple-active');
+    }
+
+    function adjustZone(side, prop, val) {
+        if(!tvWindow || tvWindow.closed) return;
+        
+        const zoneId = (side === 'left') ? 'zoneLeft' : 'zoneRight';
+        const el = tvWindow.document.getElementById(zoneId);
+        
+        if(el) {
+            if(prop === 'width') {
+                // ފުޅާމިން ބަދަލުކުރުން (%)
+                el.style.width = val + "%"; 
+            } else {
+                // ދެފަރާތަށް ޖެއްސުން (Pixels)
+                el.style[side] = val + "px"; 
+            }
+        }
+    }
+
 </script>
 </body>
 </html>
