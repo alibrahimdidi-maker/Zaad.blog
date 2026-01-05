@@ -2938,9 +2938,28 @@ body.triple-active #card {
     }
 
     // 3. ތިން ސްކްރީން މޯޑު ޖައްސާ ފަންކްޝަން
+   // ... (މަތީގައި، ކުރިން އިތުރުކުރި toggleTripleMode ފަންކްޝަން އިންނާނެ) ...
+
     function toggleTripleMode() {
         if(!tvWindow || tvWindow.closed) return;
         tvWindow.document.body.classList.toggle('triple-active');
+    }
+
+    function adjustZone(side, prop, val) {
+        if(!tvWindow || tvWindow.closed) return;
+        
+        const zoneId = (side === 'left') ? 'zoneLeft' : 'zoneRight';
+        const el = tvWindow.document.getElementById(zoneId);
+        
+        if(el) {
+            if(prop === 'width') {
+                // ފުޅާމިން ބަދަލުކުރުން (%)
+                el.style.width = val + "%"; 
+            } else {
+                // ދެފަރާތަށް ޖެއްސުން (Pixels)
+                el.style[side] = val + "px"; 
+            }
+        }
     }
 
 </script>
