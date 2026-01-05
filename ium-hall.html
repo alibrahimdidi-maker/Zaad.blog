@@ -1089,24 +1089,49 @@
     }
 
     // --- LOCK FUNCTION ---
+    // --- LOCK FUNCTION (FIXED) ---
     function toggleLock() {
         isLocked = !isLocked;
         const btn = document.getElementById('lockBtn');
+        
+        // Items to Lock
         const designPanel = document.getElementById('designPanel');
         const sidebarFiles = document.getElementById('sidebarFiles');
         const searchInput = document.getElementById('search');
+        
+        // NEW ITEMS ADDED
+        const infoPanel = document.getElementById('infoPanel');
+        const configPanel = document.getElementById('configPanel');
+        const listPanel = document.getElementById('listPanel');
 
         if (isLocked) {
             btn.innerHTML = "🔒 SYSTEM LOCKED (LIVE MODE)";
             btn.classList.add('active');
-            designPanel.classList.add('locked-zone');
-            sidebarFiles.classList.add('locked-zone');
+            
+            // Add locked effect to all panels
+            if(designPanel) designPanel.classList.add('locked-zone');
+            if(sidebarFiles) sidebarFiles.classList.add('locked-zone');
+            
+            // Lock new panels
+            if(infoPanel) infoPanel.classList.add('locked-zone');
+            if(configPanel) configPanel.classList.add('locked-zone');
+            if(listPanel) listPanel.classList.add('locked-zone');
+            
             if(searchInput) searchInput.disabled = true;
+            
         } else {
             btn.innerHTML = "🔓 UNLOCKED (Edit Mode)";
             btn.classList.remove('active');
-            designPanel.classList.remove('locked-zone');
-            sidebarFiles.classList.remove('locked-zone');
+            
+            // Remove locked effect
+            if(designPanel) designPanel.classList.remove('locked-zone');
+            if(sidebarFiles) sidebarFiles.classList.remove('locked-zone');
+            
+            // Unlock new panels
+            if(infoPanel) infoPanel.classList.remove('locked-zone');
+            if(configPanel) configPanel.classList.remove('locked-zone');
+            if(listPanel) listPanel.classList.remove('locked-zone');
+            
             if(searchInput) searchInput.disabled = false;
         }
     }
