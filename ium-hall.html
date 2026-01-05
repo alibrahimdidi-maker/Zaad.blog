@@ -39,12 +39,32 @@
             display: flex; gap: 5px; margin-bottom: 10px; justify-content: center; 
             direction: ltr !important; flex-shrink: 0; 
         }
+        /* --- LANGUAGE STYLES (NEW) --- */
+        
+        /* 1. English LTR Support */
+        html[lang="en"] body { font-family: 'Segoe UI', sans-serif !important; direction: ltr !important; text-align: left !important; }
+        html[lang="en"] .sidebar, html[lang="en"] .editor { direction: ltr !important; text-align: left !important; }
+        html[lang="en"] .group-title { right: auto; left: 20px; }
+        html[lang="en"] label { text-align: left !important; }
+        html[lang="en"] #sidebarFiles { direction: ltr !important; text-align: left !important; }
+        
+        /* 2. Arabic Font Support */
+        html[lang="ar"] body { font-family: 'Amiri', 'Faruuma', serif !important; }
+
+        /* 3. Updated Button Styles */
+        .lang-tabs { 
+            display: flex; gap: 5px; margin-bottom: 10px; justify-content: center; 
+            direction: ltr !important; flex-shrink: 0; 
+        }
         .lang-btn {
-            flex: 1; padding: 8px; text-align: center; text-decoration: none;
+            flex: 1; padding: 8px; text-align: center; cursor: pointer; /* Clickable Hand Icon */
             background: #37474f; color: #fff; border-radius: 4px; 
             font-size: 13px; font-weight: bold; border: 1px solid #555; transition: 0.3s;
             font-family: sans-serif !important;
+            text-decoration: none;
         }
+        .lang-btn:hover { background: var(--royal-accent); color: #000; }
+        .lang-btn.active { background: var(--royal-blue-mid); border: 1px solid #fff; pointer-events: none; }
         .lang-btn:hover { background: var(--royal-accent); color: #000; }
         .lang-btn.active { background: var(--royal-blue-mid); border: 1px solid #fff; pointer-events: none; }
 
