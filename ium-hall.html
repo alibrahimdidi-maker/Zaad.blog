@@ -1042,13 +1042,31 @@
     function changeLanguage(lang) {
         document.documentElement.lang = lang;
         document.documentElement.dir = (lang === 'en') ? 'ltr' : 'rtl';
+
+        // ފޮންޓް ރީތިކުރުން
+        if(lang === 'en') {
+            document.body.classList.add('lang-en');
+            document.body.style.fontFamily = "'Segoe UI', sans-serif";
+        } else {
+            document.body.classList.remove('lang-en');
+            document.body.style.fontFamily = "'Faruuma', 'MV Boli', serif";
+        }
+
+        // ބަޓަން ހައިލައިޓް ކުރުން (Error ނާރާނެ ގޮތަށް)
         document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
-        event.target.classList.add('active');
+        if (window.event && window.event.target && window.event.target.classList.contains('lang-btn')) {
+            window.event.target.classList.add('active');
+        }
+
         const t = i18n[lang];
+        if (!t) return;
+
+        // innerHTML ބޭނުންކޮށްގެން އައިކަންތައް ސަލާމަތްކުރުން
         document.querySelectorAll('[data-key]').forEach(el => {
             const key = el.getAttribute('data-key');
-            if (t[key]) el.innerText = t[key];
+            if (t[key]) el.innerHTML = t[key]; 
         });
+
         document.querySelectorAll('[data-key-ph]').forEach(el => {
             const key = el.getAttribute('data-key-ph');
             if (t[key]) el.placeholder = t[key];
