@@ -978,21 +978,15 @@
         }
     }
 
-// --- LICENSE VERIFICATION WITH EXPIRY DATE FIX ---
-    function verifyLicense() {
+function verifyLicense() {
         var keyInput = document.getElementById('licenseKey').value.trim();
         var msg = document.getElementById('secMsg');
 
-        // 1. ޑިވެލޮޕަރ މާސްޓަރ ކީ (މި ކީ ޖެހީމަ އަބަދުވެސް ހުޅުވޭނެ)
-        // ތިޔަބޭފުޅާ ބޭނުންނަމަ މީތި ބަދަލުކުރައްވާ!
-        if(keyInput === "ZAAD-MASTER-7791550") { 
-             unlockApp("DEVELOPER MODE");
-             return;
-        }
+        // (މިތަނުގައި އިން ZAAD-MASTER ގެ 4 ފޮޅުވަތް މިހާރު ވާނީ ފޮހެލާފައި)
+        // އެ ނޫން އެހެން އެއްވެސް ތަނެއް ނުފޮހެލައްވާ!
 
         try {
             // 2. ކީ ޑިކޯޑް ކުރުން (Base64)
-            // ކީ ހަދަންވާނީ: "ROYAL_EXP_" + "YYYY-MM-DD" މި ފޯމެޓަށް
             var decodedString = atob(keyInput);
 
             // 3. ކީ ގެ ކުރީގައި އިންނަންޖެހޭ ބަސް ޗެކްކުރުން
@@ -1008,7 +1002,7 @@
             var today = new Date();
             today.setHours(0,0,0,0); // ގަޑި އުނިކޮށް ހަމައެކަނި ތާރީޚު ބެލުމަށް
 
-            // 5. ތާރީޚު ޗެކްކުރުން (EXPIRY CHECK LOGIC)
+            // 5. ތާރީޚު ޗެކްކުރުން (EXPIRY CHECK LOGIC) <--- މިބައި އިންނަންވާނެ!
             if(isNaN(expDate.getTime())) {
                 msg.innerText = "❌ Corrupted Date in Key!";
                 return;
