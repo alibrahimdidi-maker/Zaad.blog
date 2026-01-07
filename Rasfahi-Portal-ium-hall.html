@@ -1146,23 +1146,39 @@ function toggleLock() {
     );
 
     if (isLocked) {
-        // --- LOCK MODE ON ---
-        btn.innerHTML = "🔒 SYSTEM LOCKED (LIVE MODE)";
-        btn.classList.add('active');
-        
-        // ސެޓިންގްސް ސަރަހައްދުތައް ފަނޑުކޮށްލުން
-        panelIds.forEach(id => {
-            const el = document.getElementById(id);
-            if(el) el.classList.add('locked-zone');
-        });
+            // --- LOCK MODE ON (ސިސްޓަމް ލޮކްކުރުން) ---
+            btn.innerHTML = "🔒 SYSTEM LOCKED (LIVE MODE)";
+            btn.classList.add('active');
+            
+            // ހުރިހާ ސެޓިންގްސް ޕެނަލްތައް ފަނޑުކޮށްލުން
+            panelIds.forEach(id => {
+                const el = document.getElementById(id);
+                if(el) el.classList.add('locked-zone');
+            });
 
-        // ހުރިހާ އެއްޗެއް ބޭނުންނުކުރެވޭ ގޮތް ހެދުން (Disable)
-        inputsToLock.forEach(el => {
-            el.disabled = true;
-            el.style.pointerEvents = 'none'; // އިތުރު ރައްކާތެރިކަމަށް
-        });
-        
-    } else {
+            // ހުރިހާ ބަޓަންތަކާއި ސްލައިޑަރުތައް ހުއްޓުވާލުން (Disable)
+            inputsToLock.forEach(el => {
+                el.disabled = true;
+                el.style.pointerEvents = 'none'; 
+            });
+            
+        } else {
+            // --- UNLOCK MODE (ސިސްޓަމް ހުޅުވާލުން) ---
+            btn.innerHTML = "🔓 UNLOCKED (Edit Mode)";
+            btn.classList.remove('active');
+            
+            // ފަނޑުކަން ކަނޑުވާލުން
+            panelIds.forEach(id => {
+                const el = document.getElementById(id);
+                if(el) el.classList.remove('locked-zone');
+            });
+
+            // ހުރިހާ އެއްޗެއް އަލުން ބޭނުންކުރެވޭ ގޮތް ހެދުން (Enable)
+            inputsToLock.forEach(el => {
+                el.disabled = false;
+                el.style.pointerEvents = 'auto';
+            });
+        }
         // --- UNLOCK MODE ---
         btn.innerHTML = "🔓 UNLOCKED (Edit Mode)";
         btn.classList.remove('active');
