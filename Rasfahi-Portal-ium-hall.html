@@ -1146,43 +1146,66 @@ document.getElementById('licenseKey').addEventListener("keyup", function(e) {
         tvWindow.document.getElementById('mainLogosContainer').style.opacity = designState.logoVisible ? '1' : '0';
     }
 
-    // --- LOCK FUNCTION (FULL SYSTEM PROTECTION) ---
+   // --- LOCK FUNCTION (COMPLETE FIX) ---
 function toggleLock() {
     isLocked = !isLocked;
     const btn = document.getElementById('lockBtn');
     
-    // 1. ލޮކް ކުރަން ބޭނުންވާ މައިގަނޑު ސަރަހައްދުތައް (Container IDs)
-    const panelIds = ['designPanel', 'sidebarFiles', 'infoPanel', 'configPanel', 'listPanel', 'editorPanel'];
+    // ލޮކް ކުރަން ބޭނުންވާ މައިގަނޑު ޕެނަލްތައް
+    const panelsToLock = [
+        'designPanel',   // ޑިޒައިން ބައި
+        'sidebarFiles',  // ފައިލްތައް ނަގާ ބައި
+        'infoPanel',     // މައުލޫމާތު ބައި
+        'configPanel',   // ސޭވް/ލޯޑް ބައި
+        'listPanel'      // ލިސްޓް ސްވިޗަރ
+    ];
 
-    // 2. ލޮކް ކުރަން ބޭނުންވާ ހުރިހާ ކޮންޓްރޯލްތަކެއް ހޮވާލުން
-    // މިތަނަށް 'textarea' އަދި 'range' ވައްތަރުގެ ހުރިހާ އެއްޗެއް ހިމަނާފައިވާނެ
-    const inputsToLock = document.querySelectorAll(
-        '#designPanel input, #designPanel select, #designPanel button, ' +
+    // ޕެނަލްތަކުގެ ތެރޭގައި ހުރި ހުރިހާ އިންޕުޓްތައް ހޯދުން
+    const elements = document.querySelectorAll(
+        '#designPanel input, #designPanel select, #designPanel button, #designPanel textarea, ' +
         '#sidebarFiles input, #sidebarFiles select, #sidebarFiles button, ' +
-        '#infoPanel input, #infoPanel textarea, #infoPanel button, ' +
+        '#infoPanel input, #infoPanel select, #infoPanel button, #infoPanel textarea, ' +
         '#configPanel button, ' +
-        '#listPanel button, #search, #stuList, ' +
-        'input[type="range"]' // ހުރިހާ ރޭންޖް ސްލައިޑަރުތަކެއް ލޮކްކުރުމަށް
+        '#search, #stuList' 
     );
 
     if (isLocked) {
-            // --- LOCK MODE ON (ސިސްޓަމް ލޮކްކުރުން) ---
-            btn.innerHTML = "🔒 SYSTEM LOCKED (LIVE MODE)";
-            btn.classList.add('active');
-            
-            // ހުރިހާ ސެޓިންގްސް ޕެނަލްތައް ފަނޑުކޮށްލުން
-            panelIds.forEach(id => {
-                const el = document.getElementById(id);
-                if(el) el.classList.add('locked-zone');
-            });
+        // --- LOCK MODE ON ---
+        btn.innerHTML = "🔒 SYSTEM LOCKED (Safe Mode)";
+        btn.classList.add('active'); 
 
-            // ހުރިހާ ބަޓަންތަކާއި ސްލައިޑަރުތައް ހުއްޓުވާލުން (Disable)
-            inputsToLock.forEach(el => {
-                el.disabled = true;
-                el.style.pointerEvents = 'none'; 
-            });
-            
-        } else {
+        // 1. ހުރިހާ ކޮންޓްރޯލްތަކެއް ޑިސޭބަލް ކުރުން
+        elements.forEach(el => {
+            el.disabled = true;
+            el.style.pointerEvents = 'none'; // މައުސް އިން ނުކުޅެވޭނެ
+            el.style.opacity = '0.6'; // ފަނޑުކޮށްލާ
+        });
+
+        // 2. ޕެނަލްތައް ފަނޑުކޮށްލުން (Visual feedback)
+        panelsToLock.forEach(id => {
+            let p = document.getElementById(id);
+            if(p) p.style.filter = "grayscale(100%) opacity(0.7)";
+        });
+
+    } else {
+        // --- UNLOCK MODE ---
+        btn.innerHTML = "🔓 UNLOCKED (Edit Mode)";
+        btn.classList.remove('active'); 
+
+        // 1. ހުރިހާ ކޮންޓްރޯލްތަކެއް އެނޭބަލް ކުރުން
+        elements.forEach(el => {
+            el.disabled = false;
+            el.style.pointerEvents = 'auto';
+            el.style.opacity = '1';
+        });
+
+        // 2. ޕެނަލްތައް އަލުން އަލިކޮށްލުން
+        panelsToLock.forEach(id => {
+            let p = document.getElementById(id);
+            if(p) p.style.filter = "none";
+        });
+    }
+}
             // --- UNLOCK MODE (ސިސްޓަމް ހުޅުވާލުން) ---
             btn.innerHTML = "🔓 UNLOCKED (Edit Mode)";
             btn.classList.remove('active');
