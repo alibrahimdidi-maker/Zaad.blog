@@ -1056,8 +1056,7 @@ ________________________________________________________________________________
 
     // Allow "Enter" key to submit
     document.getElementById('licenseKey').addEventListener("keyup", e => { if (e.key === "Enter") verifyLicense(); });
-    document.getElementById('licenseKey').addEventListener("keyup", e => { if (e.key === "Enter") verifyLicense(); });
-
+  
     let tvWindow = null;
     let students = [];
     let photoFiles = {};
