@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Zaad Royal V23 (Blue Edition)</title>
+    <title>Zaad Royal V23 (Multi-Lang)</title>
     <style>
         /* --- 1. FONTS & THEME --- */
         @font-face { font-family: 'Faruma'; src: url('https://academyzaad.com/fonts/af_faruma.ttf') format('truetype'); }
-        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Amiri:wght@400;700&display=swap');
 
         :root { 
             --primary: #FFD700;       /* Royal Gold */
@@ -18,14 +18,19 @@
             --error: #ff4444;
         }
         
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; user-select: none; /* DISABLE SELECT */ }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; user-select: none; }
 
         body { 
-            /* Royal Blue Gradient */
             background: radial-gradient(circle at center, #003366 0%, #000814 100%); 
-            color: var(--primary); font-family: 'Faruma', sans-serif; 
+            color: var(--primary); 
             margin: 0; height: 100vh; overflow: hidden; 
+            transition: all 0.3s ease;
         }
+
+        /* Language Specific Fonts */
+        body[lang="dv"] { font-family: 'Faruma', sans-serif; }
+        body[lang="ar"] { font-family: 'Amiri', serif; font-size: 1.1em; }
+        body[lang="en"] { font-family: 'Roboto', sans-serif; }
 
         /* --- 2. LAYOUT --- */
         .view { display: none; height: 100%; width: 100%; flex-direction: column; position: absolute; top:0; left:0; background:#000; z-index: 10; } 
@@ -44,14 +49,14 @@
             width: 100%; padding: 12px; background: rgba(0,0,0,0.4); 
             border: 1px solid #444; border-bottom: 2px solid var(--primary); 
             color: #fff; text-align: center; margin-top: 10px; border-radius: 5px; 
-            font-size: 16px; font-family: 'Faruma';
+            font-size: 16px; font-family: inherit;
         }
 
         .btn { 
             background: linear-gradient(45deg, var(--primary-dim), var(--primary)); border: none; 
             padding: 12px; width: 100%; font-weight: bold; cursor: pointer; 
             border-radius: 8px; margin-top: 15px; color: #000; font-size: 16px; 
-            transition: 0.3s; font-family: 'Faruma'; text-transform: uppercase;
+            transition: 0.3s; font-family: inherit; text-transform: uppercase;
             box-shadow: 0 4px 15px rgba(0,0,0,0.3);
         }
         .btn:hover { transform: scale(1.02); filter: brightness(1.2); }
@@ -60,6 +65,11 @@
         .btn-blue { background: linear-gradient(45deg, #004080, #0059b3); color: #fff; border: 1px solid var(--primary); }
         .btn-red { background: linear-gradient(45deg, #800000, #b30000); color: #fff; }
         .btn-green { background: linear-gradient(45deg, #006600, #009900); color: #fff; }
+
+        /* LANG SWITCHER */
+        .lang-switch { display: flex; justify-content: center; gap: 10px; margin-bottom: 20px; }
+        .lang-btn { background: transparent; border: 1px solid var(--primary); color: var(--primary); padding: 5px 10px; border-radius: 5px; cursor: pointer; font-size: 12px; }
+        .lang-btn.active-lang { background: var(--primary); color: #000; font-weight: bold; }
 
         /* --- 4. GRID SYSTEM --- */
         .control-grid { 
@@ -117,8 +127,8 @@
     <div id="v-license" class="view active center-box" style="z-index: 999;">
         <div class="card">
             <h1 style="font-size:40px;">🔐</h1>
-            <h2 style="color:var(--primary);">SOFTWARE ACTIVATION</h2>
-            <p style="color:#aaa; font-size:14px;">This software is protected. Please enter your license key.</p>
+            <h2 style="color:var(--primary);">ACTIVATION REQUIRED</h2>
+            <p style="color:#aaa; font-size:14px;">This software is protected.</p>
             
             <input type="text" id="licenseKeyInput" placeholder="Paste License Key Here..." style="font-family:monospace; font-size:12px;">
             <button onclick="verifyLicense()" class="btn btn-green">ACTIVATE</button>
@@ -128,53 +138,64 @@
 
     <div id="v-login" class="view center-box">
         <div class="card">
-            <img src="https://academyzaad.com/photos/logo.png" width="120" style="margin-bottom:15px;" onerror="this.style.display='none'">
-            <h2 style="margin:5px 0; color:var(--primary); font-size: 28px;">ZAAD SYSTEM V23</h2>
-            <p style="font-size:14px; color:#aaa; margin-bottom:20px;">Royal Blue Edition</p>
-            
-            <div id="licenseInfo" style="font-size:10px; color:#4CAF50; border:1px solid #4CAF50; padding:5px; margin-bottom:15px; border-radius:4px;">
-                License Active
+            <div class="lang-switch">
+                <button onclick="setLanguage('dv')" class="lang-btn" id="btn_lang_dv">ދިވެހި</button>
+                <button onclick="setLanguage('en')" class="lang-btn" id="btn_lang_en">English</button>
+                <button onclick="setLanguage('ar')" class="lang-btn" id="btn_lang_ar">عربي</button>
             </div>
 
-            <label style="font-size:12px; display:block; text-align:right; color:#aaa;">Login As</label>
+            <img src="https://academyzaad.com/photos/logo.png" width="120" style="margin-bottom:15px;" onerror="this.style.display='none'">
+            <h2 id="lbl_app_title" style="margin:5px 0; color:var(--primary); font-size: 28px;">ZAAD SYSTEM V23</h2>
+            <p id="lbl_app_sub" style="font-size:14px; color:#aaa; margin-bottom:20px;">Royal Blue Edition</p>
+            
+            <div id="licenseInfo" style="font-size:10px; color:#4CAF50; border:1px solid #4CAF50; padding:5px; margin-bottom:15px; border-radius:4px;">License Active</div>
+
+            <label id="lbl_role" style="font-size:12px; display:block; text-align:right; color:#aaa;">Login As</label>
             <select id="role">
                 <option value="admin">Admin</option>
                 <option value="judge">Judge</option>
             </select>
             
-            <label style="font-size:12px; display:block; text-align:right; color:#aaa; margin-top:15px;">Password</label>
+            <label id="lbl_pass" style="font-size:12px; display:block; text-align:right; color:#aaa; margin-top:15px;">Password</label>
             <input type="password" id="pass" placeholder="••••••••" autocapitalize="off">
             
-            <button onclick="attemptLogin()" class="btn">LOGIN</button>
+            <button id="btn_login" onclick="attemptLogin()" class="btn">LOGIN</button>
         </div>
     </div>
 
     <div id="v-admin" class="view">
         <div style="background:rgba(0,0,0,0.8); padding:15px 20px; border-bottom:1px solid var(--primary); display:flex; justify-content:space-between; align-items:center;">
-            <span style="font-weight:bold; font-size: 20px;">🎛️ CONTROL ROOM</span>
-            <button onclick="logout()" class="btn btn-red" style="width:auto; margin:0; padding:5px 20px; font-size:14px;">EXIT</button>
+            <span id="lbl_control_room" style="font-weight:bold; font-size: 20px;">🎛️ CONTROL ROOM</span>
+            <div style="display:flex; gap:10px; align-items:center;">
+                 <div class="lang-switch" style="margin:0;">
+                    <button onclick="setLanguage('dv')" class="lang-btn">DV</button>
+                    <button onclick="setLanguage('en')" class="lang-btn">EN</button>
+                    <button onclick="setLanguage('ar')" class="lang-btn">AR</button>
+                </div>
+                <button id="btn_exit" onclick="logout()" class="btn btn-red" style="width:auto; margin:0; padding:5px 20px; font-size:14px;">EXIT</button>
+            </div>
         </div>
 
         <div class="control-grid">
             <div class="panel">
-                <h3>📋 PARTICIPANTS</h3>
-                <button onclick="openDataManager()" class="btn btn-green" style="font-size:14px; margin-bottom:15px;">📂 DATA MANAGER</button>
-                <input type="text" placeholder="Search..." onkeyup="renderList(this.value)">
+                <h3 id="lbl_participants">📋 PARTICIPANTS</h3>
+                <button id="btn_data_mgr" onclick="openDataManager()" class="btn btn-green" style="font-size:14px; margin-bottom:15px;">📂 DATA MANAGER</button>
+                <input id="inp_search" type="text" placeholder="Search..." onkeyup="renderList(this.value)">
                 <div id="stuList" style="margin-top:15px;"></div>
             </div>
 
             <div class="panel" style="text-align:center;">
-                <h3>📡 SCREENS</h3>
+                <h3 id="lbl_screens">📡 SCREENS</h3>
                 <div style="display:flex; gap:10px; justify-content:center;">
-                    <button onclick="openExternalWin('STUDENT')" class="btn" style="width:48%; background:#fff; color:#000;">Student</button>
-                    <button onclick="openExternalWin('AUDIENCE')" class="btn" style="width:48%; background:#fff; color:#000;">Audience</button>
+                    <button id="btn_scr_stu" onclick="openExternalWin('STUDENT')" class="btn" style="width:48%; background:#fff; color:#000;">Student</button>
+                    <button id="btn_scr_aud" onclick="openExternalWin('AUDIENCE')" class="btn" style="width:48%; background:#fff; color:#000;">Audience</button>
                 </div>
 
                 <div style="margin-top:25px; border:1px solid #444; padding:15px; border-radius:10px; background:rgba(0,0,0,0.3);">
-                    <h4 style="margin:0 0 10px 0; color:#aaa;">🎨 DESIGN STUDIO</h4>
+                    <h4 id="lbl_design" style="margin:0 0 10px 0; color:#aaa;">🎨 DESIGN STUDIO</h4>
                     <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
-                        <button onclick="changeStyle('border')" class="btn" style="background:#003366; color:#fff; border:1px solid var(--primary); margin:0;">🔲 Frame</button>
-                        <button onclick="changeStyle('bg')" class="btn" style="background:#003366; color:#fff; border:1px solid var(--primary); margin:0;">🖼️ BG</button>
+                        <button id="btn_frame" onclick="changeStyle('border')" class="btn" style="background:#003366; color:#fff; border:1px solid var(--primary); margin:0;">🔲 Frame</button>
+                        <button id="btn_bg" onclick="changeStyle('bg')" class="btn" style="background:#003366; color:#fff; border:1px solid var(--primary); margin:0;">🖼️ BG</button>
                     </div>
                 </div>
 
@@ -184,26 +205,25 @@
                 </div>
 
                 <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:15px;">
-                    <button onclick="sendToScreen('PROFILE')" class="btn">👤 Profile</button>
-                    <button onclick="sendToScreen('SCORE')" class="btn btn-blue">🏆 Score</button>
+                    <button id="btn_profile" onclick="sendToScreen('PROFILE')" class="btn">👤 Profile</button>
+                    <button id="btn_score" onclick="sendToScreen('SCORE')" class="btn btn-blue">🏆 Score</button>
                 </div>
-                <button onclick="resetSystem()" class="btn btn-red">🔄 NEXT STUDENT</button>
+                <button id="btn_next_stu" onclick="resetSystem()" class="btn btn-red">🔄 NEXT STUDENT</button>
             </div>
 
             <div class="panel">
-                <h3>🎲 LOTTERY</h3>
+                <h3 id="lbl_lottery">🎲 LOTTERY</h3>
                 <div style="display:flex; align-items:center; gap:10px; margin-bottom:15px;">
-                    <label style="margin:0;">Pick Limit:</label>
+                    <label id="lbl_limit" style="margin:0;">Pick Limit:</label>
                     <input type="number" id="pickLimit" value="2" style="width:70px; margin:0;">
                 </div>
-                <button onclick="startLottery()" class="btn btn-blue" style="font-size: 18px; padding: 20px;">START DRAW</button>
+                <button id="btn_start_draw" onclick="startLottery()" class="btn btn-blue" style="font-size: 18px; padding: 20px;">START DRAW</button>
                 
                 <h4 style="margin-top:20px; border-bottom:1px solid #444;">Selected:</h4>
                 <div id="liveQuestions" class="question-preview"></div>
                 
                 <hr style="border-color:#333; margin:30px 0;">
-                <button onclick="fullReset()" class="btn btn-red" style="font-size:12px;">⚠️ Factory Reset</button>
-                <button onclick="removeLicense()" class="btn btn-red" style="font-size:10px; margin-top:5px;">🗑️ Deactivate License</button>
+                <button id="btn_reset" onclick="fullReset()" class="btn btn-red" style="font-size:12px;">⚠️ Factory Reset</button>
             </div>
         </div>
     </div>
@@ -213,13 +233,13 @@
             <h2 style="color:var(--primary); margin-top:0;">📂 DATA SETTINGS</h2>
             
             <div style="background:rgba(0,0,0,0.3); padding:20px; border-radius:10px; margin-bottom:20px;">
-                <h4>1. Import from Google Sheets</h4>
+                <h4>Import from Google Sheets</h4>
                 <input type="text" id="scriptUrl" placeholder="Paste Google Script URL here...">
                 <button onclick="importFromSheet()" class="btn btn-blue">📥 Import Now</button>
             </div>
 
             <div style="background:rgba(0,0,0,0.3); padding:20px; border-radius:10px; margin-bottom:20px;">
-                <h4>2. Manual Add</h4>
+                <h4>Manual Add</h4>
                 <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
                     <input type="text" id="newReg" placeholder="Reg No">
                     <input type="text" id="newName" placeholder="Name">
@@ -228,7 +248,7 @@
             </div>
 
             <div style="background:rgba(0,0,0,0.3); padding:20px; border-radius:10px;">
-                <h4>3. Total Questions (in q/ folder)</h4>
+                <h4>Total Questions (in q/ folder)</h4>
                 <input type="number" id="totalQInput" value="20" style="width:100px;">
                 <button onclick="saveQSettings()" class="btn">💾 Save Limit</button>
             </div>
@@ -279,13 +299,121 @@
 
     <script>
         // ==========================================
+        // 🌍 LANGUAGE SYSTEM
+        // ==========================================
+        const translations = {
+            dv: {
+                lbl_app_title: "ޒާދު ސިސްޓަމް ވީ23",
+                lbl_app_sub: "ރޯޔަލް ބްލޫ އެޑިޝަން",
+                lbl_role: "މަޤާމް",
+                lbl_pass: "ޕާސްވޯޑް",
+                btn_login: "ވަދޭ (ލޮގިން)",
+                lbl_control_room: "🎛️ ކޮންޓްރޯލް ރޫމް",
+                btn_exit: "ނިކުމޭ",
+                lbl_participants: "📋 ބައިވެރިން",
+                btn_data_mgr: "📂 ޑޭޓާ މެނޭޖަރ",
+                inp_search: "ހޯއްދަވާ...",
+                lbl_screens: "📡 ސްކްރީންތައް",
+                btn_scr_stu: "ދަރިވަރު",
+                btn_scr_aud: "ބެލުންތެރިން",
+                lbl_design: "🎨 ޑިޒައިން ސްޓޫޑިއޯ",
+                btn_frame: "🔲 ފްރޭމް",
+                btn_bg: "🖼️ ބެކްގްރައުންޑް",
+                activeName: "ދަރިވަރެއް ނަގާ",
+                btn_profile: "👤 ޕްރޮފައިލް",
+                btn_score: "🏆 ނަތީޖާ",
+                btn_next_stu: "🔄 ދެން އިން ކުއްޖާ",
+                lbl_lottery: "🎲 ގުރުއަތު (ލޮޓަރީ)",
+                lbl_limit: "ސުވާލު އަދަދު:",
+                btn_start_draw: "ގުރުއަތު ނަގާ",
+                btn_reset: "⚠️ ފެކްޓަރީ ރިސެޓް"
+            },
+            en: {
+                lbl_app_title: "ZAAD SYSTEM V23",
+                lbl_app_sub: "Royal Blue Edition",
+                lbl_role: "Login As",
+                lbl_pass: "Password",
+                btn_login: "LOGIN",
+                lbl_control_room: "🎛️ CONTROL ROOM",
+                btn_exit: "EXIT",
+                lbl_participants: "📋 PARTICIPANTS",
+                btn_data_mgr: "📂 DATA MANAGER",
+                inp_search: "Search...",
+                lbl_screens: "📡 SCREENS",
+                btn_scr_stu: "Student",
+                btn_scr_aud: "Audience",
+                lbl_design: "🎨 DESIGN STUDIO",
+                btn_frame: "🔲 Frame",
+                btn_bg: "🖼️ BG",
+                activeName: "Select Student",
+                btn_profile: "👤 Profile",
+                btn_score: "🏆 Score",
+                btn_next_stu: "🔄 NEXT STUDENT",
+                lbl_lottery: "🎲 LOTTERY",
+                lbl_limit: "Pick Limit:",
+                btn_start_draw: "START DRAW",
+                btn_reset: "⚠️ Factory Reset"
+            },
+            ar: {
+                lbl_app_title: "نظام زاد الإصدار 23",
+                lbl_app_sub: "الإصدار الأزرق الملكي",
+                lbl_role: "تسجيل الدخول كـ",
+                lbl_pass: "كلمة المرور",
+                btn_login: "دخول",
+                lbl_control_room: "🎛️ غرفة التحكم",
+                btn_exit: "خروج",
+                lbl_participants: "📋 المشاركون",
+                btn_data_mgr: "📂 إدارة البيانات",
+                inp_search: "بحث...",
+                lbl_screens: "📡 الشاشات",
+                btn_scr_stu: "الطالب",
+                btn_scr_aud: "الجمهور",
+                lbl_design: "🎨 استوديو التصميم",
+                btn_frame: "🔲 الإطار",
+                btn_bg: "🖼️ الخلفية",
+                activeName: "اختر طالباً",
+                btn_profile: "👤 الملف الشخصي",
+                btn_score: "🏆 النتيجة",
+                btn_next_stu: "🔄 الطالب التالي",
+                lbl_lottery: "🎲 القرعة",
+                lbl_limit: "عدد الأسئلة:",
+                btn_start_draw: "بدء السحب",
+                btn_reset: "⚠️ إعادة ضبط المصنع"
+            }
+        };
+
+        let currentLang = 'dv'; // Default
+
+        function setLanguage(lang) {
+            currentLang = lang;
+            const t = translations[lang];
+            
+            // 1. Update Direction & HTML Lang
+            const html = document.documentElement;
+            html.lang = lang;
+            html.dir = (lang === 'en') ? 'ltr' : 'rtl';
+            document.body.lang = lang; // Triggers Font CSS
+
+            // 2. Update UI Text
+            for (const [key, value] of Object.entries(t)) {
+                const el = document.getElementById(key);
+                if (el) {
+                    if (el.tagName === 'INPUT') el.placeholder = value;
+                    else el.innerText = value;
+                }
+            }
+
+            // 3. Update Buttons State
+            document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active-lang'));
+            document.getElementById(`btn_lang_${lang}`).classList.add('active-lang');
+        }
+
+        // ==========================================
         // 🛡️ SECURITY & LICENSE SYSTEM
         // ==========================================
         
-        // 1. DISABLE RIGHT CLICK & KEYS
         document.addEventListener('contextmenu', event => event.preventDefault());
         document.addEventListener('keydown', function(e) {
-            // Block F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U, Ctrl+S, Ctrl+P
             if (e.keyCode === 123 || 
                (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 74)) || 
                (e.ctrlKey && e.keyCode === 85) || 
@@ -297,7 +425,6 @@
             }
         });
 
-        // Block Dragging Images
         document.addEventListener("dragstart", function(e) {
              if (e.target.nodeName.toUpperCase() == "IMG") { return false; }
         });
@@ -308,11 +435,9 @@
             setTimeout(() => al.style.display = 'none', 1000);
         }
 
-        // 2. LICENSE VALIDATION LOGIC
         function initLicenseCheck() {
             const savedKey = localStorage.getItem('zaad_license_key');
             if(savedKey) {
-                // If key exists, validate it silently
                 if(validateKeyLogic(savedKey)) {
                     document.getElementById('v-license').classList.remove('active');
                     document.getElementById('v-login').classList.add('active');
@@ -323,7 +448,6 @@
         function verifyLicense() {
             const key = document.getElementById('licenseKeyInput').value.trim();
             const msg = document.getElementById('licMsg');
-            
             if(validateKeyLogic(key)) {
                 localStorage.setItem('zaad_license_key', key);
                 msg.style.color = "#4CAF50";
@@ -340,45 +464,23 @@
 
         function validateKeyLogic(key) {
             try {
-                // Decode Base64 (matches your Generator logic)
                 const decoded = atob(key); 
-                // Format: ROYAL_EXP_YYYY-MM-DD_CUST_Name
                 const parts = decoded.split('_');
-                
                 if(parts[0] !== 'ROYAL' || parts[1] !== 'EXP') return false;
-                
-                const expDateStr = parts[2]; // YYYY-MM-DD
+                const expDateStr = parts[2]; 
                 const expDate = new Date(expDateStr);
                 const today = new Date();
-                
-                // Reset time to compare dates only
                 today.setHours(0,0,0,0);
-                
-                if(today > expDate) {
-                    return false; // Expired
-                }
-                
-                // Show info on login screen
+                if(today > expDate) return false; 
                 document.getElementById('licenseInfo').innerText = `Licensed to: ${parts[4]} (Exp: ${expDateStr})`;
                 return true;
-
-            } catch(e) {
-                return false;
-            }
-        }
-
-        function removeLicense() {
-            if(confirm("Are you sure? This will lock the software.")) {
-                localStorage.removeItem('zaad_license_key');
-                location.reload();
-            }
+            } catch(e) { return false; }
         }
 
         // ==========================================
         // 🏗️ MAIN APP LOGIC
         // ==========================================
 
-        // CONFIG
         const PHOTO_PATH = "q/"; 
         let TOTAL_Q = 20;
         let students = [{ reg:"001", name:"Ahmed Ali", cat:"Quran", img:"https://via.placeholder.com/150" }];
@@ -387,28 +489,18 @@
         let currentPicks = [];
         let stuWin = null, audWin = null;
 
-        // --- STYLES CONFIG ---
-        const BORDERS = [
-            "10px double #FFD700", "8px solid #FFD700", "15px ridge #c0c0c0", "12px groove #B8860B", 
-            "10px inset #fff", "5px dashed #FFD700", "20px solid transparent"
-        ];
-        const BACKGROUNDS = [
-            "radial-gradient(circle, #003366, #000814)",
-            "url('https://img.freepik.com/free-vector/islamic-gradient-background-design_23-2148906373.jpg')",
-            "#000000", 
-            "linear-gradient(135deg, #1a2980, #26d0ce)"
-        ];
+        const BORDERS = ["10px double #FFD700", "8px solid #FFD700", "15px ridge #c0c0c0", "12px groove #B8860B", "10px inset #fff", "5px dashed #FFD700", "20px solid transparent"];
+        const BACKGROUNDS = ["radial-gradient(circle, #003366, #000814)", "url('https://img.freepik.com/free-vector/islamic-gradient-background-design_23-2148906373.jpg')", "#000000", "linear-gradient(135deg, #1a2980, #26d0ce)"];
         let currentBorder = BORDERS[0];
         let currentBg = BACKGROUNDS[0];
 
-        // INIT
         window.onload = function() {
             if(localStorage.getItem('zaad_students')) students = JSON.parse(localStorage.getItem('zaad_students'));
             if(localStorage.getItem('zaad_total_q')) TOTAL_Q = parseInt(localStorage.getItem('zaad_total_q'));
-            initLicenseCheck(); // Start License Check
+            setLanguage('dv'); // Default Language
+            initLicenseCheck(); 
         };
 
-        // --- AUTH ---
         function attemptLogin() {
             const pass = document.getElementById('pass').value.trim().toLowerCase();
             if (pass === 'admin123') { switchScreen('v-admin'); renderList(); }
@@ -422,7 +514,6 @@
         function logout() { document.getElementById('pass').value=""; switchScreen('v-login'); }
         function showToast(msg) { const t=document.getElementById('toast'); t.innerText=msg; t.style.display="block"; setTimeout(()=>t.style.display="none",3000); }
 
-        // --- DATA ---
         function openDataManager() { document.getElementById('totalQInput').value = TOTAL_Q; document.getElementById('dataModal').style.display = 'flex'; }
         function saveQSettings() {
             const val = document.getElementById('totalQInput').value;
@@ -450,7 +541,6 @@
             });
         }
 
-        // --- LISTS ---
         function renderList(filter="") {
             const html = students.filter(s => s.name.toLowerCase().includes(filter.toLowerCase()) || s.reg.includes(filter))
                 .map(s => `<div class="student-item" onclick="selectStudent('${s.reg}')"><span><b>${s.reg}</b> ${s.name}</span></div>`).join('');
@@ -474,7 +564,6 @@
                 <input type="number" placeholder="Hifz (10)">`;
         }
 
-        // --- STYLES ---
         function changeStyle(type) {
             if(type === 'border') {
                 const idx = BORDERS.indexOf(currentBorder);
@@ -495,62 +584,30 @@
             if(audWin && !audWin.closed) audWin.eval(js);
         }
 
-        // --- WINDOWS (FIXED CENTERING & LAYOUT) ---
         const SCREEN_CSS = `
             <style>
                 @font-face { font-family: 'Faruma'; src: url('https://academyzaad.com/fonts/af_faruma.ttf') format('truetype'); }
                 body { margin:0; background: radial-gradient(circle at center, #003366 0%, #000814 100%); background-size:cover; display:flex; justify-content:center; align-items:center; height:100vh; overflow:hidden; font-family:'Faruma'; color:#FFD700; transition: background 0.5s; user-select:none; }
-                
                 #fs-btn { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(0,0,0,0.8); border: 2px solid #FFD700; color: #fff; padding: 20px 40px; font-size: 24px; cursor: pointer; z-index: 9999; border-radius: 15px; animation: pulse 2s infinite; }
                 @keyframes pulse { 0% { transform: translate(-50%, -50%) scale(1); } 50% { transform: translate(-50%, -50%) scale(1.1); } 100% { transform: translate(-50%, -50%) scale(1); } }
-
                 .welcome-card { text-align:center; animation: fadeIn 2s; background: rgba(0,0,0,0.7); padding: 40px; border-radius: 20px; border: 2px solid #FFD700; }
                 .welcome-card img { width: 150px; margin-bottom: 20px; }
                 .welcome-card h1 { font-size: 60px; margin: 0; text-shadow: 2px 2px 10px #000; }
-
-                /* FIXED CENTERING CONTAINER */
-                .stage-center {
-                    display: flex;
-                    flex-direction: column;
-                    justify-content: center;
-                    align-items: center;
-                    width: 100%;
-                    height: 100%;
-                }
-
-                .grid { 
-                    display:flex; flex-wrap: wrap; justify-content: center; align-content: center; 
-                    gap: 20px; max-width: 1200px; padding: 20px;
-                }
-                
-                .box { 
-                    width: 120px; height: 120px; 
-                    background: rgba(0, 30, 60, 0.8); border: 2px solid #FFD700; 
-                    display: flex; justify-content: center; align-items: center; 
-                    font-size: 50px; color: #FFD700; cursor: pointer; 
-                    border-radius: 15px; transition: 0.3s; 
-                    box-shadow: 0 5px 15px rgba(0,0,0,0.5); 
-                }
+                .stage-center { display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; height: 100%; }
+                .grid { display:flex; flex-wrap: wrap; justify-content: center; align-content: center; gap: 20px; max-width: 1200px; padding: 20px; }
+                .box { width: 120px; height: 120px; background: rgba(0, 30, 60, 0.8); border: 2px solid #FFD700; display: flex; justify-content: center; align-items: center; font-size: 50px; color: #FFD700; cursor: pointer; border-radius: 15px; transition: 0.3s; box-shadow: 0 5px 15px rgba(0,0,0,0.5); }
                 .box:hover { transform: scale(1.1); background: #FFD700; color: #000; }
                 .box.picked { background: #FFD700; color: #000; transform: scale(1.1); box-shadow: 0 0 40px #FFD700; }
                 .box.disabled { opacity: 0.1; pointer-events: none; }
-
                 .q-container { display: flex; gap: 30px; justify-content: center; width: 100%; align-items: center; flex-wrap: wrap; }
-                .royal-frame { 
-                    border: 10px double #FFD700; padding: 10px; background: #000; 
-                    box-shadow: 0 0 60px rgba(255, 215, 0, 0.4); border-radius: 10px; 
-                    animation: zoomIn 0.8s; max-width: 45%; max-height: 85vh;
-                }
+                .royal-frame { border: 10px double #FFD700; padding: 10px; background: #000; box-shadow: 0 0 60px rgba(255, 215, 0, 0.4); border-radius: 10px; animation: zoomIn 0.8s; max-width: 45%; max-height: 85vh; }
                 .royal-frame img { width: 100%; height: auto; display: block; max-height: 80vh; object-fit: contain; }
                 .profile { text-align:center; background:rgba(0,0,0,0.8); padding:50px; border-radius:30px; border:4px solid #FFD700; width:80%; }
                 @keyframes zoomIn { from { transform: scale(0.5); opacity: 0; } to { transform: scale(1); opacity: 1; } }
                 @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
             </style>
         `;
-        const FS_SCRIPT = `<script>
-            function goFull() { document.documentElement.requestFullscreen(); document.getElementById('fs-btn').style.display = 'none'; }
-            document.addEventListener('contextmenu', event => event.preventDefault());
-        <\/script>`;
+        const FS_SCRIPT = `<script>function goFull() { document.documentElement.requestFullscreen(); document.getElementById('fs-btn').style.display = 'none'; } document.addEventListener('contextmenu', event => event.preventDefault());<\/script>`;
 
         function openExternalWin(type) {
             const w = 800, h = 600;
@@ -567,18 +624,12 @@
             setTimeout(syncStyles, 500);
         }
 
-        // --- LOTTERY ---
         function startLottery() {
             if(!stuWin || stuWin.closed) { showToast("⚠️ Open Student Screen"); return; }
             if(!activeStudent) { showToast("⚠️ Select Student"); return; }
             currentPicks = [];
             const limit = document.getElementById('pickLimit').value;
-            
-            let html = `
-                <div class="stage-center">
-                    <h1 style="color:#fff; margin-bottom:30px; text-shadow:0 0 10px #000;">Select ${limit} Numbers</h1>
-                    <div class="grid">`;
-            
+            let html = `<div class="stage-center"><h1 style="color:#fff; margin-bottom:30px; text-shadow:0 0 10px #000;">Select ${limit} Numbers</h1><div class="grid">`;
             for(let i=1; i<=TOTAL_Q; i++) {
                 let cls = usedNumbers.includes(i) ? "box disabled" : "box";
                 html += `<div id="b${i}" class="${cls}" onclick="window.opener.handlePick(${i})">${i}</div>`;
@@ -617,12 +668,7 @@
         function sendToScreen(mode) {
             if(!activeStudent || !audWin) return;
             if(mode === 'PROFILE') {
-                audWin.document.body.innerHTML = `
-                    <div class="profile">
-                        <img src="${activeStudent.img}" style="width:200px; height:200px; border-radius:50%; border:3px solid #FFD700; object-fit:cover;">
-                        <h1>${activeStudent.name}</h1>
-                        <h2 style="color:#FFD700;">${activeStudent.reg} | ${activeStudent.cat}</h2>
-                    </div>`;
+                audWin.document.body.innerHTML = `<div class="profile"><img src="${activeStudent.img}" style="width:200px; height:200px; border-radius:50%; border:3px solid #FFD700; object-fit:cover;"><h1>${activeStudent.name}</h1><h2 style="color:#FFD700;">${activeStudent.reg} | ${activeStudent.cat}</h2></div>`;
             } else if (mode === 'SCORE') {
                 audWin.document.body.innerHTML = `<div class="profile"><h1>${activeStudent.name}</h1><h2 style="color:#aaa;">TOTAL SCORE</h2><div style="font-size:120px; color:#00e676; font-weight:bold;">95.0</div></div>`;
             }
