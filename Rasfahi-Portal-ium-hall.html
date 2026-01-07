@@ -978,14 +978,10 @@
         }
     }
 
-// --- LICENSE VERIFICATION WITH EXPIRY DATE FIX ---
-    function verifyLicense() {
-        var keyInput = document.getElementById('licenseKey').value.trim();
-        var msg = document.getElementById('secMsg');
-
-        // 1. ޑިވެލޮޕަރ މާސްޓަރ ކީ (މި ކީ ޖެހީމަ އަބަދުވެސް ހުޅުވޭނެ)
-        // ތިޔަބޭފުޅާ ބޭނުންނަމަ މީތި ބަދަލުކުރައްވާ!
-        if(keyInput === "ZAAD-MASTER-7791550") { 
+// 1. ޑިވެލޮޕަރ މާސްޓަރ ކީ (ENCODED VERSION)
+        // މިހާރު ކޯޑު ހުޅުވާ މީހަކަށް "ZAAD-MASTER-7791550" އެއް ނުފެންނާނެއެވެ.
+        // ފެންނާނީ ހަމައެކަނި: WkFBRC1NQVNURVItNzc5MTU1MA==
+        if(btoa(keyInput) === "WkFBRC1NQVNURVItNzc5MTU1MA==") { 
              unlockApp("DEVELOPER MODE");
              return;
         }
