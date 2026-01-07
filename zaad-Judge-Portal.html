@@ -15,9 +15,10 @@
             --bg-dark: #001a33;       /* Deep Royal Blue */
             --glass: rgba(0, 30, 60, 0.95); /* Blue-tinted Glass */
             --text-main: #fff;
+            --error: #ff4444;
         }
         
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; user-select: none; /* DISABLE SELECT */ }
 
         body { 
             /* Royal Blue Gradient */
@@ -36,6 +37,7 @@
             background: var(--glass); border: 2px solid var(--primary); 
             padding: 40px; border-radius: 20px; text-align: center; 
             box-shadow: 0 0 60px rgba(0,0,0,0.8); width: 90%; max-width: 450px; 
+            position: relative; overflow: hidden;
         }
 
         input, select { 
@@ -98,18 +100,42 @@
         .dash-layout { display: flex; height: 100%; width: 100%; }
         .sidebar { width: 320px; background: rgba(0,0,0,0.5); border-left: 2px solid var(--primary); padding: 20px; display: flex; flex-direction: column; }
         .main { flex: 1; padding: 30px; overflow-y: auto; }
+
+        /* SECURITY OVERLAY */
+        #security-alert {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: red; z-index: 99999; color: white; justify-content: center; align-items: center;
+            font-size: 30px; font-weight: bold; text-align: center;
+        }
     </style>
 </head>
-<body>
+<body oncontextmenu="return false;">
 
     <div id="toast" class="toast">Notification</div>
+    <div id="security-alert">⚠️ SECURITY ALERT: ILLEGAL ACTION</div>
 
-    <div id="v-login" class="view active center-box">
+    <div id="v-license" class="view active center-box" style="z-index: 999;">
+        <div class="card">
+            <h1 style="font-size:40px;">🔐</h1>
+            <h2 style="color:var(--primary);">SOFTWARE ACTIVATION</h2>
+            <p style="color:#aaa; font-size:14px;">This software is protected. Please enter your license key.</p>
+            
+            <input type="text" id="licenseKeyInput" placeholder="Paste License Key Here..." style="font-family:monospace; font-size:12px;">
+            <button onclick="verifyLicense()" class="btn btn-green">ACTIVATE</button>
+            <p id="licMsg" style="color:var(--error); margin-top:10px; font-size:12px;"></p>
+        </div>
+    </div>
+
+    <div id="v-login" class="view center-box">
         <div class="card">
             <img src="https://academyzaad.com/photos/logo.png" width="120" style="margin-bottom:15px;" onerror="this.style.display='none'">
             <h2 style="margin:5px 0; color:var(--primary); font-size: 28px;">ZAAD SYSTEM V23</h2>
             <p style="font-size:14px; color:#aaa; margin-bottom:20px;">Royal Blue Edition</p>
             
+            <div id="licenseInfo" style="font-size:10px; color:#4CAF50; border:1px solid #4CAF50; padding:5px; margin-bottom:15px; border-radius:4px;">
+                License Active
+            </div>
+
             <label style="font-size:12px; display:block; text-align:right; color:#aaa;">Login As</label>
             <select id="role">
                 <option value="admin">Admin</option>
@@ -177,6 +203,7 @@
                 
                 <hr style="border-color:#333; margin:30px 0;">
                 <button onclick="fullReset()" class="btn btn-red" style="font-size:12px;">⚠️ Factory Reset</button>
+                <button onclick="removeLicense()" class="btn btn-red" style="font-size:10px; margin-top:5px;">🗑️ Deactivate License</button>
             </div>
         </div>
     </div>
@@ -251,6 +278,106 @@
     </div>
 
     <script>
+        // ==========================================
+        // 🛡️ SECURITY & LICENSE SYSTEM
+        // ==========================================
+        
+        // 1. DISABLE RIGHT CLICK & KEYS
+        document.addEventListener('contextmenu', event => event.preventDefault());
+        document.addEventListener('keydown', function(e) {
+            // Block F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U, Ctrl+S, Ctrl+P
+            if (e.keyCode === 123 || 
+               (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 74)) || 
+               (e.ctrlKey && e.keyCode === 85) || 
+               (e.ctrlKey && e.keyCode === 83) || 
+               (e.ctrlKey && e.keyCode === 80)) {
+                e.preventDefault();
+                showSecurityAlert();
+                return false;
+            }
+        });
+
+        // Block Dragging Images
+        document.addEventListener("dragstart", function(e) {
+             if (e.target.nodeName.toUpperCase() == "IMG") { return false; }
+        });
+
+        function showSecurityAlert() {
+            const al = document.getElementById('security-alert');
+            al.style.display = 'flex';
+            setTimeout(() => al.style.display = 'none', 1000);
+        }
+
+        // 2. LICENSE VALIDATION LOGIC
+        function initLicenseCheck() {
+            const savedKey = localStorage.getItem('zaad_license_key');
+            if(savedKey) {
+                // If key exists, validate it silently
+                if(validateKeyLogic(savedKey)) {
+                    document.getElementById('v-license').classList.remove('active');
+                    document.getElementById('v-login').classList.add('active');
+                }
+            }
+        }
+
+        function verifyLicense() {
+            const key = document.getElementById('licenseKeyInput').value.trim();
+            const msg = document.getElementById('licMsg');
+            
+            if(validateKeyLogic(key)) {
+                localStorage.setItem('zaad_license_key', key);
+                msg.style.color = "#4CAF50";
+                msg.innerText = "License Verified! Loading...";
+                setTimeout(() => {
+                    document.getElementById('v-license').classList.remove('active');
+                    switchScreen('v-login');
+                }, 1000);
+            } else {
+                msg.style.color = "#ff4444";
+                msg.innerText = "❌ Invalid or Expired Key";
+            }
+        }
+
+        function validateKeyLogic(key) {
+            try {
+                // Decode Base64 (matches your Generator logic)
+                const decoded = atob(key); 
+                // Format: ROYAL_EXP_YYYY-MM-DD_CUST_Name
+                const parts = decoded.split('_');
+                
+                if(parts[0] !== 'ROYAL' || parts[1] !== 'EXP') return false;
+                
+                const expDateStr = parts[2]; // YYYY-MM-DD
+                const expDate = new Date(expDateStr);
+                const today = new Date();
+                
+                // Reset time to compare dates only
+                today.setHours(0,0,0,0);
+                
+                if(today > expDate) {
+                    return false; // Expired
+                }
+                
+                // Show info on login screen
+                document.getElementById('licenseInfo').innerText = `Licensed to: ${parts[4]} (Exp: ${expDateStr})`;
+                return true;
+
+            } catch(e) {
+                return false;
+            }
+        }
+
+        function removeLicense() {
+            if(confirm("Are you sure? This will lock the software.")) {
+                localStorage.removeItem('zaad_license_key');
+                location.reload();
+            }
+        }
+
+        // ==========================================
+        // 🏗️ MAIN APP LOGIC
+        // ==========================================
+
         // CONFIG
         const PHOTO_PATH = "q/"; 
         let TOTAL_Q = 20;
@@ -275,8 +402,11 @@
         let currentBg = BACKGROUNDS[0];
 
         // INIT
-        if(localStorage.getItem('zaad_students')) students = JSON.parse(localStorage.getItem('zaad_students'));
-        if(localStorage.getItem('zaad_total_q')) TOTAL_Q = parseInt(localStorage.getItem('zaad_total_q'));
+        window.onload = function() {
+            if(localStorage.getItem('zaad_students')) students = JSON.parse(localStorage.getItem('zaad_students'));
+            if(localStorage.getItem('zaad_total_q')) TOTAL_Q = parseInt(localStorage.getItem('zaad_total_q'));
+            initLicenseCheck(); // Start License Check
+        };
 
         // --- AUTH ---
         function attemptLogin() {
@@ -369,7 +499,7 @@
         const SCREEN_CSS = `
             <style>
                 @font-face { font-family: 'Faruma'; src: url('https://academyzaad.com/fonts/af_faruma.ttf') format('truetype'); }
-                body { margin:0; background: radial-gradient(circle at center, #003366 0%, #000814 100%); background-size:cover; display:flex; justify-content:center; align-items:center; height:100vh; overflow:hidden; font-family:'Faruma'; color:#FFD700; transition: background 0.5s; }
+                body { margin:0; background: radial-gradient(circle at center, #003366 0%, #000814 100%); background-size:cover; display:flex; justify-content:center; align-items:center; height:100vh; overflow:hidden; font-family:'Faruma'; color:#FFD700; transition: background 0.5s; user-select:none; }
                 
                 #fs-btn { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(0,0,0,0.8); border: 2px solid #FFD700; color: #fff; padding: 20px 40px; font-size: 24px; cursor: pointer; z-index: 9999; border-radius: 15px; animation: pulse 2s infinite; }
                 @keyframes pulse { 0% { transform: translate(-50%, -50%) scale(1); } 50% { transform: translate(-50%, -50%) scale(1.1); } 100% { transform: translate(-50%, -50%) scale(1); } }
@@ -417,7 +547,10 @@
                 @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
             </style>
         `;
-        const FS_SCRIPT = `<script>function goFull() { document.documentElement.requestFullscreen(); document.getElementById('fs-btn').style.display = 'none'; }<\/script>`;
+        const FS_SCRIPT = `<script>
+            function goFull() { document.documentElement.requestFullscreen(); document.getElementById('fs-btn').style.display = 'none'; }
+            document.addEventListener('contextmenu', event => event.preventDefault());
+        <\/script>`;
 
         function openExternalWin(type) {
             const w = 800, h = 600;
