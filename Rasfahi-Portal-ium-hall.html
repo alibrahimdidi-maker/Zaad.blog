@@ -982,11 +982,6 @@
     function verifyLicense() {
         var keyInput = document.getElementById('licenseKey').value.trim();
         var msg = document.getElementById('secMsg');
-
-        // 1. ޑިވެލޮޕަރ މާސްޓަރ ކީ (SECURE HASH CHECK)
-        // "-926938927" އަކީ "ZAAD-MASTER-7791550" ގެ ހޭޝް ނަންބަރެވެ.
-        // މީހަކަށް ކޯޑު ހުޅުވިޔަސް އަސްލު ޕާސްވޯޑެއް ނުފެންނާނެއެވެ.
-        
         var inputHash = 0;
         for (var i = 0; i < keyInput.length; i++) {
             var char = keyInput.charCodeAt(i);
