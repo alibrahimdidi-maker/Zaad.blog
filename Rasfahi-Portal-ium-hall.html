@@ -1,3 +1,7 @@
+މި ކޯޑުގެ އެޑްމިން އިން ފައިލް ހުޅުވުމަށް ޖަހާ ކޯޑަކީ މާސްޓަރ ކީ މިއީ ހަމަ އެކަނި މަޢުލޫމާތަށްޓަކައި މި ކީގެ ތިރިން އިންނަ ބަޔަކީ ކޯޑާ ގުޅޭ ބައި  ZAAD-MASTER-7791550
+އެވެ.
+މިއީ ލައިސަންސް ކީ ރަނގަޅު ކުރުމަށްފަހު 7 ޖެނުއަރީ ދުވަހު މެންދުރު 12.56 ގައި ހެދި އާ ކޯޑެވެ
+
 <!DOCTYPE html>
 <html lang="dv" dir="rtl">
 <head>
@@ -978,53 +982,50 @@
         }
     }
 
-        // --- FINAL SECURE LICENSE LOGIC (HASHED MASTER KEY & EXPIRY CHECK) ---
+// --- LICENSE VERIFICATION WITH EXPIRY DATE FIX ---
     function verifyLicense() {
         var keyInput = document.getElementById('licenseKey').value.trim();
         var msg = document.getElementById('secMsg');
-        var inputHash = 0;
-        for (var i = 0; i < keyInput.length; i++) {
-            var char = keyInput.charCodeAt(i);
-            inputHash = ((inputHash << 5) - inputHash) + char;
-            inputHash = inputHash & inputHash; 
-        }
 
-        if(inputHash === -926938927) { 
+        // 1. ޑިވެލޮޕަރ މާސްޓަރ ކީ (މި ކީ ޖެހީމަ އަބަދުވެސް ހުޅުވޭނެ)
+        // ތިޔަބޭފުޅާ ބޭނުންނަމަ މީތި ބަދަލުކުރައްވާ!
+        if(keyInput === "ZAAD-MASTER-7791550") { 
              unlockApp("DEVELOPER MODE");
              return;
         }
 
         try {
-            // 2. ކަސްޓަމަރުންގެ ކީ ޗެކްކުރުން (DATE CHECK)
+            // 2. ކީ ޑިކޯޑް ކުރުން (Base64)
+            // ކީ ހަދަންވާނީ: "ROYAL_EXP_" + "YYYY-MM-DD" މި ފޯމެޓަށް
             var decodedString = atob(keyInput);
 
-            // ކީ ގެ ކުރީގައި "ROYAL_EXP_" އިންނަން ޖެހޭނެ
+            // 3. ކީ ގެ ކުރީގައި އިންނަންޖެހޭ ބަސް ޗެކްކުރުން
             if(!decodedString.startsWith("ROYAL_EXP_")) {
-                msg.innerText = "❌ Invalid License Key!";
+                msg.innerText = "❌ Invalid License Key! (Wrong Format)";
                 msg.style.color = "red";
                 return;
             }
 
-            // ތާރީޚު ވަކިކުރުން
-            var dateString = decodedString.split("ROYAL_EXP_")[1];
+            // 4. ތާރީޚު ވަކިކުރުން
+            var dateString = decodedString.split("ROYAL_EXP_")[1]; // "YYYY-MM-DD" ނަގާނީ
             var expDate = new Date(dateString);
             var today = new Date();
-            today.setHours(0,0,0,0); 
+            today.setHours(0,0,0,0); // ގަޑި އުނިކޮށް ހަމައެކަނި ތާރީޚު ބެލުމަށް
 
-            // ތާރީޚު ރަނގަޅުތޯ ބެލުން
+            // 5. ތާރީޚު ޗެކްކުރުން (EXPIRY CHECK LOGIC)
             if(isNaN(expDate.getTime())) {
-                msg.innerText = "❌ Corrupted Key!";
+                msg.innerText = "❌ Corrupted Date in Key!";
                 return;
             }
 
-            // މުއްދަތު ހަމަވެއްޖެނަމަ
+            // މިއަދު > މުއްދަތު ހަމަވާ ތާރީޚު (އެހެންވެއްޖެނަމަ ބްލޮކް ކުރޭ)
             if(today > expDate) {
                  msg.innerText = "⚠️ LICENSE EXPIRED! Valid until: " + dateString;
                  msg.style.color = "#ff5252";
-                 return; 
+                 return; // ހުއްޓުވާލާނީ މިހިސާބުން (STOP)
             }
 
-            // ހުރިހާ ކަމެއް ރަނގަޅު (Unlock)
+            // 6. ހުރިހާ ކަމެއް ރަނގަޅުނަމަ ހުޅުވާލަދީ
             unlockApp(dateString);
 
         } catch(e) {
@@ -1037,14 +1038,7 @@
         document.getElementById('mainApp').style.display = 'flex';
         document.getElementById('licenseStatus').innerText = "✅ PLATINUM EDITION | ACTIVE (Exp: " + dateInfo + ")";
         
-        // ޓައިޓްލްތައް އަޕްޑޭޓް ކުރުން
-        setTimeout(() => {
-             if(typeof updateJalsaText === "function") updateJalsaText();
-        }, 1000);
-    }
-    
-    // Enter ފިތުމުން ލޮގިންވުން
-    document.getElementById('licenseKey').addEventListener("keyup", e => { if (e.key === "Enter") verifyLicense(); });
+        // ފުރަތަމަ ފަހަރަށް ލޯޑުވާއިރު ޓައިޓްލްތައް ރަނގަޅަށް ދެއްކުމަށް
         setTimeout(() => {
              if(typeof updateJalsaText === "function") updateJalsaText();
         }, 1000);
