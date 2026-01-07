@@ -978,13 +978,67 @@
         }
     }
 
-    // --- LICENSE LOGIC ---
+// --- LICENSE VERIFICATION WITH EXPIRY DATE FIX ---
     function verifyLicense() {
+        var keyInput = document.getElementById('licenseKey').value.trim();
+        var msg = document.getElementById('secMsg');
+
+        // 1. ޑިވެލޮޕަރ މާސްޓަރ ކީ (މި ކީ ޖެހީމަ އަބަދުވެސް ހުޅުވޭނެ)
+        // ތިޔަބޭފުޅާ ބޭނުންނަމަ މީތި ބަދަލުކުރައްވާ!
+        if(keyInput === "ZAAD-MASTER-7791550") { 
+             unlockApp("DEVELOPER MODE");
+             return;
+        }
+
+        try {
+            // 2. ކީ ޑިކޯޑް ކުރުން (Base64)
+            // ކީ ހަދަންވާނީ: "ROYAL_EXP_" + "YYYY-MM-DD" މި ފޯމެޓަށް
+            var decodedString = atob(keyInput);
+
+            // 3. ކީ ގެ ކުރީގައި އިންނަންޖެހޭ ބަސް ޗެކްކުރުން
+            if(!decodedString.startsWith("ROYAL_EXP_")) {
+                msg.innerText = "❌ Invalid License Key! (Wrong Format)";
+                msg.style.color = "red";
+                return;
+            }
+
+            // 4. ތާރީޚު ވަކިކުރުން
+            var dateString = decodedString.split("ROYAL_EXP_")[1]; // "YYYY-MM-DD" ނަގާނީ
+            var expDate = new Date(dateString);
+            var today = new Date();
+            today.setHours(0,0,0,0); // ގަޑި އުނިކޮށް ހަމައެކަނި ތާރީޚު ބެލުމަށް
+
+            // 5. ތާރީޚު ޗެކްކުރުން (EXPIRY CHECK LOGIC)
+            if(isNaN(expDate.getTime())) {
+                msg.innerText = "❌ Corrupted Date in Key!";
+                return;
+            }
+
+            // މިއަދު > މުއްދަތު ހަމަވާ ތާރީޚު (އެހެންވެއްޖެނަމަ ބްލޮކް ކުރޭ)
+            if(today > expDate) {
+                 msg.innerText = "⚠️ LICENSE EXPIRED! Valid until: " + dateString;
+                 msg.style.color = "#ff5252";
+                 return; // ހުއްޓުވާލާނީ މިހިސާބުން (STOP)
+            }
+
+            // 6. ހުރިހާ ކަމެއް ރަނގަޅުނަމަ ހުޅުވާލަދީ
+            unlockApp(dateString);
+
+        } catch(e) {
+            msg.innerText = "❌ Invalid Key Format";
+        }
+    }
+
+    function unlockApp(dateInfo) {
         document.getElementById('securityOverlay').style.display = 'none';
         document.getElementById('mainApp').style.display = 'flex';
-        document.getElementById('licenseStatus').innerText = "✅ PLATINUM EDITION | V33.0 ACTIVE";
+        document.getElementById('licenseStatus').innerText = "✅ PLATINUM EDITION | ACTIVE (Exp: " + dateInfo + ")";
+        
+        // ފުރަތަމަ ފަހަރަށް ލޯޑުވާއިރު ޓައިޓްލްތައް ރަނގަޅަށް ދެއްކުމަށް
+        setTimeout(() => {
+             if(typeof updateJalsaText === "function") updateJalsaText();
+        }, 1000);
     }
-    document.getElementById('licenseKey').addEventListener("keyup", e => { if (e.key === "Enter") verifyLicense(); });
 
     let tvWindow = null;
     let students = [];
