@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Royal Key Generator (Corrected)</title>
+    <style>
+        body { font-family: sans-serif; padding: 50px; text-align: center; background: #222; color: #fff; }
+        input { padding: 15px; font-size: 20px; margin: 10px; border-radius: 5px; border: none; }
+        button { padding: 15px 30px; font-size: 20px; background: #00e676; color: black; font-weight: bold; cursor: pointer; border: none; border-radius: 5px; }
+        #output { margin-top: 30px; font-family: monospace; font-size: 28px; color: #ffff00; word-break: break-all; background: #333; padding: 20px; border-radius: 10px; }
+    </style>
+</head>
+<body>
+    <h1>🔑 Royal License Key Generator</h1>
+    <p>Select the date when the license should EXPIRE:</p>
+    
+    <label>Expiry Date:</label><br>
+    <input type="date" id="dateInput"><br>
+    <button onclick="genKey()">Generate Secure Key</button>
+    
+    <div id="output">...</div>
+
+    <script>
+        function genKey() {
+            var date = document.getElementById('dateInput').value;
+            if(!date) { alert("Please pick an expiry date!"); return; }
+            
+            // This format MUST match the main software code
+            var rawString = "ROYAL_EXP_" + date; 
+            
+            // Encode to Base64
+            var encodedKey = btoa(rawString); 
+            
+            document.getElementById('output').innerText = encodedKey;
+        }
+    </script>
+</body>
+</html>
