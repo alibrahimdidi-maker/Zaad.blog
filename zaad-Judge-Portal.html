@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Zaad Royal V23 (Multi-Lang)</title>
+    <title>Zaad Royal V23 (Ultimate Edition)</title>
     <style>
         /* --- 1. FONTS & THEME --- */
         @font-face { font-family: 'Faruma'; src: url('https://academyzaad.com/fonts/af_faruma.ttf') format('truetype'); }
@@ -18,6 +18,7 @@
             --error: #ff4444;
         }
         
+        /* DISABLE SELECTION & OUTLINES FOR SECURITY */
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; user-select: none; }
 
         body { 
@@ -50,6 +51,13 @@
             border: 1px solid #444; border-bottom: 2px solid var(--primary); 
             color: #fff; text-align: center; margin-top: 10px; border-radius: 5px; 
             font-size: 16px; font-family: inherit;
+        }
+
+        /* Force Password Input to be LTR (Left-to-Right) always */
+        input[type="password"] {
+            direction: ltr !important;
+            font-family: 'Roboto', sans-serif !important;
+            letter-spacing: 2px;
         }
 
         .btn { 
@@ -114,8 +122,9 @@
         /* SECURITY OVERLAY */
         #security-alert {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: red; z-index: 99999; color: white; justify-content: center; align-items: center;
+            background: #b30000; z-index: 99999; color: white; justify-content: center; align-items: center;
             font-size: 30px; font-weight: bold; text-align: center;
+            font-family: sans-serif;
         }
     </style>
 </head>
@@ -130,7 +139,7 @@
             <h2 style="color:var(--primary);">ACTIVATION REQUIRED</h2>
             <p style="color:#aaa; font-size:14px;">This software is protected.</p>
             
-            <input type="text" id="licenseKeyInput" placeholder="Paste License Key Here..." style="font-family:monospace; font-size:12px;">
+            <input type="text" id="licenseKeyInput" placeholder="Paste License Key Here..." style="font-family:monospace; font-size:12px; direction: ltr;">
             <button onclick="verifyLicense()" class="btn btn-green">ACTIVATE</button>
             <p id="licMsg" style="color:var(--error); margin-top:10px; font-size:12px;"></p>
         </div>
@@ -157,6 +166,7 @@
             </select>
             
             <label id="lbl_pass" style="font-size:12px; display:block; text-align:right; color:#aaa; margin-top:15px;">Password</label>
+            
             <input type="password" id="pass" placeholder="••••••••" autocapitalize="off">
             
             <button id="btn_login" onclick="attemptLogin()" class="btn">LOGIN</button>
@@ -215,7 +225,7 @@
                 <h3 id="lbl_lottery">🎲 LOTTERY</h3>
                 <div style="display:flex; align-items:center; gap:10px; margin-bottom:15px;">
                     <label id="lbl_limit" style="margin:0;">Pick Limit:</label>
-                    <input type="number" id="pickLimit" value="2" style="width:70px; margin:0;">
+                    <input type="number" id="pickLimit" value="2" style="width:70px; margin:0; direction: ltr;">
                 </div>
                 <button id="btn_start_draw" onclick="startLottery()" class="btn btn-blue" style="font-size: 18px; padding: 20px;">START DRAW</button>
                 
@@ -224,6 +234,7 @@
                 
                 <hr style="border-color:#333; margin:30px 0;">
                 <button id="btn_reset" onclick="fullReset()" class="btn btn-red" style="font-size:12px;">⚠️ Factory Reset</button>
+                <button onclick="removeLicense()" class="btn btn-red" style="font-size:10px; margin-top:5px; width:auto; padding:5px;">🗑️ Lock System</button>
             </div>
         </div>
     </div>
@@ -234,7 +245,7 @@
             
             <div style="background:rgba(0,0,0,0.3); padding:20px; border-radius:10px; margin-bottom:20px;">
                 <h4>Import from Google Sheets</h4>
-                <input type="text" id="scriptUrl" placeholder="Paste Google Script URL here...">
+                <input type="text" id="scriptUrl" placeholder="Paste Google Script URL here..." style="direction:ltr;">
                 <button onclick="importFromSheet()" class="btn btn-blue">📥 Import Now</button>
             </div>
 
@@ -249,7 +260,7 @@
 
             <div style="background:rgba(0,0,0,0.3); padding:20px; border-radius:10px;">
                 <h4>Total Questions (in q/ folder)</h4>
-                <input type="number" id="totalQInput" value="20" style="width:100px;">
+                <input type="number" id="totalQInput" value="20" style="width:100px; direction:ltr;">
                 <button onclick="saveQSettings()" class="btn">💾 Save Limit</button>
             </div>
 
@@ -392,7 +403,7 @@
             const html = document.documentElement;
             html.lang = lang;
             html.dir = (lang === 'en') ? 'ltr' : 'rtl';
-            document.body.lang = lang; // Triggers Font CSS
+            document.body.lang = lang; 
 
             // 2. Update UI Text
             for (const [key, value] of Object.entries(t)) {
@@ -412,19 +423,23 @@
         // 🛡️ SECURITY & LICENSE SYSTEM
         // ==========================================
         
+        // Disable Context Menu
         document.addEventListener('contextmenu', event => event.preventDefault());
+
+        // Block Restricted Keys
         document.addEventListener('keydown', function(e) {
-            if (e.keyCode === 123 || 
-               (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 74)) || 
-               (e.ctrlKey && e.keyCode === 85) || 
-               (e.ctrlKey && e.keyCode === 83) || 
-               (e.ctrlKey && e.keyCode === 80)) {
+            if (e.keyCode === 123 || // F12
+               (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 74)) || // Ctrl+Shift+I/J
+               (e.ctrlKey && e.keyCode === 85) || // Ctrl+U
+               (e.ctrlKey && e.keyCode === 83) || // Ctrl+S
+               (e.ctrlKey && e.keyCode === 80)) { // Ctrl+P
                 e.preventDefault();
                 showSecurityAlert();
                 return false;
             }
         });
 
+        // Block Image Dragging
         document.addEventListener("dragstart", function(e) {
              if (e.target.nodeName.toUpperCase() == "IMG") { return false; }
         });
@@ -435,6 +450,7 @@
             setTimeout(() => al.style.display = 'none', 1000);
         }
 
+        // License Check on Load
         function initLicenseCheck() {
             const savedKey = localStorage.getItem('zaad_license_key');
             if(savedKey) {
@@ -445,6 +461,7 @@
             }
         }
 
+        // Validate License Button
         function verifyLicense() {
             const key = document.getElementById('licenseKeyInput').value.trim();
             const msg = document.getElementById('licMsg');
@@ -462,19 +479,31 @@
             }
         }
 
+        // Logic to validate Base64 Key
         function validateKeyLogic(key) {
             try {
                 const decoded = atob(key); 
                 const parts = decoded.split('_');
+                // Key Structure: ROYAL_EXP_YYYY-MM-DD_CUST_Name
                 if(parts[0] !== 'ROYAL' || parts[1] !== 'EXP') return false;
+                
                 const expDateStr = parts[2]; 
                 const expDate = new Date(expDateStr);
                 const today = new Date();
                 today.setHours(0,0,0,0);
+                
                 if(today > expDate) return false; 
+                
                 document.getElementById('licenseInfo').innerText = `Licensed to: ${parts[4]} (Exp: ${expDateStr})`;
                 return true;
             } catch(e) { return false; }
+        }
+
+        function removeLicense() {
+            if(confirm("Lock System? You will need Key to enter again.")) {
+                localStorage.removeItem('zaad_license_key');
+                location.reload();
+            }
         }
 
         // ==========================================
@@ -489,11 +518,13 @@
         let currentPicks = [];
         let stuWin = null, audWin = null;
 
+        // Styles
         const BORDERS = ["10px double #FFD700", "8px solid #FFD700", "15px ridge #c0c0c0", "12px groove #B8860B", "10px inset #fff", "5px dashed #FFD700", "20px solid transparent"];
         const BACKGROUNDS = ["radial-gradient(circle, #003366, #000814)", "url('https://img.freepik.com/free-vector/islamic-gradient-background-design_23-2148906373.jpg')", "#000000", "linear-gradient(135deg, #1a2980, #26d0ce)"];
         let currentBorder = BORDERS[0];
         let currentBg = BACKGROUNDS[0];
 
+        // On Load
         window.onload = function() {
             if(localStorage.getItem('zaad_students')) students = JSON.parse(localStorage.getItem('zaad_students'));
             if(localStorage.getItem('zaad_total_q')) TOTAL_Q = parseInt(localStorage.getItem('zaad_total_q'));
@@ -501,12 +532,15 @@
             initLicenseCheck(); 
         };
 
+        // Login Logic
         function attemptLogin() {
             const pass = document.getElementById('pass').value.trim().toLowerCase();
+            // Single password for all languages
             if (pass === 'admin123') { switchScreen('v-admin'); renderList(); }
             else if (pass === 'judge123') { switchScreen('v-judge'); renderList(); }
             else showToast("❌ Incorrect Password");
         }
+
         function switchScreen(id) {
             document.querySelectorAll('.view').forEach(v => { v.style.display='none'; v.classList.remove('active'); });
             const t = document.getElementById(id); t.style.display='flex'; setTimeout(()=>t.classList.add('active'),10);
@@ -514,6 +548,7 @@
         function logout() { document.getElementById('pass').value=""; switchScreen('v-login'); }
         function showToast(msg) { const t=document.getElementById('toast'); t.innerText=msg; t.style.display="block"; setTimeout(()=>t.style.display="none",3000); }
 
+        // Data & Settings
         function openDataManager() { document.getElementById('totalQInput').value = TOTAL_Q; document.getElementById('dataModal').style.display = 'flex'; }
         function saveQSettings() {
             const val = document.getElementById('totalQInput').value;
@@ -541,12 +576,14 @@
             });
         }
 
+        // List Rendering
         function renderList(filter="") {
             const html = students.filter(s => s.name.toLowerCase().includes(filter.toLowerCase()) || s.reg.includes(filter))
                 .map(s => `<div class="student-item" onclick="selectStudent('${s.reg}')"><span><b>${s.reg}</b> ${s.name}</span></div>`).join('');
             document.getElementById('stuList').innerHTML = html;
             document.getElementById('judgeStuList').innerHTML = html;
         }
+
         function selectStudent(reg) {
             activeStudent = students.find(s => s.reg === reg);
             document.getElementById('activeName').innerText = activeStudent.name;
@@ -558,12 +595,13 @@
             document.getElementById('jPhoto').src = activeStudent.img || "https://via.placeholder.com/150";
             document.getElementById('jInfo').innerText = activeStudent.reg;
             document.getElementById('scoringGrid').innerHTML = `
-                <input type="number" placeholder="Tajweed (40)">
-                <input type="number" placeholder="Fasaahath (30)">
-                <input type="number" placeholder="Voice (20)">
-                <input type="number" placeholder="Hifz (10)">`;
+                <input type="number" placeholder="Tajweed (40)" style="direction:ltr;">
+                <input type="number" placeholder="Fasaahath (30)" style="direction:ltr;">
+                <input type="number" placeholder="Voice (20)" style="direction:ltr;">
+                <input type="number" placeholder="Hifz (10)" style="direction:ltr;">`;
         }
 
+        // Style Changer
         function changeStyle(type) {
             if(type === 'border') {
                 const idx = BORDERS.indexOf(currentBorder);
@@ -584,6 +622,7 @@
             if(audWin && !audWin.closed) audWin.eval(js);
         }
 
+        // Secondary Screens
         const SCREEN_CSS = `
             <style>
                 @font-face { font-family: 'Faruma'; src: url('https://academyzaad.com/fonts/af_faruma.ttf') format('truetype'); }
@@ -624,6 +663,7 @@
             setTimeout(syncStyles, 500);
         }
 
+        // Lottery System
         function startLottery() {
             if(!stuWin || stuWin.closed) { showToast("⚠️ Open Student Screen"); return; }
             if(!activeStudent) { showToast("⚠️ Select Student"); return; }
@@ -665,6 +705,7 @@
             syncStyles();
         }
 
+        // Actions
         function sendToScreen(mode) {
             if(!activeStudent || !audWin) return;
             if(mode === 'PROFILE') {
