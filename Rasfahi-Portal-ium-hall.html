@@ -978,12 +978,32 @@
         }
     }
 
-    // --- LICENSE LOGIC ---
-    function verifyLicense() {
-        document.getElementById('securityOverlay').style.display = 'none';
+    // --- LICENSE LOGIC (FIXED) ---
+function verifyLicense() {
+    var keyInput = document.getElementById('licenseKey').value;
+    var msg = document.getElementById('secMsg');
+    var overlay = document.getElementById('securityOverlay');
+
+    // މިތަނަށް ބޭނުންވާ ޕާސްވޯޑެއް ޖައްސަވާ (މިސާލަކަށް: "1234")
+    if (keyInput === "1234") { 
+        // ޕާސްވޯޑް ރަނގަޅުނަމަ:
+        overlay.style.transition = "opacity 0.5s";
+        overlay.style.opacity = "0";
+        setTimeout(() => { overlay.style.display = 'none'; }, 500);
+
         document.getElementById('mainApp').style.display = 'flex';
         document.getElementById('licenseStatus').innerText = "✅ PLATINUM EDITION | V33.0 ACTIVE";
+    } else {
+        // ޕާސްވޯޑް ނުބައިނަމަ:
+        msg.innerText = "❌ ޕާސްވޯޑް ނުބައި! (Try: 1234)";
+        document.getElementById('licenseKey').style.borderColor = "red";
     }
+}
+
+// Enter ފިއްތާލުމުން ވެސް މަސައްކަތް ކުރާގޮތަށް ހެދުން
+document.getElementById('licenseKey').addEventListener("keyup", function(e) { 
+    if (e.key === "Enter") verifyLicense(); 
+});
     document.getElementById('licenseKey').addEventListener("keyup", e => { if (e.key === "Enter") verifyLicense(); });
 
     let tvWindow = null;
