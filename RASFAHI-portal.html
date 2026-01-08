@@ -1186,6 +1186,7 @@
     }
 
    // --- FINAL LOCK FUNCTION (LOCKS SETTINGS & EVERYTHING ELSE) ---
+// --- UPDATED LOCK FUNCTION (KEEPS SCENE SWITCHER & VIDEO CONTROLS ACTIVE) ---
 function toggleLock() {
     isLocked = !isLocked;
     const btn = document.getElementById('lockBtn');
@@ -1199,14 +1200,16 @@ function toggleLock() {
         btn.classList.add('active');
 
         allInputs.forEach(el => {
-            // ލޮކް ނުކޮށް ބަހައްޓަންވީ ހަމައެކަނި މި ތަކެތި:
+            // ލޮކް ނުކޮށް (Active) ބަހައްޓަންވީ ބައިތައް:
             // 1. .video-panel (ވީޑިއޯ ކޮންޓްރޯލްތައް)
             // 2. .controls (މެއިން ކޮންޓްރޯލްސް - Live, Next, Prev)
-            // 3. #lockBtn (ލޮކް ފިތް)
-            // 4. #cpFsBtn (ފުލް ސްކްރީން ފިތް)
+            // 3. #listPanel (ސީން ސްވިޗަރ - Title, Student, Top 5)
+            // 4. #lockBtn (ލޮކް ފިތް)
+            // 5. #cpFsBtn (ފުލް ސްކްރީން ފިތް)
             
             if (el.closest('.video-panel') || 
                 el.closest('.controls') || 
+                el.closest('#listPanel') || 
                 el.id === 'lockBtn' || 
                 el.id === 'cpFsBtn') {
                 
@@ -1214,6 +1217,7 @@ function toggleLock() {
                 el.disabled = false;
                 el.style.opacity = '1';
                 el.style.filter = 'none';
+                el.style.pointerEvents = 'auto';
                 
             } else {
                 // ދެން ހުރި ހުރިހާ އެއްޗެއް ލޮކް ކުރޭ 
@@ -1222,7 +1226,6 @@ function toggleLock() {
                 
                 // ލޮކް ވެފައި ހުރިކަން އެންގުމަށް ކުލަ ފަނޑުކޮށްލާ
                 el.style.opacity = '0.3'; 
-                // el.style.filter = 'grayscale(100%)'; // ބޭނުންނަމަ ކުލަވެސް ނިއްވާލެވިދާނެ
             }
         });
         
@@ -1236,6 +1239,7 @@ function toggleLock() {
             el.disabled = false;
             el.style.opacity = '1';
             el.style.filter = 'none';
+            el.style.pointerEvents = 'auto';
         });
     }
 }
