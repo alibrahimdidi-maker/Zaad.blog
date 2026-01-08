@@ -1175,53 +1175,63 @@
         tvWindow.document.getElementById('mainLogosContainer').style.opacity = designState.logoVisible ? '1' : '0';
     }
 
-    // --- LOCK FUNCTION (ULTIMATE FIX - DISABLES ALL INPUTS) ---
-    function toggleLock() {
-        isLocked = !isLocked;
-        const btn = document.getElementById('lockBtn');
+    // --- ULTIMATE LOCK FUNCTION (White-list Mode) ---
+function toggleLock() {
+    isLocked = !isLocked;
+    const btn = document.getElementById('lockBtn');
+    
+    // 1. ޕޭޖުގައިވާ ހުރިހާ އިންޕުޓްތަކާއި ބަޓަންތައް ނެގުން
+    const allInputs = document.querySelectorAll('input, select, textarea, button');
+
+    if (isLocked) {
+        // --- ލޮކް މޯޑް ޖެއްސުން ---
+        btn.innerHTML = "🔒 SYSTEM LOCKED (LIVE MODE)";
+        btn.classList.add('active');
+
+        allInputs.forEach(el => {
+            // 2. ލޮކް ނުކުރަންވީ ބައިތައް (EXCEPTIONS)
+            // - .video-panel: މުއައްސަސާ ވީޑިއޯ + ޓޮޕް 5 ކޮންޓްރޯލްސް
+            // - .controls: މެއިން ނެވިގޭޝަން (Live, Next, Prev, Clear)
+            // - #lockBtn: ލޮކް ފިތް
+            // - .launch-btn: ޓީވީ ހުޅުވާ ފިތް
+            // - #cpFsBtn: ފުލްސްކްރީން ބަޓަން
+            
+            if (el.closest('.video-panel') || 
+                el.closest('.controls') || 
+                el.id === 'lockBtn' || 
+                el.id === 'cpFsBtn' ||
+                el.classList.contains('launch-btn')) {
+                
+                el.disabled = false; // މިއީ ހުޅުވާފައި ބަހައްޓާ
+                el.style.opacity = '1';
+                el.style.pointerEvents = 'auto';
+                
+            } else {
+                el.disabled = true; // ދެން ހުރި ހުރިހާ އެއްޗެއް ލޮކް ކުރޭ
+                
+                // ވިޒުއަލްކޮށް ވެސް ލޮކްވެފައި ހުރިކަން އެންގުން (ފަނޑުކޮށްލުން)
+                if(el.tagName !== 'BUTTON') { // ބަޓަން ނޫން އެހެން އެއްޗެހި
+                     el.parentElement.style.opacity = '0.4';
+                     el.parentElement.style.pointerEvents = 'none';
+                }
+            }
+        });
         
-        // 1. ލޮކް ކުރަން ބޭނުންވާ ޕެނަލްތަކުގެ ނަންތައް
-        const panelIds = ['designPanel', 'sidebarFiles', 'infoPanel', 'configPanel', 'listPanel'];
+    } else {
+        // --- ލޮކް ހުޅުވުން ---
+        btn.innerHTML = "🔓 UNLOCKED (Edit Mode)";
+        btn.classList.remove('active');
 
-        // 2. ލޮކް ކުރަން ބޭނުންވާ ހުރިހާ އިންޕުޓްތައް ހޮވާލުން
-        // (Design, Files, Info, Settings, Lists)
-        const inputsToLock = document.querySelectorAll(
-            '#designPanel input, #designPanel select, #designPanel button, ' +
-            '#sidebarFiles input, #sidebarFiles select, #sidebarFiles button, ' +
-            '#infoPanel input, #infoPanel textarea, #infoPanel button, ' +
-            '#configPanel button, ' +
-            '#listPanel button, #search'
-        );
-
-        if (isLocked) {
-            // --- LOCK MODE ON ---
-            btn.innerHTML = "🔒 SYSTEM LOCKED (LIVE MODE)";
-            btn.classList.add('active');
-            
-            // ކުލަ ފަނޑުކޮށްލުން (Visual Lock)
-            panelIds.forEach(id => {
-                const el = document.getElementById(id);
-                if(el) el.classList.add('locked-zone');
-            });
-
-            // ހުރިހާ އެއްޗެއް ހުއްޓުވާލުން (Functional Lock - Disable)
-            inputsToLock.forEach(el => el.disabled = true);
-            
-        } else {
-            // --- UNLOCK MODE ---
-            btn.innerHTML = "🔓 UNLOCKED (Edit Mode)";
-            btn.classList.remove('active');
-            
-            // ކުލަ އަނބުރާ ގެނައުން
-            panelIds.forEach(id => {
-                const el = document.getElementById(id);
-                if(el) el.classList.remove('locked-zone');
-            });
-
-            // ހުރިހާ އެއްޗެއް ހުޅުވާލުން (Enable)
-            inputsToLock.forEach(el => el.disabled = false);
-        }
+        // ހުރިހާ އެއްޗެއް އަނބުރާ ހުޅުވާލުން
+        allInputs.forEach(el => {
+            el.disabled = false;
+            if(el.tagName !== 'BUTTON') {
+                el.parentElement.style.opacity = '1';
+                el.parentElement.style.pointerEvents = 'auto';
+            }
+        });
     }
+}
     function downloadConfig() {
         const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(designState));
         const a = document.createElement('a'); a.href = dataStr; a.download = "royal_config_v33.json"; document.body.appendChild(a); a.click(); a.remove();
