@@ -1246,10 +1246,6 @@ function downloadConfig() {
     a.remove();
 }
 
-        const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(designState));
-        const a = document.createElement('a'); a.href = dataStr; a.download = "royal_config_v33_full.json"; document.body.appendChild(a); a.click(); a.remove();
-    }
-
     function loadConfig(input) {
         const file = input.files[0]; if(!file) return;
         const reader = new FileReader();
