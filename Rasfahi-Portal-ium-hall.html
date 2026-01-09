@@ -670,20 +670,32 @@
                         <span class="d-label">2. ދަރިވަރުގެ ކާޑު ޑިޒައިން (Normal Mode):</span>
 <div style="display:flex; gap:10px;">
 
-    <select id="cBorderSel" onchange="liveUpdate('cBorder', this.value)" style="width:75%;">
-        <option value="custom_bg">🖼️ ކަސްޓަމް ބެކްގްރައުންޑް (Image)</option>
-        <option value="custom">🖼️ އަމިއްލަ ފްރޭމް (Frame)</option>
-        <optgroup label="ޝާހީ ފެހި ކުލަ (Royal Green)">
-            <script> for(let i=1; i<=15; i++) document.write(`<option value="b${i}">Style ${i} - Royal Green</option>`); </script>
-        </optgroup>
-        <optgroup label="ޝާހީ ނޫ ކުލަ (Royal Blue)">
-            <script> for(let i=16; i<=30; i++) document.write(`<option value="b${i}">Style ${i} - Royal Blue</option>`); </script>
-        </optgroup>
-        <optgroup label="އެހެނިހެން ޕްރީމިއަމް ސްޓައިލްތައް">
-            <script> for(let i=31; i<=100; i++) document.write(`<option value="b${i}">Style ${i} - Premium</option>`); </script>
-        </optgroup>
-        <option value="b0">🚫 ބޯޑަރެއް ނެތް (ޓްރާންސްޕޭރެންޓް)</option>
-    </select>
+   <select id="cBorderSel" onchange="liveUpdate('cBorder', this.value)" style="width:75%;">
+    <option value="custom_bg">🖼️ ކަސްޓަމް ބެކްގްރައުންޑް (Image)</option>
+    <option value="custom">🖼️ އަމިއްލަ ފްރޭމް (Frame)</option>
+    
+    <optgroup label="👑 1. The Golden State (Gold & Black)">
+        <script> for(let i=1; i<=20; i++) document.write(`<option value="b${i}">Style ${i} - Presidential Gold</option>`); </script>
+    </optgroup>
+
+    <optgroup label="🌴 2. Royal Maldivian (Green & Gold)">
+        <script> for(let i=21; i<=40; i++) document.write(`<option value="b${i}">Style ${i} - Royal Green</option>`); </script>
+    </optgroup>
+
+    <optgroup label="⚓ 3. The Diplomat (Blue & Silver)">
+        <script> for(let i=41; i<=60; i++) document.write(`<option value="b${i}">Style ${i} - Royal Blue</option>`); </script>
+    </optgroup>
+
+    <optgroup label="🎖️ 4. The Red Carpet (Maroon & Red)">
+        <script> for(let i=61; i<=80; i++) document.write(`<option value="b${i}">Style ${i} - Royal Red</option>`); </script>
+    </optgroup>
+
+    <optgroup label="💎 5. Ultra Modern (Glass & VVIP)">
+        <script> for(let i=81; i<=100; i++) document.write(`<option value="b${i}">Style ${i} - VVIP Modern</option>`); </script>
+    </optgroup>
+
+    <option value="b0">🚫 ބޯޑަރެއް ނެތް (ޓްރާންސްޕޭރެންޓް)</option>
+</select>
 
     <input type="color" id="bdColorPick" value="#d4af37" oninput="liveUpdate('bdColor', this.value)" title="Theme Color">
 </div>
@@ -1550,6 +1562,8 @@ function downloadConfig() {
         for(let i=0; i<200; i++) {
             cssGen += `.bg${i+1} { background: ${themes[i]}; background-size: cover; }\n`;
         }
+        // .b0 (No Border) އަށް ކުޑަ ކުލައެއް ގެނައުމަށް މި ލައިން އިތުރުކުރައްވާ:
+cssGen += `.b0 { border: none; background: rgba(0,20,15,0.8) !important; box-shadow: none; }\n`;
 // ============================================================
         // 100 ULTRA-LUXURY ROYAL STYLES (PRESIDENTIAL EDITION)
         // ============================================================
@@ -1693,7 +1707,13 @@ function downloadConfig() {
                     --star-x: ${designState.badgeX}px; --star-y: ${designState.badgeY}px;
                     --troph-x: ${designState.trophyX}px; --troph-y: ${designState.trophyY}px;
                 }
-                body, h1, h2, div, span { font-family: 'Faruuma', 'MV Boli', 'Noto Sans Thaana', serif !important; }
+                /* Custom Font Rules - Dynamic Loading */
+                @font-face { font-family: 'Faruuma'; src: ${fontCSS}; }
+
+                /* Apply Font to ALL elements including inputs and classes */
+                body, h1, h2, h3, div, span, p, input, .jalsa-text, .font-dv, .font-en { 
+                    font-family: 'Faruuma', 'MV Boli', 'Noto Sans Thaana', serif !important; 
+                }
                 body { margin:0; overflow:hidden; background:#000; user-select:none; }
                 #fsBtn { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); z-index:9999; padding:20px; font-size:20px; cursor:pointer; background:var(--theme-color); border:2px solid #fff; }
                 
@@ -1732,7 +1752,9 @@ function downloadConfig() {
                     height:${designState.cardH}vh; 
                     max-width: ${designState.cardW > 90 ? 'none' : '1500px'};
                     display:flex; flex-direction:${designState.layoutDir === 'rtl' ? 'row-reverse' : 'row'}; 
-                    align-items:center; background:rgba(0,20,15,0.92); padding:3vh; box-sizing:border-box; 
+                    align-items:center; 
+                    /* Background removed to allow styles to show */
+                    padding:3vh; box-sizing:border-box; 
                     opacity:0; transition:all 0.5s ease; z-index:5001; 
                 }
                 #card.active { opacity:1; }
@@ -2703,18 +2725,52 @@ body.triple-active #card {
         }; r.readAsText(file);
     };
 
+    // --- FORCE FONT LOADER (FIXED) ---
     document.getElementById('fontFile').onchange = e => {
-        const file = e.target.files[0]; if(!file) return;
+        const file = e.target.files[0]; 
+        if(!file) return;
+        
         const r = new FileReader();
         r.onload = evt => {
-            currentFontData = evt.target.result;
+            currentFontData = evt.target.result; // Save Data URL
+            
+            // 1. Editor Font Update
             const newFont = new FontFace('Faruuma', `url(${currentFontData})`);
             newFont.load().then(f => {
                 document.fonts.add(f);
-                document.querySelectorAll('.font-dv, input, h2').forEach(el => el.style.fontFamily = "'Faruuma', serif");
-                alert("Font Loaded! Re-open TV.");
+                document.body.style.fontFamily = "'Faruuma', serif";
             });
-        }; r.readAsDataURL(file);
+
+            // 2. TV Window Font Update (Force Inject)
+            if(tvWindow && !tvWindow.closed) {
+                const doc = tvWindow.document;
+                
+                // Remove old font style if exists
+                const oldStyle = doc.getElementById('customFontStyle');
+                if(oldStyle) oldStyle.remove();
+
+                // Inject NEW Font Face
+                const style = doc.createElement('style');
+                style.id = 'customFontStyle';
+                style.innerHTML = `
+                    @font-face { 
+                        font-family: 'Faruuma'; 
+                        src: url('${currentFontData}') format('truetype'); 
+                    }
+                    /* Force Apply to EVERYTHING */
+                    body, h1, h2, h3, div, span, input, textarea, .jalsa-text, .font-dv { 
+                        font-family: 'Faruuma', 'MV Boli', serif !important; 
+                    }
+                `;
+                doc.head.appendChild(style);
+                
+                // Force Redraw
+                updateJalsaText();
+            }
+            
+            alert("Custom Font Loaded & Applied!");
+        }; 
+        r.readAsDataURL(file);
     };
 
     document.getElementById('jalsaBgFile').onchange = e => {
