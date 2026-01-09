@@ -1176,21 +1176,28 @@
     }
 
     // --- LOCK FUNCTION (ULTIMATE FIX - DISABLES ALL INPUTS) ---
+    // --- LOCK FUNCTION (UPDATED: EXCLUDES BUTTONS) ---
     function toggleLock() {
         isLocked = !isLocked;
         const btn = document.getElementById('lockBtn');
         
-        // 1. ލޮކް ކުރަން ބޭނުންވާ ޕެނަލްތަކުގެ ނަންތައް
-        const panelIds = ['designPanel', 'sidebarFiles', 'infoPanel', 'configPanel', 'listPanel'];
+        // 1. ވިޝުއަލްކޮށް ލޮކް ކުރާ (ކުލަ ފަނޑުކުރާ) ޕެނަލްތައް
+        // ނޯޓް: މިއިން #infoPanel އަދި #listPanel ވަނީ އުނިކޮށްފައި
+        const panelIds = ['designPanel', 'sidebarFiles', 'configPanel'];
 
-        // 2. ލޮކް ކުރަން ބޭނުންވާ ހުރިހާ އިންޕުޓްތައް ހޮވާލުން
-        // (Design, Files, Info, Settings, Lists)
+        // 2. ޑިސޭބަލް (އޮއްބާ ނުލެވޭގޮތް) ހަދަން ބޭނުންވާ އިންޕުޓްތައް
+        // މީގައި އަޅުގަނޑުމެން މި ނަގަނީ ހަމައެކަނި ލޮކް ކުރަން ބޭނުންވާ ބައިތައް
         const inputsToLock = document.querySelectorAll(
+            // ޑިޒައިން ޕެނަލް އެއްކޮށް
             '#designPanel input, #designPanel select, #designPanel button, ' +
+            // ފައިލް އަޅާ ބައި އެއްކޮށް
             '#sidebarFiles input, #sidebarFiles select, #sidebarFiles button, ' +
-            '#infoPanel input, #infoPanel textarea, #infoPanel button, ' +
+            // ސޭވް ބަޓަންތައް
             '#configPanel button, ' +
-            '#listPanel button, #search'
+            // ސާޗް ބާ އަދި ލިސްޓު
+            '#search, #stuList, ' +
+            // ދަރިވަރުގެ މައުލޫމާތު ލިޔާ ބައިތައް (ވަކިވަކިން ހޮވާފައި)
+            '#nD, #nE, #fD, #fE, #cD, #cE, #rankInput, #cm, #singlePhoto'
         );
 
         if (isLocked) {
@@ -1198,18 +1205,18 @@
             btn.innerHTML = "🔒 SYSTEM LOCKED (LIVE MODE)";
             btn.classList.add('active');
             
-            // ކުލަ ފަނޑުކޮށްލުން (Visual Lock)
+            // ކުލަ ފަނޑުކޮށްލުން
             panelIds.forEach(id => {
                 const el = document.getElementById(id);
                 if(el) el.classList.add('locked-zone');
             });
 
-            // ހުރިހާ އެއްޗެއް ހުއްޓުވާލުން (Functional Lock - Disable)
+            // ހޮވާލެވުނު އިންޕުޓްތައް ޑިސޭބަލް ކުރުން
             inputsToLock.forEach(el => el.disabled = true);
             
         } else {
             // --- UNLOCK MODE ---
-            btn.innerHTML = "🔓 UNLOCKED (Edit Mode)";
+            btn.innerHTML = "🔓 ހުޅުވިފައި (ބަދަލުކުރެވޭ މޯޑު)";
             btn.classList.remove('active');
             
             // ކުލަ އަނބުރާ ގެނައުން
@@ -1218,7 +1225,7 @@
                 if(el) el.classList.remove('locked-zone');
             });
 
-            // ހުރިހާ އެއްޗެއް ހުޅުވާލުން (Enable)
+            // އިންޕުޓްތައް ހުޅުވާލުން
             inputsToLock.forEach(el => el.disabled = false);
         }
     }
