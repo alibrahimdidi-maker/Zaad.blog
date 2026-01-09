@@ -1175,58 +1175,59 @@
         tvWindow.document.getElementById('mainLogosContainer').style.opacity = designState.logoVisible ? '1' : '0';
     }
 
-    // --- LOCK FUNCTION (ULTIMATE FIX - DISABLES ALL INPUTS) ---
-    // --- LOCK FUNCTION (UPDATED: EXCLUDES BUTTONS) ---
+    // --- LOCK FUNCTION (FINAL FIXED VERSION) ---
     function toggleLock() {
         isLocked = !isLocked;
         const btn = document.getElementById('lockBtn');
         
-        // 1. ވިޝުއަލްކޮށް ލޮކް ކުރާ (ކުލަ ފަނޑުކުރާ) ޕެނަލްތައް
-        // ނޯޓް: މިއިން #infoPanel އަދި #listPanel ވަނީ އުނިކޮށްފައި
-        const panelIds = ['designPanel', 'sidebarFiles', 'configPanel'];
+        // ޕޭޖުގައިވާ ހުރިހާ ބަޓަނާއި، އިންޕުޓްތައް ހޮވާލުން
+        const allElements = document.querySelectorAll('input, select, textarea, button');
 
-        // 2. ޑިސޭބަލް (އޮއްބާ ނުލެވޭގޮތް) ހަދަން ބޭނުންވާ އިންޕުޓްތައް
-        // މީގައި އަޅުގަނޑުމެން މި ނަގަނީ ހަމައެކަނި ލޮކް ކުރަން ބޭނުންވާ ބައިތައް
-        const inputsToLock = document.querySelectorAll(
-            // ޑިޒައިން ޕެނަލް އެއްކޮށް
-            '#designPanel input, #designPanel select, #designPanel button, ' +
-            // ފައިލް އަޅާ ބައި އެއްކޮށް
-            '#sidebarFiles input, #sidebarFiles select, #sidebarFiles button, ' +
-            // ސޭވް ބަޓަންތައް
-            '#configPanel button, ' +
-            // ސާޗް ބާ އަދި ލިސްޓު
-            '#search, #stuList, ' +
-            // ދަރިވަރުގެ މައުލޫމާތު ލިޔާ ބައިތައް (ވަކިވަކިން ހޮވާފައި)
-            '#nD, #nE, #fD, #fE, #cD, #cE, #rankInput, #cm, #singlePhoto'
-        );
+        // ވިޝުއަލްކޮށް ލޮކް ކުރާ ބައިތައް (ކުލަ ފަނޑުކުރަން)
+        const sidebarFiles = document.getElementById('sidebarFiles');
+        const designPanel = document.getElementById('designPanel');
 
         if (isLocked) {
             // --- LOCK MODE ON ---
             btn.innerHTML = "🔒 SYSTEM LOCKED (LIVE MODE)";
             btn.classList.add('active');
-            
-            // ކުލަ ފަނޑުކޮށްލުން
-            panelIds.forEach(id => {
-                const el = document.getElementById(id);
-                if(el) el.classList.add('locked-zone');
-            });
 
-            // ހޮވާލެވުނު އިންޕުޓްތައް ޑިސޭބަލް ކުރުން
-            inputsToLock.forEach(el => el.disabled = true);
+            // ސައިޑްބާ އަދި ޑިޒައިން ޕެނަލްގެ ކުލަ ފަނޑުކޮށްލުން
+            if(sidebarFiles) sidebarFiles.classList.add('locked-zone');
+            if(designPanel) designPanel.classList.add('locked-zone');
+
+            // ހުރިހާ އެއްޗެއް ޗެކްކޮށް، ލޮކް ކުރަންވީ އެއްޗެހި ލޮކްކުރުން
+            allElements.forEach(el => {
+                // 1. މިތަނުގައި މި ލިޔަނީ ލޮކް ނުކޮށް ދޫކޮށްލަންވީ ބައިތައް (EXCEPTIONS)
+                if (
+                    el.id === 'lockBtn' ||                   // ލޮކް ބަޓަން
+                    el.id === 'cpFsBtn' ||                   // ފުލް ސްކްރީން ބަޓަން
+                    el.closest('#listPanel') ||              // މެއިން ޓައިޓްލް / ޓޮޕް 5 / ސްޓޫޑެންޓް ބަޓަންތައް
+                    el.closest('.video-panel') ||            // ވީޑިއޯ އަދި ޕްރެޒެންޓޭޝަން ބައި
+                    el.closest('.controls') ||               // ލައިވް/ނެކްސްޓް/ބެކް ބަޓަންތައް
+                    el.closest('.lang-tabs') ||              // ބަހުގެ ބަޓަންތައް
+                    el.classList.contains('sec-input') ||    // ސެކިއުރިޓީ ޕިން ޖަހާބައި
+                    el.classList.contains('sec-btn')         // ސެކިއުރިޓީ ބަޓަން
+                ) {
+                    // މި ބައިތައް ހުންނާނީ ހުޅުވިފައި (Do Nothing)
+                    el.disabled = false; 
+                } else {
+                    // 2. ދެން ހުރި ހުރިހާ އެއްޗެއް ލޮކް ވާނެ (ދަރިވަރުންގެ ބަޔާއި ޑިޒައިން ބައި ހިމެނޭގޮތަށް)
+                    el.disabled = true;
+                }
+            });
             
         } else {
             // --- UNLOCK MODE ---
             btn.innerHTML = "🔓 ހުޅުވިފައި (ބަދަލުކުރެވޭ މޯޑު)";
             btn.classList.remove('active');
-            
-            // ކުލަ އަނބުރާ ގެނައުން
-            panelIds.forEach(id => {
-                const el = document.getElementById(id);
-                if(el) el.classList.remove('locked-zone');
-            });
 
-            // އިންޕުޓްތައް ހުޅުވާލުން
-            inputsToLock.forEach(el => el.disabled = false);
+            // ކުލަ އަނބުރާ ގެނައުން
+            if(sidebarFiles) sidebarFiles.classList.remove('locked-zone');
+            if(designPanel) designPanel.classList.remove('locked-zone');
+
+            // ހުރިހާ އެއްޗެއް އެނޭބަލް ކުރުން
+            allElements.forEach(el => el.disabled = false);
         }
     }
     function downloadConfig() {
