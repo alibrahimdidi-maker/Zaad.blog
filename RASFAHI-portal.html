@@ -347,61 +347,10 @@
             </div>
 <div style="background:#ede7f6; padding:10px; border-radius:8px; border:1px solid #b39ddb; margin-bottom:15px;">
                <div style="background:#ede7f6; padding:10px; border-radius:8px; border:1px solid #b39ddb; margin-bottom:15px;">
-   <div style="background:#ede7f6; padding:10px; border-radius:8px; border:1px solid #b39ddb; margin-bottom:15px;">
-    <label style="color:#512da8; font-size:14px; margin-bottom:5px;">🖥️ 3-Screen Controls & Calibration:</label>
-
-    <div style="display:flex; gap:5px; margin-bottom:5px;">
-        <div style="flex:1;">
-            <span style="font-size:10px; font-weight:bold;">Left Image:</span>
-            <input type="file" accept="image/*" onchange="loadScreenBG('left', this)" style="font-size:11px;">
-        </div>
-        <div style="flex:1;">
-            <span style="font-size:10px; font-weight:bold;">Right Image:</span>
-            <input type="file" accept="image/*" onchange="loadScreenBG('right', this)" style="font-size:11px;">
-        </div>
-    </div>
-
-    <button class="btn-vid" style="background:#673ab7; font-weight:bold; margin-bottom:10px;" onclick="toggleTripleMode()">
-        Toggle 3-Screen Mode (On/Off)
-    </button>
-
-    <div style="border-top: 1px dashed #9575cd; padding-top: 5px;">
-        <label style="font-size:11px; color:#512da8; font-weight:bold;">🔭 Monitor Zoom (View Only):</label>
-        <input type="range" min="0.2" max="1" step="0.05" value="1" oninput="setTVZoom(this.value)" style="height:10px;">
-    </div>
-
-    <div style="background:#fff; padding:5px; border-radius:5px; margin-top:5px; border:1px solid #d1c4e9;">
-        <label style="font-size:11px; font-weight:bold; color:#311b92;">🛠️ Screen Calibration (Position):</label>
-        
-        <div style="display:flex; gap:5px; align-items:center; margin-top:3px;">
-            <span style="font-size:10px; width:30px;">Left:</span>
-            <input type="range" min="10" max="30" step="0.1" value="16.6" title="Width" oninput="adjustZone('left', 'width', this.value)">
-            <input type="range" min="-100" max="100" step="1" value="0" title="Move X" oninput="adjustZone('left', 'left', this.value)">
-        </div>
-
-        <div style="display:flex; gap:5px; align-items:center; margin-top:3px;">
-            <span style="font-size:10px; width:30px;">Right:</span>
-            <input type="range" min="10" max="30" step="0.1" value="16.6" title="Width" oninput="adjustZone('right', 'width', this.value)">
-            <input type="range" min="-100" max="100" step="1" value="0" title="Move X" oninput="adjustZone('right', 'right', this.value)">
-        </div>
-    </div>
-</div>
-
-    <button class="btn-vid" style="background:#673ab7; font-weight:bold; margin-bottom:10px;" onclick="toggleTripleMode()">
-        Toggle 3-Screen Mode (On/Off)
-    </button>
-
+   
     <div style="border-top: 1px dashed #9575cd; padding-top: 5px; margin-top: 5px;">
-        <label style="font-size:12px; color:#512da8; font-weight:bold;">🔭 Monitor View Zoom (Fit to TV):</label>
-        <div style="display:flex; align-items:center; gap:5px;">
-            <span style="font-size:10px;">Out</span>
-            <input type="range" min="0.2" max="1" step="0.05" value="1" oninput="setTVZoom(this.value)">
-            <span style="font-size:10px;">In</span>
-        </div>
-        <div style="font-size:10px; color:#666; text-align:center;">(މިއިން އަސްލު ސްކްރީނަށް ބަދަލެއް ނާންނާނެ)</div>
-    </div>
-</div>
-            <div class="controls">
+        
+            <div class="controls" style="display: flex; justify-content: center; gap: 10px;">
                 <button class="action btn-nav" onclick="move(-1)">◀</button>
                 <button class="action btn-live" onclick="updateTV()">📺 ލައިވް ކުރޭ</button>
                 <button class="action btn-nav" onclick="move(1)">▶</button>
@@ -409,15 +358,19 @@
                 <button class="action btn-nav" style="background:#f9a825; font-size:16px;" onclick="toggleAdsMode()" title="އިޝްތިހާރު މޯޑު">📢</button>
             </div>
 
-            <div class="video-panel">
-                <div style="font-weight:bold; color:#0277bd; margin-bottom:5px;">🎞️ ވީޑިއޯ ޕްލޭޔަރ & ޕްރެޒެންޓޭޝަން</div>
-                
-                <div style="display:flex; gap:8px;">
-                    <label style="width:70%; font-size:12px; color:#555;">General Video Playlist:</label>
-                    <input type="file" id="videoPlaylist" accept="video/*" multiple style="width:70%">
-                    <button class="btn-vid" style="background:#e65100; width:15%; margin-right:2px;" onclick="playPrevVideo()">◀ Back</button>
-<button class="btn-vid" style="background:#ef6c00; width:15%;" onclick="playNextVideo()">Next ▶</button>
-                </div>
+           <div class="video-panel">
+    <div style="font-weight:bold; color:#0277bd; margin-bottom:5px;">🎞️ ވީޑިއޯ ޕްލޭޔަރ & ޕްރެޒެންޓޭޝަން</div>
+    
+    <div style="display:flex; gap:8px;">
+        <label style="width:70%; font-size:12px; color:#555;">General Video Playlist:</label>
+        <input type="file" id="videoPlaylist" accept="video/*" multiple style="width:70%">
+        <button class="btn-vid" style="background:#e65100; width:15%; margin-right:2px;" onclick="playPrevVideo()">◀ Back</button>
+        <button class="btn-vid" style="background:#ef6c00; width:15%;" onclick="playNextVideo()">Next ▶</button>
+    </div>
+
+    <div style="margin-top:5px;">
+        <button class="btn-vid" style="background:#00695c; width:100%; font-weight:bold;" onclick="playGeneralSequence()">▶ Play General Playlist (Sequential)</button>
+    </div>
                 
                 <div style="display:flex; gap:10px; margin-top:5px; flex-wrap:wrap; background:#fff; padding:5px; border-radius:5px;">
     
@@ -459,9 +412,47 @@
                     <button class="btn-vid" style="background:#0277bd; width:20%;" onclick="openYTPopup()">⚠️ ޕޮޕްއަޕް</button>
                 </div>
             </div>
+    <div id="statusMsg" style="font-weight:bold; color:#00695c; text-align:center; font-size:18px; margin:5px 0;">ސިސްޓަމް ރެޑީ</div>
+<div style="background:#ede7f6; padding:10px; border-radius:8px; border:1px solid #b39ddb; margin-bottom:15px; margin-top:10px;">
+    <label style="color:#512da8; font-size:14px; margin-bottom:5px; font-weight:bold; display:block;">🖥️ 3-Screen Controls & Calibration:</label>
 
-            <div id="statusMsg" style="font-weight:bold; color:#00695c; text-align:center; font-size:18px; margin:5px 0;">ސިސްޓަމް ރެޑީ</div>
+    <div style="display:flex; gap:5px; margin-bottom:10px;">
+        <div style="flex:1;">
+            <span style="font-size:10px; font-weight:bold;">Left Image:</span>
+            <input type="file" accept="image/*" onchange="loadScreenBG('left', this)" style="font-size:11px;">
+        </div>
+        <div style="flex:1;">
+            <span style="font-size:10px; font-weight:bold;">Right Image:</span>
+            <input type="file" accept="image/*" onchange="loadScreenBG('right', this)" style="font-size:11px;">
+        </div>
+    </div>
 
+    <button class="btn-vid" style="background:#673ab7; font-weight:bold; margin-bottom:10px;" onclick="toggleTripleMode()">
+        Toggle 3-Screen Mode (On/Off)
+    </button>
+
+    <div style="border-top: 1px dashed #9575cd; padding-top: 10px;">
+        <label style="font-size:11px; color:#512da8; font-weight:bold;">🔭 Monitor Zoom (View Only):</label>
+        <input type="range" min="0.2" max="1" step="0.05" value="1" oninput="setTVZoom(this.value)" style="height:10px; width:100%;">
+    </div>
+
+    <div style="background:#fff; padding:5px; border-radius:5px; margin-top:5px; border:1px solid #d1c4e9;">
+        <label style="font-size:11px; font-weight:bold; color:#311b92;">🛠️ Screen Calibration (Position):</label>
+        
+        <div style="display:flex; gap:5px; align-items:center; margin-top:3px;">
+            <span style="font-size:10px; width:30px;">Left:</span>
+            <input type="range" min="10" max="30" step="0.1" value="16.6" title="Width" oninput="adjustZone('left', 'width', this.value)">
+            <input type="range" min="-100" max="100" step="1" value="0" title="Move X" oninput="adjustZone('left', 'left', this.value)">
+        </div>
+
+        <div style="display:flex; gap:5px; align-items:center; margin-top:3px;">
+            <span style="font-size:10px; width:30px;">Right:</span>
+            <input type="range" min="10" max="30" step="0.1" value="16.6" title="Width" oninput="adjustZone('right', 'width', this.value)">
+            <input type="range" min="-100" max="100" step="1" value="0" title="Move X" oninput="adjustZone('right', 'right', this.value)">
+        </div>
+    </div>
+</div>
+            
             <div style="background:#fff; padding:20px; border-radius:10px; border:2px solid #90caf9; margin:15px 0; box-shadow:0 3px 10px rgba(0,0,0,0.05);">
                 <h3 style="margin-top:0; font-size:22px; color:#0d47a1; border-bottom:1px solid #e3f2fd; padding-bottom:5px;">🎓 ދަރިވަރުގެ މަޢުލޫމާތު</h3>
                 
@@ -2581,19 +2572,36 @@ body.triple-active #card {
         }
     }
     
-    // --- SMART LINK CONVERTER (UPDATED FOR GAMMA) ---
+   // --- SMART LINK CONVERTER (FIXED FOR YOUTUBE & OTHERS) ---
     function getSmartLink(url, type) {
-        // YouTube
-        if(url.includes('youtube.com') || url.includes('youtu.be')) {
-            const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
-            const match = url.match(regExp);
-            if (match && match[2]) {
-                return `https://www.youtube-nocookie.com/embed/${match[2]}?autoplay=1&controls=1&rel=0`;
+        if (!url) return "";
+
+        // 1. YouTube Handling (Shorts & Standard)
+        if (url.includes('youtube.com') || url.includes('youtu.be')) {
+            let videoId = null;
+
+            // Handle Shorts
+            if (url.includes('/shorts/')) {
+                const parts = url.split('/shorts/');
+                if (parts[1]) videoId = parts[1].split('?')[0]; // Remove query params
+            } 
+            // Handle Standard & Embed
+            else {
+                const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+                const match = url.match(regExp);
+                if (match && match[2] && match[2].length == 11) {
+                    videoId = match[2];
+                }
+            }
+
+            if (videoId) {
+                // Use standard youtube.com/embed with autoplay
+                return `https://www.youtube.com/embed/${videoId}?autoplay=1&controls=1&rel=0&modestbranding=1`;
             }
         }
         
-        // Canva
-        if(type === 'canva' || (type === 'auto' && url.includes('canva.com'))) {
+        // 2. Canva Handling
+        if (type === 'canva' || (type === 'auto' && url.includes('canva.com'))) {
              let cleanUrl = url.split('?')[0];
              if(cleanUrl.endsWith('/')) cleanUrl = cleanUrl.slice(0, -1);
              if(cleanUrl.includes('/view')) {
@@ -2605,8 +2613,8 @@ body.triple-active #card {
              }
         }
 
-        // Gamma (Fix: Gamma links work directly, but sometimes need cleaning)
-        if(type === 'gamma' || (type === 'auto' && url.includes('gamma.app'))) {
+        // 3. Gamma Handling
+        if (type === 'gamma' || (type === 'auto' && url.includes('gamma.app'))) {
              return url; 
         }
 
@@ -2653,6 +2661,8 @@ body.triple-active #card {
     
     function playYoutube() {
         if(!tvWindow || tvWindow.closed) return;
+        
+        // Reset Views
         tvWindow.document.getElementById('jalsaContent').classList.add('hidden');
         tvWindow.document.getElementById('card').classList.remove('active');
 
@@ -2662,16 +2672,19 @@ body.triple-active #card {
         const embedUrl = getSmartLink(url, 'auto');
         
         if(!embedUrl) { alert("Invalid YT Link"); return; }
+        
         const vl = tvWindow.document.getElementById('videoLayer');
-        vl.innerHTML = `<iframe id="ytFrame" src="${embedUrl}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="width:100%;height:100%;"></iframe>`;
+        // Added 'web-share' and 'referrerpolicy' for better compatibility
+        vl.innerHTML = `<iframe id="ytFrame" src="${embedUrl}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen style="width:100%;height:100%;"></iframe>`;
         vl.style.display = 'flex';
+        
+        document.getElementById('statusMsg').innerText = "PLAYING YOUTUBE";
     }
     
     function openYTPopup() {
         const url = document.getElementById('ytLink').value;
         if(url) window.open(url, '_blank', 'width=1280,height=720');
     }
-
     // --- FILE HANDLERS ---
     document.getElementById('jalsaCsvFile').onchange = e => {
         const file = e.target.files[0]; if(!file) return;
@@ -3050,6 +3063,35 @@ body.triple-active #card {
             return false;
         }
     });
+    // --- GENERAL VIDEO PLAYLIST PLAYER ---
+let generalPlayIndex = 0;
+
+function playGeneralSequence() {
+    // 1. Check if TV is open
+    if(!tvWindow || tvWindow.closed) { 
+        alert("Please Open TV Screen First!"); 
+        return; 
+    }
+
+    // 2. Check if files are loaded
+    if(playlist.length === 0) { 
+        alert("Please select video files in 'General Video Playlist' first!"); 
+        return; 
+    }
+
+    // 3. Reset index if at end
+    if(generalPlayIndex >= playlist.length) {
+        generalPlayIndex = 0;
+    }
+
+    // 4. Play the video
+    let file = playlist[generalPlayIndex];
+    playLocalVideoFile(file);
+
+    // 5. Update Status & Increment
+    document.getElementById('statusMsg').innerText = "Playing General: " + file.name;
+    generalPlayIndex++;
+}
 </script>
 </body>
 </html>
