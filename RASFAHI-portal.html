@@ -1744,7 +1744,9 @@ function downloadConfig() {
                     height:${designState.cardH}vh; 
                     max-width: ${designState.cardW > 90 ? 'none' : '1500px'};
                     display:flex; flex-direction:${designState.layoutDir === 'rtl' ? 'row-reverse' : 'row'}; 
-                    align-items:center; background:rgba(0,20,15,0.92); padding:3vh; box-sizing:border-box; 
+                    align-items:center; 
+                    /* Background removed to allow styles to show */
+                    padding:3vh; box-sizing:border-box; 
                     opacity:0; transition:all 0.5s ease; z-index:5001; 
                 }
                 #card.active { opacity:1; }
