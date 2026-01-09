@@ -1458,11 +1458,11 @@
        if(key === 'cBorder') {
             const card = doc.getElementById('card');
             if(card) {
-                // 1. ކުރިން ހުރި ޑިޒައިން ކްލާސްތައް އެކަނި ފުހެލުން (Re-sets classes)
-                // މީގެ ސަބަބުން Top 5 ލޭއައުޓްތައް (t5-bottom) ފުހެވިގެން ނުދާނެއެވެ.
+                // 1. ކުރިން ހުރި ޑިޒައިން ކްލާސްތައް އެކަނި ފުހެލުން
+                // މީގެ ސަބަބުން Top 5 ލޭއައުޓްތައް (t5-bottom / t5-left) ފުހެވިގެން ނުދާނެއެވެ.
                 const currentClasses = Array.from(card.classList);
                 currentClasses.forEach(cls => {
-                    // b1, b2, custom, custom_bg ފަދަ ކްލާސްތައް ހޯދާފައި ނެގުން
+                    // b1, b2... b100 ނުވަތަ custom/custom_bg ފަދަ ކްލާސްތައް ނެގުން
                     if(cls.startsWith('b') || cls === 'custom' || cls === 'custom_bg') {
                         card.classList.remove(cls);
                     }
@@ -1471,24 +1471,26 @@
                 // 2. އާ ޑިޒައިން ކްލާސް އިތުރުކުރުން
                 card.classList.add(value);
 
-                // 3. މުހިންމު ބައި: ކުރިން ހުރި ކަސްޓަމް ފޮޓޯތައް ރީސެޓް ކުރުން (RESET INLINE STYLES)
+                // 3. މުހިންމު ބައި: ކުރިން ހުރި ކަސްޓަމް ފޮޓޯތައް ރީސެޓް ކުރުން (Inline Styles Reset)
                 // މިހެން ނުހަދައިފިނަމަ، ކަސްޓަމް ފްރޭމް ނެގުމަށްފަހު އާދައިގެ ޑިޒައިންއަކަށް ބަދަލުވާއިރު ފޮޓޯ ނުފިލާނެއެވެ.
                 card.style.backgroundImage = '';
                 card.style.border = '';
                 card.style.boxShadow = '';
 
-                // 4. Top 5 Mode ގައި އިންނަމަ، އެކަން ޔަގީންކުރުން
+                // 4. Top 5 Mode ގައި އިންނަމަ، އޭގެ ލޭއައުޓް ކްލާސް އަލުން ލުން (Safety Check)
                 if(document.getElementById('top5ModeCheck').checked) {
+                     // މިސާލަކަށް: t5-bottom, t5-left
                      card.classList.add('t5-' + designState.t5Layout);
                 }
 
-                // 5. ކަސްޓަމް ފްރޭމް ނުވަތަ ބެކްގްރައުންޑް ނަގާފައިވާނަމަ އެކަނި ފޮޓޯ ލުން
+                // 5. ކަސްޓަމް ފްރޭމް (Frame) ނަގާފައިވާނަމަ
                 if(value === 'custom' && customBorderData) {
                     card.style.backgroundImage = `url(${customBorderData})`;
                     card.style.backgroundSize = "100% 100%";
                     card.style.border = "none";
                     card.style.boxShadow = "none";
                 } 
+                // 6. ކަސްޓަމް ބެކްގްރައުންޑް (BG) ނަގާފައިވާނަމަ
                 else if (value === 'custom_bg' && customCardBgData) {
                     card.style.backgroundImage = `url(${customCardBgData})`;
                     card.style.backgroundSize = "100% 100%";
@@ -1496,11 +1498,10 @@
                     card.style.boxShadow = "none";
                 }
 
-                // 6. ކާޑު ވިޒިބިލިޓީ ޔަޤީންކުރުން
+                // 7. ކާޑު ވިޒިބިލިޓީ ޔަޤީންކުރުން (Transparent ނޫންނަމަ ދައްކާ)
                 if(value !== 'b0') card.classList.add('active');
             }
         }
-
     // --- TV WINDOW ---
     function openTV() {
         tvWindow = window.open('', 'GradTV', 'width=1280,height=720,menubar=no,toolbar=no');
