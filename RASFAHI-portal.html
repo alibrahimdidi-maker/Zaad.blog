@@ -336,6 +336,7 @@
         </div>
 
         <div class="editor" id="editorPanel">
+            <button id="lockBtn" onclick="toggleLock()">🔓 ހުޅުވިފައި (ބަދަލުކުރެވޭ މޯޑު)</button>
             <div id="infoPanel" style="background:#fff; padding:20px; border-radius:10px; border:2px solid #90caf9; margin:15px 0; box-shadow:0 3px 10px rgba(0,0,0,0.05);">
                 <label style="color:#d32f2f;">🚀 SCENE SWITCHER (ގަޑި ނުޖެހި ބަދަލުކުރައްވާ):</label>
                 <div id="listPanel" style="display:flex; gap:0; margin-bottom:5px;">
@@ -400,8 +401,6 @@
         <div style="font-size:10px; color:#666; text-align:center;">(މިއިން އަސްލު ސްކްރީނަށް ބަދަލެއް ނާންނާނެ)</div>
     </div>
 </div>
-            <button id="lockBtn" onclick="toggleLock()">🔓 ހުޅުވިފައި (ބަދަލުކުރެވޭ މޯޑު)</button>
-
             <div class="controls">
                 <button class="action btn-nav" onclick="move(-1)">◀</button>
                 <button class="action btn-live" onclick="updateTV()">📺 ލައިވް ކުރޭ</button>
@@ -1175,51 +1174,59 @@
         tvWindow.document.getElementById('mainLogosContainer').style.opacity = designState.logoVisible ? '1' : '0';
     }
 
-    // --- LOCK FUNCTION (ULTIMATE FIX - DISABLES ALL INPUTS) ---
+    // --- LOCK FUNCTION (FINAL FIXED VERSION) ---
     function toggleLock() {
         isLocked = !isLocked;
         const btn = document.getElementById('lockBtn');
         
-        // 1. ލޮކް ކުރަން ބޭނުންވާ ޕެނަލްތަކުގެ ނަންތައް
-        const panelIds = ['designPanel', 'sidebarFiles', 'infoPanel', 'configPanel', 'listPanel'];
+        // ޕޭޖުގައިވާ ހުރިހާ ބަޓަނާއި، އިންޕުޓްތައް ހޮވާލުން
+        const allElements = document.querySelectorAll('input, select, textarea, button');
 
-        // 2. ލޮކް ކުރަން ބޭނުންވާ ހުރިހާ އިންޕުޓްތައް ހޮވާލުން
-        // (Design, Files, Info, Settings, Lists)
-        const inputsToLock = document.querySelectorAll(
-            '#designPanel input, #designPanel select, #designPanel button, ' +
-            '#sidebarFiles input, #sidebarFiles select, #sidebarFiles button, ' +
-            '#infoPanel input, #infoPanel textarea, #infoPanel button, ' +
-            '#configPanel button, ' +
-            '#listPanel button, #search'
-        );
+        // ވިޝުއަލްކޮށް ލޮކް ކުރާ ބައިތައް (ކުލަ ފަނޑުކުރަން)
+        const sidebarFiles = document.getElementById('sidebarFiles');
+        const designPanel = document.getElementById('designPanel');
 
         if (isLocked) {
             // --- LOCK MODE ON ---
             btn.innerHTML = "🔒 SYSTEM LOCKED (LIVE MODE)";
             btn.classList.add('active');
-            
-            // ކުލަ ފަނޑުކޮށްލުން (Visual Lock)
-            panelIds.forEach(id => {
-                const el = document.getElementById(id);
-                if(el) el.classList.add('locked-zone');
-            });
 
-            // ހުރިހާ އެއްޗެއް ހުއްޓުވާލުން (Functional Lock - Disable)
-            inputsToLock.forEach(el => el.disabled = true);
+            // ސައިޑްބާ އަދި ޑިޒައިން ޕެނަލްގެ ކުލަ ފަނޑުކޮށްލުން
+            if(sidebarFiles) sidebarFiles.classList.add('locked-zone');
+            if(designPanel) designPanel.classList.add('locked-zone');
+
+            // ހުރިހާ އެއްޗެއް ޗެކްކޮށް، ލޮކް ކުރަންވީ އެއްޗެހި ލޮކްކުރުން
+            allElements.forEach(el => {
+                // 1. މިތަނުގައި މި ލިޔަނީ ލޮކް ނުކޮށް ދޫކޮށްލަންވީ ބައިތައް (EXCEPTIONS)
+                if (
+                    el.id === 'lockBtn' ||                   // ލޮކް ބަޓަން
+                    el.id === 'cpFsBtn' ||                   // ފުލް ސްކްރީން ބަޓަން
+                    el.closest('#listPanel') ||              // މެއިން ޓައިޓްލް / ޓޮޕް 5 / ސްޓޫޑެންޓް ބަޓަންތައް
+                    el.closest('.video-panel') ||            // ވީޑިއޯ އަދި ޕްރެޒެންޓޭޝަން ބައި
+                    el.closest('.controls') ||               // ލައިވް/ނެކްސްޓް/ބެކް ބަޓަންތައް
+                    el.closest('.lang-tabs') ||              // ބަހުގެ ބަޓަންތައް
+                    el.classList.contains('sec-input') ||    // ސެކިއުރިޓީ ޕިން ޖަހާބައި
+                    el.classList.contains('sec-btn')         // ސެކިއުރިޓީ ބަޓަން
+                ) {
+                    // މި ބައިތައް ހުންނާނީ ހުޅުވިފައި (Do Nothing)
+                    el.disabled = false; 
+                } else {
+                    // 2. ދެން ހުރި ހުރިހާ އެއްޗެއް ލޮކް ވާނެ (ދަރިވަރުންގެ ބަޔާއި ޑިޒައިން ބައި ހިމެނޭގޮތަށް)
+                    el.disabled = true;
+                }
+            });
             
         } else {
             // --- UNLOCK MODE ---
-            btn.innerHTML = "🔓 UNLOCKED (Edit Mode)";
+            btn.innerHTML = "🔓 ހުޅުވިފައި (ބަދަލުކުރެވޭ މޯޑު)";
             btn.classList.remove('active');
-            
-            // ކުލަ އަނބުރާ ގެނައުން
-            panelIds.forEach(id => {
-                const el = document.getElementById(id);
-                if(el) el.classList.remove('locked-zone');
-            });
 
-            // ހުރިހާ އެއްޗެއް ހުޅުވާލުން (Enable)
-            inputsToLock.forEach(el => el.disabled = false);
+            // ކުލަ އަނބުރާ ގެނައުން
+            if(sidebarFiles) sidebarFiles.classList.remove('locked-zone');
+            if(designPanel) designPanel.classList.remove('locked-zone');
+
+            // ހުރިހާ އެއްޗެއް އެނޭބަލް ކުރުން
+            allElements.forEach(el => el.disabled = false);
         }
     }
     function downloadConfig() {
