@@ -2719,18 +2719,52 @@ body.triple-active #card {
         }; r.readAsText(file);
     };
 
+    // --- FORCE FONT LOADER (FIXED) ---
     document.getElementById('fontFile').onchange = e => {
-        const file = e.target.files[0]; if(!file) return;
+        const file = e.target.files[0]; 
+        if(!file) return;
+        
         const r = new FileReader();
         r.onload = evt => {
-            currentFontData = evt.target.result;
+            currentFontData = evt.target.result; // Save Data URL
+            
+            // 1. Editor Font Update
             const newFont = new FontFace('Faruuma', `url(${currentFontData})`);
             newFont.load().then(f => {
                 document.fonts.add(f);
-                document.querySelectorAll('.font-dv, input, h2').forEach(el => el.style.fontFamily = "'Faruuma', serif");
-                alert("Font Loaded! Re-open TV.");
+                document.body.style.fontFamily = "'Faruuma', serif";
             });
-        }; r.readAsDataURL(file);
+
+            // 2. TV Window Font Update (Force Inject)
+            if(tvWindow && !tvWindow.closed) {
+                const doc = tvWindow.document;
+                
+                // Remove old font style if exists
+                const oldStyle = doc.getElementById('customFontStyle');
+                if(oldStyle) oldStyle.remove();
+
+                // Inject NEW Font Face
+                const style = doc.createElement('style');
+                style.id = 'customFontStyle';
+                style.innerHTML = `
+                    @font-face { 
+                        font-family: 'Faruuma'; 
+                        src: url('${currentFontData}') format('truetype'); 
+                    }
+                    /* Force Apply to EVERYTHING */
+                    body, h1, h2, h3, div, span, input, textarea, .jalsa-text, .font-dv { 
+                        font-family: 'Faruuma', 'MV Boli', serif !important; 
+                    }
+                `;
+                doc.head.appendChild(style);
+                
+                // Force Redraw
+                updateJalsaText();
+            }
+            
+            alert("Custom Font Loaded & Applied!");
+        }; 
+        r.readAsDataURL(file);
     };
 
     document.getElementById('jalsaBgFile').onchange = e => {
