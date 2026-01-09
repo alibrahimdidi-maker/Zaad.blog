@@ -390,6 +390,65 @@
                 </div>
             </div>
 
+            <div class="controls">
+                <button class="action btn-nav" onclick="move(-1)">◀</button>
+                <button class="action btn-live" onclick="updateTV()">📺 ލައިވް ކުރޭ</button>
+                <button class="action btn-nav" onclick="move(1)">▶</button>
+                <button class="action btn-nav" style="background:#c62828; font-size:16px;" onclick="clearTV()">X</button>
+                <button class="action btn-nav" style="background:#f9a825; font-size:16px;" onclick="toggleAdsMode()" title="އިޝްތިހާރު މޯޑު">📢</button>
+            </div>
+
+            <div class="video-panel">
+                <div style="font-weight:bold; color:#0277bd; margin-bottom:5px;">🎞️ ވީޑިއޯ ޕްލޭޔަރ & ޕްރެޒެންޓޭޝަން</div>
+                
+                <div style="display:flex; gap:8px;">
+                    <label style="width:70%; font-size:12px; color:#555;">General Video Playlist:</label>
+                    <input type="file" id="videoPlaylist" accept="video/*" multiple style="width:70%">
+                    <button class="btn-vid" style="background:#e65100; width:15%; margin-right:2px;" onclick="playPrevVideo()">◀ Back</button>
+                    <button class="btn-vid" style="background:#ef6c00; width:15%;" onclick="playNextVideo()">Next ▶</button>
+                </div>
+                
+                <div style="display:flex; gap:10px; margin-top:5px; flex-wrap:wrap; background:#fff; padding:5px; border-radius:5px;">
+                    <label style="font-size:12px; display:inline-flex; align-items:center;">
+                        <input type="checkbox" id="vidOverlayCheck" onchange="toggleOverlayMode(this.checked)"> ވީޑިއޯ މަތީ ކާޑު (Overlay)
+                    </label>
+
+                    <label style="font-size:12px; display:inline-flex; align-items:center; color:#c62828;">
+                        <input type="checkbox" id="top5ModeCheck"> <b>Top 5 Banner Mode (Royal)</b>
+                    </label>
+
+                    <label style="font-size:12px; display:inline-flex; align-items:center; color:#e65100;">
+                        <input type="checkbox" id="hideTrophyCheck" onchange="toggleTrophyVisibility(this.checked)"> <b>🚫 ޓްރޮފީ ފޮރުވާ</b>
+                    </label>
+
+                    <button class="btn-vid" style="background:#37474f; width:auto;" onclick="stopVideo()">⏹ Stop</button>
+                </div>
+
+                <hr style="border:1px dashed #ccc;">
+                
+                <div style="font-weight:bold; font-size:14px; margin-bottom:5px;">WEB & PRESENTATION:</div>
+                <div style="display:flex; gap:8px; margin-top:5px;">
+                    <input type="text" id="presLink" placeholder="Canva/Gamma Link (Auto-Fix)..." style="width:60%; text-align:left;" class="font-en">
+                        <select id="presType" style="width:20%; font-size:12px;">
+                            <option value="auto">Auto-Detect</option>
+                            <option value="gamma">Gamma.app</option>
+                            <option value="canva">Canva</option>
+                            <option value="google">Google Slides</option>
+                        </select>
+                    <button class="btn-vid" style="background:#6a1b9a; width:20%;" onclick="showPresentation()">Open</button>
+                </div>
+                <div style="margin-top:5px;">
+                        <button class="btn-vid" style="background:#d32f2f;" onclick="showPDFScreen()">📄 Show PDF</button>
+                </div>
+                
+                <div style="display:flex; gap:8px; margin-top:10px;">
+                    <input type="text" id="ytLink" placeholder="ޔޫޓިއުބް ލިންކް (Any Format)..." style="width:50%; text-align:left;" class="font-en">
+                    <button class="btn-vid" style="background:#c62828; width:30%;" onclick="playYoutube()">▶ ޔޫޓިއުބް</button>
+                    <button class="btn-vid" style="background:#0277bd; width:20%;" onclick="openYTPopup()">⚠️ ޕޮޕްއަޕް</button>
+                </div>
+            </div>
+
+
     <div style="display:flex; gap:5px; margin-bottom:5px;">
         <div style="flex:1;">
             <span style="font-size:10px; font-weight:bold;">Left Image:</span>
