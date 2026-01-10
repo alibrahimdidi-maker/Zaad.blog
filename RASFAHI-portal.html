@@ -3225,6 +3225,32 @@ function playGeneralSequence() {
     window.onbeforeunload = function() {
     return "Are you sure you want to reload? All data will be lost!";
 };
+    // ... (މިއީ އެންމެ ފަހުން ތިޔަބޭފުޅާ ލެއްވި ބައި) ...
+    window.onbeforeunload = function() {
+        return "Are you sure you want to reload? All data will be lost!";
+    };
+
+    // --- މިތަނަށް ތިޔަ އާ ކޯޑު ޕޭސްޓް ކުރައްވާ ---
+
+    // 1. Prevent Accidental Refresh (Data Loss Protection)
+    window.onbeforeunload = function(e) {
+        e = e || window.event;
+        if (e) { e.returnValue = 'Sure?'; }
+        return 'Sure?';
+    };
+
+    // 2. Clear Console clutter to improve performance slightly
+    console.log = function() {}; 
+
+    // 3. Safety Check for TV Window
+    setInterval(function(){
+        if(tvWindow && tvWindow.closed) {
+            document.getElementById('connStatus').innerText = "❌ TV CLOSED";
+            document.getElementById('connStatus').style.background = "#ffebee";
+            document.getElementById('connStatus').style.color = "red";
+        }
+    }, 2000);
+
 </script>
 </body>
 </html>
