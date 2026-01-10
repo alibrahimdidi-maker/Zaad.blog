@@ -228,7 +228,7 @@
 </head>
 <body oncontextmenu="return false;">
 
-    <button id="cpFsBtn" onclick="toggleControlFS()" title="ފުލް ސްކްރީން">⛶</button>
+    <button id="cpFsBtn" onclick="toggleControlFS()" title="Full Screen">⛶</button>
 
     <div id="securityOverlay">
     <div class="sec-box" style="width: 500px; max-width: 90vw; padding: 30px; box-sizing: border-box; max-height: 98vh; overflow-y: auto;">
@@ -273,42 +273,42 @@
     <div class="main-layout" id="mainApp">
         <div class="sidebar">
             <div class="lang-tabs">
-                <a href="RASFAHI-portal-1.html" class="lang-btn active">ވައްތަރު2</a>
-                <a href="RASFAHI-portal-5.html" class="lang-btn">ވައްތަރު3</a>
+                <a href="RASFAHI-portal-1.html" class="lang-btn active">DHIVEHI</a>
+                <a href="RASFAHI-portal-5.html" class="lang-btn">العربية</a>
                 <a href="RASFAHI-portal-3.html" class="lang-btn">ވައްތަރު4</a>
             </div>
 
             <div class="royal-banner">
                 <span class="banner-main">RASFAHI-EVENT AND GRADUATION CEREMONY SOFTWARE</span>
-                <span class="banner-sub">ރަސްފަހި ޕޯޓަލް</span>
+                <span class="banner-sub">Rasfahi Portal</span>
             </div>
 
             <div id="licenseStatus" style="font-size:13px; color:#0d47a1; text-align:center; margin-bottom:10px; font-weight:bold;"></div>
 
-            <button class="launch-btn" onclick="openTV()">🖥️ 1. ޓީވީ ސްކްރީން ހުޅުއްވާ</button>
+            <button class="launch-btn" onclick="openTV()">🖥️ Turn on the TV screen</button>
             <div id="connStatus" style="font-size:14px; color:red; text-align:center; background:#ffebee; padding:4px; border-radius:4px; margin-bottom:10px; border:1px solid #ffcdd2;">ކަނެކްޓް ނުވޭ</div>
 
             <div id="configPanel" class="config-btn-row">
-                <button class="conf-btn" onclick="downloadConfig()">⬇ ސޭވް ސެޓިންގްސް</button>
-                <button class="conf-btn" onclick="document.getElementById('confInput').click()">⬆ ލޯޑް ސެޓިންގްސް</button>
+                <button class="conf-btn" onclick="downloadConfig()">⬇ Save Configuration Settings</button>
+                <button class="conf-btn" onclick="document.getElementById('confInput').click()">⬆ Load Configuration Settings</button>
                 <input type="file" id="confInput" accept=".json" style="display:none" onchange="loadConfig(this)">
             </div>
 
             <div id="sidebarFiles">
-                <label style="margin-top:15px; color:#00281c;">🔍 ދަރިވަރުން ހޯއްދަވާ:</label>
+                <label style="margin-top:15px; color:#00281c;">🔍 Search Students:</label>
             <div style="display:flex; gap:0; margin-bottom:5px;">
-                <button class="list-switch-btn active" id="btnGenList" onclick="switchListMode('general')">👥 ޢާންމު ލިސްޓު</button>
-                <button class="list-switch-btn" id="btnTop5List" onclick="switchListMode('top5')">🏆 Top 5 ލިސްޓު</button>
+                <button class="list-switch-btn active" id="btnGenList" onclick="switchListMode('general')">👥 General List</button>
+                <button class="list-switch-btn" id="btnTop5List" onclick="switchListMode('top5')">🏆 Top 5 List</button>
             </div>
-            <input type="text" id="search" placeholder="ނަން ޖައްސަވާ..." onkeyup="filterList()">
+            <input type="text" id="search" placeholder="Type Name..." onkeyup="filterList()">
             
             <select id="stuList" size="10" style="flex-grow:1; border:1px solid #ccc; min-height: 200px;" onchange="loadStudent()"></select>
             
-                <label style="color:#0d47a1; border-bottom:1px solid #e3f2fd; padding-bottom:5px; margin-bottom:8px; font-size:16px; font-weight:bold;">📂 ސިސްޓަމް ފައިލްތައް</label>
+                <label style="color:#0d47a1; border-bottom:1px solid #e3f2fd; padding-bottom:5px; margin-bottom:8px; font-size:16px; font-weight:bold;">📂 System Files</label>
                 <div style="margin-bottom: 15px; text-align: center;">
         <a href="https://drive.google.com/drive/folders/1qcCTdxUv9gssjBjQ2LFKNDjxb2sWK1Xl?usp=drive_link" target="_blank" style="text-decoration:none;">
             <button style="width:100%; background: #e8f0fe; color: #1967d2; border: 1px solid #1967d2; padding: 10px; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 14px; transition: 0.3s;">
-                📂 ސާމްޕަލް ފައިލްތައް ޑައުންލޯޑް (G-Drive)
+                📂 Download Sample Files (G-Drive)
             </button>
         </a>
         <small style="color: #666; font-size: 11px;">(Excel, Photos, Fonts & CSV Samples)</small>
