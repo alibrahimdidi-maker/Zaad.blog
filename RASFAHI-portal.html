@@ -1149,13 +1149,23 @@ function verifyLicense() {
         trophyX: -10, trophyY: -10, trophyAnim: 'none'
     };
 
-    // --- MAIN LOGO MANAGER ---
-    function loadMainLogos(input) {
-        mainLogosData = [];
-        for(let f of input.files) mainLogosData.push(URL.createObjectURL(f));
-        renderMainLogos();
-        alert(mainLogosData.length + " Main Logos Loaded.");
+    // --- MAIN LOGO MANAGER (MEMORY SAFE VERSION) ---
+function loadMainLogos(input) {
+    // 1. ކުރިން ލޯޑުކޮށްފައި ހުރި ލޯގޯތަކުގެ މެމޮރީ ސާފުކޮށްލުން (މުހިންމު ބައި)
+    if (typeof mainLogosData !== 'undefined' && mainLogosData.length > 0) {
+        mainLogosData.forEach(url => URL.revokeObjectURL(url));
     }
+
+    // 2. އާ ލޯގޯތައް ލޯޑުކުރުން
+    mainLogosData = [];
+    for(let f of input.files) {
+        let url = URL.createObjectURL(f);
+        mainLogosData.push(url);
+    }
+
+    renderMainLogos();
+    alert(mainLogosData.length + " Main Logos Loaded (Memory Optimized).");
+}
 
     function renderMainLogos() {
         if(!tvWindow || tvWindow.closed) return;
