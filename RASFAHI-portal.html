@@ -3222,6 +3222,9 @@ function playGeneralSequence() {
     document.getElementById('statusMsg').innerText = "Playing General: " + file.name;
     generalPlayIndex++;
 }
+    window.onbeforeunload = function() {
+    return "Are you sure you want to reload? All data will be lost!";
+};
 </script>
 </body>
 </html>
