@@ -521,7 +521,7 @@
                     <div style="text-align:center;">
                         <span id="pStat" style="font-size:14px; font-weight:bold; color:#777;">No Photo</span><br>
                         <img id="previewImg" src="https://via.placeholder.com/150">
-                        <br><button style="font-size:12px; padding:3px 8px; margin-top:5px; background:#607d8b; color:#fff; border:none; border-radius:4px;" onclick="document.getElementById('singlePhoto').click()">ބަދަލުކުރޭ</button>
+                        <br><button style="font-size:12px; padding:3px 8px; margin-top:5px; background:#607d8b; color:#fff; border:none; border-radius:4px;" onclick="document.getElementById('singlePhoto').click()">Change</button>
                         <input type="file" id="singlePhoto" accept="image/*" style="display:none" onchange="manualPhoto(this)">
                     </div>
                 </div>
@@ -756,7 +756,7 @@
                 <div class="group-box">
                     <span class="group-title">📸 Photo Studio</span>
                     
-                    <span class="d-label">1. ފްރޭމް ސްޓައިލް:</span>
+                    <span class="d-label">1.Frame Style:</span>
                     <select id="photoPresetSel" onchange="applyPhotoPreset(this.value)" style="width:100%; font-weight:bold; font-size:15px; padding:10px;">
                         <option value="0">--- ފްރޭމް ސްޓައިލް ނަގާ ---</option>
                         <optgroup label="ބޯޑަރެއް ނުވަތަ ޝެޑޯއެއް ނެތް">
@@ -783,14 +783,14 @@
                         </optgroup>
                     </select>
 
-                    <span class="d-label">2. ފްރޭމް އެޖަސްޓްމަންޓް:</span>
+                    <span class="d-label">2. Frame Adjustment:</span>
                     <div style="display:flex; gap:10px; align-items:center; background:#fff; padding:10px; border-radius:8px; border:1px solid #b2dfdb;">
                         <span style="font-size:14px;">ކުލަ:</span><input type="color" id="pfColorPick" value="#000000" oninput="liveUpdate('pfColor', this.value)">
                         <span style="font-size:14px;">ފުޅާމިން:</span><input type="range" id="pfWidthRange" min="0" max="30" value="0" oninput="liveUpdate('pfWidth', this.value)">
                         <span style="font-size:14px;">ވަށް:</span><input type="range" id="pfRadiusRange" min="0" max="50" value="0" oninput="liveUpdate('pfRadius', this.value)">
                     </div>
                     
-                    <span class="d-label">3. ފޮޓޯގެ މަޤާމް އަދި ޒޫމް:</span>
+                    <span class="d-label">3. Photo Position & Zoom:</span>
                     <div style="display:flex; gap:10px; align-items:center;">
                         <span style="font-size:14px; width:50px;">ޒޫމް:</span>
                         <input type="range" id="pSizeRange" min="150" max="800" value="260" oninput="liveUpdate('pSize', this.value)">
@@ -933,7 +933,7 @@
                 </div>
 
                 <div class="group-box">
-                    <span class="group-title">🖼️ 5 މެއިން ލޯގޯ މެނޭޖަރ</span>
+                    <span class="group-title">🖼️ 5 Main Logo Manager</span>
                     <div style="background:#fff; padding:10px; border-radius:5px; margin-bottom:10px;">
                         <label style="font-size:12px;">Select Logo to Move:</label>
                         <select id="activeLogoIdx" onchange="refreshLogoInputs()" style="width:100%;">
@@ -960,7 +960,7 @@
                     
                       <div style="margin-top:8px;">
                         <label style="font-size:12px; display:inline-flex; align-items:center;">
-                            <input type="checkbox" id="logoAutoHideCheck" checked onchange="liveUpdate('logoAutoHide', this.checked)"> ދަރިވަރު ކާޑު އަރާއިރު މެއިން ލޯގޯތައް ފޮރުވާ
+                            <input type="checkbox" id="logoAutoHideCheck" checked onchange="liveUpdate('logoAutoHide', this.checked)"> Hide Main Logos when Student Card appears
                         </label>
                         <button class="btn-vid" style="background:#37474f; margin-top:5px;" onclick="toggleMainLogos()">👁️ Toggle Main Logos</button>
                     </div>
@@ -969,7 +969,7 @@
                     <span class="d-label" style="font-size:14px;">Partner Logos Settings:</span>
                       <div style="margin-bottom:8px;">
                           <label style="font-size:12px; display:inline-flex; align-items:center;">
-                              <input type="checkbox" id="plAutoHideCheck" checked onchange="liveUpdate('plAutoHide', this.checked)"> ދަރިވަރު ކާޑު އަރާއިރު ޕާޓްނަރ ލޯގޯތައް ފޮރުވާ
+                              <input type="checkbox" id="plAutoHideCheck" checked onchange="liveUpdate('plAutoHide', this.checked)"> Hide Partner Logos when Student Card appears
                           </label>
                       </div>
                       <div style="margin-bottom:8px;">
