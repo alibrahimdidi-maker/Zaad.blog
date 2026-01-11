@@ -2855,22 +2855,36 @@ body.triple-active #card {
         }; r.readAsDataURL(input.files[0]);
     }
 
-    // UPDATED CSV PARSER FOR RANK
-    function parseCSV(text) {
-        let lines = text.split('\n');
-        let data = [];
-        lines.forEach(l => {
-            let c = l.split(',');
-            if(c.length>1) {
-                data.push({
-                    nD: c[0]?.trim(), nE: c[1]?.trim(), cD: c[2]?.trim(), cE: c[3]?.trim(), 
-                    fD: c[4]?.trim(), fE: c[5]?.trim(), cm: c[6]?.trim(), ph: c[7]?.trim(),
-                    rank: c[8]?.trim() // New Column for Rank
-                });
-            }
-        });
-        return data;
-    }
+    // UPDATED CSV PARSER (Fixes Commas in Names & Handles Quotes)
+function parseCSV(text) {
+    let lines = text.split('\n');
+    let data = [];
+    
+    lines.forEach(l => {
+        // ހުސް ލައިންތައް ދޫކޮށްލުން
+        if (!l || l.trim() === '') return;
+
+        // ރެޖެކްސް ބޭނުންކޮށްގެން ކޮމާ ވަކިކުރުން (Quotes ތެރޭގައި އިންނަ ކޮމާ ދޫކޮށްލާނެ)
+        // މިއީ އެންމެ މުހިންމު ބަދަލެވެ.
+        let c = l.match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g);
+        
+        // މެޗް ނުވިނަމަ ނުވަތަ ނަލް ނަމަ، އާދައިގެ ގޮތަށް ސްޕްލިޓް ކުރުން (Safety Fallback)
+        if (!c) c = l.split(','); 
+
+        // ޑަބަލް ކޯޓްސް (") ހުރިނަމަ އެ ފޮހެލުން (Clean up quotes)
+        c = c.map(val => val.replace(/^"|"$/g, '').trim());
+
+        // ޑޭޓާ ނެގުން
+        if(c.length > 1) {
+            data.push({
+                nD: c[0] || "", nE: c[1] || "", cD: c[2] || "", cE: c[3] || "", 
+                fD: c[4] || "", fE: c[5] || "", cm: c[6] || "", ph: c[7] || "",
+                rank: c[8] || "" // Rank Column included
+            });
+        }
+    });
+    return data;
+}
 
     document.getElementById('csvFile').onchange = e => {
         const r = new FileReader();
