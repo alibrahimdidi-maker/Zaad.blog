@@ -16,14 +16,14 @@
         --bg-grad: radial-gradient(circle at center, #004d40 0%, #00251a 100%);
         --panel-bg: rgba(0, 30, 25, 0.95);
         --panel-border: 1px solid #c5a059; /* Muted Gold */
-       
+      
         --text-main: #ffffff;
         --text-label: #a7ffeb; /* Light Green for Labels */
         --text-heading: #c5a059; /* Gold for Headings */
-       
+      
         --input-bg: #001812;
         --input-border: 1px solid #4db6ac;
-       
+      
         --accent-gold: #c5a059;
         --shadow: 0 10px 30px rgba(0,0,0,0.5);
     }
@@ -43,7 +43,7 @@
         padding: 20px;
         box-sizing: border-box;
     }
-   
+  
     .sidebar {
         flex: 0 0 380px;
         background: var(--panel-bg);
@@ -83,7 +83,7 @@
         letter-spacing: 1px;
         text-align: left; /* Default headings to Left */
     }
-   
+  
     label {
         display: block; font-size: 13px;
         color: var(--text-label);
@@ -92,7 +92,7 @@
         letter-spacing: 0.5px;
         text-align: left;
     }
-   
+  
     .d-label {
         font-size: 16px; font-weight: bold; color: var(--accent-gold);
         border-bottom: 1px solid var(--accent-gold);
@@ -117,7 +117,7 @@
         outline: none;
         box-shadow: 0 0 8px rgba(197, 160, 89, 0.3);
     }
-   
+  
     /* Specific Inputs */
     #jLine1 {
         font-size: 22px !important; font-weight: bold !important; text-align: center !important;
@@ -145,12 +145,12 @@
     }
     /* Button Colors */
     .launch-btn { background: linear-gradient(to bottom, #b71c1c, #7f0000) !important; border-color: #ef5350; font-size: 15px; padding: 14px; margin-bottom: 12px; }
-   
+  
     .controls { display: flex; justify-content: center; gap: 10px; margin-bottom: 15px; }
     .btn-live { background: linear-gradient(to bottom, #f9a825, #f57f17) !important; color: #000 !important; flex: 2; padding: 12px; font-weight: 800; }
     .btn-nav { background: #37474f !important; width: 60px; font-size: 20px; }
     .btn-vid { background: #263238 !important; padding: 10px; width: 100%; margin-top: 5px; border: 1px solid #546e7a; }
-   
+  
     .conf-btn { background: #0277bd !important; flex: 1; padding: 8px; font-size: 11px; }
     .config-btn-row { display: flex; gap: 5px; margin-bottom: 15px; }
     #lockBtn { background: #ffd700 !important; color: #000 !important; font-weight: 900; padding: 12px; width: 100%; margin-bottom: 15px; border: 2px solid #fff !important; }
@@ -159,7 +159,7 @@
     .lang-tabs { display: flex; gap: 5px; margin-bottom: 15px; }
     .lang-btn { flex: 1; background: rgba(255,255,255,0.05) !important; padding: 10px; text-align: center; color: #80cbc4; text-decoration: none; border-radius: 4px; border: 1px solid rgba(255,255,255,0.1); }
     .lang-btn.active { background: #004d40 !important; color: #c5a059 !important; border: 1px solid #c5a059 !important; }
-   
+  
     .list-switch-btn { background: #263238 !important; color: #b0bec5; padding: 10px; flex: 1; border: 1px solid #37474f; }
     .list-switch-btn.active { background: var(--accent-gold) !important; color: #000 !important; font-weight:bold; }
     /* HELPERS & BANNERS */
@@ -173,11 +173,11 @@
     .group-box { border: 1px solid #004d40; border-radius: 6px; padding: 30px 20px 20px 20px; margin-bottom: 25px; background: rgba(0,0,0,0.2); position: relative; }
     .group-title { position: absolute; top: -10px; left: 20px; background: #c5a059; color: #000; padding: 4px 15px; font-size: 12px; font-weight: bold; border-radius: 2px; text-transform: uppercase; }
     .video-panel { background: rgba(0, 77, 64, 0.3); padding: 15px; border-radius: 6px; border: 1px solid #00695c; margin-bottom: 20px; }
-   
+  
     /* Student List */
     #stuList { background: #001812; color: #fff; border: 1px solid #4db6ac; min-height: 250px; border-radius: 4px; text-align: left; }
     #stuList option { padding: 10px; border-bottom: 1px solid #00332a; }
-   
+  
     /* Preview */
     .preview-container { background: rgba(0,0,0,0.3); border: 1px solid #004d40; padding: 15px; border-radius: 6px; display: flex; align-items: center; justify-content: center; gap: 15px; margin-top: 15px; }
     #previewImg { width: 110px; height: 110px; border-radius: 4px; object-fit: cover; border: 2px solid var(--accent-gold); background: #000; }
@@ -185,7 +185,7 @@
     #cpFsBtn { position: fixed; bottom: 20px; right: 20px; width: 50px; height: 50px; background: #00251a; color: var(--accent-gold); border-radius: 50%; z-index: 1000; font-size: 24px; border: 2px solid var(--accent-gold); display:flex; align-items:center; justify-content:center; }
     /* Security Overlay & Welcome Note */
     #securityOverlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #00100a; z-index: 99999; display: flex; align-items: center; justify-content: center; }
-   
+  
     .sec-box {
         background: #00251a;
         padding: 50px;
@@ -193,29 +193,29 @@
         text-align: center !important; /* FORCED CENTER */
         width: 500px;
     }
-   
+  
     /* Force children of sec-box to be centered regardless of global settings */
     .sec-box h1, .sec-box h2, .sec-box p, .sec-box div {
         text-align: center !important;
     }
     .admin-pic { width: 120px; height: 120px; border-radius: 50%; border: 4px solid var(--accent-gold); margin-bottom: 20px; background: #000; }
-   
+  
     .sec-input { background: #fff; color: #000; border: none; padding: 15px; font-size: 22px; width: 100%; margin-top: 20px; text-align: center; border-radius: 4px; font-family: monospace; }
     .sec-btn { background: var(--accent-gold); color: #00251a; width: 100%; margin-top: 25px; padding: 15px; font-size: 18px; border: none; font-weight: bold; }
     .dev-credits { text-align:center; font-size:12px; color:#4db6ac; margin-top: 20px; border-top: 1px solid #004d40; padding-top: 10px; padding-bottom: 15px; }
     .dev-name { color: #fff; font-weight:bold; }
-   
+  
     .locked-zone { opacity: 0.5; pointer-events: none; filter: grayscale(0.8); }
     </style>
-   
+  
 </head>
 <body oncontextmenu="return false;">
     <button id="cpFsBtn" onclick="toggleControlFS()" title="Full Screen">⛶</button>
     <div id="securityOverlay">
     <div class="sec-box" style="width: 500px; max-width: 90vw; padding: 40px 30px; box-sizing: border-box; max-height: 98vh; overflow-y: auto;">
-       
+      
         <img src="Photos/ali.png" class="admin-pic" alt="Ali Ibrahim Didi">
-       
+      
         <h1 style="color:#FFD700; font-size:20px; margin:0 0 5px 0; font-family:'Times New Roman', serif; text-transform:uppercase; letter-spacing:1px;">
             Warm Welcome to
         </h1>
@@ -247,7 +247,7 @@
 </div>
 </body>
 <div style="margin-top:10px;">
-                       
+                      
     <div class="main-layout" id="mainApp">
         <div class="sidebar">
             <div class="lang-tabs">
@@ -274,9 +274,9 @@
                 <button class="list-switch-btn" id="btnTop5List" onclick="switchListMode('top5')">🏆 Top 5 List</button>
             </div>
             <input type="text" id="search" placeholder="Type Name..." onkeyup="filterList()">
-           
+          
             <select id="stuList" size="10" style="flex-grow:1; border:1px solid #ccc; min-height: 200px;" onchange="loadStudent()"></select>
-           
+          
                 <label style="color:#0d47a1; border-bottom:1px solid #e3f2fd; padding-bottom:5px; margin-bottom:8px; font-size:16px; font-weight:bold;">📂 System Files</label>
                 <div style="margin-bottom: 15px; text-align: center;">
         <a href="https://drive.google.com/drive/folders/1qcCTdxUv9gssjBjQ2LFKNDjxb2sWK1Xl?usp=drive_link" target="_blank" style="text-decoration:none;">
@@ -292,35 +292,35 @@
                 <label>4. Custom Font (TTF):</label><input type="file" id="fontFile" accept=".ttf, .otf">
                 <label>5. Event Title (CSV):</label><input type="file" id="jalsaCsvFile" accept=".csv">
                 <label style="color:#d84315;">6. Custom Frame:</label><input type="file" id="customBorderFile" accept="image/*">
-               
+              
                 <hr>
                 <label style="color:#2e7d32;">7. Partner Logos:</label>
                 <input type="file" id="partnerLogos" accept="image/*" multiple onchange="loadPartnerLogos(this)">
-               
+              
                 <label style="color:#c62828;">8. Advertisement / Banner (Photo/Video):</label>
                 <input type="file" id="adFolder" accept="image/*, video/*" multiple onchange="loadAds(this)">
-               
+              
                 <label style="color:#6a1b9a;">9. Custom Card Background:</label>
                 <input type="file" id="customCardBgFile" accept="image/*" onchange="loadCustomCardBg(this)">
-               
+              
                 <label style="color:#d32f2f;">10. PDF Presentation:</label>
                 <input type="file" id="pdfFile" accept="application/pdf" onchange="loadPDF(this)">
-               
+              
                 <hr style="border: 2px dashed #ffb300;">
                 <label style="color:#ff6f00; font-weight:900;">11. TOP 5 LIST (CSV):</label>
                 <input type="file" id="top5CsvFile" accept=".csv" onchange="loadTop5Csv(this)">
-               
+              
                 <label style="color:#ff6f00; font-weight:900;">12. TOP 5 VIDEOS:</label>
                 <input type="file" id="top5VideoFiles" accept="video/*" multiple onchange="loadTop5Videos(this)">
-               
+              
                 <hr style="border: 2px dashed #ffb300;">
                 <label style="color:#ffd700; font-weight:900;">13. ROYAL STAR ICON (PNG):</label>
                 <input type="file" id="royalStarFile" accept="image/*" onchange="loadRoyalStar(this)">
-               
+              
                 <label style="color:#ffd700; font-weight:900;">14. TROPHY ICON (PNG):</label>
                 <input type="file" id="trophyFile" accept="image/*" onchange="loadTrophy(this)">
             </div>
-           
+          
             <div class="dev-credits">
                 <span style="display:block; margin-bottom:3px;">Program Designed & Developed by:</span>
                 <span class="dev-name">Ali Ibrahim Didi (+9607791550)</span>
@@ -338,9 +338,9 @@
                 </div>
             </div>
 <div style="background:#ede7f6; padding:10px; border-radius:8px; border:1px solid #b39ddb; margin-bottom:15px;">
-  
+ 
     <div style="border-top: 1px dashed #9575cd; padding-top: 5px; margin-top: 5px;">
-       
+      
             <div class="controls" style="display: flex; justify-content: center; gap: 10px;">
                 <button class="action btn-nav" onclick="move(-1)">◀</button>
                 <button class="action btn-live" onclick="updateTV()">📺 Display Student Name</button>
@@ -350,7 +350,7 @@
             </div>
            <div class="video-panel">
     <div style="font-weight:bold; color:#0277bd; margin-bottom:5px;">🎞️ Video Player & Presentation</div>
-   
+  
     <div style="display:flex; gap:8px;">
         <label style="width:70%; font-size:12px; color:#555;">General Video Playlist:</label>
         <input type="file" id="videoPlaylist" accept="video/*" multiple style="width:70%">
@@ -360,9 +360,9 @@
     <div style="margin-top:5px;">
         <button class="btn-vid" style="background:#00695c; width:100%; font-weight:bold;" onclick="playGeneralSequence()">▶ Play General Playlist (Sequential)</button>
     </div>
-               
+              
                 <div style="display:flex; gap:10px; margin-top:5px; flex-wrap:wrap; background:#fff; padding:5px; border-radius:5px;">
-   
+  
     <label style="font-size:12px; display:inline-flex; align-items:center;">
         <input type="checkbox" id="vidOverlayCheck" onchange="toggleOverlayMode(this.checked)"> Video Overlay Card (Overlay)
     </label>
@@ -375,7 +375,7 @@
     <button class="btn-vid" style="background:#37474f; width:auto;" onclick="stopVideo()">⏹ Stop</button>
 </div>
                 <hr style="border:1px dashed #ccc;">
-               
+              
                 <div style="font-weight:bold; font-size:14px; margin-bottom:5px;">WEB & PRESENTATION:</div>
                 <div style="display:flex; gap:8px; margin-top:5px;">
                     <input type="text" id="presLink" placeholder="Canva/Gamma Link (Auto-Fix)..." style="width:60%; text-align:left;" class="font-en">
@@ -390,13 +390,13 @@
                 <div style="margin-top:5px;">
                       <button class="btn-vid" style="background:#d32f2f;" onclick="showPDFScreen()">📄 Show PDF</button>
                 </div>
-               
+              
                 <div style="display:flex; gap:8px; margin-top:10px;">
                     <input type="text" id="ytLink" placeholder="YouTube Link (Any Format)..." style="width:50%; text-align:left;" class="font-en">
                     <button class="btn-vid" style="background:#c62828; width:30%;" onclick="playYoutube()">▶ YouTube</button>
                     <button class="btn-vid" style="background:#0277bd; width:20%;" onclick="openYTPopup()">⚠️ Pop-up</button>
                 </div>
-               
+              
                 <div style="margin-top:10px;">
                     <button class="btn-vid" style="background:#2e7d32; width:100%; font-weight:bold;" onclick="forceShowTitles()">🔄 Force Refresh Titles</button>
                 </div>
@@ -423,7 +423,7 @@
     </div>
     <div style="background:#fff; padding:5px; border-radius:5px; margin-top:5px; border:1px solid #d1c4e9;">
         <label style="font-size:11px; font-weight:bold; color:#311b92;">🛠️ Screen Calibration (Position):</label>
-       
+      
         <div style="display:flex; gap:5px; align-items:center; margin-top:3px;">
             <span style="font-size:10px; width:30px;">Left:</span>
             <input type="range" min="10" max="30" step="0.1" value="16.6" title="Width" oninput="adjustZone('left', 'width', this.value)">
@@ -436,20 +436,20 @@
         </div>
     </div>
 </div>
-           
+          
             <div style="background:#fff; padding:20px; border-radius:10px; border:2px solid #90caf9; margin:15px 0; box-shadow:0 3px 10px rgba(0,0,0,0.05);">
                 <h3 style="margin-top:0; font-size:22px; color:#0d47a1; border-bottom:1px solid #e3f2fd; padding-bottom:5px;">🎓 Student Information</h3>
-               
+              
                 <div style="margin-bottom: 10px;">
                     <label style="font-size:14px; color:#555;">Name (Dhivehi):</label>
                     <input id="nD" class="font-dv" placeholder="Name (Dhivehi)" style="width:100%;">
                 </div>
-               
+              
                 <div style="margin-bottom: 15px;">
                     <label style="font-size:14px; color:#555; text-align:right; display:block;">Name (English):</label>
                     <input id="nE" class="eng" placeholder="Name (English)" style="width:100%; text-align:left;">
                 </div>
-               
+              
                 <div class="row" style="display:flex; gap:10px; width:100%;">
                     <div class="col" style="flex:1;">
                         <input id="fD" class="font-dv" placeholder="Detail 1 (Dhivehi)" style="width:100%; text-align:right;">
@@ -466,12 +466,12 @@
                         <input id="cE" class="eng" placeholder="Detail 2 (English)" style="width:100%; direction:ltr; text-align:left;">
                     </div>
                 </div>
-               
+              
                 <div class="row" style="margin-top:5px;">
                     <label style="font-size:14px; color:#d84315;">🏆 Rank/Position (Optional):</label>
                     <input id="rankInput" placeholder="1, 2, 3..." style="width:100%;">
                 </div>
-               
+              
                 <textarea id="cm" rows="2" class="font-dv" placeholder="Additional Information..."></textarea>
                 <div class="preview-container">
                     <div><img id="logoPreview" alt="Logo" style="height:50px; opacity:0.5;"></div>
@@ -489,7 +489,7 @@
                     <span class="group-title" style="background:#ff6f00;">🏆 Top 5 Mode & Video</span>
                     <div class="design-col">
                         <p style="font-size:12px; color:#555; margin-bottom:10px;">Select Layout to move Card (Left/Right/Bottom). Use Video Sliders to move video box anywhere!</p>
-                       
+                      
                         <div style="margin-bottom:15px;">
                              <span style="font-weight:bold; font-size:14px;">1. Banner Layout Position:</span>
                              <select id="t5LayoutSel" onchange="liveUpdate('t5Layout', this.value)" style="width:100%; font-weight:bold; color:#d84315;">
@@ -498,7 +498,7 @@
                                  <option value="right">Right Sidebar (Right)</option>
                              </select>
                         </div>
-                       
+                      
                         <div style="background:#fff; padding:10px; border-radius:5px; border:1px solid #ffcc80; margin-bottom:15px;">
                              <span style="font-weight:bold; font-size:14px; display:block; margin-bottom:5px;">2. Video Box Control (Move Anywhere):</span>
                              <div style="display:flex; gap:5px;">
@@ -523,10 +523,10 @@
                             <span style="font-size:14px; width:100px;">Photo Size:</span>
                             <input type="range" min="80" max="300" value="160" oninput="liveUpdate('t5PhotoSize', this.value)">
                         </div>
-                       
+                      
                         <hr style="border:1px dashed #ffd54f; margin:10px 0;">
                         <span style="display:block; font-weight:bold; margin-bottom:5px; color:#ff6f00;">4. Top 5 Text Settings (Flexible):</span>
-                       
+                      
                         <div style="display:flex; gap:5px; margin-bottom:5px; align-items:center;">
                             <span style="font-size:12px; width:80px; font-weight:bold; color:blue;">↕ Text Y-Pos:</span>
                             <input type="range" min="-300" max="300" value="0" oninput="liveUpdate('t5TextY', this.value)">
@@ -548,12 +548,12 @@
                         </div>
                     </div>
                 </div>
-               
+              
                 <div class="group-box" style="border-color:#d4af37; background:#fff8e1;">
                     <span class="group-title" style="background:#ff8f00;">🏅 Badges & Animation Control</span>
                     <div class="design-col">
                         <p style="font-size:12px; color:#555; margin-bottom:10px;">Move badges anywhere and select animations.</p>
-                       
+                      
                         <div style="margin-bottom:10px; border-bottom:1px dashed #ccc; padding-bottom:10px;">
                            <span style="font-weight:bold; color:#ff6f00;">1. Star Badge:</span>
 <div style="display:flex; gap:5px; margin-top:5px;">
@@ -608,7 +608,7 @@
                         <span class="d-label">1. Wallpaper Background:</span>
                         <div style="display:flex; gap:10px;">
                             <select id="bgPresetSel" onchange="liveUpdate('bgPreset', this.value)" style="width:70%;">
-   
+  
     <optgroup label="👑 Royal Green (Royal Green)">
         <script> for(let i=1; i<=20; i++) document.write(`<option value="bg${i}">Royal Green ${i}</option>`); </script>
     </optgroup>
@@ -633,13 +633,13 @@
                                 <option value="off">Video Loop: No</option>
                             </select>
                         </div>
-                       
+                      
                         <span class="d-label">2. Student Card Design (Normal Mode):</span>
 <div style="display:flex; gap:10px;">
    <select id="cBorderSel" onchange="liveUpdate('cBorder', this.value)" style="width:75%;">
     <option value="custom_bg">🖼️ Custom Background (Image)</option>
     <option value="custom">🖼️ Custom Frame (Frame)</option>
-   
+  
     <optgroup label="👑 1. The Golden State (Gold & Black)">
         <script> for(let i=1; i<=20; i++) document.write(`<option value="b${i}">Style ${i} - Presidential Gold</option>`); </script>
     </optgroup>
@@ -688,7 +688,7 @@
                 </div>
                 <div class="group-box">
                     <span class="group-title">📸 Photo Studio</span>
-                   
+                  
                     <span class="d-label">1.Frame Style:</span>
                     <select id="photoPresetSel" onchange="applyPhotoPreset(this.value)" style="width:100%; font-weight:bold; font-size:15px; padding:10px;">
                         <option value="0">--- Select Frame Style ---</option>
@@ -721,7 +721,7 @@
                         <span style="font-size:14px;">ފުޅާމިން:</span><input type="range" id="pfWidthRange" min="0" max="30" value="0" oninput="liveUpdate('pfWidth', this.value)">
                         <span style="font-size:14px;">ވަށް:</span><input type="range" id="pfRadiusRange" min="0" max="50" value="0" oninput="liveUpdate('pfRadius', this.value)">
                     </div>
-                   
+                  
                     <span class="d-label">3. Photo Position & Zoom:</span>
                     <div style="display:flex; gap:10px; align-items:center;">
                         <span style="font-size:14px; width:50px;">Zoom:</span>
@@ -742,7 +742,7 @@
                 </div>
                 <div class="group-box">
                     <span class="group-title">🔤 Text Alignment & Styling (Normal Mode)</span>
-                   
+                  
                     <span class="d-label">1. Student Name (Size/Color):</span>
                     <div style="display:flex; gap:10px; align-items:center; margin-bottom:8px;">
                         <span style="font-size:14px; width:60px;">Dhivehi:</span>
@@ -760,7 +760,7 @@
                             <option value="on">Underline Name: Yes</option>
                         </select>
                     </div>
-                   
+                  
                     <hr style="border:1px dashed #aaa; margin:12px 0;">
                     <span class="d-label">2. Detail Lines:</span>
                     <div style="display:flex; gap:10px; align-items:center; margin-bottom:8px;">
@@ -776,10 +776,10 @@
                 </div>
                 <div class="group-box">
                     <span class="group-title">👑 Event Titles</span>
-                   
+                  
                     <span class="d-label">1. Main Title:</span>
                     <input type="text" id="jLine1" placeholder="Main Title..." class="font-dv" oninput="updateJalsaText()">
-                   
+                  
                     <div style="margin-top:5px;">
                         <select onchange="liveUpdate('tLine', this.value)" style="width:100%; background:#fff;">
                             <option value="on">Underline Main Title: YES</option>
@@ -805,7 +805,7 @@
                     </div>
                     <hr style="border:1px dashed #999; margin:15px 0;">
                     <span class="d-label">2. Subtitles (7 Lines):</span>
-                   
+                  
                     <div style="background:#e8eaf6; padding:10px; border-radius:8px; border:1px solid #c5cae9; margin-bottom:10px;">
                         <label style="font-size:12px;">Edit Style for Line:</label>
                         <select id="stStyleSelector" style="font-size:12px; padding:5px; margin-bottom:5px;">
@@ -829,7 +829,7 @@
                     <input type="text" id="jLine6" placeholder="Subtitle 5" class="sub-title-input">
                     <input type="text" id="jLine7" placeholder="Subtitle 6" class="sub-title-input">
                     <input type="text" id="jLine8" placeholder="Subtitle 7" class="sub-title-input">
-                   
+                  
                     <div style="display:flex; gap:10px; margin-top:8px; align-items:center;">
                         <span style="font-size:14px;">Align:</span>
                         <select id="stAlignSel" onchange="liveUpdate('stAlign', this.value)" style="width:100%; background:#fff;">
@@ -852,7 +852,7 @@
                             <option value="on">Subtitle Underline: Yes</option>
                         </select>
                     </div>
-                   
+                  
                     <button class="btn-vid" style="background:#2e7d32; width:100%; margin-top:15px; font-weight:bold; font-size:18px; padding:12px;" onclick="updateJalsaText()">Update Titles</button>
                 </div>
                 <div class="group-box">
@@ -867,7 +867,7 @@
                             <option value="4">Logo 5</option>
                         </select>
                     </div>
-                   
+                  
                     <div style="display:flex; gap:10px; align-items:center;">
                         <span style="font-size:12px;">Size:</span>
                         <input type="range" id="mlSize" min="20" max="500" value="100" oninput="updateLogoStyle('size', this.value)">
@@ -880,14 +880,14 @@
                         <span style="font-size:12px;">Y-Pos:</span>
                         <input type="range" id="mlY" min="-500" max="500" value="0" oninput="updateLogoStyle('y', this.value)">
                     </div>
-                   
+                  
                       <div style="margin-top:8px;">
                         <label style="font-size:12px; display:inline-flex; align-items:center;">
                             <input type="checkbox" id="logoAutoHideCheck" checked onchange="liveUpdate('logoAutoHide', this.checked)"> Hide Main Logos when Student Card appears
                         </label>
                         <button class="btn-vid" style="background:#37474f; margin-top:5px;" onclick="toggleMainLogos()">👁️ Toggle Main Logos</button>
                     </div>
-                   
+                  
                     <hr>
                     <span class="d-label" style="font-size:14px;">Partner Logos Settings:</span>
                       <div style="margin-bottom:8px;">
@@ -914,7 +914,7 @@
     </div>
 <script>
     document.addEventListener('contextmenu', event => event.preventDefault());
-   
+  
     // --- FULL SCREEN ---
     function toggleControlFS() {
         if (!document.fullscreenElement) {
@@ -938,7 +938,7 @@ function verifyLicense() {
     try {
         // 1. Decode Key
         var decodedString = atob(inputKey);
-       
+      
         // 2. Strict Validation Check
         if (decodedString.indexOf("ROYAL_EXP_") !== 0) {
             throw new Error("Invalid Format");
@@ -972,17 +972,16 @@ function verifyLicense() {
 }
     // Allow "Enter" key to submit
     document.getElementById('licenseKey').addEventListener("keyup", e => { if (e.key === "Enter") verifyLicense(); });
- 
     let tvWindow = null;
     let students = [];
     let photoFiles = {};
-   
+  
     // Top 5 Separation Arrays
     let top5Students = [];
     let top5PhotoFiles = {};
     let activeListMode = 'general';
     let top5VideoPlaylist = [];
-   
+  
     let partnerLogosData = [];
     let mainLogosData = [];
     let adFiles = [];
@@ -996,12 +995,16 @@ function verifyLicense() {
     let customCardBgData = null;
     let royalStarData = null;
     let trophyData = null;
-   
+  
     let isLocked = false;
     let lastActiveState = 'title';
     let playlist = [];
     let currentVidIdx = 0;
     let pdfUrl = null;
+    let currentVideoBlobUrl = null;
+    let pdfBlobUrl = null;
+    let royalStarBlobUrl = null;
+    let trophyBlobUrl = null;
     // Subtitle Styles Logic
     let stStyles = {};
     for(let i=1; i<=8; i++) stStyles[i] = { size: 2.6, color: '#ffffff' };
@@ -1018,9 +1021,9 @@ function verifyLicense() {
         mtY: 210, mtX: 0, mtSize: 5.6,
         mtColor: '#FFD700', // ޝާހީ ރަންކުލަ (Royal Gold)
         mtAlign: 'center', tLine: 'on', keepTitle: false,
-       
+      
         stY: 0, stX: 0, stGap: 5, stLine: 'off', stAlign: 'center',
-       
+      
         logos: [
             {x:0, y:-300, s:150}, {x:-400, y:-300, s:100}, {x:400, y:-300, s:100}, {x:0, y:300, s:100}, {x:0, y:0, s:100}
         ],
@@ -1028,41 +1031,40 @@ function verifyLicense() {
         plGap: 20, plSize: 100, plAutoHide: true, plVisible: true, plY: 20, plX: 0,
         pSize: 260, pX: 0, pY: 0, pVis: 'show', pFit: 'cover',
         pfWidth: 0, pfColor: '#000000', pfStyle: 'solid', pfRadius: 0, pfShadow: 'none',
-       
+      
         // 2. Card & Background Defaults
         cBorder: 'b1', // Style 1 (Royal Green Border)
         bdColor: '#FFD700', // Theme Color (Gold)
         bgPreset: 'bg1', // Background 1 (Royal Green Wallpaper)
-       
+      
         layoutDir: 'rtl', textAlign: 'right', bgLoop: 'on',
-       
+      
         // 3. Student Name Colors (Gold & White)
         tnDSize: 6.5,
         tnDColor: '#FFD700', // ނަން (ދިވެހި) - ރަންކުލަ
         tnESize: 4.5,
         tnEColor: '#ffffff', // Name (English) - White
         nLine: 'off',
-       
+      
         tfDSize: 2.5, tfDColor: '#fff9c4', tcDSize: 3.0, tcDColor: '#fff9c4',
         cardW: 90, cardH: 80, cardX: 0, cardY: 0,
-       
+      
         // TOP 5 SPECIFIC VARIABLES
         t5CardW: 95, t5CardH: 22, t5Bottom: 2, t5PhotoSize: 160,
         t5NameSize: 3.0, t5EngSize: 2.0, t5DetSize: 1.5,
         t5TextY: 0,
         t5Layout: 'bottom',
         tvX: 10, tvY: 5, tvW: 80, tvH: 65,
-       
+      
         // BADGES & ANIMATIONS
         badgeX: -20, badgeY: -20, badgeAnim: 'none',
         trophyX: -10, trophyY: -10, trophyAnim: 'none'
     };
     // --- MAIN LOGO MANAGER (MEMORY SAFE VERSION) ---
 function loadMainLogos(input) {
-    // Revoke old URLs to free memory
-    mainLogosData.forEach(url => URL.revokeObjectURL(url));
+    // No revoke needed since using data URLs
     mainLogosData = [];
-   
+  
     let files = Array.from(input.files).slice(0, 5); // Limit to 5
     files.forEach(f => {
         const r = new FileReader();
@@ -1102,7 +1104,7 @@ function loadMainLogos(input) {
     function updateLogoStyle(prop, val) {
         const idx = document.getElementById('activeLogoIdx').value;
         designState.logos[idx][prop.replace('size', 's')] = parseInt(val);
-       
+      
         if(!tvWindow || tvWindow.closed) return;
         const img = tvWindow.document.getElementById('ml-'+idx);
         if(img) {
@@ -1120,7 +1122,7 @@ function loadMainLogos(input) {
     function toggleLock() {
         isLocked = !isLocked;
         const btn = document.getElementById('lockBtn');
-       
+      
         // ޕޭޖުގައިވާ ހުރިހާ ބަޓަނާއި، އިންޕުޓްތައް ހޮވާލުން
         const allElements = document.querySelectorAll('input, select, textarea, button');
         // ވިޝުއަލްކޮށް ލޮކް ކުރާ ބައިތައް (ކުލަ ފަނޑުކުރަން)
@@ -1153,7 +1155,7 @@ function loadMainLogos(input) {
                     el.disabled = true;
                 }
             });
-           
+          
         } else {
             // --- UNLOCK MODE ---
             btn.innerHTML = "🔓 ހުޅުވިފައި (ބަދަލުކުރެވޭ މޯޑު)";
@@ -1196,7 +1198,7 @@ function downloadConfig() {
             try {
                 const loaded = JSON.parse(e.target.result);
                 Object.assign(designState, loaded);
-               
+              
                 // --- RESTORE SUBTITLE STYLES ---
                 if(loaded.savedStStyles) {
                     stStyles = loaded.savedStStyles;
@@ -1215,17 +1217,17 @@ function downloadConfig() {
                 if(tvWindow && !tvWindow.closed) {
                     for (const key in designState) { liveUpdate(key, designState[key]); }
                     renderMainLogos();
-                   
+                  
                     // Force update titles visually on TV
                     updateJalsaText();
                 }
-               
+              
                 // Update checkbox states based on loaded settings
                 if(designState.plAutoHide !== undefined) document.getElementById('plAutoHideCheck').checked = designState.plAutoHide;
                 if(designState.logoAutoHide !== undefined) document.getElementById('logoAutoHideCheck').checked = designState.logoAutoHide;
                 if(designState.keepTitle !== undefined) document.getElementById('keepTitleCheck').checked = designState.keepTitle;
                 if(designState.t5Layout !== undefined) document.getElementById('t5LayoutSel').value = designState.t5Layout;
-               
+              
                 refreshLogoInputs();
                 alert("Settings & Titles Loaded Successfully!");
             } catch(err) {
@@ -1274,7 +1276,7 @@ function downloadConfig() {
 // ޓޮޕް 5 ޓެކްސްޓް އެލައިންމަންޓް
         if(key === 't5Align') {
              root.style.setProperty('--t5-align', value);
-            
+           
              if(value === 'left') root.style.setProperty('--t5-flex-align', 'flex-start');
              else if(value === 'right') root.style.setProperty('--t5-flex-align', 'flex-end');
              else root.style.setProperty('--t5-flex-align', 'center');
@@ -1287,7 +1289,7 @@ function downloadConfig() {
         if(key === 'badgeY') root.style.setProperty('--star-y', value + 'px');
         if(key === 'trophyX') root.style.setProperty('--troph-x', value + 'px');
         if(key === 'trophyY') root.style.setProperty('--troph-y', value + 'px');
-       
+      
         if(key === 'badgeAnim') {
             const el = doc.getElementById('royalStar');
             el.className = 'royal-star-badge'; // reset
@@ -1304,12 +1306,12 @@ function downloadConfig() {
         if(key === 't5Bottom') root.style.setProperty('--t5-b', value + '%');
         if(key === 't5PhotoSize') root.style.setProperty('--t5-p', value + 'px');
         if(key === 't5TextY') root.style.setProperty('--t5-text-y', value + 'px');
-       
+      
         if(key === 'tvX') root.style.setProperty('--tv-x', value + '%');
         if(key === 'tvY') root.style.setProperty('--tv-y', value + '%');
         if(key === 'tvW') root.style.setProperty('--tv-w', value + '%');
         if(key === 'tvH') root.style.setProperty('--tv-h', value + '%');
-       
+      
         if(key === 't5Layout') {
             const card = doc.getElementById('card');
             card.className = card.className.replace(/t5-\w+/g, ''); // Remove old
@@ -1317,7 +1319,7 @@ function downloadConfig() {
             liveUpdate('t5CardW', designState.t5CardW);
             liveUpdate('t5CardH', designState.t5CardH);
         }
-       
+      
         if(key === 't5NameSize') root.style.setProperty('--t5-n-s', value + 'em');
         if(key === 't5EngSize') root.style.setProperty('--t5-e-s', value + 'em');
         if(key === 't5DetSize') root.style.setProperty('--t5-d-s', value + 'em');
@@ -1340,14 +1342,14 @@ function downloadConfig() {
             if(c) c.style.transform = `translate(calc(-50% + ${designState.cardX}px), calc(-50% + ${designState.cardY}px))`;
         }
         if(key === 'pVis') { const el = doc.querySelector('.photo-col'); if(el) el.style.visibility = (value === 'show') ? 'visible' : 'hidden'; }
-       
+      
         if(key === 'lSize') { const logoImg = doc.getElementById('logoImg'); if(logoImg) logoImg.style.height = value + 'px'; }
         if(key === 'bgLoop') { const vid = doc.getElementById('bgVid'); if(vid) vid.style.display = (value === 'on') ? 'block' : 'none'; }
         if(key === 'layoutDir') { const card = doc.getElementById('card'); if(card) card.style.flexDirection = (value === 'rtl') ? 'row-reverse' : 'row'; }
         if(key === 'textAlign') { const txt = doc.querySelector('.text-col'); if(txt) txt.style.textAlign = value; }
         if(key === 'bgPreset') { const bg = doc.getElementById('bgLayer'); if(bg) { bg.className = ''; bg.classList.add(value); } }
         if(key === 'bdColor') { doc.documentElement.style.setProperty('--theme-color', value); }
-       
+      
         if(key === 'mtY' || key === 'mtX') doc.getElementById('titleContainer').style.transform = `translate(${designState.mtX}px, ${designState.mtY}px)`;
         if(key === 'mtSize') doc.getElementById('jt1').style.fontSize = value + 'em';
         if(key === 'mtColor') {
@@ -1364,7 +1366,7 @@ function downloadConfig() {
         if(key === 'stGap') doc.getElementById('subTitleWrap').style.gap = value + 'px';
         if(key === 'stAlign') doc.getElementById('subTitleWrap').style.textAlign = value;
         if(key === 'stLine') { updateJalsaText(); }
-       
+      
         if(key === 'plSize') doc.querySelectorAll('.pl-img').forEach(el => el.style.height = value + 'px');
         if(key === 'plGap') doc.getElementById('plContainer').style.gap = value + 'px';
         if(key === 'plY') doc.getElementById('plContainer').style.bottom = value + 'px';
@@ -1373,7 +1375,7 @@ function downloadConfig() {
         if(key === 'tnDSize') doc.getElementById('tnD').style.fontSize = value + 'em';
         if(key === 'tnESize') doc.getElementById('tnE').style.fontSize = value + 'em';
         if(key === 'tnEColor') doc.getElementById('tnE').style.color = value;
-       
+      
         if(key === 'nLine') {
             const h2 = doc.getElementById('tnE');
             if(value === 'on') { h2.style.borderBottom = '2px solid var(--theme-color)'; h2.style.display='inline-block'; }
@@ -1383,7 +1385,7 @@ function downloadConfig() {
         if(key === 'tfDColor') { doc.getElementById('tfD').style.color = value; doc.getElementById('tfE').style.color = value; }
         if(key === 'tcDSize') { doc.getElementById('tcD').style.fontSize = value + 'em'; doc.getElementById('tcE').style.fontSize = (value*0.8) + 'em'; }
         if(key === 'tcDColor') { doc.getElementById('tcD').style.color = value; doc.getElementById('tcE').style.color = value; }
-       
+      
         if(key === 'pSize') { const img = doc.getElementById('stuImg'); if(img) { img.style.width = value+'px'; img.style.height = value+'px'; } }
         if(key === 'pX' || key === 'pY') { const el = doc.querySelector('.photo-col'); if(el) el.style.transform = `translate(${designState.pX}px, ${designState.pY}px)`; }
         if(key === 'pFit') { const img = doc.getElementById('stuImg'); if(img) img.style.objectFit = value; }
@@ -1392,13 +1394,13 @@ function downloadConfig() {
             if(card) {
                 card.className = ''; card.classList.add(value);
                 if(document.getElementById('top5ModeCheck').checked) card.classList.add('t5-'+designState.t5Layout);
-               
+              
                 if(value === 'custom' && customBorderData) {
                     card.style.backgroundImage = `url(${customBorderData})`; card.style.backgroundSize = "100% 100%"; card.style.border = "none"; card.style.boxShadow = "none";
                 } else if (value === 'custom_bg' && customCardBgData) {
                     card.style.backgroundImage = `url(${customCardBgData})`; card.style.backgroundSize = "100% 100%"; card.style.border = "none"; card.style.boxShadow = "none";
                 } else { card.style.backgroundImage = "none"; }
-               
+              
                 if(value !== 'b1' && value !== 'b0') card.classList.add('active');
             }
         }
@@ -1413,7 +1415,7 @@ function downloadConfig() {
         // 200 ROYAL THEMES GENERATOR (SORTED BY COLOR)
         // ============================================================
         let cssGen = "";
-       
+      
         // Helper to create gradients
         const makeGrad = (c1, c2, type="linear") => {
             return type === "radial"
@@ -1590,7 +1592,7 @@ function downloadConfig() {
        // 4. STYLE LOOP (ULTIMATE FIX FOR TOP 5)
         for(let i=0; i<200; i++) {
             let style = baseStyles[i % baseStyles.length];
-           
+          
             // 1. މައިގަނޑު ކާޑުގެ ސްޓައިލް (Main Card)
             cssGen += `.b${i+1} { ${style} }\n`;
             // 2. ޓޮޕް 5 ގެ ކުދި ކާޑުތަކަށް (Force Style on List Items)
@@ -1645,12 +1647,12 @@ function downloadConfig() {
                 }
                 body { margin:0; overflow:hidden; background:#000; user-select:none; }
                 #fsBtn { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); z-index:9999; padding:20px; font-size:20px; cursor:pointer; background:var(--theme-color); border:2px solid #fff; }
-               
+              
                 #bgLayer { position:fixed; top:0; left:0; width:100%; height:100%; z-index:0; transition: background 0.5s ease; }
                 ${cssGen}
                 #jalsaContent { position:absolute; top:0; left:0; width:100%; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; z-index:10; transition: opacity 0.8s ease; opacity:1; }
                 #jalsaContent.hidden { opacity: 0; pointer-events:none; visibility: hidden; }
-               
+              
                 #titleContainer { width: 90%; max-width: 1600px; text-align: center; }
                 #mainTitleWrap { width: 100%; text-align: ${designState.mtAlign}; }
                 #subTitleWrap { width: 100%; text-align: ${designState.stAlign}; display:flex; flex-direction:column; gap:${designState.stGap}px; }
@@ -1663,7 +1665,7 @@ function downloadConfig() {
                     transition: opacity 0.5s ease;
                 }
                 .main-logo-img { position:absolute; transform:translate(-50%, -50%); object-fit:contain; filter: drop-shadow(0 5px 15px rgba(0,0,0,0.5)); transition: all 0.3s ease; }
-               
+              
                 #plContainer {
                     position:absolute; bottom:${designState.plY}px; width:100%;
                     display:flex; justify-content:center; gap:${designState.plGap}px; z-index:25; padding:0 20px; flex-wrap:wrap;
@@ -1697,7 +1699,7 @@ function downloadConfig() {
                 .comm-tiny { padding: 0 !important; height: 3px !important; min-height: 0 !important; overflow: hidden; border:none !important; background: var(--theme-color); opacity: 0.6; margin-top:20px; }
                 .photo-col { position:relative; flex:0 0 auto; min-width: 200px; display:flex; justify-content:center; align-items:center; transform:translate(${designState.pX}px, ${designState.pY}px); transition: transform 0.2s ease; height: 100%; }
                 .shrink-photo img { width: 8px !important; height: 8px !important; min-width: 0 !important; min-height: 0 !important; border-radius: 50% !important; border: none !important; box-shadow: 0 0 5px var(--theme-color) !important; background: var(--theme-color); padding: 0 !important; }
-               
+              
                 #stuImg {
                     width:${designState.pSize}px;
                     height:${designState.pSize}px;
@@ -1714,7 +1716,7 @@ function downloadConfig() {
                 @keyframes royalSpin { 100% { transform: translate(var(--star-x), var(--star-y)) rotate(360deg); } }
                 @keyframes royalPulse { 0% { transform: translate(var(--star-x), var(--star-y)) scale(1); } 50% { transform: translate(var(--star-x), var(--star-y)) scale(1.1); } 100% { transform: translate(var(--star-x), var(--star-y)) scale(1); } }
                 @keyframes royalFloat { 0%, 100% { transform: translate(var(--star-x), var(--star-y)); } 50% { transform: translate(var(--star-x), calc(var(--star-y) - 10px)); } }
-               
+              
                 @keyframes trophyPulse { 0% { transform: translate(var(--troph-x), var(--troph-y)) scale(1); } 50% { transform: translate(var(--troph-x), var(--troph-y)) scale(1.05); } 100% { transform: translate(var(--troph-x), var(--troph-y)) scale(1); } }
                 @keyframes trophyShine { 0% { filter: brightness(1); transform: translate(var(--troph-x), var(--troph-y)); } 50% { filter: brightness(1.3); transform: translate(var(--troph-x), var(--troph-y)); } 100% { filter: brightness(1); transform: translate(var(--troph-x), var(--troph-y)); } }
                 @keyframes trophyZoom { 0% { transform: translate(var(--troph-x), var(--troph-y)) scale(0); opacity:0; } 80% { transform: translate(var(--troph-x), var(--troph-y)) scale(1.1); opacity:1; } 100% { transform: translate(var(--troph-x), var(--troph-y)) scale(1); opacity:1; } }
@@ -1742,11 +1744,11 @@ function downloadConfig() {
                 .trophy-badge img { height: 40px; margin-right: 5px; }
                 .rank-num { font-size: 30px; font-weight: 900; color: #3e2723; font-family: 'Times New Roman', serif; }
                 .text-col { flex:1; text-align:${designState.textAlign}; padding:0 30px; color:white; display:flex; flex-direction:column; justify-content:center; }
-               
+              
                 /* VIDEO & ADS LAYERS */
                 #videoLayer { position:fixed; top:0; left:0; width:100%; height:100%; background:#000; z-index:5500; display:none; justify-content:center; align-items:center; transition: all 0.5s ease; }
                 #videoLayer video, #videoLayer iframe { width:100%; height:100%; border:none; }
-               
+              
                 #adLayer { position:fixed; top:0; left:0; width:100%; height:100%; background:#000; z-index:6000; display:none; justify-content:center; align-items:center; }
                 #adImg, #adVid { width:100%; height:100%; object-fit:contain; position:absolute; top:0; left:0; }
                 /* OVERLAY MODE FOR VIDEO */
@@ -1763,7 +1765,7 @@ function downloadConfig() {
                 .overlay-mode .fac-dv, .overlay-mode .crs-dv, .overlay-mode .comm { display:none; }
                 /* --- TOP 5 BANNER MODE (Royal Edition) --- */
                 .top5-mode #titleContainer { display: none !important; }
-               
+              
                 .top5-mode #videoLayer {
                     top: var(--tv-y);
                     left: var(--tv-x);
@@ -1796,7 +1798,7 @@ function downloadConfig() {
     top: auto !important;
     left: 50% !important;
     transform: translateX(-50%) !important;
-   
+  
     /* Layout */
     flex-direction: row !important;
     align-items: center !important;
@@ -1839,17 +1841,17 @@ function downloadConfig() {
     position: absolute !important;
     top: 0 !important;
     left: 0 !important;
-   
+  
     /* Default Size */
     width: var(--star-s, 200px) !important;
     height: auto !important;
     min-width: 50px !important;
-   
+  
     /* Position */
     transform: translate(var(--star-x), var(--star-y)) !important;
-   
+  
     z-index: 9999 !important;
-   
+  
     /* ނޯޓް: މިތަނުން އެނިމޭޝަން ލައިން ވަނީ ނަގާފައި.
        މިހާރު ކޮންޓްރޯލް ޕެނަލްގެ ޑްރޮޕްޑައުން އިން މަސައްކަތް ކުރާނެ. */
 }
@@ -1885,7 +1887,7 @@ function downloadConfig() {
                     justify-content: center;
                     border-left: 4px solid var(--theme-color);
                 }
-               
+              
                 /* FIX: Text Y Position within Top 5 Card */
                 .top5-mode .text-col {
                     text-align: center !important;
@@ -1900,7 +1902,7 @@ function downloadConfig() {
                     width: var(--t5-p) !important; height: var(--t5-p) !important;
                     object-fit: cover !important;
                 }
-               
+              
                 .top5-mode h1 { font-size: var(--t5-n-s) !important; }
                 .top5-mode h2 { font-size: var(--t5-e-s) !important; margin: 5px 0 !important; }
                 .top5-mode .fac-dv, .top5-mode .crs-dv { font-size: var(--t5-d-s) !important; }
@@ -2003,14 +2005,14 @@ body.triple-active #card {
         <p>This is required for Audio/Video to play automatically.</p>
     </div>
     <button id="fsBtn" onclick="goFS(this)">⛶ FULL SCREEN</button>
-   
+  
     <div id="adLayer">
         <img id="adImg" style="display:none;">
         <video id="adVid" style="display:none;" muted autoplay></video>
     </div>
-   
+  
     <div id="videoLayer"></div>
-   
+  
     <div id="bgLayer" class="${designState.bgPreset}"></div>
     <div id="mainLogosContainer"></div>
     <div id="plContainer"></div>
@@ -2051,7 +2053,7 @@ body.triple-active #card {
         tvWindow.document.close();
         renderMainLogos();
         updateJalsaBackground();
-       
+      
         // FIX: Force update title and layout after a short delay
         setTimeout(() => {
             updateJalsaText();
@@ -2092,7 +2094,7 @@ body.triple-active #card {
         if(!tvWindow || tvWindow.closed) return;
         const doc = tvWindow.document;
         doc.getElementById('jt1').innerText = document.getElementById('jLine1').value;
-       
+      
         for(let i=2; i<=8; i++) {
              let txt = document.getElementById('jLine'+i).value;
              let el = doc.getElementById('jt'+i);
@@ -2109,7 +2111,7 @@ body.triple-active #card {
                  el.style.display = 'block';
              }
         }
-       
+      
         if(currentFontData) {
              const style = doc.createElement('style');
              style.innerHTML = `@font-face { font-family: 'Faruuma'; src: url('${currentFontData}') format('truetype'); } .jalsa-text, .font-dv { font-family: 'Faruuma', 'Amiri', serif !important; }`;
@@ -2123,30 +2125,30 @@ body.triple-active #card {
         jContent.classList.remove('hidden');
         jContent.style.opacity = '1';
         jContent.style.display = 'flex';
-       
+      
         const mainLogoContainer = tvWindow.document.getElementById('mainLogosContainer');
         if(designState.logoVisible) mainLogoContainer.style.opacity = '1';
-       
+      
         if(designState.plVisible) {
              tvWindow.document.getElementById('plContainer').style.opacity = '1';
         }
-       
+      
         document.getElementById('statusMsg').innerText = "MODE: Jalsa Titles";
         lastActiveState = 'title';
     }
     function updateTV() {
         if(!tvWindow || tvWindow.closed) { alert("TV Closed!"); return; }
         stopAds();
-       
+      
         if(!designState.keepTitle) {
             tvWindow.document.getElementById('jalsaContent').classList.add('hidden');
         } else {
             tvWindow.document.getElementById('jalsaContent').classList.remove('hidden');
         }
-       
+      
         const mainLogoContainer = tvWindow.document.getElementById('mainLogosContainer');
         if(designState.logoAutoHide) mainLogoContainer.style.opacity = '0';
-       
+      
         const plContainer = tvWindow.document.getElementById('plContainer');
         if(designState.plAutoHide) plContainer.style.opacity = '0';
         const doc = tvWindow.document;
@@ -2156,7 +2158,7 @@ body.triple-active #card {
         doc.getElementById('tfE').textContent = document.getElementById('fE').value;
         doc.getElementById('tcD').textContent = document.getElementById('cD').value;
         doc.getElementById('tcE').textContent = document.getElementById('cE').value;
-       
+      
         const cmText = document.getElementById('cm').value;
         const commBox = doc.getElementById('tcm');
         if(!cmText || cmText.trim() === "") {
@@ -2168,7 +2170,7 @@ body.triple-active #card {
         }
         const img = doc.getElementById('stuImg');
         const pCol = doc.querySelector('.photo-col');
-       
+      
         if(currentPhotoData) {
             img.src = currentPhotoData;
             img.style.display='block';
@@ -2194,7 +2196,7 @@ body.triple-active #card {
                  doc.getElementById('royalStar').style.display = 'none';
              }
         }
-       
+      
         // SHOW TROPHY IF RANK EXISTS
         const rankTxt = document.getElementById('rankInput').value;
         const trophyWrap = doc.getElementById('trophyWrap');
@@ -2220,19 +2222,27 @@ body.triple-active #card {
     // --- NEW BADGE LOADERS ---
     function loadRoyalStar(input) {
         if(input.files && input.files[0]) {
+            if (royalStarBlobUrl && royalStarBlobUrl.startsWith('blob:')) {
+                URL.revokeObjectURL(royalStarBlobUrl);
+            }
             royalStarData = URL.createObjectURL(input.files[0]);
+            royalStarBlobUrl = royalStarData;
             alert("Royal Star Loaded!");
         }
     }
-   
+  
     function loadTrophy(input) {
         if(input.files && input.files[0]) {
+            if (trophyBlobUrl && trophyBlobUrl.startsWith('blob:')) {
+                URL.revokeObjectURL(trophyBlobUrl);
+            }
             trophyData = URL.createObjectURL(input.files[0]);
+            trophyBlobUrl = trophyData;
             alert("Trophy Icon Loaded!");
         }
     }
     // --- VIDEO & ADS & PRESENTATION V29 ---
-   
+  
     function loadPartnerLogos(input) {
         partnerLogosData = [];
         for(let f of input.files) {
@@ -2243,7 +2253,7 @@ body.triple-active #card {
         updatePartnerLogos();
         alert(partnerLogosData.length + " Partner Logos Loaded.");
     }
-   
+  
     function updatePartnerLogos() {
         if(!tvWindow || tvWindow.closed) return;
         const c = tvWindow.document.getElementById('plContainer');
@@ -2256,7 +2266,7 @@ body.triple-active #card {
         });
         c.style.gap = designState.plGap + 'px';
     }
-   
+  
     function togglePartnerLogos() {
         designState.plVisible = !designState.plVisible;
         if(tvWindow && !tvWindow.closed) {
@@ -2274,24 +2284,24 @@ body.triple-active #card {
         }
         alert(adFiles.length + " Ads (Photos/Videos) Loaded.");
     }
-   
+  
     function toggleAdsMode() {
         if(adInterval) stopAds(); else startAds();
     }
-   
+  
     function startAds() {
         if(!tvWindow || tvWindow.closed || adFiles.length === 0) { alert("No Ads Loaded or TV Closed!"); return; }
         const adLayer = tvWindow.document.getElementById('adLayer');
         const adImg = tvWindow.document.getElementById('adImg');
         const adVid = tvWindow.document.getElementById('adVid');
-       
+      
         adLayer.style.display = 'flex';
         adIndex = 0;
-       
+      
         function playAd() {
             if(!adInterval) return;
             let currentAd = adFiles[adIndex];
-           
+          
             if(currentAd.type === 'image') {
                 adVid.pause(); adVid.style.display = 'none';
                 adImg.src = currentAd.url;
@@ -2307,7 +2317,7 @@ body.triple-active #card {
                 adVid.onended = () => { if(adInterval) { nextAdIndex(); playAd(); } };
             }
         }
-       
+      
         function nextAdIndex() {
             adIndex = (adIndex + 1) % adFiles.length;
         }
@@ -2315,7 +2325,7 @@ body.triple-active #card {
         playAd();
         document.getElementById('statusMsg').innerText = "ADS MODE ON";
     }
-   
+  
     function stopAds() {
         adInterval = false;
         if(tvWindow && !tvWindow.closed) {
@@ -2329,7 +2339,7 @@ body.triple-active #card {
         currentVidIdx = 0;
         alert(playlist.length + " General Videos Queued.");
     };
-   
+  
     function loadTop5Videos(input) {
         top5VideoPlaylist = Array.from(input.files);
         currentVidIdx = 0;
@@ -2344,7 +2354,7 @@ body.triple-active #card {
         // 2. Safety Checks
         if(targetStudentList.length === 0) { alert("Student List is empty!"); return; }
         if(targetVideoFiles.length === 0) { alert("No Videos Loaded!"); return; }
-       
+      
         // Reset index if needed
         if(currentVidIdx >= targetStudentList.length) currentVidIdx = 0;
         // 3. Get Student Data
@@ -2353,7 +2363,7 @@ body.triple-active #card {
         // Prepare Search Terms (Dhivehi & English)
         let nameDhivehi = studentData.nD ? studentData.nD.trim() : "";
         let nameEnglish = studentData.nE ? studentData.nE.trim().toLowerCase() : "";
-       
+      
         // Clean names
         nameDhivehi = nameDhivehi.replace(/\s+/g, ' ');
         nameEnglish = nameEnglish.replace(/\s+/g, ' ');
@@ -2362,16 +2372,16 @@ body.triple-active #card {
         let foundVideo = targetVideoFiles.find(file => {
             let fileName = decodeURIComponent(file.name);
             let fileNameLower = fileName.toLowerCase().replace(/\s+/g, ' ');
-           
+          
             let matchDhivehi = (nameDhivehi.length > 0) && fileName.includes(nameDhivehi);
             let matchEnglish = (nameEnglish.length > 0) && fileNameLower.includes(nameEnglish);
-           
+          
             return matchDhivehi || matchEnglish;
         });
         if(foundVideo) {
             // Play Video
             playLocalVideoFile(foundVideo);
-           
+          
             // Highlight Student & Load Data
             let listElement = document.getElementById('stuList');
             if(listElement.options.length > currentVidIdx) {
@@ -2386,7 +2396,7 @@ body.triple-active #card {
                     doc.getElementById('tfE').textContent = studentData.fE || "";
                     doc.getElementById('tcD').textContent = studentData.cD || "";
                     doc.getElementById('tcE').textContent = studentData.cE || "";
-                   
+                  
                     if(studentData.rank) {
                         doc.getElementById('rankNum').innerText = studentData.rank;
                         doc.getElementById('trophyWrap').style.display = 'flex';
@@ -2397,7 +2407,7 @@ body.triple-active #card {
                 // -------------------------------
             }
             document.getElementById('statusMsg').innerText = "PLAYING: " + studentData.nD;
-           
+          
             // Move index forward for the next click
             currentVidIdx++;
         } else {
@@ -2428,28 +2438,36 @@ body.triple-active #card {
                 tvWindow.document.getElementById('card').classList.remove('active');
             }
         }
+        if (currentVideoBlobUrl && currentVideoBlobUrl.startsWith('blob:')) {
+            URL.revokeObjectURL(currentVideoBlobUrl);
+        }
         const url = URL.createObjectURL(file);
+        currentVideoBlobUrl = url;
         const vl = tvWindow.document.getElementById('videoLayer');
         vl.innerHTML = `<video id="mainVid" src="${url}" autoplay controls style="width:100%;height:100%; object-fit:contain;" preload="auto"></video>`;
         vl.style.display = 'flex';
-        setTimeout(() => { 
-            const v = tvWindow.document.getElementById('mainVid'); 
-            if(v) v.play().catch(e => { 
-                console.error('Video Play Error:', e); 
-                v.muted = true; 
-                v.play(); 
-            }); 
+        setTimeout(() => {
+            const v = tvWindow.document.getElementById('mainVid');
+            if(v) v.play().catch(e => {
+                console.error('Video Play Error:', e);
+                v.muted = true;
+                v.play();
+            });
         }, 100);
         document.getElementById('statusMsg').innerText = "PLAYING VIDEO";
     }
-   
+  
     function stopVideo() {
         if(!tvWindow || tvWindow.closed) return;
         const vl = tvWindow.document.getElementById('videoLayer');
         vl.innerHTML = ''; vl.style.display = 'none';
+        if (currentVideoBlobUrl && currentVideoBlobUrl.startsWith('blob:')) {
+            URL.revokeObjectURL(currentVideoBlobUrl);
+            currentVideoBlobUrl = null;
+        }
         tvWindow.document.body.classList.remove('overlay-mode');
         if(!document.getElementById('top5ModeCheck').checked) tvWindow.document.body.classList.remove('top5-mode');
-       
+      
         if(lastActiveState === 'title') {
             showJalsaScreen();
         } else if (lastActiveState === 'card') {
@@ -2461,7 +2479,7 @@ body.triple-active #card {
             }
         }
     }
-   
+  
    // --- SMART LINK CONVERTER (FIXED FOR YOUTUBE & OTHERS) ---
     function getSmartLink(url, type) {
         if (!url) return "";
@@ -2486,7 +2504,7 @@ body.triple-active #card {
                 return `https://www.youtube.com/embed/${videoId}?autoplay=1&controls=1&rel=0&modestbranding=1`;
             }
         }
-       
+      
         // 2. Canva Handling
         if (type === 'canva' || (type === 'auto' && url.includes('canva.com'))) {
              let cleanUrl = url.split('?')[0];
@@ -2510,7 +2528,7 @@ body.triple-active #card {
         let url = document.getElementById('presLink').value;
         const type = document.getElementById('presType').value;
         if(!url) return;
-       
+      
         if(url.includes("<iframe")) {
             const match = url.match(/src="([^"]+)"/);
             if(match && match[1]) url = match[1];
@@ -2522,46 +2540,50 @@ body.triple-active #card {
         tvWindow.document.getElementById('jalsaContent').classList.add('hidden');
         tvWindow.document.getElementById('card').classList.remove('active');
     }
-   
+  
     function loadPDF(input) {
         if(input.files && input.files[0]) {
+            if (pdfBlobUrl && pdfBlobUrl.startsWith('blob:')) {
+                URL.revokeObjectURL(pdfBlobUrl);
+            }
             pdfUrl = URL.createObjectURL(input.files[0]);
+            pdfBlobUrl = pdfUrl;
             alert("PDF Loaded. Click 'Show PDF' to display.");
         }
     }
-   
+  
     function showPDFScreen() {
         if(!tvWindow || tvWindow.closed) return;
         if(!pdfUrl) { alert("No PDF Loaded!"); return; }
-       
+      
         const vl = tvWindow.document.getElementById('videoLayer');
         vl.innerHTML = `<iframe src="${pdfUrl}" style="width:100%; height:100%; border:none;"></iframe>`;
         vl.style.display = 'flex';
         tvWindow.document.getElementById('jalsaContent').classList.add('hidden');
         tvWindow.document.getElementById('card').classList.remove('active');
     }
-   
+  
     function playYoutube() {
         if(!tvWindow || tvWindow.closed) return;
-       
+      
         // Reset Views
         tvWindow.document.getElementById('jalsaContent').classList.add('hidden');
         tvWindow.document.getElementById('card').classList.remove('active');
         let url = document.getElementById('ytLink').value;
         if(!url) return;
-       
+      
         const embedUrl = getSmartLink(url, 'auto');
-       
+      
         if(!embedUrl) { alert("Invalid YT Link"); return; }
-       
+      
         const vl = tvWindow.document.getElementById('videoLayer');
         // Added 'web-share' and 'referrerpolicy' for better compatibility
         vl.innerHTML = `<iframe id="ytFrame" src="${embedUrl}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen style="width:100%;height:100%;"></iframe>`;
         vl.style.display = 'flex';
-       
+      
         document.getElementById('statusMsg').innerText = "PLAYING YOUTUBE";
     }
-   
+  
     function openYTPopup() {
         const url = document.getElementById('ytLink').value;
         if(url) window.open(url, '_blank', 'width=1280,height=720');
@@ -2586,11 +2608,11 @@ body.triple-active #card {
     document.getElementById('fontFile').onchange = e => {
         const file = e.target.files[0];
         if(!file) return;
-       
+      
         const r = new FileReader();
         r.onload = evt => {
             currentFontData = evt.target.result; // Save Data URL
-           
+          
             // 1. Editor Font Update
             const newFont = new FontFace('Faruuma', `url(${currentFontData})`);
             newFont.load().then(f => {
@@ -2600,7 +2622,7 @@ body.triple-active #card {
             // 2. TV Window Font Update (Force Inject)
             if(tvWindow && !tvWindow.closed) {
                 const doc = tvWindow.document;
-               
+              
                 // Remove old font style if exists
                 const oldStyle = doc.getElementById('customFontStyle');
                 if(oldStyle) oldStyle.remove();
@@ -2618,11 +2640,11 @@ body.triple-active #card {
                     }
                 `;
                 doc.head.appendChild(style);
-               
+              
                 // Force Redraw
                 updateJalsaText();
             }
-           
+          
             alert("Custom Font Loaded & Applied!");
         };
         r.readAsDataURL(file);
@@ -2644,7 +2666,7 @@ body.triple-active #card {
             alert("Custom Frame Loaded!");
         }; r.readAsDataURL(e.target.files[0]);
     };
-   
+  
     function loadCustomCardBg(input) {
         const r = new FileReader();
         r.onload = evt => {
@@ -2712,13 +2734,13 @@ body.triple-active #card {
         activeListMode = mode;
         document.getElementById('btnGenList').className = mode === 'general' ? 'list-switch-btn active' : 'list-switch-btn';
         document.getElementById('btnTop5List').className = mode === 'top5' ? 'list-switch-btn active' : 'list-switch-btn';
-       
+      
         if(mode === 'top5') {
             document.getElementById('top5ModeCheck').checked = true;
         } else {
              document.getElementById('top5ModeCheck').checked = false;
         }
-       
+      
         filterList();
         currentVidIdx = 0;
     }
@@ -2727,7 +2749,7 @@ body.triple-active #card {
         reader.onload = e => { cb(e.target.result); };
         reader.readAsDataURL(file);
     }
-   
+  
     function manualPhoto(input) {
     if (input.files && input.files[0]) {
         // 1. ކުރިން ފޮޓޯއެއް އިންނަމަ، އެ ފޮޓޯ މެމޮރީން ފޮހެލާ (Free up RAM)
@@ -2748,9 +2770,9 @@ body.triple-active #card {
         let l = document.getElementById('stuList');
         l.innerHTML = ''; // Clear existing
         let frag = document.createDocumentFragment(); // Use Fragment for batch append
-       
+      
         let targetArray = activeListMode === 'top5' ? top5Students : students;
-       
+      
         targetArray.forEach((s,i) => {
             let fullName = (s.nD || '') + (s.nE || '');
             fullName = fullName.toLowerCase().replace(/\s+/g, ' '); // Normalize
@@ -2766,10 +2788,10 @@ body.triple-active #card {
     }
    function loadStudent() {
     let idx = document.getElementById('stuList').value;
-   
+  
     // Check which list and photo set to use
     let targetArray = activeListMode === 'top5' ? top5Students : students;
-   
+  
     // ================== ބަދަލު ގެންނަންވީ ބައި ==================
     let targetPhotos;
     if (activeListMode === 'top5') {
@@ -2779,7 +2801,7 @@ body.triple-active #card {
         targetPhotos = photoFiles;
     }
     // =========================================================
-   
+  
     if(!targetArray[idx]) return;
     let s = targetArray[idx];
     // Populate text fields
@@ -2791,17 +2813,17 @@ body.triple-active #card {
     document.getElementById('cE').value = s.cE || "";
     document.getElementById('cm').value = s.cm || "";
     document.getElementById('rankInput').value = s.rank || "";
-       
+      
         // --- IMPROVED PHOTO FINDER ---
         let pNameRaw = s.ph ? s.ph.trim() : ""; // Name from CSV
         let pName = pNameRaw.toLowerCase(); // Lowercase version
         let pNameNoExt = pName.split('.').slice(0, -1).join('.'); // Remove .jpg if present
         let prev = document.getElementById('previewImg');
         let stat = document.getElementById('pStat');
-       
+      
         // Try matching in 3 ways: Exact, Lowercase, or No Extension
         let foundFile = targetPhotos[pNameRaw] || targetPhotos[pName] || targetPhotos[pNameNoExt];
-       
+      
         if(foundFile) {
             stat.innerText = "Loading...";
             processPhoto(foundFile, d => {
@@ -2809,7 +2831,7 @@ body.triple-active #card {
                 prev.src = d;
                 stat.innerText = "✅ Found";
                 stat.style.color="green";
-               
+              
                 // --- FIX: REMOVED AUTO TV UPDATE CODE FROM HERE ---
                 // The lines that forced the photo to TV immediately have been removed.
                 // Now photo only goes to TV when you click 'Live'.
@@ -2817,7 +2839,7 @@ body.triple-active #card {
         } else {
             currentPhotoData = null;
             prev.src = "https://via.placeholder.com/150";
-           
+          
             // Show error in the preview box
             if(pNameRaw === "") {
                 stat.innerText = "No Photo Name";
@@ -2844,7 +2866,7 @@ body.triple-active #card {
         let targetVideoFiles = activeListMode === 'top5' ? top5VideoPlaylist : playlist;
         // 2. Safety Checks
         if(currentVidIdx <= 0) { alert("މިއީ ފުރަތަމަ ވީޑިއޯ! ފަހަތަކަށް ނުދެވޭނެ."); return; }
-       
+      
         // 3. Move Index Backwards
         currentVidIdx--;
         // 4. Get Student Data for the PREVIOUS student
@@ -2853,7 +2875,7 @@ body.triple-active #card {
         // Prepare Search Terms
         let nameDhivehi = studentData.nD ? studentData.nD.trim() : "";
         let nameEnglish = studentData.nE ? studentData.nE.trim().toLowerCase() : "";
-       
+      
         // Clean names
         nameDhivehi = nameDhivehi.replace(/\s+/g, ' ');
         nameEnglish = nameEnglish.replace(/\s+/g, ' ');
@@ -2862,16 +2884,16 @@ body.triple-active #card {
         let foundVideo = targetVideoFiles.find(file => {
             let fileName = decodeURIComponent(file.name);
             let fileNameLower = fileName.toLowerCase().replace(/\s+/g, ' ');
-           
+          
             let matchDhivehi = (nameDhivehi.length > 0) && fileName.includes(nameDhivehi);
             let matchEnglish = (nameEnglish.length > 0) && fileNameLower.includes(nameEnglish);
-           
+          
             return matchDhivehi || matchEnglish;
         });
         if(foundVideo) {
             // Play Previous Video
             playLocalVideoFile(foundVideo);
-           
+          
             // Highlight Student in List
             let listElement = document.getElementById('stuList');
             if(listElement.options.length > currentVidIdx) {
@@ -2915,10 +2937,10 @@ body.triple-active #card {
     }
     function adjustZone(side, prop, val) {
         if(!tvWindow || tvWindow.closed) return;
-       
+      
         const zoneId = (side === 'left') ? 'zoneLeft' : 'zoneRight';
         const el = tvWindow.document.getElementById(zoneId);
-       
+      
         if(el) {
             if(prop === 'width') {
                 // ފުޅާމިން ބަދަލުކުރުން (%)
@@ -3000,6 +3022,12 @@ body.triple-active #card {
             document.getElementById('connStatus').style.color = "red";
         }
     }, 2000);
+    // Prevent Enter key from refreshing in inputs (except licenseKey)
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' && e.target.tagName === 'INPUT' && e.target.id !== 'licenseKey') {
+            e.preventDefault();
+        }
+    });
 </script>
 </body>
 </html>
