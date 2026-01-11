@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="dv" dir="rtl">
+<html lang="en" dir="ltr">
 <head>
     <meta charset="UTF-8">
     <title>Rasfahi portal (V33.0 - Platinum Edition - Navigation & Flex)</title>
     <style>
-/* 1. Google Fonts */
+    /* 1. Google Fonts */
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Cinzel:wght@400;700&family=Noto+Sans+Thaana:wght@400;700&display=swap');
 
     /* 2. Faruuma Font */
@@ -13,7 +13,7 @@
         src: local('Faruuma'), local('Faruumaa'), url('Fonts/faruuma.ttf') format('truetype');
     }
 
-    /* --- THEME 5: THE MAJESTIC ONYX (Matte Black & Gold) --- */
+    /* --- THEME 5: THE MAJESTIC ONYX (Matte Black & Gold) - LTR EDITION --- */
     :root {
         /* Background: Luxury Matte Black */
         --bg-grad: radial-gradient(circle at center, #1a1a1a 0%, #000000 100%);
@@ -40,11 +40,12 @@
         margin: 0; padding: 0;
         background: var(--bg-grad);
         color: var(--text-main);
-        font-family: 'Inter', 'Faruuma', 'Noto Sans Thaana', sans-serif;
+        font-family: 'Inter', sans-serif;
         overflow: hidden; height: 100vh; width: 100vw;
+        text-align: left; /* Global Left Align */
     }
 
-    /* LAYOUT (PRESERVED) */
+    /* LAYOUT */
     .main-layout { display: flex; gap: 20px; height: 100vh; width: 100vw; padding: 20px; box-sizing: border-box; }
     
     .sidebar {
@@ -75,9 +76,22 @@
     }
 
     /* TYPOGRAPHY */
-    h1, h2, h3, h4 { margin: 5px 0; font-family: 'Cinzel', serif; color: var(--text-heading); text-transform: uppercase; letter-spacing: 2px; }
-    label { display: block; font-size: 13px; color: var(--text-label); margin: 15px 0 5px 0; font-weight: bold; letter-spacing: 1px; }
-    .d-label { font-size: 17px; font-weight: bold; color: var(--accent-color); border-bottom: 2px solid var(--accent-color); padding-bottom: 5px; margin-top: 30px; font-family: 'Cinzel', serif; }
+    h1, h2, h3, h4 { 
+        margin: 5px 0; font-family: 'Cinzel', serif; 
+        color: var(--text-heading); text-transform: uppercase; letter-spacing: 2px; 
+        text-align: left;
+    }
+    label { 
+        display: block; font-size: 13px; color: var(--text-label); 
+        margin: 15px 0 5px 0; font-weight: bold; letter-spacing: 1px; 
+        text-align: left;
+    }
+    .d-label { 
+        font-size: 17px; font-weight: bold; color: var(--accent-color); 
+        border-bottom: 2px solid var(--accent-color); padding-bottom: 5px; 
+        margin-top: 30px; font-family: 'Cinzel', serif; 
+        text-align: left;
+    }
 
     /* INPUTS */
     input[type="text"], textarea, select, input[type="number"] { 
@@ -85,11 +99,25 @@
         border: var(--input-border); border-radius: 4px; 
         background: var(--input-bg); color: #fff; 
         font-size: 15px; box-sizing: border-box; transition: 0.2s;
+        text-align: left;
+        font-family: 'Inter', sans-serif;
     }
-    input:focus, textarea:focus, select:focus { border-color: var(--accent-color); background: #000; outline: none; box-shadow: 0 0 10px rgba(255, 215, 0, 0.2); }
+    input:focus, textarea:focus, select:focus { 
+        border-color: var(--accent-color); 
+        background: #000; outline: none; 
+        box-shadow: 0 0 10px rgba(255, 215, 0, 0.2); 
+    }
     
+    /* Specific Inputs - Centered */
     #jLine1 { font-size: 22px !important; text-align: center !important; color: #ffd700 !important; background: #000 !important; border: 1px solid var(--accent-color) !important; font-family: 'Cinzel', serif !important; }
     .sub-title-input { text-align: center !important; background: #333 !important; border: 1px solid #555 !important; }
+
+    /* DHIVEHI OVERRIDE */
+    .font-dv {
+        font-family: 'Faruuma', 'Noto Sans Thaana', sans-serif !important;
+        direction: rtl !important;
+        text-align: right !important;
+    }
 
     /* BUTTONS */
     button { 
@@ -101,7 +129,7 @@
     button:hover { background: #e0aa3e; color: #000; transform: translateY(-1px); }
 
     .launch-btn { background: #b00020 !important; border-color: #ff5252 !important; color: #fff !important; margin-bottom: 12px; padding: 14px; }
-    .controls { display: flex; gap: 10px; margin-bottom: 15px; }
+    .controls { display: flex; gap: 10px; margin-bottom: 15px; justify-content: center; }
     .btn-live { background: #004d40 !important; color: #fff !important; border-color:#00796b !important; flex: 2; padding: 12px; }
     .btn-nav { background: #263238 !important; color: #fff !important; width: 60px; font-size: 20px; border-color: #546e7a !important; }
     .btn-vid { background: #212121 !important; padding: 10px; width: 100%; margin-top: 5px; color:#fff !important; }
@@ -116,12 +144,14 @@
     .banner-sub { color: #ffd700; font-size: 24px; font-family: 'Cinzel', serif; display: block; margin-top: 5px; text-shadow: 0 0 10px rgba(255, 215, 0, 0.5); }
 
     .group-box { border: 1px solid #333; padding: 30px 20px 20px; margin-bottom: 25px; background: rgba(255,255,255,0.05); position: relative; }
-    .group-title { position: absolute; top: -10px; right: 20px; background: #000; color: #ffd700; padding: 4px 15px; font-size: 11px; font-weight: bold; border: 1px solid var(--accent-color); }
+    .group-title { position: absolute; top: -10px; left: 20px; /* Left aligned */ background: #000; color: #ffd700; padding: 4px 15px; font-size: 11px; font-weight: bold; border: 1px solid var(--accent-color); }
 
     .video-panel { background: rgba(255,255,255,0.05); padding: 15px; border: 1px solid #424242; margin-bottom: 20px; }
-    #stuList { background: #000; color: #fff; border: 1px solid #424242; min-height: 250px; }
+    
+    #stuList { background: #000; color: #fff; border: 1px solid #424242; min-height: 250px; text-align: left; }
     #stuList option { padding: 10px; border-bottom: 1px solid #333; }
-    .preview-container { background: #111; border: 1px solid #333; padding: 15px; display: flex; justify-content: center; margin-top: 15px; }
+    
+    .preview-container { background: #111; border: 1px solid #333; padding: 15px; display: flex; justify-content: center; margin-top: 15px; gap: 15px; }
     #previewImg { width: 110px; height: 110px; border: 3px solid var(--accent-color); background: #000; object-fit: cover; }
 
     /* SCROLLBAR */
@@ -130,9 +160,25 @@
     ::-webkit-scrollbar-thumb { background: #ffd700; border-radius: 4px; }
 
     /* EXTRAS */
-    #cpFsBtn { position: fixed; bottom: 20px; left: 20px; width: 50px; height: 50px; background: #000; color: var(--accent-color); border-radius: 50%; z-index: 1000; font-size: 24px; border: 2px solid var(--accent-color); display:flex; align-items:center; justify-content:center; }
+    #cpFsBtn { position: fixed; bottom: 20px; right: 20px; /* Moved to Right */ width: 50px; height: 50px; background: #000; color: var(--accent-color); border-radius: 50%; z-index: 1000; font-size: 24px; border: 2px solid var(--accent-color); display:flex; align-items:center; justify-content:center; }
+    
+    /* Security Overlay - CENTERED CONTENT */
     #securityOverlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 99999; display: flex; align-items: center; justify-content: center; }
-    .sec-box { background: #111; padding: 50px; border: 2px solid var(--accent-color); text-align: center; width: 500px; box-shadow: 0 0 50px rgba(255, 215, 0, 0.2); }
+    
+    .sec-box { 
+        background: #111; 
+        padding: 50px; 
+        border: 2px solid var(--accent-color); 
+        text-align: center !important; /* Force Center */
+        width: 500px; 
+        box-shadow: 0 0 50px rgba(255, 215, 0, 0.2); 
+    }
+    
+    /* Force children to center */
+    .sec-box h1, .sec-box h2, .sec-box p, .sec-box div {
+        text-align: center !important;
+    }
+
     .sec-input { background: #fff; color: #000; border: none; padding: 15px; font-size: 22px; width: 100%; margin-top: 20px; text-align: center; }
     .sec-btn { background: var(--accent-color); color: #000; width: 100%; margin-top: 25px; padding: 15px; font-size: 18px; border: none; font-weight: bold; }
     .admin-pic { width: 120px; height: 120px; border-radius: 50%; border: 4px solid var(--accent-color); margin-bottom: 20px; background: #000; }
@@ -144,8 +190,10 @@
     .lang-btn.active { background:#000 !important; color:#ffd700 !important; border:1px solid #ffd700; }
     .list-switch-btn { background:#111 !important; color:#888; padding:10px; flex:1; border:1px solid #333; }
     .list-switch-btn.active { background:var(--accent-color) !important; color:#000 !important; }
-    </style>
     
+    /* Lock State */
+    .locked-zone { opacity: 0.5; pointer-events: none; filter: grayscale(0.8); }
+    </style>
 </head>
 <body oncontextmenu="return false;">
 
