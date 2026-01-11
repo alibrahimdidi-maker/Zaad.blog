@@ -41,7 +41,7 @@
         margin: 0; padding: 0;
         background: var(--bg-grad);
         color: var(--text-main);
-        font-family: 'Inter', sans-serif; /* Priority to English Font */
+        font-family: 'Inter', sans-serif;
         overflow: hidden; height: 100vh; width: 100vw;
         text-align: left; /* Global Left Align */
     }
@@ -106,16 +106,16 @@
         border: var(--input-border); border-radius: 2px; 
         background: var(--input-bg); color: #fff; 
         font-size: 15px; box-sizing: border-box; transition: 0.2s;
-        text-align: left; /* English Inputs Left Aligned */
+        text-align: left;
         font-family: 'Inter', sans-serif;
     }
     input:focus, textarea:focus, select:focus { border-color: var(--accent-color); background: #000; outline: none; }
     
-    /* Center Specific Inputs */
+    /* Specific Inputs - Centered */
     #jLine1 { font-size: 22px !important; text-align: center !important; color: #fff !important; background: #000 !important; border: 1px solid var(--accent-color) !important; font-family: 'Cinzel', serif !important; }
     .sub-title-input { text-align: center !important; background: #1c2541 !important; border: 1px solid #3a506b !important; }
 
-    /* DHIVEHI INPUT OVERRIDE (Keep Right Aligned) */
+    /* DHIVEHI OVERRIDE */
     .font-dv {
         font-family: 'Faruuma', 'Noto Sans Thaana', sans-serif !important;
         direction: rtl !important;
@@ -146,7 +146,7 @@
     .banner-sub { color: #edf2f4; font-size: 24px; font-family: 'Cinzel', serif; display: block; margin-top: 5px; }
 
     .group-box { border: 1px solid #3a506b; padding: 30px 20px 20px; margin-bottom: 25px; background: rgba(255,255,255,0.02); position: relative; }
-    .group-title { position: absolute; top: -10px; left: 20px; /* Left aligned label */ background: #3a506b; color: #fff; padding: 4px 15px; font-size: 11px; font-weight: bold; }
+    .group-title { position: absolute; top: -10px; left: 20px; background: #3a506b; color: #fff; padding: 4px 15px; font-size: 11px; font-weight: bold; }
 
     .video-panel { background: rgba(0,0,0,0.3); padding: 15px; border: 1px solid #3a506b; margin-bottom: 20px; }
     #stuList { background: #0b132b; color: #fff; border: 1px solid #415a77; min-height: 250px; text-align: left; }
@@ -160,17 +160,24 @@
     ::-webkit-scrollbar-thumb { background: #415a77; }
 
     /* EXTRAS */
-    #cpFsBtn { position: fixed; bottom: 20px; right: 20px; /* Moved to Right for LTR */ width: 50px; height: 50px; background: #3a506b; color: #fff; border-radius: 50%; z-index: 1000; font-size: 24px; border: 2px solid #fff; display:flex; align-items:center; justify-content:center; }
+    #cpFsBtn { position: fixed; bottom: 20px; right: 20px; width: 50px; height: 50px; background: #3a506b; color: #fff; border-radius: 50%; z-index: 1000; font-size: 24px; border: 2px solid #fff; display:flex; align-items:center; justify-content:center; }
     
-    /* Security Overlay - CENTERED */
+    /* Security Overlay - CENTERED CONTENT */
     #securityOverlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #0d1b2a; z-index: 99999; display: flex; align-items: center; justify-content: center; }
+    
     .sec-box { 
         background: #1b263b; 
         padding: 50px; 
         border: 1px solid var(--accent-color); 
-        text-align: center !important; /* Force Center */
+        text-align: center !important; /* FORCED CENTER */
         width: 500px; 
     }
+    
+    /* Force overrides for children in Welcome Note */
+    .sec-box h1, .sec-box h2, .sec-box p, .sec-box div {
+        text-align: center !important;
+    }
+
     .sec-input { background: #fff; color: #000; border: none; padding: 15px; font-size: 22px; width: 100%; margin-top: 20px; text-align: center; }
     .sec-btn { background: var(--accent-color); color: #000; width: 100%; margin-top: 25px; padding: 15px; font-size: 18px; border: none; font-weight: bold; }
     .admin-pic { width: 120px; height: 120px; border-radius: 50%; border: 4px solid var(--accent-color); margin-bottom: 20px; background: #000; }
