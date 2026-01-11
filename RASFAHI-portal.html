@@ -3186,6 +3186,12 @@ body.triple-active #card {
             e.preventDefault();
             return false;
         }
+        // 6. F5 (Refresh) Block - Add this inside your keydown listener
+if(e.key === 'F5' || e.keyCode === 116) {
+    e.preventDefault();
+    alert("⚠️ Safety: Refresh is disabled during the show!");
+    return false;
+}
 
         // 5. Ctrl + S (Save Page - މިއިން ޑައުންލޯޑް ކުރުން ހުއްޓުވޭނެ)
         if(e.ctrlKey && (e.key === 's' || e.key === 'S' || e.keyCode === 83)) {
