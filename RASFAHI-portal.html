@@ -3293,16 +3293,49 @@ function filterList() {
         }
     });
 
+    // --- AUTO-SAVE SYSTEM (FIXED & VERIFIED) ---
+
+    // 1. Load settings when page opens
+    window.addEventListener('load', function() {
+        const savedConfig = localStorage.getItem('rasfahi_config_v33');
+        if (savedConfig) {
+            try {
+                const loaded = JSON.parse(savedConfig);
+                Object.assign(designState, loaded);
+                
+                // Restore Text Fields
+                if(loaded.savedTitles) {
+                    // Check if element exists before setting value to avoid errors
+                    if(document.getElementById('jLine1')) document.getElementById('jLine1').value = loaded.savedTitles.t1 || "";
+                    if(document.getElementById('jLine2')) document.getElementById('jLine2').value = loaded.savedTitles.t2 || "";
+                    if(document.getElementById('jLine3')) document.getElementById('jLine3').value = loaded.savedTitles.t3 || "";
+                    if(document.getElementById('jLine4')) document.getElementById('jLine4').value = loaded.savedTitles.t4 || "";
+                    if(document.getElementById('jLine5')) document.getElementById('jLine5').value = loaded.savedTitles.t5 || "";
+                    if(document.getElementById('jLine6')) document.getElementById('jLine6').value = loaded.savedTitles.t6 || "";
+                    if(document.getElementById('jLine7')) document.getElementById('jLine7').value = loaded.savedTitles.t7 || "";
+                    if(document.getElementById('jLine8')) document.getElementById('jLine8').value = loaded.savedTitles.t8 || "";
+                }
+                
+                if(loaded.savedStStyles) {
+                    stStyles = loaded.savedStStyles;
+                }
+                console.log("✅ Auto-saved settings restored!");
+            } catch (e) {
+                console.error("Error loading auto-save", e);
+            }
+        }
+    });
+
     // 2. Modified liveUpdate to trigger Auto-Save
-    const originalLiveUpdate = liveUpdate; // Keep old function reference
+    const originalLiveUpdate = liveUpdate; 
     liveUpdate = function(key, value) {
         // Call original function
         originalLiveUpdate(key, value);
         
-        // Save to LocalStorage (Debounced slightly to prevent thrashing)
+        // Save to LocalStorage
         clearTimeout(window.saveTimeout);
         window.saveTimeout = setTimeout(() => {
-            // Update current text values before saving (ALL 8 Lines)
+            
             designState.savedTitles = {
                 t1: document.getElementById('jLine1').value,
                 t2: document.getElementById('jLine2').value,
@@ -3317,7 +3350,7 @@ function filterList() {
             
             localStorage.setItem('rasfahi_config_v33', JSON.stringify(designState));
             console.log("💾 Settings Auto-Saved");
-        }, 1000); // Saves 1 second after you stop adjusting
+        }, 1000); 
     };
 </script>
 </body>
