@@ -2348,14 +2348,13 @@ body.triple-active #card {
         const pCol = doc.querySelector('.photo-col');
         
         if(currentPhotoData) { 
-            img.src = currentPhotoData; 
-            img.style.display='block'; 
-            pCol.classList.remove('shrink-photo');
-        } else { 
-            img.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'; 
-            pCol.classList.add('shrink-photo');
-        }
-
+           img.src = currentPhotoData; 
+           img.style.display='block'; 
+           pCol.classList.remove('shrink-photo');
+       } else { 
+           img.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'; 
+           pCol.classList.add('shrink-photo');
+       }
         // Auto Toggle Top 5 Mode
         if(activeListMode === 'top5') {
             doc.body.classList.add('top5-mode');
