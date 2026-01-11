@@ -3014,6 +3014,17 @@ body.triple-active #card {
            }
 
            // 2. އާ ފޮޓޯ ލޯޑުކުރުން (RAM Safe Mode)
+           // (މިބައި ނުލައި ފޮޓޯއެއް ނާރާނެ)
+           currentPhotoObjectUrl = URL.createObjectURL(foundFile);
+           currentPhotoData = currentPhotoObjectUrl; 
+
+           // 3. ޕްރިވިއު ދެއްކުން
+           prev.src = currentPhotoObjectUrl; 
+           stat.innerText = "✅ Found (RAM Safe)"; 
+           stat.style.color="green";
+       }
+
+           // 2. އާ ފޮޓޯ ލޯޑުކުރުން (RAM Safe Mode)
            currentPhotoObjectUrl = URL.createObjectURL(foundFile);
            currentPhotoData = currentPhotoObjectUrl; 
 
