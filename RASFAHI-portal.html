@@ -2970,19 +2970,26 @@ body.triple-active #card {
     }
 }
 
-    function filterList() {
-        let t = document.getElementById('search').value.toLowerCase();
-        let l = document.getElementById('stuList'); l.innerHTML = '';
-        
-        let targetArray = activeListMode === 'top5' ? top5Students : students;
-        
-        targetArray.forEach((s,i) => {
-            if((s.nD+s.nE).toLowerCase().includes(t)) {
-                let prefix = activeListMode === 'top5' ? "🏆 " : (i+1)+". ";
-                let o = document.createElement('option'); o.value=i; o.text=prefix+s.nD; l.add(o);
-            }
-        });
-    }
+    let filterTimeout;
+function debouncedFilter() {
+    clearTimeout(filterTimeout);
+    filterTimeout = setTimeout(() => {
+        filterList();
+    }, 300); 
+}
+function filterList() {
+    let t = document.getElementById('search').value.toLowerCase();
+    let l = document.getElementById('stuList'); l.innerHTML = '';
+    
+    let targetArray = activeListMode === 'top5' ? top5Students : students;
+    
+    targetArray.forEach((s,i) => {
+        if((s.nD+s.nE).toLowerCase().includes(t)) {
+            let prefix = activeListMode === 'top5' ? "🏆 " : (i+1)+". ";
+            let o = document.createElement('option'); o.value=i; o.text=prefix+s.nD; l.add(o);
+        }
+    });
+}
 
    function loadStudent() {
     let idx = document.getElementById('stuList').value;
