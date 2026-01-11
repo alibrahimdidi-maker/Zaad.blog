@@ -3006,17 +3006,22 @@ body.triple-active #card {
         let foundFile = targetPhotos[pNameRaw] || targetPhotos[pName] || targetPhotos[pNameNoExt];
         
         if(foundFile) {
-            stat.innerText = "Loading...";
-            processPhoto(foundFile, d => {
-                currentPhotoData = d; 
-                prev.src = d; 
-                stat.innerText = "✅ Found"; 
-                stat.style.color="green";
-                
-                // --- FIX: REMOVED AUTO TV UPDATE CODE FROM HERE ---
-                // The lines that forced the photo to TV immediately have been removed.
-                // Now photo only goes to TV when you click 'Live'.
-            });
+           stat.innerText = "Loading...";
+
+           // 1. މެމަރީ ސާފުކުރުން (Memory Cleanup)
+           if (currentPhotoObjectUrl) {
+               URL.revokeObjectURL(currentPhotoObjectUrl);
+           }
+
+           // 2. އާ ފޮޓޯ ލޯޑުކުރުން (RAM Safe Mode)
+           currentPhotoObjectUrl = URL.createObjectURL(foundFile);
+           currentPhotoData = currentPhotoObjectUrl; 
+
+           // 3. ޕްރިވިއު ދެއްކުން
+           prev.src = currentPhotoObjectUrl; 
+           stat.innerText = "✅ Found (RAM Safe)"; 
+           stat.style.color="green";
+       }
         } else {
             currentPhotoData = null; 
             prev.src = "https://via.placeholder.com/150"; 
