@@ -2678,7 +2678,43 @@ function openTV() {
             document.getElementById('connStatus').style.color = "red";
         }
     }, 2000);
+// 3. Safety Check for TV Window
+    setInterval(function(){
+        if(tvWindow && tvWindow.closed) {
+            document.getElementById('connStatus').innerText = "❌ TV CLOSED";
+            document.getElementById('connStatus').style.background = "#ffebee";
+            document.getElementById('connStatus').style.color = "red";
+        }
+    }, 2000);
 
+    function updateMasterScale(axis, value) {
+        if(axis === 'width') document.getElementById('dispMW').innerText = value + '%';
+        if(axis === 'height') document.getElementById('dispMH').innerText = value + '%';
+
+        if(tvWindow && !tvWindow.closed) {
+            const stage = tvWindow.document.getElementById('masterStage');
+            if(stage) {
+                stage.style[axis] = value + '%';
+            }
+        }
+    }
+
+    function resetMasterScale() {
+        updateMasterScale('width', 100);
+        updateMasterScale('height', 100);
+        document.getElementById('dispMW').innerText = '100%';
+        document.getElementById('dispMH').innerText = '100%';
+        
+        // Reset Sliders visually
+        const inputs = document.querySelectorAll('input[type="range"]');
+        inputs.forEach(input => {
+            if(input.getAttribute('oninput') && input.getAttribute('oninput').includes('updateMasterScale')) {
+                input.value = 100;
+            }
+        });
+    }
+
+</script>
 </script>
 </body>
 </html>
