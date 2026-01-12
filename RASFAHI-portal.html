@@ -1029,62 +1029,79 @@
         }
     }
 
-    // --- IMPROVED SECURITY FUNCTION ---
-function verifyLicense() {
-    var inputKey = document.getElementById('licenseKey').value.trim();
-    var msgArea = document.getElementById('secMsg');
-    var overlay = document.getElementById('securityOverlay');
+   <script>
+    document.addEventListener('contextmenu', event => event.preventDefault());
+    function verifyLicense() {
+        var inputKey = document.getElementById('licenseKey').value.trim();
+        var msgArea = document.getElementById('secMsg');
+        var overlay = document.getElementById('securityOverlay');
+        var mainApp = document.getElementById('mainApp');
 
-    // ހުސްކޮށް އޮތްތޯ ބެލުން
-    if (!inputKey) {
-        msgArea.innerText = "⚠️ Please enter the license key!";
-        return;
-    }
-
-    try {
-        // 1. Decode Key
-        var decodedString = atob(inputKey); 
-        
-        // 2. Strict Validation Check
-        if (decodedString.indexOf("ROYAL_EXP_") !== 0) {
-            throw new Error("Invalid Format");
-        }
-
-        var parts = decodedString.split('_');
-        if (parts.length < 5) throw new Error("Incomplete Key");
-
-        var expDateString = parts[2]; 
-        var custName = parts[4];      
-        var expDate = new Date(expDateString);
-        var today = new Date();
-        today.setHours(0,0,0,0); 
-
-        // 3. Check Expiry
-        if (today > expDate) {
-            msgArea.innerText = "❌ The license has expired!";
-            msgArea.style.color = "red";
+        // Empty Check
+        if (!inputKey) {
+            msgArea.innerText = "⚠️ Please enter the key!";
+            msgArea.style.color = "yellow";
             return;
         }
 
-        // 4. Success - Remove Overlay completely from DOM
-        // (މިއީ ކުރިން ހުރި ކޯޑަށްވުރެ ރައްކާތެރި ގޮތެކެވެ. ލޮކް ސްކްރީން އެއްކޮށް ފޮހެލާނެއެވެ.)
-        overlay.style.opacity = '0';
-        setTimeout(function(){
-            overlay.remove(); 
-        }, 500);
+        try {
+            // 1. Decode Key
+            var decodedString = atob(inputKey); 
+            
+            // 2. Validation
+            if (decodedString.indexOf("ROYAL_EXP_") !== 0) {
+                throw new Error("Invalid Format");
+            }
 
-        document.getElementById('mainApp').style.display = 'flex';
-        document.getElementById('licenseStatus').innerText = "✅ PLATINUM ACTIVE | " + custName;
+            var parts = decodedString.split('_');
+            var expDateString = parts[2]; 
+            var custName = parts[4];       
+            var expDate = new Date(expDateString);
+            var today = new Date();
+            today.setHours(0,0,0,0); 
 
-    } catch (e) {
-        msgArea.innerText = "❌ The key is incorrect!";
-        msgArea.style.color = "red";
-        document.getElementById('licenseKey').value = ""; // Clear input for security
+            // 3. Expiry Check
+            if (today > expDate) {
+                msgArea.innerText = "❌ License Expired!";
+                msgArea.style.color = "#ff5252";
+                return;
+            }
+
+            // 4. SUCCESS - UNLOCK
+            msgArea.innerText = "✅ Verifying...";
+            msgArea.style.color = "#4ade80";
+            
+            setTimeout(function(){
+                // Fade out overlay
+                overlay.style.transition = "opacity 0.8s ease";
+                overlay.style.opacity = '0';
+                overlay.style.pointerEvents = 'none'; // Prevent clicking while fading
+                
+                // Show Main App
+                if(mainApp) mainApp.style.display = 'flex';
+
+                // Update Status in Sidebar
+                var statusEl = document.getElementById('licenseStatus');
+                if(statusEl) statusEl.innerText = "✅ PLATINUM ACTIVE | " + custName;
+
+                // Remove Overlay from DOM after fade
+                setTimeout(function(){
+                    overlay.style.display = 'none'; 
+                }, 800);
+            }, 500);
+
+        } catch (e) {
+            msgArea.innerText = "❌ Invalid Key!";
+            msgArea.style.color = "#ff5252";
+            document.getElementById('licenseKey').value = ""; 
+        }
     }
-}
-    // Allow "Enter" key to submit
-    document.getElementById('licenseKey').addEventListener("keyup", e => { if (e.key === "Enter") verifyLicense(); });
-  
+
+    // Allow "Enter" key to trigger login
+    document.getElementById('licenseKey').addEventListener("keyup", function(e) { 
+        if (e.key === "Enter") verifyLicense(); 
+    });
+    
     let tvWindow = null;
     let students = [];
     let photoFiles = {};
