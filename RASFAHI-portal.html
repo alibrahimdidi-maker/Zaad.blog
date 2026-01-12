@@ -2890,45 +2890,79 @@ function openTV() {
         generalPlayIndex++;
     }
 
-    // --- FINAL SYSTEM CHECKS ---
+    // 1. UPDATED SUBTITLE LOGIC (INDIVIDUAL CONTROL)
+    let stStyles = {};
+    for(let i=1; i<=7; i++) stStyles[i] = { size: 2.6, color: '#ffffff', underline: false };
 
-    // 1. Prevent Accidental Refresh (Data Loss Protection)
-    window.onbeforeunload = function(e) {
-        e = e || window.event;
-        // For older browsers
-        if (e) { e.returnValue = 'Sure?'; }
-        return 'Sure?';
-    };
+    function setSubtitleStyle(prop, val) {
+        let line = document.getElementById('stStyleSelector').value;
+        if(prop === 'size') { stStyles[line].size = val; document.getElementById('stSizeDisp').innerText = val; }
+        if(prop === 'color') stStyles[line].color = val;
+        if(prop === 'underline') stStyles[line].underline = val;
+        updateJalsaText();
+    }
 
-    // 2. Clear Console clutter to improve performance slightly
-    console.log = function() {}; 
+    function updateSubtitleInputs() {
+        let line = document.getElementById('stStyleSelector').value;
+        let style = stStyles[line];
+        document.getElementById('stSizeInput').value = style.size;
+        document.getElementById('stSizeDisp').innerText = style.size;
+        document.getElementById('stColorInput').value = style.color;
+        document.getElementById('stUnderlineInput').checked = style.underline;
+    }
 
-    // 3. Safety Check for TV Window
-    setInterval(function(){
-        if(tvWindow && tvWindow.closed) {
-            document.getElementById('connStatus').innerText = "❌ TV CLOSED";
-            document.getElementById('connStatus').style.background = "#ffebee";
-            document.getElementById('connStatus').style.color = "red";
+    function updateJalsaText() {
+        if(!tvWindow || tvWindow.closed) return;
+        const doc = tvWindow.document;
+        
+        // Main Title
+        const mt = doc.getElementById('jt1');
+        mt.innerText = document.getElementById('jLine1').value;
+        if(designState.tLine === 'on') {
+            mt.style.borderBottom = '3px solid ' + designState.mtColor;
+            mt.style.paddingBottom = '10px';
+        } else {
+            mt.style.borderBottom = 'none';
+            mt.style.paddingBottom = '0';
         }
-    }, 2000);
-// 3. Safety Check for TV Window
-    setInterval(function(){
-        if(tvWindow && tvWindow.closed) {
-            document.getElementById('connStatus').innerText = "❌ TV CLOSED";
-            document.getElementById('connStatus').style.background = "#ffebee";
-            document.getElementById('connStatus').style.color = "red";
-        }
-    }, 2000);
 
+        // Subtitles
+        for(let i=1; i<=7; i++) {
+            let inputId = 'jLine' + (i+1);
+            let tvId = 'jt' + (i+1);
+            let txt = document.getElementById(inputId).value;
+            let el = doc.getElementById(tvId);
+            if(el) {
+                el.innerText = txt;
+                el.style.fontSize = stStyles[i].size + 'em';
+                el.style.color = stStyles[i].color;
+                if(stStyles[i].underline) {
+                    el.style.borderBottom = `2px solid ${stStyles[i].color}`;
+                    el.style.display = 'inline-block';
+                    el.style.marginBottom = '5px';
+                } else {
+                    el.style.borderBottom = 'none';
+                    el.style.display = 'block';
+                    el.style.marginBottom = '0';
+                }
+            }
+        }
+        
+        if(currentFontData) {
+             const style = doc.createElement('style');
+             style.innerHTML = `@font-face { font-family: 'Faruuma'; src: url('${currentFontData}') format('truetype'); } .jalsa-text, .font-dv { font-family: 'Faruuma', serif !important; }`;
+             doc.head.appendChild(style);
+        }
+    }
+
+    // 2. SCREEN SCALING LOGIC (UNIVERSAL FIT)
     function updateMasterScale(axis, value) {
         if(axis === 'width') document.getElementById('dispMW').innerText = value + '%';
         if(axis === 'height') document.getElementById('dispMH').innerText = value + '%';
 
         if(tvWindow && !tvWindow.closed) {
             const stage = tvWindow.document.getElementById('masterStage');
-            if(stage) {
-                stage.style[axis] = value + '%';
-            }
+            if(stage) stage.style[axis] = value + '%';
         }
     }
 
@@ -2937,64 +2971,69 @@ function openTV() {
         updateMasterScale('height', 100);
         document.getElementById('dispMW').innerText = '100%';
         document.getElementById('dispMH').innerText = '100%';
-        
-        // Reset Sliders visually
-        const inputs = document.querySelectorAll('input[type="range"]');
-        inputs.forEach(input => {
+        document.querySelectorAll('input[type="range"]').forEach(input => {
             if(input.getAttribute('oninput') && input.getAttribute('oninput').includes('updateMasterScale')) {
                 input.value = 100;
             }
         });
     }
-    
-    // 1. Create Tooltip Element
-    const ttBox = document.createElement('div');
+
+    // 3. ULTRA TRI-LINGUAL TOOLTIP SYSTEM
+    const ttBox = document.getElementById('tooltip-box') || document.createElement('div');
     ttBox.id = 'tooltip-box';
     document.body.appendChild(ttBox);
 
-    // 2. Define Recommendations Database
-    const tips = {
-        'csvFile': { t: 'Student List', d: 'Format: CSV. Columns: Name(Dv), Name(En), Detail1, Detail2...' },
-        'photoFolder': { t: 'Student Photos', d: '📷 Rec: JPG/PNG. Ratio: 1:1 (Square). Size: 500x500px.' },
-        'mainLogosInput': { t: 'Main Logos', d: '📷 Rec: Transparent PNG. Max 5 logos.' },
-        'adFolder': { t: 'Ads & Banners', d: '🎬 Video: 1920x1080 MP4. 📷 Photo: 1920x1080 JPG.' },
-        'videoPlaylist': { t: 'General Playlist', d: '🎬 Rec: 1080p MP4 (H.264). Audio: AAC.' },
-        'top5VideoFiles': { t: 'Top 5 Videos', d: '🎬 Rec: Short clips (10-20s). 1080p MP4.' },
-        'royalStarFile': { t: 'Royal Star Icon', d: '📷 Rec: Transparent PNG. Gold/Yellow color.' },
-        'trophyFile': { t: 'Trophy Icon', d: '📷 Rec: Transparent PNG. High Quality.' },
-        'customBorderFile': { t: 'Custom Frame', d: '📷 Rec: Transparent PNG Frame. 1920x1080px.' },
-        'customCardBgFile': { t: 'Card Background', d: '📷 Rec: Texture/Image. 1920x1080px.' },
-        'jalsaBgFile': { t: 'Main Background', d: '🎬 Video Loop or 📷 Image. 1920x1080px.' },
-        'aspectRatioFix': { t: 'Anti-Stretch', d: 'Check this for huge LED Walls to prevent text stretching.' },
-        'lockBtn': { t: 'Safety Lock', d: 'Click to prevent accidental changes during the event.' }
+    const dict = {
+        'btnLaunchTV': { en: 'Open TV Screen', dv: 'ޓީވީ ސްކްރީން ހުޅުވުން', ar: 'فتح شاشة العرض' },
+        'btnSaveConfig': { en: 'Save Settings', dv: 'ސެޓިންގްސް ސޭވް ކުރުން', ar: 'حفظ الإعدادات' },
+        'btnLoadConfig': { en: 'Load Settings', dv: 'ސެޓިންގްސް ނެގުން', ar: 'تحميل الإعدادات' },
+        'csvFile': { en: 'Student List (CSV)', dv: 'ދަރިވަރުންގެ ލިސްޓު', ar: 'قائمة الطلاب' },
+        'photoFolder': { en: 'Photos (Rec: 5MB)', dv: 'ފޮޓޯތައް (5 މެގަބައިޓް)', ar: 'الصور (٥ ميجابايت)' },
+        // ... (Add more mappings as needed)
     };
 
-    // 3. Attach Events Automatically
-    document.querySelectorAll('input, button, select, div').forEach(el => {
-        // Add hover listener
+    document.querySelectorAll('button, input, select, div').forEach(el => {
         el.addEventListener('mouseenter', (e) => {
-            const id = e.target.id;
-            const tip = tips[id];
-            
-            if (tip) {
-                ttBox.innerHTML = `<strong>${tip.t}</strong>${tip.d}`;
-                ttBox.style.display = 'block';
-            } else if (e.target.tagName === 'BUTTON' && e.target.innerText) {
-                // Auto-tooltip for buttons without specific ID mapping
-                ttBox.innerHTML = `<strong>Action</strong>${e.target.innerText}`;
+            let data = null;
+            if (el.id && dict[el.id]) data = dict[el.id];
+            else if (el.tagName === 'BUTTON') {
+                const txt = el.innerText.toLowerCase();
+                if(txt.includes('turn on')) data = dict['btnLaunchTV'];
+                // Add more generic checks here
+            }
+
+            if (data) {
+                ttBox.innerHTML = `
+                    <div style="border-bottom:1px solid #444; padding-bottom:3px; margin-bottom:3px; color:#f9d976;">🇬🇧 ${data.en}</div>
+                    <div style="direction:rtl; color:#fff; font-family:'Faruuma'; font-size:14px;">🇲🇻 ${data.dv}</div>
+                    <div style="direction:rtl; color:#94a3b8; font-family:'Amiri', serif;">🇸🇦 ${data.ar}</div>
+                `;
                 ttBox.style.display = 'block';
             }
         });
-
         el.addEventListener('mousemove', (e) => {
-            ttBox.style.top = (e.clientY + 15) + 'px';
-            ttBox.style.left = (e.clientX + 15) + 'px';
+            ttBox.style.top = (e.clientY + 20) + 'px';
+            ttBox.style.left = (e.clientX + 20) + 'px';
         });
-
-        el.addEventListener('mouseleave', () => {
-            ttBox.style.display = 'none';
-        });
+        el.addEventListener('mouseleave', () => ttBox.style.display = 'none');
     });
+
+    // 4. THEME APPLIER
+    function applyTheme(n) {
+        liveUpdate('cBorder', 'b'+((n*20)-19)); 
+        liveUpdate('bgPreset', 'bg'+((n*20)-19));
+    }
+
+    // 5. SAFETY CHECKS
+    window.onbeforeunload = function(e) { e = e || window.event; if (e) { e.returnValue = 'Sure?'; } return 'Sure?'; };
+    console.log = function() {}; 
+    setInterval(function(){
+        if(tvWindow && tvWindow.closed) {
+            document.getElementById('connStatus').innerText = "❌ TV CLOSED";
+            document.getElementById('connStatus').style.background = "#ffebee";
+            document.getElementById('connStatus').style.color = "red";
+        }
+    }, 2000);
 </script>
 </body>
 </html>
