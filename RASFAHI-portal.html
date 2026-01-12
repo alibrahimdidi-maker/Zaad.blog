@@ -195,22 +195,48 @@
             <input type="password" id="licenseKey" placeholder="Paste Key Here..." 
                    style="text-align:center; font-size:18px; border:1px solid var(--royal-gold); background:rgba(0,0,0,0.5);">
             
-            <button onclick="verifyLicense()" 
-                    style="margin-top:20px; background:var(--royal-gold); color:#000; border:none; font-weight:bold; font-size:16px; padding:12px;">
-                🔓 UNLOCK SYSTEM
+           <button onclick="verifyLicense()" 
+                    style="margin-top:20px; background:linear-gradient(to bottom, #d4af37, #b8860b); color:#051021; border:none; font-weight:900; font-size:16px; padding:15px; width:100%; border-radius:6px; font-family:'Cinzel', serif; box-shadow:0 5px 15px rgba(212, 175, 55, 0.3);">
+                🔓 AUTHENTICATE SYSTEM
             </button>
             
-            <p id="secMsg" style="margin-top:15px; font-weight:bold; font-size:13px; min-height:20px;"></p>
+            <p id="secMsg" style="margin-top:15px; font-weight:bold; font-size:13px; min-height:20px; color:#ff5252;"></p>
 
-            <div style="margin-top:30px; border-top:1px solid rgba(255,255,255,0.1); padding-top:15px;">
-                <p style="font-size:10px; color:#64748b; margin:0;">
-                    Protected by International Copyright Law.<br>
-                    Licensed to: <strong style="color:#fff;">ZAAD Research</strong>
+            <div style="margin-top:25px; border-top:1px solid rgba(255,255,255,0.15); padding-top:15px;">
+                <p style="font-size:11px; color:#64748b; margin:0 0 5px 0; line-height:1.4;">
+                    Intellectual Property of <strong>Ali Ibrahim Didi</strong>.<br>
+                    Registered under Maldives Copyright Law.<br>
+                    <span style="color:#94a3b8;">Reg: MED.03.IP.CR.26.EW5889</span>
+                </p>
+                
+                <div style="background:rgba(220, 38, 38, 0.1); border:1px solid rgba(220, 38, 38, 0.3); padding:8px; border-radius:4px; margin-top:10px;">
+                    <span style="color:#ef4444; font-size:10px; font-weight:bold; text-transform:uppercase;">
+                        ⛔ Unauthorized use will result in legal action
+                    </span>
+                </div>
+
+                <p style="color:#d4af37; margin:10px 0 0 0; font-size:11px;">
+                    Support: <b>7791550</b> / <b>9901550</b>
                 </p>
             </div>
-        </div>
-    </div>
-    <div style="margin-top:10px;">
+        </div> </div> <div style="margin-top:10px; display:none;" id="mainApp">
+        <div class="main-layout">
+            
+            <div class="sidebar">
+                
+                <div style="text-align:center; margin-bottom:20px; border-bottom:1px solid var(--royal-gold); padding-bottom:15px;">
+                    <h1 style="font-family:'Faruuma'; font-size:35px; color:var(--royal-gold); text-shadow:0 0 10px #f9d976; margin:0;">ރަސްފަހި ޕޯޓަލް</h1>
+                    <span style="font-family:'Cinzel'; font-size:10px; color:#94a3b8; letter-spacing:4px; display:block; margin-bottom:10px;">PLATINUM EDITION</span>
+                    
+                    <div style="display:flex; gap:5px; justify-content:center;">
+                        <button id="btnStyle1" onclick="applyTheme(1)" style="padding:5px; font-size:10px; width:auto; border:1px solid #d4af37; background:rgba(212,175,55,0.2); color:#fff;">Style 1</button>
+                        <button id="btnStyle2" onclick="applyTheme(2)" style="padding:5px; font-size:10px; width:auto; border:1px solid #15803d; background:rgba(21,128,61,0.3); color:#fff;">Style 2</button>
+                        <button id="btnStyle3" onclick="applyTheme(3)" style="padding:5px; font-size:10px; width:auto; border:1px solid #1d4ed8; background:rgba(29,78,216,0.3); color:#fff;">Style 3</button>
+                        <button id="btnStyle4" onclick="applyTheme(4)" style="padding:5px; font-size:10px; width:auto; border:1px solid #b91c1c; background:rgba(185,28,28,0.3); color:#fff;">Style 4</button>
+                    </div>
+                </div>
+
+                <div id="licenseStatus" style="font-size:12px; color:#d4af37; text-align:center; margin-bottom:10px; font-weight:bold; font-family:'Cinzel', serif;">Checking License...</div>
 </body>
 <div style="margin-top:10px;">
                         
