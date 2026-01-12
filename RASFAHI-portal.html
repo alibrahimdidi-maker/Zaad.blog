@@ -496,7 +496,36 @@
 
             <div style="text-align:center; font-size:15px; color:#777; margin:20px 0; font-weight:bold; letter-spacing:1px; background:#eceff1; padding:5px; border-radius:20px;">⬇ Settings and Design Control ⬇</div>
 
-            <div id="designPanel"> 
+            <div id="designPanel">
+                <div style="background:#fff8e1; padding:10px; border:2px solid #ff6f00; border-radius:8px; margin-bottom:15px; box-shadow:0 2px 5px rgba(0,0,0,0.1);">
+    <label style="color:#d84315; font-weight:900; font-size:13px; display:block; margin-bottom:8px; border-bottom:1px dashed #ffb74d; padding-bottom:5px;">
+        🖥️ UNIVERSAL SCREEN FITTER (Anti-Stretch)
+    </label>
+    
+    <div style="display:flex; gap:10px; align-items:center; margin-bottom:8px;">
+        <span style="font-size:12px; width:60px; font-weight:bold;">↔ Width:</span>
+        <input type="range" min="30" max="100" value="100" style="flex:1; cursor:ew-resize;" 
+               oninput="updateMasterScale('width', this.value)" title="Shrink Width to fix stretching">
+        <span style="font-size:11px; font-weight:bold; color:#d84315;" id="dispMW">100%</span>
+    </div>
+
+    <div style="display:flex; gap:10px; align-items:center; margin-bottom:8px;">
+        <span style="font-size:12px; width:60px; font-weight:bold;">↕ Height:</span>
+        <input type="range" min="30" max="100" value="100" style="flex:1; cursor:ns-resize;" 
+               oninput="updateMasterScale('height', this.value)" title="Shrink Height">
+        <span style="font-size:11px; font-weight:bold; color:#d84315;" id="dispMH">100%</span>
+    </div>
+
+    <div style="text-align:center;">
+         <button onclick="resetMasterScale()" style="background:#ffcc80; color:#000; border:none; padding:5px 10px; font-size:10px; border-radius:4px;">
+            ↺ Reset to Full Screen
+         </button>
+    </div>
+    
+    <p style="font-size:10px; margin:5px 0 0 0; color:#666; font-style:italic;">
+        * For 3360x840 Screen: Try reducing <b>Width</b> to approx <b>50-60%</b>.
+    </p>
+</div>
                 <div class="group-box" style="border-color:#ffca28; background:#fffde7;">
                     <span class="group-title" style="background:#ff6f00;">🏆 Top 5 Mode & Video</span>
                     <div class="design-col">
