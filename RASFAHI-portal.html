@@ -1546,7 +1546,6 @@ function downloadConfig() {
         }
     }
 
-  // ▼▼▼▼▼▼▼▼▼▼ FULLY RESTORED & MERGED OPENTV FUNCTION ▼▼▼▼▼▼▼▼▼▼
 function openTV() {
     tvWindow = window.open('', 'GradTV', 'width=1280,height=720,menubar=no,toolbar=no');
     if(!tvWindow) { alert("Please Allow Popups!"); return; }
@@ -1912,7 +1911,7 @@ function openTV() {
     document.getElementById('connStatus').style.color = "#00e676";
     document.getElementById('connStatus').style.background = "rgba(0,0,0,0.8)";
 }
-// ▲▲▲▲▲▲▲▲▲▲ END FULL FUNCTION ▲▲▲▲▲▲▲▲▲▲
+
     function updateJalsaBackground() {
         if(!tvWindow || tvWindow.closed || !currentJalsaBgData) return;
         const bgDiv = tvWindow.document.getElementById('bgLayer');
