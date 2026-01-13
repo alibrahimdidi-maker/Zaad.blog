@@ -1556,10 +1556,29 @@ function downloadConfig() {
                     card.style.backgroundImage = `url(${customCardBgData})`; card.style.backgroundSize = "100% 100%"; card.style.border = "none"; card.style.boxShadow = "none";
                 } else { card.style.backgroundImage = "none"; }
                 
-                if(value !== 'b1' && value !== 'b0') card.classList.add('active');
+              if(value !== 'b1' && value !== 'b0') card.classList.add('active');
             }
         }
-    }
+
+        // --- 3-SCREEN AUTO UPDATE (CENTER WIDTH) ---
+        if(key === 'centerWidth') {
+            root.style.setProperty('--center-w', value + '%');
+            const disp = document.getElementById('cwDisp');
+            if(disp) disp.innerText = value + '%';
+        }
+
+        // --- VERTICAL & HEIGHT CONTROL ---
+        if(key === 'sideY') {
+            // 0% = Top, 50% = Center, 100% = Bottom
+            root.style.setProperty('--side-bg-y', value + '%');
+        }
+        
+        if(key === 'sideScale') {
+            // cover, contain, or 100% 100%
+            root.style.setProperty('--side-bg-s', value);
+        }
+    
+    } // <--- މިއީ ފަންކްޝަން ނިމޭ ބްރެކެޓް. މީތި އިންނަންވާނީ މި ހުރިހާ ކޯޑެއްގެ ތިރީގަ!
 
     // --- TV WINDOW ---
     function openTV() {
@@ -1568,7 +1587,6 @@ function downloadConfig() {
 
         let fontCSS = `url('Fonts/faruuma.ttf') format('truetype')`;
         if (currentFontData) fontCSS = `url('${currentFontData}') format('truetype')`;
-
        // ============================================================
         // 200 ROYAL THEMES GENERATOR (SORTED BY COLOR)
         // ============================================================
