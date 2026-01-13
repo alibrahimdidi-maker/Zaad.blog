@@ -2186,61 +2186,68 @@ body.triple-active #card {
             </style>
             <script>function goFS(btn){document.documentElement.requestFullscreen(); btn.style.display='none';}<\/script>
         </head>
-        <body>
-    <div id="zoneLeft" class="screen-zone"></div>
-    <div id="zoneRight" class="screen-zone"></div>
+       <body>
+            <div id="zoneLeft" class="screen-zone"></div>
+            <div id="zoneRight" class="screen-zone"></div>
 
-    <div id="activateOverlay" onclick="this.style.display='none'">
-        <h1 style="font-size:50px;">CLICK HERE TO ACTIVATE SCREEN</h1>
-        <p>This is required for Audio/Video to play automatically.</p>
-    </div>
-
-    <button id="fsBtn" onclick="goFS(this)">⛶ FULL SCREEN</button>
-    
-    <div id="adLayer">
-        <img id="adImg" style="display:none;">
-        <video id="adVid" style="display:none;" muted autoplay></video>
-    </div>
-    
-    <div id="videoLayer"></div>
-    
-    <div id="bgLayer" class="${designState.bgPreset}"></div>
-    <div id="mainLogosContainer"></div>
-    <div id="plContainer"></div>
-
-    <div id="jalsaContent">
-        <div id="titleContainer" style="margin-top:${designState.mtY}px;"> 
-            <div id="mainTitleWrap"><div id="jt1" class="main-title jalsa-text"></div></div>
-            <div id="subTitleWrap">
-                <div id="jt2" class="sub-title jalsa-text"></div>
-                <div id="jt3" class="sub-title jalsa-text"></div>
-                <div id="jt4" class="sub-title jalsa-text"></div>
-                <div id="jt5" class="sub-title jalsa-text"></div>
-                <div id="jt6" class="sub-title jalsa-text"></div>
-                <div id="jt7" class="sub-title jalsa-text"></div>
-                <div id="jt8" class="sub-title jalsa-text"></div>
+            <div id="activateOverlay" onclick="this.style.display='none'">
+                <h1 style="font-size:50px;">CLICK HERE TO ACTIVATE SCREEN</h1>
+                <p>This is required for Audio/Video to play automatically.</p>
             </div>
-        </div>
-    </div>
 
-    <div id="card" class="${designState.cBorder}">
-        <div class="photo-col">
-            <img id="stuImg" src="">
-            <img id="royalStar" class="royal-star-badge" src="">
-            <div id="trophyWrap" class="trophy-badge">
-                <img id="trophyImg" src="">
-                <span id="rankNum" class="rank-num"></span>
+            <button id="fsBtn" onclick="goFS(this)">⛶ FULL SCREEN</button>
+            
+            <div id="adLayer">
+                <img id="adImg" style="display:none;">
+                <video id="adVid" style="display:none;" muted autoplay></video>
             </div>
-        </div>
-        <div class="text-col">
-            <h1 id="tnD" class="font-dv"></h1><h2 id="tnE" class="font-en"></h2>
-            <div id="tfD" class="fac-dv font-dv"></div><div id="tfE" class="fac-en font-en"></div>
-            <div id="tcD" class="crs-dv font-dv"></div><div id="tcE" class="crs-en font-en"></div>
-            <div id="tcm" class="comm font-dv"></div>
-        </div>
-    </div>
-    <div class="copyright">© Ali Ibrahim Didi (7791550)</div>
-</body>
+            
+            <div id="videoLayer"></div>
+            
+            <div id="bgLayer" class="${designState.bgPreset}"></div>
+
+            <div id="jalsaContainer">
+
+                <div id="mainLogosContainer"></div>
+                <div id="plContainer"></div>
+
+                <div id="jalsaContent">
+                    <div id="titleContainer" style="margin-top:${designState.mtY}px;"> 
+                        <div id="mainTitleWrap"><div id="jt1" class="main-title jalsa-text"></div></div>
+                        <div id="subTitleWrap">
+                            <div id="jt2" class="sub-title jalsa-text"></div>
+                            <div id="jt3" class="sub-title jalsa-text"></div>
+                            <div id="jt4" class="sub-title jalsa-text"></div>
+                            <div id="jt5" class="sub-title jalsa-text"></div>
+                            <div id="jt6" class="sub-title jalsa-text"></div>
+                            <div id="jt7" class="sub-title jalsa-text"></div>
+                            <div id="jt8" class="sub-title jalsa-text"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="card" class="${designState.cBorder}">
+                    <div class="photo-col">
+                        <img id="stuImg" src="">
+                        <img id="royalStar" class="royal-star-badge" src="">
+                        <div id="trophyWrap" class="trophy-badge">
+                            <img id="trophyImg" src="">
+                            <span id="rankNum" class="rank-num"></span>
+                        </div>
+                    </div>
+                    <div class="text-col">
+                        <h1 id="tnD" class="font-dv"></h1><h2 id="tnE" class="font-en"></h2>
+                        <div id="tfD" class="fac-dv font-dv"></div><div id="tfE" class="fac-en font-en"></div>
+                        <div id="tcD" class="crs-dv font-dv"></div><div id="tcE" class="crs-en font-en"></div>
+                        <div id="tcm" class="comm font-dv"></div>
+                    </div>
+                </div>
+
+            </div> 
+            <div class="copyright">© Ali Ibrahim Didi (7791550)</div>
+        </body>
+
+މިގޮތަށް ލެއްވުމުން، `jalsaContainer` ގެ ތެރޭގައި ހުރި ހުރިހާ އެއްޗެއް (ލޯގޯ، ނަންތައް، ކާޑު) އިންނާނީ މެދަށް ސެޓްވެފައެވެ. އަދި ބެކްގްރައުންޑާއި ޒޯންތައް ހުންނާނީ ފުލް ސްކްރީންކޮށެވެ.
         </html>`;
 
         tvWindow.document.write(html);
