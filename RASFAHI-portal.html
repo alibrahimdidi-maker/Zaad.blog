@@ -13,27 +13,26 @@
         src: local('Faruuma'), local('Faruumaa'), url('Fonts/faruuma.ttf') format('truetype');
     }
 
-    /* --- THEME: ROYAL PRESIDENTIAL (Teal, Gold & Black) --- */
+    /* --- THEME: ROYAL PRESIDENTIAL (Fixed Layout) --- */
     :root {
         /* Background: Deep Teal fading into Royal Black */
-        --bg-grad: radial-gradient(circle at center, #002b36 0%, #000000 100%);
+        --bg-grad: radial-gradient(circle at center, #002b36 0%, #000505 100%);
         
         /* Panels: Glassy Dark Teal with Gold Shine */
-        --panel-bg: rgba(0, 20, 25, 0.96); 
+        --panel-bg: rgba(0, 15, 20, 0.96); 
         --panel-border: 1px solid #c5a059; /* Muted Gold Border */
         
         --text-main: #e0f2f1; /* Soft White */
-        --text-label: #4dd0e1; /* Cyan/Teal Label */
+        --text-label: #80cbc4; /* Cyan/Teal Label */
         --text-heading: #FFD700; /* Bright Gold Heading */
         
-        --input-bg: #001015; /* Very Dark Teal/Black */
-        --input-border: 1px solid #26a69a;
+        --input-bg: #000a0d; /* Pitch Black/Teal */
+        --input-border: 1px solid #004d40;
         
         --accent-gold: #D4AF37; /* Metallic Gold */
         --accent-teal: #006064; /* Deep Cyan */
         
-        --shadow: 0 15px 50px rgba(0,0,0,0.9);
-        --gold-glow: 0 0 10px rgba(212, 175, 55, 0.3);
+        --shadow: 0 10px 40px rgba(0,0,0,0.8);
     }
 
     body {
@@ -46,112 +45,119 @@
         text-align: left;
     }
 
-    /* LAYOUT FIXED */
+    /* LAYOUT FIXED - Better Spacing */
     .main-layout { 
-        display: flex; gap: 20px; 
+        display: flex; gap: 15px; 
         height: 100vh; width: 100vw; 
-        padding: 25px;
+        padding: 15px; /* Reduced padding to give more room */
         box-sizing: border-box; 
     }
     
-    /* SIDEBAR: ROYAL TEAL BOX */
+    /* SIDEBAR: Fixed Width with proper content fitting */
     .sidebar {
-        flex: 0 0 380px;
+        flex: 0 0 360px; /* Slightly narrower to fit smaller screens better */
         background: var(--panel-bg);
         border: 2px solid var(--accent-gold);
         border-radius: 6px; 
-        padding: 20px;
+        padding: 15px; /* Compact padding */
         display: flex; flex-direction: column; 
-        height: calc(100vh - 50px); 
+        height: 100%; 
         overflow-y: auto;
         box-shadow: var(--shadow);
         box-sizing: border-box;
-        /* Inner Gold Glow */
-        box-shadow: inset 0 0 20px rgba(0,0,0,0.8), 0 0 15px rgba(212, 175, 55, 0.1);
+        box-shadow: inset 0 0 20px rgba(0,0,0,0.8);
     }
 
-    /* EDITOR: ROYAL TEAL BOX */
+    /* EDITOR: Flexible Width */
     .editor {
         flex: 1;
         background: var(--panel-bg);
         border: 2px solid var(--accent-gold);
         border-radius: 6px;
-        padding: 30px;
+        padding: 25px;
         display: flex; flex-direction: column; 
-        height: calc(100vh - 50px); 
+        height: 100%; 
         overflow-y: auto;
         box-shadow: var(--shadow);
         position: relative;
         box-sizing: border-box;
-        box-shadow: inset 0 0 20px rgba(0,0,0,0.8), 0 0 15px rgba(212, 175, 55, 0.1);
+        box-shadow: inset 0 0 20px rgba(0,0,0,0.8);
+        min-width: 0; /* Prevents flexbox overflow issues */
     }
 
-    /* SCROLLBAR - GOLD */
-    ::-webkit-scrollbar { width: 10px; }
-    ::-webkit-scrollbar-track { background: #001015; border-left: 1px solid #333; }
+    /* SCROLLBAR - ROYAL GOLD */
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: #000; border-radius: 4px; }
     ::-webkit-scrollbar-thumb { 
         background: linear-gradient(to bottom, #b8860b, #ffd700, #b8860b); 
-        border-radius: 2px; 
-        border: 1px solid #000;
+        border-radius: 4px; border: 1px solid #000; 
     }
 
     /* TYPOGRAPHY */
     h1, h2, h3, h4 { 
-        margin: 8px 0; 
+        margin: 5px 0 10px 0; 
         font-family: 'Playfair Display', serif; 
         color: var(--text-heading); 
         text-transform: uppercase; 
-        letter-spacing: 2px;
+        letter-spacing: 1px;
+        font-size: 16px; /* Adjusted size */
         text-shadow: 0 2px 5px #000;
         text-align: left;
-        border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+        border-bottom: 1px solid rgba(212, 175, 55, 0.3);
         padding-bottom: 5px;
+        white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
     }
     
     label { 
-        display: block; font-size: 12px; 
+        display: block; font-size: 11px; /* Smaller label to save space */
         color: var(--text-label); 
-        margin-bottom: 6px; margin-top: 18px; 
+        margin-bottom: 4px; margin-top: 12px; 
         font-weight: 700; text-transform: uppercase;
-        letter-spacing: 1px;
+        letter-spacing: 0.5px;
         text-align: left;
     }
     
     .d-label { 
-        font-size: 16px; font-weight: bold; color: var(--accent-gold); 
+        font-size: 15px; font-weight: bold; color: var(--accent-gold); 
         border-bottom: 1px solid var(--accent-gold); 
-        padding-bottom: 5px; margin-top: 35px; display: block;
+        padding-bottom: 5px; margin-top: 25px; display: block;
         font-family: 'Playfair Display', serif;
         text-align: left;
-        text-shadow: 0 1px 2px #000;
     }
 
-    /* INPUTS */
-    input[type="text"], textarea, select, input[type="number"] { 
-        width: 100%; padding: 12px; 
+    /* INPUTS - Ensuring they stay inside boxes */
+    input[type="text"], textarea, select, input[type="number"], input[type="file"] { 
+        width: 100%; 
+        padding: 10px; 
         border: 1px solid #006064; 
-        border-radius: 2px; 
+        border-radius: 3px; 
         background: var(--input-bg);
         color: #fff; 
-        font-size: 14px; font-weight: 500;
-        box-sizing: border-box; transition: 0.3s;
+        font-size: 13px; font-weight: 500;
+        box-sizing: border-box; /* Crucial for fitting */
+        transition: 0.3s;
         font-family: 'Inter', sans-serif;
         text-align: left;
-        box-shadow: inset 0 2px 5px rgba(0,0,0,0.5);
-    }
-    input:focus, textarea:focus, select:focus { 
-        border-color: var(--accent-gold); 
-        background: #002025; 
-        outline: none; 
-        box-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+        margin-bottom: 5px;
     }
     
-    /* Specific Inputs */
+    /* File input fix */
+    input[type="file"] {
+        padding: 8px; font-size: 11px;
+    }
+
+    input:focus, textarea:focus, select:focus { 
+        border-color: var(--accent-gold); 
+        background: #00151a; 
+        outline: none; 
+        box-shadow: 0 0 8px rgba(212, 175, 55, 0.4);
+    }
+    
+    /* Special Inputs */
     #jLine1 { 
-        font-size: 24px !important; font-weight: bold !important; text-align: center !important; 
+        font-size: 20px !important; font-weight: bold !important; text-align: center !important; 
         color: #FFD700 !important; background: linear-gradient(to bottom, #001015, #000) !important; 
         border: 1px solid #FFD700 !important; font-family: 'Playfair Display', serif !important;
-        text-shadow: 1px 1px 1px #000;
     }
     .sub-title-input { text-align: center !important; background: #002b36 !important; color: #80cbc4 !important; border: 1px solid #004d40 !important; }
 
@@ -165,115 +171,113 @@
     /* BUTTONS */
     button { 
         cursor: pointer; font-weight: 700; border-radius: 3px; 
-        border: 1px solid rgba(255,255,255,0.1); transition: all 0.3s;
-        text-transform: uppercase; letter-spacing: 1px; font-size: 13px;
-        background: linear-gradient(to bottom, #004d40, #00251a); /* Deep Green */
-        color: #fff; box-shadow: 0 4px 6px rgba(0,0,0,0.4);
-        position: relative; overflow: hidden;
+        border: 1px solid rgba(255,255,255,0.1); transition: all 0.2s;
+        text-transform: uppercase; letter-spacing: 0.5px; font-size: 12px;
+        background: linear-gradient(to bottom, #004d40, #00251a); 
+        color: #fff; box-shadow: 0 3px 5px rgba(0,0,0,0.3);
+        width: 100%; /* Ensure full width fitting */
+        padding: 10px;
+        box-sizing: border-box;
     }
     button:hover { 
         filter: brightness(1.2); border-color: var(--accent-gold); 
-        box-shadow: 0 0 10px rgba(212, 175, 55, 0.4);
+        transform: translateY(-1px);
     }
 
-    /* Special Buttons */
+    /* Button Variants */
     .launch-btn { 
-        background: linear-gradient(to bottom, #880e4f, #4a0000) !important; 
-        border: 1px solid #f48fb1; font-size: 15px; padding: 15px; margin-bottom: 12px; 
+        background: linear-gradient(to bottom, #b71c1c, #7f0000) !important; 
+        border: 1px solid #ef5350; font-size: 14px; padding: 12px; margin-bottom: 10px; 
     }
     
-    .controls { display: flex; justify-content: center; gap: 10px; margin-bottom: 15px; }
+    .controls { display: flex; justify-content: center; gap: 5px; margin-bottom: 10px; width: 100%; }
     
-    /* Live Button - GOLD */
     .btn-live { 
         background: linear-gradient(to bottom, #FFD700, #B8860B) !important; 
-        color: #000 !important; flex: 2; padding: 12px; font-weight: 900; 
+        color: #000 !important; flex: 2; padding: 10px; font-weight: 800; 
         border: 1px solid #fff; 
-        text-shadow: 0 1px 0 rgba(255,255,255,0.4);
     }
     
-    .btn-nav { background: #263238 !important; width: 60px; font-size: 20px; border: 1px solid #546e7a; }
-    .btn-vid { background: #00332a !important; padding: 10px; width: 100%; margin-top: 5px; border: 1px solid #004d40; }
+    .btn-nav { background: #37474f !important; width: 50px; font-size: 18px; padding: 0; }
+    .btn-vid { background: #00332a !important; padding: 8px; width: 100%; margin-top: 5px; border: 1px solid #004d40; }
     
-    .conf-btn { background: #006064 !important; flex: 1; padding: 8px; font-size: 11px; }
-    .config-btn-row { display: flex; gap: 5px; margin-bottom: 15px; }
+    .conf-btn { background: #006064 !important; flex: 1; padding: 8px; font-size: 10px; }
+    .config-btn-row { display: flex; gap: 5px; margin-bottom: 15px; width: 100%; }
 
-    #lockBtn { background: transparent !important; color: #FFD700 !important; font-weight: 900; padding: 12px; width: 100%; margin-bottom: 15px; border: 2px solid #FFD700 !important; }
+    #lockBtn { background: transparent !important; color: #FFD700 !important; font-weight: 900; padding: 10px; width: 100%; margin-bottom: 15px; border: 2px solid #FFD700 !important; }
     #lockBtn.active { background: #b71c1c !important; color: white !important; border: 2px solid #ff5252 !important; }
 
     /* TABS */
-    .lang-tabs { display: flex; gap: 5px; margin-bottom: 15px; }
-    .lang-btn { flex: 1; background: rgba(0,0,0,0.3) !important; padding: 10px; text-align: center; color: #80cbc4; text-decoration: none; border-radius: 4px; border: 1px solid #004d40; transition:0.3s; }
-    .lang-btn.active { background: linear-gradient(to bottom, #004d40, #00251a) !important; color: #FFD700 !important; border: 1px solid #FFD700 !important; font-weight: bold; }
+    .lang-tabs { display: flex; gap: 5px; margin-bottom: 15px; width: 100%; }
+    .lang-btn { flex: 1; background: rgba(0,0,0,0.3) !important; padding: 8px; text-align: center; color: #80cbc4; text-decoration: none; border-radius: 4px; border: 1px solid #004d40; font-size: 12px; }
+    .lang-btn.active { background: #004d40 !important; color: #FFD700 !important; border: 1px solid #FFD700 !important; font-weight: bold; }
     
-    .list-switch-btn { background: #263238 !important; color: #b0bec5; padding: 10px; flex: 1; border: 1px solid #37474f; }
+    .list-switch-btn { background: #263238 !important; color: #b0bec5; padding: 8px; flex: 1; border: 1px solid #37474f; font-size: 12px; }
     .list-switch-btn.active { background: var(--accent-gold) !important; color: #000 !important; font-weight:bold; }
 
-    /* HELPERS & BANNERS */
+    /* BANNERS */
     .royal-banner { 
-        background: linear-gradient(to right, #001015, #003344, #001015); /* Teal Gradient */
-        border: 2px solid var(--accent-gold); 
-        text-align: center; padding: 20px; margin-bottom: 20px; border-radius: 4px; 
-        box-shadow: 0 5px 20px rgba(0,0,0,0.6);
-        position: relative;
+        background: linear-gradient(to right, #001015, #003344, #001015);
+        border: 1px solid var(--accent-gold); 
+        text-align: center; padding: 15px; margin-bottom: 20px; border-radius: 4px; 
+        box-shadow: 0 5px 15px rgba(0,0,0,0.6);
     }
-    .royal-banner::before { content: '👑'; display: block; font-size: 20px; margin-bottom: 5px; }
-    .banner-main { color: #80cbc4; font-size: 11px; letter-spacing: 4px; text-transform: uppercase; display: block; }
-    .banner-sub { color: var(--accent-gold); font-size: 26px; font-family: 'Playfair Display', serif; display: block; margin-top: 5px; font-weight: 700; text-shadow: 0 2px 4px #000; }
+    .banner-main { color: #80cbc4; font-size: 10px; letter-spacing: 3px; text-transform: uppercase; display: block; }
+    .banner-sub { color: var(--accent-gold); font-size: 20px; font-family: 'Playfair Display', serif; display: block; margin-top: 3px; font-weight: 700; }
 
     /* INNER BOXES */
     .group-box { 
         border: 1px solid #004d40; 
-        border-radius: 6px; padding: 35px 20px 20px 20px; margin-bottom: 25px; 
+        border-radius: 6px; padding: 25px 15px 15px 15px; margin-bottom: 20px; 
         background: rgba(0, 0, 0, 0.4); 
         position: relative; 
-        box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
     }
     .group-title { 
-        position: absolute; top: -12px; left: 20px; 
+        position: absolute; top: -10px; left: 15px; 
         background: linear-gradient(to right, #D4AF37, #C5A059); 
-        color: #000; padding: 5px 15px; 
-        font-size: 12px; font-weight: bold; 
+        color: #000; padding: 3px 10px; 
+        font-size: 11px; font-weight: bold; 
         border-radius: 2px; text-transform: uppercase; 
         border: 1px solid #fff;
     }
 
-    .video-panel { background: rgba(0, 43, 54, 0.5); padding: 15px; border-radius: 6px; border: 1px solid #006064; margin-bottom: 20px; }
+    .video-panel { background: rgba(0, 43, 54, 0.5); padding: 10px; border-radius: 6px; border: 1px solid #006064; margin-bottom: 15px; }
     
+    /* Layout Helpers */
+    .row { display: flex; gap: 10px; width: 100%; }
+    .col { flex: 1; min-width: 0; /* Prevents overflow in flex children */ }
+
     /* Student List */
-    #stuList { background: #000508; color: #fff; border: 1px solid #004d40; min-height: 250px; border-radius: 4px; text-align: left; }
-    #stuList option { padding: 10px; border-bottom: 1px solid #00251a; }
-    #stuList option:hover { background: #004d40; color: #FFD700; }
+    #stuList { background: #000508; color: #fff; border: 1px solid #004d40; min-height: 200px; border-radius: 4px; text-align: left; width: 100%; box-sizing: border-box; }
+    #stuList option { padding: 8px; border-bottom: 1px solid #00251a; font-size: 13px; }
     
     /* Preview */
-    .preview-container { background: rgba(0,0,0,0.5); border: 1px solid #D4AF37; padding: 15px; border-radius: 6px; display: flex; align-items: center; justify-content: center; gap: 15px; margin-top: 15px; }
-    #previewImg { width: 110px; height: 110px; border-radius: 4px; object-fit: cover; border: 3px solid var(--accent-gold); background: #000; box-shadow: 0 0 15px rgba(212, 175, 55, 0.2); }
+    .preview-container { background: rgba(0,0,0,0.5); border: 1px solid #D4AF37; padding: 10px; border-radius: 6px; display: flex; align-items: center; justify-content: center; gap: 15px; margin-top: 15px; }
+    #previewImg { width: 100px; height: 100px; border-radius: 4px; object-fit: cover; border: 2px solid var(--accent-gold); background: #000; }
 
     /* Full Screen Button */
-    #cpFsBtn { position: fixed; bottom: 20px; right: 20px; width: 50px; height: 50px; background: #00251a; color: var(--accent-gold); border-radius: 50%; z-index: 1000; font-size: 24px; border: 2px solid var(--accent-gold); display:flex; align-items:center; justify-content:center; box-shadow: 0 0 20px rgba(212, 175, 55, 0.4); }
+    #cpFsBtn { position: fixed; bottom: 20px; right: 20px; width: 50px; height: 50px; background: #00251a; color: var(--accent-gold); border-radius: 50%; z-index: 1000; font-size: 24px; border: 2px solid var(--accent-gold); display:flex; align-items:center; justify-content:center; }
 
     /* Security Overlay */
     #securityOverlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 99999; display: flex; align-items: center; justify-content: center; background-image: radial-gradient(circle, #002b36 0%, #000 90%); }
     
     .sec-box { 
         background: rgba(0, 20, 25, 0.98); 
-        padding: 50px; 
+        padding: 40px; 
         border: 3px solid var(--accent-gold); 
         text-align: center !important;
-        width: 500px; 
+        width: 450px; max-width: 90%;
         box-shadow: 0 0 50px rgba(212, 175, 55, 0.4);
-        position: relative;
     }
     
     .sec-box h1, .sec-box h2, .sec-box p, .sec-box div { text-align: center !important; }
 
-    .admin-pic { width: 120px; height: 120px; border-radius: 50%; border: 4px solid var(--accent-gold); margin-bottom: 20px; background: #000; }
+    .admin-pic { width: 100px; height: 100px; border-radius: 50%; border: 3px solid var(--accent-gold); margin-bottom: 20px; background: #000; }
     
-    .sec-input { background: #fff; color: #000; border: none; padding: 15px; font-size: 22px; width: 100%; margin-top: 20px; text-align: center; border-radius: 4px; font-family: monospace; border: 2px solid #004d40; }
-    .sec-btn { background: var(--accent-gold); color: #00251a; width: 100%; margin-top: 25px; padding: 15px; font-size: 18px; border: none; font-weight: bold; text-transform: uppercase; }
-    .sec-btn:hover { background: #FFD700; box-shadow: 0 0 20px #FFD700; }
+    .sec-input { background: #fff; color: #000; border: none; padding: 10px; font-size: 20px; width: 100%; margin-top: 20px; text-align: center; border-radius: 4px; font-family: monospace; border: 2px solid #004d40; }
+    .sec-btn { background: var(--accent-gold); color: #00251a; width: 100%; margin-top: 25px; padding: 12px; font-size: 16px; border: none; font-weight: bold; text-transform: uppercase; }
 
-    .dev-credits { text-align:center; font-size:12px; color:#4db6ac; margin-top: 20px; border-top: 1px solid #004d40; padding-top: 10px; padding-bottom: 15px; }
+    .dev-credits { text-align:center; font-size:11px; color:#4db6ac; margin-top: 20px; border-top: 1px solid #004d40; padding-top: 10px; padding-bottom: 10px; }
     .dev-name { color: #fff; font-weight:bold; }
     
     .locked-zone { opacity: 0.5; pointer-events: none; filter: grayscale(0.8); }
