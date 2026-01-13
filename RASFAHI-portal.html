@@ -3267,7 +3267,68 @@ body.triple-active #card {
             document.getElementById('connStatus').style.color = "red";
         }
     }, 2000);
+// --- NEW FUNCTIONS FOR LED FIX ---
 
+function applyLedPreset(type) {
+    if(type === 'rasfahi') {
+        // Rasfahi Setup: Total 5040px. 
+        // We want content ONLY in the middle 3360px.
+        // Left/Right is handled by zones.
+        designState.safeW = 66.6; // Middle 66% approx
+        designState.safeMaxW = 'none'; 
+        designState.t3Active = true;
+        
+        if(tvWindow && !tvWindow.closed) {
+            tvWindow.document.body.classList.add('triple-active');
+        }
+        alert("✅ Applied Rasfahi LED Settings!\nContent restricted to middle screen.\nLeft/Right screens ready for logos/BG.");
+    } 
+    else if (type === 'standard') {
+        designState.safeW = 90;
+        designState.safeMaxW = 'none';
+        designState.t3Active = false;
+        if(tvWindow && !tvWindow.closed) {
+            tvWindow.document.body.classList.remove('triple-active');
+        }
+        alert("📺 Applied Standard TV Settings.");
+    }
+    // Update live
+    liveUpdate('safeW', designState.safeW);
+}
+
+// Updated toggleTripleMode to sync with state
+function toggleTripleMode() {
+    designState.t3Active = !designState.t3Active;
+    if(!tvWindow || tvWindow.closed) return;
+    
+    if(designState.t3Active) {
+        tvWindow.document.body.classList.add('triple-active');
+        // Force width to fit middle screen exactly
+        tvWindow.document.getElementById('jalsaContainer').style.width = "66.66%";
+    } else {
+        tvWindow.document.body.classList.remove('triple-active');
+        tvWindow.document.getElementById('jalsaContainer').style.width = designState.safeW + "%";
+    }
+}
+
+// Updated LiveUpdate to handle new keys
+const originalLiveUpdate = liveUpdate; // Backup old function if needed
+liveUpdate = function(key, value) {
+    // Call old logic first (for compatibility)
+    if(typeof originalLiveUpdate === 'function') originalLiveUpdate(key, value);
+    
+    // New Logic
+    if(!tvWindow || tvWindow.closed) return;
+    const doc = tvWindow.document;
+    const container = doc.getElementById('jalsaContainer');
+    
+    if(key === 'safeW') {
+        if(!designState.t3Active) container.style.width = value + '%';
+    }
+    if(key === 'safeMaxW') {
+        container.style.maxWidth = (value === 'none' || value == '') ? 'none' : value + 'px';
+    }
+}
 </script>
 </body>
 </html>
