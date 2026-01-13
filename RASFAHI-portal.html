@@ -1082,9 +1082,14 @@ function verifyLicense() {
         updateJalsaText();
     }
 
-    // --- STATE MANAGER ---
-   // --- STATE MANAGER (UPDATED FOR ROYAL GREEN DEFAULT) ---
+    // --- STATE MANAGER (UPDATED WITH LED FIX) ---
     let designState = {
+        // 👇👇 މިއީ އަލަށް އިތުރުކުރި 3 ލައިން 👇👇
+        safeW: 100,       // Width percentage
+        safeMaxW: 'none', // Max Width px
+        t3Active: false,  // 3-Screen Mode Status
+        // 👆👆 -------------------------------- 👆👆
+
         // 1. Title Colors (Gold Default)
         mtY: 210, mtX: 0, mtSize: 5.6, 
         mtColor: '#FFD700', // ޝާހީ ރަންކުލަ (Royal Gold)
