@@ -332,7 +332,31 @@
         color: #aaa !important;
         border-color: #333 !important;
     }
-       
+       /* --- FIX: TOP 5 & TROPHY BOX COLORS (Remove Yellow) --- */
+    
+    /* 1. Change Background from Pale Yellow to Dark Royal */
+    #designPanel .group-box {
+        background-color: #00151a !important; /* Dark Teal/Black Background */
+        border: 2px solid #D4AF37 !important; /* Bright Gold Border */
+        box-shadow: inset 0 0 20px rgba(0,0,0,0.5); /* Inner Shadow for depth */
+    }
+
+    /* 2. Update the Little Titles on the Boxes */
+    #designPanel .group-title {
+        background: linear-gradient(to right, #FFD700, #B8860B) !important; /* Gold Gradient */
+        color: #000000 !important; /* Black Text */
+        font-weight: bold !important;
+        border: 1px solid #fff !important;
+        top: -12px !important; /* Adjust position slightly */
+    }
+    
+    /* 3. Ensure text inside represents the new dark background */
+    #designPanel .group-box p, 
+    #designPanel .group-box span,
+    #designPanel .group-box label {
+        color: #e0f2f1 !important; /* Light Text */
+        text-shadow: none !important;
+    }
 </style>
 </head>
 <body oncontextmenu="return false;">
