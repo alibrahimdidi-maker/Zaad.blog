@@ -1029,7 +1029,7 @@
         }
     }
 
-    // --- LICENSE VERIFICATION ---
+   // --- LICENSE VERIFICATION (FIXED VERSION) ---
     function verifyLicense() {
         var inputKey = document.getElementById('licenseKey').value.trim();
         var msgArea = document.getElementById('secMsg');
@@ -1042,10 +1042,27 @@
             msgArea.style.color = "yellow";
             return;
         }
+
         try {
-            // 1. Decode Key
-            var decodedString = atob(inputKey); 
-            
+            var decodedString = "";
+
+            // 1. FIX: Try to Decode, but fallback to plain text if it fails
+            // މިއީ މައްސަލަ ޙައްލުކުރި ބައި: އެންކޯޑް ނުކޮށް ހުއްޓަސް ބަލައިގަންނާނެ
+            try {
+                // ފުރަތަމަ ބަލާނީ މިއީ Base64 ކޯޑެއްތޯ
+                var potentialDecode = atob(inputKey);
+                // ޑިކޯޑް ކުރުމަށްފަހު ROYAL_EXP އިން ފެށޭނަމަ އެއީ ރަނގަޅު އެއްޗެއް
+                if (potentialDecode.indexOf("ROYAL_EXP_") === 0) {
+                    decodedString = potentialDecode;
+                } else {
+                    // ޑިކޯޑް ކުރިޔަސް ދިމާނުވި، އެހެންވީމަ މިއީ އާދައިގެ ޓެކްސްޓެއް ކަމަށް ބެލުން
+                    decodedString = inputKey;
+                }
+            } catch (e) {
+                // ޑިކޯޑް ނުކުރެވުނު (އެރަރ އެރީ)، އެހެންވީމަ މިއީ ސީދާ ޕްލެއިން ޓެކްސްޓް
+                decodedString = inputKey;
+            }
+
             // 2. Validation
             if (decodedString.indexOf("ROYAL_EXP_") !== 0) {
                 throw new Error("Invalid Format");
@@ -1053,19 +1070,24 @@
 
             var parts = decodedString.split('_');
             var expDateString = parts[2]; 
-            var custName = parts[4];       
+            var custName = parts[4] || "User"; // Name ނެތިއްޔާ User ޖަހާނެ       
             var expDate = new Date(expDateString);
             var today = new Date();
             today.setHours(0,0,0,0); 
 
-            // 3. Expiry Check
+            // 3. Date Validity Check
+            if (isNaN(expDate.getTime())) {
+                 throw new Error("Invalid Date");
+            }
+
+            // 4. Expiry Check
             if (today > expDate) {
-                msgArea.innerText = "❌ License Expired!";
+                msgArea.innerText = "❌ License Expired on " + expDateString;
                 msgArea.style.color = "#ff5252";
                 return;
             }
 
-            // 4. SUCCESS - UNLOCK
+            // 5. SUCCESS - UNLOCK
             msgArea.innerText = "✅ Verifying...";
             msgArea.style.color = "#4ade80";
             
@@ -1073,7 +1095,7 @@
                 // Fade out overlay
                 overlay.style.transition = "opacity 0.8s ease";
                 overlay.style.opacity = '0';
-                overlay.style.pointerEvents = 'none'; // Prevent clicking while fading
+                overlay.style.pointerEvents = 'none'; 
                 
                 // Show Main App
                 if(mainApp) mainApp.style.display = 'flex';
@@ -1089,9 +1111,10 @@
             }, 500);
 
         } catch (e) {
-            msgArea.innerText = "❌ Invalid Key!";
+            console.error(e); // For debugging
+            msgArea.innerText = "❌ Invalid Key Format!";
             msgArea.style.color = "#ff5252";
-            document.getElementById('licenseKey').value = ""; 
+            // document.getElementById('licenseKey').value = ""; // Don't clear immediately so user can fix typo
         }
     }
 
