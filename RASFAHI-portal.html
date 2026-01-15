@@ -13,7 +13,7 @@
         src: local('Faruuma'), local('Faruumaa'), url('Fonts/faruuma.ttf') format('truetype');
     }
 
-    /* --- THEME: ROYAL PRESIDENTIAL (PERFECT FIT) --- */
+    /* --- THEME: ROYAL PRESIDENTIAL (ULTIMATE EDITION) --- */
     :root {
         --bg-grad: radial-gradient(circle at center, #001a20 0%, #000000 100%);
         --panel-bg: #000000; 
@@ -24,11 +24,10 @@
         --text-label: #4db6ac; 
         --text-heading: #FFD700; 
         
-        --input-bg: #0a0a0a; 
-        
         /* Accents */
         --accent-gold: #FFD700; 
-        --soft-blue-bg: #e3f2fd; /* CHANGED: Light Blue to support Dark Text */
+        --soft-blue-bg: #e3f2fd; /* Light Blue for Top 5 BG */
+        --dark-blue-text: #01579b; /* Dark Blue for Top 5 Text */
     }
 
     body {
@@ -42,13 +41,13 @@
         font-size: 16px;
     }
 
-    /* LAYOUT FIXED */
+    /* LAYOUT FIXED - PERFECT FIT BORDERS */
     .main-layout { 
         display: flex; gap: 20px; 
         height: 100vh; 
         width: 100vw; 
         padding: 15px; 
-        box-sizing: border-box; 
+        box-sizing: border-box; /* Ensures padding doesn't push borders out */
     }
     
     .sidebar, .editor {
@@ -60,7 +59,8 @@
         overflow-y: auto; 
         height: 100%; 
         box-sizing: border-box; 
-        box-shadow: inset 0 0 40px rgba(0,0,0,0.8);
+        box-shadow: inset 0 0 50px rgba(0,0,0,0.9); /* Deep depth */
+        position: relative;
     }
 
     .sidebar { flex: 0 0 380px; } 
@@ -76,40 +76,41 @@
 
     /* TYPOGRAPHY */
     h1, h2, h3, h4 { 
-        margin: 20px 0 15px 0; 
+        margin: 15px 0 15px 0; 
         font-family: 'Playfair Display', serif; 
         color: var(--text-heading); 
         text-transform: uppercase; 
         letter-spacing: 1px;
         font-size: 22px; 
         border-bottom: 2px solid #333;
-        padding-bottom: 10px;
+        padding-bottom: 8px;
         text-align: center; 
         line-height: 1.4; 
     }
     
     label { 
         display: block; 
-        font-size: 14px; 
+        font-size: 15px; 
         color: var(--text-label); 
-        margin-bottom: 8px; margin-top: 25px; 
+        margin-bottom: 8px; margin-top: 20px; 
         font-weight: 700; text-transform: uppercase;
         letter-spacing: 0.5px;
     }
     
-    /* INPUTS */
+    /* INPUTS - BIGGER & CLEARER */
     input[type="text"], textarea, select, input[type="number"], input[type="file"], input[type="password"] { 
         width: 100%; 
-        padding: 14px; 
+        padding: 15px; /* Larger padding */
         border: 2px solid #004d40; 
         border-radius: 6px; 
         background: #080808 !important; 
         color: #ffffff !important; 
-        font-size: 18px !important; 
+        font-size: 20px !important; /* BIG TEXT */
         font-weight: 600;
         box-sizing: border-box;
-        margin-bottom: 10px;
+        margin-bottom: 12px;
         font-family: 'Inter', sans-serif;
+        height: auto;
     }
 
     input:focus, textarea:focus, select:focus { 
@@ -124,59 +125,68 @@
         font-family: 'Faruuma', 'Noto Sans Thaana', sans-serif !important;
         direction: rtl !important;
         text-align: right !important;
-        font-size: 26px !important; 
+        font-size: 28px !important; 
         line-height: 1.8; 
         padding-right: 15px;
     }
 
-    /* BUTTONS */
+    /* BUTTONS & GRIDS - ORGANIZED LAYOUT */
     button { 
         cursor: pointer; font-weight: 800; border-radius: 5px; 
         border: 1px solid rgba(255,255,255,0.2); 
-        text-transform: uppercase; letter-spacing: 1px; font-size: 14px;
+        text-transform: uppercase; letter-spacing: 1px; font-size: 13px;
         background: linear-gradient(to bottom, #004d40, #00251a);
-        color: #fff; padding: 14px; box-sizing: border-box;
+        color: #fff; padding: 12px; box-sizing: border-box;
         margin-bottom: 5px;
         width: 100%;
+        transition: 0.3s;
     }
     button:hover { 
-        filter: brightness(1.2); border-color: var(--accent-gold); 
+        filter: brightness(1.2); border-color: var(--accent-gold); transform: translateY(-2px);
     }
 
-    .launch-btn { 
-        background: linear-gradient(to bottom, #d32f2f, #b71c1c) !important; 
-        font-size: 16px; padding: 16px; margin-bottom: 15px; border: 2px solid #ff5252;
+    /* Grid for smaller buttons (Theme, Photo Studio etc) */
+    .btn-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+        margin-bottom: 15px;
     }
     
-    /* --- VIDEO & INFO PANEL (TOP 5 SETTINGS) --- */
-    /* CHANGED: Background Light, Text Dark Blue */
+    .launch-btn { 
+        background: linear-gradient(to bottom, #d32f2f, #b71c1c) !important; 
+        font-size: 16px; padding: 15px; margin-bottom: 15px; border: 2px solid #ff5252;
+    }
+    
+    /* TOP 5 / VIDEO PANEL - BLUE THEME FIX */
     .video-panel, .blue-theme-box { 
         background: var(--soft-blue-bg) !important; /* Light Blue BG */
-        padding: 15px; 
+        padding: 20px; 
         border-radius: 8px; 
-        border: 2px solid #0d47a1; /* Dark Blue Border */
-        margin-bottom: 20px;
+        border: 2px solid #0277bd; /* Blue Border */
+        margin-bottom: 25px;
         box-shadow: 0 4px 15px rgba(0,0,0,0.5);
     }
     
-    /* CHANGED: Text Color to Dark Blue */
+    /* Blue Text inside Top 5 */
     .video-panel label, .video-panel p, .video-panel h4, .video-panel div {
-        color: #0d47a1 !important; /* GADHA NU (Dark Royal Blue) */
+        color: var(--dark-blue-text) !important; /* Dark Blue Text */
         text-shadow: none !important;
         font-weight: 800 !important;
+        border-color: #0277bd !important; /* Blue underlines for headings */
     }
     
-    /* Ensure Inputs inside Top 5 are visible */
+    /* Inputs inside Top 5 */
     .video-panel input, .video-panel select {
         background: #fff !important;
         color: #000 !important;
-        border: 1px solid #0d47a1 !important;
+        border: 2px solid #0277bd !important;
     }
 
     /* BOXES */
     .group-box { 
         border: 2px solid #006064; 
-        border-radius: 8px; padding: 35px 20px 20px 20px; margin-bottom: 30px; 
+        border-radius: 8px; padding: 40px 20px 20px 20px; margin-bottom: 30px; 
         background: rgba(0, 0, 0, 0.8); 
         position: relative;
     }
@@ -184,37 +194,69 @@
         position: absolute;
         top: -15px; left: 50%; transform: translateX(-50%); 
         background: #FFD700; color: #000; 
-        padding: 5px 20px; font-size: 13px; font-weight: 900; 
+        padding: 6px 25px; font-size: 14px; font-weight: 900; 
         border: 2px solid #fff; white-space: nowrap;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+        box-shadow: 0 2px 8px rgba(0,0,0,0.6);
+        border-radius: 4px;
     }
 
-    /* SECURITY LOCK SCREEN */
+    /* PHOTO CHANGE AREA */
+    .preview-container {
+        display: flex; align-items: center; justify-content: center;
+        background: rgba(255,255,255,0.05);
+        padding: 15px; border: 1px dashed #D4AF37;
+        border-radius: 8px; margin-top: 10px;
+    }
+    #previewImg, .admin-pic {
+        width: 130px; height: 130px;
+        border: 3px solid #FFD700;
+        object-fit: cover;
+        background: #000;
+        box-shadow: 0 0 20px rgba(0,0,0,0.8);
+    }
+    .admin-pic { border-radius: 50%; } /* Round for admin */
+    #previewImg { border-radius: 5px; } /* Square for student */
+
+    /* FULL SCREEN BUTTON - ROYAL CIRCLE (Bottom Right) */
+    #cpFsBtn {
+        position: fixed;
+        bottom: 25px; right: 25px;
+        width: 60px; height: 60px;
+        border-radius: 50%;
+        background: radial-gradient(circle, #004d40, #000);
+        color: #FFD700;
+        border: 3px solid #FFD700;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 24px;
+        box-shadow: 0 0 20px rgba(0,0,0,0.8);
+        z-index: 10000; /* Always on top */
+        cursor: pointer;
+        transition: 0.3s;
+    }
+    #cpFsBtn:hover { transform: scale(1.1); box-shadow: 0 0 30px #FFD700; }
+
+    /* SECURITY LOCK SCREEN - CENTERED */
     #securityOverlay { 
         position: fixed; top: 0; left: 0; 
         width: 100%; height: 100%; 
         background: radial-gradient(circle, #002b36 0%, #000 95%); 
         z-index: 99999; 
-        display: flex; 
-        justify-content: center; 
-        align-items: center; 
+        display: flex; justify-content: center; align-items: center; 
     }
     
     .sec-box { 
         background: #000 !important; 
         padding: 50px; 
         border: 4px solid var(--accent-gold); 
-        border-radius: 15px;
-        width: 500px; max-width: 90%; 
-        box-shadow: 0 0 80px rgba(212, 175, 55, 0.3);
+        border-radius: 20px;
+        width: 550px; max-width: 90%; 
+        box-shadow: 0 0 100px rgba(212, 175, 55, 0.4);
         text-align: center; 
         display: flex; flex-direction: column; align-items: center;
-        position: relative; 
-        margin: 0; 
     }
     
     .sec-box h2 {
-        font-size: 32px !important; margin-bottom: 20px; margin-top: 10px;
+        font-size: 34px !important; margin-bottom: 25px; margin-top: 10px;
         background: linear-gradient(to right, #cfc09f, #fff, #c5a059);
         -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         text-align: center; border: none;
@@ -222,27 +264,22 @@
     
     .sec-input { 
         background: #111 !important; color: #FFD700 !important; 
-        border: 2px solid #fff; padding: 15px; font-size: 24px; 
-        text-align: center; letter-spacing: 5px; width: 80%;
+        border: 2px solid #fff; padding: 18px; font-size: 26px; 
+        text-align: center; letter-spacing: 5px; width: 85%;
+        border-radius: 8px; margin-bottom: 20px;
     }
 
-    .admin-pic { 
-        width: 120px; height: 120px; border-radius: 50%; 
-        border: 4px solid var(--accent-gold); margin-bottom: 20px; 
-        background: #000; 
-    }
-    
     /* Utility */
     .row { display: flex; gap: 10px; width: 100%; }
     .col { flex: 1; min-width: 0; }
     
     /* Tabs & Lists */
-    .lang-tabs { display: flex; gap: 8px; margin-bottom: 20px; width: 100%; }
-    .lang-btn { flex: 1; background: #111 !important; padding: 12px; color: #80cbc4; border: 2px solid #004d40; font-weight: bold; }
+    .lang-tabs { display: flex; gap: 10px; margin-bottom: 20px; width: 100%; }
+    .lang-btn { flex: 1; background: #080808 !important; padding: 15px; color: #80cbc4; border: 2px solid #004d40; font-weight: bold; border-radius: 5px; }
     .lang-btn.active { background: #004d40 !important; color: #FFD700 !important; border: 2px solid #FFD700 !important; }
     
-    #stuList { background: #000 !important; color: #fff !important; border: 2px solid #004d40; min-height: 250px; font-size: 18px; }
-    #stuList option { padding: 12px; border-bottom: 1px solid #333; }
+    #stuList { background: #000 !important; color: #fff !important; border: 2px solid #004d40; min-height: 300px; font-size: 20px; }
+    #stuList option { padding: 15px; border-bottom: 1px solid #333; }
 </style>
 </head>
 <body oncontextmenu="return false;">
