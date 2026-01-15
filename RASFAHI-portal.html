@@ -13,54 +13,62 @@
         src: local('Faruuma'), local('Faruumaa'), url('Fonts/faruuma.ttf') format('truetype');
     }
 
-    /* --- THEME: ROYAL PRESIDENTIAL (GREEN EDITION) --- */
+    /* --- THEME: ROYAL PRESIDENTIAL (COLOR CODED EDITION) --- */
     :root {
-        /* Background: Deep Green/Black Gradient */
-        --bg-grad: radial-gradient(circle at center, #00251a 0%, #000000 100%);
+        /* Main Background */
+        --bg-grad: radial-gradient(circle at center, #0a0a0a 0%, #000000 100%);
         --panel-bg: #000000; 
-        --panel-border: 3px double #D4AF37; 
+        
+        /* Borders */
+        --border-gold: 2px solid #D4AF37; 
+        --border-silver: 2px solid #90a4ae;
         
         /* Text Colors */
-        --text-main: #ffffff; 
-        --text-label: #a7ffeb; /* Bright Mint Green for labels */
-        --text-heading: #000000; 
+        --text-white: #ffffff; 
+        --text-gold: #FFD700;
+        --text-mint: #a7ffeb;
         
-        /* Accents */
-        --accent-gold: #FFD700; 
+        /* --- SECTION BACKGROUNDS (NEW) --- */
         
-        /* The Requested Matching Green Background */
-        --royal-green-bg: #004d40; 
-        --royal-green-dark: #00251a;
+        /* 1. Student Info & Toggle 3 Screen (Royal Blue) */
+        --bg-royal-blue: linear-gradient(135deg, #0d47a1, #002171);
+        
+        /* 2. Switches, Video Ctrl, Card Pos, Logo (Metallic Grey) */
+        --bg-metallic-grey: linear-gradient(135deg, #37474f, #263238);
+        
+        /* 3. Subtitle (Soft Blue/Teal) */
+        --bg-soft-blue: linear-gradient(135deg, #006064, #00363a);
+        
+        /* 4. Video Overlay Card (Light Grey) */
+        --bg-light-grey: linear-gradient(135deg, #546e7a, #455a64);
     }
 
     body {
         margin: 0; padding: 0;
         background: var(--bg-grad);
-        color: var(--text-main);
+        color: var(--text-white);
         font-family: 'Inter', sans-serif;
-        overflow: hidden; 
-        height: 100vh; width: 100vw;
+        overflow: hidden; height: 100vh; width: 100vw;
         -webkit-user-select: none; user-select: none;
         font-size: 16px;
     }
 
     /* LAYOUT */
     .main-layout { 
-        display: flex; gap: 25px; 
+        display: flex; gap: 20px; 
         height: 100vh; width: 100vw; 
-        padding: 20px; box-sizing: border-box; 
+        padding: 15px; box-sizing: border-box; 
     }
     
     .sidebar, .editor {
         background: var(--panel-bg);
-        border: var(--panel-border);
+        border: 2px solid #333; /* Outer subtle border */
         border-radius: 12px; 
-        padding: 25px;
+        padding: 20px;
         display: flex; flex-direction: column;
         overflow-y: auto; 
-        height: 100%; 
-        box-sizing: border-box; 
-        box-shadow: 0 0 40px rgba(0,0,0,0.8), inset 0 0 50px rgba(0,0,0,0.5);
+        height: 100%; box-sizing: border-box; 
+        box-shadow: inset 0 0 50px rgba(0,0,0,0.8);
         position: relative;
     }
 
@@ -68,210 +76,188 @@
     .editor { flex: 1; min-width: 0; }
 
     /* SCROLLBAR */
-    ::-webkit-scrollbar { width: 14px; }
-    ::-webkit-scrollbar-track { background: #000; border-left: 1px solid #333; }
+    ::-webkit-scrollbar { width: 12px; }
+    ::-webkit-scrollbar-track { background: #111; }
     ::-webkit-scrollbar-thumb { 
-        background: linear-gradient(to bottom, #004d40, #FFD700, #004d40); 
-        border-radius: 7px; border: 2px solid #000; 
+        background: #D4AF37; border-radius: 6px; border: 2px solid #000; 
     }
 
-    /* --- ROYAL HEADINGS (BANNERS) --- */
+    /* --- HEADINGS (BANNERS) --- */
     h1, h2, h3, h4, .group-title { 
         font-family: 'Playfair Display', serif; 
-        text-transform: uppercase; 
-        letter-spacing: 2px;
-        font-size: 18px; 
-        text-align: center; 
-        margin: 0 0 20px 0;
-        /* Gold Banner Style */
+        text-transform: uppercase; letter-spacing: 1.5px;
+        font-size: 16px; text-align: center; 
+        margin: 0 0 25px 0;
+        /* Gold Banner */
         background: linear-gradient(to right, #B8860B, #FFD700, #FDB931, #B8860B);
         color: #000 !important; 
-        padding: 12px;
-        border-radius: 4px;
-        font-weight: 900;
+        padding: 10px; border-radius: 4px; font-weight: 900;
         border: 1px solid #fff;
-        box-shadow: 0 5px 15px rgba(0,0,0,0.6);
-        position: relative; width: auto;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+        position: relative; width: auto; display: block;
     }
-    
-    /* LABELS - HIGH CONTRAST */
+
+    /* LABELS */
     label { 
-        display: block; 
-        font-size: 15px; 
-        color: var(--text-label) !important; /* Mint Green */
-        margin-bottom: 8px; margin-top: 20px; 
-        font-weight: 700; text-transform: uppercase;
-        letter-spacing: 1px;
-        border-bottom: 1px dashed rgba(255,255,255,0.1);
-        padding-bottom: 2px;
+        display: block; font-size: 14px; 
+        color: var(--text-mint) !important; 
+        margin-bottom: 10px; margin-top: 15px; 
+        font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;
+        border-bottom: 1px dashed rgba(255,255,255,0.2); padding-bottom: 3px;
     }
-    
-    /* --- UNIFIED INPUT STYLING (THE FIX) --- */
-    /* This ensures Detail 1, 2 and Dhivehi boxes look EXACTLY the same */
-    input[type="text"], textarea, select, input[type="number"], input[type="file"], input[type="password"] { 
+
+    /* --- INPUT FIX (STUDENT INFO & OTHERS) --- */
+    /* This ensures layout is perfect and details don't overlap Dhivehi */
+    input[type="text"], textarea, select, input[type="number"], input[type="password"] { 
         width: 100%; 
-        height: 60px !important; /* Fixed Heavy Height for ALL */
-        padding: 0 15px; /* Consistent Padding */
-        border: 2px solid #D4AF37; /* Gold Border for ALL */
+        height: 55px !important; /* Unified Height */
+        padding: 0 15px; 
+        border: 2px solid #D4AF37; 
         border-radius: 6px; 
         background: #000000 !important; 
         color: #ffffff !important; 
-        font-size: 22px !important; 
+        font-size: 20px !important; 
         font-weight: 600;
         box-sizing: border-box;
-        margin-bottom: 15px;
+        margin-bottom: 20px !important; /* Critical Space Fix */
         font-family: 'Inter', sans-serif;
-        display: flex; align-items: center; /* Vertically center text */
-        line-height: normal; /* Fix alignment */
+        line-height: normal;
     }
 
-    /* Specific fix for file input text */
-    input[type="file"] { padding-top: 15px; font-size: 14px !important; height: auto !important; }
-
-    input:focus, textarea:focus, select:focus { 
-        border-color: #00ffcc !important; /* Bright Cyan Glow */
-        background: #050505 !important; 
-        box-shadow: 0 0 15px rgba(0, 255, 204, 0.3);
-        outline: none; 
+    input:focus, select:focus { 
+        border-color: #00ffcc !important; 
+        background: #111 !important; 
+        box-shadow: 0 0 15px rgba(0, 255, 204, 0.4); outline: none; 
     }
 
-    /* Dhivehi Specifics (Right Align) */
+    /* Dhivehi Specific */
     .font-dv {
         font-family: 'Faruuma', 'Noto Sans Thaana', sans-serif !important;
-        direction: rtl !important;
-        text-align: right !important;
-        font-size: 28px !important; 
+        direction: rtl !important; text-align: right !important;
+        font-size: 26px !important; 
+        padding-top: 5px;
     }
 
     /* BUTTONS */
     button { 
-        cursor: pointer; font-weight: 800; border-radius: 6px; 
-        border: 1px solid rgba(255,255,255,0.15); 
-        text-transform: uppercase; letter-spacing: 1px; font-size: 14px;
+        cursor: pointer; font-weight: 800; border-radius: 5px; 
+        border: 1px solid rgba(255,255,255,0.2); 
+        text-transform: uppercase; font-size: 13px;
         background: linear-gradient(to bottom, #004d40, #00251a);
-        color: #fff; padding: 15px; box-sizing: border-box;
-        margin-bottom: 8px; width: 100%;
-        box-shadow: 0 4px 0 #00151a;
-        transition: 0.2s;
+        color: #fff; padding: 14px; width: 100%; margin-bottom: 10px;
+        box-shadow: 0 4px 5px rgba(0,0,0,0.4); transition: 0.2s;
     }
-    button:active { transform: translateY(4px); box-shadow: none; }
-    button:hover { filter: brightness(1.2); border-color: var(--accent-gold); }
+    button:hover { filter: brightness(1.2); border-color: var(--text-gold); transform: translateY(-2px); }
 
     .launch-btn { 
         background: linear-gradient(to bottom, #b71c1c, #7f0000) !important; 
-        font-size: 18px; padding: 18px; border: 2px solid #ff5252;
-    }
-    
-    /* --- GREEN SECTIONS (Student, Calibration, Card, Top 5) --- */
-    .group-box, .video-panel, .blue-theme-box { 
-        /* The Requested Royal Green Background */
-        background: linear-gradient(to bottom right, var(--royal-green-bg), var(--royal-green-dark)) !important;
-        padding: 35px 20px 20px 20px; 
-        border-radius: 10px; 
-        border: 2px solid #D4AF37; /* Gold Border */
-        margin-bottom: 30px;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-        position: relative;
+        font-size: 16px; padding: 18px; border: 2px solid #ff5252; margin-bottom: 20px;
     }
 
-    /* Fix Heading Position inside these boxes */
-    .group-box h4, .video-panel h4, .group-title {
-        margin-top: -50px; /* Pulls banner up to sit on border */
-        display: inline-block; width: auto; 
-        padding: 8px 30px;
-        z-index: 10;
+    /* --- SECTION COLOR CODING (THE REQUESTED CHANGES) --- */
+    
+    /* 1. STUDENT INFO & TOGGLE 3 SCREEN (BLUE) */
+    /* Assuming these are wrapped in .blue-section or specific IDs */
+    #stuInfoPanel, .toggle-section, #toggle3ScreenBox {
+        background: var(--bg-royal-blue) !important;
+        border: 2px solid #2962ff;
+        border-radius: 10px; padding: 25px 20px; margin-bottom: 25px;
+        box-shadow: 0 5px 20px rgba(13, 71, 161, 0.4);
     }
 
-    /* Ensure Inputs inside Green boxes are Dark */
-    .group-box input, .video-panel input, .group-box select, .video-panel select {
-        background: #000 !important;
-        border: 1px solid #80cbc4;
+    /* 2. SWITCHES, VIDEO CTRL, CARD POS, LOGO (METALLIC GREY) */
+    #screenSwitchBox, .video-ctrl-box, #cardPosBox, #logoMoveBox, .grey-section {
+        background: var(--bg-metallic-grey) !important;
+        border: 2px solid #78909c;
+        border-radius: 10px; padding: 25px 20px; margin-bottom: 25px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.6);
     }
     
-    /* Fix Text Visibility in Calibration/Top 5 */
-    .group-box label, .video-panel label, .group-box p, .video-panel p, .group-box div, .video-panel div {
-        color: #ffffff !important; 
-        text-shadow: 0 1px 3px #000;
-        opacity: 1 !important;
+    /* 3. VIDEO OVERLAY / PLAY CARD (LIGHT GREY) */
+    .video-overlay-box, #videoPlayCard {
+        background: var(--bg-light-grey) !important;
+        border: 2px solid #cfd8dc;
+        border-radius: 10px; padding: 25px 20px; margin-bottom: 25px;
+    }
+    /* Ensure text pops on light grey */
+    .video-overlay-box label, #videoPlayCard label { color: #e0f7fa !important; text-shadow: 0 1px 2px #000; }
+
+    /* 4. SUBTITLE EDIT (SOFT BLUE) */
+    #subtitleBox, .subtitle-section {
+        background: var(--bg-soft-blue) !important;
+        border: 2px solid #00acc1;
+        border-radius: 10px; padding: 25px 20px; margin-bottom: 25px;
+    }
+
+    /* --- HEADINGS ADJUSTMENT INSIDE BOXES --- */
+    /* Pulling the Gold Banner up to sit nicely on the border */
+    #stuInfoPanel h4, .toggle-section h4, #screenSwitchBox h4, .video-ctrl-box h4, 
+    #cardPosBox h4, #logoMoveBox h4, .video-overlay-box h4, #subtitleBox h4 {
+        margin-top: -45px; 
+        display: inline-block; width: auto; padding: 8px 25px;
+        z-index: 5;
     }
 
     /* PHOTO PREVIEW */
     .preview-container {
         display: flex; align-items: center; justify-content: center;
-        background: rgba(0,0,0,0.3);
-        padding: 20px; border: 2px solid #D4AF37;
-        border-radius: 10px; margin-top: 15px;
+        background: rgba(0,0,0,0.5); padding: 15px; border: 2px solid var(--text-gold);
+        border-radius: 8px; margin-top: 15px;
     }
     #previewImg, .admin-pic {
-        width: 140px; height: 140px;
-        border: 4px solid #FFD700;
-        object-fit: cover;
-        background: #000;
-        box-shadow: 0 0 25px rgba(0,0,0,0.8);
+        width: 120px; height: 120px; border: 3px solid var(--text-gold);
+        object-fit: cover; background: #000;
     }
-    .admin-pic { border-radius: 50%; } 
-    #previewImg { border-radius: 8px; }
+    .admin-pic { border-radius: 50%; } #previewImg { border-radius: 6px; }
 
     /* FULL SCREEN BUTTON */
     #cpFsBtn {
         position: fixed; bottom: 30px; right: 30px;
-        width: 70px; height: 70px;
-        border-radius: 50%;
+        width: 70px; height: 70px; border-radius: 50%;
         background: radial-gradient(circle, #004d40, #000);
-        color: #FFD700;
-        border: 4px solid #FFD700;
+        color: var(--text-gold); border: 4px solid var(--text-gold);
         display: flex; align-items: center; justify-content: center;
-        font-size: 28px;
-        box-shadow: 0 0 30px rgba(0,0,0,0.8);
-        z-index: 10000; cursor: pointer; transition: 0.3s;
+        font-size: 28px; box-shadow: 0 0 30px rgba(0,0,0,0.8);
+        z-index: 10000; transition: 0.3s;
     }
-    #cpFsBtn:hover { transform: scale(1.1); box-shadow: 0 0 50px #FFD700; }
+    #cpFsBtn:hover { transform: scale(1.1); box-shadow: 0 0 50px var(--text-gold); }
 
     /* SECURITY LOCK SCREEN */
     #securityOverlay { 
-        position: fixed; top: 0; left: 0; 
-        width: 100%; height: 100%; 
+        position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
         background: radial-gradient(circle, #001a20 0%, #000 95%); 
-        z-index: 99999; 
-        display: flex; justify-content: center; align-items: center; 
+        z-index: 99999; display: flex; justify-content: center; align-items: center; 
     }
-    
     .sec-box { 
-        background: #000 !important; 
-        padding: 60px; 
-        border: 5px solid var(--accent-gold); 
-        border-radius: 25px;
-        width: 600px; max-width: 90%; 
-        box-shadow: 0 0 120px rgba(212, 175, 55, 0.5);
-        text-align: center; 
+        background: #000 !important; padding: 60px; 
+        border: 5px solid var(--text-gold); border-radius: 25px;
+        width: 600px; max-width: 90%; text-align: center; 
+        box-shadow: 0 0 100px rgba(212, 175, 55, 0.5);
         display: flex; flex-direction: column; align-items: center;
     }
-    
     .sec-box h2 {
-        font-size: 40px !important; margin-bottom: 30px; margin-top: 20px;
+        font-size: 40px !important; margin: 20px 0 30px 0;
         background: linear-gradient(to right, #cfc09f, #fff, #c5a059);
         -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-        border: none; padding: 0; box-shadow: none;
+        border: none; box-shadow: none; padding: 0;
     }
-    
     .sec-input { 
-        background: #111 !important; color: #FFD700 !important; 
+        background: #111 !important; color: var(--text-gold) !important; 
         border: 2px solid #fff; padding: 20px; font-size: 30px !important; 
         text-align: center; letter-spacing: 8px; width: 80%;
         border-radius: 10px; margin-bottom: 25px; height: auto !important;
     }
-
-    /* Utility */
+    
+    /* Utility Helpers */
     .row { display: flex; gap: 15px; width: 100%; }
     .col { flex: 1; min-width: 0; }
     
-    /* Tabs & Lists */
-    .lang-tabs { display: flex; gap: 10px; margin-bottom: 25px; width: 100%; }
-    .lang-btn { flex: 1; background: #00251a !important; padding: 15px; color: #a7ffeb; border: 2px solid #004d40; font-weight: bold; border-radius: 6px; }
-    .lang-btn.active { background: #004d40 !important; color: #FFD700 !important; border: 2px solid #FFD700 !important; }
-    
-    #stuList { background: #000 !important; color: #fff !important; border: 3px solid #004d40; min-height: 350px; font-size: 22px; }
-    #stuList option { padding: 15px; border-bottom: 1px solid #333; }
+    /* Generic Target for Un-ID'd boxes to default to Grey if not caught */
+    .group-box {
+        background: var(--bg-metallic-grey);
+        border: 2px solid #78909c;
+        border-radius: 10px; padding: 25px 20px; margin-bottom: 25px;
+    }
 </style>
 </head>
 <body oncontextmenu="return false;">
