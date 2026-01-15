@@ -599,6 +599,66 @@
         /* އެތެރޭގެ އެންމެ ތިރީ އެއްޗެހި ބޯޑަރުގައި ނުޖެހޭވަރުގެ ކުޑަ ޖާގައެއް */
         padding-bottom: 20px !important; 
     }
+    /* --- 1. މައިގަނޑު ބޯޑަރު ކަނޑައިގެންދާ މައްސަލަ ހައްލުކުރުން --- */
+    body {
+        overflow: hidden !important; /* މުޅި ޕޭޖު ސްކްރޯލްވިޔަ ނުދިނުން */
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    .main-layout {
+        /* މަތިންނާއި ތިރިން 15px ޖާގަ ދީގެން މެދަށް ގެނައުން */
+        padding: 15px !important; 
+        height: 100vh !important;
+        box-sizing: border-box !important;
+    }
+
+    .sidebar, .editor {
+        /* މުހިންމު ބައި: ސްކްރީންގެ ސައިޒުން 30px އުނިކޮށްފައި ބެހެއްޓުން */
+        /* އޭރުން ތިރީ ބޯޑަރު ނުކެނޑި ފެންނަން އިންނާނެ */
+        height: calc(100vh - 30px) !important; 
+        overflow-y: auto !important; /* ބޯޑަރުގެ އެތެރެ އެކަނި ސްކްރޯލްވާގޮތް */
+        padding-bottom: 20px !important;
+    }
+
+    /* --- 2. މަތީގައި އިންނަ "ރަސްފަހި" ލިޔުންކޮޅު (ޝާހީ ޑިޒައިން) --- */
+    .royal-header-box {
+        font-family: 'Playfair Display', serif !important; /* ޝާހީ ފޮންޓް */
+        text-align: center !important; /* މެދަށް */
+        font-size: 26px !important; /* އަކުރު ބޮޑުކުރަން */
+        font-weight: 900 !important;
+        color: #FFD700 !important; /* ރަން ކުލަ */
+        
+        /* ޝާހީ ބޯޑަރު */
+        border: 3px double #D4AF37 !important; 
+        border-radius: 10px !important;
+        
+        /* ފަހަތުގެ ކުލަ (Background) */
+        background: linear-gradient(to bottom, #001a1a, #000000) !important;
+        
+        padding: 15px !important;
+        margin-bottom: 25px !important;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.6) !important;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+    }
+
+    /* --- 3. ތިރީގައި އިންނަ "ޑިޒައިން ބައި" ލިޔުންކޮޅު (ޝާހީ ކާޑު) --- */
+    .royal-footer-card {
+        text-align: center !important; /* މެދަށް */
+        border: 1px solid #D4AF37 !important; /* ރީތި ރަން ރޮނގެއް */
+        border-radius: 50px !important; /* ވަށްކޮށްލުމަށް */
+        
+        background: #00251a !important; /* ގަދަ ފެހި ކުލަ */
+        color: #a7ffeb !important; /* ލިޔުމުގެ ކުލަ */
+        
+        padding: 10px 20px !important;
+        margin-top: 30px !important;
+        font-size: 13px !important;
+        box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
+        width: 80%;
+        margin-left: auto; margin-right: auto; /* ގޮޅި މެދަށް ގެނައުމަށް */
+    }
 </style>!
 </head>
 <body oncontextmenu="return false;">
