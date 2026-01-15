@@ -5,37 +5,33 @@
     <title>Rasfahi portal (V33.0 - Platinum Edition - Navigation & Flex)</title>
 <style>
     /* 1. Google Font (Official & Clean) */
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Playfair+Display:wght@700&family=Noto+Sans+Thaana:wght@400;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@500;700&family=Playfair+Display:wght@700;900&family=Noto+Sans+Thaana:wght@600;800&display=swap');
 
-    /* 2. Faruuma Font (Dhivehi) */
+    /* 2. Faruuma Font */
     @font-face {
         font-family: 'Faruuma';
         src: local('Faruuma'), local('Faruumaa'), url('Fonts/faruuma.ttf') format('truetype');
     }
 
-    /* --- THEME: ROYAL PRESIDENTIAL (High Contrast) --- */
+    /* --- THEME: ROYAL PRESIDENTIAL (MAX VISIBILITY) --- */
     :root {
-        /* Background: Deep Presidential Green/Blue to Royal Black */
-        --bg-grad: radial-gradient(circle at center, #002b36 0%, #00090a 100%);
+        /* Background: Very Dark Blue/Black for Max Contrast */
+        --bg-grad: radial-gradient(circle at center, #001a20 0%, #000000 100%);
         
-        /* Panels: Solid Dark for Readability */
-        --panel-bg: #01151a; 
-        --panel-border: 1px solid #D4AF37; /* Royal Gold Border */
+        /* Panels: Pitch Black */
+        --panel-bg: #000000; 
+        --panel-border: 2px solid #D4AF37; /* Thicker Gold Border */
         
-        /* Text Colors - PRIORITY: CLARITY */
-        --text-main: #ffffff; /* Pure White for reading */
-        --text-label: #80cbc4; /* Bright Teal for labels */
-        --text-heading: #FFD700; /* Gold for Headings */
+        /* Text Colors - PRIORITY: READABILITY */
+        --text-main: #ffffff; /* 100% White */
+        --text-label: #4db6ac; /* Bright Teal (Easy to see) */
+        --text-heading: #FFD700; /* Bright Gold */
         
-        /* Inputs */
-        --input-bg: #000000; /* Pitch Black for high contrast */
-        --input-border: 1px solid #004d40; /* Presidential Green */
+        --input-bg: #0a0a0a; /* Almost Black */
+        --input-border: 1px solid #00695c; 
         
-        /* Accents */
         --accent-gold: #FFD700; 
-        --accent-teal: #006064;
-        
-        --shadow: 0 10px 40px rgba(0,0,0,0.9);
+        --shadow: 0 10px 50px rgba(0,0,0,1);
     }
 
     body {
@@ -46,274 +42,199 @@
         overflow: hidden; height: 100vh; width: 100vw;
         -webkit-user-select: none; user-select: none;
         text-align: left;
+        font-size: 16px; /* Base size increase */
     }
 
     /* LAYOUT FIXED */
     .main-layout { 
-        display: flex; gap: 15px; 
+        display: flex; gap: 20px; 
         height: 100vh; width: 100vw; 
-        padding: 15px; 
+        padding: 20px; 
         box-sizing: border-box; 
     }
     
-    /* SIDEBAR & EDITOR PANELS */
     .sidebar, .editor {
         background: var(--panel-bg);
-        border: 2px solid var(--accent-gold);
-        border-radius: 8px; 
-        box-shadow: var(--shadow);
-        box-sizing: border-box;
+        border: var(--panel-border);
+        border-radius: 10px; 
+        padding: 20px;
         display: flex; flex-direction: column;
-        box-shadow: inset 0 0 30px rgba(0,0,0,0.8); /* Depth effect */
-    }
-
-    .sidebar {
-        flex: 0 0 360px;
-        padding: 15px;
+        box-shadow: var(--shadow);
         overflow-y: auto;
+        box-sizing: border-box;
     }
 
-    .editor {
-        flex: 1;
-        padding: 25px;
-        overflow-y: auto;
-        position: relative;
-        min-width: 0;
-    }
+    .sidebar { flex: 0 0 380px; } /* Widened Sidebar */
+    .editor { flex: 1; min-width: 0; }
 
-    /* SCROLLBAR - ROYAL GOLD */
-    ::-webkit-scrollbar { width: 10px; }
-    ::-webkit-scrollbar-track { background: #000; }
+    /* SCROLLBAR - Larger & Easier to Grab */
+    ::-webkit-scrollbar { width: 12px; }
+    ::-webkit-scrollbar-track { background: #111; }
     ::-webkit-scrollbar-thumb { 
-        background: linear-gradient(to bottom, #b8860b, #ffd700, #b8860b); 
-        border-radius: 5px; border: 2px solid #000; 
+        background: #D4AF37; 
+        border-radius: 6px; border: 2px solid #000; 
     }
 
-    /* TYPOGRAPHY - HEADINGS (CLEAR & GOLD) */
+    /* TYPOGRAPHY - BIGGER & BOLDER */
     h1, h2, h3, h4 { 
-        margin: 8px 0 12px 0; 
+        margin: 10px 0 15px 0; 
         font-family: 'Playfair Display', serif; 
         color: var(--text-heading); 
         text-transform: uppercase; 
-        letter-spacing: 1.5px;
-        font-size: 17px;
-        text-shadow: 0 2px 4px rgba(0,0,0,1);
-        text-align: left;
-        border-bottom: 1px solid rgba(212, 175, 55, 0.4);
-        padding-bottom: 6px;
+        letter-spacing: 1px;
+        font-size: 20px; /* Increased Heading Size */
+        border-bottom: 2px solid #333;
+        padding-bottom: 8px;
     }
     
-    /* LABELS - HIGH VISIBILITY */
+    /* LABELS - CLEAR & BRIGHT */
     label { 
-        display: block; font-size: 12px; 
+        display: block; 
+        font-size: 14px; /* Increased Label Size */
         color: var(--text-label); 
-        margin-bottom: 5px; margin-top: 14px; 
+        margin-bottom: 6px; margin-top: 18px; 
         font-weight: 700; text-transform: uppercase;
-        letter-spacing: 0.8px;
+        letter-spacing: 0.5px;
     }
     
-    .d-label { 
-        font-size: 16px; font-weight: bold; color: var(--accent-gold); 
-        border-bottom: 1px solid var(--accent-gold); 
-        padding-bottom: 5px; margin-top: 25px; display: block;
-        font-family: 'Playfair Display', serif;
-    }
-
-    /* INPUTS - BLACK BG & WHITE TEXT (MAX READABILITY) */
+    /* INPUTS - MASSIVE IMPROVEMENT */
     input[type="text"], textarea, select, input[type="number"], input[type="file"], input[type="password"] { 
         width: 100%; 
-        padding: 12px; 
-        border: 1px solid #006064; 
-        border-radius: 4px; 
-        background: #000000 !important; /* Pitch Black */
-        color: #ffffff !important; /* Pure White */
-        font-size: 14px; font-weight: 500;
+        padding: 14px; /* More padding */
+        border: 2px solid #004d40; /* Thicker border */
+        border-radius: 6px; 
+        background: #080808 !important; 
+        color: #ffffff !important; /* Pure White Text */
+        font-size: 18px !important; /* BIGGER TEXT */
+        font-weight: 600;
         box-sizing: border-box;
-        transition: 0.3s;
         font-family: 'Inter', sans-serif;
-        margin-bottom: 8px;
-        box-shadow: inset 0 0 5px rgba(0,0,0,0.5);
+        margin-bottom: 10px;
     }
     
-    /* Dropdown Options Fix */
+    /* Dropdown Options */
     select option {
         background: #000;
         color: #fff;
-        padding: 10px;
+        font-size: 18px;
+        padding: 15px;
     }
 
-    /* Focus State - Glow Gold */
     input:focus, textarea:focus, select:focus { 
         border-color: var(--accent-gold) !important; 
-        background: #050505 !important; 
+        background: #000 !important; 
+        box-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
         outline: none; 
-        box-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
     }
 
-    /* DHIVEHI INPUTS - Slightly Larger */
+    /* DHIVEHI INPUTS - EXTRA LARGE */
     .font-dv {
         font-family: 'Faruuma', 'Noto Sans Thaana', sans-serif !important;
         direction: rtl !important;
         text-align: right !important;
-        font-size: 16px !important; /* Larger for readability */
+        font-size: 28px !important; /* Much Bigger for Thaana */
         line-height: 1.6;
+        padding-right: 15px;
     }
 
-    /* BUTTONS - PRESIDENTIAL STYLE */
+    /* BUTTONS */
     button { 
-        cursor: pointer; font-weight: 700; border-radius: 4px; 
-        border: 1px solid rgba(255,255,255,0.1); transition: all 0.2s;
-        text-transform: uppercase; letter-spacing: 1px; font-size: 12px;
-        background: linear-gradient(to bottom, #004d40, #00251a); /* Dark Green */
-        color: #fff; box-shadow: 0 4px 6px rgba(0,0,0,0.4);
-        width: 100%; padding: 12px; box-sizing: border-box;
+        cursor: pointer; font-weight: 800; border-radius: 5px; 
+        border: 1px solid rgba(255,255,255,0.2); 
+        text-transform: uppercase; letter-spacing: 1px; font-size: 14px;
+        background: linear-gradient(to bottom, #004d40, #00251a);
+        color: #fff; padding: 14px; box-sizing: border-box;
+        margin-bottom: 5px;
     }
     button:hover { 
-        filter: brightness(1.3); border-color: var(--accent-gold); 
-        transform: translateY(-1px);
+        filter: brightness(1.2); border-color: var(--accent-gold); 
     }
 
-    /* Button Variants */
+    /* Specific Buttons */
     .launch-btn { 
-        background: linear-gradient(to bottom, #800000, #500000) !important; /* Royal Red */
-        border: 1px solid #ef5350; font-size: 14px; margin-bottom: 10px; 
+        background: linear-gradient(to bottom, #d32f2f, #b71c1c) !important; 
+        font-size: 16px; padding: 16px; margin-bottom: 15px; border: 2px solid #ff5252;
     }
-    
     .btn-live { 
-        background: linear-gradient(to bottom, #FFD700, #B8860B) !important; /* Gold */
-        color: #000 !important; flex: 2; font-weight: 800; border: 1px solid #fff; 
+        background: linear-gradient(to bottom, #FFD700, #FDB931) !important; 
+        color: #000 !important; font-size: 16px; font-weight: 900; 
     }
     
-    .controls { display: flex; justify-content: center; gap: 5px; margin-bottom: 10px; width: 100%; }
-    .btn-nav { background: #37474f !important; width: 50px; font-size: 18px; padding: 0; }
-    .config-btn-row { display: flex; gap: 5px; margin-bottom: 15px; width: 100%; }
-    .conf-btn { background: #006064 !important; flex: 1; padding: 10px; font-size: 11px; }
-
-    /* Special Buttons */
-    #lockBtn { 
-        background: transparent !important; color: #FFD700 !important; 
-        font-weight: 900; padding: 12px; margin-bottom: 15px; 
-        border: 2px solid #FFD700 !important; 
-    }
-    #lockBtn.active { 
-        background: #b71c1c !important; color: white !important; 
-        border: 2px solid #ff5252 !important; 
-    }
-
     /* TABS */
-    .lang-tabs { display: flex; gap: 5px; margin-bottom: 15px; width: 100%; }
+    .lang-tabs { display: flex; gap: 8px; margin-bottom: 20px; width: 100%; }
     .lang-btn { 
-        flex: 1; background: #001015 !important; padding: 10px; 
-        text-align: center; color: #80cbc4; border: 1px solid #004d40; 
-        border-radius: 4px; font-size: 12px; 
+        flex: 1; background: #111 !important; padding: 12px; 
+        color: #80cbc4; border: 2px solid #004d40; 
+        font-size: 14px; font-weight: bold;
     }
     .lang-btn.active { 
         background: #004d40 !important; color: #FFD700 !important; 
-        border: 1px solid #FFD700 !important; font-weight: bold; 
+        border: 2px solid #FFD700 !important; 
     }
 
-    /* INNER BOXES - MAKE TEXT READABLE */
-    .group-box { 
-        border: 1px solid #004d40; 
-        border-radius: 6px; padding: 25px 15px 15px 15px; margin-bottom: 20px; 
-        background: rgba(0, 0, 0, 0.6); /* Darker background */
-        position: relative; 
-    }
-    .group-title { 
-        position: absolute; top: -10px; left: 15px; 
-        background: linear-gradient(to right, #D4AF37, #C5A059); 
-        color: #000; padding: 4px 12px; 
-        font-size: 11px; font-weight: bold; 
-        border-radius: 2px; text-transform: uppercase; 
-        border: 1px solid #fff;
-    }
-    
-    /* Ensure text inside boxes is White */
-    .group-box p, .group-box span, .group-box div {
-        color: #ffffff !important;
-    }
-
-    /* Student List - High Contrast */
+    /* LISTS (Student List etc) */
     #stuList { 
         background: #000000 !important; 
         color: #ffffff !important; 
-        border: 1px solid #004d40; 
-        min-height: 200px; border-radius: 4px; 
-        width: 100%; 
+        border: 2px solid #004d40; 
+        min-height: 250px; 
+        font-size: 18px !important; /* Big List Text */
     }
     #stuList option { 
-        padding: 10px; border-bottom: 1px solid #222; font-size: 14px; 
+        padding: 12px; border-bottom: 1px solid #333; 
     }
     #stuList option:checked {
-        background: #D4AF37 !important; color: #000 !important;
+        background: var(--accent-gold) !important; color: #000 !important; font-weight: bold;
     }
 
-    /* Preview Area */
-    .preview-container { 
-        background: rgba(0,0,0,0.7); border: 1px solid #D4AF37; 
-        padding: 15px; border-radius: 6px; 
-        display: flex; align-items: center; justify-content: center; 
-        gap: 15px; margin-top: 15px; 
+    /* BOXES & OUTPUTS */
+    .group-box { 
+        border: 2px solid #006064; 
+        border-radius: 8px; padding: 30px 20px 20px 20px; margin-bottom: 25px; 
+        background: rgba(0, 0, 0, 0.8); 
     }
-    #previewImg { 
-        width: 100px; height: 100px; border-radius: 4px; 
-        object-fit: cover; border: 2px solid var(--accent-gold); background: #000; 
-    }
-
-    /* SECURITY OVERLAY - ROYAL WELCOME */
-    #securityOverlay { 
-        position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-        background: radial-gradient(circle, #002b36 0%, #000 90%); 
-        z-index: 99999; display: flex; align-items: center; justify-content: center; 
+    .group-title { 
+        top: -14px; left: 20px; 
+        background: #FFD700; color: #000; 
+        padding: 5px 15px; font-size: 13px; font-weight: 900; 
+        border: 2px solid #fff;
     }
     
+    /* Ensure content inside boxes is big and white */
+    .group-box p, .group-box div, .group-box span {
+        color: #ffffff !important;
+        font-size: 16px;
+    }
+
+    /* SECURITY LOCK SCREEN - GRAND */
     .sec-box { 
-        background: rgba(0, 15, 20, 0.98) !important; 
-        padding: 50px 40px; 
-        border: 2px solid var(--accent-gold); 
-        border-radius: 10px;
-        text-align: center !important; 
-        width: 450px; max-width: 90%; 
-        box-shadow: 0 0 60px rgba(212, 175, 55, 0.25);
+        background: #000 !important; 
+        padding: 60px 40px; 
+        border: 4px solid var(--accent-gold); 
+        width: 500px; max-width: 95%; 
+        box-shadow: 0 0 100px rgba(212, 175, 55, 0.3);
     }
-
-    .sec-box h1 {
-        font-family: 'Playfair Display', serif !important;
-        font-size: 16px !important; color: #80cbc4 !important;
-        letter-spacing: 3px; border: none; margin-bottom: 5px;
-    }
-    
     .sec-box h2 {
-        font-size: 28px !important; margin-bottom: 20px;
-        background: linear-gradient(to right, #cfc09f, #ffecb3, #c5a059);
+        font-size: 32px !important; margin-bottom: 30px;
+        background: linear-gradient(to right, #FFD700, #fff, #FFD700);
         -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-        font-weight: 800; border: none;
     }
-    
     .sec-input { 
-        background: #000 !important; color: #FFD700 !important; 
-        border: 1px solid #004d40; padding: 15px; font-size: 20px; 
-        width: 100%; margin-top: 20px; text-align: center; 
-        border-radius: 6px; font-family: monospace; 
+        background: #111 !important; color: #FFD700 !important; 
+        border: 2px solid #fff; padding: 18px; font-size: 24px; 
+        text-align: center; letter-spacing: 5px;
     }
-    
     .sec-btn { 
-        background: linear-gradient(to right, #B8860B, #FFD700, #B8860B);
-        color: #000; width: 100%; margin-top: 25px; padding: 15px; 
-        font-size: 16px; border: none; font-weight: bold; text-transform: uppercase;
-        border-radius: 6px;
+        background: #FFD700 !important; color: #000 !important; 
+        font-size: 18px; padding: 18px; font-weight: 900;
     }
 
-    .admin-pic { 
-        width: 110px; height: 110px; border-radius: 50%; 
-        border: 3px solid var(--accent-gold); margin-bottom: 20px; background: #000; 
-        box-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
-    }
-    
     /* Utility */
     .row { display: flex; gap: 10px; width: 100%; }
     .col { flex: 1; min-width: 0; }
-    .locked-zone { opacity: 0.5; pointer-events: none; filter: grayscale(1); }
+    
+    /* Fix Placeholder Visibility */
+    ::placeholder { color: #555 !important; opacity: 1; }
 </style>
 </head>
 <body oncontextmenu="return false;">
