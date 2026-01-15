@@ -574,21 +574,30 @@
         text-transform: uppercase;
         letter-spacing: 1px;
     }
-    /* --- 5. ތިރިއަށް ގެއްލޭ މައްސަލަ ހައްލުކުރުން --- */
+   /* --- 5. ބޯޑަރު ގެއްލޭ މައްސަލަ ހައްލުކުރުން (ފައިނަލް ފިކްސް) --- */
     
-    .sidebar, .editor {
-        overflow-y: auto !important; /* ކަށަވަރުކަމާއެކު ސްކްރޯލް ކުރެވޭގޮތް ހެދުން */
-        
-        /* މިއީ އެންމެ މުހިންމު ބައި: ތިރިން ބޮޑު ޖާގައެއް ދޫކުރުން */
-        padding-bottom: 150px !important; 
-        
-        height: 100vh !important; /* މުޅި ސްކްރީންގެ އުސްމިނަށް ފިޓްކުރުން */
-        max-height: 100vh !important;
+    /* މުޅި ޕޭޖު ސްކްރޯލްވިޔަ ނުދީ ހިފެހެއްޓުން */
+    body, html {
+        height: 100vh !important;
+        overflow: hidden !important; 
     }
 
-    /* ބޮޑީ ސްކްރޯލް ވިޔަ ނުދިނުން */
-    body {
-        overflow: hidden !important;
+    .main-layout {
+        height: 100vh !important;
+        padding: 20px !important; /* ބޭރުން ދޭ ޖާގަ */
+        box-sizing: border-box;
+    }
+
+    /* ސައިޑްބާ އާއި އެޑިޓަރުގެ އުސްމިން ހިސާބުކޮށްގެން (Calculate) ހެދުން */
+    .sidebar, .editor {
+        /* މިއީ ސިއްރަކީ: 100vh އިން މަތި/ތިރި ޕެޑިންގ (40px) ކަނޑާލަނީ */
+        height: calc(100vh - 40px) !important; 
+        
+        /* ބޯޑަރު ނުގެއްލި އެތެރެ އެކަނި ސްކްރޯލްވާގޮތް ހެދުން */
+        overflow-y: auto !important; 
+        
+        /* އެތެރޭގެ އެންމެ ތިރީ އެއްޗެހި ބޯޑަރުގައި ނުޖެހޭވަރުގެ ކުޑަ ޖާގައެއް */
+        padding-bottom: 20px !important; 
     }
 </style>!
 </head>
