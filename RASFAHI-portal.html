@@ -902,6 +902,13 @@
         text-shadow: 0 0 10px rgba(0, 230, 118, 0.7) !important;
         box-shadow: 0 0 15px rgba(0, 230, 118, 0.2) !important;
     }
+    /* --- LOCK MODE FIX --- */
+input:disabled, textarea:disabled, select:disabled {
+    opacity: 0.3 !important; 
+    cursor: not-allowed !important;
+    filter: grayscale(100%) !important; 
+    border-color: #333 !important;  
+}
 </style>
 </head>
 <body oncontextmenu="return false;">
@@ -4076,21 +4083,19 @@ body.triple-active #card {
         }
     }
 
-    // 3. އޮޓޯ ސޭވް މަސައްކަތް ކުރުުވުން
-    // ހުރިހާ އިންޕުޓަކަށް "Change" އިވެންޓް ލުން
+   
     document.querySelectorAll('input, select, textarea').forEach(el => {
         el.addEventListener('change', saveSystemState);
-        el.addEventListener('keyup', saveSystemState); // ލިޔާއިރުވެސް ސޭވްވާނެ
+        el.addEventListener('keyup', saveSystemState); 
     });
 
-    // ލައިވް އަޕްޑޭޓް ފަންކްޝަން ތެރެއަށް ސޭވް ކުރުން ލުން
+  
     const originalLiveUpdate = liveUpdate; 
     liveUpdate = function(key, value) {
-        originalLiveUpdate(key, value); // ކުރީގެ މަސައްކަތް ކުރިއަށް ގެންދޭ
-        saveSystemState(); // އިތުރަށް ސޭވް ކޮށްލާ
+        originalLiveUpdate(key, value); 
+        saveSystemState(); 
     };
 
-    // ޕޭޖު ހުޅުވޭއިރު ރިސްޓޯރ ކުރުން
     window.addEventListener('load', () => {
         restoreSystemState();
     });
