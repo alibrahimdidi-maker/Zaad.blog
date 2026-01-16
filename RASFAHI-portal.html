@@ -856,6 +856,46 @@
     .preview-container span {
         color: #cccccc !important;
     }
+    /* --- FIXED: MEDIUM GRAY BACKGROUND & GOLD LABELS --- */
+
+    /* 1. ސްޓޫޑެންޓް އިންފޮމޭޝަން ބައިގެ ބެކްގްރައުންޑް (މެދުމިނުގެ އަޅިކުލަ) */
+    .sidebar div[style*="background:#fff"], 
+    .sidebar div[style*="background-color: #000000"] { 
+        background: #424242 !important; /* Medium Gray */
+        background-image: none !important;
+        border: 2px solid #FFD700 !important; /* ބޯޑަރުވެސް ރަންކުލައަށް */
+        box-shadow: none !important;
+        padding: 20px !important;
+    }
+
+    /* 2. ލޭބަލްތައް (Names, Details...) - ރަންކުލައަށް ބަދަލުކުރީ */
+    .sidebar label {
+        color: #FFD700 !important; /* ގަދަ ރަންކުލަ (ސާފުކޮށް ފެންނާނެ) */
+        font-weight: bold !important;
+        font-size: 16px !important;
+        text-shadow: 1px 1px 2px #000000 !important; /* ކަޅު ހިޔަންޏެއް ލީ */
+        margin-bottom: 5px !important;
+        margin-top: 15px !important;
+    }
+
+    /* 3. އިނގިރޭސި އިންޕުޓް ގޮޅިތައް (ސައިޒު ބޮޑުކޮށް) */
+    #nE, #fE, #cE {
+        font-size: 32px !important; /* އަކުރުގެ ސައިޒު ވަރަށް ބޮޑުކުރީ */
+        height: 75px !important;    /* ގޮޅީގެ އުސްމިން */
+        padding: 0 15px !important;
+        font-weight: 800 !important; 
+        font-family: 'Inter', sans-serif !important;
+        background-color: #212121 !important; /* ލިޔާ ގޮޅި ކަޅުކުރީ */
+        color: #ffffff !important; /* ލިޔާ އަކުރު ހުދުކުލައިގައި */
+        border: 1px solid #9e9e9e !important;
+    }
+
+    /* ދިވެހި ގޮޅިތަކަށްވެސް ކުޑަ ބަދަލެއް (ރީތިކޮށްލަން) */
+    #nD, #fD, #cD, #rankInput, #cm {
+        background-color: #212121 !important;
+        color: #ffffff !important;
+        border: 1px solid #9e9e9e !important;
+    }
 </style>
 </head>
 <body oncontextmenu="return false;">
