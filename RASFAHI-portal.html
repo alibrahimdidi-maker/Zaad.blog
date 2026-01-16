@@ -518,65 +518,57 @@
     #stuList { background: #000 !important; color: #fff !important; border: 3px solid #004d40; min-height: 350px; font-size: 22px; }
 
     #stuList option { padding: 15px; border-bottom: 1px solid #333; }
-/* --- 1. ސައިޑްބާގެ މަތީގައި އިންނަ ސުރުޚީ (ޝާހީކޮށް، ބޮޑުކޮށް، ބޯޑަރަކާއެކު) --- */
     .sidebar h2 {
-        font-size: 32px !important; /* އަކުރު ބޮޑުކުރަން */
-        text-align: center; /* މެދަށް ގެންނަން */
-        border: 4px double #FFD700; /* ރަންކުލައިގެ ބޯޑަރެއް */
+        font-size: 32px !important; 
+        text-align: center; 
+        border: 4px double #FFD700; 
         padding: 20px 10px;
         margin-bottom: 30px;
-        background: linear-gradient(to bottom, #00251a, #000); /* ކަޅު/ފެހި ގްރޭޑިއަންޓް */
-        color: #FFD700 !important; /* ރަންކުލައިގެ އަކުރު */
+        background: linear-gradient(to bottom, #00251a, #000); 
+        color: #FFD700 !important; 
         text-shadow: 0 2px 5px rgba(0,0,0,0.8);
         border-radius: 10px;
         line-height: 1.4;
         box-shadow: 0 10px 20px rgba(0,0,0,0.5);
     }
 
-    /* --- 2. ވެލްކަމް ނޯޓު / ލޮކް ސްކްރީންގެ ލިޔުން ކުޑަކުރަން --- */
     .sec-box h2 {
-        font-size: 24px !important; /* ފޮންޓް ސައިޒް ކުޑަކޮށްލީ */
+        font-size: 24px !important; 
         letter-spacing: 2px;
         margin-bottom: 15px;
     }
 
-    /* --- 3. އިންޕުޓް ގޮޅީގެ ސައިޒު އެއްވަރުކުރުން & ކުލަ ރަނގަޅުކުރުން --- */
-    /* އިނގިރޭސި އާއި ދިވެހި ގޮޅިތައް އެއްވަރުކުރުން */
     input[type="text"], textarea, select, input[type="number"], input[type="password"] {
-        height: 65px !important; /* އުސްމިން ބޮޑުކޮށް ފިކްސް ކޮށްލީ */
-        font-size: 24px !important; /* އަކުރުގެ ސައިޒު */
+        height: 65px !important;
+        font-size: 24px !important; 
         padding-top: 0 !important;
         padding-bottom: 0 !important;
         display: flex;
         align-items: center;
     }
 
-    /* ގޮޅިއަށް ފިތާލީމަ (Click) އަރާ ކަނޑު ނޫކުލަ (Sea Color) ނަގާލައި ރަންކުލަ ޖެއްސުން */
     input:focus, textarea:focus, select:focus {
-        border-color: #FFD700 !important; /* ރަން ކުލައިގެ ބޯޑަރު */
-        box-shadow: 0 0 20px rgba(255, 215, 0, 0.4); /* ރަންކުލައިގެ ދިއްލުމެއް */
+        border-color: #FFD700 !important; 
+        box-shadow: 0 0 20px rgba(255, 215, 0, 0.4); 
         background: #080808 !important;
         color: #FFD700 !important;
     }
 
-    /* --- 4. އެންމެ ތިރީގައި އިންނަ "Designed By" ލިޔުންކޮޅު ޝާހީ ކާޑަކަށް ހެދުން --- */
-    /* މި ބައި މަސައްކަތް ކުރާނީ ތިރީގައިވާ HTML ބަދަލު ގެނައުމުން */
+    
     .credit-card {
         text-align: center;
         margin-top: 40px;
         padding: 20px;
-        border: 2px solid #D4AF37; /* ރަން ބޯޑަރު */
+        border: 2px solid #D4AF37; 
         border-radius: 12px;
         background: linear-gradient(135deg, #00251a 0%, #004d40 100%);
         box-shadow: 0 5px 15px rgba(0,0,0,0.5);
-        color: #a7ffeb; /* ލިޔުމުގެ ކުލަ */
+        color: #a7ffeb; 
         font-size: 14px;
         text-transform: uppercase;
         letter-spacing: 1px;
     }
-   /* --- 5. ބޯޑަރު ގެއްލޭ މައްސަލަ ހައްލުކުރުން (ފައިނަލް ފިކްސް) --- */
-    
-    /* މުޅި ޕޭޖު ސްކްރޯލްވިޔަ ނުދީ ހިފެހެއްޓުން */
+  
     body, html {
         height: 100vh !important;
         overflow: hidden !important; 
@@ -584,56 +576,51 @@
 
     .main-layout {
         height: 100vh !important;
-        padding: 20px !important; /* ބޭރުން ދޭ ޖާގަ */
+        padding: 20px !important; 
         box-sizing: border-box;
     }
 
-    /* ސައިޑްބާ އާއި އެޑިޓަރުގެ އުސްމިން ހިސާބުކޮށްގެން (Calculate) ހެދުން */
     .sidebar, .editor {
-        /* މިއީ ސިއްރަކީ: 100vh އިން މަތި/ތިރި ޕެޑިންގ (40px) ކަނޑާލަނީ */
+    
         height: calc(100vh - 40px) !important; 
         
-        /* ބޯޑަރު ނުގެއްލި އެތެރެ އެކަނި ސްކްރޯލްވާގޮތް ހެދުން */
         overflow-y: auto !important; 
         
-        /* އެތެރޭގެ އެންމެ ތިރީ އެއްޗެހި ބޯޑަރުގައި ނުޖެހޭވަރުގެ ކުޑަ ޖާގައެއް */
         padding-bottom: 20px !important; 
     }
-    /* --- 1. މައިގަނޑު ބޯޑަރު ކަނޑައިގެންދާ މައްސަލަ ހައްލުކުރުން --- */
+
     body {
-        overflow: hidden !important; /* މުޅި ޕޭޖު ސްކްރޯލްވިޔަ ނުދިނުން */
+        overflow: hidden !important; 
         margin: 0 !important;
         padding: 0 !important;
     }
 
     .main-layout {
-        /* މަތިންނާއި ތިރިން 15px ޖާގަ ދީގެން މެދަށް ގެނައުން */
+       
         padding: 15px !important; 
         height: 100vh !important;
         box-sizing: border-box !important;
     }
 
     .sidebar, .editor {
-        /* މުހިންމު ބައި: ސްކްރީންގެ ސައިޒުން 30px އުނިކޮށްފައި ބެހެއްޓުން */
-        /* އޭރުން ތިރީ ބޯޑަރު ނުކެނޑި ފެންނަން އިންނާނެ */
+        
         height: calc(100vh - 30px) !important; 
-        overflow-y: auto !important; /* ބޯޑަރުގެ އެތެރެ އެކަނި ސްކްރޯލްވާގޮތް */
+        overflow-y: auto !important; 
         padding-bottom: 20px !important;
     }
 
-    /* --- 2. މަތީގައި އިންނަ "ރަސްފަހި" ލިޔުންކޮޅު (ޝާހީ ޑިޒައިން) --- */
     .royal-header-box {
-        font-family: 'Playfair Display', serif !important; /* ޝާހީ ފޮންޓް */
-        text-align: center !important; /* މެދަށް */
-        font-size: 26px !important; /* އަކުރު ބޮޑުކުރަން */
+        font-family: 'Playfair Display', serif !important; 
+        text-align: center !important; 
+        font-size: 26px !important; 
         font-weight: 900 !important;
-        color: #FFD700 !important; /* ރަން ކުލަ */
+        color: #FFD700 !important; 
         
-        /* ޝާހީ ބޯޑަރު */
+       
         border: 3px double #D4AF37 !important; 
         border-radius: 10px !important;
         
-        /* ފަހަތުގެ ކުލަ (Background) */
+       
         background: linear-gradient(to bottom, #001a1a, #000000) !important;
         
         padding: 15px !important;
@@ -643,78 +630,75 @@
         letter-spacing: 2px;
     }
 
-    /* --- 3. ތިރީގައި އިންނަ "ޑިޒައިން ބައި" ލިޔުންކޮޅު (ޝާހީ ކާޑު) --- */
+   
     .royal-footer-card {
-        text-align: center !important; /* މެދަށް */
-        border: 1px solid #D4AF37 !important; /* ރީތި ރަން ރޮނގެއް */
-        border-radius: 50px !important; /* ވަށްކޮށްލުމަށް */
+        text-align: center !important; 
+        border: 1px solid #D4AF37 !important; 
+        border-radius: 50px !important; 
         
-        background: #00251a !important; /* ގަދަ ފެހި ކުލަ */
-        color: #a7ffeb !important; /* ލިޔުމުގެ ކުލަ */
+        background: #00251a !important; 
+        color: #a7ffeb !important; 
         
         padding: 10px 20px !important;
         margin-top: 30px !important;
         font-size: 13px !important;
         box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
         width: 80%;
-        margin-left: auto; margin-right: auto; /* ގޮޅި މެދަށް ގެނައުމަށް */
+        margin-left: auto; margin-right: auto; 
     }
-    /* --- ޝާހީ މަތީ ސުރުޚީ (Royal Top Banner) --- */
+    
     .royal-top-banner {
-        /* ޝާހީ އިނގިރޭސި ފޮންޓް */
+        
         font-family: 'Playfair Display', serif !important; 
         
-        /* މެދަށް ގެނައުމަށް */
+       
         text-align: center !important; 
         
-        /* ލިޔުމުގެ ކުލަ (ރަން) */
+     
         color: #FFD700 !important; 
         text-shadow: 0 2px 4px #000;
         
-        /* ޝާހީ ޑަބަލް ބޯޑަރު (Royal Gold Border) */
+       
         border: 4px double #D4AF37 !important; 
-        border-radius: 8px; /* ކަނތައް ކުޑަކޮށް ވަށްކޮށްލަން */
+        border-radius: 8px; 
         
-        /* ފަހަތުގެ ކުލަ (Background) */
+        
         background: linear-gradient(to bottom, #001a1a, #000000) !important;
         
-        /* ސައިޒާއި ޖާގަ */
+       
         padding: 20px 10px !important;
         margin-bottom: 25px !important;
-        font-size: 28px !important; /* އަކުރުގެ ސައިޒު */
+        font-size: 28px !important; 
         font-weight: 900 !important;
-        text-transform: uppercase; /* ހުރިހާ އަކުރެއް ކެޕިޓަލްކުރަން */
-        letter-spacing: 2px; /* އަކުރުތައް ދުރުކޮށްލަން */
+        text-transform: uppercase; 
+        letter-spacing: 2px; 
         box-shadow: 0 8px 20px rgba(0,0,0,0.7);
     }
-    /* --- ޝާހީ ބެނަރ (Royal Top Banner) - ފައިނަލް ޑިޒައިން --- */
+  
     .royal-top-banner {
-        /* 1. ޝާހީ އިނގިރޭސި ފޮންޓް */
+      
         font-family: 'Playfair Display', serif !important; 
 
-        /* 2. ސެންޓަރ ކުރުން */
+      
         text-align: center !important;
         display: flex !important;
         justify-content: center !important;
         align-items: center !important;
 
-        /* 3. ދިގުކޮށް (Full Width) ބެހެއްޓުން */
+      
         width: 100% !important;
         box-sizing: border-box !important;
 
-        /* 4. ޝާހީ ބޯޑަރު (ޑަބަލް ރޮނގު) */
         border: 4px double #FFD700 !important; 
         border-radius: 6px;
 
-        /* ކުލަތައް */
         background: linear-gradient(to bottom, #00251a, #000000) !important;
-        color: #FFD700 !important; /* ރަން ކުލައިގެ އަކުރު */
+        color: #FFD700 !important; 
         
-        /* ސައިޒާއި ޖާގަ */
+   
         padding: 25px 10px !important;
         margin-bottom: 30px !important;
         
-        /* އަކުރުގެ ސްޓައިލް */
         font-size: 26px !important;
         font-weight: 900 !important;
         text-transform: uppercase;
@@ -723,29 +707,25 @@
         box-shadow: 0 10px 20px rgba(0,0,0,0.6);
     }
     .royal-top-banner {
-        /* ޝާހީ ފޮންޓް */
+       
         font-family: 'Playfair Display', serif !important;
         
-        /* ސައިޒު ކުޑަކޮށްލީ (20px) */
         font-size: 20px !important; 
         font-weight: 900 !important;
         
-        /* ސެންޓަރުކޮށް */
         text-align: center !important;
         width: 100% !important;
         display: block !important;
         
-        /* ރަން ބޯޑަރު (ބޯޑަރު ރީތިކޮށް ބެހެއްޓީ) */
         border: 4px double #FFD700 !important; 
         border-radius: 8px;
         
-        /* ލިޔުމުގެ ކުލަ ހުދުކުލައަށް */
+  
         color: #ffffff !important; 
         
-        /* ފަހަތުގެ ކުލަ */
+    
         background: linear-gradient(to bottom, #001a1a, #000000) !important;
         
-        /* ޖާގަ */
         padding: 15px 5px !important;
         margin-bottom: 30px !important;
         box-sizing: border-box !important;
@@ -753,62 +733,60 @@
         letter-spacing: 2px;
     }
     .royal-footer {
-        /* ފޮންޓް ސައިޒް ކުޑަކޮށް، މެދަށް */
+      
         font-size: 10px !important; 
         text-align: center !important;
         text-transform: uppercase;
         letter-spacing: 0.5px;
-        line-height: 1.5 !important; /* ލައިންތައް މާ ފިތިފައި ނުބެހެއްޓުމަށް */
+        line-height: 1.5 !important; 
         
-        /* ރަން ބޯޑަރު */
+     
         border: 1px solid #D4AF37 !important; 
-        border-radius: 15px; /* ލިޔުން ގިނަވީމަ މާ ބޮޑަށް ވަށްނުކޮށް ރީތިކޮށްލީ */
+        border-radius: 15px; 
         
-        /* ކުލަތައް */
+       
         color: #80cbc4 !important; 
         background: linear-gradient(to bottom, #00251a, #000);
         
-        /* ޖާގަ */
+     
         padding: 15px 10px !important;
         margin-top: 20px !important;
         width: 100% !important;
         box-sizing: border-box !important;
         box-shadow: inset 0 0 10px rgba(0,0,0,0.8);
     }
-    /* --- WHITE BACKGROUND FIXES (DARK MODE PATCH) --- */
-
-    /* 1. މައިގަނޑު އިންފޮމޭޝަން ޕެނަލްތައް ކަޅުކުލައަށް */
+   
     #infoPanel, 
     .editor > div[style*="background:#fff"],
     .editor > div[style*="background:#ede7f6"] {
-        background: #000000 !important; /* ހުދުކުލަ ކަޅަށް ބަދަލުކުރޭ */
-        border: 2px solid #D4AF37 !important; /* ރަން ބޯޑަރު */
-        color: #ffffff !important; /* ލިޔުންތައް ހުދުކުލައަށް */
+        background: #000000 !important; 
+        border: 2px solid #D4AF37 !important; 
+        color: #ffffff !important; 
         box-shadow: inset 0 0 20px rgba(0,50,0,0.5);
     }
 
-    /* 2. ޑިޒައިން ސެޓިންގްސް (ރީނދޫ/ހުދު ފޮށިތައް) ގަދަ ފެހިކުލައަށް */
+    
     #designPanel .group-box,
     #designPanel div[style*="background"] {
         background: linear-gradient(to bottom, #001a10, #000) !important;
         border: 1px solid #2e7d32 !important;
     }
 
-    /* 3. އެތެރޭގެ ލިޔުންތައް ސާފުކޮށް ފެންނަގޮތް ހެދުން */
+  
     #infoPanel label, #infoPanel span, #infoPanel div,
     #designPanel label, #designPanel span, #designPanel p {
-        color: #a7ffeb !important; /* މަޑު ފެހި ކުލަ */
+        color: #a7ffeb !important; 
         text-shadow: none !important;
     }
 
-    /* 4. ވީޑިއޯ ޕެނަލްގެ އެތެރޭގައި ހުރި ހުދު ތަންތަން */
+    
     .video-panel div[style*="background:#fff"] {
         background: #000 !important;
         border: 1px solid #444 !important;
         color: #fff !important;
     }
 
-    /* 5. ޑްރޮޕްޑައުން (Select Boxes) ގެ މައްސަލަ ހައްލުކުރުން */
+  
     select {
         background-color: #000 !important;
         color: #fff !important;
@@ -819,106 +797,101 @@
         color: #fff !important;
     }
 
-    /* 6. ސަބްޓައިޓްލް ފޮށިތައް */
+   
     .sub-title-input {
         background: #111 !important;
         color: #FFD700 !important;
         border: 1px solid #555 !important;
     }
-    /* --- STUDENT INFO BOX FIX (DARK THEME) --- */
+  
 
-    /* 1. ސްޓޫޑެންޓް އިންފޮމޭޝަން ހުންނަ ހުދު ފޮށި ކަޅުކުލައަށް ބަދަލުކުރުން */
+ 
     .sidebar div[style*="background:#fff"] {
-        background-color: #000000 !important; /* ބެކްގްރައުންޑް ކަޅުކުލައަށް */
-        background-image: linear-gradient(to bottom, #00251a, #000000) !important; /* ޝާހީ ފެހި ގްރޭޑިއަންޓް */
-        border: 4px double #FFD700 !important; /* ޑަބަލް ރަން ބޯޑަރު */
-        color: #ffffff !important; /* ލިޔުންތައް ހުދަށް */
-        box-shadow: 0 10px 20px rgba(0,0,0,0.8) !important; /* ހިޔަނި އެޅުވުން */
+        background-color: #000000 !important; 
+        background-image: linear-gradient(to bottom, #00251a, #000000) !important; 
+        border: 4px double #FFD700 !important; 
+        color: #ffffff !important; 
+        box-shadow: 0 10px 20px rgba(0,0,0,0.8) !important; 
     }
 
-    /* 2. "Student Information" ސުރުޚީގެ ކުލަ ރަނގަޅުކުރުން */
+    
     .sidebar h3 {
-        color: #FFD700 !important; /* ސުރުޚީ ރަންކުލައަށް */
-        border-bottom: 1px dashed rgba(255, 215, 0, 0.3) !important; /* ތިރީ ރޮނގު */
+        color: #FFD700 !important; 
+        border-bottom: 1px dashed rgba(255, 215, 0, 0.3) !important; 
         text-shadow: 0 2px 5px #000 !important;
         background: transparent !important;
     }
 
-    /* 3. އެތެރޭގެ ލޭބަލްތައް (Name, Details...) ސާފުކޮށް ފެންނަގޮތް ހެދުން */
+  
     .sidebar label {
-        color: #a7ffeb !important; /* މަޑު ފެހި ކުލައެއް */
+        color: #a7ffeb !important; 
         font-weight: bold !important;
         text-transform: uppercase;
         letter-spacing: 1px;
     }
 
-    /* 4. ފޮޓޯ އިންނަ ތަނުގެ ލިޔުންތައް */
+ 
     .preview-container span {
         color: #cccccc !important;
     }
-  /* --- FIXED: LAYOUT FIT, GRAY BG & GOLD LABELS --- */
 
-    /* 1. ސްޓޫޑެންޓް އިންފޮމޭޝަން ބައިގެ ބެކްގްރައުންޑް (މެދުމިނުގެ އަޅިކުލަ) */
+  
     .sidebar div[style*="background:#fff"], 
     .sidebar div[style*="background-color: #000000"] { 
         background: #424242 !important; /* Medium Gray */
         background-image: none !important;
-        border: 2px solid #FFD700 !important; /* ރަން ބޯޑަރު */
+        border: 2px solid #FFD700 !important; 
         box-shadow: none !important;
-        padding: 15px !important; /* ޕެޑިންގ ކުޑަކޮށްލީ ގޮޅިތަކަށް ޖާގަ ދިނުމަށް */
-        overflow: hidden !important; /* ބޭރަށް ނުކުންނަ ބައި ކަނޑާލުން */
+        padding: 15px !important; 
+        overflow: hidden !important; 
     }
 
-    /* 2. ލޭބަލްތައް (Names, Details...) - ރަންކުލަ */
+  
     .sidebar label {
         color: #FFD700 !important; 
         font-weight: bold !important;
-        font-size: 14px !important; /* ލޭބަލް ސައިޒް ހެޔޮވަރު ކޮށްލީ */
+        font-size: 14px !important; 
         text-shadow: 1px 1px 1px #000 !important;
         margin-bottom: 4px !important;
         margin-top: 10px !important;
         display: block !important;
     }
 
-    /* 3. ހުރިހާ އިންޕުޓް ގޮޅިތައް (English & Dhivehi) - ސައިޒު ހެޔޮވަރުކުރުން */
+  
     #nE, #fE, #cE, #nD, #fD, #cD, #rankInput, #cm {
-        font-size: 22px !important; /* ފޮންޓް ސައިޒް 32 އިން 22 އަށް ކުޑަކުރީ (ލޭއައުޓް ނުފަޅައިގެންދާނެ) */
-        height: 55px !important;    /* އުސްމިންވެސް ކުޑަކޮށް ހެޔޮވަރުކޮށްލީ */
+        font-size: 22px !important; 
+        height: 55px !important;    
         
-        width: 100% !important;     /* ފޮށީގެ ފުޅާމިނަށް ފައްތާލުން */
-        box-sizing: border-box !important; /* ބޭރަށް ނުކުތަ ނުދިނުމަށް */
+        width: 100% !important;     
+        box-sizing: border-box !important; 
         
         padding: 0 10px !important;
         font-weight: 700 !important; 
-        background-color: #212121 !important; /* ގަދަ ކަޅު/އަޅި */
+        background-color: #212121 !important; 
         color: #ffffff !important; 
         border: 1px solid #9e9e9e !important;
         border-radius: 4px !important;
         margin-bottom: 5px !important;
     }
 
-    /* އިނގިރޭސި ފޮންޓް ވަކިން (ސާފުކޮށް ކިޔޭގޮތަށް) */
+   
     #nE, #fE, #cE {
         font-family: 'Inter', sans-serif !important;
         letter-spacing: 0.5px;
     }
-    /* --- CENTER ALIGN TITLE INPUTS --- */
-    
-    /* 1. މައި ސުރުޚީ (Main Title) ލިޔާ ގޮޅި މެދަށް */
+ 
     #jLine1 {
         text-align: center !important;
     }
 
-    /* 2. ސަބްޓައިޓްލް (Subtitles) ލިޔާ ގޮޅިތައް މެދަށް */
     .sub-title-input {
         text-align: center !important;
     }
-    /* --- AUTO-SAVE MESSAGE VISIBILITY FIX --- */
-    
+ 
     #statusMsg {
-        color: #00e676 !important;       /* ދިއްލިފައި ހުންނަ ފެހި ކުލަ (Neon Green) */
-        background-color: #000000 !important; /* ފަހަތް ކަޅުކޮށް */
-        border: 2px solid #00e676 !important; /* ފެހި ބޯޑަރެއް */
+        color: #00e676 !important;      
+        background-color: #000000 !important; 
+        border: 2px solid #00e676 !important; 
         padding: 10px !important;
         border-radius: 8px !important;
         font-weight: 900 !important;
@@ -926,7 +899,6 @@
         text-transform: uppercase;
         margin-top: 15px !important;
         
-        /* ލިޔުންކޮޅު ފާހަގަވާގޮތަށް ދިއްލާލުން */
         text-shadow: 0 0 10px rgba(0, 230, 118, 0.7) !important;
         box-shadow: 0 0 15px rgba(0, 230, 118, 0.2) !important;
     }
