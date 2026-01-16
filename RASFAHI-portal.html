@@ -1164,6 +1164,66 @@ input:disabled, textarea:disabled, select:disabled {
         padding-bottom: 0 !important;
         margin-bottom: 0 !important;
     }
+    /* --- FINAL COMPACT WELCOME SCREEN --- */
+    
+    #securityOverlay {
+        position: fixed !important; top: 0; left: 0; width: 100%; height: 100%;
+        background: radial-gradient(circle at center, #00100a 0%, #000000 100%) !important;
+        z-index: 200000 !important;
+        display: flex !important; align-items: center; justify-content: center;
+        overflow: hidden !important; /* ސްކްރޯލް މަނާކުރުން */
+    }
+
+    .sec-box {
+        width: 500px !important;
+        max-width: 90% !important;
+        background: #050505 !important;
+        border: 4px double #FFD700 !important;
+        border-radius: 20px !important;
+        padding: 25px 20px !important; /* އެތެރޭގެ ޖާގަ ކުޑަކުރީ */
+        box-shadow: 0 0 100px rgba(0,0,0,1), inset 0 0 50px rgba(0,20,10,0.5) !important;
+        
+        display: flex !important; flex-direction: column !important;
+        align-items: center !important; justify-content: center !important;
+    }
+
+    .admin-pic {
+        width: 110px !important; height: 110px !important; /* ފޮޓޯ ސައިޒު ހެޔޮވަރުކުރީ */
+        border-radius: 50% !important;
+        border: 3px solid #FFD700 !important;
+        box-shadow: 0 0 20px rgba(255, 215, 0, 0.3) !important;
+        object-fit: cover !important;
+        margin-bottom: 10px !important;
+    }
+
+    .sec-input {
+        width: 90% !important;
+        height: 50px !important; /* އިންޕުޓް ފޮށި ތަންކޮޅެއް ހިމަ ކޮށްލީ */
+        font-size: 20px !important;
+        background: #111 !important;
+        border: 1px solid #444 !important;
+        color: #FFD700 !important;
+        border-radius: 8px !important;
+        margin-bottom: 8px !important;
+        text-align: center !important;
+    }
+    
+    .sec-input:focus { border-color: #FFD700 !important; outline: none; }
+
+    .sec-btn {
+        width: 90% !important;
+        padding: 12px !important;
+        font-size: 16px !important;
+        font-weight: bold !important;
+        background: linear-gradient(to bottom, #FFD700, #B8860B) !important;
+        color: #000 !important;
+        border: none !important;
+        border-radius: 6px !important;
+        cursor: pointer !important;
+        box-shadow: 0 4px 10px rgba(255, 215, 0, 0.2) !important;
+    }
+    
+    .sec-btn:hover { filter: brightness(1.1); transform: scale(1.02); }
 </style>
 </head>
 <body oncontextmenu="return false;">
