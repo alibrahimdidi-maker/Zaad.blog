@@ -856,45 +856,51 @@
     .preview-container span {
         color: #cccccc !important;
     }
-    /* --- FIXED: MEDIUM GRAY BACKGROUND & GOLD LABELS --- */
+  /* --- FIXED: LAYOUT FIT, GRAY BG & GOLD LABELS --- */
 
     /* 1. ސްޓޫޑެންޓް އިންފޮމޭޝަން ބައިގެ ބެކްގްރައުންޑް (މެދުމިނުގެ އަޅިކުލަ) */
     .sidebar div[style*="background:#fff"], 
     .sidebar div[style*="background-color: #000000"] { 
         background: #424242 !important; /* Medium Gray */
         background-image: none !important;
-        border: 2px solid #FFD700 !important; /* ބޯޑަރުވެސް ރަންކުލައަށް */
+        border: 2px solid #FFD700 !important; /* ރަން ބޯޑަރު */
         box-shadow: none !important;
-        padding: 20px !important;
+        padding: 15px !important; /* ޕެޑިންގ ކުޑަކޮށްލީ ގޮޅިތަކަށް ޖާގަ ދިނުމަށް */
+        overflow: hidden !important; /* ބޭރަށް ނުކުންނަ ބައި ކަނޑާލުން */
     }
 
-    /* 2. ލޭބަލްތައް (Names, Details...) - ރަންކުލައަށް ބަދަލުކުރީ */
+    /* 2. ލޭބަލްތައް (Names, Details...) - ރަންކުލަ */
     .sidebar label {
-        color: #FFD700 !important; /* ގަދަ ރަންކުލަ (ސާފުކޮށް ފެންނާނެ) */
+        color: #FFD700 !important; 
         font-weight: bold !important;
-        font-size: 16px !important;
-        text-shadow: 1px 1px 2px #000000 !important; /* ކަޅު ހިޔަންޏެއް ލީ */
+        font-size: 14px !important; /* ލޭބަލް ސައިޒް ހެޔޮވަރު ކޮށްލީ */
+        text-shadow: 1px 1px 1px #000 !important;
+        margin-bottom: 4px !important;
+        margin-top: 10px !important;
+        display: block !important;
+    }
+
+    /* 3. ހުރިހާ އިންޕުޓް ގޮޅިތައް (English & Dhivehi) - ސައިޒު ހެޔޮވަރުކުރުން */
+    #nE, #fE, #cE, #nD, #fD, #cD, #rankInput, #cm {
+        font-size: 22px !important; /* ފޮންޓް ސައިޒް 32 އިން 22 އަށް ކުޑަކުރީ (ލޭއައުޓް ނުފަޅައިގެންދާނެ) */
+        height: 55px !important;    /* އުސްމިންވެސް ކުޑަކޮށް ހެޔޮވަރުކޮށްލީ */
+        
+        width: 100% !important;     /* ފޮށީގެ ފުޅާމިނަށް ފައްތާލުން */
+        box-sizing: border-box !important; /* ބޭރަށް ނުކުތަ ނުދިނުމަށް */
+        
+        padding: 0 10px !important;
+        font-weight: 700 !important; 
+        background-color: #212121 !important; /* ގަދަ ކަޅު/އަޅި */
+        color: #ffffff !important; 
+        border: 1px solid #9e9e9e !important;
+        border-radius: 4px !important;
         margin-bottom: 5px !important;
-        margin-top: 15px !important;
     }
 
-    /* 3. އިނގިރޭސި އިންޕުޓް ގޮޅިތައް (ސައިޒު ބޮޑުކޮށް) */
+    /* އިނގިރޭސި ފޮންޓް ވަކިން (ސާފުކޮށް ކިޔޭގޮތަށް) */
     #nE, #fE, #cE {
-        font-size: 32px !important; /* އަކުރުގެ ސައިޒު ވަރަށް ބޮޑުކުރީ */
-        height: 75px !important;    /* ގޮޅީގެ އުސްމިން */
-        padding: 0 15px !important;
-        font-weight: 800 !important; 
         font-family: 'Inter', sans-serif !important;
-        background-color: #212121 !important; /* ލިޔާ ގޮޅި ކަޅުކުރީ */
-        color: #ffffff !important; /* ލިޔާ އަކުރު ހުދުކުލައިގައި */
-        border: 1px solid #9e9e9e !important;
-    }
-
-    /* ދިވެހި ގޮޅިތަކަށްވެސް ކުޑަ ބަދަލެއް (ރީތިކޮށްލަން) */
-    #nD, #fD, #cD, #rankInput, #cm {
-        background-color: #212121 !important;
-        color: #ffffff !important;
-        border: 1px solid #9e9e9e !important;
+        letter-spacing: 0.5px;
     }
 </style>
 </head>
