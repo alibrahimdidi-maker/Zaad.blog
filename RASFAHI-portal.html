@@ -1006,6 +1006,64 @@ input:disabled, textarea:disabled, select:disabled {
         line-height: 1.2 !important;
         color: #ffffff !important;
     }
+    /* --- WELCOME CARD FINAL LAYOUT FIX --- */
+
+    /* 1. ކާޑުގެ ސައިޒާއި ލޭއައުޓް (ހުސްޖާގަ ނެގުން) */
+    .sec-box {
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: flex-start !important; /* މެދުގައި ޖާގަ ހެދުނަ ނުދީ މައްޗަށް ޖައްސަން */
+        align-items: center !important;
+        
+        height: auto !important;       /* އުސްމިން އޮޓޯއިން ހެޔޮވަރުކުރަން */
+        min-height: auto !important;   /* ކޮންމެހެން ދިގުކުރާކަށް ނުޖެހޭނެ */
+        max-height: 95vh !important;   /* ސްކްރީނަށްވުރެ ބޮޑުވިޔަ ނުދިނުން */
+        
+        padding: 30px !important;      /* އެތެރޭގެ ޖާގަ */
+        width: 550px !important;
+        
+        /* ސްކްރޯލް ކުރެވޭގޮތަށް (ކުޑަ ސްކްރީންތަކަށް) */
+        overflow-y: auto !important;   
+    }
+
+    /* 2. އެޑްމިން ފޮޓޯ (ބޯ ބުރިވިޔަ ނުދިނުން) */
+    .admin-pic {
+        width: 120px !important;
+        height: 120px !important;
+        border-radius: 50% !important;
+        border: 3px solid #FFD700 !important;
+        box-shadow: 0 0 25px rgba(255, 215, 0, 0.4) !important;
+        object-fit: cover !important;
+        
+        /* މުހިންމު: ފޮޓޯ ތިރިއަށް ޖެއްސުން */
+        margin-top: 10px !important;   
+        margin-bottom: 15px !important; 
+        flex-shrink: 0 !important;     /* ފޮޓޯ ޗިސްވިޔަ ނުދިނުން */
+    }
+
+    /* 3. ލިޔުންތަކުގެ ދެމެދުގައި ހުރި ޖާގަތައް ހެޔޮވަރުކުރުން */
+    .sec-box h1 {
+        margin: 0 0 5px 0 !important;
+        font-size: 18px !important;
+    }
+    .sec-box h2 {
+        margin: 0 0 20px 0 !important;
+        font-size: 24px !important;
+        line-height: 1.2 !important;
+    }
+    
+    /* 4. ދެމެދުގައި އިންނަ ރޮނގު (Divider) ކައިރިކުރުން */
+    .sec-box hr {
+        margin: 15px 0 !important; /* ބޮޑު ޖާގަ ކުޑަކޮށްލީ */
+        width: 100% !important;
+        border-top: 1px solid rgba(255,255,255,0.2) !important;
+    }
+    
+    /* 5. ތިރީގައި އިންނަ ކުދި ލިޔުންކޮޅު */
+    .sec-box div[style*="text-align:center"] {
+        margin-top: 0 !important;
+        padding-bottom: 10px !important;
+    }
 </style>
 </head>
 <body oncontextmenu="return false;">
