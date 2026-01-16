@@ -928,6 +928,30 @@ input:disabled, textarea:disabled, select:disabled {
         text-shadow: 0 0 10px rgba(0, 230, 118, 0.7) !important;
         box-shadow: 0 0 15px rgba(0, 230, 118, 0.2) !important;
     }
+    /* --- SYSTEM READY MESSAGE DESIGN --- */
+    #statusMsg {
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        
+        color: #00e676 !important;            /* ދިއްލޭ ފެހި ކުލަ */
+        background-color: #000000 !important; /* ފަހަތް ކަޅުކޮށް */
+        border: 2px solid #00e676 !important; /* ފެހި ބޯޑަރެއް */
+        
+        padding: 10px !important;
+        text-align: center !important;
+        border-radius: 8px !important;
+        
+        font-weight: 900 !important;          /* އަކުރު ބޯކޮށް */
+        font-size: 20px !important;           /* ސައިޒު ބޮޑުކޮށް */
+        text-transform: uppercase;
+        margin-top: 15px !important;
+        
+        /* ދިއްލޭ ސްޓައިލް (Glow Effect) */
+        text-shadow: 0 0 10px rgba(0, 230, 118, 0.7) !important;
+        box-shadow: 0 0 15px rgba(0, 230, 118, 0.2) !important;
+        z-index: 99999 !important;
+    }
 </style>
 </head>
 <body oncontextmenu="return false;">
@@ -1058,7 +1082,9 @@ input:disabled, textarea:disabled, select:disabled {
 
     </div> <div class="editor" id="editorPanel">
         <button id="lockBtn" onclick="toggleLock()">🔓 Unlocked (Editable Mode)</button>
-        
+        <div id="statusMsg" style="text-align: center; margin: 10px 0; padding: 10px; font-weight: bold; border-radius: 5px;">
+    SYSTEM READY
+</div>
         <div id="infoPanel" style="background:#fff; padding:20px; border-radius:10px; border:2px solid #90caf9; margin:15px 0; box-shadow:0 3px 10px rgba(0,0,0,0.05);">
             <label style="color:#d32f2f;">🚀 SCENE SWITCHER (Change before time runs out):</label>
             <div id="listPanel" style="display:flex; gap:0; margin-bottom:5px;">
