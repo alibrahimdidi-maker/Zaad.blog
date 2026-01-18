@@ -4658,6 +4658,34 @@ body.triple-active #card {
     window.addEventListener('load', () => {
         restoreSystemState();
     });
+    // --- HALL MODE FIX (3360x840) ---
+function setHallMode() {
+    // 1. Set Center Width to exactly 50% (1680px out of 3360px)
+    const slider = document.querySelector('input[oninput="liveUpdate(\'centerWidth\', this.value)"]');
+    if(slider) {
+        slider.value = 50; // Set slider to 50
+        liveUpdate('centerWidth', 50); // Update System
+        
+        // Update Display Text
+        const disp = document.getElementById('cwDisp');
+        if(disp) disp.innerText = "50% (Hall Fit)";
+    }
+
+    // 2. Ensure Triple Mode is ON
+    if(tvWindow && !tvWindow.closed) {
+        tvWindow.document.body.classList.add('triple-active');
+        
+        // Fix Background Sizes for Ultra Wide
+        const leftZ = tvWindow.document.getElementById('zoneLeft');
+        const rightZ = tvWindow.document.getElementById('zoneRight');
+        
+        // Force background to cover full height without stretching width
+        if(leftZ) leftZ.style.backgroundSize = "100% 100%";
+        if(rightZ) rightZ.style.backgroundSize = "100% 100%";
+    }
+
+    alert("✅ HALL MODE ACTIVATED!\n\n1. Center Screen: 1680px (50%)\n2. Side Screens: 840px (25% each)\n\nPlease maximize the TV window across all 3 screens.");
+}
 </script>
 </body>
 </html>
