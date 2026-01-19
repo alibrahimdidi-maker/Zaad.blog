@@ -1412,6 +1412,24 @@ input:disabled, textarea:disabled, select:disabled {
         cursor: pointer;
         box-shadow: 0 0 10px rgba(255, 215, 0, 0.2);
     }
+    /* 1. TOP BANNER BORDER (ގަދަ ފެހި ކުލަ) */
+    .royal-top-banner {
+        border: 4px double #004d40 !important; /* ޝާހީ ގަދަ ފެހި ކުލަ */
+        box-shadow: 0 5px 15px rgba(0, 77, 64, 0.5) !important; /* ފެހި ހިޔަނި */
+    }
+
+    /* 2. SIDEBAR INPUT TEXT COLOR (ލިޔުންތައް ހުދުކުލައަށް) */
+    .sidebar input[type="text"], 
+    .sidebar input[type="number"], 
+    .sidebar select, 
+    .sidebar textarea {
+        color: #ffffff !important; /* ލިޔުން ހުދުކުލައިން */
+    }
+
+    /* (Optional) If placeholders (މަޑު ލިޔުން) are gold, make them lighter white */
+    .sidebar ::placeholder {
+        color: rgba(255, 255, 255, 0.5) !important;
+    }
 </style>
 </head>
 <body oncontextmenu="return false;">
