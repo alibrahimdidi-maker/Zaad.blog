@@ -4851,6 +4851,52 @@ function setHallMode() {
 
     alert("✅ HALL MODE ACTIVATED!\n\n1. Center Screen: 1680px (50%)\n2. Side Screens: 840px (25% each)\n\nPlease maximize the TV window across all 3 screens.");
 }
+    /* --- 10 METER ULTRA-WIDE HALL MODE (FIXED) --- */
+function setHallMode() {
+    // 1. ހިސާބު: 10 މީޓަރުގެ ތެރެއިން 5 މީޓަރަކީ %50 އެވެ.
+    // އެހެންވީމާ މެދު ސްކްރީން ސީދާ 50 އިންސައްތައަށް ސެޓްކުރަނީއެވެ.
+    // އޭރުން ދެފަރާތަށް އޮޓޯއިން 25% (2.5 މީޓަރު) ބަހާލެވޭނެއެވެ.
+    
+    const slider = document.querySelector('input[oninput="liveUpdate(\'centerWidth\', this.value)"]');
+    if(slider) {
+        slider.value = 50; // Set to 50% (5 Meters)
+        liveUpdate('centerWidth', 50); // System Update
+        
+        // Display Text Update
+        const disp = document.getElementById('cwDisp');
+        if(disp) disp.innerText = "50% (5m Center / 2.5m Sides)";
+    }
+
+    // 2. ތިން ސްކްރީން މޯޑު އެކްޓިވޭޓް ކުރުން
+    if(tvWindow && !tvWindow.closed) {
+        tvWindow.document.body.classList.add('triple-active');
+        
+        const card = tvWindow.document.getElementById('card');
+        const leftZ = tvWindow.document.getElementById('zoneLeft');
+        const rightZ = tvWindow.document.getElementById('zoneRight');
+        
+        // 3. ލިޔުންތައް ދެމިގެން ދިޔަ ނުދިނުމަށް (Anti-Stretch Fix)
+        // ބެކްގްރައުންޑް ފޮޓޯ "Cover" އަށް ލުމުން ފޮޓޯ ނުދެމޭނެއެވެ.
+        if(leftZ) {
+            leftZ.style.width = "25%"; // 2.5m
+            leftZ.style.backgroundSize = "cover"; 
+        }
+        if(rightZ) {
+            rightZ.style.width = "25%"; // 2.5m
+            rightZ.style.backgroundSize = "cover";
+        }
+        
+        // މެދު ކާޑުގެ ސައިޒު ހެޔޮވަރުކުރުން
+        if(card) {
+            card.style.width = "50%"; // 5m Center
+            card.style.backgroundSize = "cover"; // ފޮޓޯ ނުދެމޭނެ
+            // ލިޔުންތައް ހެޔޮވަރުކުރުން
+            card.style.transform = "translate(-50%, -50%) scale(1)"; 
+        }
+    }
+
+    alert("✅ 10M ULTRA-WIDE MODE SET!\n\n1. Left Screen: 2.5m (25%)\n2. Center Screen: 5m (50%)\n3. Right Screen: 2.5m (25%)\n\nAspect Ratio Fixed to prevent stretching.");
+}
 </script>
 </body>
 </html>
