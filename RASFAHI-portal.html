@@ -4121,17 +4121,13 @@ body.triple-active #card {
         }
     }
     
-/* --- SMART LINK CONVERTER (UPDATED FOR GOOGLE SLIDES) --- */
+/* --- SMART LINK CONVERTER (FIXED FOR GOOGLE SLIDES) --- */
 function getSmartLink(url, type) {
     if (!url) return "";
 
-    // 1. GOOGLE SLIDES FIX (މިބައިން އޮޓޯއިން ޕްރެޒެންޓޭޝަން މޯޑަށް ލާނެ)
+    // 1. GOOGLE SLIDES FIX
     if (type === 'google' || (type === 'auto' && url.includes('docs.google.com/presentation'))) {
-        // ލިންކުގައި އިން "/edit" ގެ ފަހަތް ކަނޑާލުން
         let baseUrl = url.split('/edit')[0];
-        
-        // ޕްރެޒެންޓޭޝަން މޯޑު ލިންކެއް ހެދުން
-        // rm=minimal އިން ތިރީގައި އިންނަ ކަޅު ބާރ (Control Bar) ފޮރުވާލާނެ
         return baseUrl + "/embed?start=false&loop=false&delayms=3000&rm=minimal";
     }
 
