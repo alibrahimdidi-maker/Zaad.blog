@@ -4940,6 +4940,53 @@ function resetToStandardMode() {
 
     alert("✅ RESET SUCCESSFUL!\n\nOptimized for 60-75 inch TVs.\nSide screens hidden. Card centered.");
 }
+    /* --- MANUAL FINE-TUNING PATCH (SLIDERS ENABLED) --- */
+
+// 1. މެދު ސްކްރީންގެ ސައިޒު ސްލައިޑަރުން ބަދަލުކުރުން
+const _oldLiveUpdate = liveUpdate;
+liveUpdate = function(key, value) {
+    // Run original function first
+    _oldLiveUpdate(key, value);
+
+    // Custom Override for Hall Mode
+    if(key === 'centerWidth') {
+        const disp = document.getElementById('cwDisp');
+        if(disp) disp.innerText = value + "%";
+
+        if(tvWindow && !tvWindow.closed) {
+            const card = tvWindow.document.getElementById('card');
+            // ހޯލް މޯޑުގައި ހުއްޓަސް، ސްލައިޑަރުން ސައިޒު ބަދަލުކުރެވޭނެ ގޮތް ހެދުން
+            if(card && tvWindow.document.body.classList.contains('triple-active')) {
+                card.style.width = value + '%';
+                
+                // ފުޅާމިން ބަދަލުވާއިރުވެސް މެދުގައި ބެހެއްޓުން (Auto-Center Calculation)
+                // Left Position = (100% - Width%) / 2
+                const newLeft = (100 - value) / 2;
+                card.style.left = newLeft + '%';
+            }
+        }
+    }
+};
+
+// 2. އަރިމަތީ ސްކްރީންތައް (Left/Right) ޖެއްސުމާއި ފުޅާކުރުން
+window.adjustZone = function(side, prop, val) {
+    if(!tvWindow || tvWindow.closed) return;
+    
+    const zoneId = (side === 'left') ? 'zoneLeft' : 'zoneRight';
+    const el = tvWindow.document.getElementById(zoneId);
+    
+    if(el) {
+        if(prop === 'width') {
+            // ފުޅާމިން ބަދަލުކުރުން
+            el.style.width = val + "%"; 
+        } else {
+            // ޕޮޒިޝަން ޖެއްސުން (X-Axis Move)
+            // މިއީ 1px ގެ ފަރަޤު ވެސް ނައްތާލުމަށް ބޭނުންކުރާނީ
+            if(side === 'left') el.style.left = val + "px";
+            else el.style.right = val + "px";
+        }
+    }
+};
 </script>
 </body>
 </html>
