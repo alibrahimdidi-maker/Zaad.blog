@@ -1475,6 +1475,43 @@ input:disabled, textarea:disabled, select:disabled {
     .sidebar ::placeholder {
         color: rgba(255, 255, 255, 0.5) !important; /* %50 ހުދު */
     }
+    /* --- SIDEBAR FILE INPUTS: LIGHT GREEN GLOW THEME --- */
+
+    /* 1. ލޭބަލްތައް (Number 1, 2...) - ލައިޓް ފެހި */
+    .sidebar label {
+        color: #69f0ae !important; /* ވަރަށް ރީތި ލައިޓް ފެހި (Mint Green) */
+        text-shadow: 0 0 8px rgba(105, 240, 174, 0.3); /* އަކުރުގެ ފަހަތަށް ލައިޓް ޝެޑޯއެއް */
+        font-weight: 800 !important;
+        margin-bottom: 5px !important;
+        border: none !important; /* ކުރިން އިން ބޯޑަރު ނެގުން */
+    }
+
+    /* 2. ފައިލް އަޅާ ފޮށިތައް - ސްޓައިލް */
+    .sidebar input[type="file"] {
+        /* ބޯޑަރު: ގަދަ ލައިޓް ފެހި ކުލަ */
+        border: 2px solid #00e676 !important; 
+        
+        /* އެތެރޭގެ ކުލަ: ކަޅާއި ގަދަ ފެހި ގްރޭޑިއަންޓެއް */
+        background: linear-gradient(to right, #001a12, #00251a) !important; 
+        
+        /* ލިޔުން: ހުދުކުލަ */
+        color: #ffffff !important; 
+        
+        /* ޝެޑޯ: ފެހިކުލައިގެ ދިއްލުމެއް (Glow Shadow) */
+        box-shadow: 0 0 15px rgba(0, 230, 118, 0.15), inset 0 0 10px rgba(0, 50, 0, 0.5) !important;
+        
+        border-radius: 8px !important; /* ކަންތައް ވަށްކޮށް */
+        transition: all 0.3s ease-in-out; /* އޮމާންކޮށް ބަދަލުވުން */
+    }
+
+    /* 3. މައުސް ގެންދިޔައީމަ (Hover Effect) */
+    .sidebar input[type="file"]:hover {
+        border-color: #b9f6ca !important; /* ބޯޑަރު އިތުރަށް އަލިވާނެ */
+        background: #003322 !important; /* އެތެރޭގެ ކުލަ ކުޑަކޮށް ބަދަލުވާނެ */
+        box-shadow: 0 0 25px rgba(0, 230, 118, 0.4) !important; /* ޝެޑޯ ގަދަވެ ދިއްލޭނެ */
+        transform: translateY(-2px); /* ފޮށި ކުޑަކޮށް މައްޗަށް ހިއްލާލާނެ */
+        cursor: pointer;
+    }
 </style>
 </head>
 <body oncontextmenu="return false;">
