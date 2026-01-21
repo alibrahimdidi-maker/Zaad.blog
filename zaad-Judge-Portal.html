@@ -631,36 +631,28 @@
         const inputKey = document.getElementById('secKey').value.trim();
         const msg = document.getElementById('secMsg');
 
-        // Master Override (މިއީ އެޑްމިން ފަރާތަށް ޚާއްޞަ މާސްޓަރ ކޯޑެކެވެ)
-        if(inputKey === "ADMIN-MASTER-123") {
-            document.getElementById('securityOverlay').classList.add('hidden');
-            renderSlots();
-            return;
-        }
+       // --- SYSTEM SECURITY & VALIDATION (FINAL VERSION) ---
+    function unlockSystem() {
+        const inputKey = document.getElementById('secKey').value.trim();
+        const msg = document.getElementById('secMsg');
 
         try {
             // 1. Decode the Base64 Key
             const decodedString = atob(inputKey);
 
-            // 2. Check for Prefix (ކޯޑުގެ ފޯމެޓް ރަނގަޅުތޯ ބެލުން)
+            // 2. Check for Prefix
             if (!decodedString.startsWith("ROYAL_EXP_")) {
                 throw new Error("Invalid Format");
             }
 
-            // 3. Extract Info (ތާރީޚާއި ނަން ވަކިކުރުން)
+            // 3. Extract Info
             const parts = decodedString.split('_'); 
-            // parts[0] = ROYAL
-            // parts[1] = EXP
-            // parts[2] = Date (YYYY-MM-DD)
-            // parts[3] = CUST
-            // parts[4] = Name
-
             const expiryDateStr = parts[2];
-            const customerName = parts[4];
+            let customerName = parts[4]; 
 
-            // 4. Validate Date (މުއްދަތު ހަމަވެފައިވޭތޯ ބެލުން)
+            // 4. Validate Date
             const today = new Date();
-            today.setHours(0, 0, 0, 0); // ގަޑި ނުލައި ހަމައެކަނި ތާރީޚަށް ބެލުމަށް
+            today.setHours(0, 0, 0, 0); 
             const expiry = new Date(expiryDateStr);
 
             if (isNaN(expiry.getTime())) {
@@ -672,10 +664,24 @@
                 msg.innerText = "⛔ LICENSE EXPIRED! (Valid until: " + expiryDateStr + ")";
                 msg.style.color = "#ff5252";
             } else {
-                // SUCCESS CASE
+                // --- SUCCESS CASE ---
                 document.getElementById('securityOverlay').classList.add('hidden');
                 renderSlots();
-                alert("✅ Welcome " + customerName + "!\nLicense Valid until: " + expiryDateStr);
+
+                // ނަން ރީތިކުރުން (Replace hyphens with spaces)
+                customerName = customerName.replace(/-/g, ' ');
+
+                // ސްކްރީންގައި ނަން ދެއްކުން (Sidebar Display)
+                const licDisp = document.getElementById('licenseDisplay');
+                const licName = document.getElementById('licenseName');
+                
+                if(licDisp && licName) {
+                    licDisp.style.display = "block"; // ފޮށިގަނޑު ދައްކާ
+                    licName.innerText = customerName.toUpperCase(); // ނަން ލިޔޭ
+                }
+                
+                // Optional Welcome Alert
+                // alert("✅ Welcome " + customerName);
             }
 
         } catch (e) {
@@ -685,8 +691,7 @@
             console.error(e);
         }
     }
-
-    // --- LOGIC ---
+    
     function setMode(mode) {
         state.mode = mode;
         document.getElementById('modeJudge').classList.toggle('active', mode === 'judge');
