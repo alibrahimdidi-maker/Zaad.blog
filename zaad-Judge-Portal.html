@@ -2,10 +2,11 @@
 <html lang="dv" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>Rasfahi Royal Quran (V19.1 Security Edition)</title>
+    <title>Rasfahi Royal Quran (V19.2 Ultimate Edition)</title>
     <style>
         /* --- FONTS & IMPORTS --- */
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Thaana:wght@400;700;900&family=Cinzel:wght@700;900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&display=swap'); /* Arabic Font */
 
         /* Placeholder for Dynamic Font */
         @font-face {
@@ -30,8 +31,8 @@
         * { box-sizing: border-box; -webkit-user-select: none; user-select: none; outline: none; }
         
         /* APPLY FONT GLOBALLY */
-        body, button, input, select, textarea, h1, h2, span, div, p, a { 
-            font-family: 'AppFont', 'Noto Sans Thaana', sans-serif !important; 
+        body, button, input, select, textarea, h1, h2, span, div, p, a, label { 
+            font-family: 'AppFont', 'Noto Sans Thaana', 'Amiri', sans-serif !important; 
         }
 
         body { 
@@ -103,6 +104,11 @@
         .btn-blue { background: linear-gradient(to bottom, #004080, #002040) !important; border-color: #0059b3 !important; }
         .btn-purple { background: linear-gradient(to bottom, #4a148c, #311b92) !important; border-color: #7c4dff !important; }
 
+        /* LANG SWITCHER */
+        .lang-bar { display: flex; gap: 5px; margin-bottom: 10px; }
+        .lang-btn { flex: 1; font-size: 12px; padding: 5px; background: #222; color: #777; border: 1px solid #444; }
+        .lang-btn.active { background: var(--royal-blue); color: var(--gold); border-color: var(--gold); font-weight: bold; }
+
         /* MODE SWITCHER */
         .mode-switch { display: flex; background: #000; border: 1px solid #444; border-radius: 4px; overflow: hidden; margin-bottom: 10px; }
         .mode-btn { flex: 1; padding: 10px; border: none; background: #222; color: #666; font-size: 12px; }
@@ -132,7 +138,7 @@
         }
 
         /* MAIN PREVIEW AREA */
-        .main-view { flex: 1; background: #050505; display: flex; flex-direction: column; border-right: 1px solid #222; }
+        .main-view { flex: 1; background: #050505; display: flex; flex-direction: column; border-right: 1px solid #222; position: relative; }
         .mirror-header { background: #111; padding: 5px 15px; color: #666; font-size: 11px; border-bottom: 1px solid #333; display: flex; justify-content: space-between; }
         
         #adminMirror {
@@ -169,6 +175,20 @@
         #securityOverlay { position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.95); z-index:9999; display:flex; justify-content:center; align-items:center; }
         .sec-box { border: 2px solid var(--gold); padding: 40px; text-align: center; background: #000d1a; border-radius: 10px; width: 400px; }
 
+        /* ROYAL FULLSCREEN BUTTON */
+        #royalFSBtn {
+            position: absolute; bottom: 20px; right: 20px;
+            width: 60px; height: 60px;
+            border-radius: 50%;
+            background: radial-gradient(circle, var(--gold), #8a6e15);
+            border: 3px solid #fff;
+            box-shadow: 0 0 20px rgba(212,175,55, 0.6);
+            cursor: pointer; z-index: 200;
+            display: flex; justify-content: center; align-items: center;
+            font-size: 24px; color: #000; transition: all 0.3s;
+        }
+        #royalFSBtn:hover { transform: scale(1.1); box-shadow: 0 0 30px var(--gold); }
+
     </style>
 </head>
 <body oncontextmenu="return false;">
@@ -188,47 +208,52 @@
 
     <div class="sidebar">
         <div class="header">
-            <h1 class="app-title">RASFAHI JUDGE V19.1</h1>
+            <h1 class="app-title" data-translate="title">RASFAHI JUDGE V19.2</h1>
         </div>
 
         <div class="content">
+            <div class="lang-bar">
+                <button class="lang-btn active" onclick="setLang('dv')">ދިވެހި</button>
+                <button class="lang-btn" onclick="setLang('ar')">عربي</button>
+                <button class="lang-btn" onclick="setLang('en')">English</button>
+            </div>
             
             <div class="panel panel-live">
-                <h2>1. ލައިވް ކޮންޓްރޯލް (Live)</h2>
+                <h2 data-translate="liveCtrl">1. ލައިވް ކޮންޓްރޯލް (Live)</h2>
                 
                 <div id="statusDisplay">WAITING...</div>
                 
                 <div class="mode-switch">
-                    <button id="modeJudge" class="mode-btn active" onclick="setMode('judge')">⚖️ ޖަޖު މެތަޑް (އޮޓޯ)</button>
-                    <button id="modeStudent" class="mode-btn" onclick="setMode('student')">🎓 ދަރިވަރު މެތަޑް (މެނުއަލް)</button>
+                    <button id="modeJudge" class="mode-btn active" onclick="setMode('judge')" data-translate="mJudge">⚖️ ޖަޖު މެތަޑް (އޮޓޯ)</button>
+                    <button id="modeStudent" class="mode-btn" onclick="setMode('student')" data-translate="mStudent">🎓 ދަރިވަރު މެތަޑް (މެނުއަލް)</button>
                 </div>
 
                 <div class="read-switch">
-                    <button id="rmMushaf" class="read-btn active" onclick="setReadingMode('mushaf')">📖 މުޞްޙަފު (ބަލައިގެން)</button>
-                    <button id="rmMemory" class="read-btn" onclick="setReadingMode('memory')">🧠 ހިތުން (ނުބަލައި)</button>
+                    <button id="rmMushaf" class="read-btn active" onclick="setReadingMode('mushaf')" data-translate="rmMushaf">📖 މުޞްޙަފު (ބަލައިގެން)</button>
+                    <button id="rmMemory" class="read-btn" onclick="setReadingMode('memory')" data-translate="rmMemory">🧠 ހިތުން (ނުބަލައި)</button>
                 </div>
 
                 <div id="judgeControls">
-                    <button class="btn-gold" style="padding:12px;" onclick="pickRandomQuestion()">🎲 ސުވާލު ނަގާ (ރެންޑަމް)</button>
+                    <button class="btn-gold" style="padding:12px;" onclick="pickRandomQuestion()" data-translate="btnPick">🎲 ސުވާލު ނަގާ (ރެންޑަމް)</button>
                 </div>
 
                 <div id="studentControls" class="hidden">
                     <div style="display:flex; gap:5px; margin-bottom:5px;">
-                        <button class="btn-blue" onclick="toggleGridScreen(true)">1. ގްރިޑް ދައްކާ (Show Grid)</button>
-                        <button class="btn-gold" onclick="reshuffleGrid()">🔄 ގްރިޑް ބަދަލުކުރޭ</button>
+                        <button class="btn-blue" onclick="toggleGridScreen(true)" data-translate="btnShowGrid">1. ގްރިޑް ދައްކާ (Show Grid)</button>
+                        <button class="btn-gold" onclick="reshuffleGrid()" data-translate="btnShuffle">🔄 ގްރިޑް ބަދަލުކުރޭ</button>
                     </div>
                     
                     <div id="selectionInfo" style="background:#000; padding:5px; border:1px solid #444; margin:5px 0; font-size:12px; text-align:center; color:var(--gold);">
                         No selection yet.
                     </div>
 
-                    <button id="btnStartReading" class="btn-green hidden" onclick="startReadingSession()">2. ފަށާ (Start Question 1)</button>
+                    <button id="btnStartReading" class="btn-green hidden" onclick="startReadingSession()" data-translate="btnStartQ1">2. ފަށާ (Start Question 1)</button>
                     <p style="font-size:11px; color:#aaa; text-align:center; margin:2px 0;">Student picks -> Grid Hides -> Judge Starts.</p>
                 </div>
 
                 <div style="display:flex; gap:5px; margin-top:10px;">
-                    <button class="btn-gold" style="width:30%;" onclick="prevQuestion()">◀ Previous</button>
-                    <button class="btn-gold" style="flex:1;" onclick="nextQuestion()">Next Question ⏩</button>
+                    <button class="btn-gold" style="width:30%;" onclick="prevQuestion()" data-translate="btnPrev">◀ Previous</button>
+                    <button class="btn-gold" style="flex:1;" onclick="nextQuestion()" data-translate="btnNext">Next Question ⏩</button>
                 </div>
 
                 <div id="slotGrid"></div>
@@ -236,20 +261,20 @@
                 <hr style="border-color:#334455; margin:15px 0;">
 
                 <div style="display:flex; gap:10px;">
-                    <button class="btn-green" onclick="toggleBell(true)">🔔 ފަށާ (ބެލް)</button>
-                    <button class="btn-red" onclick="toggleBell(false)">🛑 ހުއްޓާ (ބެލް)</button>
+                    <button class="btn-green" onclick="toggleBell(true)" data-translate="btnBellStart">🔔 ފަށާ (ބެލް)</button>
+                    <button class="btn-red" onclick="toggleBell(false)" data-translate="btnBellStop">🛑 ހުއްޓާ (ބެލް)</button>
                 </div>
 
-                <button style="margin-top:10px; background:#442222; border:1px solid #aa3333;" onclick="resetStudentSession()">🔄 އައު ދަރިވަރެއް (Reset)</button>
+                <button style="margin-top:10px; background:#442222; border:1px solid #aa3333;" onclick="resetStudentSession()" data-translate="btnReset">🔄 އައު ދަރިވަރެއް (Reset)</button>
             </div>
 
             <div class="panel">
-                <h2>2. ސްކްރީންތައް</h2>
+                <h2 data-translate="screens">2. ސްކްރީންތައް</h2>
                 
-                <label>1. ދަރިވަރު ސްކްރީން:</label>
-                <button onclick="openScreen('student')">🖥️ Student Screen (Launch)</button>
+                <label data-translate="lblStudent">1. ދަރިވަރު ސްކްރީން:</label>
+                <button onclick="openScreen('student')" data-translate="btnLaunchStudent">🖥️ Student Screen (Launch)</button>
 
-                <label>2. ޖަޖުންގެ ސްކްރީން (Multicast):</label>
+                <label data-translate="lblJudge">2. ޖަޖުންގެ ސްކްރީން (Multicast):</label>
                 <div style="display:flex; gap:5px;">
                     <select id="judgeCount" style="width:40%;">
                         <option value="1">1 Judge</option>
@@ -259,7 +284,7 @@
                         <option value="5">5 Judges</option>
                         <option value="10">10 Judges</option>
                     </select>
-                    <button onclick="openJudges()" class="btn-blue">Open Judges 🚀</button>
+                    <button onclick="openJudges()" class="btn-blue" data-translate="btnLaunchJudges">Open Judges 🚀</button>
                 </div>
             </div>
             
@@ -271,24 +296,24 @@
             </div>
 
             <div class="panel">
-                <h2>3. ސެޓިންގސް & ފައިލް</h2>
+                <h2 data-translate="settings">3. ސެޓިންގސް & ފައިލް</h2>
                 
-                <label>1. ފޮންޓް (TTF) [Faruuma]:</label>
+                <label data-translate="lblFont">1. ފޮންޓް (TTF) [Faruuma]:</label>
                 <input type="file" id="fontF" accept=".ttf, .otf">
 
-                <label>2. ސުވާލު ޑޭޓާ (CSV):</label>
+                <label data-translate="lblCSV">2. ސުވާލު ޑޭޓާ (CSV):</label>
                 <div style="display:flex; gap:5px;">
                     <input type="file" id="csvQ" accept=".csv">
                     <button onclick="downloadSampleCSV()" class="btn-purple" style="width:40%; font-size:10px;">Sample CSV ⬇️</button>
                 </div>
                 
-                <label>3. އާޔަތްތަކުގެ ފޮޓޯ (Folder):</label>
+                <label data-translate="lblImg">3. އާޔަތްތަކުގެ ފޮޓޯ (Folder):</label>
                 <input type="file" id="imgF" webkitdirectory directory multiple>
                 <small id="imgStatus" style="color:#aaa; display:block;">No images loaded</small>
 
                 <div style="display:grid; grid-template-columns: 1fr 1fr; gap:5px; margin-top:8px;">
                     <div>
-                        <label>ބޯޑަރު:</label>
+                        <label data-translate="lblBorder">ބޯޑަރު:</label>
                         <select id="borderStyle" onchange="syncWindows()">
                             <option value="gold">Royal Gold</option>
                             <option value="silver">Silver</option>
@@ -298,7 +323,7 @@
                         </select>
                     </div>
                     <div>
-                        <label>ސުވާލުގެ ޢަދަދު:</label>
+                        <label data-translate="lblQCount">ސުވާލުގެ ޢަދަދު:</label>
                         <select id="qLimit" onchange="resetStudentSession()">
                             <script>
                                 for(let i=1; i<=20; i++) document.write(`<option value="${i}" ${i===3?'selected':''}>${i}</option>`);
@@ -322,10 +347,10 @@
 
             <div class="mirror-content" id="mirrorContainer" style="opacity:1;">
                 <div class="mirror-info">
-                    <span class="mirror-val">ސުވާލު ތަފްޞީލް</span>
-                    <div><span style="color:#666; font-size:12px;">ފޮތް / ބައި:</span> <span id="mBook" class="mirror-val">-</span></div>
-                    <div><span style="color:#666; font-size:12px;">ސޫރަތް:</span> <span id="mSurah" class="mirror-val">-</span></div>
-                    <div><span style="color:#666; font-size:12px;">އާޔަތް:</span> <span id="mAyah" class="mirror-val">-</span></div>
+                    <span class="mirror-val" data-translate="qDetail">ސުވާލު ތަފްޞީލް</span>
+                    <div><span style="color:#666; font-size:12px;" data-translate="mBook">ފޮތް / ބައި:</span> <span id="mBook" class="mirror-val">-</span></div>
+                    <div><span style="color:#666; font-size:12px;" data-translate="mSurah">ސޫރަތް:</span> <span id="mSurah" class="mirror-val">-</span></div>
+                    <div><span style="color:#666; font-size:12px;" data-translate="mAyah">އާޔަތް:</span> <span id="mAyah" class="mirror-val">-</span></div>
                     <div id="adminWarn" style="color:#ff5252; font-size:11px; margin-top:10px; display:none;">⚠️ STUDENT IS IN MEMORY MODE</div>
                 </div>
                 <div class="mirror-img-area">
@@ -335,11 +360,78 @@
                 </div>
             </div>
             
-            <div id="mirrorLight" style="position:absolute; bottom:20px; right:20px; width:30px; height:30px; background:#333; border-radius:50%; border:2px solid #555;"></div>
+            <div id="mirrorLight" style="position:absolute; bottom:20px; right:100px; width:30px; height:30px; background:#333; border-radius:50%; border:2px solid #555;"></div>
+
+            <button id="royalFSBtn" onclick="toggleAppFullscreen()" title="Full Screen">⛶</button>
         </div>
     </div>
 
 <script>
+    // --- TRANSLATION DICTIONARY ---
+    const i18n = {
+        title: { dv: "ރަސްފަހި ޖަޖް V19.2", ar: "القاضي رصفهي V19.2", en: "Rasfahi Judge V19.2" },
+        liveCtrl: { dv: "1. ލައިވް ކޮންޓްރޯލް", ar: "1. التحكم المباشر", en: "1. Live Control" },
+        mJudge: { dv: "⚖️ ޖަޖު މެތަޑް (އޮޓޯ)", ar: "⚖️ وضع القاضي (تلقائي)", en: "⚖️ Judge Mode (Auto)" },
+        mStudent: { dv: "🎓 ދަރިވަރު މެތަޑް (މެނުއަލް)", ar: "🎓 وضع الطالب (يدوي)", en: "🎓 Student Mode (Manual)" },
+        rmMushaf: { dv: "📖 މުޞްޙަފު (ބަލައިގެން)", ar: "📖 المصحف (نظر)", en: "📖 Mushaf (Reading)" },
+        rmMemory: { dv: "🧠 ހިތުން (ނުބަލައި)", ar: "🧠 الحفظ (غيب)", en: "🧠 Memory (Recital)" },
+        btnPick: { dv: "🎲 ސުވާލު ނަގާ (ރެންޑަމް)", ar: "🎲 اختر سؤالاً (عشوائي)", en: "🎲 Pick Question (Random)" },
+        btnShowGrid: { dv: "1. ގްރިޑް ދައްކާ", ar: "1. عرض الشبكة", en: "1. Show Grid" },
+        btnShuffle: { dv: "🔄 ބަދަލުކުރޭ", ar: "🔄 خلط", en: "🔄 Shuffle" },
+        btnStartQ1: { dv: "2. ފަށާ (Start Q1)", ar: "2. ابدأ (سؤال 1)", en: "2. Start (Q1)" },
+        btnPrev: { dv: "◀ ކުރީގެ", ar: "◀ السابق", en: "◀ Prev" },
+        btnNext: { dv: "ކުރިއަށް ⏩", ar: "التالي ⏩", en: "Next ⏩" },
+        btnBellStart: { dv: "🔔 ފަށާ (ބެލް)", ar: "🔔 ابدأ (جرس)", en: "🔔 Start (Bell)" },
+        btnBellStop: { dv: "🛑 ހުއްޓާ (ބެލް)", ar: "🛑 توقف (جرس)", en: "🛑 Stop (Bell)" },
+        btnReset: { dv: "🔄 އައު ދަރިވަރެއް (Reset)", ar: "🔄 طالب جديد (إعادة تعيين)", en: "🔄 New Student (Reset)" },
+        screens: { dv: "2. ސްކްރީންތައް", ar: "2. الشاشات", en: "2. Screens" },
+        lblStudent: { dv: "1. ދަރިވަރު ސްކްރީން:", ar: "1. شاشة الطالب:", en: "1. Student Screen:" },
+        btnLaunchStudent: { dv: "🖥️ ލޯންޗް (Student)", ar: "🖥️ فتح (الطالب)", en: "🖥️ Launch (Student)" },
+        lblJudge: { dv: "2. ޖަޖުންގެ ސްކްރީން:", ar: "2. شاشة القاضي:", en: "2. Judge Screen:" },
+        btnLaunchJudges: { dv: "Open Judges 🚀", ar: "فتح القضاة 🚀", en: "Open Judges 🚀" },
+        settings: { dv: "3. ސެޓިންގސް & ފައިލް", ar: "3. الإعدادات والملفات", en: "3. Settings & Files" },
+        lblFont: { dv: "1. ފޮންޓް (TTF):", ar: "1. الخط (TTF):", en: "1. Font (TTF):" },
+        lblCSV: { dv: "2. ސުވާލު ޑޭޓާ (CSV):", ar: "2. بيانات الأسئلة (CSV):", en: "2. Question Data (CSV):" },
+        lblImg: { dv: "3. އާޔަތްތަކުގެ ފޮޓޯ:", ar: "3. صور الآيات:", en: "3. Ayah Images:" },
+        lblBorder: { dv: "ބޯޑަރު:", ar: "الإطار:", en: "Border:" },
+        lblQCount: { dv: "ސުވާލުގެ ޢަދަދު:", ar: "عدد الأسئلة:", en: "Question Count:" },
+        qDetail: { dv: "ސުވާލު ތަފްޞީލް", ar: "تفاصيل السؤال", en: "Question Details" },
+        mBook: { dv: "ފޮތް / ބައި:", ar: "الكتاب / الجزء:", en: "Book/Part:" },
+        mSurah: { dv: "ސޫރަތް:", ar: "سورة:", en: "Surah:" },
+        mAyah: { dv: "އާޔަތް:", ar: "آية:", en: "Ayah:" }
+    };
+
+    let currentLang = 'dv';
+
+    function setLang(lang) {
+        currentLang = lang;
+        document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+        document.querySelector(`.lang-btn[onclick="setLang('${lang}')"]`).classList.add('active');
+        document.documentElement.lang = lang;
+        document.documentElement.dir = (lang === 'en') ? 'ltr' : 'rtl';
+        document.querySelector('.sidebar').style.borderLeft = (lang === 'en') ? 'none' : '3px solid var(--gold)';
+        document.querySelector('.sidebar').style.borderRight = (lang === 'en') ? '3px solid var(--gold)' : 'none';
+
+        // Apply translations
+        document.querySelectorAll('[data-translate]').forEach(el => {
+            const key = el.getAttribute('data-translate');
+            if(i18n[key] && i18n[key][lang]) {
+                el.innerText = i18n[key][lang];
+            }
+        });
+    }
+
+    // --- FULLSCREEN LOGIC ---
+    function toggleAppFullscreen() {
+        if (!document.fullscreenElement) {
+            document.documentElement.requestFullscreen().catch(err => {
+                alert(`Error attempting to enable full-screen mode: ${err.message} (${err.name})`);
+            });
+        } else {
+            document.exitFullscreen();
+        }
+    }
+
     // --- SECURITY PROTOCOLS ---
     document.addEventListener('keydown', function(e) {
         if(e.keyCode == 123) { e.preventDefault(); return false; } // F12
@@ -370,7 +462,6 @@
     }
 
     function generateLicense() {
-        // Hidden function for admin use only via console or if panel enabled
         const days = parseInt(document.getElementById('keyDays').value);
         const date = new Date();
         date.setDate(date.getDate() + days);
@@ -646,8 +737,8 @@
         g.innerHTML = '';
         
         const source = (state.session.phase === 'selection' || state.session.phase === 'ready') 
-                       ? state.session.selectionIDs 
-                       : state.session.slots;
+                        ? state.session.selectionIDs 
+                        : state.session.slots;
 
         for(let i=0; i<limit; i++) {
             let d = document.createElement('div');
@@ -738,7 +829,8 @@
     // --- TEMPLATE ---
     function getTemplate() {
         const fontFace = state.fontData ? `@font-face { font-family: 'AppFont'; src: url('${state.fontData}'); }` : '';
-        const fontFam = state.fontData ? 'AppFont, sans-serif' : "'Noto Sans Thaana', sans-serif";
+        // FIX: Force Important to Ensure Child Window gets Font
+        const fontFam = state.fontData ? 'AppFont, sans-serif !important' : "'Noto Sans Thaana', sans-serif !important";
         const bStyle = document.getElementById('borderStyle').value;
         let borderCSS = "border: 5px solid #333;"; 
         if(bStyle === 'gold') borderCSS = "border: 10px double #D4AF37; box-shadow: 0 0 30px rgba(212,175,55,0.5);";
@@ -752,7 +844,11 @@
             <style>
                 ${fontFace}
                 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Thaana:wght@400;700&display=swap');
-                body { margin:0; height:100vh; overflow:hidden; font-family:${fontFam}; color:#fff; display:flex; background:#000; }
+                
+                /* FIX 1: GLOBAL FONT FORCE */
+                * { font-family: ${fontFam}; }
+
+                body { margin:0; height:100vh; overflow:hidden; color:#fff; display:flex; background:#000; }
                 
                 #idleScreen { display:flex; width:100%; height:100%; flex-direction:column; align-items:center; justify-content:center; background: radial-gradient(circle, #001a33, #000); }
                 
@@ -824,9 +920,28 @@
 
                 #greenLight { position:fixed; bottom:30px; left:30px; width:80px; height:80px; border-radius:50%; background:#222; border:4px solid #444; transition:0.3s; z-index: 100; }
                 #greenLight.on { background:#00e676; border-color:#fff; box-shadow:0 0 80px #00e676; }
+
+                /* FULLSCREEN OVERLAY */
+                #fsOverlay {
+                    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+                    background: rgba(0,0,0,0.85); z-index: 9999;
+                    display: flex; justify-content: center; align-items: center; cursor: pointer;
+                }
+                .fs-btn {
+                    padding: 20px 40px; border: 3px solid #D4AF37;
+                    color: #D4AF37; font-size: 2em; font-weight: bold;
+                    background: rgba(0,0,0,0.8); border-radius: 10px;
+                    box-shadow: 0 0 30px rgba(212,175,55,0.5);
+                    transition: 0.2s;
+                }
+                .fs-btn:hover { background: #D4AF37; color: #000; }
             </style>
         </head>
         <body oncontextmenu="return false;">
+            <div id="fsOverlay" onclick="goFullscreen()">
+                <div class="fs-btn">CLICK TO FULLSCREEN</div>
+            </div>
+
             <div id="idleScreen">
                 <h1 style="font-size:5vw; color:#D4AF37; text-shadow:0 0 20px #D4AF37;">RASFAHI</h1>
             </div>
@@ -868,6 +983,11 @@
             <div id="greenLight"></div>
 
             <script>
+                function goFullscreen() {
+                    document.documentElement.requestFullscreen();
+                    document.getElementById('fsOverlay').style.display = 'none';
+                }
+
                 // CHILD SECURITY
                 document.addEventListener('keydown', function(e) {
                     if(e.keyCode == 123) { e.preventDefault(); return false; } 
@@ -928,24 +1048,18 @@
                             const img = document.getElementById('qImg');
                             const memTxt = document.getElementById('memoryText');
                             
-                            // CORE LOGIC CHANGE: 
-                            // If Memory Mode AND NOT Judge -> Show Memory Text, Hide Image
-                            // If Memory Mode AND IS Judge -> Show Image (So Judge can see), Hide Memory Text
-                            
+                            // CORE LOGIC: 
                             if(d.readingMode === 'memory' && !isJudge) {
                                 img.style.display = 'none';
                                 memTxt.style.display = 'block';
-                                // APPLY ROYAL GREEN FOR STUDENT MEMORY
                                 mainArea.classList.add('royal-green-bg');
                                 mainScroll.style.background = 'transparent'; 
                                 mainScroll.style.border = 'none';
                                 mainScroll.style.boxShadow = 'none';
                             } else {
-                                // MUSHAF MODE OR JUDGE VIEW IN MEMORY MODE
                                 memTxt.style.display = 'none';
                                 if(q.src) { img.src = q.src; img.style.display = 'block'; }
                                 else { img.style.display = 'none'; }
-                                // Reset to white paper style
                                 mainScroll.style.background = '#fff';
                             }
                             
@@ -953,10 +1067,13 @@
                             document.getElementById('dAyah').innerText = q.start + ' - ' + q.end;
                         }
 
-                        // SIDEBAR LIST
+                        // FIX 2: GHOST SLOT REMOVAL
                         const listC = document.getElementById('qListContainer');
                         listC.innerHTML = '';
                         d.slots.forEach((slot, idx) => {
+                            // Only append if slot is valid
+                            if(!slot) return; 
+
                             let item = document.createElement('div');
                             item.className = 'q-item ' + (idx === d.activeIndex ? 'active' : '');
                             
