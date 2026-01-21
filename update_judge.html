@@ -2,767 +2,1610 @@
 <html lang="dv" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zaad Royal V25 (Ultra Edition)</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Rasfahi Royal Quran (V20.3 Grid Fixed)</title>
     <style>
-        /* =========================================
-           1. PREMIUM ASSETS & FONTS
-           ========================================= */
-        /* Ensure 'fonts' folder exists with these files */
-        @font-face { font-family: 'Faruma'; src: url('fonts/af_faruma.ttf'); display: swap; }
-        @font-face { font-family: 'Madina'; src: url('fonts/MADDINA.ttf'); display: swap; }
-        
+        /* --- FONTS & IMPORTS --- */
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Thaana:wght@400;700;900&family=Cinzel:wght@700;900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&display=swap');
+
+        /* Placeholder for Dynamic Font */
+        @font-face {
+            font-family: 'AppFont';
+            src: local('Faruuma'), local('Waheed'), url('https://fonts.googleapis.com/earlyaccess/notosansthaana.css');
+        }
+
         :root {
-            /* ROYAL PALETTE */
-            --gold-primary: #FFD700;
-            --gold-shine: #FFF8DC;
-            --gold-shadow: #B8860B;
             --royal-blue: #001a33;
-            --deep-black: #050505;
-            --glass-bg: rgba(10, 25, 45, 0.85);
-            --glass-border: 1px solid rgba(255, 215, 0, 0.3);
-            --neon-accent: #00ff88;
-            --danger: #ff3333;
-            
-            /* SIZES */
-            --radius-lg: 20px;
-            --radius-md: 12px;
+            --royal-blue-dark: #000d1a;
+            --royal-green: #00331a; 
+            --gold: #D4AF37;
+            --gold-dim: #aa8c2c;
+            --green: #006400;
+            --green-bright: #00e676;
+            --text-main: #ffffff;
+            --panel-bg: #0b1016;
+            --border-radius: 6px;
+            --cream-bg: #fdfcf0;
         }
 
-        * { box-sizing: border-box; outline: none; user-select: none; -webkit-tap-highlight-color: transparent; }
+        /* FIX 1: GLOBAL BOX SIZING */
+        * { box-sizing: border-box; -webkit-user-select: none; user-select: none; outline: none; }
         
-        body {
-            margin: 0; height: 100vh; overflow: hidden;
-            background: radial-gradient(circle at 50% 30%, #002b4d 0%, #000 90%);
-            font-family: 'Faruma', sans-serif;
-            color: #fff;
-            transition: background 1s ease;
+        /* APPLY FONT GLOBALLY */
+        body, button, input, select, textarea, h1, h2, span, div, p, a, label { 
+            font-family: 'AppFont', 'Noto Sans Thaana', 'Amiri', sans-serif !important; 
         }
 
-        /* =========================================
-           2. ULTRA UI COMPONENTS
-           ========================================= */
-        /* Views System */
-        .view { display: none; width: 100%; height: 100%; position: absolute; top: 0; left: 0; z-index: 10; opacity: 0; transition: opacity 0.5s; }
-        .view.active { display: flex; opacity: 1; z-index: 20; }
+        body { 
+            margin: 0; padding: 0;
+            background: #000; 
+            color: var(--text-main); 
+            height: 100vh; width: 100vw;
+            overflow: hidden; 
+            display: flex; 
+        }
+
+        /* --- SIDEBAR DESIGN --- */
+        .sidebar {
+            width: 480px; 
+            background: linear-gradient(180deg, var(--panel-bg) 0%, #000 100%); 
+            border-left: 3px solid var(--gold);
+            display: flex; flex-direction: column; height: 100vh; z-index: 100;
+            box-shadow: 10px 0 40px rgba(0,0,0,0.8);
+            transition: width 0.3s;
+        }
         
-        /* Flex Utils */
-        .flex-center { display: flex; justify-content: center; align-items: center; }
-        .flex-col { display: flex; flex-direction: column; }
-        .flex-row { display: flex; flex-direction: row; }
+        .header { 
+            padding: 15px; text-align: center; 
+            background: linear-gradient(to bottom, var(--royal-blue), var(--royal-blue-dark)); 
+            border-bottom: 2px solid var(--gold); 
+        }
+        .app-title { 
+            font-family: 'Cinzel', serif !important; color: var(--gold);
+            font-size: 20px; margin: 0; 
+            text-shadow: 0 2px 5px rgba(0,0,0,0.8); 
+        }
+
+        .content { flex: 1; overflow-y: auto; padding: 10px; display: flex; flex-direction: column; gap: 10px; }
         
-        /* Glass Card */
-        .royal-card {
-            background: var(--glass-bg);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            border: 2px solid var(--gold-shadow);
-            border-top: 2px solid var(--gold-primary);
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5), inset 0 0 20px rgba(255,215,0,0.05);
-            border-radius: var(--radius-lg);
-            padding: 40px;
+        /* ROYAL COPYRIGHT FOOTER IN SIDEBAR */
+        .royal-footer {
+            padding: 10px;
+            background: linear-gradient(to top, #000, #111);
+            border-top: 2px double var(--gold);
             text-align: center;
-            position: relative;
-            overflow: hidden;
+            font-size: 11px;
+            color: #888;
         }
+        .royal-footer p { margin: 2px 0; }
+        .royal-footer .highlight { color: var(--gold); font-weight: bold; font-family: 'Cinzel', sans-serif !important; }
         
-        /* Inputs */
-        .input-group { margin-bottom: 20px; text-align: right; }
-        .input-label { font-size: 14px; color: var(--gold-primary); margin-bottom: 8px; display: block; }
-        
-        input, select, textarea {
-            width: 100%; padding: 15px;
-            background: rgba(0,0,0,0.4);
-            border: 1px solid #333;
-            border-bottom: 2px solid var(--gold-shadow);
-            color: #fff; font-family: inherit; font-size: 16px;
-            border-radius: var(--radius-md);
+        .drive-btn {
+            background: #1f1f1f; border: 1px dashed #555; color: #aaa;
+            padding: 8px; width: 100%; margin-bottom: 10px; cursor: pointer;
+            text-decoration: none; display: block; font-size: 11px;
+            border-radius: 4px;
+        }
+        .drive-btn:hover { background: #333; color: #fff; border-color: var(--gold); }
+
+        /* PANELS */
+        .panel { 
+            background: rgba(255,255,255,0.03); 
+            border: 1px solid #334455; 
+            border-radius: var(--border-radius); 
+            padding: 12px; 
             transition: 0.3s;
         }
-        input:focus { border-color: var(--gold-primary); background: rgba(0,0,0,0.6); }
+        .panel:hover { border-color: #556677; }
 
-        /* Buttons */
-        .btn {
-            width: 100%; padding: 15px; font-weight: bold; font-size: 16px;
-            border: none; border-radius: var(--radius-md); cursor: pointer;
-            text-transform: uppercase; letter-spacing: 1px;
-            transition: all 0.2s; position: relative; overflow: hidden;
+        .panel-live {
+            background: linear-gradient(135deg, rgba(0,26,51,0.6), rgba(0,0,0,0.8));
+            border: 1px solid var(--gold-dim);
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
         }
-        .btn:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(0,0,0,0.4); }
-        .btn:active { transform: scale(0.98); }
+
+        h2 { 
+            color: var(--gold); margin: 0 0 8px 0; font-size: 16px; 
+            border-bottom: 1px dashed #445566; padding-bottom: 4px; 
+        }
         
-        .btn-gold { 
-            background: linear-gradient(135deg, var(--gold-shadow), var(--gold-primary)); 
-            color: #000; 
+        label { color: #aab; font-size: 13px; display: block; margin-top: 8px; margin-bottom: 2px; }
+        
+        input, select, button { 
+            width: 100%; padding: 8px; margin-top: 2px; 
+            background: #1a222c; border: 1px solid #334455; 
+            color: #fff; border-radius: 4px; 
+            font-size: 14px; 
         }
-        .btn-glass { 
-            background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #fff; 
+        
+        /* BUTTON STYLES */
+        button { 
+            cursor: pointer; font-weight: bold; border-color: #445566; 
+            transition: all 0.2s; 
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            background: linear-gradient(to bottom, #2a3b4c, #1a222c);
         }
-        .btn-danger { background: linear-gradient(135deg, #800, #f00); color: #fff; }
-        .btn-success { background: linear-gradient(135deg, #050, #0f0); color: #fff; text-shadow: 0 1px 2px #000; }
+        button:hover { filter: brightness(1.2); border-color: var(--gold); transform: translateY(-1px); }
+        button:active { transform: translateY(1px); }
+        
+        .btn-green { background: linear-gradient(to bottom, #004d00, #003300) !important; border-color: #006400 !important; color: #fff !important; }
+        .btn-red { background: linear-gradient(to bottom, #8b0000, #500000) !important; border-color: #b71c1c !important; color: #fff !important; }
+        .btn-gold { background: linear-gradient(to bottom, var(--gold), var(--gold-dim)) !important; color: #000 !important; border-color: #fff !important; font-weight: 900 !important; }
+        .btn-blue { background: linear-gradient(to bottom, #004080, #002040) !important; border-color: #0059b3 !important; color: #fff !important; }
+        .btn-purple { background: linear-gradient(to bottom, #4a148c, #311b92) !important; border-color: #7c4dff !important; color: #fff !important; }
+        .btn-orange { background: linear-gradient(to bottom, #e65100, #bf360c) !important; border-color: #ff6d00 !important; color: #fff !important; }
 
-        /* =========================================
-           3. DASHBOARD LAYOUTS
-           ========================================= */
-        .dashboard-grid {
-            display: grid;
-            grid-template-columns: 280px 1fr 320px;
-            gap: 20px; padding: 20px;
-            width: 100%; height: 100%;
+        /* LANG SWITCHER */
+        .lang-bar { display: flex; gap: 5px; margin-bottom: 10px; }
+        .lang-btn { flex: 1; font-size: 12px; padding: 5px; background: #222; color: #777; border: 1px solid #444; }
+        .lang-btn.active { background: var(--royal-blue); color: var(--gold); border-color: var(--gold); font-weight: bold; }
+
+        /* MODE SWITCHER */
+        .mode-switch { display: flex; background: #000; border: 1px solid #444; border-radius: 4px; overflow: hidden; margin-bottom: 10px; }
+        .mode-btn { flex: 1; padding: 10px; border: none; background: #222; color: #666; font-size: 12px; cursor: pointer; }
+        .mode-btn.active { background: var(--royal-blue); color: var(--gold); font-weight: bold; box-shadow: inset 0 0 10px rgba(0,0,0,0.5); }
+
+        /* READING MODE SWITCHER */
+        .read-switch { display:flex; gap:5px; margin-bottom:10px; }
+        .read-btn { flex:1; padding:8px; border:1px solid #444; background:#111; color:#888; font-size:12px; cursor: pointer; }
+        .read-btn.active { background:#004d40; color:#fff; border-color:#00e676; font-weight:bold; }
+
+        /* STATUS & SLOTS */
+        #statusDisplay {
+            background: #000; border: 2px solid var(--green-bright);
+            color: var(--green-bright); text-align: center;
+            font-family: 'Cinzel', serif !important; font-size: 18px; font-weight: bold;
+            padding: 8px; margin-bottom: 10px; border-radius: 4px;
+            text-shadow: 0 0 10px rgba(0,230,118,0.5);
         }
 
-        .panel {
-            background: rgba(10, 20, 35, 0.8);
-            border: 1px solid #333;
-            border-radius: var(--radius-lg);
+        #slotGrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; margin-top: 5px; }
+        .slot-box { 
+            background: #222; padding: 10px; text-align: center; font-size: 14px; 
+            color: #555; border: 1px solid #333; border-radius: 4px; transition: 0.3s;
+        }
+        .slot-box.active { 
+            background: var(--royal-blue); color: var(--gold); border-color: var(--gold); 
+            font-weight: bold; box-shadow: 0 0 10px rgba(212, 175, 55, 0.3); transform: scale(1.05);
+        }
+
+        /* MAIN PREVIEW AREA (ADMIN MONITOR) */
+        .main-view { flex: 1; background: #050505; display: flex; flex-direction: column; border-right: 1px solid #222; position: relative; overflow: hidden; }
+        .mirror-header { background: #111; padding: 5px 15px; color: #666; font-size: 11px; border-bottom: 1px solid #333; display: flex; justify-content: space-between; flex-shrink: 0; }
+        
+        #adminMirror {
+            flex: 1; overflow: hidden; position: relative;
+            background: radial-gradient(circle, #001a33, #000);
+            display: flex; justify-content: center; align-items: center;
+        }
+        
+        /* SCROLLABLE ADMIN CARD */
+        .mirror-card {
+            width: 85%; height: 85%;
+            background: #fff;
+            border: 10px double var(--gold);
+            position: relative;
             display: flex; flex-direction: column;
-            overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-        }
-        .panel-header {
-            padding: 15px; background: rgba(0,0,0,0.3);
-            border-bottom: 1px solid var(--gold-shadow);
-            color: var(--gold-primary); font-weight: bold;
-            display: flex; justify-content: space-between; align-items: center;
-        }
-        .panel-body { padding: 15px; flex: 1; overflow-y: auto; }
-
-        /* Lists */
-        .list-item {
-            padding: 12px; margin-bottom: 5px;
-            background: rgba(255,255,255,0.03);
-            border-radius: 8px; cursor: pointer;
-            display: flex; justify-content: space-between; align-items: center;
-            transition: 0.2s; border-left: 3px solid transparent;
-        }
-        .list-item:hover { background: rgba(255,215,0,0.1); padding-right: 15px; }
-        .list-item.active { 
-            background: linear-gradient(90deg, rgba(255,215,0,0.2), transparent);
-            border-left-color: var(--gold-primary);
-            color: var(--gold-primary);
+            box-shadow: 0 0 50px rgba(0,0,0,0.8);
+            border-radius: 8px;
         }
 
-        /* =========================================
-           4. JUDGE & SCREEN SPECIFIC
-           ========================================= */
-        .q-display {
-            background: #fff; color: #000;
-            padding: 20px; margin-bottom: 15px;
-            border-radius: 10px; border-right: 6px solid var(--gold-primary);
-            font-family: 'Madina', serif; font-size: 24px; direction: rtl; text-align: right;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-            line-height: 2;
+        .mirror-banner-strip {
+            background: rgba(0,0,0,0.9);
+            color: var(--gold);
+            padding: 8px;
+            display: flex; justify-content: space-around;
+            border-bottom: 2px solid var(--gold);
+            font-size: 14px;
+            font-weight: bold;
+            z-index: 10;
+            flex-shrink: 0;
+        }
+
+        /* SCROLLABLE IMAGE CONTAINER */
+        .mirror-img-container {
+            flex: 1;
+            overflow-y: auto;
+            overflow-x: hidden;
+            position: relative;
+            background: #fff;
+            padding: 0;
+            scrollbar-width: thin;
+            scrollbar-color: var(--gold) #222;
         }
         
-        .score-input-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
-        .score-box { text-align: center; }
-        .score-box input { font-size: 24px; font-weight: bold; text-align: center; color: var(--gold-primary); }
+        .mirror-img-container::-webkit-scrollbar { width: 8px; }
+        .mirror-img-container::-webkit-scrollbar-track { background: #222; }
+        .mirror-img-container::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 4px; }
 
-        /* Modal */
-        .modal-overlay {
-            position: fixed; top:0; left:0; width:100%; height:100%;
-            background: rgba(0,0,0,0.9); z-index: 1000;
-            display: none; justify-content: center; align-items: center;
+        .mirror-img-container img {
+            width: 100%; height: auto; display: block;
         }
-        .modal-box { width: 600px; max-width: 95%; max-height: 90vh; overflow-y: auto; }
+
+        .mirror-info-span { color: #fff; margin-left: 5px; }
+
+        /* GRID PREVIEW (ADMIN CLICKABLE) */
+        #gridPreview { display: none; grid-template-columns: repeat(5, 1fr); gap: 5px; width: 60%; }
+        .gp-box { 
+            background: #111; border: 1px solid #444; color: #666; 
+            text-align: center; padding: 10px; font-size: 12px; cursor: pointer;
+        }
+        .gp-box:hover { background: #222; color: #fff; border-color: #666; }
+        .gp-box.taken { background: #330000; color: #555; border-color: #500; pointer-events: none; }
+        .gp-box.selected { background: var(--gold); color: #000; border-color: #fff; font-weight:bold; }
+
+        .hidden { display: none !important; }
+
+        /* SECURITY OVERLAY */
+        #securityOverlay { position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.95); z-index:9999; display:flex; justify-content:center; align-items:center; }
+        .sec-box { border: 2px solid var(--gold); padding: 40px; text-align: center; background: #000d1a; border-radius: 10px; width: 400px; box-shadow: 0 0 50px rgba(212,175,55,0.2); }
+
+        /* ROYAL FULLSCREEN BUTTON */
+        #royalFSBtn {
+            position: absolute; bottom: 20px; right: 20px;
+            width: 60px; height: 60px;
+            border-radius: 50%;
+            background: radial-gradient(circle, var(--gold), #8a6e15);
+            border: 3px solid #fff;
+            box-shadow: 0 0 20px rgba(212,175,55, 0.6);
+            cursor: pointer; z-index: 200;
+            display: flex; justify-content: center; align-items: center;
+            font-size: 24px; color: #000; transition: all 0.3s;
+        }
+        #royalFSBtn:hover { transform: scale(1.1); box-shadow: 0 0 30px var(--gold); }
+
+        /* --- MOBILE & RESPONSIVE DESIGN --- */
+        @media screen and (max-width: 900px) {
+            body { flex-direction: column-reverse; height: auto; overflow-y: auto; }
+            .sidebar { 
+                width: 100%; height: auto; 
+                border-left: none; border-top: 3px solid var(--gold); 
+                order: 2;
+            }
+            .main-view { 
+                width: 100%; height: 60vh; 
+                order: 1; border-right: none;
+            }
+            .content { max-height: 400px; }
+            .mirror-card { width: 95%; height: 95%; border-width: 5px; }
+            .sec-box { width: 90%; }
+            button, select, input { padding: 12px; font-size: 16px; }
+        }
 
     </style>
 </head>
-<body>
+<body oncontextmenu="return false;">
 
-    <div id="view-login" class="view active flex-center">
-        <div class="royal-card">
-            <div style="margin-bottom: 20px; font-size: 50px;">👑</div>
-            <h1 style="margin: 0; color: var(--gold-primary); text-shadow: 0 0 10px var(--gold-shadow);">ZAAD ROYAL V25</h1>
-            <p style="color: #aaa; margin-bottom: 30px; letter-spacing: 2px;">ULTRA EDITION</p>
-            
-            <div class="input-group">
-                <select id="loginRole">
-                    <option value="admin">Admin Controller</option>
-                    <option value="judge">Judge Panel</option>
-                </select>
-            </div>
-            <div class="input-group">
-                <input type="password" id="loginPass" placeholder="Enter Password" style="direction: ltr;">
-            </div>
-            <button onclick="App.login()" class="btn btn-gold">ACCESS SYSTEM</button>
+    <audio id="bellStart" src="start.mp3"></audio>
+    <audio id="bellEnd" src="end.mp3"></audio>
+
+    <div id="securityOverlay">
+        <div class="sec-box">
+            <h1 style="color:var(--gold); font-family:'Cinzel' !important; margin:0;">ROYAL ELITE V20.3</h1>
+            <p style="color:#666; font-size:10px;">GRID FIXED EDITION</p>
+            <input type="password" id="secKey" style="text-align:center; font-size:18px; margin:15px 0; padding:10px; border-color:var(--gold);" placeholder="Enter License Key">
+            <button class="btn-green" onclick="unlockSystem()">UNLOCK SYSTEM</button>
+            <p id="secMsg" style="color:#ff5252; margin-top:10px; font-size:12px;"></p>
         </div>
     </div>
 
-    <div id="view-admin" class="view">
-        <div class="dashboard-grid">
-            
-            <div class="panel">
-                <div class="panel-header">
-                    <span>👥 PARTICIPANTS</span>
-                    <button onclick="App.openModal('modal-data')" style="background:none; border:none; color:var(--neon-accent); cursor:pointer;">📂 DATA</button>
-                </div>
-                <div class="panel-body">
-                    <input type="text" placeholder="Search Student..." onkeyup="App.filterStudents(this.value)" style="margin-bottom:10px;">
-                    <div id="admin-stu-list"></div>
-                </div>
+    <div class="sidebar">
+        <div class="header">
+            <h1 class="app-title" data-translate="title">RASFAHI JUDGE V20.3</h1>
+        </div>
+<div class="content">
+            <div class="lang-bar">
+                <button class="lang-btn active" onclick="setLang('dv')">ދިވެހި</button>
+                <button class="lang-btn" onclick="setLang('ar')">عربي</button>
+                <button class="lang-btn" onclick="setLang('en')">English</button>
             </div>
-
-            <div class="flex-col" style="gap: 20px;">
-                <div class="royal-card" style="padding: 20px; display:flex; justify-content:space-between; align-items:center;">
-                    <div style="text-align: right;">
-                        <h2 style="margin:0; color:var(--gold-primary);">CONTROL ROOM</h2>
-                        <small style="color:#aaa;">Broadcast Active</small>
-                    </div>
-                    <button onclick="location.reload()" class="btn btn-danger" style="width:auto; padding: 5px 15px; font-size: 12px;">LOGOUT</button>
+            
+            <div id="licenseDisplay" style="display:none; background:#e3f2fd; color:#00008b; text-align:center; font-weight:bold; font-size:13px; padding:8px; margin-bottom:10px; border-radius:4px; border: 1px solid #00008b;">
+                Licensed To: <span id="licenseName"></span>
+            </div>
+            
+            <div class="panel panel-live">
+                <h2 data-translate="liveCtrl">1. ލައިވް ކޮންޓްރޯލް (Live)</h2>
+                
+                <div id="statusDisplay">WAITING...</div>
+                
+ 
+                <div class="mode-switch">
+                    <button id="modeJudge" class="mode-btn active" onclick="setMode('judge')" data-translate="mJudge">⚖️ ޖަޖު މެތަޑް (އޮޓޯ)</button>
+                    <button id="modeStudent" class="mode-btn" onclick="setMode('student')" data-translate="mStudent">🎓 ދަރިވަރު މެތަޑް (މެނުއަލް)</button>
                 </div>
 
-                <div class="panel" style="text-align: center; border-color: var(--gold-primary); background: rgba(255,215,0,0.05);">
-                    <div class="panel-body">
-                        <small style="color: #aaa; text-transform: uppercase; letter-spacing: 2px;">Current Student</small>
-                        <h1 id="ctrl-stu-name" style="margin: 10px 0; color: var(--gold-primary); font-size: 32px;">No Selection</h1>
-                        <h3 id="ctrl-stu-reg" style="margin: 0; color: #fff;">---</h3>
-                    </div>
+                <div class="read-switch">
+                    <button id="rmMushaf" class="read-btn active" onclick="setReadingMode('mushaf')" data-translate="rmMushaf">📖 މުޞްޙަފު (ބަލައިގެން)</button>
+                    <button id="rmMemory" class="read-btn" onclick="setReadingMode('memory')" data-translate="rmMemory">🧠 ހިތުން (ނުބަލައި)</button>
                 </div>
 
-                <div class="panel">
-                    <div class="panel-header">📡 SCREEN COMMANDS</div>
-                    <div class="panel-body">
-                        <div class="flex-row" style="gap: 10px; margin-bottom: 15px;">
-                            <button onclick="App.openScreen('STUDENT')" class="btn btn-gold">OPEN STUDENT SCREEN</button>
-                            <button onclick="App.openScreen('AUDIENCE')" class="btn btn-glass">OPEN AUDIENCE</button>
-                        </div>
-                        
-                        <div style="background: rgba(0,0,0,0.4); padding: 15px; border-radius: 10px; border: 1px solid #444;">
-                            <label style="color:#aaa; font-size:12px;">THEME ENGINE</label>
-                            <div class="flex-row" style="align-items: center; gap: 10px; margin-top: 5px;">
-                                <button onclick="App.changeTheme(-1)" class="btn btn-glass" style="width: 50px;">◀</button>
-                                <div style="flex:1; text-align: center; color: var(--gold-primary); font-weight: bold;" id="theme-label">Royal Gold #1</div>
-                                <button onclick="App.changeTheme(1)" class="btn btn-glass" style="width: 50px;">▶</button>
-                            </div>
-                        </div>
-
-                        <div style="margin-top: 15px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-                            <button onclick="App.setMode('PROFILE')" class="btn btn-glass">SHOW PROFILE</button>
-                            <button onclick="App.setMode('LOTTERY')" class="btn btn-glass">START LOTTERY</button>
-                        </div>
-
-                        <div style="margin-top: 15px; padding: 10px; border: 1px dashed var(--gold-shadow); border-radius: 8px;">
-                            <label class="flex-center" style="gap: 10px; cursor: pointer;">
-                                <input type="checkbox" id="chk-thilawah" onchange="App.updateSettings()" style="width: 20px; margin:0;">
-                                <span style="color: var(--neon-accent); font-weight: bold;">ENABLE THILAWAH MODE (Reading)</span>
-                            </label>
-                        </div>
-
-                        <button onclick="App.resetStudent()" class="btn btn-danger" style="margin-top: 15px;">🔄 NEXT STUDENT (RESET)</button>
-                    </div>
+                <div id="judgeControls">
+                    <button class="btn-gold" style="padding:12px;" onclick="pickRandomQuestion()" data-translate="btnPick">🎲 ސުވާލު ނަގާ (ރެންޑަމް)</button>
                 </div>
+
+                <div id="studentControls" class="hidden">
+                    <div style="display:flex; gap:5px; margin-bottom:5px;">
+                        <button class="btn-blue" onclick="toggleGridScreen(true)" data-translate="btnShowGrid">1. ގްރިޑް ދައްކާ (Show Grid)</button>
+                        <button class="btn-gold" onclick="reshuffleGrid()" data-translate="btnShuffle">🔄 ގްރިޑް ބަދަލުކުރޭ</button>
+                    </div>
+                    
+                    <div id="selectionInfo" style="background:#000; padding:5px; border:1px solid #444; margin:5px 0; font-size:12px; text-align:center; color:var(--gold);">
+                        No selection yet.
+                    </div>
+
+                    <button id="btnStartReading" class="btn-green hidden" onclick="startReadingSession()" data-translate="btnStartQ1">2. ފަށާ (Start Question 1)</button>
+                </div>
+
+                <div style="display:flex; gap:5px; margin-top:10px;">
+                    <button class="btn-gold" style="width:30%;" onclick="prevQuestion()" data-translate="btnPrev">◀ Previous</button>
+                    <button class="btn-gold" style="flex:1;" onclick="nextQuestion()" data-translate="btnNext">Next Question ⏩</button>
+                </div>
+
+                <div id="slotGrid"></div>
+
+                <hr style="border-color:#334455; margin:15px 0;">
+
+                <div style="display:flex; gap:10px;">
+                    <button class="btn-green" onclick="toggleBell(true)" data-translate="btnBellStart">🔔 ފަށާ (ބެލް)</button>
+                    <button class="btn-red" onclick="toggleBell(false)" data-translate="btnBellStop">🛑 ހުއްޓާ (ބެލް)</button>
+                </div>
+
+                <button style="margin-top:10px; background:#442222; border:1px solid #aa3333;" onclick="resetStudentSession()" data-translate="btnReset">🔄 އައު ދަރިވަރެއް (Reset)</button>
             </div>
 
             <div class="panel">
-                <div class="panel-header">
-                    <span>❓ QUESTIONS</span>
-                    <input type="number" id="pick-limit" value="3" style="width: 60px; padding: 5px; margin:0; text-align:center;">
+                <h2 data-translate="screens">2. ސްކްރީން & ކޮންފިގަރޭޝަން</h2>
+                
+                <div style="display:flex; gap:5px; margin-bottom:10px;">
+                    <button class="btn-blue" onclick="saveConfig()">💾 SAVE Config</button>
+                    <button class="btn-orange" onclick="document.getElementById('loadConf').click()">📂 LOAD Config</button>
+                    <input type="file" id="loadConf" accept=".json" class="hidden" onchange="loadConfig(this)">
                 </div>
-                <div class="panel-body">
-                    <div id="admin-q-list" style="display:flex; flex-direction:column; gap:5px;"></div>
-                </div>
-                <div style="padding: 15px;">
-                    <button onclick="App.clearHistory()" class="btn btn-glass" style="font-size: 12px; color: #aaa;">CLEAR HISTORY</button>
+
+                <button class="btn-red" onclick="clearCache()" style="font-size:10px; margin-bottom:10px;">🧹 Purge Memory (Clear Cache)</button>
+
+                <label data-translate="lblStudent">1. ދަރިވަރު ސްކްރީން:</label>
+                <button onclick="openScreen('student')" class="btn-purple" data-translate="btnLaunchStudent">🖥️ Student Screen (Launch)</button>
+
+                <label data-translate="lblJudge">2. ޖަޖުންގެ ސްކްރީން (Multicast):</label>
+                <div style="display:flex; gap:5px;">
+                    <select id="judgeCount" style="width:40%;">
+                        <option value="1">1 Judge</option>
+                        <option value="2">2 Judges</option>
+                        <option value="3" selected>3 Judges</option>
+                        <option value="5">5 Judges</option>
+                    </select>
+                    <button onclick="openJudges()" class="btn-blue" data-translate="btnLaunchJudges">Open Judges 🚀</button>
                 </div>
             </div>
-        </div>
-    </div>
 
-    <div id="view-judge" class="view">
-        <div class="dashboard-grid" style="grid-template-columns: 300px 1fr;">
             <div class="panel">
-                <div class="panel-header">
-                    <span>STUDENT INFO</span>
-                    <button onclick="location.reload()" style="background:none; border:none; color:var(--danger); cursor:pointer;">EXIT</button>
-                </div>
-                <div class="panel-body" style="text-align: center;">
-                    <div style="width: 120px; height: 120px; background: #000; border-radius: 50%; border: 3px solid var(--gold-primary); margin: 20px auto;">
-                        <span style="font-size: 50px; line-height: 110px;">👤</span>
-                    </div>
-                    <h2 id="j-stu-name" style="color: var(--gold-primary); margin: 10px 0;">Waiting...</h2>
-                    <h3 id="j-stu-reg">---</h3>
-                </div>
-            </div>
+                <h2 data-translate="settings">3. ސެޓިންގސް & ޑޭޓާ</h2>
+                
+                <label style="color:#00e676;">★ ފޮންޓް އިންސްޓޯލް (Font File):</label>
+                <input type="file" id="fontLoader" accept=".ttf,.otf,.woff,.woff2" style="border-color:#00e676;">
+                <small style="color:#666; font-size:10px;">Select .TTF or .WOFF file for Faruuma/Waheed</small>
+                <hr style="border-color:#333; margin:8px 0;">
 
-            <div class="flex-col" style="gap: 20px;">
-                <div class="panel" style="flex: 2;">
-                    <div class="panel-header">📖 ACTIVE QUESTIONS (FULL TEXT)</div>
-                    <div class="panel-body" id="j-q-display">
-                        <div style="text-align: center; padding-top: 50px; color: #aaa;">
-                            Waiting for student to pick questions...
-                        </div>
-                    </div>
-                </div>
+                <label>1. Royal Theme Engine (100+):</label>
+                <select id="themeSelect" onchange="updateTheme()">
+                    </select>
 
-                <div class="panel" style="flex: 1;">
-                    <div class="panel-header">📝 SCORING</div>
-                    <div class="panel-body">
-                        <div class="score-input-grid">
-                            <div class="score-box">
-                                <label>Hifz (40)</label>
-                                <input type="number" id="sc-hifz">
-                            </div>
-                            <div class="score-box">
-                                <label>Tajweed (30)</label>
-                                <input type="number" id="sc-taj">
-                            </div>
-                            <div class="score-box">
-                                <label>Voice (20)</label>
-                                <input type="number" id="sc-voice">
-                            </div>
-                            <div class="score-box">
-                                <label>Makhraj (10)</label>
-                                <input type="number" id="sc-mak">
-                            </div>
-                        </div>
-                        <button onclick="alert('Score Saved Successfully!')" class="btn btn-gold" style="margin-top: 20px;">SUBMIT EVALUATION</button>
+                <label data-translate="lblCSV">2. ސުވާލު ޑޭޓާ (CSV):</label>
+                <div style="display:flex; gap:5px;">
+                    <input type="file" id="csvQ" accept=".csv">
+                    <button onclick="downloadSampleCSV()" class="btn-purple" style="width:40%; font-size:10px;">Sample CSV ⬇️</button>
+                </div>
+                
+                <label data-translate="lblImg">3. އާޔަތްތަކުގެ ފޮޓޯ (Folder):</label>
+                <input type="file" id="imgF" webkitdirectory directory multiple>
+                <small id="imgStatus" style="color:#aaa; display:block;">No images loaded</small>
+
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:5px; margin-top:8px;">
+                    <div>
+                        <label data-translate="lblBorder">ބޯޑަރު:</label>
+                        <select id="borderStyle" onchange="syncWindows()">
+                            <option value="royal">Royal Frame</option>
+                            <option value="custom">Custom Img</option>
+                            <option value="none">None</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label data-translate="lblQCount">ސުވާލުގެ ޢަދަދު:</label>
+                        <select id="qLimit" onchange="resetStudentSession()">
+                            <script>
+                                for(let i=1; i<=20; i++) document.write(`<option value="${i}" ${i===3?'selected':''}>${i}</option>`);
+                            </script>
+                        </select>
                     </div>
                 </div>
+                <input type="file" id="borderImg" accept="image/*" class="hidden" style="margin-top:5px;">
             </div>
+        </div>
+
+        <div class="royal-footer">
+            <a id="driveLink" href="#" target="_blank" class="drive-btn">
+                📂 Open Google Drive Folder (Samples)
+            </a>
+
+            <p>Copyright Reserved</p>
+            <p class="highlight">Ali Ibrahim Didi 7791550 & 9901550</p>
+            <p>Zad Research and Consultancy Firm</p>
         </div>
     </div>
 
-    <div id="modal-data" class="modal-overlay">
-        <div class="royal-card modal-box">
-            <h2 style="color: var(--gold-primary); margin-top: 0;">DATA CENTER</h2>
-            
-            <div style="text-align: left; margin-bottom: 20px;">
-                <label class="input-label">1. Import Questions (CSV Paste)</label>
-                <textarea id="csv-input" rows="6" placeholder="ID, Surah, Ayah, Hint Text, Full Text..." style="font-family: monospace; font-size: 12px; text-align: left;"></textarea>
-                <button onclick="App.importCSV()" class="btn btn-glass" style="margin-top: 10px;">PROCESS DATA</button>
-            </div>
-
-            <div style="text-align: left; margin-bottom: 20px;">
-                <label class="input-label">2. Quick Add Student</label>
-                <div class="flex-row" style="gap: 10px;">
-                    <input type="text" id="new-reg" placeholder="Reg No">
-                    <input type="text" id="new-name" placeholder="Name">
-                </div>
-                <button onclick="App.addStudent()" class="btn btn-success" style="margin-top: 10px;">ADD STUDENT</button>
-            </div>
-
-            <button onclick="App.closeModal('modal-data')" class="btn btn-danger">CLOSE</button>
+    <div class="main-view">
+        <div class="mirror-header">
+            <span>LIVE VIEW (ADMIN MONITOR)</span>
+            <span id="mirrorStatus" style="color:var(--gold);">IDLE</span>
         </div>
-    </div>
-
-    <script>
-        /**
-         * ZAAD ROYAL CORE ENGINE
-         * Uses BroadcastChannel for instant multi-window sync.
-         */
         
-        class ZaadSystem {
-            constructor() {
-                // Initial State
-                this.state = {
-                    viewMode: 'STANDBY', // STANDBY, PROFILE, LOTTERY, QUESTIONS
-                    activeReg: null,
-                    selectedQIDs: [],
-                    themeID: 1,
-                    thilawahMode: false,
-                    usedQuestions: JSON.parse(localStorage.getItem('zaad_used') || "[]")
-                };
+        <div id="adminMirror">
+            <div id="gridPreview"></div>
 
-                // Data Store
-                this.students = JSON.parse(localStorage.getItem('zaad_students') || "[]");
-                this.qBank = JSON.parse(localStorage.getItem('zaad_qbank') || "[]");
-
-                // Comms
-                this.channel = new BroadcastChannel('zaad_channel');
-                this.channel.onmessage = (ev) => this.handleMessage(ev.data);
-
-                // Init
-                this.init();
-            }
-
-            init() {
-                // Check if already logged in (simple session check)
-                // For demo, we start at login
-            }
-
-            // --- AUTH ---
-            login() {
-                const role = document.getElementById('loginRole').value;
-                const pass = document.getElementById('loginPass').value;
+            <div id="mirrorContainer" class="mirror-card" style="display:flex;">
                 
-                if((role === 'admin' && pass === 'admin123') || (role === 'judge' && pass === 'judge123')) {
-                    this.role = role;
-                    this.switchView(role === 'admin' ? 'view-admin' : 'view-judge');
-                    if(role === 'admin') this.renderAdminList();
-                    if(role === 'judge') this.syncJudgeView();
-                } else {
-                    alert('Access Denied: Invalid Credentials');
+                <div id="adminBanner" class="mirror-banner-strip" style="display:none;">
+                    <span>Book: <span id="mBook" class="mirror-info-span">-</span></span>
+                    <span>Surah: <span id="mSurah" class="mirror-info-span">-</span></span>
+                    <span>Ayah: <span id="mAyah" class="mirror-info-span">-</span></span>
+                </div>
+
+                <div class="mirror-img-container">
+                    <img id="mImg" src="" style="display:none;">
+                    
+                    <h1 id="mMemoryText" style="display:none; color: var(--gold); text-align:center; font-size: 30px; margin-top: 20%;">
+                        (Memory Recitation Mode)
+                    </h1>
+
+                    <h2 id="mReadyText" style="display:none; color:#00e676; text-align:center; margin-top:20%;">READY TO START</h2>
+                    <h1 id="mFinishText" style="display:none; color:#ff5252; text-align:center; margin-top:20%; font-size:24px;"></h1>
+                </div>
+
+                <div id="adminWarn" style="position:absolute; bottom:5px; left:5px; color:#ff5252; font-size:11px; display:none; background:rgba(0,0,0,0.8); padding:2px;">⚠️ MEMORY MODE</div>
+            </div>
+            
+            <div id="mirrorLight" style="position:absolute; bottom:20px; right:100px; width:30px; height:30px; background:#333; border-radius:50%; border:2px solid #555;"></div>
+
+            <button id="royalFSBtn" onclick="toggleAppFullscreen()" title="Full Screen">⛶</button>
+        </div>
+    </div>
+
+<script>
+    // --- 0. SECURITY & CONFIG ---
+    const GOOGLE_DRIVE_URL = "https://drive.google.com/drive/folders/YOUR_FOLDER_ID"; 
+    document.getElementById('driveLink').href = GOOGLE_DRIVE_URL;
+
+    // SECURITY BLOCKER
+    document.addEventListener('contextmenu', event => event.preventDefault());
+    
+    // --- NEW: FONT LOADING LOGIC ---
+    document.getElementById('fontLoader').onchange = e => {
+        const file = e.target.files[0];
+        if(!file) return;
+        const reader = new FileReader();
+        reader.onload = function(evt) {
+            state.fontData = evt.target.result; // Store base64 font data
+            
+            // Inject into Admin Panel
+            const style = document.createElement('style');
+            style.innerHTML = `@font-face { font-family: 'AppFont'; src: url('${state.fontData}'); }`;
+            document.head.appendChild(style);
+            
+            alert("Font Loaded Successfully! (Syncing to screens...)");
+            syncWindows();
+        };
+        reader.readAsDataURL(file);
+    };
+
+    // --- TRANSLATION DICTIONARY ---
+    const i18n = {
+        title: { dv: "ރަސްފަހި ޖަޖް V20.3", ar: "القاضي رصفهي V20.3", en: "Rasfahi Judge V20.3" },
+        liveCtrl: { dv: "1. ލައިވް ކޮންޓްރޯލް", ar: "1. التحكم المباشر", en: "1. Live Control" },
+        mJudge: { dv: "⚖️ ޖަޖު މެތަޑް (އޮޓޯ)", ar: "⚖️ وضع القاضي (تلقائي)", en: "⚖️ Judge Mode (Auto)" },
+        mStudent: { dv: "🎓 ދަރިވަރު މެތަޑް (މެނުއަލް)", ar: "🎓 وضع الطالب (يدوي)", en: "🎓 Student Mode (Manual)" },
+        rmMushaf: { dv: "📖 މުޞްޙަފު (ބަލައިގެން)", ar: "📖 المصحف (نظر)", en: "📖 Mushaf (Reading)" },
+        rmMemory: { dv: "🧠 ހިތުން (ނުބަލައި)", ar: "🧠 الحفظ (غيب)", en: "🧠 Memory (Recital)" },
+        btnPick: { dv: "🎲 ސުވާލު ނަގާ (ރެންޑަމް)", ar: "🎲 اختر سؤالاً (عشوائي)", en: "🎲 Pick Question (Random)" },
+        btnShowGrid: { dv: "1. ގްރިޑް ދައްކާ", ar: "1. عرض الشبكة", en: "1. Show Grid" },
+        btnShuffle: { dv: "🔄 ބަދަލުކުރޭ", ar: "🔄 خلط", en: "🔄 Shuffle" },
+        btnStartQ1: { dv: "2. ފަށާ (Start Q1)", ar: "2. ابدأ (سؤال 1)", en: "2. Start (Q1)" },
+        btnPrev: { dv: "◀ ކުރީގެ", ar: "◀ السابق", en: "◀ Prev" },
+        btnNext: { dv: "ކުރިއަށް ⏩", ar: "التالي ⏩", en: "Next ⏩" },
+        btnBellStart: { dv: "🔔 ފަށާ (ބެލް)", ar: "🔔 ابدأ (جرس)", en: "🔔 Start (Bell)" },
+        btnBellStop: { dv: "🛑 ހުއްޓާ (ބެލް)", ar: "🛑 توقف (جرس)", en: "🛑 Stop (Bell)" },
+        btnReset: { dv: "🔄 އައު ދަރިވަރެއް (Reset)", ar: "🔄 طالب جديد (إعادة تعيين)", en: "🔄 New Student (Reset)" },
+        screens: { dv: "2. ސްކްރީން & ކޮންފިގަރޭޝަން", ar: "2. الشاشات", en: "2. Screens & Config" },
+        lblStudent: { dv: "1. ދަރިވަރު ސްކްރީން:", ar: "1. شاشة الطالب:", en: "1. Student Screen:" },
+        btnLaunchStudent: { dv: "🖥️ ލޯންޗް (Student)", ar: "🖥️ فتح (الطالب)", en: "🖥️ Launch (Student)" },
+        lblJudge: { dv: "2. ޖަޖުންގެ ސްކްރީން:", ar: "2. شاشة القاضي:", en: "2. Judge Screen:" },
+        btnLaunchJudges: { dv: "Open Judges 🚀", ar: "فتح القضاة 🚀", en: "Open Judges 🚀" },
+        settings: { dv: "3. ސެޓިންގސް & ޑޭޓާ", ar: "3. الإعدادات والملفات", en: "3. Settings & Data" },
+        lblCSV: { dv: "2. ސުވާލު ޑޭޓާ (CSV):", ar: "2. بيانات الأسئلة (CSV):", en: "2. Question Data (CSV):" },
+        lblImg: { dv: "3. އާޔަތްތަކުގެ ފޮޓޯ:", ar: "3. صور الآيات:", en: "3. Ayah Images:" },
+        lblBorder: { dv: "ބޯޑަރު:", ar: "الإطار:", en: "Border:" },
+        lblQCount: { dv: "ސުވާލުގެ ޢަދަދު:", ar: "عدد الأسئلة:", en: "Question Count:" },
+        msgFinished: { 
+            dv: "މިހާރު ކަނޑައެޅިފައިވާ މިންވަރަށް ސުވާލުކޮށް ނިމިއްޖެ!", 
+            ar: "تم الانتهاء من طرح الأسئلة المحددة!", 
+            en: "Questioning complete for the current limit!" 
+        }
+    };
+
+    let currentLang = 'dv';
+    let themeList = [];
+
+    // --- 1. THEME ENGINE ---
+    function initThemes() {
+        const bases = [
+            {n:"Royal Blue", c1:"#001a33", c2:"#000d1a", txt:"#ffffff"},
+            {n:"Emerald Green", c1:"#002b15", c2:"#001a0d", txt:"#e6ffe6"},
+            {n:"Burgundy Red", c1:"#2a0000", c2:"#1a0000", txt:"#ffe6e6"},
+            {n:"Midnight Black", c1:"#111111", c2:"#000000", txt:"#ffffff"},
+            {n:"Imperial Purple", c1:"#1a0033", c2:"#0d001a", txt:"#f2e6ff"}
+        ];
+        const accents = [
+            {n:"Gold", c:"#D4AF37", b:"double"},
+            {n:"Silver", c:"#C0C0C0", b:"ridge"},
+            {n:"Bronze", c:"#cd7f32", b:"groove"},
+            {n:"White Gold", c:"#f5f5dc", b:"solid"}
+        ];
+
+        const sel = document.getElementById('themeSelect');
+        sel.innerHTML = ""; 
+        let count = 1;
+        
+        bases.forEach(base => {
+            accents.forEach(acc => {
+                for(let i=1; i<=5; i++) { 
+                     let variantName = i === 1 ? "Standard" : (i===2 ? "Dark" : (i===3 ? "Deep" : (i===4 ? "Vivid" : "Classic")));
+                     let themeObj = {
+                        name: `Theme ${count}: ${base.n} & ${acc.n} (${variantName})`,
+                        bg1: base.c1, bg2: base.c2,
+                        accent: acc.c, borderType: acc.b, text: base.txt,
+                        id: count
+                    };
+                    themeList.push(themeObj);
+                    let opt = document.createElement('option');
+                    opt.value = count-1;
+                    opt.innerText = themeObj.name;
+                    sel.appendChild(opt);
+                    count++;
+                }
+            });
+        });
+        
+        if(themeList.length > 0) {
+            state.theme = themeList[0];
+            sel.value = 0;
+        }
+    }
+
+    function setLang(lang) {
+        currentLang = lang;
+        document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+        document.querySelector(`.lang-btn[onclick="setLang('${lang}')"]`).classList.add('active');
+        document.documentElement.lang = lang;
+        document.documentElement.dir = (lang === 'en') ? 'ltr' : 'rtl';
+        document.querySelector('.sidebar').style.borderLeft = (lang === 'en') ? 'none' : '3px solid var(--gold)';
+
+        // Apply translations
+        document.querySelectorAll('[data-translate]').forEach(el => {
+            const key = el.getAttribute('data-translate');
+            if(i18n[key] && i18n[key][lang]) {
+                el.innerText = i18n[key][lang];
+            }
+        });
+
+        if(i18n.msgFinished[lang]) {
+            document.getElementById('mFinishText').innerHTML = i18n.msgFinished[lang].replace(/\n/g, '<br>');
+        }
+        syncWindows();
+    }
+
+    function toggleAppFullscreen() {
+        if (!document.fullscreenElement) {
+            document.documentElement.requestFullscreen().catch(err => alert(`Error: ${err.message}`));
+        } else {
+            document.exitFullscreen();
+        }
+    }
+
+    // --- STATE ---
+    let state = {
+        qPool: [], qUsed: [], qDataMap: {}, 
+        pImages: {}, 
+        fontData: null, borderData: null,
+        windows: { student: null, judges: [] },
+        session: { slots: [], selectionIDs: [], activeIndex: -1, phase: 'idle', light: false },
+        mode: 'judge', readingMode: 'mushaf',
+        grid: { map: {}, visible: false, taken: [] },
+        theme: null
+    };
+
+   // --- SYSTEM SECURITY & VALIDATION (NO MASTER KEY) ---
+    function unlockSystem() {
+        const inputKey = document.getElementById('secKey').value.trim();
+        const msg = document.getElementById('secMsg');
+
+        // Master Key section has been REMOVED completely.
+        // Only generated keys will work now.
+
+        try {
+            // 1. DECODE THE KEY
+            const decodedString = atob(inputKey);
+
+            // 2. CHECK FORMAT
+            if (!decodedString.startsWith("ROYAL_EXP_")) {
+                throw new Error("Invalid Format");
+            }
+
+            // 3. EXTRACT INFO
+            const parts = decodedString.split('_'); 
+            const expiryDateStr = parts[2]; // Date part
+            let customerName = parts[4];    // Name part
+
+            // 4. CHECK DATE VALIDITY
+            const today = new Date();
+            today.setHours(0, 0, 0, 0); // Ignore time
+            const expiry = new Date(expiryDateStr);
+
+            if (isNaN(expiry.getTime())) {
+                throw new Error("Invalid Date in Key");
+            }
+
+            if (today > expiry) {
+                // EXPIRED
+                msg.innerText = "⛔ LICENSE EXPIRED! (Valid until: " + expiryDateStr + ")";
+                msg.style.color = "#ff5252";
+            } else {
+                // SUCCESS - ACCESS GRANTED
+                document.getElementById('securityOverlay').classList.add('hidden');
+                renderSlots();
+
+                // Clean up name format
+                customerName = customerName.replace(/-/g, ' ');
+
+                // Show License Name in Sidebar
+                const licDisp = document.getElementById('licenseDisplay');
+                const licName = document.getElementById('licenseName');
+                
+                if(licDisp && licName) {
+                    licDisp.style.display = "block";
+                    licName.innerText = customerName.toUpperCase();
                 }
             }
 
-            switchView(id) {
-                document.querySelectorAll('.view').forEach(el => el.classList.remove('active'));
-                document.getElementById(id).classList.add('active');
-            }
+        } catch (e) {
+            // INVALID KEY
+            msg.innerText = "❌ Invalid License Key.";
+            msg.style.color = "#ffb74d";
+            // console.error("Key Error:", e); // Optional: remove console log for better security
+        }
+    }
+    
+    function setMode(mode) {
+        state.mode = mode;
+        document.getElementById('modeJudge').classList.toggle('active', mode === 'judge');
+        document.getElementById('modeStudent').classList.toggle('active', mode === 'student');
+        document.getElementById('judgeControls').classList.toggle('hidden', mode !== 'judge');
+        document.getElementById('studentControls').classList.toggle('hidden', mode !== 'student');
+        
+        if(mode === 'student') {
+            reshuffleGrid(); 
+        } else { 
+            state.grid.visible = false; 
+            syncWindows(); 
+        }
+    }
 
-            // --- DATA HANDLING ---
-            addStudent() {
-                const reg = document.getElementById('new-reg').value;
-                const name = document.getElementById('new-name').value;
-                if(reg && name) {
-                    this.students.push({reg, name});
-                    this.saveData();
-                    this.renderAdminList();
-                    document.getElementById('new-reg').value = '';
-                    document.getElementById('new-name').value = '';
-                    alert('Student Added');
+    function setReadingMode(rm) {
+        state.readingMode = rm;
+        document.getElementById('rmMushaf').classList.toggle('active', rm === 'mushaf');
+        document.getElementById('rmMemory').classList.toggle('active', rm === 'memory');
+        updateMirror(); syncWindows();
+    }
+
+    function updateTheme() {
+        const idx = document.getElementById('themeSelect').value;
+        state.theme = themeList[idx];
+        syncWindows();
+    }
+
+    function downloadSampleCSV() {
+        const csvContent = "data:text/csv;charset=utf-8,ID,Image,Book,Surah,Page,StartAyah,EndAyah\n1,1.png,Juz 1,Al-Fatiha,1,1,7\n2,002.png,Juz 1,Al-Baqarah,2,1,5";
+        const link = document.createElement("a");
+        link.setAttribute("href", encodeURI(csvContent));
+        link.setAttribute("download", "sample_questions.csv");
+        document.body.appendChild(link); link.click(); document.body.removeChild(link);
+    }
+
+    // --- SAVE & LOAD CONFIGURATION ---
+    function saveConfig() {
+        const config = {
+            themeIndex: document.getElementById('themeSelect').value,
+            borderStyle: document.getElementById('borderStyle').value,
+            qLimit: document.getElementById('qLimit').value,
+            mode: state.mode,
+            readingMode: state.readingMode,
+            judgeCount: document.getElementById('judgeCount').value
+        };
+        const blob = new Blob([JSON.stringify(config)], {type: "application/json"});
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = "rasfahi_config.json";
+        a.click();
+        URL.revokeObjectURL(url);
+    }
+
+    function loadConfig(input) {
+        const file = input.files[0];
+        if(!file) return;
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            try {
+                const config = JSON.parse(e.target.result);
+                document.getElementById('themeSelect').value = config.themeIndex || 0;
+                document.getElementById('borderStyle').value = config.borderStyle || 'royal';
+                document.getElementById('qLimit').value = config.qLimit || 3;
+                document.getElementById('judgeCount').value = config.judgeCount || 3;
+                
+                updateTheme();
+                setMode(config.mode || 'judge');
+                setReadingMode(config.readingMode || 'mushaf');
+                
+                resetStudentSession();
+                alert("Configuration Loaded Successfully!");
+            } catch(err) {
+                alert("Error loading config: " + err);
+            }
+        };
+        reader.readAsText(file);
+    }
+
+    // --- CACHE MANAGEMENT ---
+    function clearCache() {
+        if(confirm("Are you sure? This will clear all loaded images to free up memory.")) {
+            Object.values(state.pImages).forEach(url => URL.revokeObjectURL(url));
+            state.pImages = {};
+            state.qDataMap = {};
+            state.qPool = [];
+            state.qUsed = [];
+            document.getElementById('imgStatus').innerText = "Memory Purged. Reload Images.";
+            document.getElementById('mImg').src = "";
+            resetStudentSession();
+            alert("Memory Cleared!");
+        }
+    }
+
+    function resolveImage(rawName) {
+        if(!rawName) return null;
+        rawName = rawName.toString().toLowerCase().trim();
+        if(state.pImages[rawName]) return state.pImages[rawName];
+        if(state.pImages[rawName + '.png']) return state.pImages[rawName + '.png'];
+        if(state.pImages[rawName.padStart(3, '0') + '.png']) return state.pImages[rawName.padStart(3, '0') + '.png'];
+        const intVal = parseInt(rawName);
+        if(!isNaN(intVal) && state.pImages[intVal]) return state.pImages[intVal];
+        return null;
+    }
+
+    function rebindAllImages() {
+        Object.values(state.qDataMap).forEach(q => { q.src = resolveImage(q.imgRaw); });
+        syncWindows();
+    }
+
+    // --- HANDLERS ---
+    document.getElementById('imgF').onchange = e => {
+        let count = 0; state.pImages = {}; 
+        for(let f of e.target.files) {
+            if(f.type.startsWith('image/')) {
+                const url = URL.createObjectURL(f);
+                const name = f.name.toLowerCase();
+                state.pImages[name] = url; 
+                state.pImages[name.split('.')[0]] = url; 
+                count++;
+            }
+        }
+        document.getElementById('imgStatus').innerText = count + " images loaded ready.";
+        rebindAllImages();
+    };
+
+    document.getElementById('csvQ').onchange = e => {
+        const r = new FileReader();
+        r.onload = ev => {
+            const rows = ev.target.result.split('\n');
+            state.qPool = []; state.qUsed = [];
+            rows.slice(1).forEach(r => {
+                const c = r.split(',');
+                if(c.length < 2) return;
+                const id = c[0].trim();
+                const imgRaw = c[1] ? c[1].trim() : "";
+                state.qDataMap[id] = { 
+                    id: id, imgRaw: imgRaw, src: null,      
+                    book: c[2], surah: c[3], page: c[4], start: c[5], end: c[6] 
+                };
+                state.qPool.push(id);
+            });
+            rebindAllImages();
+            alert("Questions Loaded: " + state.qPool.length);
+        };
+        r.readAsText(e.target.files[0]);
+    };
+
+    document.getElementById('borderStyle').onchange = function() {
+        document.getElementById('borderImg').classList.toggle('hidden', this.value !== 'custom');
+        syncWindows();
+    };
+    document.getElementById('borderImg').onchange = e => {
+        const r = new FileReader();
+        r.onload = ev => { state.borderData = ev.target.result; syncWindows(); };
+        r.readAsDataURL(e.target.files[0]);
+    };
+
+    // --- GRID ---
+    window.handleGridClick = function(boxID) {
+        const limit = parseInt(document.getElementById('qLimit').value);
+        if(state.session.selectionIDs.length >= limit) return;
+
+        const qID = state.grid.map[boxID];
+        
+        // FIX: Ensure ID exists
+        if(!qID || state.grid.taken.includes(boxID)) {
+             console.log("Empty Slot or Taken:", boxID);
+             return;
+        }
+
+        state.grid.taken.push(boxID);
+        state.session.selectionIDs.push(qID);
+
+        const idx = state.qPool.indexOf(qID);
+        if(idx > -1) state.qPool.splice(idx, 1);
+        state.qUsed.push(qID);
+
+        updateSelectionUI();
+
+        if(state.session.selectionIDs.length === limit) {
+            state.grid.visible = false;
+            state.session.phase = 'ready';
+            prepareSlotsFromSelection();
+            document.getElementById('btnStartReading').classList.remove('hidden');
+        } else {
+            state.session.phase = 'selection';
+        }
+        renderSlots(); updateGridPreview(); syncWindows();
+    }
+
+    function updateSelectionUI() {
+        document.getElementById('selectionInfo').innerText = "Selected: " + state.session.selectionIDs.join(", ");
+    }
+
+    function prepareSlotsFromSelection() {
+        state.session.slots = state.session.selectionIDs.map(id => {
+            let q = state.qDataMap[id];
+            if(q && !q.src) q.src = resolveImage(q.imgRaw);
+            return q;
+        });
+        state.session.activeIndex = -1;
+        updateStatus();
+    }
+
+    window.startReadingSession = function() {
+        if(state.session.slots.length === 0) return;
+        state.session.activeIndex = 0;
+        state.session.phase = 'active';
+        document.getElementById('btnStartReading').classList.add('hidden');
+        updateStatus(); updateMirror(); syncWindows();
+    }
+
+    window.pickRandomQuestion = function() {
+        const limit = parseInt(document.getElementById('qLimit').value);
+        if(state.session.slots.length >= limit) return;
+        
+        const q = getRandomQ();
+        if(!q) return;
+
+        state.session.slots.push(q);
+        state.session.activeIndex = state.session.slots.length - 1;
+        state.session.phase = 'active';
+        updateStatus(); renderSlots(); updateMirror(); syncWindows();
+    };
+
+    function getRandomQ() {
+        if(state.qPool.length === 0) {
+             if(state.qUsed.length === 0) { alert("No Data Loaded!"); return null; }
+             state.qPool = [...state.qUsed]; state.qUsed = [];
+             alert("Reshuffling Database...");
+        }
+        const rIdx = Math.floor(Math.random() * state.qPool.length);
+        const qID = state.qPool[rIdx];
+        state.qPool.splice(rIdx, 1);
+        state.qUsed.push(qID);
+        
+        const qData = state.qDataMap[qID];
+        if(!qData.src) qData.src = resolveImage(qData.imgRaw);
+        return qData;
+    }
+
+    // FIX: RESHUFFLE LOGIC
+    window.reshuffleGrid = function() {
+        // Safety Check
+        if(state.qPool.length === 0 && state.qUsed.length === 0) {
+            alert("No questions loaded! Please load CSV first.");
+            return;
+        }
+
+        state.grid.map = {}; state.grid.taken = [];
+        let tempPool = [...state.qPool];
+        
+        // If low on questions, borrow from used pile
+        if(tempPool.length < 20 && state.qUsed.length > 0) tempPool = [...tempPool, ...state.qUsed];
+        
+        for(let i=1; i<=20; i++) {
+            if(tempPool.length === 0) {
+                state.grid.map[i] = null; // Mark as empty
+                continue;
+            }
+            const rIdx = Math.floor(Math.random() * tempPool.length);
+            state.grid.map[i] = tempPool[rIdx];
+            tempPool.splice(rIdx, 1);
+        }
+        updateGridPreview(); syncWindows();
+    }
+
+    window.toggleGridScreen = function(show) {
+        state.grid.visible = show;
+        state.session.phase = 'selection';
+        syncWindows(); updateGridPreview();
+    }
+
+    // --- NAVIGATION SAFEGUARDS & FEATURES ---
+    window.prevQuestion = function() {
+        if(state.session.phase === 'finished') {
+            state.session.phase = 'active';
+            state.session.activeIndex = state.session.slots.length - 1;
+        } else if (state.session.activeIndex > 0) {
+            state.session.activeIndex--;
+        } else {
+            return; 
+        }
+        toggleBell(false);
+        updateStatus(); renderSlots(); updateMirror(); syncWindows();
+    }
+
+    window.nextQuestion = function() {
+        if(state.session.phase === 'ready') {
+            startReadingSession(); return;
+        }
+
+        if(state.session.phase === 'finished') return; 
+
+        const nextIdx = state.session.activeIndex + 1;
+        
+        if(nextIdx >= state.session.slots.length) {
+            state.session.phase = 'finished';
+        } else {
+            state.session.activeIndex = nextIdx;
+        }
+        
+        toggleBell(false);
+        updateStatus(); renderSlots(); updateMirror(); syncWindows();
+    }
+
+    window.resetStudentSession = function() {
+        state.session = { slots: [], selectionIDs: [], activeIndex: -1, phase: 'idle', light: false };
+        state.grid.taken = []; state.grid.visible = false;
+        document.getElementById('btnStartReading').classList.add('hidden');
+        document.getElementById('selectionInfo').innerText = "No selection yet.";
+        
+        if(state.mode === 'student') reshuffleGrid();
+        toggleBell(false);
+        updateStatus(); renderSlots(); updateMirror(); syncWindows();
+    }
+
+    function toggleBell(on) {
+        const bs = document.getElementById('bellStart');
+        const be = document.getElementById('bellEnd');
+        if(on) { bs.currentTime=0; bs.play().catch(()=>{}); }
+        else { be.currentTime=0; be.play().catch(()=>{}); }
+        state.session.light = on;
+        updateMirror(); syncWindows();
+    }
+
+    // --- UI RENDER ---
+    function renderSlots() {
+        const limit = parseInt(document.getElementById('qLimit').value);
+        const g = document.getElementById('slotGrid');
+        g.style.gridTemplateColumns = `repeat(${limit}, 1fr)`;
+        g.innerHTML = '';
+        
+        const source = (state.session.phase === 'selection' || state.session.phase === 'ready') 
+                        ? state.session.selectionIDs 
+                        : state.session.slots;
+
+        for(let i=0; i<limit; i++) {
+            let d = document.createElement('div');
+            let content = `Slot ${i+1}`;
+            if(source[i]) { content = source[i].id ? `Q: ${source[i].id}` : `Q: ${source[i]}`; }
+            d.className = 'slot-box ' + (i === state.session.activeIndex ? 'active' : '');
+            d.innerText = content;
+            g.appendChild(d);
+        }
+    }
+
+    function updateStatus() {
+        const s = document.getElementById('statusDisplay');
+        if(state.session.phase === 'idle') { s.innerText = "WAITING..."; s.style.color="#777"; }
+        else if(state.session.phase === 'selection') { s.innerText = "SELECTING..."; s.style.color="#D4AF37"; }
+        else if(state.session.phase === 'ready') { s.innerText = "READY"; s.style.color="#00e676"; }
+        else if(state.session.phase === 'finished') { s.innerText = "FINISHED"; s.style.color="#ff5252"; }
+        else { s.innerText = `Q-${state.session.slots[state.session.activeIndex]?.id || "?"}`; s.style.color = "#00e676"; }
+    }
+
+    // --- UPDATED MIRROR LOGIC ---
+    function updateMirror() {
+        const gp = document.getElementById('gridPreview');
+        const mCont = document.getElementById('mirrorContainer');
+        const mImg = document.getElementById('mImg');
+        const mReady = document.getElementById('mReadyText');
+        const mFin = document.getElementById('mFinishText');
+        const wWarn = document.getElementById('adminWarn');
+        const banner = document.getElementById('adminBanner');
+        const mMemory = document.getElementById('mMemoryText');
+        
+        document.getElementById('mirrorLight').style.background = state.session.light ? '#00e676' : '#333';
+
+        // Apply Royal Styles to Admin Monitor
+        if(state.theme) {
+            mCont.style.border = `10px ${state.theme.borderType} ${state.theme.accent}`;
+            mCont.style.background = '#fff'; 
+        }
+
+        if(state.grid.visible) {
+            mCont.style.display = 'none'; 
+            gp.style.display = 'grid';
+            updateGridPreview();
+            return;
+        } 
+        
+        gp.style.display = 'none'; 
+        mCont.style.display = 'flex';
+        
+        // Hide All Elements initially
+        mImg.style.display = 'none';
+        mReady.style.display = 'none'; 
+        mFin.style.display = 'none'; 
+        wWarn.style.display = 'none';
+        banner.style.display = 'none';
+        mMemory.style.display = 'none';
+
+        if(state.session.phase === 'ready') {
+             mReady.style.display = 'block';
+             document.getElementById('mirrorStatus').innerText = "WAITING";
+             return;
+        }
+
+        if(state.session.phase === 'finished') {
+            mFin.style.display = 'block';
+            mFin.innerHTML = i18n.msgFinished[currentLang];
+            document.getElementById('mirrorStatus').innerText = "FINISHED";
+            return;
+        }
+
+        const q = state.session.slots[state.session.activeIndex];
+
+        if(q && state.session.phase === 'active') {
+            // Update Banner
+            document.getElementById('mBook').innerText = q.book;
+            document.getElementById('mSurah').innerText = q.surah;
+            document.getElementById('mAyah').innerText = q.start + '-' + q.end;
+            banner.style.display = 'flex'; // Show Banner Top
+
+            if(state.readingMode === 'memory') {
+                wWarn.style.display = 'block';
+                mMemory.style.display = 'block'; // Show Memory Text
+                if(q.src) { mImg.src = q.src; mImg.style.display = 'block'; mImg.style.opacity = "0.2"; }
+            } else {
+                if(q.src) { mImg.src = q.src; mImg.style.display = 'block'; mImg.style.opacity = "1"; }
+            }
+            
+            document.getElementById('mirrorStatus').innerText = "LIVE READING";
+        } else {
+            document.getElementById('mirrorStatus').innerText = "IDLE";
+        }
+    }
+
+    // FIX: UPDATE GRID PREVIEW WITH CLICK HANDLER
+    function updateGridPreview() {
+        const gp = document.getElementById('gridPreview');
+        gp.innerHTML = '';
+        for(let i=1; i<=20; i++) {
+            let b = document.createElement('div');
+            let isSelected = state.session.selectionIDs.includes(state.grid.map[i]);
+            b.className = 'gp-box ' + (state.grid.taken.includes(i) ? 'taken' : '') + (isSelected ? ' selected' : '');
+            b.innerText = i;
+            // Allow Admin to Click on Preview Grid to Activate
+            b.setAttribute('onclick', `handleGridClick(${i})`); 
+            gp.appendChild(b);
+        }
+    }
+
+    // --- TEMPLATE GENERATOR ---
+    function getTemplate() {
+        // Embed Font Data
+        const fontFace = state.fontData ? `@font-face { font-family: 'AppFont'; src: url('${state.fontData}'); }` : '';
+        const bStyle = document.getElementById('borderStyle').value;
+        const th = state.theme || themeList[0]; 
+
+        // BORDER LOGIC
+        let borderCSS = `border: 1.5vmin ${th.borderType} ${th.accent}; box-shadow: 0 0 5vmin ${th.accent}80;`;
+        if(bStyle === 'custom' && state.borderData) borderCSS = `border: 4vmin solid transparent; border-image: url('${state.borderData}') 30 stretch;`;
+        if(bStyle === 'none') borderCSS = "border:none;";
+
+        return `
+        <!DOCTYPE html>
+        <html lang="dv" dir="rtl">
+        <head>
+            <style>
+                ${fontFace}
+                @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Thaana:wght@400;700&display=swap');
+                @import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&display=swap');
+
+                body.lang-dv * { font-family: 'AppFont', 'Faruuma', 'Waheed', 'Noto Sans Thaana', sans-serif !important; }
+                body.lang-ar * { font-family: 'Amiri', serif !important; }
+                body.lang-en * { font-family: sans-serif !important; direction: ltr; }
+
+                /* DYNAMIC THEME VARIABLES */
+                :root {
+                    --bg-1: ${th.bg1}; --bg-2: ${th.bg2};
+                    --accent: ${th.accent}; --border-type: ${th.borderType};
+                    --txt-col: ${th.text};
                 }
-            }
+                
+                * { box-sizing: border-box; }
+                body { 
+                    margin:0; padding: 0;
+                    width: 100vw; height: 100vh; 
+                    overflow:hidden; 
+                    color:var(--txt-col); 
+                    display:flex; 
+                    background: #000;
+                }
 
-            importCSV() {
-                const txt = document.getElementById('csv-input').value;
-                if(!txt) return;
-                const lines = txt.split('\n');
-                const newQ = [];
-                lines.forEach(l => {
-                    const p = l.split(',');
-                    if(p.length >= 5) {
-                        newQ.push({
-                            id: p[0].trim(),
-                            surah: p[1].trim(),
-                            ayah: p[2].trim(),
-                            hint: p[3].trim(),
-                            full: p.slice(4).join(',').trim()
-                        });
-                    }
-                });
-                this.qBank = newQ;
-                this.saveData();
-                alert(`Imported ${newQ.length} questions successfully.`);
-            }
+                /* 1. FULL SCREEN ROYAL FRAME */
+                #royalFrame {
+                    position: fixed; top:0; left:0; width:100%; height:100%;
+                    pointer-events: none; z-index: 9999;
+                    border: 2.5vmin solid var(--accent);
+                    box-shadow: inset 0 0 10vmin rgba(0,0,0,0.9);
+                }
 
-            saveData() {
-                localStorage.setItem('zaad_students', JSON.stringify(this.students));
-                localStorage.setItem('zaad_qbank', JSON.stringify(this.qBank));
-                localStorage.setItem('zaad_used', JSON.stringify(this.state.usedQuestions));
-            }
+                #watermark {
+                    position: fixed; bottom: 10px; left: 10px; 
+                    opacity: 0.3;
+                    color: var(--accent);
+                    font-size: 1.2vmin; 
+                    z-index: 9000;
+                    text-align: left; 
+                    pointer-events: none;
+                    font-weight: bold;
+                }
 
-            // --- ADMIN CONTROLS ---
-            renderAdminList(filter = "") {
-                const container = document.getElementById('admin-stu-list');
-                container.innerHTML = this.students
-                    .filter(s => s.name.toLowerCase().includes(filter.toLowerCase()) || s.reg.includes(filter))
-                    .map(s => `
-                        <div class="list-item ${this.state.activeReg === s.reg ? 'active' : ''}" onclick="App.selectStudent('${s.reg}')">
-                            <span style="font-family:monospace; font-weight:bold;">${s.reg}</span>
-                            <span>${s.name}</span>
+                #signalLight {
+                    position: fixed; top: 2vmin; right: 2vmin;
+                    width: 6vmin; height: 6vmin;
+                    border-radius: 50%;
+                    background: #333;
+                    border: 0.5vmin solid #fff;
+                    box-shadow: 0 0 2vmin rgba(0,0,0,0.5);
+                    z-index: 10000;
+                    transition: background 0.3s;
+                }
+
+                /* SCREENS */
+                #idleScreen { display:flex; width:100%; height:100%; flex-direction:column; align-items:center; justify-content:center; background: radial-gradient(circle, var(--bg-1), var(--bg-2)); }
+                
+                #gridScreen { display:none; width:100%; height:100%; align-items:center; justify-content:center; flex-direction:column; background: radial-gradient(circle, var(--bg-1), #000); }
+                #gridContainer { 
+                    display:grid; grid-template-columns: repeat(5, 1fr); grid-template-rows: repeat(4, 1fr);
+                    gap: 1.5vmin; width: 85vw; height: 75vh; 
+                }
+                .grid-btn { 
+                    width: 100%; height: 100%;
+                    background: linear-gradient(135deg, var(--accent), var(--bg-1)); 
+                    border: 0.3vmin solid #fff; border-radius: 1vmin;
+                    color: #fff; text-shadow: 0 2px 2px #000;
+                    font-size: 5vmin; font-weight: bold; cursor: pointer; transition: 0.3s; 
+                    display:flex; justify-content:center; align-items:center;
+                    box-shadow: 0 1vmin 2vmin rgba(0,0,0,0.5);
+                }
+                .grid-btn:hover { transform: scale(1.05); filter: brightness(1.2); }
+                .grid-btn.taken { opacity: 0.1; pointer-events: none; filter: grayscale(1); }
+
+                #readScreen { display:none; width:100%; height:100%; flex-direction:column; background: radial-gradient(circle, var(--bg-1), var(--bg-2)); }
+                
+                #topBar { 
+                    height: 12vh; width: 100%; 
+                    background: linear-gradient(to bottom, var(--bg-1), #000); 
+                    border-bottom: 0.5vmin solid var(--accent);
+                    display: flex; align-items: center; justify-content: center;
+                    box-shadow: 0 1vh 2vh rgba(0,0,0,0.8); z-index: 10;
+                }
+                #topStatusText { 
+                    color: var(--accent); font-size: 4vmin; font-weight: bold; 
+                    text-shadow: 0 0.5vmin 1vmin rgba(0,0,0,1);
+                }
+
+                #contentArea { display: flex; height: 88vh; width: 100%; padding: 2vmin; box-sizing: border-box; }
+
+                #infoPanel { 
+                    width: 20vw; background: rgba(0,0,0,0.5); 
+                    border: 0.3vmin solid var(--accent); border-radius: 1vmin;
+                    display: flex; flex-direction: column; margin-left: 1vw;
+                }
+
+                .mode-display {
+                    padding: 2vh;
+                    border-bottom: 1px solid var(--accent);
+                    text-align: center;
+                }
+                .mode-text {
+                    color: #00e676; 
+                    font-size: 2.5vmin;
+                    font-weight: bold;
+                    text-shadow: 0 2px 2px #000;
+                }
+
+                .selected-list-box {
+                    border-bottom: 1px solid var(--accent);
+                    padding: 2vh; 
+                    background: rgba(255, 255, 255, 0.05);
+                    text-align: center; 
+                }
+                .selected-label { 
+                    color: var(--accent); 
+                    font-size: 1.8vmin; 
+                    display: block; 
+                    margin-bottom: 1vh;
+                    text-decoration: underline;
+                }
+                .selected-nums { 
+                    color: #fff; 
+                    font-size: 3vmin; 
+                    font-weight: bold; 
+                    line-height: 1.5;
+                }
+
+                .questions-list { flex: 1; overflow-y: auto; padding: 1vmin; }
+                .q-item { 
+                    padding: 1.5vmin; margin-bottom: 1vmin; border-radius: 1vmin; 
+                    border: 1px solid #444; background: rgba(0,0,0,0.6);
+                    transition: 0.3s;
+                    font-size: 2vmin;
+                }
+                .q-item.active { 
+                    border-color: var(--accent); background: linear-gradient(90deg, var(--bg-1), #000); 
+                }
+
+                /* 2. RESPONSIVE LANDSCAPE CARD STYLE */
+                #mainArea { 
+                    flex: 1; display: flex; justify-content: center; align-items: center; 
+                    perspective: 1000px;
+                }
+                
+                .royal-card {
+                    width: 75vw; 
+                    height: 80vh; 
+                    background: #fff; 
+                    ${borderCSS}
+                    border-radius: 1vmin;
+                    overflow-y: auto; 
+                    overflow-x: hidden;
+                    display: block; 
+                    position: relative;
+                    box-shadow: 0 2vmin 5vmin rgba(0,0,0,0.7);
+                }
+                
+                .royal-card img { 
+                    width: 100%; 
+                    height: auto; 
+                    display: block; 
+                    margin: 0;
+                }
+                
+                .royal-card.memory-mode { 
+                    background: transparent; border: none; box-shadow: none; 
+                    display: flex; justify-content: center; align-items: center;
+                }
+
+                #memoryText { display:none; color: var(--accent); font-size: 5vw; text-shadow: 0 0 2vh var(--accent); text-align:center; }
+                
+                #finishScreen { display:none; width:100%; height:100%; flex-direction:column; align-items:center; justify-content:center; background: #000; }
+                #waitScreen { display:none; width:100%; height:100%; flex-direction:column; align-items:center; justify-content:center; background: #000; }
+
+                #fsOverlay { position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:99999; display:flex; justify-content:center; align-items:center; }
+                .fs-btn { border: 2px solid var(--accent); padding: 20px; color: var(--accent); background: #000; cursor: pointer; font-size: 20px; border-radius: 10px; }
+            </style>
+        </head>
+        <body oncontextmenu="return false;" class="lang-dv">
+            <div id="fsOverlay" onclick="goFullscreen()"><div class="fs-btn">CLICK TO START (FULLSCREEN)</div></div>
+            
+            ${bStyle === 'royal' ? '<div id="royalFrame"></div>' : ''}
+
+            <div id="signalLight"></div>
+
+            <div id="watermark">Copyright Ali Ibrahim Didi 7791550</div>
+
+            <div id="idleScreen">
+                <h1 style="font-size:8vw; color:var(--accent); text-shadow:0 0 3vh var(--accent);">RASFAHI</h1>
+            </div>
+
+            <div id="gridScreen">
+                <h1 id="gridTitle" style="color:var(--accent); font-size: 5vh;">ސުވާލު ނަންބަރު ނަގާ</h1>
+                <div id="gridContainer"></div>
+            </div>
+
+            <div id="waitScreen">
+                <h1 id="waitHead" style="color:var(--accent); font-size: 5vh;">SELECTION COMPLETE</h1>
+                <h2 id="waitSub" style="color:#fff; font-size: 3vh;">Waiting...</h2>
+                <div id="waitList" style="color:var(--accent); font-size:3vh; margin-top:20px;"></div>
+            </div>
+
+            <div id="finishScreen">
+                <h1 id="finText" style="color:var(--accent); text-shadow:0 0 3vh var(--accent); text-align:center; font-size: 6vw;"></h1>
+            </div>
+
+            <div id="readScreen">
+                <div id="topBar"><div id="topStatusText"></div></div>
+                <div id="contentArea">
+                    <div id="infoPanel">
+                        
+                        <div class="mode-display">
+                             <span class="mode-text" id="displayMode"></span>
                         </div>
-                    `).join('');
-            }
 
-            selectStudent(reg) {
-                this.state.activeReg = reg;
-                this.state.viewMode = 'STANDBY';
-                this.state.selectedQIDs = [];
-                this.updateAdminUI();
-                this.broadcast();
-            }
+                        <div class="selected-list-box">
+                            <span class="selected-label" data-key="lblSelected">އިޚްތިޔާރުކުރި ސުވާލު:</span>
+                            <span class="selected-nums" id="displaySelected"></span>
+                        </div>
 
-            updateAdminUI() {
-                const stu = this.students.find(s => s.reg === this.state.activeReg);
-                if(stu) {
-                    document.getElementById('ctrl-stu-name').innerText = stu.name;
-                    document.getElementById('ctrl-stu-reg').innerText = stu.reg;
-                } else {
-                    document.getElementById('ctrl-stu-name').innerText = "No Selection";
-                    document.getElementById('ctrl-stu-reg').innerText = "---";
-                }
-                
-                // Update Q List
-                const qList = document.getElementById('admin-q-list');
-                qList.innerHTML = this.state.selectedQIDs.map(id => {
-                    const q = this.qBank.find(x => x.id == id);
-                    return `<div style="background:var(--gold-primary); color:#000; padding:5px 10px; border-radius:4px; font-size:12px;">
-                        <b>Q${id}</b> - ${q ? q.surah : 'Unknown'}
-                    </div>`;
-                }).join('');
+                        <div class="questions-list" id="qListContainer"></div>
+                    </div>
+                    <div id="mainArea">
+                        <div class="royal-card" id="mainScroll">
+                            <img id="qImg" src="">
+                            <h1 id="memoryText"></h1>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-                this.renderAdminList(); // To update active class
-            }
+            <script>
+                // Child Security
+                document.addEventListener('contextmenu', e => e.preventDefault());
 
-            setMode(mode) {
-                if(!this.state.activeReg) return alert('Select a student first!');
-                this.state.viewMode = mode;
-                this.broadcast();
-            }
-
-            updateSettings() {
-                this.state.thilawahMode = document.getElementById('chk-thilawah').checked;
-                this.broadcast();
-            }
-
-            resetStudent() {
-                if(this.state.selectedQIDs.length > 0) {
-                    this.state.usedQuestions.push(...this.state.selectedQIDs);
-                    this.saveData();
-                }
-                this.state.activeReg = null;
-                this.state.selectedQIDs = [];
-                this.state.viewMode = 'STANDBY';
-                this.updateAdminUI();
-                this.broadcast();
-            }
-            
-            clearHistory() {
-                if(confirm("Clear all used question history?")) {
-                    this.state.usedQuestions = [];
-                    this.saveData();
-                    alert("History Cleared");
-                }
-            }
-
-            // --- THEME ENGINE ---
-            changeTheme(dir) {
-                let id = this.state.themeID + dir;
-                if(id > 100) id = 1;
-                if(id < 1) id = 100;
-                this.state.themeID = id;
-                document.getElementById('theme-label').innerText = `Royal Theme #${id}`;
-                this.broadcast();
-            }
-
-            // --- COMMUNICATIONS ---
-            broadcast() {
-                this.channel.postMessage({ type: 'STATE_UPDATE', payload: this.state });
-            }
-
-            handleMessage(msg) {
-                // Handled by specific windows logic below
-                if(msg.type === 'PICK_QUESTION') {
-                    this.handlePick(msg.id);
-                }
-            }
-            
-            handlePick(id) {
-                const limit = parseInt(document.getElementById('pick-limit').value);
-                if(this.state.selectedQIDs.length >= limit) return;
-                if(this.state.selectedQIDs.includes(id)) return;
-                
-                this.state.selectedQIDs.push(id);
-                this.updateAdminUI();
-                
-                // If limit reached, switch to Question View automatically after delay
-                if(this.state.selectedQIDs.length >= limit) {
-                    setTimeout(() => {
-                        this.state.viewMode = 'QUESTIONS';
-                        this.broadcast();
-                    }, 1500);
-                } else {
-                    this.broadcast();
-                }
-            }
-
-            // --- SCREEN OPENER ---
-            openScreen(type) {
-                const w = 1200; const h = 800;
-                const win = window.open('', type, `width=${w},height=${h}`);
-                
-                // INJECT SCREEN CODE
-                const screenHTML = `
-                <!DOCTYPE html>
-                <html lang="dv" dir="rtl">
-                <head>
-                    <title>${type} Screen</title>
-                    <style>
-                        @font-face { font-family: 'Faruma'; src: 'fonts/af_faruma.ttf'; }
-                        @font-face { font-family: 'Madina'; src: 'fonts/MADDINA.ttf'; }
-                        body { 
-                            margin:0; overflow:hidden; 
-                            background: #000; color: #fff; font-family: 'Faruma';
-                            display: flex; justify-content: center; align-items: center;
-                            height: 100vh; transition: background 0.8s;
-                        }
-                        
-                        /* Dynamic Theme Vars */
-                        :root { --t-col: #FFD700; --t-bg: #000; }
-                        
-                        .frame {
-                            width: 90%; height: 90%;
-                            border: 10px solid var(--t-col);
-                            border-radius: 30px;
-                            box-shadow: 0 0 80px var(--t-col), inset 0 0 50px rgba(0,0,0,0.8);
-                            background: rgba(0,0,0,0.7);
-                            backdrop-filter: blur(10px);
-                            display: flex; flex-direction: column; justify-content: center; align-items: center;
-                            position: relative;
-                        }
-                        
-                        /* LOTTERY GRID */
-                        .grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; max-width: 1200px; padding: 20px; }
-                        .box {
-                            width: 110px; height: 110px;
-                            border: 2px solid var(--t-col);
-                            color: var(--t-col);
-                            font-size: 40px; font-weight: bold;
-                            display: flex; justify-content: center; align-items: center;
-                            cursor: pointer; border-radius: 15px;
-                            transition: 0.3s; background: rgba(255,255,255,0.05);
-                        }
-                        .box:hover { background: var(--t-col); color: #000; transform: scale(1.1); }
-                        .box.picked { background: var(--t-col); color: #000; transform: scale(0); opacity: 0; pointer-events: none; }
-                        .box.disabled { opacity: 0.1; pointer-events: none; filter: grayscale(1); }
-
-                        /* CARDS */
-                        .card-holder { display: flex; gap: 30px; }
-                        .q-card {
-                            background: #fff; color: #000;
-                            width: 450px; min-height: 600px;
-                            border-radius: 20px;
-                            border: 8px solid var(--t-col);
-                            padding: 30px;
-                            display: flex; flex-direction: column;
-                            box-shadow: 0 20px 60px rgba(0,0,0,0.6);
-                            animation: slideUp 0.8s ease-out;
-                        }
-                        .q-content {
-                            flex: 1; display: flex; justify-content: center; align-items: center;
-                            text-align: center; font-family: 'Madina'; font-size: 42px; line-height: 1.8;
-                        }
-                        .blur { filter: blur(15px); cursor: pointer; transition: 0.5s; user-select: none; }
-                        .revealed { filter: blur(0); }
-                        
-                        @keyframes slideUp { from { transform: translateY(100px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-                    </style>
-                </head>
-                <body>
-                    <div id="app" class="frame"><h1>CONNECTING...</h1></div>
-                    <script>
-                        const channel = new BroadcastChannel('zaad_channel');
-                        let qBank = JSON.parse(localStorage.getItem('zaad_qbank') || "[]");
-                        
-                        channel.onmessage = (ev) => {
-                            if(ev.data.type === 'STATE_UPDATE') render(ev.data.payload);
-                        };
-
-                        // Initial Sync
-                        const raw = localStorage.getItem('zaad_state'); // Fallback if no broadcast immediately
-                        // Better approach: Ask for state? Or just wait.
-
-                        function render(state) {
-                            applyTheme(state.themeID);
-                            const app = document.getElementById('app');
-                            
-                            if(state.viewMode === 'STANDBY') {
-                                app.innerHTML = '<img src="https://academyzaad.com/photos/logo.png" width="200"><h1 style="font-size:60px; margin-top:30px; color:#fff;">WAITING...</h1>';
-                            }
-                            else if(state.viewMode === 'PROFILE') {
-                                const stu = JSON.parse(localStorage.getItem('zaad_students')).find(s => s.reg === state.activeReg);
-                                if(stu) {
-                                    app.innerHTML = '<h1 style="font-size:90px; margin:0; text-shadow:0 0 20px var(--t-col);">'+stu.name+'</h1><h2 style="font-size:50px; color:var(--t-col);">'+stu.reg+'</h2>';
-                                }
-                            }
-                            else if(state.viewMode === 'LOTTERY') {
-                                let html = '<div class="grid">';
-                                // Generate 20 placeholder IDs if qBank empty
-                                const list = qBank.length ? qBank : Array.from({length:20},(_,i)=>({id:i+1}));
-                                
-                                list.forEach(q => {
-                                    let cls = 'box';
-                                    if(state.usedQuestions.includes(q.id)) cls += ' disabled';
-                                    if(state.selectedQIDs.includes(q.id)) cls += ' picked';
-                                    html += '<div class="'+cls+'" onclick="pick(\\''+q.id+'\\')">'+q.id+'</div>';
-                                });
-                                html += '</div>';
-                                app.innerHTML = html;
-                            }
-                            else if(state.viewMode === 'QUESTIONS') {
-                                let html = '<div class="card-holder">';
-                                state.selectedQIDs.forEach(id => {
-                                    const q = qBank.find(x => x.id == id);
-                                    if(q) {
-                                        html += '<div class="q-card">';
-                                        html += '<div style="border-bottom:1px solid #ccc; padding-bottom:10px; color:#888; font-size:18px;">Surah '+q.surah+' : '+q.ayah+'</div>';
-                                        
-                                        // LOGIC: THILAWAH vs HIFZ
-                                        if(state.thilawahMode) {
-                                            html += '<div class="q-content blur" onclick="this.classList.toggle(\\'revealed\\')">'+q.full+'</div>';
-                                            html += '<div style="color:red; font-size:12px; text-align:center;">(Reading Mode: Tap to Reveal)</div>';
-                                        } else {
-                                            html += '<div class="q-content">'+q.hint+' ...</div>';
-                                            html += '<div style="color:green; font-size:12px; text-align:center;">(Memorization Mode: Hint Only)</div>';
-                                        }
-                                        html += '</div>';
-                                    }
-                                });
-                                html += '</div>';
-                                app.innerHTML = html;
-                            }
-                        }
-
-                        function applyTheme(id) {
-                            // High Quality Procedural Theme Generator
-                            const hue = (id * 137) % 360;
-                            const col = 'hsl('+hue+', 80%, 60%)';
-                            const bg = 'radial-gradient(circle at center, hsl('+hue+', 60%, 10%), #000)';
-                            
-                            document.documentElement.style.setProperty('--t-col', col);
-                            document.body.style.background = bg;
-                        }
-
-                        window.pick = (id) => {
-                            channel.postMessage({ type: 'PICK_QUESTION', id: id });
-                        };
-                    <\/script>
-                </body>
-                </html>
-                `;
-                win.document.write(screenHTML);
-            }
-            
-            // --- MODALS ---
-            openModal(id) { document.getElementById(id).style.display = 'flex'; }
-            closeModal(id) { document.getElementById(id).style.display = 'none'; }
-            
-            // --- JUDGE SYNC ---
-            syncJudgeView() {
-                // Listen to broadcast to update Judge View
-                this.channel.onmessage = (ev) => {
-                    if(ev.data.type === 'STATE_UPDATE') {
-                        const s = ev.data.payload;
-                        const stu = this.students.find(x => x.reg === s.activeReg);
-                        
-                        // Update Info
-                        if(stu) {
-                            document.getElementById('j-stu-name').innerText = stu.name;
-                            document.getElementById('j-stu-reg').innerText = stu.reg;
-                        } else {
-                            document.getElementById('j-stu-name').innerText = "Waiting...";
-                        }
-                        
-                        // Update Questions (Always show full text to Judge)
-                        const qContainer = document.getElementById('j-q-display');
-                        if(s.selectedQIDs.length > 0) {
-                            qContainer.innerHTML = s.selectedQIDs.map(id => {
-                                const q = this.qBank.find(x => x.id == id);
-                                return `
-                                    <div class="q-display">
-                                        <div style="font-size:14px; color:#666; margin-bottom:5px; border-bottom:1px solid #eee;">Q${id} | ${q.surah}</div>
-                                        ${q.full}
-                                    </div>
-                                `;
-                            }).join('');
-                        } else {
-                            qContainer.innerHTML = '<div style="text-align:center; padding-top:50px; color:#aaa;">Waiting for selection...</div>';
-                        }
+                const childI18n = {
+                    gridTitle: { dv: "ސުވާލު ނަންބަރު ނަގާ", ar: "اختر رقم السؤال", en: "Pick Question Number" },
+                    waitHead: { dv: "ސުވާލު ނެގުން ނިމިއްޖެ", ar: "اكتمل الاختيار", en: "Selection Complete" },
+                    waitSub: { dv: "ޖަޖުން ފަށަންދެން މަޑުކުރައްވާ", ar: "بانتظار بدء القاضي", en: "Waiting for Judge..." },
+                    memText: { dv: "(ނުބަލައި ކިޔެވުމުގެ ބައިގެ ކިޔެވުން)", ar: "(تلاوة عن ظهر قلب)", en: "(Memory Recitation Mode)" },
+                    rmMushaf: { dv: "ބަލައިގެން ކިޔެވުމުގެ ގޮފި", ar: "فرع القراءة من المصحف", en: "Reading from Mushaf" },
+                    rmMemory: { dv: "ނުބަލާ ކިޔެވުމުގެ ގޮފި", ar: "فرع الحفظ", en: "Reciting from Memory" },
+                    lblSelected: { dv: "އިޚްތިޔާރުކުރި ސުވާލު:", ar: "الأسئلة المختارة:", en: "Selected Questions:" },
+                    qPrefix: { dv: "ސުވާލު", ar: "سؤال", en: "Q" },
+                    pagePrefix: { dv: "ޞަފްޙާ", ar: "صفحة", en: "Pg" },
+                    statFirst: { dv: "މިހާރު ތިޔަ ކިޔަވަނީ ފުރަތަމަ ސުވާލު", ar: "أنت تقرأ السؤال الأول", en: "Reading First Question" },
+                    statLast: { dv: "މިއީ އެންމެ ފަހު ސުވާލު", ar: "هذا هو السؤال الأخير", en: "This is the Last Question" },
+                    statMid: { dv: "މިހާރު ތިޔަ ކިޔަވަނީ %N ވަނަ ސުވާލު", ar: "أنت تقرأ السؤال رقم %N", en: "Reading Question #%N" },
+                    msgFinished: { 
+                        dv: "މިހާރު ކަނޑައެޅިފައިވާ މިންވަރަށް ސުވާލުކޮށް ނިމިއްޖެ!", 
+                        ar: "تم الانتهاء من طرح الأسئلة المحددة!", 
+                        en: "Questioning complete for the current limit!" 
                     }
                 };
+
+                function goFullscreen() {
+                    document.documentElement.requestFullscreen();
+                    document.getElementById('fsOverlay').style.display = 'none';
+                }
+
+                window.updateState = function(d) {
+                    const lang = d.currentLang || 'dv';
+                    document.body.className = 'lang-' + lang;
+                    document.documentElement.dir = (lang === 'en') ? 'ltr' : 'rtl';
+                    document.documentElement.lang = lang;
+
+                    // Update Signal Light
+                    document.getElementById('signalLight').style.background = d.light ? '#00e676' : '#330000';
+                    document.getElementById('signalLight').style.boxShadow = d.light ? '0 0 5vmin #00e676' : 'none';
+
+                    // Update Text
+                    document.getElementById('gridTitle').innerText = childI18n.gridTitle[lang];
+                    document.getElementById('waitHead').innerText = childI18n.waitHead[lang];
+                    document.getElementById('waitSub').innerText = childI18n.waitSub[lang];
+                    document.getElementById('finText').innerHTML = childI18n.msgFinished[lang].replace(/\\n/g, '<br>');
+                    document.getElementById('memoryText').innerText = childI18n.memText[lang];
+                    document.querySelectorAll('[data-key]').forEach(el => {
+                        const k = el.getAttribute('data-key');
+                        if(childI18n[k]) el.innerText = childI18n[k][lang];
+                    });
+
+                    // Hide All
+                    ['idleScreen','gridScreen','waitScreen','readScreen','finishScreen'].forEach(id=>document.getElementById(id).style.display='none');
+                    
+                    const card = document.getElementById('mainScroll');
+
+                    if(d.grid.visible) {
+                        document.getElementById('gridScreen').style.display = 'flex';
+                        const gc = document.getElementById('gridContainer');
+                        gc.innerHTML = '';
+                        for(let i=1; i<=20; i++) {
+                            let b = document.createElement('div');
+                            let bClass = 'grid-btn';
+                            if(d.grid.taken.includes(i)) bClass += ' taken';
+                            
+                            b.className = bClass;
+                            b.innerText = i;
+                            // FIXED: Added check for opener existence
+                            b.setAttribute('onclick', 'if(window.opener) window.opener.handleGridClick('+i+')');
+                            gc.appendChild(b);
+                        }
+                    } else if(d.phase === 'ready') {
+                         document.getElementById('waitScreen').style.display = 'flex';
+                         document.getElementById('waitList').innerText = (lang==='en'?"Q: ":"ސުވާލު: ") + d.slots.map(s => s.id).join(', ');
+                    } else if(d.phase === 'finished') {
+                         document.getElementById('finishScreen').style.display = 'flex';
+                    } else if(d.phase === 'active') {
+                        document.getElementById('readScreen').style.display = 'flex';
+                        const q = d.slots[d.activeIndex];
+                        
+                        const statusTxt = document.getElementById('topStatusText');
+                        const currentNum = d.activeIndex + 1;
+                        if(currentNum === 1) statusTxt.innerText = childI18n.statFirst[lang];
+                        else if(d.activeIndex === d.slots.length - 1 && d.slots.length > 1) statusTxt.innerText = childI18n.statLast[lang];
+                        else statusTxt.innerText = childI18n.statMid[lang].replace('%N', currentNum);
+
+                        // SHOW SELECTED QUESTIONS
+                        const selIds = d.slots.map(s => s.id).join(', ');
+                        document.getElementById('displaySelected').innerText = selIds;
+
+                        // SHOW MODE
+                        const modeTxt = document.getElementById('displayMode');
+                        if(d.readingMode === 'memory') {
+                            modeTxt.innerText = childI18n.rmMemory[lang];
+                        } else {
+                            modeTxt.innerText = childI18n.rmMushaf[lang];
+                        }
+
+                        if(q) {
+                            const img = document.getElementById('qImg');
+                            const memTxt = document.getElementById('memoryText');
+                            
+                            if(d.readingMode === 'memory') {
+                                card.classList.add('memory-mode');
+                                img.style.display = 'none';
+                                memTxt.style.display = 'block';
+                            } else {
+                                card.classList.remove('memory-mode');
+                                memTxt.style.display = 'none';
+                                if(q.src) { img.src = q.src; img.style.display = 'block'; }
+                            }
+                        }
+
+                        const listC = document.getElementById('qListContainer');
+                        listC.innerHTML = '';
+                        d.slots.forEach((slot, idx) => {
+                            if(!slot) return; 
+                            let item = document.createElement('div');
+                            item.className = 'q-item ' + (idx === d.activeIndex ? 'active' : '');
+                            
+                            // UPDATED DISPLAY: Adds Ayah Start-End Numbers
+                            item.innerHTML = \`<div style="color:#00e676;">\${childI18n.qPrefix[lang]} \${idx+1}</div>
+                                <div style="color:#fff; font-weight:bold; font-size:1.1em;">\${slot.surah}</div>
+                                <div style="margin-top:4px; font-size:0.8em; color:#ccc;">
+                                    <span style="border:1px solid #555; padding:2px 6px; border-radius:4px; background:rgba(0,0,0,0.3);">
+                                        އާޔަތް: \${slot.start} - \${slot.end}
+                                    </span>
+                                </div>\`;
+                                
+                            listC.appendChild(item);
+                        });
+                    } else {
+                        document.getElementById('idleScreen').style.display = 'flex';
+                    }
+                }
+            <\/script>
+        </body>
+        </html>`;
+    }
+
+    function openScreen(type) {
+        const html = getTemplate();
+        if(type === 'student') {
+            if(state.windows.student) state.windows.student.close();
+            state.windows.student = window.open("", "Student", "width=1280,height=720");
+            if(state.windows.student) {
+                state.windows.student.document.open();
+                state.windows.student.document.write(html);
+                state.windows.student.document.close(); 
+            } else {
+                alert("Please Allow Popups for this site!");
+            }
+        } else {
+            let w = window.open("", "JudgeGeneric", "width=800,height=600");
+            if(w) {
+                w.document.open();
+                w.document.write(html);
+                w.document.close();
+                state.windows.judges.push(w);
             }
         }
+        setTimeout(syncWindows, 500);
+    }
 
-        // INIT APP
-        const App = new ZaadSystem();
-
-        // Admin Filter Helper
-        App.filterStudents = function(val) {
-            this.renderAdminList(val);
+    function openJudges() {
+        const count = parseInt(document.getElementById('judgeCount').value);
+        state.windows.judges.forEach(w => w.close());
+        state.windows.judges = [];
+        for(let i=0; i<count; i++) {
+            let w = window.open("", `Judge_${i+1}`, "width=800,height=600");
+            if(w) {
+                w.document.open();
+                w.document.write(getTemplate());
+                w.document.close();
+                state.windows.judges.push(w);
+            }
         }
+        setTimeout(syncWindows, 500);
+    }
 
-    </script>
+    function syncWindows() {
+        const packet = {
+            slots: state.session.slots, activeIndex: state.session.activeIndex,
+            phase: state.session.phase, light: state.session.light,
+            grid: state.grid, readingMode: state.readingMode,
+            currentLang: currentLang, fontData: state.fontData
+        };
+        const send = w => { if(w && !w.closed && w.updateState) w.updateState(packet); };
+        send(state.windows.student);
+        state.windows.judges.forEach(w => send(w));
+    }
+    
+    // INITIALIZATION
+    initThemes();
+    if(themeList.length > 0) state.theme = themeList[0];
+    setMode('judge');
+    renderSlots();
+    // --- ADVANCED SECURITY BLOCKER ---
+    
+    // 1. Block Right Click (މިހާރުވެސް އިނދެދާނެ)
+    document.addEventListener('contextmenu', event => event.preventDefault());
+
+    // 2. Block Keyboard Shortcuts (F12, Ctrl+U, Ctrl+Shift+I)
+    document.onkeydown = function(e) {
+        if(event.keyCode == 123) { // F12
+            return false;
+        }
+        if(e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) { // Inspect
+            return false;
+        }
+        if(e.ctrlKey && e.shiftKey && e.keyCode == 'C'.charCodeAt(0)) { // Inspect Element
+            return false;
+        }
+        if(e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)) { // Console
+            return false;
+        }
+        if(e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) { // View Source
+            return false;
+        }
+        if(e.ctrlKey && e.keyCode == 'S'.charCodeAt(0)) { // Save Page
+            e.preventDefault();
+            return false;
+        }
+    }
+</script>
 </body>
 </html>
