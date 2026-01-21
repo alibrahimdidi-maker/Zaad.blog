@@ -302,28 +302,10 @@
                 <button class="lang-btn" onclick="setLang('ar')">عربي</button>
                 <button class="lang-btn" onclick="setLang('en')">English</button>
             </div>
-            <div class="lang-bar">
-                <button class="lang-btn active" onclick="setLang('dv')">ދިވެހި</button>
-                <button class="lang-btn" onclick="setLang('ar')">عربي</button>
-                <button class="lang-btn" onclick="setLang('en')">English</button>
-            </div>
-
             <div id="licenseDisplay" style="display:none; background:#e3f2fd; color:#00008b; text-align:center; font-weight:bold; font-size:13px; padding:8px; margin-bottom:10px; border-radius:4px; border: 1px solid #00008b;">
                 Licensed To: <span id="licenseName"></span>
             </div>
 
-*ނޯޓް: ސައިޑްބާގެ ކުލަ ކަޅުކުލައިގައި ހުރުމުން، ގަދަ ނޫކުލަ ރީތިކޮށް ދެއްކުމަށްޓަކައި އަޅުގަނޑު އެ އިންނާނީ ހުދު/ނޫ (Light Blue) ފޮށިގަނޑެއްގެ ތެރެއަށް ލާފައެވެ.*
-
----
-
-### 2. JavaScript ބަޔަށް ގެންނަންޖެހޭ ބަދަލު (ނަން ދެއްކުން)
-
-ކުރިން އަޅުގަނޑު ދިން `unlockSystem()` ފަންކްޝަންގެ ތެރޭގައި އިންނަ **`// SUCCESS CASE`** ގެ ދަށަށް ތިރީގައިވާ ކޯޑު އިތުރުކޮށްލައްވާށެވެ.
-
-މުޅި `unlockSystem` ފަންކްޝަން އިންނަންވާނީ މިހެންނެވެ:
-
-```javascript
-    // --- SYSTEM SECURITY & VALIDATION ---
     function unlockSystem() {
         const inputKey = document.getElementById('secKey').value.trim();
         const msg = document.getElementById('secMsg');
@@ -359,7 +341,7 @@
                 msg.innerText = "⛔ LICENSE EXPIRED! (Valid until: " + expiryDateStr + ")";
                 msg.style.color = "#ff5252";
             } else {
-                // --- SUCCESS CASE (މިތަނަށް ބަދަލު ގެންނަވާ) ---
+               
                 document.getElementById('securityOverlay').classList.add('hidden');
                 renderSlots();
 
