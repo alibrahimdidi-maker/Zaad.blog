@@ -2,11 +2,11 @@
 <html lang="dv" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>Rasfahi Royal Quran (V19.3 Ultimate Edition)</title>
+    <title>Rasfahi Royal Quran (V19.6 Ultimate Edition)</title>
     <style>
         /* --- FONTS & IMPORTS --- */
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Thaana:wght@400;700;900&family=Cinzel:wght@700;900&display=swap');
-        @import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&display=swap'); /* Arabic Font */
+        @import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&display=swap');
 
         /* Placeholder for Dynamic Font */
         @font-face {
@@ -28,6 +28,7 @@
             --cream-bg: #fdfcf0;
         }
 
+        /* FIX 1: GLOBAL BOX SIZING FOR FIT */
         * { box-sizing: border-box; -webkit-user-select: none; user-select: none; outline: none; }
         
         /* APPLY FONT GLOBALLY - PARENT */
@@ -36,15 +37,15 @@
         }
 
         body { 
-            margin: 0; 
+            margin: 0; padding: 0;
             background: #000; 
             color: var(--text-main); 
-            height: 100vh; 
+            height: 100vh; width: 100vw;
             overflow: hidden; 
             display: flex; 
         }
 
-        /* --- SIDEBAR --- */
+        /* --- SIDEBAR DESIGN --- */
         .sidebar {
             width: 480px; 
             background: linear-gradient(180deg, var(--panel-bg) 0%, #000 100%); 
@@ -66,15 +67,20 @@
 
         .content { flex: 1; overflow-y: auto; padding: 10px; display: flex; flex-direction: column; gap: 10px; }
         
+        /* PANELS */
         .panel { 
             background: rgba(255,255,255,0.03); 
             border: 1px solid #334455; 
             border-radius: var(--border-radius); 
             padding: 12px; 
+            transition: 0.3s;
         }
+        .panel:hover { border-color: #556677; }
+
         .panel-live {
             background: linear-gradient(135deg, rgba(0,26,51,0.6), rgba(0,0,0,0.8));
             border: 1px solid var(--gold-dim);
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
         }
 
         h2 { 
@@ -82,27 +88,31 @@
             border-bottom: 1px dashed #445566; padding-bottom: 4px; 
         }
         
-        label { color: #aab; font-size: 13px; display: block; margin-top: 8px; }
+        label { color: #aab; font-size: 13px; display: block; margin-top: 8px; margin-bottom: 2px; }
         
         input, select, button { 
-            width: 100%; padding: 8px; margin-top: 4px; 
+            width: 100%; padding: 8px; margin-top: 2px; 
             background: #1a222c; border: 1px solid #334455; 
             color: #fff; border-radius: 4px; 
             font-size: 14px; 
         }
         
+        /* BUTTON STYLES (DETAILED) */
         button { 
             cursor: pointer; font-weight: bold; border-color: #445566; 
             transition: all 0.2s; 
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
             background: linear-gradient(to bottom, #2a3b4c, #1a222c);
         }
-        button:hover { filter: brightness(1.2); border-color: var(--gold); }
+        button:hover { filter: brightness(1.2); border-color: var(--gold); transform: translateY(-1px); }
+        button:active { transform: translateY(1px); }
         
-        .btn-green { background: linear-gradient(to bottom, #004d00, #003300) !important; border-color: #006400 !important; }
-        .btn-red { background: linear-gradient(to bottom, #8b0000, #500000) !important; border-color: #b71c1c !important; }
-        .btn-gold { background: linear-gradient(to bottom, var(--gold), var(--gold-dim)) !important; color: #000 !important; border-color: #fff !important; }
-        .btn-blue { background: linear-gradient(to bottom, #004080, #002040) !important; border-color: #0059b3 !important; }
-        .btn-purple { background: linear-gradient(to bottom, #4a148c, #311b92) !important; border-color: #7c4dff !important; }
+        .btn-green { background: linear-gradient(to bottom, #004d00, #003300) !important; border-color: #006400 !important; color: #fff !important; }
+        .btn-red { background: linear-gradient(to bottom, #8b0000, #500000) !important; border-color: #b71c1c !important; color: #fff !important; }
+        .btn-gold { background: linear-gradient(to bottom, var(--gold), var(--gold-dim)) !important; color: #000 !important; border-color: #fff !important; font-weight: 900 !important; }
+        .btn-blue { background: linear-gradient(to bottom, #004080, #002040) !important; border-color: #0059b3 !important; color: #fff !important; }
+        .btn-purple { background: linear-gradient(to bottom, #4a148c, #311b92) !important; border-color: #7c4dff !important; color: #fff !important; }
 
         /* LANG SWITCHER */
         .lang-bar { display: flex; gap: 5px; margin-bottom: 10px; }
@@ -111,12 +121,12 @@
 
         /* MODE SWITCHER */
         .mode-switch { display: flex; background: #000; border: 1px solid #444; border-radius: 4px; overflow: hidden; margin-bottom: 10px; }
-        .mode-btn { flex: 1; padding: 10px; border: none; background: #222; color: #666; font-size: 12px; }
+        .mode-btn { flex: 1; padding: 10px; border: none; background: #222; color: #666; font-size: 12px; cursor: pointer; }
         .mode-btn.active { background: var(--royal-blue); color: var(--gold); font-weight: bold; box-shadow: inset 0 0 10px rgba(0,0,0,0.5); }
 
         /* READING MODE SWITCHER */
         .read-switch { display:flex; gap:5px; margin-bottom:10px; }
-        .read-btn { flex:1; padding:8px; border:1px solid #444; background:#111; color:#888; font-size:12px; }
+        .read-btn { flex:1; padding:8px; border:1px solid #444; background:#111; color:#888; font-size:12px; cursor: pointer; }
         .read-btn.active { background:#004d40; color:#fff; border-color:#00e676; font-weight:bold; }
 
         /* STATUS & SLOTS */
@@ -125,19 +135,20 @@
             color: var(--green-bright); text-align: center;
             font-family: 'Cinzel', serif !important; font-size: 18px; font-weight: bold;
             padding: 8px; margin-bottom: 10px; border-radius: 4px;
+            text-shadow: 0 0 10px rgba(0,230,118,0.5);
         }
 
         #slotGrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; margin-top: 5px; }
         .slot-box { 
             background: #222; padding: 10px; text-align: center; font-size: 14px; 
-            color: #555; border: 1px solid #333; border-radius: 4px;
+            color: #555; border: 1px solid #333; border-radius: 4px; transition: 0.3s;
         }
         .slot-box.active { 
             background: var(--royal-blue); color: var(--gold); border-color: var(--gold); 
-            font-weight: bold; box-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
+            font-weight: bold; box-shadow: 0 0 10px rgba(212, 175, 55, 0.3); transform: scale(1.05);
         }
 
-        /* MAIN PREVIEW AREA */
+        /* MAIN PREVIEW AREA (ADMIN MONITOR) */
         .main-view { flex: 1; background: #050505; display: flex; flex-direction: column; border-right: 1px solid #222; position: relative; }
         .mirror-header { background: #111; padding: 5px 15px; color: #666; font-size: 11px; border-bottom: 1px solid #333; display: flex; justify-content: space-between; }
         
@@ -162,7 +173,7 @@
             width: 100%; height: auto; display: block;
         }
 
-        .mirror-val { color: var(--gold); font-size: 16px; font-weight: bold; }
+        .mirror-val { color: var(--gold); font-size: 16px; font-weight: bold; border-bottom: 1px dotted #333; padding-bottom: 2px; }
         
         #gridPreview { display: none; grid-template-columns: repeat(5, 1fr); gap: 5px; width: 60%; }
         .gp-box { background: #111; border: 1px solid #444; color: #666; text-align: center; padding: 10px; font-size: 12px; }
@@ -171,9 +182,9 @@
 
         .hidden { display: none !important; }
 
-        /* SECURITY */
+        /* SECURITY OVERLAY */
         #securityOverlay { position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.95); z-index:9999; display:flex; justify-content:center; align-items:center; }
-        .sec-box { border: 2px solid var(--gold); padding: 40px; text-align: center; background: #000d1a; border-radius: 10px; width: 400px; }
+        .sec-box { border: 2px solid var(--gold); padding: 40px; text-align: center; background: #000d1a; border-radius: 10px; width: 400px; box-shadow: 0 0 50px rgba(212,175,55,0.2); }
 
         /* ROYAL FULLSCREEN BUTTON */
         #royalFSBtn {
@@ -198,9 +209,9 @@
 
     <div id="securityOverlay">
         <div class="sec-box">
-            <h1 style="color:var(--gold); font-family:'Cinzel' !important; margin:0;">ROYAL ELITE V19.3</h1>
-            <p style="color:#666; font-size:10px;">ULTIMATE PRO PLUS</p>
-            <input type="password" id="secKey" style="text-align:center; font-size:18px; margin:15px 0; padding:10px; border-color:var(--gold);" placeholder="License Key">
+            <h1 style="color:var(--gold); font-family:'Cinzel' !important; margin:0;">ROYAL ELITE V19.6</h1>
+            <p style="color:#666; font-size:10px;">ULTIMATE PRO EDITION</p>
+            <input type="password" id="secKey" style="text-align:center; font-size:18px; margin:15px 0; padding:10px; border-color:var(--gold);" placeholder="Enter License Key">
             <button class="btn-green" onclick="unlockSystem()">UNLOCK SYSTEM</button>
             <p id="secMsg" style="color:#ff5252; margin-top:10px; font-size:12px;"></p>
         </div>
@@ -208,7 +219,7 @@
 
     <div class="sidebar">
         <div class="header">
-            <h1 class="app-title" data-translate="title">RASFAHI JUDGE V19.3</h1>
+            <h1 class="app-title" data-translate="title">RASFAHI JUDGE V19.6</h1>
         </div>
 
         <div class="content">
@@ -269,10 +280,10 @@
             </div>
 
             <div class="panel">
-                <h2 data-translate="screens">2. ސްކްރީންތައް</h2>
+                <h2 data-translate="screens">2. ސްކްރީންތައް & ލައިސަންސް</h2>
                 
                 <label data-translate="lblStudent">1. ދަރިވަރު ސްކްރީން:</label>
-                <button onclick="openScreen('student')" data-translate="btnLaunchStudent">🖥️ Student Screen (Launch)</button>
+                <button onclick="openScreen('student')" class="btn-purple" data-translate="btnLaunchStudent">🖥️ Student Screen (Launch)</button>
 
                 <label data-translate="lblJudge">2. ޖަޖުންގެ ސްކްރީން (Multicast):</label>
                 <div style="display:flex; gap:5px;">
@@ -280,34 +291,38 @@
                         <option value="1">1 Judge</option>
                         <option value="2">2 Judges</option>
                         <option value="3" selected>3 Judges</option>
-                        <option value="4">4 Judges</option>
                         <option value="5">5 Judges</option>
-                        <option value="10">10 Judges</option>
                     </select>
                     <button onclick="openJudges()" class="btn-blue" data-translate="btnLaunchJudges">Open Judges 🚀</button>
                 </div>
-            </div>
-            
-            <div class="panel hidden">
-                 <label style="color:var(--gold);">Validity (Days):</label>
-                 <input type="number" id="keyDays" value="30">
-                 <button class="btn-green" onclick="generateLicense()">GENERATE KEY</button>
-                 <textarea id="outKey" readonly></textarea>
+
+                <div style="margin-top:10px; border-top:1px dashed #444; padding-top:5px;">
+                    <label style="color:var(--gold);">System Validity (Key Gen):</label>
+                    <div style="display:flex; gap:5px;">
+                        <input type="number" id="keyDays" value="30" style="width:30%;">
+                        <button class="btn-green" onclick="generateLicense()" style="font-size:10px;">GENERATE KEY</button>
+                    </div>
+                    <textarea id="outKey" readonly style="height:40px; font-size:10px; color:#aaa;"></textarea>
+                </div>
             </div>
 
             <div class="panel">
-                <h2 data-translate="settings">3. ސެޓިންގސް & ފައިލް</h2>
+                <h2 data-translate="settings">3. ސެޓިންގސް & ތީމް (Royal)</h2>
                 
-                <label data-translate="lblFont">1. ފޮންޓް (TTF) [Faruuma]:</label>
+                <label>1. Royal Theme Engine (100+):</label>
+                <select id="themeSelect" onchange="updateTheme()">
+                    </select>
+
+                <label data-translate="lblFont">2. ފޮންޓް (TTF) [Faruuma]:</label>
                 <input type="file" id="fontF" accept=".ttf, .otf">
 
-                <label data-translate="lblCSV">2. ސުވާލު ޑޭޓާ (CSV):</label>
+                <label data-translate="lblCSV">3. ސުވާލު ޑޭޓާ (CSV):</label>
                 <div style="display:flex; gap:5px;">
                     <input type="file" id="csvQ" accept=".csv">
                     <button onclick="downloadSampleCSV()" class="btn-purple" style="width:40%; font-size:10px;">Sample CSV ⬇️</button>
                 </div>
                 
-                <label data-translate="lblImg">3. އާޔަތްތަކުގެ ފޮޓޯ (Folder):</label>
+                <label data-translate="lblImg">4. އާޔަތްތަކުގެ ފޮޓޯ (Folder):</label>
                 <input type="file" id="imgF" webkitdirectory directory multiple>
                 <small id="imgStatus" style="color:#aaa; display:block;">No images loaded</small>
 
@@ -315,9 +330,7 @@
                     <div>
                         <label data-translate="lblBorder">ބޯޑަރު:</label>
                         <select id="borderStyle" onchange="syncWindows()">
-                            <option value="gold">Royal Gold</option>
-                            <option value="silver">Silver</option>
-                            <option value="pattern">Pattern</option>
+                            <option value="royal">Royal Frame</option>
                             <option value="custom">Custom Img</option>
                             <option value="none">None</option>
                         </select>
@@ -351,12 +364,12 @@
                     <div><span style="color:#666; font-size:12px;" data-translate="mBook">ފޮތް / ބައި:</span> <span id="mBook" class="mirror-val">-</span></div>
                     <div><span style="color:#666; font-size:12px;" data-translate="mSurah">ސޫރަތް:</span> <span id="mSurah" class="mirror-val">-</span></div>
                     <div><span style="color:#666; font-size:12px;" data-translate="mAyah">އާޔަތް:</span> <span id="mAyah" class="mirror-val">-</span></div>
-                    <div id="adminWarn" style="color:#ff5252; font-size:11px; margin-top:10px; display:none;">⚠️ STUDENT IS IN MEMORY MODE</div>
+                    <div id="adminWarn" style="color:#ff5252; font-size:11px; margin-top:10px; display:none; border:1px solid #ff5252; padding:5px;">⚠️ STUDENT IS IN MEMORY MODE</div>
                 </div>
                 <div class="mirror-img-area">
                     <img id="mImg" src="" style="display:none;">
                     <h2 id="mReadyText" style="display:none; color:#00e676; text-align:center; width:100%;">READY TO START</h2>
-                    <h1 id="mFinishText" style="display:none; color:#ff5252; text-align:center; width:100%; font-size:30px;">މިހާރު މި ބައިވެރިޔާގެ<br>ހުރިހައި ސުވާލެއް ނިމުނީ</h1>
+                    <h1 id="mFinishText" style="display:none; color:#ff5252; text-align:center; width:100%; font-size:24px; padding:20px;"></h1>
                 </div>
             </div>
             
@@ -369,7 +382,7 @@
 <script>
     // --- TRANSLATION DICTIONARY ---
     const i18n = {
-        title: { dv: "ރަސްފަހި ޖަޖް V19.3", ar: "القاضي رصفهي V19.3", en: "Rasfahi Judge V19.3" },
+        title: { dv: "ރަސްފަހި ޖަޖް V19.6", ar: "القاضي رصفهي V19.6", en: "Rasfahi Judge V19.6" },
         liveCtrl: { dv: "1. ލައިވް ކޮންޓްރޯލް", ar: "1. التحكم المباشر", en: "1. Live Control" },
         mJudge: { dv: "⚖️ ޖަޖު މެތަޑް (އޮޓޯ)", ar: "⚖️ وضع القاضي (تلقائي)", en: "⚖️ Judge Mode (Auto)" },
         mStudent: { dv: "🎓 ދަރިވަރު މެތަޑް (މެނުއަލް)", ar: "🎓 وضع الطالب (يدوي)", en: "🎓 Student Mode (Manual)" },
@@ -389,19 +402,68 @@
         btnLaunchStudent: { dv: "🖥️ ލޯންޗް (Student)", ar: "🖥️ فتح (الطالب)", en: "🖥️ Launch (Student)" },
         lblJudge: { dv: "2. ޖަޖުންގެ ސްކްރީން:", ar: "2. شاشة القاضي:", en: "2. Judge Screen:" },
         btnLaunchJudges: { dv: "Open Judges 🚀", ar: "فتح القضاة 🚀", en: "Open Judges 🚀" },
-        settings: { dv: "3. ސެޓިންގސް & ފައިލް", ar: "3. الإعدادات والملفات", en: "3. Settings & Files" },
-        lblFont: { dv: "1. ފޮންޓް (TTF):", ar: "1. الخط (TTF):", en: "1. Font (TTF):" },
-        lblCSV: { dv: "2. ސުވާލު ޑޭޓާ (CSV):", ar: "2. بيانات الأسئلة (CSV):", en: "2. Question Data (CSV):" },
-        lblImg: { dv: "3. އާޔަތްތަކުގެ ފޮޓޯ:", ar: "3. صور الآيات:", en: "3. Ayah Images:" },
+        settings: { dv: "3. ސެޓިންގސް & ތީމް", ar: "3. الإعدادات والملفات", en: "3. Settings & Themes" },
+        lblFont: { dv: "2. ފޮންޓް (TTF):", ar: "2. الخط (TTF):", en: "2. Font (TTF):" },
+        lblCSV: { dv: "3. ސުވާލު ޑޭޓާ (CSV):", ar: "3. بيانات الأسئلة (CSV):", en: "3. Question Data (CSV):" },
+        lblImg: { dv: "4. އާޔަތްތަކުގެ ފޮޓޯ:", ar: "4. صور الآيات:", en: "4. Ayah Images:" },
         lblBorder: { dv: "ބޯޑަރު:", ar: "الإطار:", en: "Border:" },
         lblQCount: { dv: "ސުވާލުގެ ޢަދަދު:", ar: "عدد الأسئلة:", en: "Question Count:" },
         qDetail: { dv: "ސުވާލު ތަފްޞީލް", ar: "تفاصيل السؤال", en: "Question Details" },
         mBook: { dv: "ފޮތް / ބައި:", ar: "الكتاب / الجزء:", en: "Book/Part:" },
         mSurah: { dv: "ސޫރަތް:", ar: "سورة:", en: "Surah:" },
-        mAyah: { dv: "އާޔަތް:", ar: "آية:", en: "Ayah:" }
+        mAyah: { dv: "އާޔަތް:", ar: "آية:", en: "Ayah:" },
+        msgFinished: { 
+            dv: "މިހާރު ކަނޑައެޅިފައިވާ މިންވަރަށް ސުވާލުކޮށް ނިމިއްޖެ!", 
+            ar: "تم الانتهاء من طرح الأسئلة المحددة!", 
+            en: "Questioning complete for the current limit!" 
+        }
     };
 
     let currentLang = 'dv';
+    let themeList = [];
+
+    // --- 1. THEME ENGINE (Generates 100+ Royal Variations) ---
+    function initThemes() {
+        // Base Royal Colors
+        const bases = [
+            {n:"Royal Blue", c1:"#001a33", c2:"#000d1a", txt:"#ffffff"},
+            {n:"Emerald Green", c1:"#002b15", c2:"#001a0d", txt:"#e6ffe6"},
+            {n:"Burgundy Red", c1:"#2a0000", c2:"#1a0000", txt:"#ffe6e6"},
+            {n:"Midnight Black", c1:"#111111", c2:"#000000", txt:"#ffffff"},
+            {n:"Imperial Purple", c1:"#1a0033", c2:"#0d001a", txt:"#f2e6ff"}
+        ];
+        // Accents (Borders/Highlights)
+        const accents = [
+            {n:"Gold", c:"#D4AF37", b:"double"},
+            {n:"Silver", c:"#C0C0C0", b:"ridge"},
+            {n:"Bronze", c:"#cd7f32", b:"groove"},
+            {n:"White Gold", c:"#f5f5dc", b:"solid"}
+        ];
+
+        const sel = document.getElementById('themeSelect');
+        let count = 1;
+        
+        bases.forEach(base => {
+            accents.forEach(acc => {
+                // Generate variants for each combination to reach high count
+                for(let i=1; i<=5; i++) { 
+                     let variantName = i === 1 ? "Standard" : (i===2 ? "Dark" : (i===3 ? "Deep" : (i===4 ? "Vivid" : "Classic")));
+                     let themeObj = {
+                        name: `Theme ${count}: ${base.n} & ${acc.n} (${variantName})`,
+                        bg1: base.c1, bg2: base.c2,
+                        accent: acc.c, borderType: acc.b, text: base.txt,
+                        id: count
+                    };
+                    themeList.push(themeObj);
+                    let opt = document.createElement('option');
+                    opt.value = count-1;
+                    opt.innerText = themeObj.name;
+                    sel.appendChild(opt);
+                    count++;
+                }
+            });
+        });
+    }
 
     function setLang(lang) {
         currentLang = lang;
@@ -420,6 +482,11 @@
             }
         });
 
+        // Update Admin End Message
+        if(i18n.msgFinished[lang]) {
+            document.getElementById('mFinishText').innerHTML = i18n.msgFinished[lang].replace(/\n/g, '<br>');
+        }
+
         // SYNC TO CHILDREN
         syncWindows();
     }
@@ -428,7 +495,7 @@
     function toggleAppFullscreen() {
         if (!document.fullscreenElement) {
             document.documentElement.requestFullscreen().catch(err => {
-                alert(`Error attempting to enable full-screen mode: ${err.message} (${err.name})`);
+                alert(`Error: ${err.message}`);
             });
         } else {
             document.exitFullscreen();
@@ -452,7 +519,8 @@
         windows: { student: null, judges: [] },
         session: { slots: [], selectionIDs: [], activeIndex: -1, phase: 'idle', light: false },
         mode: 'judge', readingMode: 'mushaf',
-        grid: { map: {}, visible: false, taken: [] } 
+        grid: { map: {}, visible: false, taken: [] },
+        theme: null
     };
 
     // --- SYSTEM ---
@@ -490,6 +558,12 @@
         updateMirror(); syncWindows();
     }
 
+    function updateTheme() {
+        const idx = document.getElementById('themeSelect').value;
+        state.theme = themeList[idx];
+        syncWindows();
+    }
+
     function downloadSampleCSV() {
         const csvContent = "data:text/csv;charset=utf-8,ID,Image,Book,Surah,Page,StartAyah,EndAyah\n1,1.png,Juz 1,Al-Fatiha,1,1,7\n2,002.png,Juz 1,Al-Baqarah,2,1,5";
         const link = document.createElement("a");
@@ -523,8 +597,6 @@
                 const name = f.name.toLowerCase();
                 state.pImages[name] = url; 
                 state.pImages[name.split('.')[0]] = url; 
-                const intVal = parseInt(name.split('.')[0]); 
-                if(!isNaN(intVal)) state.pImages[intVal] = url; 
                 count++;
             }
         }
@@ -793,6 +865,7 @@
 
         if(state.session.phase === 'finished') {
             mFin.style.display = 'block';
+            mFin.innerHTML = i18n.msgFinished[currentLang]; // Update text dynamically
             document.getElementById('mirrorStatus').innerText = "FINISHED";
             return;
         }
@@ -829,15 +902,17 @@
         }
     }
 
-    // --- TEMPLATE ---
+    // --- TEMPLATE GENERATOR (The "Child" Window Logic) ---
     function getTemplate() {
         // Embed Font Data
         const fontFace = state.fontData ? `@font-face { font-family: 'AppFont'; src: url('${state.fontData}'); }` : '';
         const bStyle = document.getElementById('borderStyle').value;
-        let borderCSS = "border: 5px solid #333;"; 
-        if(bStyle === 'gold') borderCSS = "border: 10px double #D4AF37; box-shadow: 0 0 30px rgba(212,175,55,0.5);";
-        else if(bStyle === 'pattern') borderCSS = "border: 15px solid transparent; border-image: linear-gradient(to right, #D4AF37, #000, #D4AF37) 1;";
-        else if(bStyle === 'custom' && state.borderData) borderCSS = `border: 20px solid transparent; border-image: url('${state.borderData}') 30 stretch;`;
+        const th = state.theme || themeList[0]; // Use selected theme or default
+
+        // BORDER LOGIC - Uses Viewport Units (vh) for auto scaling
+        let borderCSS = `border: 1.5vmin ${th.borderType} ${th.accent}; box-shadow: 0 0 5vmin ${th.accent}80;`;
+        if(bStyle === 'custom' && state.borderData) borderCSS = `border: 4vmin solid transparent; border-image: url('${state.borderData}') 30 stretch;`;
+        if(bStyle === 'none') borderCSS = "border:none;";
 
         return `
         <!DOCTYPE html>
@@ -848,123 +923,159 @@
                 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Thaana:wght@400;700&display=swap');
                 @import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&display=swap');
 
-                /* DYNAMIC FONT CLASSES */
                 body.lang-dv * { font-family: 'AppFont', 'Faruuma', 'Waheed', 'Noto Sans Thaana', sans-serif !important; }
                 body.lang-ar * { font-family: 'Amiri', serif !important; }
                 body.lang-en * { font-family: sans-serif !important; direction: ltr; }
 
-                body { margin:0; height:100vh; overflow:hidden; color:#fff; display:flex; background:#000; }
+                /* DYNAMIC THEME VARIABLES */
+                :root {
+                    --bg-1: ${th.bg1}; --bg-2: ${th.bg2};
+                    --accent: ${th.accent}; --border-type: ${th.borderType};
+                    --txt-col: ${th.text};
+                }
                 
-                #idleScreen { display:flex; width:100%; height:100%; flex-direction:column; align-items:center; justify-content:center; background: radial-gradient(circle, #001a33, #000); }
+                /* FIX 2: RESET AND FULLSCREEN FIX */
+                * { box-sizing: border-box; }
+                body { 
+                    margin:0; padding: 0;
+                    width: 100vw; height: 100vh; 
+                    overflow:hidden; 
+                    color:var(--txt-col); 
+                    display:flex; 
+                    background: #000;
+                }
+
+                /* 1. FULL SCREEN ROYAL FRAME (Fixed Overlay) */
+                #royalFrame {
+                    position: fixed; top:0; left:0; width:100%; height:100%;
+                    pointer-events: none; z-index: 9999;
+                    border: 2.5vmin solid var(--accent); /* Uses vmin for auto scaling */
+                    box-shadow: inset 0 0 10vmin rgba(0,0,0,0.9);
+                }
+
+                /* SCREENS */
+                #idleScreen { display:flex; width:100%; height:100%; flex-direction:column; align-items:center; justify-content:center; background: radial-gradient(circle, var(--bg-1), var(--bg-2)); }
                 
-                #gridScreen { display:none; width:100%; height:100%; align-items:center; justify-content:center; flex-direction:column; background:#050505; }
-                #gridContainer { display:grid; grid-template-columns:repeat(5, 1fr); gap:20px; width:80%; }
+                #gridScreen { display:none; width:100%; height:100%; align-items:center; justify-content:center; flex-direction:column; background: radial-gradient(circle, var(--bg-1), #000); }
+                #gridContainer { 
+                    display:grid; grid-template-columns: repeat(5, 1fr); grid-template-rows: repeat(4, 1fr);
+                    gap: 1.5vmin; width: 85vw; height: 75vh; 
+                }
                 .grid-btn { 
-                    aspect-ratio: 1; background: linear-gradient(135deg, #D4AF37, #8a6e15); border: 2px solid #fff; border-radius: 10px;
-                    color: #000; font-size: 3vw; font-weight: bold; cursor: pointer; transition: 0.3s; display:flex; justify-content:center; align-items:center;
-                    box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+                    width: 100%; height: 100%;
+                    background: linear-gradient(135deg, var(--accent), var(--bg-1)); 
+                    border: 0.3vmin solid #fff; border-radius: 1vmin;
+                    color: #fff; text-shadow: 0 2px 2px #000;
+                    font-size: 5vmin; font-weight: bold; cursor: pointer; transition: 0.3s; 
+                    display:flex; justify-content:center; align-items:center;
+                    box-shadow: 0 1vmin 2vmin rgba(0,0,0,0.5);
                 }
                 .grid-btn:hover { transform: scale(1.05); filter: brightness(1.2); }
                 .grid-btn.taken { opacity: 0.1; pointer-events: none; filter: grayscale(1); }
 
-                /* WAIT SCREEN */
-                #waitScreen { display:none; width:100%; height:100%; flex-direction:column; align-items:center; justify-content:center; background:#000; }
-                
-                /* FINISH SCREEN */
-                #finishScreen { display:none; width:100%; height:100%; flex-direction:column; align-items:center; justify-content:center; background: radial-gradient(circle, #000d1a, #000); position:absolute; top:0; left:0; z-index:999; }
-
-                #readScreen { display:none; width:100%; height:100%; flex-direction:column; }
+                #readScreen { display:none; width:100%; height:100%; flex-direction:column; background: radial-gradient(circle, var(--bg-1), var(--bg-2)); }
                 
                 #topBar { 
-                    height: 10%; width: 100%; 
-                    background: linear-gradient(to bottom, #001a33, #000d1a); 
-                    border-bottom: 2px solid #D4AF37;
+                    height: 12vh; width: 100%; 
+                    background: linear-gradient(to bottom, var(--bg-1), #000); 
+                    border-bottom: 0.5vmin solid var(--accent);
                     display: flex; align-items: center; justify-content: center;
-                    box-shadow: 0 5px 15px rgba(0,0,0,0.8); z-index: 10;
+                    box-shadow: 0 1vh 2vh rgba(0,0,0,0.8); z-index: 10;
                 }
                 #topStatusText { 
-                    color: #D4AF37; font-size: 2.5em; font-weight: bold; 
-                    text-shadow: 0 2px 10px rgba(0,0,0,1); letter-spacing: 1px;
+                    color: var(--accent); font-size: 4vmin; font-weight: bold; 
+                    text-shadow: 0 0.5vmin 1vmin rgba(0,0,0,1);
                 }
 
-                #contentArea { display: flex; height: 90%; width: 100%; }
+                #contentArea { display: flex; height: 88vh; width: 100%; padding: 2vmin; box-sizing: border-box; }
 
                 #infoPanel { 
-                    width: 25%; background: linear-gradient(180deg, #050505, #000); 
-                    border-left: 4px solid #D4AF37; display: flex; flex-direction: column; 
-                    box-shadow: -10px 0 30px rgba(0,0,0,0.8);
+                    width: 20vw; background: rgba(0,0,0,0.5); 
+                    border: 0.3vmin solid var(--accent); border-radius: 1vmin;
+                    display: flex; flex-direction: column; margin-left: 1vw;
                 }
-                .current-details { padding: 20px; border-bottom: 1px solid #333; height: 40%; display:flex; flex-direction:column; justify-content:center; }
-                .val { color: #fff; font-size: 2em; font-weight:bold; margin-bottom: 10px; display:block; line-height:1.2; }
-                .lbl { color: #00e676; font-size: 1em; text-transform:uppercase; margin-bottom: 2px; display:block;}
+                .current-details { padding: 2vh; border-bottom: 1px solid var(--accent); }
+                .val { font-size: 3vmin; font-weight:bold; display:block; color: #fff; }
+                .lbl { color: var(--accent); font-size: 2vmin; }
 
-                .questions-list { flex: 1; overflow-y: auto; padding: 15px; background: rgba(255,255,255,0.02); }
+                .questions-list { flex: 1; overflow-y: auto; padding: 1vmin; }
                 .q-item { 
-                    padding: 15px; margin-bottom: 10px; border-radius: 8px; 
-                    border: 1px solid #333; background: #111; color: #888;
-                    transition: 0.3s; display: flex; flex-direction: column;
+                    padding: 1.5vmin; margin-bottom: 1vmin; border-radius: 1vmin; 
+                    border: 1px solid #444; background: rgba(0,0,0,0.6);
+                    transition: 0.3s;
+                    font-size: 2vmin;
                 }
                 .q-item.active { 
-                    border-color: #D4AF37; background: linear-gradient(90deg, #222, #000); 
-                    color: #fff; box-shadow: 0 0 10px rgba(212,175,55,0.2); transform: scale(1.02);
+                    border-color: var(--accent); background: linear-gradient(90deg, var(--bg-1), #000); 
                 }
-                .q-item-num { font-size: 0.9em; color: #00e676; margin-bottom: 5px; font-weight:bold; }
-                .q-item-detail { font-size: 1.1em; font-weight: bold; color:#fff; }
-                .q-item-sub { font-size: 0.8em; color: #888; margin-top:3px; }
-                
-                #mainArea { width: 75%; display: flex; justify-content: center; align-items: center; background: #000; position: relative; transition: background 0.5s; }
-                
-                /* ROYAL GREEN BACKGROUND CLASS */
-                .royal-green-bg { background: radial-gradient(circle, #00331a, #001a0d) !important; }
 
-                .scroll-wrap { width: 90%; height: 90%; background: #fff; overflow-y: auto; ${borderCSS} display:block; }
-                
-                .scroll-wrap img { width: 100%; height: auto; display: block; }
-
-                #memoryText { display:none; color: #D4AF37; font-size: 4vw; text-shadow: 0 0 20px #D4AF37; text-align:center; padding:20px; margin-top: 20%; }
-
-                /* LIGHT MOVED TO TOP CORNER */
-                #greenLight { position:fixed; top:20px; right:20px; width:80px; height:80px; border-radius:50%; background:#222; border:4px solid #444; transition:0.3s; z-index: 100; }
-                #greenLight.on { background:#00e676; border-color:#fff; box-shadow:0 0 80px #00e676; }
-
-                /* FULLSCREEN OVERLAY */
-                #fsOverlay {
-                    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-                    background: rgba(0,0,0,0.85); z-index: 9999;
-                    display: flex; justify-content: center; align-items: center; cursor: pointer;
+                /* 2. RESPONSIVE LANDSCAPE CARD STYLE */
+                #mainArea { 
+                    flex: 1; display: flex; justify-content: center; align-items: center; 
+                    perspective: 1000px;
                 }
-                .fs-btn {
-                    padding: 20px 40px; border: 3px solid #D4AF37;
-                    color: #D4AF37; font-size: 2em; font-weight: bold;
-                    background: rgba(0,0,0,0.8); border-radius: 10px;
-                    box-shadow: 0 0 30px rgba(212,175,55,0.5);
-                    transition: 0.2s;
+                
+                /* FIX 3: SCROLLABLE PORTRAIT FIX (Use Block + Fixed Height + Overflow Auto) */
+                .royal-card {
+                    width: 75vw; /* Responsive Width */
+                    height: 80vh; /* Fixed Height relative to screen */
+                    background: #fff; 
+                    ${borderCSS}
+                    border-radius: 1vmin;
+                    /* KEY FIX FOR SCROLLING */
+                    overflow-y: auto; 
+                    overflow-x: hidden;
+                    display: block; /* Don't flex-center vertically */
+                    position: relative;
+                    box-shadow: 0 2vmin 5vmin rgba(0,0,0,0.7);
                 }
-                .fs-btn:hover { background: #D4AF37; color: #000; }
+                
+                /* FIX 3 CONT: IMAGE SCALING */
+                .royal-card img { 
+                    width: 100%; /* Force width to fit container */
+                    height: auto; /* Allow height to expand naturally */
+                    display: block; 
+                    margin: 0;
+                }
+                
+                /* Memory Mode Styling */
+                .royal-card.memory-mode { 
+                    background: transparent; border: none; box-shadow: none; 
+                    display: flex; justify-content: center; align-items: center; /* Center text */
+                }
+
+                #memoryText { display:none; color: var(--accent); font-size: 5vw; text-shadow: 0 0 2vh var(--accent); text-align:center; }
+                
+                #finishScreen { display:none; width:100%; height:100%; flex-direction:column; align-items:center; justify-content:center; background: #000; }
+                #waitScreen { display:none; width:100%; height:100%; flex-direction:column; align-items:center; justify-content:center; background: #000; }
+
+                /* Fullscreen Button Overlay */
+                #fsOverlay { position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:99999; display:flex; justify-content:center; align-items:center; }
+                .fs-btn { border: 2px solid var(--accent); padding: 20px; color: var(--accent); background: #000; cursor: pointer; font-size: 20px; border-radius: 10px; }
             </style>
         </head>
         <body oncontextmenu="return false;" class="lang-dv">
-            <div id="fsOverlay" onclick="goFullscreen()">
-                <div class="fs-btn">CLICK TO FULLSCREEN</div>
-            </div>
+            <div id="fsOverlay" onclick="goFullscreen()"><div class="fs-btn">CLICK TO START (FULLSCREEN)</div></div>
+            
+            ${bStyle === 'royal' ? '<div id="royalFrame"></div>' : ''}
 
             <div id="idleScreen">
-                <h1 style="font-size:5vw; color:#D4AF37; text-shadow:0 0 20px #D4AF37;">RASFAHI</h1>
+                <h1 style="font-size:8vw; color:var(--accent); text-shadow:0 0 3vh var(--accent);">RASFAHI</h1>
             </div>
 
             <div id="gridScreen">
-                <h1 id="gridTitle" style="color:#D4AF37; margin-bottom:20px;">ސުވާލު ނަންބަރު ނަގާ</h1>
+                <h1 id="gridTitle" style="color:var(--accent); font-size: 5vh;">ސުވާލު ނަންބަރު ނަގާ</h1>
                 <div id="gridContainer"></div>
             </div>
 
             <div id="waitScreen">
-                <h1 id="waitHead" style="color:#00e676; font-size:3vw;">SELECTION COMPLETE</h1>
-                <h2 id="waitSub" style="color:#fff;">Waiting for Judge to Start...</h2>
-                <div id="waitList" style="color:#D4AF37; margin-top:20px; font-size:2vw;"></div>
+                <h1 id="waitHead" style="color:var(--accent); font-size: 5vh;">SELECTION COMPLETE</h1>
+                <h2 id="waitSub" style="color:#fff; font-size: 3vh;">Waiting...</h2>
+                <div id="waitList" style="color:var(--accent); font-size:3vh; margin-top:20px;"></div>
             </div>
 
             <div id="finishScreen">
-                <h1 id="finText" style="color:#D4AF37; font-size:4vw; text-shadow:0 0 30px #D4AF37; text-align:center; line-height:1.5;">މިހާރު މި ބައިވެރިޔާގެ<br>ހުރިހައި ސުވާލެއް ނިމުނީ</h1>
+                <h1 id="finText" style="color:var(--accent); text-shadow:0 0 3vh var(--accent); text-align:center; font-size: 6vw;"></h1>
             </div>
 
             <div id="readScreen">
@@ -978,23 +1089,19 @@
                         <div class="questions-list" id="qListContainer"></div>
                     </div>
                     <div id="mainArea">
-                        <div class="scroll-wrap" id="mainScroll">
-                            <img id="qImg" src="" style="width:100%;">
-                            <h1 id="memoryText">(ނުބަލައި ކިޔެވުމުގެ ބައިގެ ކިޔެވުން)</h1>
+                        <div class="royal-card" id="mainScroll">
+                            <img id="qImg" src="">
+                            <h1 id="memoryText"></h1>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div id="greenLight"></div>
-
             <script>
-                // Child Translations
                 const childI18n = {
                     gridTitle: { dv: "ސުވާލު ނަންބަރު ނަގާ", ar: "اختر رقم السؤال", en: "Pick Question Number" },
                     waitHead: { dv: "ސުވާލު ނެގުން ނިމިއްޖެ", ar: "اكتمل الاختيار", en: "Selection Complete" },
                     waitSub: { dv: "ޖަޖުން ފަށަންދެން މަޑުކުރައްވާ", ar: "بانتظار بدء القاضي", en: "Waiting for Judge..." },
-                    finText: { dv: "މިހާރު މި ބައިވެރިޔާގެ<br>ހުރިހައި ސުވާލެއް ނިމުނީ", ar: "انتهت أسئلة هذا المشارك", en: "Participant Finished All Questions" },
                     memText: { dv: "(ނުބަލައި ކިޔެވުމުގެ ބައިގެ ކިޔެވުން)", ar: "(تلاوة عن ظهر قلب)", en: "(Memory Recitation Mode)" },
                     lblSurah: { dv: "ސޫރަތް:", ar: "سورة:", en: "Surah:" },
                     lblAyah: { dv: "އާޔަތް:", ar: "آية:", en: "Ayah:" },
@@ -1002,7 +1109,12 @@
                     pagePrefix: { dv: "ޞަފްޙާ", ar: "صفحة", en: "Pg" },
                     statFirst: { dv: "މިހާރު ތިޔަ ކިޔަވަނީ ފުރަތަމަ ސުވާލު", ar: "أنت تقرأ السؤال الأول", en: "Reading First Question" },
                     statLast: { dv: "މިއީ އެންމެ ފަހު ސުވާލު", ar: "هذا هو السؤال الأخير", en: "This is the Last Question" },
-                    statMid: { dv: "މިހާރު ތިޔަ ކިޔަވަނީ %N ވަނަ ސުވާލު", ar: "أنت تقرأ السؤال رقم %N", en: "Reading Question #%N" }
+                    statMid: { dv: "މިހާރު ތިޔަ ކިޔަވަނީ %N ވަނަ ސުވާލު", ar: "أنت تقرأ السؤال رقم %N", en: "Reading Question #%N" },
+                    msgFinished: { 
+                        dv: "މިހާރު ކަނޑައެޅިފައިވާ މިންވަރަށް ސުވާލުކޮށް ނިމިއްޖެ!", 
+                        ar: "تم الانتهاء من طرح الأسئلة المحددة!", 
+                        en: "Questioning complete for the current limit!" 
+                    }
                 };
 
                 function goFullscreen() {
@@ -1010,80 +1122,48 @@
                     document.getElementById('fsOverlay').style.display = 'none';
                 }
 
-                // CHILD SECURITY
-                document.addEventListener('keydown', function(e) {
-                    if(e.keyCode == 123) { e.preventDefault(); return false; } 
-                    if(e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) { e.preventDefault(); return false; }
-                    if(e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) { e.preventDefault(); return false; }
-                });
-
                 window.updateState = function(d) {
-                    const isJudge = window.isJudge === true;
-                    
-                    // 1. UPDATE LANGUAGE & FONT
                     const lang = d.currentLang || 'dv';
                     document.body.className = 'lang-' + lang;
                     document.documentElement.dir = (lang === 'en') ? 'ltr' : 'rtl';
                     document.documentElement.lang = lang;
 
-                    // Update Static Text
+                    // Update Text
                     document.getElementById('gridTitle').innerText = childI18n.gridTitle[lang];
                     document.getElementById('waitHead').innerText = childI18n.waitHead[lang];
                     document.getElementById('waitSub').innerText = childI18n.waitSub[lang];
-                    document.getElementById('finText').innerHTML = childI18n.finText[lang];
+                    document.getElementById('finText').innerHTML = childI18n.msgFinished[lang].replace(/\\n/g, '<br>');
                     document.getElementById('memoryText').innerText = childI18n.memText[lang];
-
-                    // Update Labels
                     document.querySelectorAll('[data-key]').forEach(el => {
                         const k = el.getAttribute('data-key');
                         if(childI18n[k]) el.innerText = childI18n[k][lang];
                     });
 
-                    // 2. VIEW LOGIC
-                    const idle = document.getElementById('idleScreen');
-                    const grid = document.getElementById('gridScreen');
-                    const wait = document.getElementById('waitScreen');
-                    const read = document.getElementById('readScreen');
-                    const finish = document.getElementById('finishScreen');
-                    const light = document.getElementById('greenLight');
-                    const mainArea = document.getElementById('mainArea');
-                    const mainScroll = document.getElementById('mainScroll');
-
-                    // Reset all
-                    idle.style.display = 'none'; grid.style.display = 'none'; 
-                    wait.style.display = 'none'; read.style.display = 'none';
-                    finish.style.display = 'none';
+                    // Hide All
+                    ['idleScreen','gridScreen','waitScreen','readScreen','finishScreen'].forEach(id=>document.getElementById(id).style.display='none');
                     
-                    // Reset Background
-                    mainArea.classList.remove('royal-green-bg');
-                    mainScroll.style.background = '#fff';
+                    const card = document.getElementById('mainScroll');
 
                     if(d.grid.visible) {
-                        grid.style.display = 'flex';
+                        document.getElementById('gridScreen').style.display = 'flex';
                         const gc = document.getElementById('gridContainer');
                         gc.innerHTML = '';
                         for(let i=1; i<=20; i++) {
                             let b = document.createElement('div');
-                            let bContent = i;
-                            // Convert number if arabic
-                            if(lang === 'ar' || lang === 'dv') { /* Optional: Convert digits if needed, currently leaving as Hindu-Arabic numerals for clarity */ }
-                            
                             b.className = 'grid-btn ' + (d.grid.taken.includes(i) ? 'taken' : '');
-                            b.innerText = bContent;
+                            b.innerText = i;
                             b.setAttribute('onclick', 'window.opener.handleGridClick('+i+')');
                             gc.appendChild(b);
                         }
                     } else if(d.phase === 'ready') {
-                        wait.style.display = 'flex';
-                        const sl = d.slots.map(s => s.id).join(', ');
-                        document.getElementById('waitList').innerText = (lang==='en'?"Questions: ":"ސުވާލު: ") + sl;
+                         document.getElementById('waitScreen').style.display = 'flex';
+                         document.getElementById('waitList').innerText = (lang==='en'?"Q: ":"ސުވާލު: ") + d.slots.map(s => s.id).join(', ');
                     } else if(d.phase === 'finished') {
-                         finish.style.display = 'flex';
+                         document.getElementById('finishScreen').style.display = 'flex';
                     } else if(d.phase === 'active') {
-                        read.style.display = 'flex';
+                        document.getElementById('readScreen').style.display = 'flex';
                         const q = d.slots[d.activeIndex];
                         
-                        // Top Text Logic
                         const statusTxt = document.getElementById('topStatusText');
                         const currentNum = d.activeIndex + 1;
                         if(currentNum === 1) statusTxt.innerText = childI18n.statFirst[lang];
@@ -1094,20 +1174,15 @@
                             const img = document.getElementById('qImg');
                             const memTxt = document.getElementById('memoryText');
                             
-                            if(d.readingMode === 'memory' && !isJudge) {
+                            if(d.readingMode === 'memory') {
+                                card.classList.add('memory-mode');
                                 img.style.display = 'none';
                                 memTxt.style.display = 'block';
-                                mainArea.classList.add('royal-green-bg');
-                                mainScroll.style.background = 'transparent'; 
-                                mainScroll.style.border = 'none';
-                                mainScroll.style.boxShadow = 'none';
                             } else {
+                                card.classList.remove('memory-mode');
                                 memTxt.style.display = 'none';
                                 if(q.src) { img.src = q.src; img.style.display = 'block'; }
-                                else { img.style.display = 'none'; }
-                                mainScroll.style.background = '#fff';
                             }
-                            
                             document.getElementById('dSurah').innerText = q.surah;
                             document.getElementById('dAyah').innerText = q.start + ' - ' + q.end;
                         }
@@ -1118,22 +1193,13 @@
                             if(!slot) return; 
                             let item = document.createElement('div');
                             item.className = 'q-item ' + (idx === d.activeIndex ? 'active' : '');
-                            
-                            item.innerHTML = \`
-                                <div class="q-item-num">\${childI18n.qPrefix[lang]} \${idx+1}</div>
-                                <div class="q-item-detail">\${slot.surah} (\${slot.start}-\${slot.end})</div>
-                                <div class="q-item-sub">\${slot.book} | \${childI18n.pagePrefix[lang]}: \${slot.page}</div>
-                            \`;
+                            item.innerHTML = \`<div style="color:#00e676;">\${childI18n.qPrefix[lang]} \${idx+1}</div>
+                                <div style="color:#fff; font-weight:bold;">\${slot.surah}</div>\`;
                             listC.appendChild(item);
                         });
                     } else {
-                        idle.style.display = 'flex';
+                        document.getElementById('idleScreen').style.display = 'flex';
                     }
-
-                    light.className = d.light ? 'on' : '';
-                    
-                    // Adjust light position for LTR if needed (Right is standard for us, but if EN prefers left):
-                    // Current CSS: right: 20px; top: 20px; (Good for both usually)
                 }
             <\/script>
         </body>
@@ -1146,13 +1212,9 @@
             if(state.windows.student) state.windows.student.close();
             state.windows.student = window.open("", "Student", "width=1280,height=720");
             state.windows.student.document.write(html);
-            // MARK AS STUDENT
-            state.windows.student.isJudge = false; 
         } else {
-            // GENERIC SINGLE JUDGE
             let w = window.open("", "JudgeGeneric", "width=800,height=600");
             w.document.write(html);
-            w.isJudge = true;
             state.windows.judges.push(w);
         }
         setTimeout(syncWindows, 500);
@@ -1160,14 +1222,11 @@
 
     function openJudges() {
         const count = parseInt(document.getElementById('judgeCount').value);
-        // Close existing
         state.windows.judges.forEach(w => w.close());
         state.windows.judges = [];
-        // Open new with SPECIFIC NAMES (Judge 1, Judge 2...) to prevent overwriting
         for(let i=0; i<count; i++) {
             let w = window.open("", `Judge_${i+1}`, "width=800,height=600");
             w.document.write(getTemplate());
-            w.isJudge = true; // MARK AS JUDGE
             state.windows.judges.push(w);
         }
         setTimeout(syncWindows, 500);
@@ -1178,13 +1237,16 @@
             slots: state.session.slots, activeIndex: state.session.activeIndex,
             phase: state.session.phase, light: state.session.light,
             grid: state.grid, readingMode: state.readingMode,
-            currentLang: currentLang // PASS LANGUAGE
+            currentLang: currentLang
         };
         const send = w => { if(w && !w.closed && w.updateState) w.updateState(packet); };
         send(state.windows.student);
         state.windows.judges.forEach(w => send(w));
     }
     
+    // INITIALIZATION
+    initThemes();
+    state.theme = themeList[0];
     setMode('judge');
     renderSlots();
 </script>
