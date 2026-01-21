@@ -2,7 +2,7 @@
 <html lang="dv" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>Rasfahi Royal Quran (V15.0 Ultimate Pro)</title>
+    <title>Rasfahi Royal Quran (V16.0 Platinum)</title>
     <style>
         /* --- FONTS & IMPORTS --- */
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Thaana:wght@400;700;900&family=Cinzel:wght@700;900&display=swap');
@@ -16,6 +16,8 @@
         :root {
             --royal-blue: #001a33;
             --royal-blue-dark: #000d1a;
+            --royal-green: #00331a; /* New Royal Green */
+            --royal-green-dark: #001a0d;
             --gold: #D4AF37;
             --gold-dim: #aa8c2c;
             --green: #006400;
@@ -129,7 +131,7 @@
             font-weight: bold; box-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
         }
 
-        /* MAIN PREVIEW AREA (FIXED BLURRINESS) */
+        /* MAIN PREVIEW AREA */
         .main-view { flex: 1; background: #050505; display: flex; flex-direction: column; border-right: 1px solid #222; }
         .mirror-header { background: #111; padding: 5px 15px; color: #666; font-size: 11px; border-bottom: 1px solid #333; display: flex; justify-content: space-between; }
         
@@ -139,26 +141,20 @@
             display: flex; justify-content: center; align-items: center;
         }
         
-        .mirror-content { width: 98%; height: 98%; display: flex; gap: 10px; } /* Increased size */
+        .mirror-content { width: 98%; height: 98%; display: flex; gap: 10px; }
         .mirror-info { width: 30%; background: rgba(0,0,0,0.8); border-left: 3px double var(--gold); padding: 15px; display: flex; flex-direction: column; gap: 15px; overflow-y:auto; }
         .mirror-img-area { 
             width: 70%; background: #000; display: flex; justify-content: center; align-items: center; 
             border: 1px solid #333; position: relative; 
         }
         .mirror-img-area img {
-            width: auto; height: auto; max-width: 100%; max-height: 100%; object-fit: contain; /* FIXED BLUR */
+            width: auto; height: auto; max-width: 100%; max-height: 100%; object-fit: contain;
         }
 
         .mirror-val { color: var(--gold); font-size: 16px; font-weight: bold; }
         
-        /* Grid Preview in Admin */
-        #gridPreview {
-            display: none; grid-template-columns: repeat(5, 1fr); gap: 5px; width: 60%;
-        }
-        .gp-box {
-            background: #111; border: 1px solid #444; color: #666; 
-            text-align: center; padding: 10px; font-size: 12px;
-        }
+        #gridPreview { display: none; grid-template-columns: repeat(5, 1fr); gap: 5px; width: 60%; }
+        .gp-box { background: #111; border: 1px solid #444; color: #666; text-align: center; padding: 10px; font-size: 12px; }
         .gp-box.taken { background: #330000; color: #555; border-color: #500; }
         .gp-box.selected { background: var(--gold); color: #000; border-color: #fff; font-weight:bold; }
 
@@ -177,8 +173,8 @@
 
     <div id="securityOverlay">
         <div class="sec-box">
-            <h1 style="color:var(--gold); font-family:'Cinzel' !important; margin:0;">ROYAL ELITE V15</h1>
-            <p style="color:#666; font-size:10px;">PRO WORKFLOW EDITION</p>
+            <h1 style="color:var(--gold); font-family:'Cinzel' !important; margin:0;">ROYAL ELITE V16</h1>
+            <p style="color:#666; font-size:10px;">PLATINUM EDITION</p>
             <input type="password" id="secKey" style="text-align:center; font-size:18px; margin:15px 0; padding:10px; border-color:var(--gold);" placeholder="License Key">
             <button class="btn-green" onclick="unlockSystem()">UNLOCK SYSTEM</button>
             <p id="secMsg" style="color:#ff5252; margin-top:10px; font-size:12px;"></p>
@@ -187,7 +183,7 @@
 
     <div class="sidebar">
         <div class="header">
-            <h1 class="app-title">RASFAHI JUDGE V15.0</h1>
+            <h1 class="app-title">RASFAHI JUDGE V16.0</h1>
         </div>
 
         <div class="content">
@@ -308,7 +304,8 @@
         <div id="adminMirror">
             <div id="gridPreview"></div>
 
-            <div class="mirror-content" id="mirrorContainer" style="opacity:1;"> <div class="mirror-info">
+            <div class="mirror-content" id="mirrorContainer" style="opacity:1;">
+                <div class="mirror-info">
                     <span class="mirror-val">ސުވާލު ތަފްޞީލް</span>
                     <div><span style="color:#666; font-size:12px;">ފޮތް / ބައި:</span> <span id="mBook" class="mirror-val">-</span></div>
                     <div><span style="color:#666; font-size:12px;">ސޫރަތް:</span> <span id="mSurah" class="mirror-val">-</span></div>
@@ -318,6 +315,7 @@
                     <img id="mImg" src="" style="display:none;">
                     <h1 id="mMemoryText" style="display:none; color:#D4AF37; text-align:center; width:100%;">(ނުބަލައި ކިޔެވުން)</h1>
                     <h2 id="mReadyText" style="display:none; color:#00e676; text-align:center; width:100%;">READY TO START</h2>
+                    <h1 id="mFinishText" style="display:none; color:#ff5252; text-align:center; width:100%; font-size:30px;">މިހާރު މި ބައިވެރިޔާގެ<br>ހުރިހައި ސުވާލެއް ނިމުނީ</h1>
                 </div>
             </div>
             
@@ -332,15 +330,8 @@
         pImages: {}, 
         fontData: null, borderData: null,
         windows: { student: null, judges: [] },
-        session: { 
-            slots: [], // Stores actual Question Data objects
-            selectionIDs: [], // Stores IDs picked from grid temporarily
-            activeIndex: -1, 
-            phase: 'idle', // idle, selection, ready, active, finished
-            light: false 
-        },
-        mode: 'judge', // judge/student
-        readingMode: 'mushaf', // mushaf/memory
+        session: { slots: [], selectionIDs: [], activeIndex: -1, phase: 'idle', light: false },
+        mode: 'judge', readingMode: 'mushaf',
         grid: { map: {}, visible: false, taken: [] } 
     };
 
@@ -368,7 +359,6 @@
         document.getElementById('modeStudent').classList.toggle('active', mode === 'student');
         document.getElementById('judgeControls').classList.toggle('hidden', mode !== 'judge');
         document.getElementById('studentControls').classList.toggle('hidden', mode !== 'student');
-        
         if(mode === 'student') reshuffleGrid();
         else { state.grid.visible = false; syncWindows(); }
     }
@@ -383,16 +373,13 @@
 
     function downloadSampleCSV() {
         const csvContent = "data:text/csv;charset=utf-8,ID,Image,Book,Surah,Page,StartAyah,EndAyah\n1,1.png,Juz 1,Al-Fatiha,1,1,7\n2,002.png,Juz 1,Al-Baqarah,2,1,5";
-        const encodedUri = encodeURI(csvContent);
         const link = document.createElement("a");
-        link.setAttribute("href", encodedUri);
+        link.setAttribute("href", encodeURI(csvContent));
         link.setAttribute("download", "sample_questions.csv");
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
+        document.body.appendChild(link); link.click(); document.body.removeChild(link);
     }
 
-    // --- SMART IMAGE RESOLVER ---
+    // --- IMAGE RESOLVER ---
     function resolveImage(rawName) {
         if(!rawName) return null;
         rawName = rawName.toString().toLowerCase().trim();
@@ -409,7 +396,7 @@
         syncWindows();
     }
 
-    // --- FILE LOADERS ---
+    // --- LOADERS ---
     document.getElementById('imgF').onchange = e => {
         let count = 0; state.pImages = {}; 
         for(let f of e.target.files) {
@@ -472,59 +459,45 @@
         r.readAsDataURL(e.target.files[0]);
     };
 
-    // --- STUDENT GRID SELECTION LOGIC (NEW V15) ---
+    // --- WORKFLOW ---
     window.handleGridClick = function(boxID) {
         const limit = parseInt(document.getElementById('qLimit').value);
-        
-        // Prevent clicking if we already selected enough
         if(state.session.selectionIDs.length >= limit) return;
 
         const qID = state.grid.map[boxID];
         if(!qID || state.grid.taken.includes(boxID)) return;
 
-        // 1. Mark as taken in Grid
         state.grid.taken.push(boxID);
-        
-        // 2. Add to Selection
         state.session.selectionIDs.push(qID);
 
-        // 3. Mark in Database as used
         const idx = state.qPool.indexOf(qID);
         if(idx > -1) state.qPool.splice(idx, 1);
         state.qUsed.push(qID);
 
-        // 4. Update UI
         updateSelectionUI();
 
-        // 5. CHECK IF LIMIT REACHED -> HIDE GRID, ENTER READY MODE
         if(state.session.selectionIDs.length === limit) {
             state.grid.visible = false;
             state.session.phase = 'ready';
             prepareSlotsFromSelection();
             document.getElementById('btnStartReading').classList.remove('hidden');
         } else {
-            // Still picking
             state.session.phase = 'selection';
         }
-        
-        renderSlots(); // Shows "Slot 1: Q-ID"
-        updateGridPreview();
-        syncWindows();
+        renderSlots(); updateGridPreview(); syncWindows();
     }
 
     function updateSelectionUI() {
-        const div = document.getElementById('selectionInfo');
-        div.innerText = "Selected: " + state.session.selectionIDs.join(", ");
+        document.getElementById('selectionInfo').innerText = "Selected: " + state.session.selectionIDs.join(", ");
     }
 
     function prepareSlotsFromSelection() {
-        // Convert IDs to Question Objects
         state.session.slots = state.session.selectionIDs.map(id => {
             let q = state.qDataMap[id];
             if(!q.src) q.src = resolveImage(q.imgRaw);
             return q;
         });
-        state.session.activeIndex = -1; // Ready to start
+        state.session.activeIndex = -1;
         updateStatus();
     }
 
@@ -533,12 +506,9 @@
         state.session.activeIndex = 0;
         state.session.phase = 'active';
         document.getElementById('btnStartReading').classList.add('hidden');
-        updateStatus();
-        updateMirror();
-        syncWindows();
+        updateStatus(); updateMirror(); syncWindows();
     }
 
-    // --- JUDGE PICK (AUTO) ---
     window.pickRandomQuestion = function() {
         const limit = parseInt(document.getElementById('qLimit').value);
         if(state.session.slots.length >= limit) return;
@@ -549,10 +519,7 @@
         state.session.slots.push(q);
         state.session.activeIndex = state.session.slots.length - 1;
         state.session.phase = 'active';
-        updateStatus();
-        renderSlots();
-        updateMirror();
-        syncWindows();
+        updateStatus(); renderSlots(); updateMirror(); syncWindows();
     };
 
     function getRandomQ() {
@@ -584,32 +551,32 @@
             state.grid.map[i] = tempPool[rIdx];
             tempPool.splice(rIdx, 1);
         }
-        updateGridPreview();
-        syncWindows();
+        updateGridPreview(); syncWindows();
     }
 
     window.toggleGridScreen = function(show) {
         state.grid.visible = show;
         state.session.phase = 'selection';
-        syncWindows();
-        updateGridPreview();
+        syncWindows(); updateGridPreview();
     }
 
     window.nextQuestion = function() {
         if(state.session.phase === 'ready') {
-            startReadingSession();
-            return;
+            startReadingSession(); return;
         }
+
+        // Prevent moving past finish if already finished
+        if(state.session.phase === 'finished') return;
 
         state.session.activeIndex++;
         toggleBell(false);
+        
+        // CHECK IF FINISHED
         if(state.session.activeIndex >= state.session.slots.length) {
             state.session.phase = 'finished';
         }
-        updateStatus();
-        renderSlots();
-        updateMirror();
-        syncWindows();
+        
+        updateStatus(); renderSlots(); updateMirror(); syncWindows();
     }
 
     window.resetStudentSession = function() {
@@ -620,10 +587,7 @@
         
         if(state.mode === 'student') reshuffleGrid();
         toggleBell(false);
-        updateStatus();
-        renderSlots();
-        updateMirror();
-        syncWindows();
+        updateStatus(); renderSlots(); updateMirror(); syncWindows();
     }
 
     function toggleBell(on) {
@@ -632,8 +596,7 @@
         if(on) { bs.currentTime=0; bs.play().catch(()=>{}); }
         else { be.currentTime=0; be.play().catch(()=>{}); }
         state.session.light = on;
-        updateMirror();
-        syncWindows();
+        updateMirror(); syncWindows();
     }
 
     // --- UI UPDATES ---
@@ -643,7 +606,6 @@
         g.style.gridTemplateColumns = `repeat(${limit}, 1fr)`;
         g.innerHTML = '';
         
-        // Use Selection IDs if phase is selection/ready, otherwise slots
         const source = (state.session.phase === 'selection' || state.session.phase === 'ready') 
                        ? state.session.selectionIDs 
                        : state.session.slots;
@@ -651,12 +613,7 @@
         for(let i=0; i<limit; i++) {
             let d = document.createElement('div');
             let content = `Slot ${i+1}`;
-            
-            if(source[i]) {
-                // Check if it's an object (slot) or ID (selection)
-                content = source[i].id ? `Q: ${source[i].id}` : `Q: ${source[i]}`;
-            }
-
+            if(source[i]) { content = source[i].id ? `Q: ${source[i].id}` : `Q: ${source[i]}`; }
             d.className = 'slot-box ' + (i === state.session.activeIndex ? 'active' : '');
             d.innerText = content;
             g.appendChild(d);
@@ -666,41 +623,45 @@
     function updateStatus() {
         const s = document.getElementById('statusDisplay');
         if(state.session.phase === 'idle') { s.innerText = "WAITING..."; s.style.color="#777"; }
-        else if(state.session.phase === 'selection') { s.innerText = "STUDENT SELECTING..."; s.style.color="#D4AF37"; }
-        else if(state.session.phase === 'ready') { s.innerText = "READY TO START"; s.style.color="#00e676"; }
+        else if(state.session.phase === 'selection') { s.innerText = "SELECTING..."; s.style.color="#D4AF37"; }
+        else if(state.session.phase === 'ready') { s.innerText = "READY"; s.style.color="#00e676"; }
         else if(state.session.phase === 'finished') { s.innerText = "FINISHED"; s.style.color="#ff5252"; }
-        else { 
-            let qID = state.session.slots[state.session.activeIndex]?.id || "?";
-            s.innerText = `READING Q-${qID}`; s.style.color = "#00e676"; 
-        }
+        else { s.innerText = `Q-${state.session.slots[state.session.activeIndex]?.id || "?"}`; s.style.color = "#00e676"; }
     }
 
     function updateMirror() {
-        const c = document.getElementById('mirrorContainer');
         const gp = document.getElementById('gridPreview');
         const mImg = document.getElementById('mImg');
         const mMem = document.getElementById('mMemoryText');
         const mReady = document.getElementById('mReadyText');
+        const mFin = document.getElementById('mFinishText');
         
         document.getElementById('mirrorLight').style.background = state.session.light ? '#00e676' : '#333';
 
         if(state.grid.visible) {
-            c.style.display = 'none'; gp.style.display = 'grid';
+            document.getElementById('mirrorContainer').style.display = 'none'; 
+            gp.style.display = 'grid';
             updateGridPreview();
             return;
         } 
         
-        gp.style.display = 'none'; c.style.display = 'flex';
+        gp.style.display = 'none'; 
+        document.getElementById('mirrorContainer').style.display = 'flex';
         
-        // HIDE ALL INITIALLY
-        mImg.style.display = 'none';
-        mMem.style.display = 'none';
-        mReady.style.display = 'none';
+        // Hide All
+        mImg.style.display = 'none'; mMem.style.display = 'none';
+        mReady.style.display = 'none'; mFin.style.display = 'none';
 
         if(state.session.phase === 'ready') {
              mReady.style.display = 'block';
-             document.getElementById('mirrorStatus').innerText = "WAITING FOR JUDGE";
+             document.getElementById('mirrorStatus').innerText = "WAITING";
              return;
+        }
+
+        if(state.session.phase === 'finished') {
+            mFin.style.display = 'block';
+            document.getElementById('mirrorStatus').innerText = "FINISHED";
+            return;
         }
 
         const q = state.session.slots[state.session.activeIndex];
@@ -726,9 +687,7 @@
         gp.innerHTML = '';
         for(let i=1; i<=20; i++) {
             let b = document.createElement('div');
-            // Add 'selected' class if it's currently selected but grid is still visible
             let isSelected = state.session.selectionIDs.includes(state.grid.map[i]);
-            
             b.className = 'gp-box ' + (state.grid.taken.includes(i) ? 'taken' : '') + (isSelected ? ' selected' : '');
             b.innerText = i;
             gp.appendChild(b);
@@ -766,8 +725,11 @@
                 .grid-btn:hover { transform: scale(1.05); filter: brightness(1.2); }
                 .grid-btn.taken { opacity: 0.1; pointer-events: none; filter: grayscale(1); }
 
-                /* WAIT SCREEN (NEW) */
+                /* WAIT SCREEN */
                 #waitScreen { display:none; width:100%; height:100%; flex-direction:column; align-items:center; justify-content:center; background:#000; }
+                
+                /* FINISH SCREEN */
+                #finishScreen { display:none; width:100%; height:100%; flex-direction:column; align-items:center; justify-content:center; background: radial-gradient(circle, #000d1a, #000); position:absolute; top:0; left:0; z-index:999; }
 
                 #readScreen { display:none; width:100%; height:100%; flex-direction:column; }
                 
@@ -804,10 +766,14 @@
                     border-color: #D4AF37; background: linear-gradient(90deg, #222, #000); 
                     color: #fff; box-shadow: 0 0 10px rgba(212,175,55,0.2); transform: scale(1.02);
                 }
-                .q-item-num { font-size: 0.9em; color: #00e676; margin-bottom: 3px; }
-                .q-item-detail { font-size: 1.1em; font-weight: bold; }
+                .q-item-num { font-size: 0.9em; color: #00e676; margin-bottom: 5px; font-weight:bold; }
+                .q-item-detail { font-size: 1.1em; font-weight: bold; color:#fff; }
+                .q-item-sub { font-size: 0.8em; color: #888; margin-top:3px; }
                 
-                #mainArea { width: 75%; display: flex; justify-content: center; align-items: center; background: #000; position: relative; }
+                #mainArea { width: 75%; display: flex; justify-content: center; align-items: center; background: #000; position: relative; transition: background 0.5s; }
+                /* ROYAL GREEN BACKGROUND CLASS */
+                .royal-green-bg { background: radial-gradient(circle, #00331a, #001a0d) !important; }
+
                 .scroll-wrap { width: 90%; height: 90%; background: #fff; overflow-y: auto; ${borderCSS} display:flex; justify-content:center; align-items:center; }
                 
                 #memoryText { display:none; color: #D4AF37; font-size: 4vw; text-shadow: 0 0 20px #D4AF37; text-align:center; padding:20px; }
@@ -832,6 +798,10 @@
                 <div id="waitList" style="color:#D4AF37; margin-top:20px; font-size:2vw;"></div>
             </div>
 
+            <div id="finishScreen">
+                <h1 style="color:#D4AF37; font-size:4vw; text-shadow:0 0 30px #D4AF37; text-align:center; line-height:1.5;">މިހާރު މި ބައިވެރިޔާގެ<br>ހުރިހައި ސުވާލެއް ނިމުނީ</h1>
+            </div>
+
             <div id="readScreen">
                 <div id="topBar"><div id="topStatusText"></div></div>
                 <div id="contentArea">
@@ -843,7 +813,7 @@
                         <div class="questions-list" id="qListContainer"></div>
                     </div>
                     <div id="mainArea">
-                        <div class="scroll-wrap">
+                        <div class="scroll-wrap" id="mainScroll">
                             <img id="qImg" src="" style="width:100%;">
                             <h1 id="memoryText">(ނުބަލައި ކިޔެވުމުގެ ބައިގެ ކިޔެވުން)</h1>
                         </div>
@@ -859,11 +829,19 @@
                     const grid = document.getElementById('gridScreen');
                     const wait = document.getElementById('waitScreen');
                     const read = document.getElementById('readScreen');
+                    const finish = document.getElementById('finishScreen');
                     const light = document.getElementById('greenLight');
+                    const mainArea = document.getElementById('mainArea');
+                    const mainScroll = document.getElementById('mainScroll');
 
                     // Reset all
                     idle.style.display = 'none'; grid.style.display = 'none'; 
                     wait.style.display = 'none'; read.style.display = 'none';
+                    finish.style.display = 'none';
+                    
+                    // Reset Background
+                    mainArea.classList.remove('royal-green-bg');
+                    mainScroll.style.background = '#fff';
 
                     if(d.grid.visible) {
                         grid.style.display = 'flex';
@@ -880,10 +858,13 @@
                         wait.style.display = 'flex';
                         const sl = d.slots.map(s => s.id).join(', ');
                         document.getElementById('waitList').innerText = "Questions: " + sl;
-                    } else if(d.phase === 'active' || d.phase === 'finished') {
+                    } else if(d.phase === 'finished') {
+                         finish.style.display = 'flex';
+                    } else if(d.phase === 'active') {
                         read.style.display = 'flex';
                         const q = d.slots[d.activeIndex];
                         
+                        // Top Text
                         const statusTxt = document.getElementById('topStatusText');
                         const currentNum = d.activeIndex + 1;
                         if(currentNum === 1) statusTxt.innerText = "މިހާރު ތިޔަ ކިޔަވަނީ ފުރަތަމަ ސުވާލު";
@@ -897,34 +878,37 @@
                             if(d.readingMode === 'memory') {
                                 img.style.display = 'none';
                                 memTxt.style.display = 'block';
+                                // APPLY ROYAL GREEN
+                                mainArea.classList.add('royal-green-bg');
+                                mainScroll.style.background = 'transparent'; // Make container transparent to show green
+                                mainScroll.style.border = 'none';
+                                mainScroll.style.boxShadow = 'none';
                             } else {
                                 memTxt.style.display = 'none';
                                 if(q.src) { img.src = q.src; img.style.display = 'block'; }
                                 else { img.style.display = 'none'; }
+                                // Reset to white
+                                mainScroll.style.background = '#fff';
                             }
                             
                             document.getElementById('dSurah').innerText = q.surah;
                             document.getElementById('dAyah').innerText = q.start + ' - ' + q.end;
                         }
 
+                        // SIDEBAR LIST WITH FULL DETAILS
                         const listC = document.getElementById('qListContainer');
                         listC.innerHTML = '';
                         d.slots.forEach((slot, idx) => {
                             let item = document.createElement('div');
                             item.className = 'q-item ' + (idx === d.activeIndex ? 'active' : '');
-                            let numDiv = document.createElement('div');
-                            numDiv.className = 'q-item-num';
-                            numDiv.innerText = "ސުވާލު " + (idx + 1);
-                            let detDiv = document.createElement('div');
-                            detDiv.className = 'q-item-detail';
-                            detDiv.innerText = slot.surah + " (" + slot.start + "-" + slot.end + ")";
-                            item.appendChild(numDiv); item.appendChild(detDiv);
+                            
+                            item.innerHTML = `
+                                <div class="q-item-num">ސުވާލު ${idx+1}</div>
+                                <div class="q-item-detail">${slot.surah} (${slot.start}-${slot.end})</div>
+                                <div class="q-item-sub">${slot.book} | ޞަފްޙާ: ${slot.page}</div>
+                            `;
                             listC.appendChild(item);
                         });
-
-                        if(d.phase === 'finished') document.getElementById('mainArea').style.opacity = '0.3';
-                        else document.getElementById('mainArea').style.opacity = '1';
-
                     } else {
                         idle.style.display = 'flex';
                     }
