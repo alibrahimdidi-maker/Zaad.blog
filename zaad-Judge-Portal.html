@@ -2,7 +2,7 @@
 <html lang="dv" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>Rasfahi Royal Quran (V19.6 Ultimate Edition)</title>
+    <title>Rasfahi Royal Quran (V20.1 Fixed Edition)</title>
     <style>
         /* --- FONTS & IMPORTS --- */
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Thaana:wght@400;700;900&family=Cinzel:wght@700;900&display=swap');
@@ -28,10 +28,10 @@
             --cream-bg: #fdfcf0;
         }
 
-        /* FIX 1: GLOBAL BOX SIZING FOR FIT */
+        /* FIX 1: GLOBAL BOX SIZING */
         * { box-sizing: border-box; -webkit-user-select: none; user-select: none; outline: none; }
         
-        /* APPLY FONT GLOBALLY - PARENT */
+        /* APPLY FONT GLOBALLY */
         body, button, input, select, textarea, h1, h2, span, div, p, a, label { 
             font-family: 'AppFont', 'Noto Sans Thaana', 'Amiri', sans-serif !important; 
         }
@@ -67,6 +67,27 @@
 
         .content { flex: 1; overflow-y: auto; padding: 10px; display: flex; flex-direction: column; gap: 10px; }
         
+        /* ROYAL COPYRIGHT FOOTER IN SIDEBAR */
+        .royal-footer {
+            padding: 10px;
+            background: linear-gradient(to top, #000, #111);
+            border-top: 2px double var(--gold);
+            text-align: center;
+            font-size: 11px;
+            color: #888;
+        }
+        .royal-footer p { margin: 2px 0; }
+        .royal-footer .highlight { color: var(--gold); font-weight: bold; font-family: 'Cinzel', sans-serif !important; }
+        
+        /* NEW: DRIVE LINK BUTTON STYLE (MOVED UP) */
+        .drive-btn {
+            background: #1f1f1f; border: 1px dashed #555; color: #aaa;
+            padding: 8px; width: 100%; margin-bottom: 10px; cursor: pointer;
+            text-decoration: none; display: block; font-size: 11px;
+            border-radius: 4px;
+        }
+        .drive-btn:hover { background: #333; color: #fff; border-color: var(--gold); }
+
         /* PANELS */
         .panel { 
             background: rgba(255,255,255,0.03); 
@@ -97,7 +118,7 @@
             font-size: 14px; 
         }
         
-        /* BUTTON STYLES (DETAILED) */
+        /* BUTTON STYLES */
         button { 
             cursor: pointer; font-weight: bold; border-color: #445566; 
             transition: all 0.2s; 
@@ -113,6 +134,7 @@
         .btn-gold { background: linear-gradient(to bottom, var(--gold), var(--gold-dim)) !important; color: #000 !important; border-color: #fff !important; font-weight: 900 !important; }
         .btn-blue { background: linear-gradient(to bottom, #004080, #002040) !important; border-color: #0059b3 !important; color: #fff !important; }
         .btn-purple { background: linear-gradient(to bottom, #4a148c, #311b92) !important; border-color: #7c4dff !important; color: #fff !important; }
+        .btn-orange { background: linear-gradient(to bottom, #e65100, #bf360c) !important; border-color: #ff6d00 !important; color: #fff !important; }
 
         /* LANG SWITCHER */
         .lang-bar { display: flex; gap: 5px; margin-bottom: 10px; }
@@ -148,7 +170,7 @@
             font-weight: bold; box-shadow: 0 0 10px rgba(212, 175, 55, 0.3); transform: scale(1.05);
         }
 
-        /* MAIN PREVIEW AREA (ADMIN MONITOR) */
+        /* MAIN PREVIEW AREA (ADMIN MONITOR - REDESIGNED) */
         .main-view { flex: 1; background: #050505; display: flex; flex-direction: column; border-right: 1px solid #222; position: relative; }
         .mirror-header { background: #111; padding: 5px 15px; color: #666; font-size: 11px; border-bottom: 1px solid #333; display: flex; justify-content: space-between; }
         
@@ -158,23 +180,41 @@
             display: flex; justify-content: center; align-items: center;
         }
         
-        .mirror-content { width: 98%; height: 98%; display: flex; gap: 10px; }
-        .mirror-info { width: 30%; background: rgba(0,0,0,0.8); border-left: 3px double var(--gold); padding: 15px; display: flex; flex-direction: column; gap: 15px; overflow-y:auto; }
-        
-        /* PREVIEW AREA */
-        .mirror-img-area { 
-            width: 70%; 
-            background: var(--cream-bg);
-            display: flex; justify-content: center; align-items: flex-start;
-            border: 1px solid #333; position: relative; 
-            overflow-y: auto;
+        /* NEW ADMIN MIRROR LAYOUT (Mimics Student Screen) */
+        .mirror-card {
+            width: 80%; height: 80%;
+            background: #fff;
+            border: 15px double var(--gold); /* Mimic Royal Border */
+            position: relative;
+            overflow: hidden;
+            display: flex; flex-direction: column;
+            box-shadow: 0 0 50px rgba(0,0,0,0.8);
         }
-        .mirror-img-area img {
+
+        .mirror-banner-strip {
+            background: rgba(0,0,0,0.9);
+            color: var(--gold);
+            padding: 8px;
+            display: flex; justify-content: space-around;
+            border-bottom: 2px solid var(--gold);
+            font-size: 14px;
+            font-weight: bold;
+            z-index: 10;
+        }
+
+        .mirror-img-container {
+            flex: 1;
+            overflow-y: auto;
+            position: relative;
+            display: flex; justify-content: center;
+        }
+        .mirror-img-container img {
             width: 100%; height: auto; display: block;
         }
 
-        .mirror-val { color: var(--gold); font-size: 16px; font-weight: bold; border-bottom: 1px dotted #333; padding-bottom: 2px; }
-        
+        .mirror-info-span { color: #fff; margin-left: 5px; }
+
+        /* Existing Grid Preview */
         #gridPreview { display: none; grid-template-columns: repeat(5, 1fr); gap: 5px; width: 60%; }
         .gp-box { background: #111; border: 1px solid #444; color: #666; text-align: center; padding: 10px; font-size: 12px; }
         .gp-box.taken { background: #330000; color: #555; border-color: #500; }
@@ -209,8 +249,8 @@
 
     <div id="securityOverlay">
         <div class="sec-box">
-            <h1 style="color:var(--gold); font-family:'Cinzel' !important; margin:0;">ROYAL ELITE V19.6</h1>
-            <p style="color:#666; font-size:10px;">ULTIMATE PRO EDITION</p>
+            <h1 style="color:var(--gold); font-family:'Cinzel' !important; margin:0;">ROYAL ELITE V20.0</h1>
+            <p style="color:#666; font-size:10px;">ULTIMATE SECURITY EDITION</p>
             <input type="password" id="secKey" style="text-align:center; font-size:18px; margin:15px 0; padding:10px; border-color:var(--gold);" placeholder="Enter License Key">
             <button class="btn-green" onclick="unlockSystem()">UNLOCK SYSTEM</button>
             <p id="secMsg" style="color:#ff5252; margin-top:10px; font-size:12px;"></p>
@@ -219,7 +259,7 @@
 
     <div class="sidebar">
         <div class="header">
-            <h1 class="app-title" data-translate="title">RASFAHI JUDGE V19.6</h1>
+            <h1 class="app-title" data-translate="title">RASFAHI JUDGE V20.1</h1>
         </div>
 
         <div class="content">
@@ -259,7 +299,6 @@
                     </div>
 
                     <button id="btnStartReading" class="btn-green hidden" onclick="startReadingSession()" data-translate="btnStartQ1">2. ފަށާ (Start Question 1)</button>
-                    <p style="font-size:11px; color:#aaa; text-align:center; margin:2px 0;">Student picks -> Grid Hides -> Judge Starts.</p>
                 </div>
 
                 <div style="display:flex; gap:5px; margin-top:10px;">
@@ -280,8 +319,16 @@
             </div>
 
             <div class="panel">
-                <h2 data-translate="screens">2. ސްކްރީންތައް & ލައިސަންސް</h2>
+                <h2 data-translate="screens">2. ސްކްރީން & ކޮންފިގަރޭޝަން</h2>
                 
+                <div style="display:flex; gap:5px; margin-bottom:10px;">
+                    <button class="btn-blue" onclick="saveConfig()">💾 SAVE Config</button>
+                    <button class="btn-orange" onclick="document.getElementById('loadConf').click()">📂 LOAD Config</button>
+                    <input type="file" id="loadConf" accept=".json" class="hidden" onchange="loadConfig(this)">
+                </div>
+
+                <button class="btn-red" onclick="clearCache()" style="font-size:10px; margin-bottom:10px;">🧹 Purge Memory (Clear Cache)</button>
+
                 <label data-translate="lblStudent">1. ދަރިވަރު ސްކްރީން:</label>
                 <button onclick="openScreen('student')" class="btn-purple" data-translate="btnLaunchStudent">🖥️ Student Screen (Launch)</button>
 
@@ -295,34 +342,22 @@
                     </select>
                     <button onclick="openJudges()" class="btn-blue" data-translate="btnLaunchJudges">Open Judges 🚀</button>
                 </div>
-
-                <div style="margin-top:10px; border-top:1px dashed #444; padding-top:5px;">
-                    <label style="color:var(--gold);">System Validity (Key Gen):</label>
-                    <div style="display:flex; gap:5px;">
-                        <input type="number" id="keyDays" value="30" style="width:30%;">
-                        <button class="btn-green" onclick="generateLicense()" style="font-size:10px;">GENERATE KEY</button>
-                    </div>
-                    <textarea id="outKey" readonly style="height:40px; font-size:10px; color:#aaa;"></textarea>
-                </div>
             </div>
 
             <div class="panel">
-                <h2 data-translate="settings">3. ސެޓިންގސް & ތީމް (Royal)</h2>
+                <h2 data-translate="settings">3. ސެޓިންގސް & ޑޭޓާ</h2>
                 
                 <label>1. Royal Theme Engine (100+):</label>
                 <select id="themeSelect" onchange="updateTheme()">
                     </select>
 
-                <label data-translate="lblFont">2. ފޮންޓް (TTF) [Faruuma]:</label>
-                <input type="file" id="fontF" accept=".ttf, .otf">
-
-                <label data-translate="lblCSV">3. ސުވާލު ޑޭޓާ (CSV):</label>
+                <label data-translate="lblCSV">2. ސުވާލު ޑޭޓާ (CSV):</label>
                 <div style="display:flex; gap:5px;">
                     <input type="file" id="csvQ" accept=".csv">
                     <button onclick="downloadSampleCSV()" class="btn-purple" style="width:40%; font-size:10px;">Sample CSV ⬇️</button>
                 </div>
                 
-                <label data-translate="lblImg">4. އާޔަތްތަކުގެ ފޮޓޯ (Folder):</label>
+                <label data-translate="lblImg">3. އާޔަތްތަކުގެ ފޮޓޯ (Folder):</label>
                 <input type="file" id="imgF" webkitdirectory directory multiple>
                 <small id="imgStatus" style="color:#aaa; display:block;">No images loaded</small>
 
@@ -347,6 +382,16 @@
                 <input type="file" id="borderImg" accept="image/*" class="hidden" style="margin-top:5px;">
             </div>
         </div>
+
+        <div class="royal-footer">
+            <a id="driveLink" href="#" target="_blank" class="drive-btn">
+                📂 Open Google Drive Folder (Samples)
+            </a>
+
+            <p>Copyright Reserved</p>
+            <p class="highlight">Ali Ibrahim Didi 7791550 & 9901550</p>
+            <p>Zad Research and Consultancy Firm</p>
+        </div>
     </div>
 
     <div class="main-view">
@@ -358,19 +403,26 @@
         <div id="adminMirror">
             <div id="gridPreview"></div>
 
-            <div class="mirror-content" id="mirrorContainer" style="opacity:1;">
-                <div class="mirror-info">
-                    <span class="mirror-val" data-translate="qDetail">ސުވާލު ތަފްޞީލް</span>
-                    <div><span style="color:#666; font-size:12px;" data-translate="mBook">ފޮތް / ބައި:</span> <span id="mBook" class="mirror-val">-</span></div>
-                    <div><span style="color:#666; font-size:12px;" data-translate="mSurah">ސޫރަތް:</span> <span id="mSurah" class="mirror-val">-</span></div>
-                    <div><span style="color:#666; font-size:12px;" data-translate="mAyah">އާޔަތް:</span> <span id="mAyah" class="mirror-val">-</span></div>
-                    <div id="adminWarn" style="color:#ff5252; font-size:11px; margin-top:10px; display:none; border:1px solid #ff5252; padding:5px;">⚠️ STUDENT IS IN MEMORY MODE</div>
+            <div id="mirrorContainer" class="mirror-card" style="display:flex;">
+                
+                <div id="adminBanner" class="mirror-banner-strip" style="display:none;">
+                    <span>Book: <span id="mBook" class="mirror-info-span">-</span></span>
+                    <span>Surah: <span id="mSurah" class="mirror-info-span">-</span></span>
+                    <span>Ayah: <span id="mAyah" class="mirror-info-span">-</span></span>
                 </div>
-                <div class="mirror-img-area">
+
+                <div class="mirror-img-container">
                     <img id="mImg" src="" style="display:none;">
-                    <h2 id="mReadyText" style="display:none; color:#00e676; text-align:center; width:100%;">READY TO START</h2>
-                    <h1 id="mFinishText" style="display:none; color:#ff5252; text-align:center; width:100%; font-size:24px; padding:20px;"></h1>
+                    
+                    <h1 id="mMemoryText" style="display:none; color: var(--gold); text-align:center; font-size: 30px; margin-top: 20%;">
+                        (Memory Recitation Mode)
+                    </h1>
+
+                    <h2 id="mReadyText" style="display:none; color:#00e676; text-align:center; margin-top:20%;">READY TO START</h2>
+                    <h1 id="mFinishText" style="display:none; color:#ff5252; text-align:center; margin-top:20%; font-size:24px;"></h1>
                 </div>
+
+                <div id="adminWarn" style="position:absolute; bottom:5px; left:5px; color:#ff5252; font-size:11px; display:none; background:rgba(0,0,0,0.8); padding:2px;">⚠️ MEMORY MODE</div>
             </div>
             
             <div id="mirrorLight" style="position:absolute; bottom:20px; right:100px; width:30px; height:30px; background:#333; border-radius:50%; border:2px solid #555;"></div>
@@ -380,9 +432,29 @@
     </div>
 
 <script>
+    // --- 0. SECURITY & CONFIG ---
+    // Placeholder for Drive Link - User can edit this variable
+    const GOOGLE_DRIVE_URL = "https://drive.google.com/drive/folders/YOUR_FOLDER_ID"; 
+    document.getElementById('driveLink').href = GOOGLE_DRIVE_URL;
+
+    // SECURITY BLOCKER
+    document.addEventListener('contextmenu', event => event.preventDefault());
+    document.addEventListener('keydown', function(e) {
+        if(
+            e.key === 'F12' || 
+            (e.ctrlKey && e.shiftKey && e.key === 'I') || 
+            (e.ctrlKey && e.shiftKey && e.key === 'J') || 
+            (e.ctrlKey && e.key === 'U') || 
+            (e.ctrlKey && e.key === 'S') 
+        ) {
+            e.preventDefault();
+            return false;
+        }
+    });
+
     // --- TRANSLATION DICTIONARY ---
     const i18n = {
-        title: { dv: "ރަސްފަހި ޖަޖް V19.6", ar: "القاضي رصفهي V19.6", en: "Rasfahi Judge V19.6" },
+        title: { dv: "ރަސްފަހި ޖަޖް V20.1", ar: "القاضي رصفهي V20.1", en: "Rasfahi Judge V20.1" },
         liveCtrl: { dv: "1. ލައިވް ކޮންޓްރޯލް", ar: "1. التحكم المباشر", en: "1. Live Control" },
         mJudge: { dv: "⚖️ ޖަޖު މެތަޑް (އޮޓޯ)", ar: "⚖️ وضع القاضي (تلقائي)", en: "⚖️ Judge Mode (Auto)" },
         mStudent: { dv: "🎓 ދަރިވަރު މެތަޑް (މެނުއަލް)", ar: "🎓 وضع الطالب (يدوي)", en: "🎓 Student Mode (Manual)" },
@@ -397,21 +469,16 @@
         btnBellStart: { dv: "🔔 ފަށާ (ބެލް)", ar: "🔔 ابدأ (جرس)", en: "🔔 Start (Bell)" },
         btnBellStop: { dv: "🛑 ހުއްޓާ (ބެލް)", ar: "🛑 توقف (جرس)", en: "🛑 Stop (Bell)" },
         btnReset: { dv: "🔄 އައު ދަރިވަރެއް (Reset)", ar: "🔄 طالب جديد (إعادة تعيين)", en: "🔄 New Student (Reset)" },
-        screens: { dv: "2. ސްކްރީންތައް", ar: "2. الشاشات", en: "2. Screens" },
+        screens: { dv: "2. ސްކްރީން & ކޮންފިގަރޭޝަން", ar: "2. الشاشات", en: "2. Screens & Config" },
         lblStudent: { dv: "1. ދަރިވަރު ސްކްރީން:", ar: "1. شاشة الطالب:", en: "1. Student Screen:" },
         btnLaunchStudent: { dv: "🖥️ ލޯންޗް (Student)", ar: "🖥️ فتح (الطالب)", en: "🖥️ Launch (Student)" },
         lblJudge: { dv: "2. ޖަޖުންގެ ސްކްރީން:", ar: "2. شاشة القاضي:", en: "2. Judge Screen:" },
         btnLaunchJudges: { dv: "Open Judges 🚀", ar: "فتح القضاة 🚀", en: "Open Judges 🚀" },
-        settings: { dv: "3. ސެޓިންގސް & ތީމް", ar: "3. الإعدادات والملفات", en: "3. Settings & Themes" },
-        lblFont: { dv: "2. ފޮންޓް (TTF):", ar: "2. الخط (TTF):", en: "2. Font (TTF):" },
-        lblCSV: { dv: "3. ސުވާލު ޑޭޓާ (CSV):", ar: "3. بيانات الأسئلة (CSV):", en: "3. Question Data (CSV):" },
-        lblImg: { dv: "4. އާޔަތްތަކުގެ ފޮޓޯ:", ar: "4. صور الآيات:", en: "4. Ayah Images:" },
+        settings: { dv: "3. ސެޓިންގސް & ޑޭޓާ", ar: "3. الإعدادات والملفات", en: "3. Settings & Data" },
+        lblCSV: { dv: "2. ސުވާލު ޑޭޓާ (CSV):", ar: "2. بيانات الأسئلة (CSV):", en: "2. Question Data (CSV):" },
+        lblImg: { dv: "3. އާޔަތްތަކުގެ ފޮޓޯ:", ar: "3. صور الآيات:", en: "3. Ayah Images:" },
         lblBorder: { dv: "ބޯޑަރު:", ar: "الإطار:", en: "Border:" },
         lblQCount: { dv: "ސުވާލުގެ ޢަދަދު:", ar: "عدد الأسئلة:", en: "Question Count:" },
-        qDetail: { dv: "ސުވާލު ތަފްޞީލް", ar: "تفاصيل السؤال", en: "Question Details" },
-        mBook: { dv: "ފޮތް / ބައި:", ar: "الكتاب / الجزء:", en: "Book/Part:" },
-        mSurah: { dv: "ސޫރަތް:", ar: "سورة:", en: "Surah:" },
-        mAyah: { dv: "އާޔަތް:", ar: "آية:", en: "Ayah:" },
         msgFinished: { 
             dv: "މިހާރު ކަނޑައެޅިފައިވާ މިންވަރަށް ސުވާލުކޮށް ނިމިއްޖެ!", 
             ar: "تم الانتهاء من طرح الأسئلة المحددة!", 
@@ -441,11 +508,11 @@
         ];
 
         const sel = document.getElementById('themeSelect');
+        sel.innerHTML = ""; // FIX: Clear existing options
         let count = 1;
         
         bases.forEach(base => {
             accents.forEach(acc => {
-                // Generate variants for each combination to reach high count
                 for(let i=1; i<=5; i++) { 
                      let variantName = i === 1 ? "Standard" : (i===2 ? "Dark" : (i===3 ? "Deep" : (i===4 ? "Vivid" : "Classic")));
                      let themeObj = {
@@ -463,6 +530,12 @@
                 }
             });
         });
+        
+        // FIX: Ensure first theme is loaded
+        if(themeList.length > 0) {
+            state.theme = themeList[0];
+            sel.value = 0;
+        }
     }
 
     function setLang(lang) {
@@ -502,15 +575,6 @@
         }
     }
 
-    // --- SECURITY PROTOCOLS ---
-    document.addEventListener('keydown', function(e) {
-        if(e.keyCode == 123) { e.preventDefault(); return false; } // F12
-        if(e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) { e.preventDefault(); return false; }
-        if(e.ctrlKey && e.shiftKey && e.keyCode == 'C'.charCodeAt(0)) { e.preventDefault(); return false; }
-        if(e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)) { e.preventDefault(); return false; }
-        if(e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) { e.preventDefault(); return false; }
-    });
-
     // --- STATE ---
     let state = {
         qPool: [], qUsed: [], qDataMap: {}, 
@@ -532,14 +596,6 @@
         }
     }
 
-    function generateLicense() {
-        const days = parseInt(document.getElementById('keyDays').value);
-        const date = new Date();
-        date.setDate(date.getDate() + days);
-        const str = "ROYAL_EXP_" + date.toISOString().split('T')[0];
-        document.getElementById('outKey').value = btoa(str);
-    }
-
     // --- LOGIC ---
     function setMode(mode) {
         state.mode = mode;
@@ -547,8 +603,13 @@
         document.getElementById('modeStudent').classList.toggle('active', mode === 'student');
         document.getElementById('judgeControls').classList.toggle('hidden', mode !== 'judge');
         document.getElementById('studentControls').classList.toggle('hidden', mode !== 'student');
-        if(mode === 'student') reshuffleGrid();
-        else { state.grid.visible = false; syncWindows(); }
+        
+        if(mode === 'student') {
+            reshuffleGrid(); // FIX: Ensure grid is populated
+        } else { 
+            state.grid.visible = false; 
+            syncWindows(); 
+        }
     }
 
     function setReadingMode(rm) {
@@ -570,6 +631,67 @@
         link.setAttribute("href", encodeURI(csvContent));
         link.setAttribute("download", "sample_questions.csv");
         document.body.appendChild(link); link.click(); document.body.removeChild(link);
+    }
+
+    // --- SAVE & LOAD CONFIGURATION ---
+    function saveConfig() {
+        const config = {
+            themeIndex: document.getElementById('themeSelect').value,
+            borderStyle: document.getElementById('borderStyle').value,
+            qLimit: document.getElementById('qLimit').value,
+            mode: state.mode,
+            readingMode: state.readingMode,
+            judgeCount: document.getElementById('judgeCount').value
+        };
+        const blob = new Blob([JSON.stringify(config)], {type: "application/json"});
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = "rasfahi_config.json";
+        a.click();
+        URL.revokeObjectURL(url);
+    }
+
+    function loadConfig(input) {
+        const file = input.files[0];
+        if(!file) return;
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            try {
+                const config = JSON.parse(e.target.result);
+                // Apply Settings
+                document.getElementById('themeSelect').value = config.themeIndex || 0;
+                document.getElementById('borderStyle').value = config.borderStyle || 'royal';
+                document.getElementById('qLimit').value = config.qLimit || 3;
+                document.getElementById('judgeCount').value = config.judgeCount || 3;
+                
+                updateTheme();
+                setMode(config.mode || 'judge');
+                setReadingMode(config.readingMode || 'mushaf');
+                
+                resetStudentSession();
+                alert("Configuration Loaded Successfully!");
+            } catch(err) {
+                alert("Error loading config: " + err);
+            }
+        };
+        reader.readAsText(file);
+    }
+
+    // --- CACHE MANAGEMENT ---
+    function clearCache() {
+        if(confirm("Are you sure? This will clear all loaded images to free up memory.")) {
+            // Revoke all Object URLs
+            Object.values(state.pImages).forEach(url => URL.revokeObjectURL(url));
+            state.pImages = {};
+            state.qDataMap = {};
+            state.qPool = [];
+            state.qUsed = [];
+            document.getElementById('imgStatus').innerText = "Memory Purged. Reload Images.";
+            document.getElementById('mImg').src = "";
+            resetStudentSession();
+            alert("Memory Cleared!");
+        }
     }
 
     function resolveImage(rawName) {
@@ -624,19 +746,6 @@
             alert("Questions Loaded: " + state.qPool.length);
         };
         r.readAsText(e.target.files[0]);
-    };
-
-    document.getElementById('fontF').onchange = e => {
-        const r = new FileReader();
-        r.onload = ev => { 
-            state.fontData = ev.target.result;
-            const newStyle = document.createElement('style');
-            newStyle.textContent = `@font-face { font-family: 'AppFont'; src: url('${state.fontData}'); } 
-                body, button, input, select, textarea { font-family: 'AppFont', 'Noto Sans Thaana', sans-serif !important; }`;
-            document.head.appendChild(newStyle);
-            syncWindows(); 
-        };
-        r.readAsDataURL(e.target.files[0]);
     };
 
     document.getElementById('borderStyle').onchange = function() {
@@ -834,28 +943,42 @@
         else { s.innerText = `Q-${state.session.slots[state.session.activeIndex]?.id || "?"}`; s.style.color = "#00e676"; }
     }
 
+    // --- UPDATED MIRROR LOGIC (REDESIGNED) ---
     function updateMirror() {
         const gp = document.getElementById('gridPreview');
+        const mCont = document.getElementById('mirrorContainer');
         const mImg = document.getElementById('mImg');
         const mReady = document.getElementById('mReadyText');
         const mFin = document.getElementById('mFinishText');
         const wWarn = document.getElementById('adminWarn');
+        const banner = document.getElementById('adminBanner');
+        const mMemory = document.getElementById('mMemoryText');
         
         document.getElementById('mirrorLight').style.background = state.session.light ? '#00e676' : '#333';
 
+        // Apply Royal Styles to Admin Monitor
+        if(state.theme) {
+            mCont.style.border = `15px ${state.theme.borderType} ${state.theme.accent}`;
+            mCont.style.background = '#fff'; // Usually white for image paper background
+        }
+
         if(state.grid.visible) {
-            document.getElementById('mirrorContainer').style.display = 'none'; 
+            mCont.style.display = 'none'; 
             gp.style.display = 'grid';
             updateGridPreview();
             return;
         } 
         
         gp.style.display = 'none'; 
-        document.getElementById('mirrorContainer').style.display = 'flex';
+        mCont.style.display = 'flex';
         
-        // Hide All
+        // Hide All Elements initially
         mImg.style.display = 'none';
-        mReady.style.display = 'none'; mFin.style.display = 'none'; wWarn.style.display = 'none';
+        mReady.style.display = 'none'; 
+        mFin.style.display = 'none'; 
+        wWarn.style.display = 'none';
+        banner.style.display = 'none';
+        mMemory.style.display = 'none';
 
         if(state.session.phase === 'ready') {
              mReady.style.display = 'block';
@@ -865,7 +988,7 @@
 
         if(state.session.phase === 'finished') {
             mFin.style.display = 'block';
-            mFin.innerHTML = i18n.msgFinished[currentLang]; // Update text dynamically
+            mFin.innerHTML = i18n.msgFinished[currentLang];
             document.getElementById('mirrorStatus').innerText = "FINISHED";
             return;
         }
@@ -873,15 +996,18 @@
         const q = state.session.slots[state.session.activeIndex];
 
         if(q && state.session.phase === 'active') {
+            // Update Banner
             document.getElementById('mBook').innerText = q.book;
             document.getElementById('mSurah').innerText = q.surah;
             document.getElementById('mAyah').innerText = q.start + '-' + q.end;
-            
-            // ADMIN ALWAYS SEES IMAGE
-            if(q.src) { mImg.src = q.src; mImg.style.display = 'block'; }
+            banner.style.display = 'flex'; // Show Banner Top
 
             if(state.readingMode === 'memory') {
-                wWarn.style.display = 'block'; // Warn admin that student is in memory mode
+                wWarn.style.display = 'block';
+                mMemory.style.display = 'block'; // Show Memory Text
+                if(q.src) { mImg.src = q.src; mImg.style.display = 'block'; mImg.style.opacity = "0.5"; }
+            } else {
+                if(q.src) { mImg.src = q.src; mImg.style.display = 'block'; mImg.style.opacity = "1"; }
             }
             
             document.getElementById('mirrorStatus').innerText = "LIVE READING";
@@ -902,12 +1028,12 @@
         }
     }
 
-    // --- TEMPLATE GENERATOR (The "Child" Window Logic) ---
+    // --- TEMPLATE GENERATOR ---
     function getTemplate() {
         // Embed Font Data
         const fontFace = state.fontData ? `@font-face { font-family: 'AppFont'; src: url('${state.fontData}'); }` : '';
         const bStyle = document.getElementById('borderStyle').value;
-        const th = state.theme || themeList[0]; // Use selected theme or default
+        const th = state.theme || themeList[0]; // FIX: Safety check
 
         // BORDER LOGIC - Uses Viewport Units (vh) for auto scaling
         let borderCSS = `border: 1.5vmin ${th.borderType} ${th.accent}; box-shadow: 0 0 5vmin ${th.accent}80;`;
@@ -934,7 +1060,6 @@
                     --txt-col: ${th.text};
                 }
                 
-                /* FIX 2: RESET AND FULLSCREEN FIX */
                 * { box-sizing: border-box; }
                 body { 
                     margin:0; padding: 0;
@@ -945,12 +1070,36 @@
                     background: #000;
                 }
 
-                /* 1. FULL SCREEN ROYAL FRAME (Fixed Overlay) */
+                /* 1. FULL SCREEN ROYAL FRAME */
                 #royalFrame {
                     position: fixed; top:0; left:0; width:100%; height:100%;
                     pointer-events: none; z-index: 9999;
-                    border: 2.5vmin solid var(--accent); /* Uses vmin for auto scaling */
+                    border: 2.5vmin solid var(--accent);
                     box-shadow: inset 0 0 10vmin rgba(0,0,0,0.9);
+                }
+
+                /* UPDATED: WATERMARK (Bottom-Left & Smaller) */
+                #watermark {
+                    position: fixed; bottom: 10px; left: 10px; /* Moved to Left */
+                    opacity: 0.3;
+                    color: var(--accent);
+                    font-size: 1.2vmin; /* Made smaller */
+                    z-index: 9000;
+                    text-align: left; /* Align Left */
+                    pointer-events: none;
+                    font-weight: bold;
+                }
+
+                /* SIGNAL LIGHT (Top Right) */
+                #signalLight {
+                    position: fixed; top: 2vmin; right: 2vmin;
+                    width: 6vmin; height: 6vmin;
+                    border-radius: 50%;
+                    background: #333;
+                    border: 0.5vmin solid #fff;
+                    box-shadow: 0 0 2vmin rgba(0,0,0,0.5);
+                    z-index: 10000;
+                    transition: background 0.3s;
                 }
 
                 /* SCREENS */
@@ -994,9 +1143,39 @@
                     border: 0.3vmin solid var(--accent); border-radius: 1vmin;
                     display: flex; flex-direction: column; margin-left: 1vw;
                 }
-                .current-details { padding: 2vh; border-bottom: 1px solid var(--accent); }
-                .val { font-size: 3vmin; font-weight:bold; display:block; color: #fff; }
-                .lbl { color: var(--accent); font-size: 2vmin; }
+
+                /* UPDATED SIDEBAR CONTENT STYLES */
+                .mode-display {
+                    padding: 2vh;
+                    border-bottom: 1px solid var(--accent);
+                    text-align: center;
+                }
+                .mode-text {
+                    color: #00e676; /* Green for mode */
+                    font-size: 2.5vmin;
+                    font-weight: bold;
+                    text-shadow: 0 2px 2px #000;
+                }
+
+                .selected-list-box {
+                    border-bottom: 1px solid var(--accent);
+                    padding: 2vh; /* More padding */
+                    background: rgba(255, 255, 255, 0.05);
+                    text-align: center; /* Centered */
+                }
+                .selected-label { 
+                    color: var(--accent); 
+                    font-size: 1.8vmin; 
+                    display: block; 
+                    margin-bottom: 1vh;
+                    text-decoration: underline;
+                }
+                .selected-nums { 
+                    color: #fff; 
+                    font-size: 3vmin; /* Larger numbers */
+                    font-weight: bold; 
+                    line-height: 1.5;
+                }
 
                 .questions-list { flex: 1; overflow-y: auto; padding: 1vmin; }
                 .q-item { 
@@ -1015,33 +1194,29 @@
                     perspective: 1000px;
                 }
                 
-                /* FIX 3: SCROLLABLE PORTRAIT FIX (Use Block + Fixed Height + Overflow Auto) */
                 .royal-card {
                     width: 75vw; /* Responsive Width */
                     height: 80vh; /* Fixed Height relative to screen */
                     background: #fff; 
                     ${borderCSS}
                     border-radius: 1vmin;
-                    /* KEY FIX FOR SCROLLING */
                     overflow-y: auto; 
                     overflow-x: hidden;
-                    display: block; /* Don't flex-center vertically */
+                    display: block; 
                     position: relative;
                     box-shadow: 0 2vmin 5vmin rgba(0,0,0,0.7);
                 }
                 
-                /* FIX 3 CONT: IMAGE SCALING */
                 .royal-card img { 
-                    width: 100%; /* Force width to fit container */
-                    height: auto; /* Allow height to expand naturally */
+                    width: 100%; 
+                    height: auto; 
                     display: block; 
                     margin: 0;
                 }
                 
-                /* Memory Mode Styling */
                 .royal-card.memory-mode { 
                     background: transparent; border: none; box-shadow: none; 
-                    display: flex; justify-content: center; align-items: center; /* Center text */
+                    display: flex; justify-content: center; align-items: center;
                 }
 
                 #memoryText { display:none; color: var(--accent); font-size: 5vw; text-shadow: 0 0 2vh var(--accent); text-align:center; }
@@ -1049,7 +1224,6 @@
                 #finishScreen { display:none; width:100%; height:100%; flex-direction:column; align-items:center; justify-content:center; background: #000; }
                 #waitScreen { display:none; width:100%; height:100%; flex-direction:column; align-items:center; justify-content:center; background: #000; }
 
-                /* Fullscreen Button Overlay */
                 #fsOverlay { position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:99999; display:flex; justify-content:center; align-items:center; }
                 .fs-btn { border: 2px solid var(--accent); padding: 20px; color: var(--accent); background: #000; cursor: pointer; font-size: 20px; border-radius: 10px; }
             </style>
@@ -1058,6 +1232,10 @@
             <div id="fsOverlay" onclick="goFullscreen()"><div class="fs-btn">CLICK TO START (FULLSCREEN)</div></div>
             
             ${bStyle === 'royal' ? '<div id="royalFrame"></div>' : ''}
+
+            <div id="signalLight"></div>
+
+            <div id="watermark">Copyright Ali Ibrahim Didi 7791550</div>
 
             <div id="idleScreen">
                 <h1 style="font-size:8vw; color:var(--accent); text-shadow:0 0 3vh var(--accent);">RASFAHI</h1>
@@ -1082,10 +1260,16 @@
                 <div id="topBar"><div id="topStatusText"></div></div>
                 <div id="contentArea">
                     <div id="infoPanel">
-                        <div class="current-details">
-                            <span class="lbl" data-key="lblSurah">ސޫރަތް:</span><span class="val" id="dSurah"></span>
-                            <span class="lbl" data-key="lblAyah">އާޔަތް:</span><span class="val" id="dAyah"></span>
+                        
+                        <div class="mode-display">
+                             <span class="mode-text" id="displayMode"></span>
                         </div>
+
+                        <div class="selected-list-box">
+                            <span class="selected-label" data-key="lblSelected">އިޚްތިޔާރުކުރި ސުވާލު:</span>
+                            <span class="selected-nums" id="displaySelected"></span>
+                        </div>
+
                         <div class="questions-list" id="qListContainer"></div>
                     </div>
                     <div id="mainArea">
@@ -1098,13 +1282,17 @@
             </div>
 
             <script>
+                // Child Security
+                document.addEventListener('contextmenu', e => e.preventDefault());
+
                 const childI18n = {
                     gridTitle: { dv: "ސުވާލު ނަންބަރު ނަގާ", ar: "اختر رقم السؤال", en: "Pick Question Number" },
                     waitHead: { dv: "ސުވާލު ނެގުން ނިމިއްޖެ", ar: "اكتمل الاختيار", en: "Selection Complete" },
                     waitSub: { dv: "ޖަޖުން ފަށަންދެން މަޑުކުރައްވާ", ar: "بانتظار بدء القاضي", en: "Waiting for Judge..." },
                     memText: { dv: "(ނުބަލައި ކިޔެވުމުގެ ބައިގެ ކިޔެވުން)", ar: "(تلاوة عن ظهر قلب)", en: "(Memory Recitation Mode)" },
-                    lblSurah: { dv: "ސޫރަތް:", ar: "سورة:", en: "Surah:" },
-                    lblAyah: { dv: "އާޔަތް:", ar: "آية:", en: "Ayah:" },
+                    rmMushaf: { dv: "ބަލައިގެން ކިޔެވުމުގެ ގޮފި", ar: "فرع القراءة من المصحف", en: "Reading from Mushaf" },
+                    rmMemory: { dv: "ނުބަލާ ކިޔެވުމުގެ ގޮފި", ar: "فرع الحفظ", en: "Reciting from Memory" },
+                    lblSelected: { dv: "އިޚްތިޔާރުކުރި ސުވާލު:", ar: "الأسئلة المختارة:", en: "Selected Questions:" },
                     qPrefix: { dv: "ސުވާލު", ar: "سؤال", en: "Q" },
                     pagePrefix: { dv: "ޞަފްޙާ", ar: "صفحة", en: "Pg" },
                     statFirst: { dv: "މިހާރު ތިޔަ ކިޔަވަނީ ފުރަތަމަ ސުވާލު", ar: "أنت تقرأ السؤال الأول", en: "Reading First Question" },
@@ -1127,6 +1315,10 @@
                     document.body.className = 'lang-' + lang;
                     document.documentElement.dir = (lang === 'en') ? 'ltr' : 'rtl';
                     document.documentElement.lang = lang;
+
+                    // Update Signal Light
+                    document.getElementById('signalLight').style.background = d.light ? '#00e676' : '#330000';
+                    document.getElementById('signalLight').style.boxShadow = d.light ? '0 0 5vmin #00e676' : 'none';
 
                     // Update Text
                     document.getElementById('gridTitle').innerText = childI18n.gridTitle[lang];
@@ -1170,6 +1362,18 @@
                         else if(d.activeIndex === d.slots.length - 1 && d.slots.length > 1) statusTxt.innerText = childI18n.statLast[lang];
                         else statusTxt.innerText = childI18n.statMid[lang].replace('%N', currentNum);
 
+                        // SHOW SELECTED QUESTIONS
+                        const selIds = d.slots.map(s => s.id).join(', ');
+                        document.getElementById('displaySelected').innerText = selIds;
+
+                        // SHOW MODE
+                        const modeTxt = document.getElementById('displayMode');
+                        if(d.readingMode === 'memory') {
+                            modeTxt.innerText = childI18n.rmMemory[lang];
+                        } else {
+                            modeTxt.innerText = childI18n.rmMushaf[lang];
+                        }
+
                         if(q) {
                             const img = document.getElementById('qImg');
                             const memTxt = document.getElementById('memoryText');
@@ -1183,8 +1387,6 @@
                                 memTxt.style.display = 'none';
                                 if(q.src) { img.src = q.src; img.style.display = 'block'; }
                             }
-                            document.getElementById('dSurah').innerText = q.surah;
-                            document.getElementById('dAyah').innerText = q.start + ' - ' + q.end;
                         }
 
                         const listC = document.getElementById('qListContainer');
@@ -1211,11 +1413,22 @@
         if(type === 'student') {
             if(state.windows.student) state.windows.student.close();
             state.windows.student = window.open("", "Student", "width=1280,height=720");
-            state.windows.student.document.write(html);
+            // FIX: Added document.close to ensure window loads completely
+            if(state.windows.student) {
+                state.windows.student.document.open();
+                state.windows.student.document.write(html);
+                state.windows.student.document.close(); 
+            } else {
+                alert("Please Allow Popups for this site!");
+            }
         } else {
             let w = window.open("", "JudgeGeneric", "width=800,height=600");
-            w.document.write(html);
-            state.windows.judges.push(w);
+            if(w) {
+                w.document.open();
+                w.document.write(html);
+                w.document.close();
+                state.windows.judges.push(w);
+            }
         }
         setTimeout(syncWindows, 500);
     }
@@ -1226,8 +1439,12 @@
         state.windows.judges = [];
         for(let i=0; i<count; i++) {
             let w = window.open("", `Judge_${i+1}`, "width=800,height=600");
-            w.document.write(getTemplate());
-            state.windows.judges.push(w);
+            if(w) {
+                w.document.open();
+                w.document.write(getTemplate());
+                w.document.close();
+                state.windows.judges.push(w);
+            }
         }
         setTimeout(syncWindows, 500);
     }
@@ -1244,9 +1461,9 @@
         state.windows.judges.forEach(w => send(w));
     }
     
-    // INITIALIZATION
+    // INITIALIZATION - FIX: Ensure Theme and Mode are set on load
     initThemes();
-    state.theme = themeList[0];
+    if(themeList.length > 0) state.theme = themeList[0];
     setMode('judge');
     renderSlots();
 </script>
