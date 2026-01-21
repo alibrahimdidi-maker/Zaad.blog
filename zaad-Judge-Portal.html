@@ -2,7 +2,8 @@
 <html lang="dv" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>Rasfahi Royal Quran (V20.1 Fixed Edition)</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Rasfahi Royal Quran (V20.2 Mobile & Font Fix)</title>
     <style>
         /* --- FONTS & IMPORTS --- */
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Thaana:wght@400;700;900&family=Cinzel:wght@700;900&display=swap');
@@ -52,6 +53,7 @@
             border-left: 3px solid var(--gold);
             display: flex; flex-direction: column; height: 100vh; z-index: 100;
             box-shadow: 10px 0 40px rgba(0,0,0,0.8);
+            transition: width 0.3s;
         }
         
         .header { 
@@ -79,7 +81,6 @@
         .royal-footer p { margin: 2px 0; }
         .royal-footer .highlight { color: var(--gold); font-weight: bold; font-family: 'Cinzel', sans-serif !important; }
         
-        /* NEW: DRIVE LINK BUTTON STYLE (MOVED UP) */
         .drive-btn {
             background: #1f1f1f; border: 1px dashed #555; color: #aaa;
             padding: 8px; width: 100%; margin-bottom: 10px; cursor: pointer;
@@ -171,8 +172,8 @@
         }
 
         /* MAIN PREVIEW AREA (ADMIN MONITOR - REDESIGNED) */
-        .main-view { flex: 1; background: #050505; display: flex; flex-direction: column; border-right: 1px solid #222; position: relative; }
-        .mirror-header { background: #111; padding: 5px 15px; color: #666; font-size: 11px; border-bottom: 1px solid #333; display: flex; justify-content: space-between; }
+        .main-view { flex: 1; background: #050505; display: flex; flex-direction: column; border-right: 1px solid #222; position: relative; overflow: hidden; }
+        .mirror-header { background: #111; padding: 5px 15px; color: #666; font-size: 11px; border-bottom: 1px solid #333; display: flex; justify-content: space-between; flex-shrink: 0; }
         
         #adminMirror {
             flex: 1; overflow: hidden; position: relative;
@@ -180,15 +181,15 @@
             display: flex; justify-content: center; align-items: center;
         }
         
-        /* NEW ADMIN MIRROR LAYOUT (Mimics Student Screen) */
+        /* UPDATED: SCROLLABLE ADMIN CARD */
         .mirror-card {
-            width: 80%; height: 80%;
+            width: 85%; height: 85%; /* Slightly larger */
             background: #fff;
-            border: 15px double var(--gold); /* Mimic Royal Border */
+            border: 10px double var(--gold); /* Royal Border */
             position: relative;
-            overflow: hidden;
             display: flex; flex-direction: column;
             box-shadow: 0 0 50px rgba(0,0,0,0.8);
+            border-radius: 8px;
         }
 
         .mirror-banner-strip {
@@ -200,16 +201,30 @@
             font-size: 14px;
             font-weight: bold;
             z-index: 10;
+            flex-shrink: 0;
         }
 
+        /* UPDATED: SCROLLABLE IMAGE CONTAINER */
         .mirror-img-container {
             flex: 1;
-            overflow-y: auto;
+            overflow-y: auto; /* Enable Vertical Scrolling */
+            overflow-x: hidden;
             position: relative;
-            display: flex; justify-content: center;
+            background: #fff;
+            padding: 0;
+            scrollbar-width: thin; /* Firefox */
+            scrollbar-color: var(--gold) #222;
         }
+        
+        /* Custom Scrollbar */
+        .mirror-img-container::-webkit-scrollbar { width: 8px; }
+        .mirror-img-container::-webkit-scrollbar-track { background: #222; }
+        .mirror-img-container::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 4px; }
+
         .mirror-img-container img {
-            width: 100%; height: auto; display: block;
+            width: 100%; /* Force Fit Width */
+            height: auto; /* Auto Height (Scrollable) */
+            display: block;
         }
 
         .mirror-info-span { color: #fff; margin-left: 5px; }
@@ -240,6 +255,27 @@
         }
         #royalFSBtn:hover { transform: scale(1.1); box-shadow: 0 0 30px var(--gold); }
 
+        /* --- MOBILE & RESPONSIVE DESIGN --- */
+        @media screen and (max-width: 900px) {
+            body { flex-direction: column-reverse; /* Sidebar at bottom or scrollable */ height: auto; overflow-y: auto; }
+            .sidebar { 
+                width: 100%; height: auto; 
+                border-left: none; border-top: 3px solid var(--gold); 
+                order: 2; /* Move below main view */
+            }
+            .main-view { 
+                width: 100%; height: 60vh; /* Main view takes top portion */
+                order: 1; 
+                border-right: none;
+            }
+            .content { max-height: 400px; } /* Scrollable settings on mobile */
+            .mirror-card { width: 95%; height: 95%; border-width: 5px; }
+            .sec-box { width: 90%; }
+            
+            /* Bigger touch targets */
+            button, select, input { padding: 12px; font-size: 16px; }
+        }
+
     </style>
 </head>
 <body oncontextmenu="return false;">
@@ -249,8 +285,8 @@
 
     <div id="securityOverlay">
         <div class="sec-box">
-            <h1 style="color:var(--gold); font-family:'Cinzel' !important; margin:0;">ROYAL ELITE V20.0</h1>
-            <p style="color:#666; font-size:10px;">ULTIMATE SECURITY EDITION</p>
+            <h1 style="color:var(--gold); font-family:'Cinzel' !important; margin:0;">ROYAL ELITE V20.2</h1>
+            <p style="color:#666; font-size:10px;">MOBILE & FONT FIX EDITION</p>
             <input type="password" id="secKey" style="text-align:center; font-size:18px; margin:15px 0; padding:10px; border-color:var(--gold);" placeholder="Enter License Key">
             <button class="btn-green" onclick="unlockSystem()">UNLOCK SYSTEM</button>
             <p id="secMsg" style="color:#ff5252; margin-top:10px; font-size:12px;"></p>
@@ -259,7 +295,7 @@
 
     <div class="sidebar">
         <div class="header">
-            <h1 class="app-title" data-translate="title">RASFAHI JUDGE V20.1</h1>
+            <h1 class="app-title" data-translate="title">RASFAHI JUDGE V20.2</h1>
         </div>
 
         <div class="content">
@@ -347,6 +383,11 @@
             <div class="panel">
                 <h2 data-translate="settings">3. ސެޓިންގސް & ޑޭޓާ</h2>
                 
+                <label style="color:#00e676;">★ ފޮންޓް އިންސްޓޯލް (Font File):</label>
+                <input type="file" id="fontLoader" accept=".ttf,.otf,.woff,.woff2" style="border-color:#00e676;">
+                <small style="color:#666; font-size:10px;">Select .TTF or .WOFF file for Faruuma/Waheed</small>
+                <hr style="border-color:#333; margin:8px 0;">
+
                 <label>1. Royal Theme Engine (100+):</label>
                 <select id="themeSelect" onchange="updateTheme()">
                     </select>
@@ -433,28 +474,34 @@
 
 <script>
     // --- 0. SECURITY & CONFIG ---
-    // Placeholder for Drive Link - User can edit this variable
     const GOOGLE_DRIVE_URL = "https://drive.google.com/drive/folders/YOUR_FOLDER_ID"; 
     document.getElementById('driveLink').href = GOOGLE_DRIVE_URL;
 
     // SECURITY BLOCKER
     document.addEventListener('contextmenu', event => event.preventDefault());
-    document.addEventListener('keydown', function(e) {
-        if(
-            e.key === 'F12' || 
-            (e.ctrlKey && e.shiftKey && e.key === 'I') || 
-            (e.ctrlKey && e.shiftKey && e.key === 'J') || 
-            (e.ctrlKey && e.key === 'U') || 
-            (e.ctrlKey && e.key === 'S') 
-        ) {
-            e.preventDefault();
-            return false;
-        }
-    });
+    
+    // --- NEW: FONT LOADING LOGIC ---
+    document.getElementById('fontLoader').onchange = e => {
+        const file = e.target.files[0];
+        if(!file) return;
+        const reader = new FileReader();
+        reader.onload = function(evt) {
+            state.fontData = evt.target.result; // Store base64 font data
+            
+            // Inject into Admin Panel
+            const style = document.createElement('style');
+            style.innerHTML = `@font-face { font-family: 'AppFont'; src: url('${state.fontData}'); }`;
+            document.head.appendChild(style);
+            
+            alert("Font Loaded Successfully! (Syncing to screens...)");
+            syncWindows();
+        };
+        reader.readAsDataURL(file);
+    };
 
     // --- TRANSLATION DICTIONARY ---
     const i18n = {
-        title: { dv: "ރަސްފަހި ޖަޖް V20.1", ar: "القاضي رصفهي V20.1", en: "Rasfahi Judge V20.1" },
+        title: { dv: "ރަސްފަހި ޖަޖް V20.2", ar: "القاضي رصفهي V20.2", en: "Rasfahi Judge V20.2" },
         liveCtrl: { dv: "1. ލައިވް ކޮންޓްރޯލް", ar: "1. التحكم المباشر", en: "1. Live Control" },
         mJudge: { dv: "⚖️ ޖަޖު މެތަޑް (އޮޓޯ)", ar: "⚖️ وضع القاضي (تلقائي)", en: "⚖️ Judge Mode (Auto)" },
         mStudent: { dv: "🎓 ދަރިވަރު މެތަޑް (މެނުއަލް)", ar: "🎓 وضع الطالب (يدوي)", en: "🎓 Student Mode (Manual)" },
@@ -489,9 +536,8 @@
     let currentLang = 'dv';
     let themeList = [];
 
-    // --- 1. THEME ENGINE (Generates 100+ Royal Variations) ---
+    // --- 1. THEME ENGINE ---
     function initThemes() {
-        // Base Royal Colors
         const bases = [
             {n:"Royal Blue", c1:"#001a33", c2:"#000d1a", txt:"#ffffff"},
             {n:"Emerald Green", c1:"#002b15", c2:"#001a0d", txt:"#e6ffe6"},
@@ -499,7 +545,6 @@
             {n:"Midnight Black", c1:"#111111", c2:"#000000", txt:"#ffffff"},
             {n:"Imperial Purple", c1:"#1a0033", c2:"#0d001a", txt:"#f2e6ff"}
         ];
-        // Accents (Borders/Highlights)
         const accents = [
             {n:"Gold", c:"#D4AF37", b:"double"},
             {n:"Silver", c:"#C0C0C0", b:"ridge"},
@@ -508,7 +553,7 @@
         ];
 
         const sel = document.getElementById('themeSelect');
-        sel.innerHTML = ""; // FIX: Clear existing options
+        sel.innerHTML = ""; 
         let count = 1;
         
         bases.forEach(base => {
@@ -531,7 +576,6 @@
             });
         });
         
-        // FIX: Ensure first theme is loaded
         if(themeList.length > 0) {
             state.theme = themeList[0];
             sel.value = 0;
@@ -545,7 +589,6 @@
         document.documentElement.lang = lang;
         document.documentElement.dir = (lang === 'en') ? 'ltr' : 'rtl';
         document.querySelector('.sidebar').style.borderLeft = (lang === 'en') ? 'none' : '3px solid var(--gold)';
-        document.querySelector('.sidebar').style.borderRight = (lang === 'en') ? '3px solid var(--gold)' : 'none';
 
         // Apply translations
         document.querySelectorAll('[data-translate]').forEach(el => {
@@ -555,21 +598,15 @@
             }
         });
 
-        // Update Admin End Message
         if(i18n.msgFinished[lang]) {
             document.getElementById('mFinishText').innerHTML = i18n.msgFinished[lang].replace(/\n/g, '<br>');
         }
-
-        // SYNC TO CHILDREN
         syncWindows();
     }
 
-    // --- FULLSCREEN LOGIC ---
     function toggleAppFullscreen() {
         if (!document.fullscreenElement) {
-            document.documentElement.requestFullscreen().catch(err => {
-                alert(`Error: ${err.message}`);
-            });
+            document.documentElement.requestFullscreen().catch(err => alert(`Error: ${err.message}`));
         } else {
             document.exitFullscreen();
         }
@@ -605,7 +642,7 @@
         document.getElementById('studentControls').classList.toggle('hidden', mode !== 'student');
         
         if(mode === 'student') {
-            reshuffleGrid(); // FIX: Ensure grid is populated
+            reshuffleGrid(); 
         } else { 
             state.grid.visible = false; 
             syncWindows(); 
@@ -659,7 +696,6 @@
         reader.onload = function(e) {
             try {
                 const config = JSON.parse(e.target.result);
-                // Apply Settings
                 document.getElementById('themeSelect').value = config.themeIndex || 0;
                 document.getElementById('borderStyle').value = config.borderStyle || 'royal';
                 document.getElementById('qLimit').value = config.qLimit || 3;
@@ -681,7 +717,6 @@
     // --- CACHE MANAGEMENT ---
     function clearCache() {
         if(confirm("Are you sure? This will clear all loaded images to free up memory.")) {
-            // Revoke all Object URLs
             Object.values(state.pImages).forEach(url => URL.revokeObjectURL(url));
             state.pImages = {};
             state.qDataMap = {};
@@ -858,8 +893,6 @@
     }
 
     // --- NAVIGATION SAFEGUARDS & FEATURES ---
-    
-    // BACK BUTTON
     window.prevQuestion = function() {
         if(state.session.phase === 'finished') {
             state.session.phase = 'active';
@@ -873,7 +906,6 @@
         updateStatus(); renderSlots(); updateMirror(); syncWindows();
     }
 
-    // NEXT BUTTON
     window.nextQuestion = function() {
         if(state.session.phase === 'ready') {
             startReadingSession(); return;
@@ -958,8 +990,8 @@
 
         // Apply Royal Styles to Admin Monitor
         if(state.theme) {
-            mCont.style.border = `15px ${state.theme.borderType} ${state.theme.accent}`;
-            mCont.style.background = '#fff'; // Usually white for image paper background
+            mCont.style.border = `10px ${state.theme.borderType} ${state.theme.accent}`;
+            mCont.style.background = '#fff'; 
         }
 
         if(state.grid.visible) {
@@ -1005,7 +1037,7 @@
             if(state.readingMode === 'memory') {
                 wWarn.style.display = 'block';
                 mMemory.style.display = 'block'; // Show Memory Text
-                if(q.src) { mImg.src = q.src; mImg.style.display = 'block'; mImg.style.opacity = "0.5"; }
+                if(q.src) { mImg.src = q.src; mImg.style.display = 'block'; mImg.style.opacity = "0.2"; }
             } else {
                 if(q.src) { mImg.src = q.src; mImg.style.display = 'block'; mImg.style.opacity = "1"; }
             }
@@ -1033,9 +1065,9 @@
         // Embed Font Data
         const fontFace = state.fontData ? `@font-face { font-family: 'AppFont'; src: url('${state.fontData}'); }` : '';
         const bStyle = document.getElementById('borderStyle').value;
-        const th = state.theme || themeList[0]; // FIX: Safety check
+        const th = state.theme || themeList[0]; 
 
-        // BORDER LOGIC - Uses Viewport Units (vh) for auto scaling
+        // BORDER LOGIC
         let borderCSS = `border: 1.5vmin ${th.borderType} ${th.accent}; box-shadow: 0 0 5vmin ${th.accent}80;`;
         if(bStyle === 'custom' && state.borderData) borderCSS = `border: 4vmin solid transparent; border-image: url('${state.borderData}') 30 stretch;`;
         if(bStyle === 'none') borderCSS = "border:none;";
@@ -1078,19 +1110,17 @@
                     box-shadow: inset 0 0 10vmin rgba(0,0,0,0.9);
                 }
 
-                /* UPDATED: WATERMARK (Bottom-Left & Smaller) */
                 #watermark {
-                    position: fixed; bottom: 10px; left: 10px; /* Moved to Left */
+                    position: fixed; bottom: 10px; left: 10px; 
                     opacity: 0.3;
                     color: var(--accent);
-                    font-size: 1.2vmin; /* Made smaller */
+                    font-size: 1.2vmin; 
                     z-index: 9000;
-                    text-align: left; /* Align Left */
+                    text-align: left; 
                     pointer-events: none;
                     font-weight: bold;
                 }
 
-                /* SIGNAL LIGHT (Top Right) */
                 #signalLight {
                     position: fixed; top: 2vmin; right: 2vmin;
                     width: 6vmin; height: 6vmin;
@@ -1144,14 +1174,13 @@
                     display: flex; flex-direction: column; margin-left: 1vw;
                 }
 
-                /* UPDATED SIDEBAR CONTENT STYLES */
                 .mode-display {
                     padding: 2vh;
                     border-bottom: 1px solid var(--accent);
                     text-align: center;
                 }
                 .mode-text {
-                    color: #00e676; /* Green for mode */
+                    color: #00e676; 
                     font-size: 2.5vmin;
                     font-weight: bold;
                     text-shadow: 0 2px 2px #000;
@@ -1159,9 +1188,9 @@
 
                 .selected-list-box {
                     border-bottom: 1px solid var(--accent);
-                    padding: 2vh; /* More padding */
+                    padding: 2vh; 
                     background: rgba(255, 255, 255, 0.05);
-                    text-align: center; /* Centered */
+                    text-align: center; 
                 }
                 .selected-label { 
                     color: var(--accent); 
@@ -1172,7 +1201,7 @@
                 }
                 .selected-nums { 
                     color: #fff; 
-                    font-size: 3vmin; /* Larger numbers */
+                    font-size: 3vmin; 
                     font-weight: bold; 
                     line-height: 1.5;
                 }
@@ -1195,8 +1224,8 @@
                 }
                 
                 .royal-card {
-                    width: 75vw; /* Responsive Width */
-                    height: 80vh; /* Fixed Height relative to screen */
+                    width: 75vw; 
+                    height: 80vh; 
                     background: #fff; 
                     ${borderCSS}
                     border-radius: 1vmin;
@@ -1342,7 +1371,10 @@
                         gc.innerHTML = '';
                         for(let i=1; i<=20; i++) {
                             let b = document.createElement('div');
-                            b.className = 'grid-btn ' + (d.grid.taken.includes(i) ? 'taken' : '');
+                            let bClass = 'grid-btn';
+                            if(d.grid.taken.includes(i)) bClass += ' taken';
+                            
+                            b.className = bClass;
                             b.innerText = i;
                             b.setAttribute('onclick', 'window.opener.handleGridClick('+i+')');
                             gc.appendChild(b);
@@ -1413,7 +1445,6 @@
         if(type === 'student') {
             if(state.windows.student) state.windows.student.close();
             state.windows.student = window.open("", "Student", "width=1280,height=720");
-            // FIX: Added document.close to ensure window loads completely
             if(state.windows.student) {
                 state.windows.student.document.open();
                 state.windows.student.document.write(html);
@@ -1454,14 +1485,14 @@
             slots: state.session.slots, activeIndex: state.session.activeIndex,
             phase: state.session.phase, light: state.session.light,
             grid: state.grid, readingMode: state.readingMode,
-            currentLang: currentLang
+            currentLang: currentLang, fontData: state.fontData
         };
         const send = w => { if(w && !w.closed && w.updateState) w.updateState(packet); };
         send(state.windows.student);
         state.windows.judges.forEach(w => send(w));
     }
     
-    // INITIALIZATION - FIX: Ensure Theme and Mode are set on load
+    // INITIALIZATION
     initThemes();
     if(themeList.length > 0) state.theme = themeList[0];
     setMode('judge');
