@@ -301,13 +301,11 @@
                 <button class="lang-btn" onclick="setLang('ar')">عربي</button>
                 <button class="lang-btn" onclick="setLang('en')">English</button>
             </div>
+            
             <div id="licenseDisplay" style="display:none; background:#e3f2fd; color:#00008b; text-align:center; font-weight:bold; font-size:13px; padding:8px; margin-bottom:10px; border-radius:4px; border: 1px solid #00008b;">
                 Licensed To: <span id="licenseName"></span>
             </div>
-            <div class="royal-footer">
-            </div> <a id="driveLink" href="#" target="_blank" class="drive-btn" style="margin: 10px;">
-            📂 Open Google Drive Folder (Samples)
-        </a>
+            
             <div class="panel panel-live">
                 <h2 data-translate="liveCtrl">1. ލައިވް ކޮންޓްރޯލް (Live)</h2>
                 
@@ -384,7 +382,7 @@
                 </div>
             </div>
 
- <div class="panel">
+            <div class="panel">
                 <h2 data-translate="settings">3. ސެޓިންގސް & ޑޭޓާ</h2>
                 
                 <label style="color:#00e676;">★ ފޮންޓް އިންސްޓޯލް (Font File):</label>
@@ -394,7 +392,7 @@
 
                 <label>1. Royal Theme Engine (100+):</label>
                 <select id="themeSelect" onchange="updateTheme()">
-                </select>
+                    </select>
 
                 <label data-translate="lblCSV">2. ސުވާލު ޑޭޓާ (CSV):</label>
                 <div style="display:flex; gap:5px;">
@@ -424,30 +422,20 @@
                         </select>
                     </div>
                 </div>
-
-                <label style="margin-top:10px; color:#00e676;">ކިޔަވާފައިވާ ފޮތް (Range):</label>
-                <div style="display:flex; gap:5px; align-items:center;">
-                    <select id="startJuz" style="text-align:center;">
-                        <script>
-                            for(let i=1; i<=30; i++) document.write(`<option value="${i}">ފޮތް ${i}</option>`);
-                        </script>
-                    </select>
-                    <span style="color:#666;">to</span>
-                    <select id="endJuz" style="text-align:center;">
-                        <script>
-                            for(let i=1; i<=30; i++) document.write(`<option value="${i}" ${i===30?'selected':''}>ފޮތް ${i}</option>`);
-                        </script>
-                    </select>
-                </div>
-
                 <input type="file" id="borderImg" accept="image/*" class="hidden" style="margin-top:5px;">
-            </div> 
+            </div>
+        </div>
+
+        <div class="royal-footer">
+            <a id="driveLink" href="#" target="_blank" class="drive-btn">
+                📂 Open Google Drive Folder (Samples)
+            </a>
+
             <p>Copyright Reserved</p>
             <p class="highlight">Ali Ibrahim Didi 7791550 & 9901550</p>
             <p>Zad Research and Consultancy Firm</p>
         </div>
-    </div> ```
-
+    </div>
 
     <div class="main-view">
         <div class="mirror-header">
@@ -858,43 +846,28 @@
         r.readAsDataURL(e.target.files[0]);
     };
 
- // --- GRID (UPDATED) ---
+    // --- GRID ---
     window.handleGridClick = function(boxID) {
-        // 1. Check if Limit Reached
         const limit = parseInt(document.getElementById('qLimit').value);
-        if(state.session.selectionIDs.length >= limit) {
-            alert("ސުވާލު ހަމަވެއްޖެ! (Limit Reached)");
-            return;
-        }
+        if(state.session.selectionIDs.length >= limit) return;
 
-        // 2. Check if Question Exists in Map (Is Grid Shuffled?)
         const qID = state.grid.map[boxID];
         
-        if(!qID) {
-            console.log("Error: Box " + boxID + " is empty.");
-            alert("މި ނަންބަރަށް ސުވާލެއް ލިބިފައެއް ނެތް! (Please Click 'Shuffle Grid' first)");
-            return;
+        // FIX: Ensure ID exists
+        if(!qID || state.grid.taken.includes(boxID)) {
+             console.log("Empty Slot or Taken:", boxID);
+             return;
         }
 
-        // 3. Check if Already Taken
-        if(state.grid.taken.includes(boxID)) {
-            alert("ތިޔަ ނަންބަރު ވަނީ ނަގާފައި!");
-            return;
-        }
-
-        // 4. Process Selection
         state.grid.taken.push(boxID);
         state.session.selectionIDs.push(qID);
 
-        // Remove from global pool so it's not repeated later
         const idx = state.qPool.indexOf(qID);
         if(idx > -1) state.qPool.splice(idx, 1);
         state.qUsed.push(qID);
 
-        // 5. Update UI
         updateSelectionUI();
 
-        // Check if finished selection
         if(state.session.selectionIDs.length === limit) {
             state.grid.visible = false;
             state.session.phase = 'ready';
@@ -903,12 +876,9 @@
         } else {
             state.session.phase = 'selection';
         }
-
-        // Sync updates to screens
-        renderSlots(); 
-        updateGridPreview(); 
-        syncWindows();
+        renderSlots(); updateGridPreview(); syncWindows();
     }
+
     function updateSelectionUI() {
         document.getElementById('selectionInfo').innerText = "Selected: " + state.session.selectionIDs.join(", ");
     }
@@ -944,7 +914,6 @@
         updateStatus(); renderSlots(); updateMirror(); syncWindows();
     };
 
-// --- 1. Helper Function (Ensure this is correct) ---
     function getRandomQ() {
         if(state.qPool.length === 0) {
              if(state.qUsed.length === 0) { alert("No Data Loaded!"); return null; }
@@ -961,101 +930,38 @@
         return qData;
     }
 
-    // --- 2. NEW RESHUFFLE FUNCTION ---
+    // FIX: RESHUFFLE LOGIC
     window.reshuffleGrid = function() {
         // Safety Check
-        if(!state.qPool || (state.qPool.length === 0 && state.qUsed.length === 0)) {
-            alert("އެއްވެސް ސުވާލެއް ލޯޑުކުރެވިފައެއް ނެތް! ފުރަތަމަ CSV ފައިލް ލޯޑުކުރައްވާ.");
+        if(state.qPool.length === 0 && state.qUsed.length === 0) {
+            alert("No questions loaded! Please load CSV first.");
             return;
         }
 
-        const sJuz = parseInt(document.getElementById('startJuz').value);
-        const eJuz = parseInt(document.getElementById('endJuz').value);
-
-        let allQuestions = [...state.qPool, ...state.qUsed];
+        state.grid.map = {}; state.grid.taken = [];
+        let tempPool = [...state.qPool];
         
-        // Filter by Juz (Page calculation)
-        let filteredPool = allQuestions.filter(qID => {
-            let q = state.qDataMap[qID];
-            if(!q) return false;
-            let pNo = parseInt(q.page);
-            let juzCalc = Math.ceil((pNo - 1.5) / 20); 
-            if(pNo >= 582) juzCalc = 30; 
-            if(juzCalc === 0) juzCalc = 1;
-            return juzCalc >= sJuz && juzCalc <= eJuz;
-        });
-
-        if(filteredPool.length === 0) {
-            alert(`Juz ${sJuz} to ${eJuz} : މި ފޮތްތަކާ ދިމާވާ އެއްވެސް ސުވާލެއް ޑޭޓާބޭސްގައި ނެތެވެ!`);
-            return;
-        }
-
-        state.grid.map = {}; 
-        state.grid.taken = [];
-        let tempPool = [...filteredPool];
+        // If low on questions, borrow from used pile
+        if(tempPool.length < 20 && state.qUsed.length > 0) tempPool = [...tempPool, ...state.qUsed];
         
         for(let i=1; i<=20; i++) {
-            if(tempPool.length === 0) tempPool = [...filteredPool];
+            if(tempPool.length === 0) {
+                state.grid.map[i] = null; // Mark as empty
+                continue;
+            }
             const rIdx = Math.floor(Math.random() * tempPool.length);
             state.grid.map[i] = tempPool[rIdx];
             tempPool.splice(rIdx, 1);
         }
-
-        updateGridPreview(); 
-        syncWindows();
+        updateGridPreview(); syncWindows();
     }
 
-    // --- 3. TOGGLE FUNCTION (Fixes Grid Not Showing) ---
     window.toggleGridScreen = function(show) {
         state.grid.visible = show;
-        updateMirror();
-        syncWindows();
+        state.session.phase = 'selection';
+        syncWindows(); updateGridPreview();
     }
-        const sJuz = parseInt(document.getElementById('startJuz').value);
-        const eJuz = parseInt(document.getElementById('endJuz').value);
 
-        // 3. Prepare Pool (Combine all loaded questions)
-        let allQuestions = [...state.qPool, ...state.qUsed];
-        
-        // 4. FILTER Logic (Check Page Number to guess Juz)
-        let filteredPool = allQuestions.filter(qID => {
-            let q = state.qDataMap[qID];
-            if(!q) return false;
-            
-            let pNo = parseInt(q.page);
-            // Calculate Juz from Page (Standard formula)
-            let juzCalc = Math.ceil((pNo - 1.5) / 20); 
-            if(pNo >= 582) juzCalc = 30; 
-            if(juzCalc === 0) juzCalc = 1;
-
-            return juzCalc >= sJuz && juzCalc <= eJuz;
-        });
-
-        if(filteredPool.length === 0) {
-            alert(`Juz ${sJuz} to ${eJuz} : މި ފޮތްތަކާ ދިމާވާ އެއްވެސް ސުވާލެއް ޑޭޓާބޭސްގައި ނެތެވެ!`);
-            return;
-        }
-
-        // 5. Build Grid Map
-        state.grid.map = {}; 
-        state.grid.taken = [];
-        
-        let tempPool = [...filteredPool];
-        
-        for(let i=1; i<=20; i++) {
-            // Recycle if pool is smaller than 20
-            if(tempPool.length === 0) tempPool = [...filteredPool];
-            
-            const rIdx = Math.floor(Math.random() * tempPool.length);
-            state.grid.map[i] = tempPool[rIdx]; // Assign Question ID to Box Number
-            
-            tempPool.splice(rIdx, 1);
-        }
-
-        // 6. Confirm & Update
-        updateGridPreview(); 
-        syncWindows();
-    }
     // --- NAVIGATION SAFEGUARDS & FEATURES ---
     window.prevQuestion = function() {
         if(state.session.phase === 'finished') {
@@ -1599,7 +1505,7 @@
                             // UPDATED DISPLAY: Adds Ayah Start-End Numbers
                             item.innerHTML = \`<div style="color:#00e676;">\${childI18n.qPrefix[lang]} \${idx+1}</div>
                                 <div style="color:#fff; font-weight:bold; font-size:1.1em;">\${slot.surah}</div>
-                                <div style="margin-top:4px; font-size:0.75em; color:#ccc;">
+                                <div style="margin-top:4px; font-size:0.8em; color:#ccc;">
                                     <span style="border:1px solid #555; padding:2px 6px; border-radius:4px; background:rgba(0,0,0,0.3);">
                                         އާޔަތް: \${slot.start} - \${slot.end}
                                     </span>
