@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="dv" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>Quran CSV Generator (7-10 Lines)</title>
+    <style>
+        body { font-family: "Faruuma", "Segoe UI", Tahoma, sans-serif; text-align: center; padding: 50px; background: #fff3e0; }
+        .container { background: white; padding: 40px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); max-width: 600px; margin: 0 auto; }
+        #btn { padding: 15px 30px; font-size: 18px; background: #e65100; color: white; border: none; border-radius: 5px; cursor: pointer; }
+        #btn:disabled { background: #ccc; cursor: not-allowed; }
+        .progress { width: 100%; background-color: #ddd; margin-top: 10px; height: 30px; border-radius: 5px; overflow: hidden; }
+        .bar { width: 0%; height: 100%; background-color: #ef6c00; text-align: center; line-height: 30px; color: white; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>ވަރޝަން 2: 7-10 ފޮޅުވަތް (~2000 ސުވާލު)</h1>
+    <button id="btn" onclick="generateCSV()">CSV ފައިލް ހަދާ (Start)</button>
+    <div class="progress"><div id="bar" class="bar">0%</div></div>
+    <div id="status" style="margin-top:10px;">Waiting...</div>
+</div>
+
+<script>
+    async function generateCSV() {
+        const btn = document.getElementById('btn');
+        const status = document.getElementById('status');
+        const bar = document.getElementById('bar');
+        btn.disabled = true;
+        
+        let csvContent = "ID,ImageName,SurahName,PageNo,StartAyah,EndAyah,ReadableReference\n";
+        let qID = 1;
+
+        // --- CONFIGURATION FOR 7-10 LINES ---
+        // 7 Lines ~= 46%, 10 Lines ~= 66%
+        const MIN_RATIO = 0.46; 
+        const MAX_RATIO = 0.70;
+
+        try {
+            for (let page = 1; page <= 604; page++) {
+                bar.style.width = Math.round((page / 604) * 100) + "%";
+                bar.innerText = bar.style.width;
+                status.innerText = `Processing Page ${page}...`;
+
+                let response = await fetch(`https://api.alquran.cloud/v1/page/${page}/quran-uthmani`);
+                let json = await response.json();
+                let ayahs = json.data.ayahs;
+                
+                if (ayahs.length > 0) {
+                    let totalTxt = ayahs.reduce((a,c)=>a+c.text.length,0);
+                    let created = new Set();
+
+                    // STRATEGY: With longer questions, we overlap significantly to get 3 questions
+                    let startPoints = [0, totalTxt * 0.20, totalTxt * 0.40];
+
+                    startPoints.forEach(targetStart => {
+                        let currentLen = 0;
+                        let startIndex = -1;
+
+                        for(let i=0; i<ayahs.length; i++) {
+                            if(currentLen >= targetStart) { startIndex = i; break; }
+                            currentLen += ayahs[i].text.length;
+                        }
+                        if(startIndex === -1) startIndex = 0;
+
+                        let chunkTxt = 0;
+                        let endIndex = startIndex;
+                        for(let j=startIndex; j<ayahs.length; j++) {
+                            chunkTxt += ayahs[j].text.length;
+                            endIndex = j;
+                            let ratio = chunkTxt / totalTxt;
+                            
+                            // Try to satisfy range
+                            if(ratio >= MIN_RATIO) {
+                                break; 
+                            }
+                        }
+
+                        let key = `${page}-${startIndex}-${endIndex}`;
+                        if(!created.has(key)) {
+                            created.add(key);
+                            
+                            let first = ayahs[startIndex];
+                            let last = ayahs[endIndex];
+                            let refStr = (first.surah.number === last.surah.number) 
+                                ? `الصفحة ${page}: ${first.surah.name} ${first.numberInSurah}-${last.numberInSurah}`
+                                : `الصفحة ${page}: ${first.surah.name} ${first.numberInSurah} - ${last.surah.name} ${last.numberInSurah}`;
+
+                            csvContent += [
+                                qID++, 
+                                String(page).padStart(3,'0')+".png",
+                                first.surah.name, page,
+                                first.numberInSurah, last.numberInSurah,
+                                `"${refStr}"`
+                            ].join(",") + "\n";
+                        }
+                    });
+                }
+            }
+
+            const blob = new Blob(["\uFEFF"+csvContent], {type: 'text/csv;charset=utf-8;'});
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = "Quran_Questions_7-10_Lines.csv";
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            status.innerText = "Done!";
+
+        } catch (e) { alert("Error: " + e); btn.disabled = false; }
+    }
+</script>
+</body>
+</html>
