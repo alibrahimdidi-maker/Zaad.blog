@@ -959,16 +959,56 @@
         if(!qData.src) qData.src = resolveImage(qData.imgRaw);
         return qData;
     }
-// --- ޕޭސްޓް ކުރަންވީ ބައި (PASTE THIS) ---
-
+// 1. NEW RESHUFFLE FUNCTION
     window.reshuffleGrid = function() {
-        // 1. Safety Check for Data
+        // Safety Check
         if(!state.qPool || (state.qPool.length === 0 && state.qUsed.length === 0)) {
             alert("އެއްވެސް ސުވާލެއް ލޯޑުކުރެވިފައެއް ނެތް! ފުރަތަމަ CSV ފައިލް ލޯޑުކުރައްވާ.");
             return;
         }
 
-        // 2. Get Selected Range
+        const sJuz = parseInt(document.getElementById('startJuz').value);
+        const eJuz = parseInt(document.getElementById('endJuz').value);
+
+        let allQuestions = [...state.qPool, ...state.qUsed];
+        
+        // Filter by Juz (Page calculation)
+        let filteredPool = allQuestions.filter(qID => {
+            let q = state.qDataMap[qID];
+            if(!q) return false;
+            let pNo = parseInt(q.page);
+            let juzCalc = Math.ceil((pNo - 1.5) / 20); 
+            if(pNo >= 582) juzCalc = 30; 
+            if(juzCalc === 0) juzCalc = 1;
+            return juzCalc >= sJuz && juzCalc <= eJuz;
+        });
+
+        if(filteredPool.length === 0) {
+            alert(`Juz ${sJuz} to ${eJuz} : މި ފޮތްތަކާ ދިމާވާ އެއްވެސް ސުވާލެއް ޑޭޓާބޭސްގައި ނެތެވެ!`);
+            return;
+        }
+
+        state.grid.map = {}; 
+        state.grid.taken = [];
+        let tempPool = [...filteredPool];
+        
+        for(let i=1; i<=20; i++) {
+            if(tempPool.length === 0) tempPool = [...filteredPool];
+            const rIdx = Math.floor(Math.random() * tempPool.length);
+            state.grid.map[i] = tempPool[rIdx];
+            tempPool.splice(rIdx, 1);
+        }
+
+        updateGridPreview(); 
+        syncWindows();
+    }
+
+    // 2. MISSING TOGGLE FUNCTION (This fixes the "Grid won't show" issue)
+    window.toggleGridScreen = function(show) {
+        state.grid.visible = show;
+        updateMirror();
+        syncWindows();
+    }
         const sJuz = parseInt(document.getElementById('startJuz').value);
         const eJuz = parseInt(document.getElementById('endJuz').value);
 
