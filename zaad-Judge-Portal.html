@@ -944,6 +944,7 @@
         updateStatus(); renderSlots(); updateMirror(); syncWindows();
     };
 
+// --- 1. Helper Function (Ensure this is correct) ---
     function getRandomQ() {
         if(state.qPool.length === 0) {
              if(state.qUsed.length === 0) { alert("No Data Loaded!"); return null; }
@@ -959,7 +960,8 @@
         if(!qData.src) qData.src = resolveImage(qData.imgRaw);
         return qData;
     }
-// 1. NEW RESHUFFLE FUNCTION
+
+    // --- 2. NEW RESHUFFLE FUNCTION ---
     window.reshuffleGrid = function() {
         // Safety Check
         if(!state.qPool || (state.qPool.length === 0 && state.qUsed.length === 0)) {
@@ -1003,7 +1005,7 @@
         syncWindows();
     }
 
-    // 2. MISSING TOGGLE FUNCTION (This fixes the "Grid won't show" issue)
+    // --- 3. TOGGLE FUNCTION (Fixes Grid Not Showing) ---
     window.toggleGridScreen = function(show) {
         state.grid.visible = show;
         updateMirror();
