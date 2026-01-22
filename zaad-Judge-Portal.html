@@ -861,28 +861,43 @@
         r.readAsDataURL(e.target.files[0]);
     };
 
-    // --- GRID ---
+ // --- GRID (UPDATED) ---
     window.handleGridClick = function(boxID) {
+        // 1. Check if Limit Reached
         const limit = parseInt(document.getElementById('qLimit').value);
-        if(state.session.selectionIDs.length >= limit) return;
-
-        const qID = state.grid.map[boxID];
-        
-        // FIX: Ensure ID exists
-        if(!qID || state.grid.taken.includes(boxID)) {
-             console.log("Empty Slot or Taken:", boxID);
-             return;
+        if(state.session.selectionIDs.length >= limit) {
+            alert("ސުވާލު ހަމަވެއްޖެ! (Limit Reached)");
+            return;
         }
 
+        // 2. Check if Question Exists in Map (Is Grid Shuffled?)
+        const qID = state.grid.map[boxID];
+        
+        if(!qID) {
+            console.log("Error: Box " + boxID + " is empty.");
+            alert("މި ނަންބަރަށް ސުވާލެއް ލިބިފައެއް ނެތް! (Please Click 'Shuffle Grid' first)");
+            return;
+        }
+
+        // 3. Check if Already Taken
+        if(state.grid.taken.includes(boxID)) {
+            alert("ތިޔަ ނަންބަރު ވަނީ ނަގާފައި!");
+            return;
+        }
+
+        // 4. Process Selection
         state.grid.taken.push(boxID);
         state.session.selectionIDs.push(qID);
 
+        // Remove from global pool so it's not repeated later
         const idx = state.qPool.indexOf(qID);
         if(idx > -1) state.qPool.splice(idx, 1);
         state.qUsed.push(qID);
 
+        // 5. Update UI
         updateSelectionUI();
 
+        // Check if finished selection
         if(state.session.selectionIDs.length === limit) {
             state.grid.visible = false;
             state.session.phase = 'ready';
@@ -891,9 +906,12 @@
         } else {
             state.session.phase = 'selection';
         }
-        renderSlots(); updateGridPreview(); syncWindows();
-    }
 
+        // Sync updates to screens
+        renderSlots(); 
+        updateGridPreview(); 
+        syncWindows();
+    }
     function updateSelectionUI() {
         document.getElementById('selectionInfo').innerText = "Selected: " + state.session.selectionIDs.join(", ");
     }
