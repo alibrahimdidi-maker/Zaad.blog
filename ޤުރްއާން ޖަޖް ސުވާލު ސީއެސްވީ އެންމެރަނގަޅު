@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="dv" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>Quran Grid CSV (Balanced 6-8 Lines)</title>
+    <style>
+        body { font-family: "Faruuma", "Segoe UI", Tahoma, sans-serif; text-align: center; padding: 50px; background: #f9f9f9; color: #333; }
+        h1 { color: #006400; }
+        .container { background: white; padding: 40px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); max-width: 600px; margin: 0 auto; }
+        #btn { padding: 15px 30px; font-size: 18px; background: #006400; color: white; border: none; border-radius: 5px; cursor: pointer; transition: 0.3s; }
+        #btn:hover { background: #004d00; }
+        #btn:disabled { background: #ccc; cursor: not-allowed; }
+        #status { margin-top: 20px; font-weight: bold; direction: ltr; font-size: 14px; }
+        .progress { width: 100%; background-color: #e0e0e0; margin-top: 20px; height: 25px; border-radius: 15px; overflow: hidden; }
+        .bar { width: 0%; height: 100%; background-color: #28a745; text-align: center; line-height: 25px; color: white; font-size: 12px; transition: width 0.2s; }
+        .info-box { background: #e3f2fd; border: 1px solid #bbdefb; color: #0d47a1; padding: 10px; margin-bottom: 20px; border-radius: 5px; font-size: 14px; text-align: right; direction: rtl; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>ޤުރްއާން ގްރިޑް CSV (ބެލެންސްޑް)</h1>
+    
+    <div class="info-box">
+        <strong>އިޞްލާޙްކުރެވުނު ކަންކަން:</strong><br>
+        * ޞަފްޙާގެ މެދާ އެންމެ ގާތްކޮށް އާޔަތް ބައިކުރުން.<br>
+        * ގާތްގަނޑަކަށް 6-8 ފޮޅުވަތަށް (ވިޝުއަލީ) ފެތޭގޮތަށް ސުވާލު ބެހިގެންދާނެ.<br>
+        * ސޫރަތް ބަދަލުވާ ތަންތަން ފާހަގަވާނެ (Example: Mujadila 22 - Hashr 1).
+    </div>
+    
+    <button id="btn" onclick="generateCSV()">CSV ފައިލް ހަދަން ފަށާ!</button>
+
+    <div id="progressContainer" style="display:none;">
+        <div class="progress"><div id="bar" class="bar">0%</div></div>
+        <div id="status">Waiting to start...</div>
+    </div>
+</div>
+
+<script>
+    async function generateCSV() {
+        const btn = document.getElementById('btn');
+        const status = document.getElementById('status');
+        const bar = document.getElementById('bar');
+        document.getElementById('progressContainer').style.display = 'block';
+        
+        btn.disabled = true;
+        btn.innerText = "Processing... (Please Wait)";
+
+        // CSV Headers
+        let csvContent = "ID,ImageName,SurahName,PageNo,StartAyah,EndAyah,ReadableReference\n";
+        
+        let qID = 1;
+        const totalPages = 604;
+
+        try {
+            for (let page = 1; page <= totalPages; page++) {
+                
+                // Update Progress
+                let percent = Math.round((page / totalPages) * 100) + "%";
+                bar.style.width = percent;
+                bar.innerText = percent;
+                status.innerText = `Processing Page ${page} of 604...`;
+
+                // Fetch Data
+                let response = await fetch(`https://api.alquran.cloud/v1/page/${page}/quran-uthmani`);
+                if (!response.ok) throw new Error(`API Error on page ${page}`);
+
+                let json = await response.json();
+                let ayahs = json.data.ayahs;
+                
+                if (ayahs.length > 0) {
+                    let chunks = [];
+
+                    // --- IMPROVED BALANCING LOGIC (CLOSEST TO CENTER) ---
+                    let totalLength = ayahs.reduce((acc, curr) => acc + curr.text.length, 0);
+                    let runningLength = 0;
+                    
+                    // We want to find the split index that minimizes the distance to 50%
+                    let targetMiddle = totalLength / 2;
+                    let closestDiff = Infinity;
+                    let bestSplitIndex = 0;
+
+                    if (ayahs.length === 1) {
+                        // Only 1 ayah on page (rare but possible)
+                        bestSplitIndex = 0;
+                    } else {
+                        for (let i = 0; i < ayahs.length - 1; i++) { // Go up to length-1 to ensure at least 1 ayah in second half
+                            runningLength += ayahs[i].text.length;
+                            
+                            // Calculate how far this cut is from the perfect center
+                            let diff = Math.abs(runningLength - targetMiddle);
+                            
+                            if (diff < closestDiff) {
+                                closestDiff = diff;
+                                bestSplitIndex = i;
+                            }
+                        }
+                    }
+
+                    // Create the two chunks based on the best calculated index
+                    if (ayahs.length === 1) {
+                        chunks.push(ayahs);
+                    } else {
+                        chunks.push(ayahs.slice(0, bestSplitIndex + 1));
+                        chunks.push(ayahs.slice(bestSplitIndex + 1));
+                    }
+
+                    // Process Chunks into Rows
+                    chunks.forEach((chunk) => {
+                        if (chunk.length === 0) return;
+                        
+                        let first = chunk[0];
+                        let last = chunk[chunk.length - 1];
+                        
+                        let imgName = String(page).padStart(3, '0') + ".png";
+                        
+                        // Mixed Surah Logic
+                        let surahLabel = "";
+                        let refString = "";
+
+                        if (first.surah.number === last.surah.number) {
+                            // Same Surah
+                            surahLabel = first.surah.name;
+                            refString = `الصفحة ${page}: ${surahLabel} ${first.numberInSurah}-${last.numberInSurah}`;
+                        } else {
+                            // Mixed Surahs
+                            surahLabel = `${first.surah.name} - ${last.surah.name}`;
+                            refString = `الصفحة ${page}: ${first.surah.name} ${first.numberInSurah} - ${last.surah.name} ${last.numberInSurah}`;
+                        }
+
+                        let row = [
+                            qID++,                        // ID
+                            imgName,                      // Image
+                            `"${surahLabel}"`,            // Surah Name
+                            page,                         // Page Number
+                            first.numberInSurah,          // Start Ayah
+                            last.numberInSurah,           // End Ayah
+                            `"${refString}"`              // Readable Reference
+                        ].join(",");
+                        
+                        csvContent += row + "\n";
+                    });
+                }
+            }
+
+            // Download File (UTF-8 BOM included)
+            status.innerText = "Completed! Downloading file...";
+            const blob = new Blob(["\uFEFF" + csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement("a");
+            const url = URL.createObjectURL(blob);
+            link.setAttribute("href", url);
+            link.setAttribute("download", "Quran_Grid_Balanced_v2.csv");
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            btn.innerText = "Done! Downloaded";
+            btn.style.backgroundColor = "#333";
+
+        } catch (error) {
+            console.error(error);
+            status.innerText = "Error: " + error.message;
+            btn.disabled = false;
+        }
+    }
+</script>
+
+</body>
+</html>
