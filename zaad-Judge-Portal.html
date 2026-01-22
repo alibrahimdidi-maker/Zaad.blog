@@ -382,7 +382,7 @@
                 </div>
             </div>
 
-            <div class="panel">
+ <div class="panel">
                 <h2 data-translate="settings">3. ސެޓިންގސް & ޑޭޓާ</h2>
                 
                 <label style="color:#00e676;">★ ފޮންޓް އިންސްޓޯލް (Font File):</label>
@@ -392,7 +392,7 @@
 
                 <label>1. Royal Theme Engine (100+):</label>
                 <select id="themeSelect" onchange="updateTheme()">
-                    </select>
+                </select>
 
                 <label data-translate="lblCSV">2. ސުވާލު ޑޭޓާ (CSV):</label>
                 <div style="display:flex; gap:5px;">
@@ -405,16 +405,6 @@
                 <small id="imgStatus" style="color:#aaa; display:block;">No images loaded</small>
 
                 <div style="display:grid; grid-template-columns: 1fr 1fr; gap:5px; margin-top:8px;">
-                    <div>
-                        <label data-translate="lblBorder">ބޯޑަރު:</label>
-                        <select id="borderStyle" onchange="syncWindows()">
-                            <option value="royal">Royal Frame</option>
-                            <option value="custom">Custom Img</option>
-                            <option value="none">None</option>
-                        </select>
-                    </div>
-                    <div>
-                   <div style="display:grid; grid-template-columns: 1fr 1fr; gap:5px; margin-top:8px;">
                     <div>
                         <label data-translate="lblBorder">ބޯޑަރު:</label>
                         <select id="borderStyle" onchange="syncWindows()">
@@ -437,19 +427,20 @@
                 <div style="display:flex; gap:5px; align-items:center;">
                     <select id="startJuz" style="text-align:center;">
                         <script>
-                            for(let i=1; i<=30; i++) document.write(`<option value="${i}">ފޮތް ${i}</script>`);
+                            for(let i=1; i<=30; i++) document.write(`<option value="${i}">ފޮތް ${i}</option>`);
                         </script>
                     </select>
                     <span style="color:#666;">to</span>
                     <select id="endJuz" style="text-align:center;">
                         <script>
-                            for(let i=1; i<=30; i++) document.write(`<option value="${i}" ${i===30?'selected':''}>ފޮތް ${i}</script>`);
+                            for(let i=1; i<=30; i++) document.write(`<option value="${i}" ${i===30?'selected':''}>ފޮތް ${i}</option>`);
                         </script>
                     </select>
                 </div>
 
                 <input type="file" id="borderImg" accept="image/*" class="hidden" style="margin-top:5px;">
-            </div> </div> <a id="driveLink" href="#" target="_blank" class="drive-btn" style="margin: 0 10px 10px 10px;">
+            </div> 
+        </div> <a id="driveLink" href="#" target="_blank" class="drive-btn" style="margin: 10px;">
             📂 Open Google Drive Folder (Samples)
         </a>
 
@@ -458,7 +449,7 @@
             <p class="highlight">Ali Ibrahim Didi 7791550 & 9901550</p>
             <p>Zad Research and Consultancy Firm</p>
         </div>
-    </div>
+    </div> ```
 
 
     <div class="main-view">
