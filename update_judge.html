@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Rasfahi Royal Quran (V23.0 Ceremony Edition)</title>
+    <title>Rasfahi Royal Quran (V23.1 Ceremony Edition)</title>
     <style>
         /* --- FONTS & IMPORTS --- */
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Thaana:wght@400;700;900&family=Cinzel:wght@700;900&display=swap');
@@ -283,7 +283,7 @@
 
     <div id="securityOverlay">
         <div class="sec-box">
-            <h1 style="color:var(--gold); font-family:'Cinzel' !important; margin:0;">ROYAL ELITE V23.0</h1>
+            <h1 style="color:var(--gold); font-family:'Cinzel' !important; margin:0;">ROYAL ELITE V23.1</h1>
             <p style="color:#666; font-size:10px;">JUDGE + CEREMONY EDITION</p>
             <input type="password" id="secKey" style="text-align:center; font-size:18px; margin:15px 0; padding:10px; border-color:var(--gold);" placeholder="Enter License Key">
             <button class="btn-green" onclick="unlockSystem()">UNLOCK SYSTEM</button>
@@ -293,7 +293,7 @@
 
     <div class="sidebar">
         <div class="header">
-            <h1 class="app-title" data-translate="title">RASFAHI JUDGE V23.0</h1>
+            <h1 class="app-title" data-translate="title">RASFAHI JUDGE V23.1</h1>
         </div>
 
         <div class="content">
@@ -471,9 +471,9 @@
                 
                 <label>1. ޚާއްޞަ ފޮންޓްތައް (Special Fonts):</label>
                 <input type="file" id="ceremonyQuranFont" accept=".ttf,.otf" style="margin-bottom:5px;">
-                <small style="color:#aaa;">(Optional) Quran Font (e.g., Madina)</small>
+                <small style="color:#aaa;">Quran Font (e.g., Tanzil/Madina)</small>
                 <input type="file" id="ceremonyTransFont" accept=".ttf,.otf">
-                <small style="color:#aaa;">(Optional) Translation Font (e.g., Faruuma)</small>
+                <small style="color:#aaa;">Translation Font (e.g., Faruuma)</small>
                 
                 <hr style="border-color:#333; margin:8px 0;">
                 
@@ -486,7 +486,21 @@
                     <button onclick="downloadCeremonySample('en')" class="btn-purple" style="font-size:9px;">⬇️ Sample (English)</button>
                 </div>
 
-                <label>3. ޖަލްސާގެ ނަން (Event Title):</label>
+                <label style="margin-top:10px; color:#00e5ff;">3. ކިޔެވުން ސެލެކްޓް ކުރައްވާ:</label>
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:5px;">
+                     <div>
+                        <small>Start:</small>
+                        <select id="ceremonyStartSelect" style="font-size:11px;"></select>
+                     </div>
+                     <div>
+                        <small>End:</small>
+                        <select id="ceremonyEndSelect" style="font-size:11px;"></select>
+                     </div>
+                </div>
+                <button class="btn-green" onclick="setCeremonyRange()" style="margin-top:5px; font-size:11px;">Set Recitation Range</button>
+
+
+                <label>4. ޖަލްސާގެ ނަން (Event Title):</label>
                 <input type="text" id="ceremonyTitle" placeholder="e.g. Quran Competition Opening" oninput="updateCeremonyState()">
 
                 <button onclick="openCeremonyScreen()" class="btn-orange" style="margin-top:10px;">📺 Launch Ceremony Screen</button>
@@ -502,8 +516,8 @@
                 </div>
 
                 <div style="display:flex; gap:5px; margin-top:5px;">
-                     <button class="btn-green" onclick="ceremonySetPhase('start')">بِسْمِ ٱللَّٰهِ</button>
-                     <button class="btn-red" onclick="ceremonySetPhase('end')">صَدَقَ ٱللّٰهُ</button>
+                      <button class="btn-green" onclick="ceremonySetPhase('start')">بِسْمِ ٱللَّٰهِ</button>
+                      <button class="btn-red" onclick="ceremonySetPhase('end')">صَدَقَ ٱللّٰهُ</button>
                 </div>
                 <button class="btn-gold" style="margin-top:5px;" onclick="ceremonySetPhase('cover')">Show Cover / Hide</button>
 
@@ -598,7 +612,7 @@
 
     // --- TRANSLATION DICTIONARY ---
     const i18n = {
-        title: { dv: "ރަސްފަހި ޖަޖް V23.0", ar: "القاضي رصفهي V23.0", en: "Rasfahi Judge V23.0" },
+        title: { dv: "ރަސްފަހި ޖަޖް V23.1", ar: "القاضي رصفهي V23.1", en: "Rasfahi Judge V23.1" },
         lblSyllabus: { dv: "2. މުޤައްރަރު (Syllabus Scope)", ar: "2. المنهج", en: "2. Syllabus Scope" },
         lblFilterType: { dv: "ފިލްޓަރ ކުރާގޮތް:", ar: "نوع التصفية:", en: "Filter Mode:" },
         liveCtrl: { dv: "1. ލައިވް ކޮންޓްރޯލް", ar: "1. التحكم المباشر", en: "1. Live Control" },
@@ -762,7 +776,8 @@
         ceremony: {
             active: false,
             phase: 'cover', // cover, start, reciting, end
-            data: [], // Array of { ayah: "...", trans: "..." }
+            fullData: [], // All rows from CSV
+            activeData: [], // Selected Slice
             currentIndex: 0,
             fonts: { quran: null, trans: null }
         }
@@ -860,9 +875,9 @@
     function downloadCeremonySample(lang) {
         let content = "AyahArabic,Translation\n";
         if(lang === 'dv') {
-            content += "الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ,މާތްﷲއަށް ޙަމްދު ހުއްޓެވެ.";
+            content += "الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ,މާތްﷲއަށް ޙަމްދު ހުއްޓެވެ.";
         } else {
-            content += "الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ,Praise be to Allah, Lord of the Worlds.";
+            content += "الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ,Praise be to Allah, Lord of the Worlds.";
         }
         const link = document.createElement("a");
         link.href = "data:text/csv;charset=utf-8," + encodeURIComponent(content);
@@ -874,16 +889,34 @@
         const r = new FileReader();
         r.onload = ev => {
             const rows = ev.target.result.split('\n');
-            state.ceremony.data = [];
-            rows.slice(1).forEach(r => {
-                // Split by comma, but handle commas inside quotes if simple, otherwise assume basic CSV
-                // Simple split for now
+            state.ceremony.fullData = [];
+            
+            // Populate Dropdowns
+            const selStart = document.getElementById('ceremonyStartSelect');
+            const selEnd = document.getElementById('ceremonyEndSelect');
+            selStart.innerHTML = ''; selEnd.innerHTML = '';
+
+            rows.slice(1).forEach((r, idx) => {
                 const c = r.split(',');
                 if(c.length >= 2) {
-                    state.ceremony.data.push({ ayah: c[0].trim(), trans: c.slice(1).join(',').trim() });
+                    const ayahText = c[0].trim();
+                    const transText = c.slice(1).join(',').trim();
+                    if(ayahText) {
+                         state.ceremony.fullData.push({ ayah: ayahText, trans: transText });
+                         
+                         // Add Option
+                         let optText = `${idx+1}. ${ayahText.substring(0, 20)}...`;
+                         selStart.add(new Option(optText, idx));
+                         selEnd.add(new Option(optText, idx));
+                    }
                 }
             });
-            alert(`Ceremony Data Loaded: ${state.ceremony.data.length} Ayahs.`);
+
+            // Default: All active
+            state.ceremony.activeData = [...state.ceremony.fullData];
+            selEnd.value = state.ceremony.fullData.length - 1;
+
+            alert(`Ceremony Data Loaded: ${state.ceremony.fullData.length} Ayahs. Please set range.`);
             state.ceremony.currentIndex = 0;
             state.ceremony.phase = 'cover';
             updateCeremonyPreview();
@@ -891,6 +924,19 @@
         };
         r.readAsText(e.target.files[0]);
     };
+
+    function setCeremonyRange() {
+         const s = parseInt(document.getElementById('ceremonyStartSelect').value);
+         const e = parseInt(document.getElementById('ceremonyEndSelect').value);
+         
+         if(s > e) { alert("Start cannot be after End!"); return; }
+         
+         state.ceremony.activeData = state.ceremony.fullData.slice(s, e+1);
+         state.ceremony.currentIndex = 0;
+         alert(`Range Set! Reciting ${state.ceremony.activeData.length} ayahs.`);
+         updateCeremonyPreview();
+         syncWindows();
+    }
 
     // Load Ceremony Fonts
     const loadCF = (id, key) => {
@@ -911,7 +957,7 @@
 
     function ceremonyNext() {
         if(state.ceremony.phase === 'reciting') {
-            if(state.ceremony.currentIndex < state.ceremony.data.length - 1) {
+            if(state.ceremony.currentIndex < state.ceremony.activeData.length - 1) {
                 state.ceremony.currentIndex++;
                 updateCeremonyPreview();
                 syncWindows();
@@ -939,7 +985,7 @@
             syncWindows();
         } else if (state.ceremony.phase === 'end') {
              state.ceremony.phase = 'reciting';
-             state.ceremony.currentIndex = state.ceremony.data.length - 1;
+             state.ceremony.currentIndex = state.ceremony.activeData.length - 1;
              updateCeremonyPreview();
              syncWindows();
         }
@@ -962,8 +1008,8 @@
         else if(state.ceremony.phase === 'start') el.innerText = "DISPLAYING BASMALAH";
         else if(state.ceremony.phase === 'end') el.innerText = "DISPLAYING SADAQALLAH";
         else {
-            el.innerText = `Ayah ${state.ceremony.currentIndex+1}/${state.ceremony.data.length}: ` + 
-                           (state.ceremony.data[state.ceremony.currentIndex]?.ayah.substring(0, 20) || "...");
+            el.innerText = `Ayah ${state.ceremony.currentIndex+1}/${state.ceremony.activeData.length}: ` + 
+                           (state.ceremony.activeData[state.ceremony.currentIndex]?.ayah.substring(0, 20) || "...");
         }
     }
 
@@ -1088,7 +1134,7 @@
                 }
 
                 state.qDataMap[id] = { 
-                    id: id, imgRaw: imgRaw, src: null,       
+                    id: id, imgRaw: imgRaw, src: null,        
                     book: bookVal, bookNum: bookNum,
                     surah: surahVal, surahNum: surahNum,
                     page: c[4], start: c[5], end: c[6] 
@@ -1631,7 +1677,7 @@
 
                 #finishScreen, #waitScreen { flex-direction:column; align-items:center; justify-content:center; background: #000; }
 
-                /* --- CEREMONY SCREEN CSS --- */
+                /* --- CEREMONY SCREEN CSS (UPDATED) --- */
                 #ceremonyScreen {
                     display: none; width: 100%; height: 100%;
                     flex-direction: column; align-items: center; justify-content: center;
@@ -1640,39 +1686,42 @@
                 }
                 
                 .ceremony-box {
-                    width: 90%; height: 80%;
+                    width: 90%; height: 90%;
                     display: flex; flex-direction: column; justify-content: center; align-items: center;
                     position: relative;
                 }
 
-                .royal-line {
-                    width: 100%; height: 0.5vmin; background: var(--accent);
-                    margin: 3vmin 0; box-shadow: 0 0 2vmin var(--accent);
+                .ceremony-divider {
+                    width: 60%; height: 0.3vmin; background: var(--accent);
+                    margin: 3vmin auto;
+                    box-shadow: 0 0 1vmin var(--accent);
                 }
 
                 .ceremony-quran {
                     font-family: 'QuranFont', 'Amiri', serif !important;
                     color: #fff; 
-                    line-height: 2;
+                    font-size: 7vmin;
+                    line-height: 1.6;
                     text-shadow: 0 2px 5px rgba(0,0,0,0.8);
                     direction: rtl;
+                    margin-bottom: 1vmin;
                 }
                 
                 .ceremony-trans {
                     font-family: 'TransFont', 'Faruuma', 'AppFont', sans-serif !important;
-                    color: var(--accent);
-                    font-size: 3.5vmin;
-                    margin-top: 2vmin;
+                    color: #ddd;
+                    font-size: 4.5vmin;
+                    margin-top: 1vmin;
                     text-shadow: 0 2px 2px rgba(0,0,0,0.8);
                     direction: rtl;
+                    text-align: center;
                 }
 
                 .c-cover { font-size: 8vmin; color: var(--accent); font-family: 'Cinzel', serif !important; text-transform: uppercase; }
-                .c-basmalah { font-size: 8vmin; color: #fff; }
+                .c-basmalah { font-size: 8vmin; color: #fff; margin-bottom: 2vmin; }
                 .c-sadaqallah { font-size: 10vmin; color: var(--accent); }
                 
-                .c-ayah-active { font-size: 6vmin; }
-                .c-basmalah-small { font-size: 3vmin; opacity: 0.7; color: var(--accent); margin-bottom: 2vmin; }
+                .c-basmalah-small { font-size: 4vmin; opacity: 0.8; color: var(--accent); margin-bottom: 2vmin; font-family: 'Amiri', serif; }
 
                 #fsOverlay { position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:99999; display:flex; justify-content:center; align-items:center; }
                 .fs-btn { border: 2px solid var(--accent); padding: 20px; color: var(--accent); background: #000; cursor: pointer; font-size: 20px; border-radius: 10px; }
@@ -1686,7 +1735,7 @@
             <div id="signalLight"></div>
             <div id="idleScreen"><h1 style="font-size:8vw; color:var(--accent); text-shadow:0 0 3vh var(--accent);">RASFAHI</h1></div>
             <div id="gridScreen"><h1 id="gridTitle" style="color:var(--accent); font-size: 5vh;">ސުވާލު ނަންބަރު ނަގާ</h1><div id="gridContainer"></div></div>
-            <div id="waitScreen"><h1 id="waitHead" style="color:var(--accent); font-size: 5vh;">SELECTION COMPLETE</h1><h2 id="waitSub" style="color:#fff; font-size: 3vh;">Waiting...</h2><div id="waitList" style="color:var(--accent); font-size:3vh; margin-top:20px;"></div></div>
+            <div id="waitScreen"><h1 id="waitHead" style="color:var(--accent); font-size: 5vh;">SELECTION COMPLETE</h1><h2 id="waitSub" style="color:#fff; font-size: 3vh;">Waiting for Judge...</h2><div id="waitList" style="color:var(--accent); font-size:3vh; margin-top:20px;"></div></div>
             <div id="finishScreen"><h1 id="finText" style="color:var(--accent); text-shadow:0 0 3vh var(--accent); text-align:center; font-size: 6vw;"></h1></div>
             <div id="readScreen">
                 <div id="topBar"><div id="topStatusText"></div></div>
@@ -1709,8 +1758,8 @@
 
             <div id="ceremonyScreen">
                 <div class="ceremony-box">
-                    <div id="cHeader" class="ceremony-quran"></div>
-                    <div id="cBody"></div>
+                    <div id="cHeader"></div>
+                    <div id="cBody" style="width:100%;"></div>
                     <div id="cFooter"></div>
                 </div>
             </div>
@@ -1880,8 +1929,7 @@
                     cHead.innerHTML = ''; cBody.innerHTML = ''; cFoot.innerHTML = '';
 
                     const data = d.ceremony;
-                    const title = document.getElementById('ceremonyTitle') ? document.getElementById('ceremonyTitle').value : "Ceremony"; 
-
+                    
                     if(data.phase === 'cover') {
                         cBody.innerHTML = \`<div class="c-cover">\${d.ceremonyTitle || "Quran Ceremony"}</div>\`;
                     } else if (data.phase === 'start') {
@@ -1889,18 +1937,17 @@
                     } else if (data.phase === 'end') {
                          cBody.innerHTML = '<div class="c-sadaqallah">صَدَقَ ٱللّٰهُ ٱلْعَظِيمُ</div>';
                     } else if (data.phase === 'reciting') {
-                        // Header: Basmalah Small
-                        cHead.innerHTML = '<div class="c-basmalah-small">بِسْمِ ٱللَّٰهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ</div><div class="royal-line"></div>';
+                        // --- UPDATED LOGIC FOR SPLIT VIEW ---
+                        // No Header (Bismillah) during recitation as requested.
+                        cHead.style.display = 'none'; 
                         
-                        // Body: Ayah
-                        const ayah = data.data[data.currentIndex];
+                        // Body: Ayah + Gold Line + Translation
+                        const ayah = data.activeData[data.currentIndex];
                         if(ayah) {
-                            cBody.innerHTML = \`<div class="c-ayah-active ceremony-quran">\${ayah.ayah}</div>
+                            cBody.innerHTML = \`<div class="ceremony-quran">\${ayah.ayah}</div>
+                                               <div class="ceremony-divider"></div>
                                                <div class="ceremony-trans">\${ayah.trans}</div>\`;
                         }
-
-                        // Footer: Line
-                        cFoot.innerHTML = '<div class="royal-line" style="margin-top:4vmin;"></div>';
                     }
                 }
             <\/script>
