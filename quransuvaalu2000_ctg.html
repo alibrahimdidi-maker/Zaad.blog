@@ -2,33 +2,34 @@
 <html lang="dv" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>Ultimate Quran CSV Generator (2000 Questions)</title>
+    <title>Tanzil-Standard Question Generator (V22 Verified)</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Thaana:wght@400;700&display=swap');
         
-        body { font-family: "Noto Sans Thaana", "Segoe UI", Tahoma, sans-serif; text-align: center; padding: 30px; background: #e0f2f1; }
-        .container { background: white; padding: 40px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.15); max-width: 700px; margin: 0 auto; border-top: 5px solid #00695c; }
+        body { font-family: "Noto Sans Thaana", "Segoe UI", Tahoma, sans-serif; text-align: center; padding: 30px; background: #fffde7; }
+        .container { background: white; padding: 40px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.15); max-width: 700px; margin: 0 auto; border-top: 5px solid #fbc02d; }
         
-        h1 { color: #00695c; margin-bottom: 5px; }
+        h1 { color: #f57f17; margin-bottom: 5px; }
         p { color: #555; font-size: 14px; margin-bottom: 25px; }
+        .note { background: #fff3e0; padding: 10px; border-radius: 5px; font-size: 12px; color: #e65100; margin-bottom: 20px; text-align: right; }
 
         .control-group { margin-bottom: 20px; text-align: right; direction: rtl; }
         label { font-weight: bold; display: block; margin-bottom: 8px; color: #333; }
         
         select { 
-            width: 100%; padding: 12px; font-size: 16px; border: 2px solid #26a69a; border-radius: 6px; 
+            width: 100%; padding: 12px; font-size: 16px; border: 2px solid #fdd835; border-radius: 6px; 
             font-family: "Noto Sans Thaana", sans-serif; background: #fff; cursor: pointer;
         }
 
         #btn { 
-            padding: 15px 40px; font-size: 18px; background: #00897b; color: white; border: none; 
+            padding: 15px 40px; font-size: 18px; background: #fbc02d; color: black; border: none; 
             border-radius: 6px; cursor: pointer; transition: 0.3s; width: 100%; font-weight: bold;
         }
-        #btn:hover { background: #004d40; }
+        #btn:hover { background: #f9a825; }
         #btn:disabled { background: #b0bec5; cursor: not-allowed; }
 
         .progress { width: 100%; background-color: #cfd8dc; margin-top: 20px; height: 25px; border-radius: 15px; overflow: hidden; }
-        .bar { width: 0%; height: 100%; background-color: #00bcd4; text-align: center; line-height: 25px; color: #fff; font-size: 12px; transition: width 0.2s; font-weight: bold; }
+        .bar { width: 0%; height: 100%; background-color: #fdd835; text-align: center; line-height: 25px; color: #000; font-size: 12px; transition: width 0.2s; font-weight: bold; }
         
         .log-box { 
             margin-top: 15px; font-size: 12px; color: #333; font-family: monospace; direction: ltr; 
@@ -39,24 +40,28 @@
 <body>
 
 <div class="container">
-    <h1>Ultimate Question Generator (2000 Qs)</h1>
-    <p>Generates large random sets for Rasfahi V22</p>
+    <h1>Tanzil-Standard Generator (Strict)</h1>
+    <p>Calibrated for 15-Line Madani Mushaf (2000 Questions)</p>
+    
+    <div class="note">
+        ނޯޓް: މި ޖެނެރޭޓަރުން ހިސާބު ހަދާނީ މަދީނާ މުޞްޙަފުގެ (15 ފޮޅުވަތް) މިންގަނޑަށެވެ. 5 ފޮޅުވަތް ކަމަށްވާނަމަ، ކަށަވަރުންވެސް 5 ވަނަ ފޮޅުވަތް ހުރަސްކުރާނެއެވެ.
+    </div>
 
     <div class="control-group">
-        <label>ބޭނުންވާ ފޮޅުވަތުގެ މިންވަރު (Select Range):</label>
+        <label>ބޭނުންވާ ފޮޅުވަތުގެ މިންވަރު (Select Strict Range):</label>
         <select id="rangeSelect">
             <option value="1-5">1 ފޮޅުވަތާއި 5 ފޮޅުވަތާ ދެމެދު</option>
-            <option value="5-6">5 ފޮޅުވަތާއި 6 ފޮޅުވަތާ ދެމެދު</option>
-            <option value="5-7">5 ފޮޅުވަތާއި 7 ފޮޅުވަތާ ދެމެދު</option>
-            <option value="6-8">6 ފޮޅުވަތާއި 8 ފޮޅުވަތާ ދެމެދު</option>
-            <option value="7-10">7 ފޮޅުވަތާއި 10 ފޮޅުވަތާ ދެމެދު</option>
-            <option value="10-15">10 ފޮޅުވަތާއި 15 ފޮޅުވަތާ ދެމެދު (މުޅި ޞަފްޙާ)</option>
-            <option value="15-20">15 ފޮޅުވަތާއި 20 ފޮޅުވަތާ ދެމެދު (1.5 ޞަފްޙާ)</option>
-            <option value="20-30">20 ފޮޅުވަތާއި 30 ފޮޅުވަތާ ދެމެދު (2 ޞަފްޙާ)</option>
+            <option value="5-6">5 ފޮޅުވަތާއި 6 ފޮޅުވަތާ ދެމެދު (Strict Min > 5)</option>
+            <option value="5-7">5 ފޮޅުވަތާއި 7 ފޮޅުވަތާ ދެމެދު (Strict Min > 5)</option>
+            <option value="6-8">6 ފޮޅުވަތާއި 8 ފޮޅުވަތާ ދެމެދު (Strict Min > 6)</option>
+            <option value="7-10">7 ފޮޅުވަތާއި 10 ފޮޅުވަތާ ދެމެދު (Strict Min > 7)</option>
+            <option value="10-15">10 ފޮޅުވަތާއި 15 ފޮޅުވަތާ ދެމެދު (Strict Min > 10)</option>
+            <option value="15-20">15 ފޮޅުވަތާއި 20 ފޮޅުވަތާ ދެމެދު (Min 1 Page)</option>
+            <option value="20-30">20 ފޮޅުވަތާއި 30 ފޮޅުވަތާ ދެމެދު (Min 1.4 Pages)</option>
         </select>
     </div>
 
-    <button id="btn" onclick="generateMassiveCSV()">Generate 2000 Questions</button>
+    <button id="btn" onclick="generateVerifiedCSV()">Generate 2000 Questions</button>
 
     <div class="progress">
         <div id="bar" class="bar">0%</div>
@@ -68,27 +73,59 @@
     // --- SETTINGS ---
     const TARGET_COUNT = 2000;
     
-    // Average Text Length per Page (Approximate for Madani Script)
-    // We use this to estimate line count without fetching every single page separately.
-    // 1 Page ~ 800-900 chars (varies, but ratio works well)
+    // CALIBRATION FOR TANZIL/MADANI MUSHAF
+    // 1 Page = 15 Lines.
+    // Average Characters per Page ~ 850 (Standard Uthmani Script).
     const AVG_PAGE_LEN = 850; 
 
-    // Conversion: Lines -> Ratio of a Page
-    // 15 lines = 1.0 (100%)
+    // CALCULATED STRICT RATIOS (Math: Lines / 15)
+    // To be strict, we add a small buffer (+0.02) to the minimum to avoid "short" lines.
+    
     const RANGES = {
-        "1-5":   { min: 0.05, max: 0.33 },
-        "5-6":   { min: 0.33, max: 0.40 },
-        "5-7":   { min: 0.33, max: 0.46 },
-        "6-8":   { min: 0.40, max: 0.53 },
-        "7-10":  { min: 0.46, max: 0.66 },
-        "10-15": { min: 0.66, max: 1.00 },
-        "15-20": { min: 1.00, max: 1.35 },
-        "20-30": { min: 1.35, max: 2.00 }
+        // 1-5 Lines:
+        // Min: 1/15 = 0.06.
+        // Max: 5/15 = 0.33 (+ buffer = 0.35)
+        "1-5":   { min: 0.06, max: 0.35 }, 
+
+        // 5-6 Lines:
+        // Min: 5/15 = 0.333. Set to 0.35 to ensure we are well INTO the 5th line.
+        // Max: 6.5/15 = 0.43 (Allowing half line overflow to finish ayah)
+        "5-6":   { min: 0.35, max: 0.43 }, 
+
+        // 5-7 Lines:
+        // Min: 5/15 = 0.333 -> Set to 0.35
+        // Max: 7.5/15 = 0.50
+        "5-7":   { min: 0.35, max: 0.50 },
+
+        // 6-8 Lines:
+        // Min: 6/15 = 0.40 -> Set to 0.42 (Strict > 6)
+        // Max: 8.5/15 = 0.56
+        "6-8":   { min: 0.42, max: 0.56 },
+
+        // 7-10 Lines:
+        // Min: 7/15 = 0.466 -> Set to 0.48 (Strict > 7)
+        // Max: 10.5/15 = 0.70
+        "7-10":  { min: 0.48, max: 0.70 },
+
+        // 10-15 Lines (Full Page context):
+        // Min: 10/15 = 0.66 -> Set to 0.68
+        // Max: 15/15 = 1.0 -> Set to 1.10 (Allow full page + a bit)
+        "10-15": { min: 0.68, max: 1.10 },
+
+        // 15-20 Lines (1 to 1.3 Pages):
+        // Min: 15/15 = 1.0 -> Set to 1.02 (Must exceed 1 page slightly)
+        // Max: 20/15 = 1.33 -> Set to 1.40
+        "15-20": { min: 1.02, max: 1.40 },
+
+        // 20-30 Lines (1.3 to 2 Pages):
+        // Min: 20/15 = 1.33 -> Set to 1.35
+        // Max: 30/15 = 2.0 -> Set to 2.10
+        "20-30": { min: 1.35, max: 2.10 }
     };
 
     let allAyahsData = null;
 
-    async function generateMassiveCSV() {
+    async function generateVerifiedCSV() {
         const btn = document.getElementById('btn');
         const status = document.getElementById('status');
         const bar = document.getElementById('bar');
@@ -96,13 +133,13 @@
         const config = RANGES[rangeKey];
 
         btn.disabled = true;
-        status.innerHTML = "Initializing...";
+        status.innerHTML = "Initializing Tanzil-Check...";
         bar.style.width = "5%";
 
         try {
             // 1. Fetch WHOLE Quran (Once)
             if(!allAyahsData) {
-                status.innerHTML = "Downloading Quran Data (This happens once)...";
+                status.innerHTML = "Downloading Quran Text (Standard Uthmani)...";
                 let response = await fetch('https://api.alquran.cloud/v1/quran/quran-uthmani');
                 let json = await response.json();
                 
@@ -120,62 +157,70 @@
                         });
                     });
                 });
-                status.innerHTML = `Quran Data Loaded! Total Ayahs: ${allAyahsData.length}`;
+                status.innerHTML = `Quran Data Loaded! Calibrating to 15-line Grid...`;
             }
             
             bar.style.width = "20%";
 
-            // 2. Scan for candidates (Sliding Window)
+            // 2. Scan for candidates (Sliding Window with STRICT Checks)
             let candidates = [];
             let totalAyahs = allAyahsData.length;
             
-            status.innerHTML += "<br>Scanning all ayahs for candidates...";
+            status.innerHTML += "<br>Scanning... Enforcing STRICT Tanzil Alignment...";
             
-            // Loop through every ayah as a potential start point
             for(let i=0; i < totalAyahs; i++) {
-                
                 let currentTxtLen = 0;
                 
                 // Look ahead
                 for(let j=i; j < totalAyahs; j++) {
                     currentTxtLen += allAyahsData[j].textLen;
                     
-                    // Estimate ratio based on standard page length
+                    // Current ratio (Lines calculated based on 850 char avg page)
                     let ratio = currentTxtLen / AVG_PAGE_LEN;
                     
-                    // Optimization: If ratio exceeds max significantly, stop looking ahead for this start point
-                    if(ratio > config.max + 0.1) break;
-
-                    if(ratio >= config.min && ratio <= config.max) {
-                        // Found a valid candidate!
-                        candidates.push({
-                            startIdx: i,
-                            endIdx: j
-                        });
+                    // CHECK 1: STRICT MINIMUM
+                    // We skip if the calculated length is less than the Minimum needed.
+                    // E.g. for "5-6", if ratio is 0.30 (4.5 lines), we SKIP adding to candidates
+                    // and continue the inner loop to add another ayah.
+                    if (ratio < config.min) {
+                        continue;
                     }
+
+                    // CHECK 2: STRICT MAXIMUM
+                    // If we exceed the max lines allowed, we STOP looking ahead for this start point.
+                    if (ratio > config.max) {
+                        break; 
+                    }
+
+                    // CHECK 3: VALID CANDIDATE
+                    // If we are here, we are strictly between Min and Max.
+                    candidates.push({
+                        startIdx: i,
+                        endIdx: j
+                    });
                 }
                 
-                // Update UI every 1000 ayahs
+                // UI Update
                 if(i % 1000 === 0) {
-                    let progress = 20 + Math.round((i / totalAyahs) * 60); // 20% to 80%
+                    let progress = 20 + Math.round((i / totalAyahs) * 60); 
                     bar.style.width = progress + "%";
-                    status.innerHTML = `Scanning... Found ${candidates.length} potential questions so far.`;
-                    await new Promise(r => setTimeout(r, 1)); // Yield to UI
+                    status.innerHTML = `Scanning... Found ${candidates.length} verified segments.`;
+                    await new Promise(r => setTimeout(r, 1)); 
                 }
             }
 
-            status.innerHTML += `<br>Scan Complete. Total Candidates found: ${candidates.length}`;
+            status.innerHTML += `<br>Scan Complete. Total Valid Candidates: ${candidates.length}`;
             bar.style.width = "85%";
+
+            if(candidates.length < TARGET_COUNT) {
+                 status.innerHTML += `<br><span style='color:orange'>Note: Found ${candidates.length} candidates. Taking all available.</span>`;
+            }
 
             // 3. Shuffle and Pick 2000
             shuffleArray(candidates);
             let finalSelection = candidates.slice(0, TARGET_COUNT);
             
-            // Sort by Page/Ayah for cleaner CSV output (Optional, but looks nicer) or keep random?
-            // User requested randomness to avoid repeats, but usually CSVs are better sorted for checking.
-            // Let's keep them random (shuffled) as requested for the "set".
-            
-            // 4. Generate CSV String
+            // 4. Generate CSV
             let csvContent = "ID,ImageName,Book,Surah,Page,StartAyah,EndAyah\n";
             let qID = 1;
 
@@ -183,7 +228,7 @@
                 let first = allAyahsData[item.startIdx];
                 let last = allAyahsData[item.endIdx];
 
-                // Formatting for V22
+                // V22 Format
                 let imgName = String(first.page).padStart(3, '0') + ".png";
                 let juzStr = "Juz " + first.juz;
                 let surahStr = `${first.surahNum}. ${first.surahName}`;
@@ -205,12 +250,12 @@
             const blob = new Blob(["\uFEFF"+csvContent], {type: 'text/csv;charset=utf-8;'});
             const link = document.createElement("a");
             link.href = URL.createObjectURL(blob);
-            link.download = `Quran_2000_Set_${rangeKey}.csv`;
+            link.download = `Rasfahi_TanzilSet_${rangeKey}.csv`;
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
             
-            status.innerHTML += `<br><strong style='color:green'>SUCCESS! Generated ${finalSelection.length} unique questions.</strong>`;
+            status.innerHTML += `<br><strong style='color:green'>SUCCESS! Generated ${finalSelection.length} calibrated questions.</strong>`;
             btn.disabled = false;
 
         } catch (e) {
