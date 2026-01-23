@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Rasfahi Royal Quran (V24.1 Ceremony Fixed)</title>
+    <title>Rasfahi Royal Quran (V24.2 Ceremony Pro)</title>
     <style>
         /* --- FONTS & IMPORTS --- */
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Thaana:wght@400;700;900&family=Cinzel:wght@700;900&display=swap');
@@ -119,6 +119,11 @@
             color: #fff; border-radius: 4px; 
             font-size: 14px; 
         }
+        
+        /* Custom Controls for Ceremony */
+        .control-row { display: flex; align-items: center; gap: 10px; margin-bottom: 5px; }
+        .color-picker { width: 40px; padding: 2px; height: 35px; cursor: pointer; border: 1px solid #555; }
+        .range-slider { flex: 1; cursor: pointer; accent-color: var(--gold); }
         
         /* BUTTON STYLES */
         button { 
@@ -284,7 +289,7 @@
 
     <div id="securityOverlay">
         <div class="sec-box">
-            <h1 style="color:var(--gold); font-family:'Cinzel' !important; margin:0;">ROYAL ELITE V24.1</h1>
+            <h1 style="color:var(--gold); font-family:'Cinzel' !important; margin:0;">ROYAL ELITE V24.2</h1>
             <p style="color:#666; font-size:10px;">JUDGE + CEREMONY EDITION</p>
             <input type="password" id="secKey" style="text-align:center; font-size:18px; margin:15px 0; padding:10px; border-color:var(--gold);" placeholder="Enter License Key">
             <button class="btn-green" onclick="unlockSystem()">UNLOCK SYSTEM</button>
@@ -294,7 +299,7 @@
 
     <div class="sidebar">
         <div class="header">
-            <h1 class="app-title" data-translate="title">RASFAHI JUDGE V24.1</h1>
+            <h1 class="app-title" data-translate="title">RASFAHI JUDGE V24.2</h1>
         </div>
 
         <div class="content">
@@ -416,7 +421,7 @@
                 <small style="color:#666; font-size:10px;">Select .TTF or .WOFF file for Faruuma/Waheed</small>
                 <hr style="border-color:#333; margin:8px 0;">
 
-                <label>1. Royal Theme Engine (100+):</label>
+                <label>1. Royal Theme Engine (Main App):</label>
                 <select id="themeSelect" onchange="updateTheme()">
                     </select>
 
@@ -483,6 +488,46 @@
                     <input type="file" id="ceremonyCSV" accept=".csv">
                 </div>
                 <button onclick="downloadCeremonySample('dv')" class="btn-purple" style="font-size:9px;">⬇️ Sample (Fixed Format)</button>
+
+                <hr style="border-color:#333; margin:8px 0;">
+
+                <label style="color:#FFD700;">★ ޖަލްސާ ސްކްރީން ސެޓިންގސް (Styles):</label>
+                
+                <div style="margin-bottom:8px;">
+                    <small style="color:#aaa;">Ceremony Theme (20+ Royal Styles):</small>
+                    <select id="ceremonyTheme" onchange="updateCeremonyState()">
+                        <script>
+                            const cThemes = [
+                                "Royal Green (Double Gold)", "Royal Blue (Double Gold)", "Royal Red (Double Gold)",
+                                "Emerald Green (Single Gold)", "Midnight Blue (Single Gold)", "Burgundy (Single Gold)",
+                                "Green & Blue Mix (Gold)", "Red & Black Mix (Gold)", "Deep Purple (Gold)",
+                                "White & Gold (Royal Light)", "Cream & Gold (Classic)", "Black & Gold (Premium)",
+                                "Green Gradient (Silver)", "Blue Gradient (Silver)", "Red Gradient (Silver)",
+                                "Royal Teal (Gold Frame)", "Majestic Maroon (Gold Frame)", "Onyx Black (Double White)",
+                                "Pearl White (Double Green)", "Mix: Green/Red/Blue (Presidential)"
+                            ];
+                            cThemes.forEach((t, i) => document.write(`<option value="${i}">${i+1}. ${t}</option>`));
+                        </script>
+                    </select>
+                </div>
+
+                <div class="control-row">
+                    <input type="color" id="cArabicColor" value="#D4AF37" class="color-picker" onchange="updateCeremonyState()" title="Arabic Text Color">
+                    <div style="flex:1;">
+                        <small style="color:#aaa;">Arabic Size (ޢަރަބި ސައިޒް)</small>
+                        <input type="range" id="cArabicSize" class="range-slider" min="5" max="25" step="0.5" value="12" oninput="updateCeremonyState()">
+                    </div>
+                </div>
+
+                <div class="control-row">
+                    <input type="color" id="cTransColor" value="#ffffff" class="color-picker" onchange="updateCeremonyState()" title="Translation Text Color">
+                    <div style="flex:1;">
+                        <small style="color:#aaa;">Dhivehi Size (ދިވެހި ސައިޒް)</small>
+                        <input type="range" id="cTransSize" class="range-slider" min="2" max="15" step="0.5" value="5" oninput="updateCeremonyState()">
+                    </div>
+                </div>
+
+                <hr style="border-color:#333; margin:8px 0;">
 
                 <label style="margin-top:10px; color:#00e5ff;">3. ކިޔެވުން ސެލެކްޓް (Selection):</label>
                 
@@ -623,7 +668,7 @@
 
     // --- TRANSLATION DICTIONARY ---
     const i18n = {
-        title: { dv: "ރަސްފަހި ޖަޖް V24.1", ar: "القاضي رصفهي V24.1", en: "Rasfahi Judge V24.1" },
+        title: { dv: "ރަސްފަހި ޖަޖް V24.2", ar: "القاضي رصفهي V24.2", en: "Rasfahi Judge V24.2" },
         lblSyllabus: { dv: "2. މުޤައްރަރު (Syllabus Scope)", ar: "2. المنهج", en: "2. Syllabus Scope" },
         lblFilterType: { dv: "ފިލްޓަރ ކުރާގޮތް:", ar: "نوع التصفية:", en: "Filter Mode:" },
         liveCtrl: { dv: "1. ލައިވް ކޮންޓްރޯލް", ar: "1. التحكم المباشر", en: "1. Live Control" },
@@ -660,7 +705,7 @@
     let currentLang = 'dv';
     let themeList = [];
 
-    // --- 1. THEME ENGINE ---
+    // --- 1. THEME ENGINE (MAIN APP) ---
     function initThemes() {
         const bases = [
             {n:"Royal Blue", c1:"#001a33", c2:"#000d1a", txt:"#ffffff"},
@@ -791,7 +836,16 @@
             activeData: [], // Selected Slice of ayahs
             currentIndex: 0,
             selectedLang: 'dv', // dv or en
-            fonts: { quran: null, trans: null }
+            fonts: { quran: null, trans: null },
+            
+            // New Settings for Ceremony Screen
+            settings: {
+                themeIndex: 0,
+                arabicColor: '#D4AF37',
+                transColor: '#ffffff',
+                arabicSize: 12,
+                transSize: 5
+            }
         }
     };
 
@@ -1049,7 +1103,14 @@
     }
     
     function updateCeremonyState() {
-        syncWindows(); // Just sync title updates
+        // Collect new settings
+        state.ceremony.settings.themeIndex = document.getElementById('ceremonyTheme').value;
+        state.ceremony.settings.arabicColor = document.getElementById('cArabicColor').value;
+        state.ceremony.settings.transColor = document.getElementById('cTransColor').value;
+        state.ceremony.settings.arabicSize = document.getElementById('cArabicSize').value;
+        state.ceremony.settings.transSize = document.getElementById('cTransSize').value;
+        
+        syncWindows(); 
     }
 
     function updateCeremonyPreview() {
@@ -1733,17 +1794,43 @@
 
                 #finishScreen, #waitScreen { flex-direction:column; align-items:center; justify-content:center; background: #000; }
 
-                /* --- ROYAL CEREMONY SCREEN CSS --- */
+                /* --- ROYAL CEREMONY SCREEN CSS (THEMING) --- */
                 #ceremonyScreen {
                     display: none; width: 100%; height: 100%;
                     flex-direction: column; align-items: center; justify-content: center;
-                    /* Royal Green Mix Gradient Background */
-                    background: radial-gradient(circle at center, var(--royal-green-dark), #000);
+                    /* Default Background - Overridden by JS */
+                    background: radial-gradient(circle at center, #002200, #000);
                     text-align: center; padding: 4vmin;
-                    border: 2vmin double var(--royal-gold);
+                    border: 2vmin double #D4AF37;
                     box-sizing: border-box;
+                    transition: all 0.5s ease;
                 }
                 
+                /* THEME CLASSES */
+                .theme-0 { background: radial-gradient(circle, #002200, #000); border: 2vmin double #D4AF37; } /* Royal Green */
+                .theme-1 { background: radial-gradient(circle, #001a33, #000); border: 2vmin double #D4AF37; } /* Royal Blue */
+                .theme-2 { background: radial-gradient(circle, #330000, #000); border: 2vmin double #D4AF37; } /* Royal Red */
+                .theme-3 { background: radial-gradient(circle, #004d00, #002200); border: 2vmin solid #D4AF37; } /* Emerald */
+                .theme-4 { background: radial-gradient(circle, #000066, #000033); border: 2vmin solid #D4AF37; } /* Midnight */
+                .theme-5 { background: radial-gradient(circle, #4d0000, #220000); border: 2vmin solid #D4AF37; } /* Burgundy */
+                .theme-6 { background: linear-gradient(135deg, #002200, #001a33); border: 2vmin ridge #D4AF37; } /* Mix Green/Blue */
+                .theme-7 { background: linear-gradient(135deg, #330000, #000); border: 2vmin ridge #D4AF37; } /* Mix Red/Black */
+                .theme-8 { background: radial-gradient(circle, #1a0033, #0d001a); border: 2vmin double #D4AF37; } /* Deep Purple */
+                .theme-9 { background: radial-gradient(circle, #fdfcf0, #e0e0e0); border: 2vmin double #D4AF37; } /* White/Gold */
+                .theme-10 { background: radial-gradient(circle, #fffdd0, #f5f5dc); border: 2vmin solid #aa8c2c; } /* Cream */
+                .theme-11 { background: radial-gradient(circle, #111, #000); border: 2vmin double #D4AF37; } /* Black/Gold */
+                .theme-12 { background: linear-gradient(to bottom, #004d00, #000); border: 2vmin double #C0C0C0; } /* Green/Silver */
+                .theme-13 { background: linear-gradient(to bottom, #002040, #000); border: 2vmin double #C0C0C0; } /* Blue/Silver */
+                .theme-14 { background: linear-gradient(to bottom, #500000, #000); border: 2vmin double #C0C0C0; } /* Red/Silver */
+                .theme-15 { background: #004d40; border: 3vmin solid #D4AF37; box-shadow: inset 0 0 5vmin #000; } /* Teal */
+                .theme-16 { background: #4a0000; border: 3vmin solid #D4AF37; box-shadow: inset 0 0 5vmin #000; } /* Maroon */
+                .theme-17 { background: #000; border: 1.5vmin double #fff; } /* Onyx */
+                .theme-18 { background: #f0f0f0; border: 2vmin double #004d00; } /* Pearl/Green */
+                .theme-19 { background: linear-gradient(45deg, #002200, #001a33, #330000); border: 2vmin double #D4AF37; } /* Mix All */
+
+                /* Special Overrides for Light Themes to make text visible if needed (Handled via JS Color Picker mostly) */
+                .theme-9 .c-basmalah, .theme-9 .c-sadaqallah, .theme-10 .c-basmalah, .theme-10 .c-sadaqallah, .theme-18 .c-basmalah, .theme-18 .c-sadaqallah { color: #000 !important; }
+
                 .ceremony-box {
                     width: 90%; height: 90%;
                     display: flex; flex-direction: column; justify-content: center; align-items: center;
@@ -1752,34 +1839,32 @@
 
                 .ceremony-divider {
                     width: 60%; height: 0.5vmin; 
-                    background: linear-gradient(90deg, transparent, var(--royal-gold), transparent);
+                    background: linear-gradient(90deg, transparent, #D4AF37, transparent);
                     margin: 4vmin auto;
-                    box-shadow: 0 0 2vmin var(--royal-gold);
+                    box-shadow: 0 0 2vmin #D4AF37;
                 }
 
                 .ceremony-quran {
                     font-family: 'QuranFont', 'Amiri', serif !important;
-                    color: var(--royal-gold); 
-                    font-size: 12vmin; /* 50+ equivalent */
+                    /* Color set by JS */
                     line-height: 1.6;
-                    text-shadow: 0 4px 10px rgba(0,0,0,1);
+                    text-shadow: 0 4px 10px rgba(0,0,0,0.5);
                     direction: rtl;
                     margin-bottom: 1vmin;
                 }
                 
                 .ceremony-trans {
                     font-family: 'TransFont', 'Faruuma', 'AppFont', sans-serif !important;
-                    color: #fff;
-                    font-size: 5vmin;
+                    /* Color set by JS */
                     margin-top: 1vmin;
-                    text-shadow: 0 2px 5px rgba(0,0,0,1);
-                    direction: rtl; /* Can change based on lang, but good default */
+                    text-shadow: 0 2px 5px rgba(0,0,0,0.8);
+                    direction: rtl; 
                     text-align: center;
                 }
 
-                .c-cover { font-size: 8vmin; color: var(--royal-gold); font-family: 'Cinzel', serif !important; text-transform: uppercase; text-shadow: 0 0 20px #000; }
+                .c-cover { font-size: 8vmin; color: #D4AF37; font-family: 'Cinzel', serif !important; text-transform: uppercase; text-shadow: 0 0 20px #000; }
                 .c-basmalah { font-size: 10vmin; color: #fff; margin-bottom: 2vmin; font-family: 'Amiri', serif !important; text-shadow: 0 0 20px #000; }
-                .c-sadaqallah { font-size: 10vmin; color: var(--royal-gold); font-family: 'Amiri', serif !important; text-shadow: 0 0 20px #000; }
+                .c-sadaqallah { font-size: 10vmin; color: #D4AF37; font-family: 'Amiri', serif !important; text-shadow: 0 0 20px #000; }
 
                 #fsOverlay { position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:99999; display:flex; justify-content:center; align-items:center; }
                 .fs-btn { border: 2px solid var(--accent); padding: 20px; color: var(--accent); background: #000; cursor: pointer; font-size: 20px; border-radius: 10px; }
@@ -1814,7 +1899,7 @@
                 </div>
             </div>
 
-            <div id="ceremonyScreen">
+            <div id="ceremonyScreen" class="theme-0">
                 <div class="ceremony-box">
                     <div id="cHeader"></div>
                     <div id="cBody" style="width:100%;"></div>
@@ -1979,14 +2064,20 @@
                 function updateCeremony(d) {
                     ['idleScreen','gridScreen','waitScreen','readScreen','finishScreen', 'ceremonyScreen'].forEach(id=>document.getElementById(id).style.display='none');
                     document.getElementById('signalLight').style.display = 'none'; // Hide light for ceremony
-                    document.getElementById('ceremonyScreen').style.display = 'flex';
                     
+                    const screen = document.getElementById('ceremonyScreen');
+                    screen.style.display = 'flex';
+                    
+                    // APPLY THEME
+                    screen.className = 'theme-' + (d.ceremony.settings.themeIndex || 0);
+
                     const cHead = document.getElementById('cHeader');
                     const cBody = document.getElementById('cBody');
                     const cFoot = document.getElementById('cFooter');
                     cHead.innerHTML = ''; cBody.innerHTML = ''; cFoot.innerHTML = '';
 
                     const data = d.ceremony;
+                    const sets = d.ceremony.settings;
                     
                     if(data.phase === 'cover') {
                         cBody.innerHTML = \`<div class="c-cover">\${d.ceremonyTitle || "Quran Ceremony"}</div>\`;
@@ -2008,9 +2099,9 @@
                         }
 
                         if(ayah) {
-                            cBody.innerHTML = \`<div class="ceremony-quran">\${ayah.arabic}</div>
+                            cBody.innerHTML = \`<div class="ceremony-quran" style="color:\${sets.arabicColor}; font-size:\${sets.arabicSize}vmin;">\${ayah.arabic}</div>
                                                 <div class="ceremony-divider"></div>
-                                                <div class="ceremony-trans">\${transText}</div>\`;
+                                                <div class="ceremony-trans" style="color:\${sets.transColor}; font-size:\${sets.transSize}vmin;">\${transText}</div>\`;
                         }
                     }
                 }
