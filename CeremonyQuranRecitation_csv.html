@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="dv" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rasfahi Data Generator (Compatible V24.1)</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Thaana:wght@400;700&display=swap');
+        
+        body {
+            font-family: 'Noto Sans Thaana', sans-serif;
+            background-color: #0d1117;
+            color: #c9d1d9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background: #161b22;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+            width: 500px;
+            text-align: center;
+            border-top: 5px solid #D4AF37; /* Royal Gold */
+            border-bottom: 5px solid #D4AF37;
+        }
+        h2 { margin-top: 0; color: #D4AF37; }
+        p { font-size: 13px; color: #8b949e; }
+        
+        .file-group {
+            margin-bottom: 15px;
+            text-align: right;
+            border: 1px dashed #30363d;
+            padding: 10px;
+            border-radius: 5px;
+            background: #0d1117;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            font-size: 14px;
+            color: #58a6ff;
+        }
+        input[type="file"] {
+            width: 100%;
+            font-size: 12px;
+            color: #c9d1d9;
+        }
+        button {
+            background: linear-gradient(to bottom, #D4AF37, #aa8c2c);
+            color: #000;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-family: 'Noto Sans Thaana', sans-serif;
+            font-size: 16px;
+            font-weight: bold;
+            width: 100%;
+            margin-top: 10px;
+            transition: 0.3s;
+        }
+        button:hover { filter: brightness(1.1); }
+        button:disabled { background: #333; color: #777; cursor: not-allowed; }
+        #status {
+            margin-top: 15px;
+            font-size: 13px;
+        }
+        .error { color: #ff7b72; }
+        .success { color: #3fb950; font-weight: bold; }
+        .link-note { margin-top: 20px; font-size: 11px; color: #8b949e; border-top: 1px solid #30363d; padding-top: 10px;}
+        a { color: #58a6ff; text-decoration: none; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Royal CSV Generator</h2>
+        <p>
+            Tanzil.net އިން ޑައުންލޯޑްކުރި 3 ފައިލް ތިރީގައިވާ ބައިތަކަށް އަޅުއްވާށެވެ.
+            މި ޓޫލް އިން ސޫރަތުގެ ނަންބަރު، ސޫރަތުގެ ނަމަށް ބަދަލުކޮށް، V24.1 އަށް ބޭނުންވާ ފޯމެޓަށް ހަދައިދޭނެއެވެ.
+        </p>
+
+        <div class="file-group">
+            <label>1. ޢަރަބި ޓެކްސްޓް (Arabic Simple/Clean):</label>
+            <input type="file" id="fileArabic" accept=".txt">
+        </div>
+
+        <div class="file-group">
+            <label>2. ދިވެހި ތަރުޖަމާ (Dhivehi):</label>
+            <input type="file" id="fileDhivehi" accept=".txt">
+        </div>
+
+        <div class="file-group">
+            <label>3. އިނގިރޭސި ތަރުޖަމާ (English):</label>
+            <input type="file" id="fileEnglish" accept=".txt">
+        </div>
+
+        <button onclick="processFiles()" id="btnGen">Generate Royal CSV ⬇️</button>
+        <div id="status"></div>
+        
+        <div class="link-note">
+            Source: <a href="http://tanzil.net/trans/" target="_blank">Tanzil.net</a> (Select "Text" format for all files)
+        </div>
+    </div>
+
+    <script>
+        // Surah Names Mapping (To match V24.1)
+        const SURAH_NAMES = [
+            "Al-Fatiha", "Al-Baqarah", "Ali 'Imran", "An-Nisa", "Al-Ma'idah", "Al-An'am", "Al-A'raf", "Al-Anfal", "At-Tawbah", "Yunus",
+            "Hud", "Yusuf", "Ar-Ra'd", "Ibrahim", "Al-Hijr", "An-Nahl", "Al-Isra", "Al-Kahf", "Maryam", "Ta-Ha",
+            "Al-Anbiya", "Al-Hajj", "Al-Mu'minun", "An-Nur", "Al-Furqan", "Ash-Shu'ara", "An-Naml", "Al-Qasas", "Al-Ankabut", "Ar-Rum",
+            "Luqman", "As-Sajdah", "Al-Ahzab", "Saba", "Fatir", "Ya-Sin", "As-Saffat", "Sad", "Az-Zumar", "Ghafir",
+            "Fussilat", "Ash-Shura", "Az-Zukhruf", "Ad-Dukhan", "Al-Jathiyah", "Al-Ahqaf", "Muhammad", "Al-Fath", "Al-Hujurat", "Qaf",
+            "Adh-Dhariyat", "At-Tur", "An-Najm", "Al-Qamar", "Ar-Rahman", "Al-Waqi'ah", "Al-Hadid", "Al-Mujadila", "Al-Hashr", "Al-Mumtahanah",
+            "As-Saff", "Al-Jumu'ah", "Al-Munafiqun", "At-Taghabun", "At-Talaq", "At-Tahrim", "Al-Mulk", "Al-Qalam", "Al-Haqqah", "Al-Ma'arij",
+            "Nuh", "Al-Jinn", "Al-Muzzammil", "Al-Muddaththir", "Al-Qiyamah", "Al-Insan", "Al-Mursalat", "An-Naba", "An-Nazi'at", "Abasa",
+            "At-Takwir", "Al-Infitar", "Al-Mutaffifin", "Al-Inshiqaq", "Al-Buruj", "At-Tariq", "Al-A'la", "Al-Ghashiyah", "Al-Fajr", "Al-Balad",
+            "Ash-Shams", "Al-Layl", "Ad-Duha", "Ash-Sharh", "At-Tin", "Al-Alaq", "Al-Qadr", "Al-Bayyinah", "Az-Zalzalah", "Al-Adiyat",
+            "Al-Qari'ah", "At-Takathur", "Al-Asr", "Al-Humazah", "Al-Fil", "Quraysh", "Al-Ma'un", "Al-Kawthar", "Al-Kafirun", "An-Nasr",
+            "Al-Masad", "Al-Ikhlas", "Al-Falaq", "An-Nas"
+        ];
+
+        function log(msg, type="") {
+            const el = document.getElementById('status');
+            el.innerHTML = msg;
+            el.className = type;
+        }
+
+        function parseTanzilContent(text) {
+            const lines = text.split('\n');
+            const data = [];
+            
+            for (let line of lines) {
+                line = line.trim();
+                // Skip comments and empty lines
+                if (!line || line.startsWith('#')) continue;
+                
+                const parts = line.split('|');
+                if (parts.length >= 3) {
+                    data.push({
+                        sura: parseInt(parts[0]), // Store as number
+                        ayah: parseInt(parts[1]),
+                        text: parts[2]
+                    });
+                }
+            }
+            return data;
+        }
+
+        function readFile(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = (e) => resolve(parseTanzilContent(e.target.result));
+                reader.onerror = (e) => reject(e);
+                reader.readAsText(file); 
+            });
+        }
+
+        async function processFiles() {
+            const fAr = document.getElementById('fileArabic').files[0];
+            const fDv = document.getElementById('fileDhivehi').files[0];
+            const fEn = document.getElementById('fileEnglish').files[0];
+
+            if (!fAr || !fDv || !fEn) {
+                log("މަދުވެގެން 3 ފައިލް ނަގަންވާނެއެވެ.", "error");
+                return;
+            }
+
+            const btn = document.getElementById('btnGen');
+            btn.disabled = true;
+            btn.innerText = "Processing...";
+            log("Reading files...");
+
+            try {
+                // Read all files in parallel
+                const [a
