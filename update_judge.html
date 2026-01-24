@@ -3032,30 +3032,32 @@
         link.click();
         document.body.removeChild(link);
     }
-    // --- ADVANCED REPORT GENERATION FUNCTIONS ---
-
-    function getFilteredResults() {
+   function getFilteredResults() {
         const fBranch = document.getElementById('rptFilterBranch').value;
         const fGroup = document.getElementById('rptFilterGroup').value;
+        // ★ އައު ފިލްޓަރ ނެގުން ★
+        const fInst = document.getElementById('rptFilterInstType').value;
 
         // Filter Data
         let list = state.judging.savedResults.filter(r => {
-            // Check Branch (Flexible check)
+            // Check Branch
             let branchMatch = (fBranch === "All") ? true : (r.branch && r.branch.includes(fBranch));
-            // Manual fixes for Dhivehi naming if needed
             if(fBranch === "Balaiygen" && r.branch && r.branch.toLowerCase().includes("balai")) branchMatch = true;
             if(fBranch === "Nubalai" && r.branch && r.branch.toLowerCase().includes("nubalai")) branchMatch = true;
 
             // Check Group
             let groupMatch = (fGroup === "All") ? true : (r.group === fGroup);
 
-            return branchMatch && groupMatch;
+            // ★ Check Institution Type (School, Office, etc.) ★
+            // Note: If old data didn't have instType, treat as valid if filter is All
+            let instMatch = (fInst === "All") ? true : (r.instType === fInst);
+
+            return branchMatch && groupMatch && instMatch;
         });
 
         // Sort Highest to Lowest
         return list.sort((a, b) => b.finalScore - a.finalScore);
     }
-
     // --- ADVANCED REPORT GENERATION (UPDATED WITH FULL DETAILS) ---
     function generateAdvancedReport(mode) {
         // 1. Get Data & Filter
