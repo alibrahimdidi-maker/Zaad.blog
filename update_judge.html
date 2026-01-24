@@ -2183,7 +2183,7 @@
         let borderCSS = `border: 1.5vmin ${th.borderType} ${th.accent}; box-shadow: 0 0 5vmin ${th.accent}80;`;
         if(bStyle === 'custom' && state.borderData) borderCSS = `border: 4vmin solid transparent; border-image: url('${state.borderData}') 30 stretch;`;
         if(bStyle === 'none') borderCSS = "border:none;";
-const finalTitle = judgeTitle ? judgeTitle : "JUDGE SCREEN";
+
         return `
         <!DOCTYPE html>
         <html lang="dv" dir="rtl">
@@ -2393,7 +2393,7 @@ const finalTitle = judgeTitle ? judgeTitle : "JUDGE SCREEN";
                         <div class="royal-card" id="mainScroll"><img id="qImg" src=""><h1 id="memoryText"></h1></div>
                         
                         <div id="judgeSection">
-    <h1 id="judgeTitleDisplay" style="text-align:center; color:#b71c1c; border-bottom:2px solid #ccc; padding-bottom:10px; font-size:40px;">${finalTitle}</h1>
+    <h1 id="judgeTitleDisplay" style="text-align:center; color:#b71c1c; border-bottom:2px solid #ccc; padding-bottom:10px; font-size:40px;">JUDGE SCREEN</h1>
     
     <div class="student-bar">Student: <span id="jStudentName">---</span></div>
                             <table class="rubric-table">
@@ -2715,22 +2715,21 @@ const finalTitle = judgeTitle ? judgeTitle : "JUDGE SCREEN";
              alert("Please Allow Popups for this site!");
         }
     }
-// --- SINGLE JUDGE OPENER (FIXED COLOR & SIZE) ---
+// --- SINGLE JUDGE OPENER (WITH NAME DISPLAY) ---
     function openSingleJudge() {
         // 1. ނަންބަރާއި ނަން ހޯދުން
         const judgeNum = document.getElementById('targetJudgeSelect').value;
+        
+        // މިތަނުން މިބަލަނީ ތިބާ ދެންމެ ހެދި Input ގޮޅިތަކުގައި ނަމެއް އިންތޯ
         const nameInput = document.getElementById('jName' + judgeNum); 
         const judgeName = nameInput ? nameInput.value : ""; 
 
         const windowName = `Judge_${judgeNum}`;
         
-        // ޓައިޓްލް ހަދާގޮތް
+        // ★ ޓައިޓްލް ހަދާގޮތް: ނަން އިންނަމަ ނަމާއެކު، ނެތްނަމަ ހަމައެކަނި "JUDGE X"
         let displayTitle = `JUDGE ${judgeNum}`;
-        
         if(judgeName) {
-            // ★ މުހިންމު ބަދަލު: color:#000 (ކަޅުކުލަ) އަށް ބަދަލުކުރެވިފައި
-            // އަދި ސައިޒު 20px އިން 25px އަށް ބޮޑުކުރެވިފައި
-            displayTitle += `<br><span style="font-size:25px; color:#000000; font-weight:bold; font-family:'AppFont';">(${judgeName})</span>`;
+            displayTitle += `<br><span style="font-size:20px; color:#fff; font-family:'AppFont';">${judgeName}</span>`;
         }
 
         // 2. ވިންޑޯ ހުޅުވުން
@@ -2738,7 +2737,7 @@ const finalTitle = judgeTitle ? judgeTitle : "JUDGE SCREEN";
         
         if(w) {
             w.document.open();
-            // ނަން (Title) ފޮނުވުން
+            // ތައްޔާރުކުރި ޓައިޓްލް ފޮނުވުން
             w.document.write(getTemplate(false, displayTitle)); 
             w.document.close();
             
