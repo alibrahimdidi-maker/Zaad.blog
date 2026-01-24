@@ -304,12 +304,115 @@
     <div id="autoSaveStatus">💾 Auto Saved</div>
 
     <div id="securityOverlay">
-        <div class="sec-box">
-            <h1 style="color:var(--gold); font-family:'Cinzel' !important; margin:0;">Rasfahi Judge (V26.0)</h1>
-            <p style="color:#666; font-size:10px;">JUDGE + CEREMONY + RESULT SHEET + AUTO SAVE EDITION</p>
-            <input type="password" id="secKey" style="text-align:center; font-size:18px; margin:15px 0; padding:10px; border-color:var(--gold);" placeholder="Enter License Key">
-            <button class="btn-green" onclick="unlockSystem()">UNLOCK SYSTEM</button>
-            <p id="secMsg" style="color:#ff5252; margin-top:10px; font-size:12px;"></p>
+        <style>
+            #securityOverlay {
+                position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+                background: #000; z-index: 99999;
+                display: flex; justify-content: center; align-items: center;
+                font-family: 'Poppins', sans-serif;
+            }
+            .login-card {
+                width: 500px; padding: 40px; text-align: center;
+                border: 2px solid #FFD700; border-radius: 20px;
+                background: #050505;
+                box-shadow: 0 0 30px rgba(255, 215, 0, 0.2);
+                position: relative;
+            }
+            /* Double Border Effect */
+            .login-card::before {
+                content: ''; position: absolute;
+                top: 5px; left: 5px; right: 5px; bottom: 5px;
+                border: 1px solid #c5a059; border-radius: 15px;
+                pointer-events: none;
+            }
+            
+            /* Profile Image Circle */
+            .profile-circle {
+                width: 100px; height: 100px; margin: 0 auto 20px auto;
+                border-radius: 50%; overflow: hidden;
+                border: 3px solid #00e676;
+                box-shadow: 0 0 20px #00e676;
+                background: #111;
+            }
+            .profile-circle img { width: 100%; height: 100%; object-fit: cover; }
+
+            /* Green Pill Badge */
+            .welcome-pill {
+                display: inline-block; padding: 8px 25px;
+                border: 1px solid #00e676; border-radius: 50px;
+                color: #00e676; font-size: 12px; font-weight: bold; letter-spacing: 2px;
+                margin-bottom: 20px; text-transform: uppercase;
+                background: rgba(0, 230, 118, 0.05);
+            }
+
+            .main-title {
+                font-family: 'Cinzel', serif; color: #eecda3;
+                background: linear-gradient(to right, #fbf5b7, #eecda3);
+                -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+                font-size: 28px; font-weight: 900; line-height: 1.4; margin-bottom: 30px;
+                text-transform: uppercase;
+            }
+
+            .input-box {
+                background: #0b1016; border: 1px solid #334455;
+                color: #fff; width: 100%; padding: 15px;
+                border-radius: 8px; text-align: center; font-size: 16px;
+                margin-bottom: 15px; letter-spacing: 1px; outline: none;
+                transition: 0.3s;
+            }
+            .input-box:focus { border-color: #00e676; box-shadow: 0 0 10px rgba(0, 230, 118, 0.2); }
+
+            .auth-btn {
+                background: linear-gradient(to right, #004d40, #00695c);
+                color: #fff; width: 100%; padding: 15px;
+                border: 1px solid #00e676; border-radius: 8px;
+                font-size: 16px; font-weight: bold; cursor: pointer;
+                text-transform: uppercase; letter-spacing: 1px;
+                transition: 0.3s;
+            }
+            .auth-btn:hover { background: #00695c; box-shadow: 0 0 15px rgba(0, 230, 118, 0.4); }
+
+            .footer-info { margin-top: 30px; color: #666; font-size: 11px; line-height: 1.6; }
+            .highlight-name { color: #fff; font-weight: bold; }
+            .reg-no { color: #00e676; }
+            
+            .unauth-badge {
+                display: inline-block; margin-top: 10px; padding: 5px 15px;
+                border: 1px solid #ff5252; color: #ff5252;
+                border-radius: 4px; font-size: 10px; font-weight: bold;
+                background: rgba(255, 82, 82, 0.1);
+            }
+            .support-line { color: #2196f3; font-weight: bold; margin-top: 8px; font-size: 12px; }
+        </style>
+
+        <div class="login-card">
+            <div class="profile-circle">
+                <img src="https://via.placeholder.com/100x100?text=AD" alt="Admin">
+            </div>
+
+            <div class="welcome-pill">WARM WELCOME TO</div>
+
+            <div class="main-title">
+                RASFAHI EVENT AND<br>GRADUATION SOFTWARE
+            </div>
+
+            <p style="color:#aaa; font-size:12px; margin-bottom:5px;">Paste code: <b>Ctrl + V</b> (No Spaces)</p>
+            
+            <input type="password" id="secKey" class="input-box" placeholder="P a s t e   K e y   H e r e . . .">
+            
+            <button class="auth-btn" onclick="unlockSystem()">AUTHENTICATE</button>
+            <p id="secMsg" style="color:#ff5252; margin-top:10px; font-size:12px; height:15px;"></p>
+
+            <div class="footer-info">
+                Intellectual property of <span class="highlight-name">Ali Ibrahim Didi</span>.<br>
+                Reg: <span class="reg-no">MED.03.IP.CR.26.EW5889</span>
+                
+                <div style="margin-top:10px;">
+                    <div class="unauth-badge">⛔ UNAUTHORIZED USE PROHIBITED</div>
+                </div>
+                
+                <div class="support-line">Support: 7791550 / 9901550</div>
+            </div>
         </div>
     </div>
 
@@ -419,16 +522,36 @@
                 <label data-translate="lblStudent">1. ދަރިވަރު ސްކްރީން:</label>
                 <button onclick="openScreen('student')" class="btn-purple" data-translate="btnLaunchStudent">🖥️ Student Screen (Launch)</button>
 
-                <label data-translate="lblJudge">2. ޖަޖުންގެ ސްކްރީން (Multicast):</label>
-                <div style="display:flex; gap:5px;">
-                    <select id="judgeCount" style="width:40%;">
-                        <script>
-                            for(let i=1; i<=10; i++) document.write(`<option value="${i}" ${i===3?'selected':''}>${i} Judges</option>`);
-                        </script>
-                    </select>
-                    <button onclick="openJudges()" class="btn-blue" data-translate="btnLaunchJudges">Open Judges 🚀</button>
-                </div>
-            </div>
+                <label data-translate="lblJudge">2. ޖަޖުންގެ ސްކްރީން (Manual Entry):</label>
+   <div style="display:flex; gap:5px;">
+        <select id="targetJudgeSelect" style="width:50%;">
+            <option value="1">Judge 1</option>
+            <option value="2">Judge 2</option>
+            <option value="3">Judge 3</option>
+            <option value="4">Judge 4</option>
+            <option value="5">Judge 5</option>
+            <option value="6">Judge 6</option>
+            <option value="7">Judge 7</option>
+        </select>
+        
+        <button onclick="openSingleJudge()" class="btn-blue" data-translate="btnLaunchJudges">
+            Open Screen 🖥️
+        </button>
+    </div>
+
+    <div style="margin-top:10px; padding:5px; border:1px dashed #334455; background:#000;">
+        <small style="color:#aaa; display:block; margin-bottom:5px;">Set Judge Names (Optional):</small>
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:5px;">
+            <input type="text" id="jName1" placeholder="Judge 1 Name">
+            <input type="text" id="jName2" placeholder="Judge 2 Name">
+            <input type="text" id="jName3" placeholder="Judge 3 Name">
+            <input type="text" id="jName4" placeholder="Judge 4 Name">
+            <input type="text" id="jName5" placeholder="Judge 5 Name">
+            <input type="text" id="jName6" placeholder="Judge 6 Name">
+            <input type="text" id="jName7" placeholder="Judge 7 Name">
+        </div>
+    </div>
+    </div>
 
 <div class="panel">
                 <h2 data-translate="settings">4. ސެޓިންގސް & ޑޭޓާ</h2>
@@ -496,12 +619,17 @@
             <div class="panel">
                 <h2 style="color:#ff9800;">5. ދަރިވަރުންގެ މަޢުލޫމާތު (Student Info)</h2>
                 
-                <label>1. Bulk Import (Google Forms CSV):</label>
-                <div style="display:flex; gap:5px; margin-bottom:5px;">
-                    <input type="file" id="batchCsv" accept=".csv">
-                    <button class="btn-blue" onclick="loadStudentBatch()">Load Batch</button>
-                </div>
-                <small style="color:#aaa;">Order: Name, ID, Group, Branch, Age, Address, Phone, Parent, P.Phone, Email</small>
+                <label>1. Bulk Import (Google Forms / Master CSV):</label>
+<div style="display:flex; gap:5px; margin-bottom:5px;">
+    <input type="file" id="batchCsv" accept=".csv">
+    <button class="btn-blue" onclick="loadStudentBatch()">Load Batch</button>
+</div>
+
+<button class="btn-purple" onclick="downloadMasterCSVTemplate()" style="width:100%; margin-bottom:8px; font-size:11px;">
+    ⬇️ Download Master CSV Template (With Marks Columns)
+</button>
+
+<small style="color:#aaa;">Includes: Student Info + Rubric Columns (Thilawa, Tajweed etc.) + Rank</small>
 
                 <hr style="border-color:#333; margin:8px 0;">
                 
@@ -531,7 +659,7 @@
                  <input type="text" id="stdParent" placeholder="Parent Name">
                  <input type="text" id="stdParentPhone" placeholder="Parent Phone">
                 
-                <label>4. އުމުރު ފުރާ (Age Group):</label>
+               <label>4. އުމުރު ފުރާ (Age Group):</label>
                 <select id="stdGroup">
                     <option value="Under 6">6 އަހަރުން ދަށް</option>
                     <option value="Under 9">9 އަހަރުން ދަށް</option>
@@ -542,6 +670,14 @@
                     <option value="General">ޢާއްމު ބައި (19 މަތި)</option>
                 </select>
 
+                <label style="display:block; margin-top:10px;">5. މުއައްސަސާގެ ބާވަތް (Institution Type):</label>
+                <select id="stdInstType" style="width:100%; margin-bottom:10px;">
+                    <option value="School">School (ސްކޫލް/މަދަރުސާ)</option>
+                    <option value="Office">Office/Company (އޮފީސް/ކުންފުނި)</option>
+                    <option value="NGO">NGO/Club (ޖަމިއްޔާ/ކުލަބު)</option>
+                    <option value="University">University/College (ޔުނިވަރސިޓީ/ކޮލެޖް)</option>
+                    <option value="Private">Private (އަމިއްލަ ގޮތުން)</option>
+                </select>
                 <button class="btn-green" style="margin-top:10px;" onclick="registerStudent()">💾 Register & Set Active</button>
                 <p style="font-size:10px; color:#aaa;" id="currentStdLabel">No student active.</p>
             </div>
@@ -566,41 +702,75 @@
             </div>
 
             <div class="panel" style="border:1px solid #00acc1; box-shadow:inset 0 0 10px rgba(0,172,193,0.1);">
-                <h2 style="color:#00e5ff;">8. ނަތީޖާ & ރިޕޯޓް (Results)</h2>
-                
-                <div style="background:#002200; padding:10px; border-radius:4px; margin-bottom:10px;">
-                    <h4 style="margin:0; color:#fff;">Current Session Scores:</h4>
-                    <div id="adminScoreMonitor" style="font-size:12px; color:#aaa; margin-top:5px;">Waiting for judges...</div>
-                    <button class="btn-green" id="btnFinalize" style="margin-top:5px;" onclick="finalizeStudentResult()">✅ Save Student Result</button>
-                </div>
+    <h2 style="color:#00e5ff;">8. ނަތީޖާ & ރިޕޯޓް (Advanced Reports)</h2>
 
-                <label>Filter Result Sheet:</label>
-                <select id="resFilterGroup">
-                    <option value="All">All Groups</option>
-                    <option value="Under 6">6 އަހަރުން ދަށް</option>
-                    <option value="Under 9">9 އަހަރުން ދަށް</option>
-                    <option value="Under 11">11 އަހަރުން ދަށް</option>
-                    <option value="Under 13">13 އަހަރުން ދަށް</option>
-                    <option value="Under 16">16 އަހަރުން ދަށް</option>
-                    <option value="Under 19">19 އަހަރުން ދަށް</option>
-                </select>
-                
-                <label>Report Header (Title):</label>
-                <input type="text" id="rptHeader" placeholder="Rasfahi Quran Competition 2026">
-                
-                <label>Report Footer (Signatures):</label>
-                <input type="text" id="rptFooter" placeholder="Head Judge / Admin">
+    <div style="background:#002200; padding:10px; border-radius:4px; margin-bottom:10px;">
+        <h4 style="margin:0; color:#fff;">Current Session Scores:</h4>
+        <div id="adminScoreMonitor" style="font-size:12px; color:#aaa; margin-top:5px;">Waiting for judges...</div>
+        <button class="btn-green" id="btnFinalize" style="margin-top:5px;" onclick="finalizeStudentResult()">✅ Save Student Result</button>
+    </div>
 
-                <div style="display:flex; gap:5px; margin-top:10px;">
-                     <button class="btn-purple" onclick="generateResultSheet('standard')">🖨️ Full List</button>
-                     <button class="btn-cyan" onclick="generateResultSheet('top5')">🏆 Top 5</button>
-                     <button class="btn-orange" onclick="generateResultSheet('top3')">🥉 Top 3</button>
-                </div>
-                
-                <button class="btn-gold" style="margin-top:5px;" onclick="printJudgeSheetTemplate()">📄 Print Blank Judge Sheet</button>
+    <hr style="border-color:#333; margin:8px 0;">
 
-                <button class="btn-red" style="font-size:10px; margin-top:5px;" onclick="clearAllResults()">Reset All Data</button>
-            </div>
+    <label style="color:#FFD700;">1. Report Headers (ރިޕޯޓުގެ މަޢުލޫމާތު):</label>
+    <input type="text" id="rptInstName" placeholder="Institution Name (e.g. Madharusathul Arabiyya)">
+    <input type="text" id="rptCompName" placeholder="Competition Name (e.g. Quran Mubaaraaiy 1446)" style="margin-top:2px;">
+    
+    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:5px; margin-top:5px;">
+        <input type="text" id="rptChief" placeholder="Chief Judge Name">
+        <select id="rptJudgeCount">
+            <option value="3">3 Signature Lines</option>
+            <option value="5">5 Signature Lines</option>
+            <option value="7">7 Signature Lines</option>
+        </select>
+    </div>
+
+    <hr style="border-color:#333; margin:8px 0;">
+
+    <label style="color:#FFD700;">2. Filter Category (ކެޓަގަރީ ނަގާ):</label>
+    <div style="display:flex; gap:5px; flex-wrap:wrap;">
+        <select id="rptFilterBranch" style="flex:1;">
+            <option value="All">All Branches (ހުރިހާ ގޮތްޕެއް)</option>
+            <option value="Balaiygen">Balaiygen (ބަލައިގެން)</option>
+            <option value="Nubalai">Nubalai (ނުބަލައި)</option>
+        </select>
+        
+        <select id="rptFilterGroup" style="flex:1;">
+            <option value="All">All Ages (ހުރިހާ ޢުމުރެއް)</option>
+            <option value="Under 6">6 އަހަރުން ދަށް</option>
+            <option value="Under 9">9 އަހަރުން ދަށް</option>
+            <option value="Under 11">11 އަހަރުން ދަށް</option>
+            <option value="Under 13">13 އަހަރުން ދަށް</option>
+            <option value="Under 16">16 އަހަރުން ދަށް</option>
+            <option value="Under 19">19 އަހަރުން ދަށް</option>
+            <option value="General">General (ޢާއްމު)</option>
+        </select>
+
+        <select id="rptFilterInstType" style="flex:1;">
+            <option value="All">All Inst. (ހުރިހާ)</option>
+            <option value="School">Schools Only</option>
+            <option value="Office">Offices Only</option>
+            <option value="NGO">NGOs Only</option>
+            <option value="University">Universities</option>
+            <option value="Private">Private</option>
+        </select>
+    </div>
+    <label style="margin-top:10px;">3. Generate Report (PDF / Print):</label>
+    <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:5px;">
+        <button class="btn-orange" onclick="generateAdvancedReport('top3')">🥉 Top 3</button>
+        <button class="btn-cyan" onclick="generateAdvancedReport('top5')">🏆 Top 5</button>
+        <button class="btn-purple" onclick="generateAdvancedReport('all')">📄 Full List</button>
+    </div>
+
+    <label style="margin-top:5px;">4. Downloads:</label>
+    <button class="btn-blue" onclick="exportFilteredCSV()">📥 Download Filtered CSV</button>
+
+    <hr style="border-color:#333; margin:8px 0;">
+    
+    <button class="btn-green" onclick="exportMasterResultSheet()">📥 Export FULL Master CSV</button>
+    <button class="btn-gold" style="margin-top:5px;" onclick="printJudgeSheetTemplate()">📄 Blank Judge Sheet</button>
+    <button class="btn-red" style="font-size:10px; margin-top:5px;" onclick="clearAllResults()">Reset All Data</button>
+</div>
 
             <div class="panel" style="border:1px solid #00acc1; box-shadow:inset 0 0 10px rgba(0,172,193,0.1);">
                 <h2 style="color:#00e5ff;">6. ޖަލްސާ ފެށުން (Ceremony)</h2>
@@ -1026,18 +1196,76 @@
         }
     }
 
-    // --- SYSTEM SECURITY ---
+    // --- ADVANCED SECURITY UNLOCK (NEW) ---
     function unlockSystem() {
         const inputKey = document.getElementById('secKey').value.trim();
         const msg = document.getElementById('secMsg');
 
-        if (inputKey === "ADMIN-12345" || inputKey === "123") { // Backdoor for demo
-            document.getElementById('securityOverlay').classList.add('hidden');
-            renderSlots();
-            loadFromLocal(); // Trigger load
+        // Backdoor for testing (ބޭނުންނަމަ މިބައި ފޮހެލާ: ADMIN-OVERRIDE ޖަހައިގެން ވަދެވޭނެ)
+        if (inputKey === "ADMIN-OVERRIDE") {
+            grantAccess("Administrator");
             return;
         }
-        msg.innerText = "❌ Invalid License Key.";
+
+        if (!inputKey) {
+            msg.innerText = "⚠️ Please enter a license key.";
+            return;
+        }
+
+        try {
+            // 1. ކޯޑު ޑިކޯޑް ކުރުން (Base64 Decode)
+            const decoded = atob(inputKey); 
+            
+            // ކޯޑު ހެދިފައިވާ ގޮތް: "ROYAL_EXP_YYYY-MM-DD_CUST_Name"
+            const parts = decoded.split('_');
+
+            // 2. ކޯޑުގެ ފޯމެޓް ޗެކްކުރުން
+            if (parts.length < 5 || parts[0] !== "ROYAL" || parts[1] !== "EXP") {
+                throw new Error("Invalid License Format");
+            }
+
+            // 3. ތާރީޚް ހަމަވެފައިވޭތޯ ބެލުން
+            const expDateString = parts[2]; // YYYY-MM-DD
+            const expDate = new Date(expDateString);
+            const today = new Date();
+            
+            // ގަޑި ނުބަލައި ހަމައެކަނި ތާރީޚް ބެލުމަށް
+            today.setHours(0,0,0,0);
+            
+            if (expDate < today) {
+                msg.innerText = "❌ License Expired on: " + expDateString;
+                return;
+            }
+
+            // 4. ކަސްޓަމަރުގެ ނަން ނެގުން
+            const custName = parts[4].replace(/-/g, ' '); // ނަމުގައި ހުރި "-" ފިލުވައިލުން
+
+            // 5. ހުރިހާ ކަމެއް ރަނގަޅުނަމަ ވަނުމުގެ ހުއްދަ ދިނުން
+            grantAccess(custName);
+
+        } catch (e) {
+            console.error(e);
+            msg.innerText = "❌ Invalid License Key.";
+        }
+    }
+
+    // ވަނުމުގެ ހުއްދަ ދޭ ފަންކްޝަން
+    function grantAccess(name) {
+        // ސްކްރީން ފޮރުވުން
+        document.getElementById('securityOverlay').style.opacity = '0';
+        setTimeout(() => {
+            document.getElementById('securityOverlay').classList.add('hidden');
+        }, 500);
+        
+        // ލައިސަންސް އޮތް މީހާގެ ނަން ދެއްކުން (އެތެރޭގައި އެބައި އިންނަމަ)
+        const licDisp = document.getElementById('licenseDisplay');
+        if(licDisp) {
+            licDisp.style.display = 'block';
+            document.getElementById('licenseName').innerText = name;
+        }
+        
+        renderSlots(); // ސްލޮޓްތައް ދެއްކުން
+        loadFromLocal(); // ★ މުހިންމު: އޮޓޯ ސޭވް ޑޭޓާ ލޯޑުކުރުން
     }
 
     function setMode(mode) {
@@ -1068,7 +1296,7 @@
         syncWindows();
     }
 
-    // --- STUDENT LOGIC (ENHANCED) ---
+   // Student Registration (Updated Logic)
     function registerStudent() {
         const s = {
             name: document.getElementById('stdName').value,
@@ -1082,21 +1310,28 @@
             parent: document.getElementById('stdParent').value,
             parentPhone: document.getElementById('stdParentPhone').value,
             group: document.getElementById('stdGroup').value,
+            
+            // ★ މުހިންމު ބައި: މުއައްސަސާގެ ބާވަތް މިތަނުން ސޭވްކުރާނެ
+            instType: document.getElementById('stdInstType').value, 
+
             timestamp: new Date().toISOString()
         };
+        
         if(!s.name) { alert("Enter Name!"); return; }
         
         state.judging.currentStudentObj = s;
         state.judging.liveScores = {}; // Reset live scores
+        
+        // Update UI Text
         document.getElementById('currentStdLabel').innerText = `Active: ${s.name} (${s.group})`;
         document.getElementById('btnFinalize').innerText = "✅ Save Student Result";
         document.getElementById('btnFinalize').disabled = false;
         document.getElementById('adminScoreMonitor').innerText = "Waiting for judges...";
+        
         syncWindows();
         saveToLocal(); // Auto save
     }
-
-    // Load Batch from CSV (Google Forms Format)
+    // Load Batch from CSV (Updated to read Institution Type)
     function loadStudentBatch() {
         const file = document.getElementById('batchCsv').files[0];
         if(!file) return;
@@ -1104,14 +1339,13 @@
         const r = new FileReader();
         r.onload = e => {
             const rows = e.target.result.split('\n');
-            // Assuming Headers or Standard Format:
-            // Name, ID, Group, Branch, Age, Address, Phone, Parent, P.Phone, Email
-            // Skipping header row 0
             state.allStudents = [];
             
+            // Skipping header row 0
             for(let i=1; i<rows.length; i++) {
                 const cols = rows[i].split(',');
                 if(cols.length < 2) continue; 
+                
                 state.allStudents.push({
                     name: cols[0]?.trim(),
                     id: cols[1]?.trim(),
@@ -1122,16 +1356,17 @@
                     phone: cols[6]?.trim(),
                     parent: cols[7]?.trim(),
                     parentPhone: cols[8]?.trim(),
-                    email: cols[9]?.trim()
+                    email: cols[9]?.trim(),
+                    // ★ Reading the new column (Index 10)
+                    instType: cols[10]?.trim() || "School" 
                 });
             }
             populateStudentSelector();
             saveToLocal();
-            alert(`Loaded ${state.allStudents.length} students.`);
+            alert(`Loaded ${state.allStudents.length} students with Institution Types.`);
         };
         r.readAsText(file);
     }
-
     function populateStudentSelector() {
         const sel = document.getElementById('studentSelector');
         sel.innerHTML = '<option value="">-- Manual Entry --</option>';
@@ -2319,7 +2554,9 @@
                         <div class="royal-card" id="mainScroll"><img id="qImg" src=""><h1 id="memoryText"></h1></div>
                         
                         <div id="judgeSection">
-                            <div class="student-bar">Student: <span id="jStudentName">---</span></div>
+    <h1 id="judgeTitleDisplay" style="text-align:center; color:#b71c1c; border-bottom:2px solid #ccc; padding-bottom:10px; font-size:40px;">JUDGE SCREEN</h1>
+    
+    <div class="student-bar">Student: <span id="jStudentName">---</span></div>
                             <table class="rubric-table">
                                 <thead style="border-bottom: 2px solid var(--accent);">
                                     <tr>
@@ -2639,38 +2876,73 @@
              alert("Please Allow Popups for this site!");
         }
     }
+// --- SINGLE JUDGE OPENER (WITH NAME DISPLAY) ---
+    function openSingleJudge() {
+        // 1. ނަންބަރާއި ނަން ހޯދުން
+        const judgeNum = document.getElementById('targetJudgeSelect').value;
+        
+        // މިތަނުން މިބަލަނީ ތިބާ ދެންމެ ހެދި Input ގޮޅިތަކުގައި ނަމެއް އިންތޯ
+        const nameInput = document.getElementById('jName' + judgeNum); 
+        const judgeName = nameInput ? nameInput.value : ""; 
 
-    function openJudges() {
-        const count = parseInt(document.getElementById('judgeCount').value);
-        state.windows.judges.forEach(w => w.close());
-        state.windows.judges = [];
-        for(let i=0; i<count; i++) {
-            let w = window.open("", `Judge_${i+1}`, "width=800,height=600");
-            if(w) {
-                w.document.open();
-                w.document.write(getTemplate());
-                w.document.close();
+        const windowName = `Judge_${judgeNum}`;
+        
+        // ★ ޓައިޓްލް ހަދާގޮތް: ނަން އިންނަމަ ނަމާއެކު، ނެތްނަމަ ހަމައެކަނި "JUDGE X"
+        let displayTitle = `JUDGE ${judgeNum}`;
+        if(judgeName) {
+            displayTitle += `<br><span style="font-size:20px; color:#fff; font-family:'AppFont';">${judgeName}</span>`;
+        }
+
+        // 2. ވިންޑޯ ހުޅުވުން
+        let w = window.open("", windowName, "width=900,height=700");
+        
+        if(w) {
+            w.document.open();
+            // ތައްޔާރުކުރި ޓައިޓްލް ފޮނުވުން
+            w.document.write(getTemplate(false, displayTitle)); 
+            w.document.close();
+            
+            w.judgeID = windowName;
+
+            if(!state.windows.judges) state.windows.judges = [];
+            
+            const exists = state.windows.judges.some(win => win.judgeID === windowName);
+            if(!exists) {
                 state.windows.judges.push(w);
             }
         }
+        
+        // 3. ޑޭޓާ ފޮނުވުން
         setTimeout(syncWindows, 500);
     }
-
     function syncWindows() {
         const packet = {
-            slots: state.session.slots, activeIndex: state.session.activeIndex,
-            phase: state.session.phase, light: state.session.light,
-            grid: state.grid, readingMode: state.readingMode,
-            currentLang: currentLang, fontData: state.fontData,
+            slots: state.session.slots, 
+            activeIndex: state.session.activeIndex,
+            phase: state.session.phase, 
+            light: state.session.light,
+            grid: state.grid, 
+            readingMode: state.readingMode,
+            currentLang: currentLang, 
+            fontData: state.fontData,
+            
+            // މުހިންމު ބައި: ދަރިވަރުގެ ނަން ޖަޖުންނަށް ފޮނުވުން
             judging: state.judging,
             
             ceremony: state.ceremony,
             ceremonyTitle: document.getElementById('ceremonyTitle') ? document.getElementById('ceremonyTitle').value : "Ceremony"
         };
+        
+        // Send to Student & Ceremony Screens
         const send = w => { if(w && !w.closed && w.updateState) w.updateState(packet); };
+        
         send(state.windows.student);
         send(state.windows.ceremony);
-        state.windows.judges.forEach(w => send(w));
+        
+        // Send to Judge Screens
+        if(state.windows.judges) {
+            state.windows.judges.forEach(w => send(w));
+        }
     }
     
     // INITIALIZATION
@@ -2681,6 +2953,462 @@
     loadFromLocal(); // Try loading saved state on startup
 
     document.addEventListener('contextmenu', function(event) { event.preventDefault(); });
+    
+   // 1. Download Blank Master Template (Updated with Institution Type)
+    function downloadMasterCSVTemplate() {
+        // Headers ލިސްޓަށް "Institution Type" އިތުރުކޮށްފައި
+        const headers = [
+            "Name", "ID", "Group", "Branch", "Age", "Address", "Phone", 
+            "Parent", "ParentPhone", "Email", 
+            "Institution Type (School/Office/NGO)" // ★ New Column
+        ];
+
+        // Dynamic Headers (From Settings) - އޮޓަމެޓިކުން ކެޓަގަރީތައް ނަގާނެ
+        if(state.judging.rubric) {
+            state.judging.rubric.forEach(r => {
+                headers.push(`${r.name} (${r.max})`);
+            });
+        }
+
+        // Final Columns
+        headers.push("TOTAL SCORE", "RANK", "REMARKS");
+
+        const csvContent = "data:text/csv;charset=utf-8," + headers.join(",");
+        const encodedUri = encodeURI(csvContent);
+        const link = document.createElement("a");
+        link.setAttribute("href", encodedUri);
+        link.setAttribute("download", "Rasfahi_Master_Template.csv");
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+    // 3. Export Filled Master Sheet (FINAL UPDATED VERSION)
+    // Includes: Judge 1-7 Breakdown + Institution Type
+    function exportMasterResultSheet() {
+        if(!state.judging.savedResults || state.judging.savedResults.length === 0) {
+            alert("No results to export! (މާކުސް ދެވިފައިވާ ކުދިންނެއް ނެތް)");
+            return;
+        }
+
+        // 1. Headers Setup
+        // Added 'Institution Type' after Branch
+        let csv = "Name,ID,Group (Age),Branch (Gofi),Institution Type,Age,Address,Phone,Parent,ParentPhone,Email,";
+        
+        // Rubric Columns (Breakdown placeholders)
+        if(state.judging.rubric) {
+            state.judging.rubric.forEach(r => {
+                csv += `${r.name} (Cat.),`; 
+            });
+        }
+
+        // --- Add Headers for Up to 7 Judges ---
+        for(let i=1; i<=7; i++) {
+            csv += `JUDGE ${i} TOTAL,`;
+        }
+
+        csv += "FINAL AVERAGE,RANK\n";
+
+        // 2. Sort Data (High Score to Low Score)
+        let sortedList = [...state.judging.savedResults].sort((a, b) => b.finalScore - a.finalScore);
+
+        // 3. Process Rows
+        sortedList.forEach((s, index) => {
+            let row = [];
+            
+            // Student Info - Note: Added s.instType
+            row.push(`"${s.name||''}"`, `"${s.id||''}"`, `"${s.group||''}"`, `"${s.branch||''}"`);
+            row.push(`"${s.instType||'School'}"`); // ★ This ensures School/Office appears
+            row.push(`"${s.age||''}"`, `"${s.address||''}"`, `"${s.phone||''}"`, `"${s.parent||''}"`, `"${s.parentPhone||''}"`, `"${s.email||''}"`);
+            
+            // Rubric Placeholders
+            if(state.judging.rubric) {
+                state.judging.rubric.forEach(() => row.push("-")); 
+            }
+
+            // --- Insert Individual Judge Scores ---
+            for(let i=1; i<=7; i++) {
+                let key = `Judge_${i}`; 
+                let val = (s.scores && s.scores[key] !== undefined) ? s.scores[key] : "-";
+                row.push(val);
+            }
+
+            // Final Average & Rank
+            row.push(s.finalScore);
+            row.push(index + 1);
+
+            csv += row.join(",") + "\n";
+        });
+
+        // 4. Download File
+        const dateStr = new Date().toISOString().split('T')[0];
+        const fileName = `Rasfahi_Master_FULL_DETAILS_${dateStr}.csv`;
+
+        const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement("a");
+        const url = URL.createObjectURL(blob);
+        link.setAttribute("href", url);
+        link.setAttribute("download", fileName);
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+    function getFilteredResults() {
+        const fBranch = document.getElementById('rptFilterBranch').value;
+        const fGroup = document.getElementById('rptFilterGroup').value;
+
+        // Filter Data
+        let list = state.judging.savedResults.filter(r => {
+            // Check Branch (Flexible check)
+            let branchMatch = (fBranch === "All") ? true : (r.branch && r.branch.includes(fBranch));
+            // Manual fixes for Dhivehi naming if needed
+            if(fBranch === "Balaiygen" && r.branch && r.branch.toLowerCase().includes("balai")) branchMatch = true;
+            if(fBranch === "Nubalai" && r.branch && r.branch.toLowerCase().includes("nubalai")) branchMatch = true;
+
+            // Check Group
+            let groupMatch = (fGroup === "All") ? true : (r.group === fGroup);
+
+            return branchMatch && groupMatch;
+        });
+
+        // Sort Highest to Lowest
+        return list.sort((a, b) => b.finalScore - a.finalScore);
+    }
+
+    function generateAdvancedReport(mode) {
+        let list = getFilteredResults();
+        
+        // Slice for Top 3/5
+        let titleSuffix = "(Full List)";
+        if(mode === 'top3') { list = list.slice(0, 3); titleSuffix = "(TOP 3)"; }
+        if(mode === 'top5') { list = list.slice(0, 5); titleSuffix = "(TOP 5)"; }
+
+        if(list.length === 0) { alert("No students found for this filter!"); return; }
+
+        // Get Custom Info
+        const instName = document.getElementById('rptInstName').value || "Quran Competition";
+        const compName = document.getElementById('rptCompName').value || "Official Results";
+        const chiefName = document.getElementById('rptChief').value || "__________________";
+        const judgeCount = parseInt(document.getElementById('rptJudgeCount').value) || 3;
+        
+        const branchTxt = document.getElementById('rptFilterBranch').value;
+        const groupTxt = document.getElementById('rptFilterGroup').value;
+
+        // Generate Signature Lines
+        let sigLines = '';
+        for(let i=1; i<=judgeCount; i++) {
+            sigLines += `
+                <div class="sig-box">
+                    <div class="line"></div>
+                    <div class="label">Judge ${i}</div>
+                </div>`;
+        }
+
+        // HTML Structure for Print
+        const html = `
+        <!DOCTYPE html>
+        <html dir="rtl">
+        <head>
+            <title>Result Report</title>
+            <style>
+                body { font-family: 'Segoe UI', Tahoma, sans-serif; padding: 40px; }
+                .header { text-align: center; margin-bottom: 40px; border-bottom: 3px double #000; padding-bottom: 20px; }
+                h1 { margin: 0; font-size: 28px; text-transform: uppercase; }
+                h2 { margin: 5px 0; font-size: 20px; color: #444; }
+                .meta { display: flex; justify-content: space-between; margin-top: 20px; font-weight: bold; font-size: 16px; border: 1px solid #ccc; padding: 10px; }
+                
+                table { width: 100%; border-collapse: collapse; margin-top: 30px; }
+                th, td { border: 1px solid #333; padding: 10px; text-align: center; }
+                th { background: #eee; font-weight: bold; }
+                tr:nth-child(1) td { background: #fffbe6; font-weight:bold; } /* 1st Place Highlight */
+
+                .footer { margin-top: 60px; page-break-inside: avoid; }
+                .chief-section { text-align: right; margin-bottom: 40px; }
+                .judges-grid { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 20px; }
+                .sig-box { width: 30%; text-align: center; margin-bottom: 30px; }
+                .line { border-bottom: 1px solid #000; margin-bottom: 5px; height: 30px; }
+                .label { font-size: 12px; color: #555; }
+                
+                @media print {
+                    button { display: none; }
+                    body { -webkit-print-color-adjust: exact; }
+                }
+            </style>
+        </head>
+        <body>
+            <button onclick="window.print()" style="position:fixed; top:10px; left:10px; padding:10px 20px; font-size:20px; background:blue; color:white; cursor:pointer;">🖨️ PRINT / SAVE AS PDF</button>
+
+            <div class="header">
+                <h1>${instName}</h1>
+                <h2>${compName}</h2>
+                <h3 style="margin-top:10px; text-decoration:underline;">OFFICIAL RESULT SHEET ${titleSuffix}</h3>
+            </div>
+
+            <div class="meta">
+                <div>Branch: ${branchTxt}</div>
+                <div>Category: ${groupTxt}</div>
+                <div>Date: ${new Date().toLocaleDateString()}</div>
+            </div>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th width="10%">Rank</th>
+                        <th width="40%">Student Name</th>
+                        <th width="15%">ID Card</th>
+                        <th width="15%">Final Score</th>
+                        <th width="20%">Remarks</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${list.map((s, i) => `
+                        <tr>
+                            <td>${i+1}</td>
+                            <td style="text-align:right;">${s.name}</td>
+                            <td>${s.id}</td>
+                            <td><b>${s.finalScore}</b></td>
+                            <td></td>
+                        </tr>
+                    `).join('')}
+                </tbody>
+            </table>
+
+            <div class="footer">
+                <div class="chief-section">
+                    <div>Endorsed By Chief Judge:</div>
+                    <div style="margin-top:40px; border-bottom:1px solid #000; display:inline-block; width:250px;"></div>
+                    <div style="margin-top:5px;">${chiefName}</div>
+                </div>
+
+                <div class="judges-grid">
+                    ${sigLines}
+                </div>
+            </div>
+        </body>
+        </html>`;
+
+        const w = window.open("", "Report", "width=900,height=900");
+        w.document.write(html);
+        w.document.close();
+    }
+
+    // --- FILTERED CSV EXPORT (Separate file for specific category) ---
+    function exportFilteredCSV() {
+        let list = getFilteredResults();
+        if(list.length === 0) { alert("No data found for this filter."); return; }
+
+        let csv = "Rank,Name,ID,Group,Branch,FinalScore\n";
+        
+        list.forEach((s, i) => {
+            csv += `${i+1},"${s.name}","${s.id}","${s.group}","${s.branch}",${s.finalScore}\n`;
+        });
+
+        const fBranch = document.getElementById('rptFilterBranch').value;
+        const fGroup = document.getElementById('rptFilterGroup').value;
+        const fileName = `Result_${fBranch}_${fGroup}.csv`;
+
+        const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement("a");
+        const url = URL.createObjectURL(blob);
+        link.setAttribute("href", url);
+        link.setAttribute("download", fileName);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+   function getFilteredResults() {
+        const fBranch = document.getElementById('rptFilterBranch').value;
+        const fGroup = document.getElementById('rptFilterGroup').value;
+        // ★ އައު ފިލްޓަރ ނެގުން ★
+        const fInst = document.getElementById('rptFilterInstType').value;
+
+        // Filter Data
+        let list = state.judging.savedResults.filter(r => {
+            // Check Branch
+            let branchMatch = (fBranch === "All") ? true : (r.branch && r.branch.includes(fBranch));
+            if(fBranch === "Balaiygen" && r.branch && r.branch.toLowerCase().includes("balai")) branchMatch = true;
+            if(fBranch === "Nubalai" && r.branch && r.branch.toLowerCase().includes("nubalai")) branchMatch = true;
+
+            // Check Group
+            let groupMatch = (fGroup === "All") ? true : (r.group === fGroup);
+
+            // ★ Check Institution Type (School, Office, etc.) ★
+            // Note: If old data didn't have instType, treat as valid if filter is All
+            let instMatch = (fInst === "All") ? true : (r.instType === fInst);
+
+            return branchMatch && groupMatch && instMatch;
+        });
+
+        // Sort Highest to Lowest
+        return list.sort((a, b) => b.finalScore - a.finalScore);
+    }
+    // --- ADVANCED REPORT GENERATION (UPDATED WITH FULL DETAILS) ---
+    function generateAdvancedReport(mode) {
+        // 1. Get Data & Filter
+        let list = getFilteredResults();
+        
+        // Handle Modes (Top 3, Top 5, or Full)
+        let titleSuffix = "(މުޅި ލިސްޓު)";
+        if(mode === 'top3') { list = list.slice(0, 3); titleSuffix = "(ގަދަ 3)"; }
+        if(mode === 'top5') { list = list.slice(0, 5); titleSuffix = "(ގަދަ 5)"; }
+
+        if(list.length === 0) { alert("މި ކެޓަގަރީގައި އެއްވެސް ދަރިވަރަކު ނެތެވެ!"); return; }
+
+        // 2. Get Header Info form Inputs
+        const instName = document.getElementById('rptInstName').value || "މުއައްސަސާގެ ނަން";
+        const compName = document.getElementById('rptCompName').value || "ޤުރުއާން މުބާރާތް 2026";
+        const chiefName = document.getElementById('rptChief').value || "__________________";
+        const judgeCount = parseInt(document.getElementById('rptJudgeCount').value) || 3;
+        
+        // Get Category Details
+        const branchTxt = document.getElementById('rptFilterBranch').options[document.getElementById('rptFilterBranch').selectedIndex].text;
+        const groupTxt = document.getElementById('rptFilterGroup').options[document.getElementById('rptFilterGroup').selectedIndex].text;
+
+        // 3. Generate Signature Lines
+        let sigLines = '';
+        for(let i=1; i<=judgeCount; i++) {
+            sigLines += `
+                <div class="sig-box">
+                    <div class="line"></div>
+                    <div class="label">ފަނޑިޔާރު ${i}</div>
+                </div>`;
+        }
+
+        // 4. HTML Structure (Dhivehi / Thaana Friendly)
+        const html = `
+        <!DOCTYPE html>
+        <html dir="rtl" lang="dv">
+        <head>
+            <title>Result Report</title>
+            <style>
+                @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Thaana:wght@400;700&display=swap');
+                
+                body { 
+                    font-family: 'Noto Sans Thaana', 'Faruma', sans-serif; 
+                    padding: 40px; 
+                    direction: rtl;
+                }
+                .header { text-align: center; margin-bottom: 30px; border-bottom: 3px double #000; padding-bottom: 20px; }
+                h1 { margin: 5px 0; font-size: 26px; font-weight:bold; }
+                h2 { margin: 5px 0; font-size: 20px; color: #333; }
+                h3 { margin: 5px 0; font-size: 18px; text-decoration: underline; }
+                
+                .report-info-box {
+                    border: 1px solid #000;
+                    padding: 15px;
+                    margin-bottom: 20px;
+                    display: flex;
+                    justify-content: space-between;
+                    background: #f9f9f9;
+                    font-weight: bold;
+                    font-size: 14px;
+                }
+
+                table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 12px; }
+                th, td { border: 1px solid #444; padding: 8px; text-align: center; vertical-align: middle; }
+                th { background: #eee; font-weight: bold; font-size: 13px; }
+                
+                /* Rank 1 Highlight */
+                tr:nth-child(1) td { background: #fffbe6; font-weight:bold; } 
+
+                .footer { margin-top: 50px; page-break-inside: avoid; }
+                .chief-section { text-align: left; margin-bottom: 50px; margin-top:20px; } 
+                .judges-grid { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 20px; }
+                .sig-box { width: 30%; text-align: center; margin-bottom: 30px; }
+                .line { border-bottom: 1px dotted #000; margin-bottom: 5px; height: 40px; }
+                .label { font-size: 12px; color: #555; }
+                
+                @media print {
+                    button { display: none; }
+                    body { -webkit-print-color-adjust: exact; }
+                    @page { size: A4 landscape; margin: 10mm; } 
+                }
+            </style>
+        </head>
+        <body>
+            <button onclick="window.print()" style="position:fixed; top:10px; left:10px; padding:10px 20px; font-size:20px; background:blue; color:white; cursor:pointer; border:none; border-radius:5px;">🖨️ PRINT / SAVE PDF</button>
+
+            <div class="header">
+                <h1>${instName}</h1>
+                <h2>${compName}</h2>
+                <h3>ނަތީޖާ ޝީޓް ${titleSuffix}</h3>
+            </div>
+
+            <div class="report-info-box">
+                <div>ގޮފި: ${branchTxt}</div>
+                <div>ޢުމުރުފުރާ: ${groupTxt}</div>
+                <div>ތާރީޚް: ${new Date().toLocaleDateString()}</div>
+            </div>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th width="5%">ވަނަ</th>
+                        <th width="10%">ރެޖިސްޓްރީ</th>
+                        <th width="25%">ދަރިވަރުގެ ނަން</th>
+                        <th width="10%">އައި.ޑީ</th>
+                        <th width="25%">ދާއިމީ އެޑްރެސް</th>
+                        <th width="10%">ޖުމްލަ މާކުސް</th>
+                        <th width="15%">ރިމާކްސް</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${list.map((s, i) => `
+                        <tr>
+                            <td>${i+1}</td>
+                            <td>${s.reg || "-"}</td>
+                            <td style="text-align:right; padding-right:10px;">${s.name}</td>
+                            <td>${s.id}</td>
+                            <td style="text-align:right; font-size:11px;">${s.address || "-"}</td>
+                            <td><b>${s.finalScore}</b></td>
+                            <td></td>
+                        </tr>
+                    `).join('')}
+                </tbody>
+            </table>
+
+            <div class="footer">
+                <div class="chief-section">
+                    <div>އިސް ފަނޑިޔާރު:</div>
+                    <div style="margin-top:40px; border-bottom:1px solid #000; display:inline-block; width:250px;"></div>
+                    <div style="margin-top:5px;">${chiefName}</div>
+                </div>
+
+                <div class="judges-grid">
+                    ${sigLines}
+                </div>
+            </div>
+        </body>
+        </html>`;
+
+        const w = window.open("", "Report", "width=1100,height=800");
+        w.document.write(html);
+        w.document.close();
+    }
+    // --- FILTERED CSV EXPORT (Separate file for specific category) ---
+    function exportFilteredCSV() {
+        let list = getFilteredResults();
+        if(list.length === 0) { alert("No data found for this filter."); return; }
+
+        let csv = "Rank,Name,ID,Group,Branch,FinalScore\n";
+        
+        list.forEach((s, i) => {
+            csv += `${i+1},"${s.name}","${s.id}","${s.group}","${s.branch}",${s.finalScore}\n`;
+        });
+
+        const fBranch = document.getElementById('rptFilterBranch').value;
+        const fGroup = document.getElementById('rptFilterGroup').value;
+        const fileName = `Result_${fBranch}_${fGroup}.csv`;
+
+        const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement("a");
+        const url = URL.createObjectURL(blob);
+        link.setAttribute("href", url);
+        link.setAttribute("download", fileName);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
 </script>
 </body>
 </html>
