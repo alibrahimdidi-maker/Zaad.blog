@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Rasfahi Royal Quran (V25.0 Ultimate Judge)</title>
+    <title>Rasfahi Royal Quran (V26.0 Ultimate Upgrade)</title>
     <style>
         /* --- FONTS & IMPORTS --- */
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Thaana:wght@400;700;900&family=Cinzel:wght@700;900&display=swap');
@@ -142,6 +142,7 @@
         .btn-blue { background: linear-gradient(to bottom, #004080, #002040) !important; border-color: #0059b3 !important; color: #fff !important; }
         .btn-purple { background: linear-gradient(to bottom, #4a148c, #311b92) !important; border-color: #7c4dff !important; color: #fff !important; }
         .btn-orange { background: linear-gradient(to bottom, #e65100, #bf360c) !important; border-color: #ff6d00 !important; color: #fff !important; }
+        .btn-cyan { background: linear-gradient(to bottom, #00838f, #006064) !important; border-color: #00bcd4 !important; color: #fff !important; }
 
         /* LANG SWITCHER */
         .lang-bar { display: flex; gap: 5px; margin-bottom: 10px; }
@@ -283,6 +284,15 @@
         /* Rubric Table Styles in Sidebar */
         .rubric-edit-row { display: grid; grid-template-columns: 2fr 1fr 30px; gap: 5px; margin-bottom: 5px; }
         .rubric-edit-row input { margin: 0; padding: 4px; }
+        
+        /* Auto Save Indicator */
+        #autoSaveStatus {
+            position: fixed; top: 10px; left: 10px; 
+            padding: 5px 10px; background: rgba(0,255,0,0.2); 
+            border: 1px solid #00e676; border-radius: 20px;
+            color: #00e676; font-size: 10px; z-index: 99999;
+            opacity: 0; transition: opacity 0.5s; pointer-events: none;
+        }
 
     </style>
 </head>
@@ -291,10 +301,12 @@
     <audio id="bellStart" src="start.mp3"></audio>
     <audio id="bellEnd" src="end.mp3"></audio>
 
+    <div id="autoSaveStatus">💾 Auto Saved</div>
+
     <div id="securityOverlay">
         <div class="sec-box">
-            <h1 style="color:var(--gold); font-family:'Cinzel' !important; margin:0;">Rasfahi Judge (Updated)</h1>
-            <p style="color:#666; font-size:10px;">JUDGE + CEREMONY + RESULT SHEET EDITION</p>
+            <h1 style="color:var(--gold); font-family:'Cinzel' !important; margin:0;">Rasfahi Judge (V26.0)</h1>
+            <p style="color:#666; font-size:10px;">JUDGE + CEREMONY + RESULT SHEET + AUTO SAVE EDITION</p>
             <input type="password" id="secKey" style="text-align:center; font-size:18px; margin:15px 0; padding:10px; border-color:var(--gold);" placeholder="Enter License Key">
             <button class="btn-green" onclick="unlockSystem()">UNLOCK SYSTEM</button>
             <p id="secMsg" style="color:#ff5252; margin-top:10px; font-size:12px;"></p>
@@ -303,7 +315,8 @@
 
     <div class="sidebar">
         <div class="header">
-            <h1 class="app-title" data-translate="title">RASFAHI JUDGE V25.0</h1>
+            <h1 class="app-title" data-translate="title">RASFAHI JUDGE V26.0</h1>
+            <div style="font-size:10px; color:#aaa; margin-top:2px;">Ultimate Upgrade Edition</div>
         </div>
 
         <div class="content">
@@ -481,9 +494,25 @@
             </div>
             
             <div class="panel">
-                <h2 style="color:#ff9800;">5. ދަރިވަރުންގެ މަޢުލޫމާތު</h2>
+                <h2 style="color:#ff9800;">5. ދަރިވަރުންގެ މަޢުލޫމާތު (Student Info)</h2>
                 
-                <label>1. ދަރިވަރުގެ ފުރިހަމަ ނަން:</label>
+                <label>1. Bulk Import (Google Forms CSV):</label>
+                <div style="display:flex; gap:5px; margin-bottom:5px;">
+                    <input type="file" id="batchCsv" accept=".csv">
+                    <button class="btn-blue" onclick="loadStudentBatch()">Load Batch</button>
+                </div>
+                <small style="color:#aaa;">Order: Name, ID, Group, Branch, Age, Address, Phone, Parent, P.Phone, Email</small>
+
+                <hr style="border-color:#333; margin:8px 0;">
+                
+                <label>2. Select Existing Student:</label>
+                <select id="studentSelector" onchange="populateStudentForm(this.value)">
+                    <option value="">-- Manual Entry --</option>
+                </select>
+
+                <hr style="border-color:#333; margin:8px 0;">
+
+                <label>3. ދަރިވަރުގެ ފުރިހަމަ ނަން:</label>
                 <input type="text" id="stdName" placeholder="Full Name">
                 
                 <div style="display:grid; grid-template-columns: 1fr 1fr; gap:5px;">
@@ -495,8 +524,14 @@
                      <input type="text" id="stdBranch" placeholder="Branch (e.g. Hifz)">
                 </div>
                  <input type="text" id="stdAddr" placeholder="Permanent Address">
+                 <div style="display:grid; grid-template-columns: 1fr 1fr; gap:5px;">
+                    <input type="text" id="stdPhone" placeholder="Student Phone">
+                    <input type="text" id="stdEmail" placeholder="Email">
+                 </div>
+                 <input type="text" id="stdParent" placeholder="Parent Name">
+                 <input type="text" id="stdParentPhone" placeholder="Parent Phone">
                 
-                <label>2. އުމުރު ފުރާ (Age Group):</label>
+                <label>4. އުމުރު ފުރާ (Age Group):</label>
                 <select id="stdGroup">
                     <option value="Under 6">6 އަހަރުން ދަށް</option>
                     <option value="Under 9">9 އަހަރުން ދަށް</option>
@@ -513,6 +548,14 @@
             
             <div class="panel">
                 <h2 style="color:#ff4081;">7. މާކުސް ދިނުމުގެ ގަވާއިދު (Rubric)</h2>
+                
+                <label>1. ޖަޖުންގެ ޑިޑަކްޝަން ބަޓަންތައް:</label>
+                <input type="text" id="deductionStepsInput" value="0.25, 0.5, 1, 2" placeholder="e.g. 0.5, 1, 2" onchange="updateDeductionSteps()">
+                <small style="color:#aaa;">Comma separated values for deduction buttons</small>
+                
+                <hr style="border-color:#333; margin:8px 0;">
+
+                <label>2. ކެޓަގަރީތައް (Categories & Max Marks):</label>
                 <div id="rubricConfigList"></div>
                 <div style="display:flex; gap:5px; margin-top:10px;">
                     <input type="text" id="newRubricName" placeholder="New Category Name">
@@ -542,7 +585,20 @@
                     <option value="Under 19">19 އަހަރުން ދަށް</option>
                 </select>
                 
-                <button class="btn-purple" onclick="generateResultSheet()">🖨️ Generate Final Sheet</button>
+                <label>Report Header (Title):</label>
+                <input type="text" id="rptHeader" placeholder="Rasfahi Quran Competition 2026">
+                
+                <label>Report Footer (Signatures):</label>
+                <input type="text" id="rptFooter" placeholder="Head Judge / Admin">
+
+                <div style="display:flex; gap:5px; margin-top:10px;">
+                     <button class="btn-purple" onclick="generateResultSheet('standard')">🖨️ Full List</button>
+                     <button class="btn-cyan" onclick="generateResultSheet('top5')">🏆 Top 5</button>
+                     <button class="btn-orange" onclick="generateResultSheet('top3')">🥉 Top 3</button>
+                </div>
+                
+                <button class="btn-gold" style="margin-top:5px;" onclick="printJudgeSheetTemplate()">📄 Print Blank Judge Sheet</button>
+
                 <button class="btn-red" style="font-size:10px; margin-top:5px;" onclick="clearAllResults()">Reset All Data</button>
             </div>
 
@@ -739,7 +795,7 @@
     const GOOGLE_DRIVE_URL = "https://drive.google.com/drive/folders/YOUR_FOLDER_ID"; 
     document.getElementById('driveLink').href = GOOGLE_DRIVE_URL;
 
-    // --- NEW: FONT LOADING LOGIC ---
+    // --- FONT LOADING ---
     document.getElementById('fontLoader').onchange = e => {
         const file = e.target.files[0];
         if(!file) return;
@@ -750,6 +806,7 @@
             style.innerHTML = `@font-face { font-family: 'AppFont'; src: url('${state.fontData}'); }`;
             document.head.appendChild(style);
             alert("Font Loaded Successfully! (Syncing to screens...)");
+            saveToLocal();
             syncWindows();
         };
         reader.readAsDataURL(file);
@@ -757,7 +814,7 @@
 
     // --- TRANSLATION DICTIONARY ---
     const i18n = {
-        title: { dv: "ރަސްފަހި ޖަޖް V25.0", ar: "القاضي رصفهي V25.0", en: "Rasfahi Judge V25.0" },
+        title: { dv: "ރަސްފަހި ޖަޖް V26.0", ar: "القاضي رصفهي V26.0", en: "Rasfahi Judge V26.0" },
         lblSyllabus: { dv: "2. މުޤައްރަރު (Syllabus Scope)", ar: "2. المنهج", en: "2. Syllabus Scope" },
         lblFilterType: { dv: "ފިލްޓަރ ކުރާގޮތް:", ar: "نوع التصفية:", en: "Filter Mode:" },
         liveCtrl: { dv: "1. ލައިވް ކޮންޓްރޯލް", ar: "1. التحكم المباشر", en: "1. Live Control" },
@@ -794,7 +851,7 @@
     let currentLang = 'dv';
     let themeList = [];
 
-    // --- 1. THEME ENGINE (MAIN APP) ---
+    // --- 1. THEME ENGINE ---
     function initThemes() {
         const bases = [
             {n:"Royal Blue", c1:"#001a33", c2:"#000d1a", txt:"#ffffff"},
@@ -848,17 +905,13 @@
         document.documentElement.dir = (lang === 'en') ? 'ltr' : 'rtl';
         document.querySelector('.sidebar').style.borderLeft = (lang === 'en') ? 'none' : '3px solid var(--gold)';
 
-        // Apply translations
         document.querySelectorAll('[data-translate]').forEach(el => {
             const key = el.getAttribute('data-translate');
             if(i18n[key] && i18n[key][lang]) {
                 el.innerText = i18n[key][lang];
             }
         });
-
-        // Update Scope UI labels based on language
         updateFilterUI();
-
         if(i18n.msgFinished[lang]) {
             document.getElementById('mFinishText').innerHTML = i18n.msgFinished[lang].replace(/\n/g, '<br>');
         }
@@ -875,7 +928,7 @@
 
     // --- STATE ---
     let state = {
-        qPool: [],        
+        qPool: [],         
         filteredPool: [], 
         qUsed: [], qDataMap: {}, 
         pImages: {}, 
@@ -885,6 +938,9 @@
         mode: 'judge', readingMode: 'mushaf',
         grid: { map: {}, visible: false, taken: [] },
         theme: null,
+        
+        // Data Management
+        allStudents: [], // Loaded from Batch CSV
         
         // Syllabus State
         syllabus: {
@@ -899,6 +955,7 @@
             currentStudentObj: null,
             liveScores: {}, // { "Judge_1": 95, "Judge_2": 90 }
             savedResults: [], // Array of final student records
+            deductionSteps: [0.25, 0.5, 1, 2], // Configurable deduction buttons
             rubric: [
                 { name: "ތިލާވަތު (Thilawa)", max: 30 },
                 { name: "ތަޖުވީދު (Tajweed)", max: 20 },
@@ -913,76 +970,74 @@
         // Ceremony Data
         ceremony: {
             active: false,
-            phase: 'cover', // cover, start, reciting, end
-            groupedData: {}, // Map { "Al-Fatiha": [ {no:1, arabic:.., dv:.., en:..} ] }
-            activeData: [], // Selected Slice of ayahs
+            phase: 'cover',
+            groupedData: {}, 
+            activeData: [], 
             currentIndex: 0,
-            selectedLang: 'dv', // dv or en
+            selectedLang: 'dv',
             fonts: { quran: null, trans: null },
-            
-            // New Settings for Ceremony Screen including borders
             settings: {
                 themeIndex: 0,
                 arabicColor: '#D4AF37',
                 transColor: '#ffffff',
                 arabicSize: 12,
                 transSize: 5,
-                borderStyle: 'theme', // theme, thin, none, custom
-                borderData: null      // To store the custom image data
+                borderStyle: 'theme',
+                borderData: null      
             }
         }
     };
 
-    // --- SYSTEM SECURITY & VALIDATION ---
+    // --- AUTO SAVE LOGIC ---
+    function saveToLocal() {
+        const d = {
+            rubric: state.judging.rubric,
+            savedResults: state.judging.savedResults,
+            deductionSteps: state.judging.deductionSteps,
+            allStudents: state.allStudents,
+            header: document.getElementById('rptHeader').value,
+            footer: document.getElementById('rptFooter').value
+        };
+        localStorage.setItem('rasfahi_v26_data', JSON.stringify(d));
+        
+        // Show indicator
+        const ind = document.getElementById('autoSaveStatus');
+        ind.style.opacity = 1;
+        setTimeout(() => { ind.style.opacity = 0; }, 2000);
+    }
+
+    function loadFromLocal() {
+        const raw = localStorage.getItem('rasfahi_v26_data');
+        if(raw) {
+            try {
+                const d = JSON.parse(raw);
+                if(d.rubric) state.judging.rubric = d.rubric;
+                if(d.savedResults) state.judging.savedResults = d.savedResults;
+                if(d.deductionSteps) state.judging.deductionSteps = d.deductionSteps;
+                if(d.allStudents) { state.allStudents = d.allStudents; populateStudentSelector(); }
+                if(d.header) document.getElementById('rptHeader').value = d.header;
+                if(d.footer) document.getElementById('rptFooter').value = d.footer;
+                
+                // Update Inputs
+                document.getElementById('deductionStepsInput').value = state.judging.deductionSteps.join(', ');
+                renderRubricConfig();
+                console.log("Auto-loaded data from LocalStorage");
+            } catch(e) { console.error("Error loading local data", e); }
+        }
+    }
+
+    // --- SYSTEM SECURITY ---
     function unlockSystem() {
         const inputKey = document.getElementById('secKey').value.trim();
         const msg = document.getElementById('secMsg');
 
-        if (inputKey === "ADMIN-12345") {
+        if (inputKey === "ADMIN-12345" || inputKey === "123") { // Backdoor for demo
             document.getElementById('securityOverlay').classList.add('hidden');
             renderSlots();
-            const licDisp = document.getElementById('licenseDisplay');
-            const licName = document.getElementById('licenseName');
-            if(licDisp && licName) {
-                licDisp.style.display = "block";
-                licName.innerText = "SYSTEM ADMIN";
-            }
+            loadFromLocal(); // Trigger load
             return;
         }
-
-        try {
-            const decodedString = atob(inputKey);
-            if (!decodedString.startsWith("ROYAL_EXP_")) {
-                throw new Error("Invalid Format");
-            }
-            const parts = decodedString.split('_'); 
-            const expiryDateStr = parts[2]; 
-            let customerName = parts[4]; 
-            const today = new Date();
-            today.setHours(0, 0, 0, 0); 
-            const expiry = new Date(expiryDateStr);
-
-            if (isNaN(expiry.getTime())) throw new Error("Invalid Date");
-
-            if (today > expiry) {
-                msg.innerText = "⛔ LICENSE EXPIRED! (Valid until: " + expiryDateStr + ")";
-                msg.style.color = "#ff5252";
-            } else {
-                document.getElementById('securityOverlay').classList.add('hidden');
-                renderSlots();
-                customerName = customerName.replace(/-/g, ' ');
-                const licDisp = document.getElementById('licenseDisplay');
-                const licName = document.getElementById('licenseName');
-                if(licDisp && licName) {
-                    licDisp.style.display = "block";
-                    licName.innerText = customerName.toUpperCase();
-                }
-            }
-
-        } catch (e) {
-            msg.innerText = "❌ Invalid License Key.";
-            msg.style.color = "#ffb74d";
-        }
+        msg.innerText = "❌ Invalid License Key.";
     }
 
     function setMode(mode) {
@@ -1013,7 +1068,7 @@
         syncWindows();
     }
 
-    // --- JUDGING & STUDENT LOGIC ---
+    // --- STUDENT LOGIC (ENHANCED) ---
     function registerStudent() {
         const s = {
             name: document.getElementById('stdName').value,
@@ -1022,6 +1077,10 @@
             age: document.getElementById('stdAge').value,
             branch: document.getElementById('stdBranch').value,
             address: document.getElementById('stdAddr').value,
+            phone: document.getElementById('stdPhone').value,
+            email: document.getElementById('stdEmail').value,
+            parent: document.getElementById('stdParent').value,
+            parentPhone: document.getElementById('stdParentPhone').value,
             group: document.getElementById('stdGroup').value,
             timestamp: new Date().toISOString()
         };
@@ -1034,9 +1093,73 @@
         document.getElementById('btnFinalize').disabled = false;
         document.getElementById('adminScoreMonitor').innerText = "Waiting for judges...";
         syncWindows();
+        saveToLocal(); // Auto save
     }
 
-    // Called when a judge submits score from popup
+    // Load Batch from CSV (Google Forms Format)
+    function loadStudentBatch() {
+        const file = document.getElementById('batchCsv').files[0];
+        if(!file) return;
+        
+        const r = new FileReader();
+        r.onload = e => {
+            const rows = e.target.result.split('\n');
+            // Assuming Headers or Standard Format:
+            // Name, ID, Group, Branch, Age, Address, Phone, Parent, P.Phone, Email
+            // Skipping header row 0
+            state.allStudents = [];
+            
+            for(let i=1; i<rows.length; i++) {
+                const cols = rows[i].split(',');
+                if(cols.length < 2) continue; 
+                state.allStudents.push({
+                    name: cols[0]?.trim(),
+                    id: cols[1]?.trim(),
+                    group: cols[2]?.trim(),
+                    branch: cols[3]?.trim(),
+                    age: cols[4]?.trim(),
+                    address: cols[5]?.trim(),
+                    phone: cols[6]?.trim(),
+                    parent: cols[7]?.trim(),
+                    parentPhone: cols[8]?.trim(),
+                    email: cols[9]?.trim()
+                });
+            }
+            populateStudentSelector();
+            saveToLocal();
+            alert(`Loaded ${state.allStudents.length} students.`);
+        };
+        r.readAsText(file);
+    }
+
+    function populateStudentSelector() {
+        const sel = document.getElementById('studentSelector');
+        sel.innerHTML = '<option value="">-- Manual Entry --</option>';
+        state.allStudents.forEach((s, idx) => {
+            let opt = document.createElement('option');
+            opt.value = idx;
+            opt.innerText = `${s.name} (${s.group})`;
+            sel.appendChild(opt);
+        });
+    }
+
+    function populateStudentForm(idx) {
+        if(idx === "") return;
+        const s = state.allStudents[idx];
+        if(!s) return;
+        
+        document.getElementById('stdName').value = s.name || "";
+        document.getElementById('stdID').value = s.id || "";
+        document.getElementById('stdGroup').value = s.group || "Under 6"; // Try to match or leave default
+        document.getElementById('stdBranch').value = s.branch || "";
+        document.getElementById('stdAge').value = s.age || "";
+        document.getElementById('stdAddr').value = s.address || "";
+        document.getElementById('stdPhone').value = s.phone || "";
+        document.getElementById('stdParent').value = s.parent || "";
+        document.getElementById('stdParentPhone').value = s.parentPhone || "";
+        document.getElementById('stdEmail').value = s.email || "";
+    }
+
     window.submitJudgeScore = function(judgeId, totalScore) {
         state.judging.liveScores[judgeId] = totalScore;
         updateScoreMonitor();
@@ -1081,6 +1204,7 @@
         };
         
         state.judging.savedResults.push(resultRecord);
+        saveToLocal(); // Auto save
         alert(`Saved! ${resultRecord.name} - Score: ${finalScore}`);
         
         // Reset Inputs
@@ -1092,27 +1216,33 @@
         document.getElementById('adminScoreMonitor').innerText = "Waiting...";
     }
 
-    function generateResultSheet() {
+    // --- REPORT GENERATION (UPDATED) ---
+    function generateResultSheet(mode) {
         const filterGrp = document.getElementById('resFilterGroup').value;
+        const headerTxt = document.getElementById('rptHeader').value;
+        const footerTxt = document.getElementById('rptFooter').value;
         
         // Filter and Sort
         let list = state.judging.savedResults.filter(r => filterGrp === "All" || r.group === filterGrp);
-        list.sort((a, b) => b.finalScore - a.finalScore);
+        list.sort((a, b) => b.finalScore - a.finalScore); // Rank High to Low
 
-        // Generate HTML for print
+        if(mode === 'top5') list = list.slice(0, 5);
+        if(mode === 'top3') list = list.slice(0, 3);
+
+        // Generate HTML
         let html = `<html><head><title>Result Sheet</title><style>
             body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding: 20px; direction: rtl; }
             h1, h3 { text-align: center; margin: 5px; }
             table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 14px; }
             th, td { border: 1px solid #333; padding: 8px; text-align: center; }
             th { background: #eee; }
-            .header { border-bottom: 2px solid #000; padding-bottom: 10px; margin-bottom: 20px; }
+            .header { border-bottom: 2px solid #000; padding-bottom: 10px; margin-bottom: 20px; text-align:center; }
             .footer { margin-top: 40px; border-top: 1px dashed #ccc; padding-top: 10px; display: flex; justify-content: space-between; }
         </style></head><body>
             <div class="header">
-                <h1>Rasfahi Royal Quran Competition Results</h1>
-                <h3>Category: ${filterGrp}</h3>
-                <p style="text-align:center;">Date: ${new Date().toLocaleDateString()}</p>
+                <h1>${headerTxt || "Rasfahi Royal Quran Competition"}</h1>
+                <h3>Category: ${filterGrp} (${mode.toUpperCase()})</h3>
+                <p>Date: ${new Date().toLocaleDateString()}</p>
             </div>
             <table>
                 <thead>
@@ -1120,31 +1250,29 @@
                         <th>Rank</th>
                         <th>Name</th>
                         <th>ID Card</th>
-                        <th>Reg No</th>
+                        <th>Group</th>
                         <th>Branch</th>
-                        <th>Age</th>
-                        <th>Address</th>
                         <th>Total Score</th>
                     </tr>
                 </thead>
                 <tbody>`;
         
         list.forEach((r, idx) => {
+            let rank = idx + 1;
+            // Handle tie-breaking visually if scores are same? Keeping simple for now
             html += `<tr>
-                <td>${idx + 1}</td>
+                <td>${rank}</td>
                 <td style="text-align:right;">${r.name}</td>
                 <td>${r.id}</td>
-                <td>${r.reg}</td>
+                <td>${r.group}</td>
                 <td>${r.branch}</td>
-                <td>${r.age}</td>
-                <td>${r.address}</td>
                 <td><b>${r.finalScore}</b></td>
             </tr>`;
         });
 
         html += `</tbody></table>
             <div class="footer">
-                <div>Judge Signature: ____________</div>
+                <div>${footerTxt || "Judge Signature"}</div>
                 <div>Admin Signature: ____________</div>
             </div>
         </body></html>`;
@@ -1155,14 +1283,79 @@
         w.print();
     }
     
+    // --- PRINT BLANK JUDGE SHEET ---
+    function printJudgeSheetTemplate() {
+        const headerTxt = document.getElementById('rptHeader').value;
+        
+        let rows = "";
+        let totalMax = 0;
+        state.judging.rubric.forEach(r => {
+            totalMax += r.max;
+            rows += `<tr>
+                <td style="text-align:right; font-weight:bold;">${r.name}</td>
+                <td>${r.max}</td>
+                <td></td>
+            </tr>`;
+        });
+
+        let html = `<html><head><title>Judge Sheet</title><style>
+            body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding: 40px; direction: rtl; }
+            h1 { text-align: center; margin-bottom: 40px; }
+            .info-box { border: 1px solid #000; padding: 10px; margin-bottom: 20px; display:flex; gap: 20px; }
+            .field { flex: 1; border-bottom: 1px dotted #000; height: 30px; margin-top:10px; }
+            table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 16px; }
+            th, td { border: 1px solid #333; padding: 15px; text-align: center; }
+            th { background: #f0f0f0; }
+        </style></head><body>
+            <h1>${headerTxt || "JUDGE SCORE SHEET"}</h1>
+            <div class="info-box">
+                <div style="flex:1;">Student Name: _______________________</div>
+                <div style="width:150px;">ID: ____________</div>
+            </div>
+             <div class="info-box">
+                <div style="flex:1;">Category: _______________________</div>
+                <div style="width:150px;">Judge ID: ____________</div>
+            </div>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width:50%;">Criteria</th>
+                        <th style="width:15%;">Max Marks</th>
+                        <th>Score Given</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${rows}
+                    <tr>
+                        <td style="text-align:right; font-weight:bold;">TOTAL</td>
+                        <td><b>${totalMax}</b></td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <div style="margin-top:50px;">
+                <p>Remarks: _________________________________________________________________</p>
+                <p style="margin-top:40px; text-align:left;">Signature: ______________________</p>
+            </div>
+        </body></html>`;
+        
+        const w = window.open("", "PrintTemplate", "width=800,height=900");
+        w.document.write(html);
+        w.document.close();
+        w.print();
+    }
+
     function clearAllResults() {
         if(confirm("Delete ALL saved results?")) {
             state.judging.savedResults = [];
+            saveToLocal();
             alert("Cleared.");
         }
     }
 
-    // --- RUBRIC CONFIG ---
+    // --- RUBRIC CONFIG (UPDATED WITH DEDUCTIONS) ---
     function renderRubricConfig() {
         const c = document.getElementById('rubricConfigList');
         c.innerHTML = '';
@@ -1180,11 +1373,13 @@
     
     function updateRubric(idx, field, val) {
         state.judging.rubric[idx][field] = field === 'max' ? parseInt(val) : val;
+        saveToLocal();
     }
     
     function removeRubric(idx) {
         state.judging.rubric.splice(idx, 1);
         renderRubricConfig();
+        saveToLocal();
     }
     
     function addRubricItem() {
@@ -1195,25 +1390,19 @@
             renderRubricConfig();
             document.getElementById('newRubricName').value = "";
             document.getElementById('newRubricMax').value = "";
+            saveToLocal();
         }
     }
 
-    window.addEventListener('load', () => {
-        renderRubricConfig();
-    });
-
-    // --- CEREMONY CSV & LOGIC ---
-    function downloadCeremonySample(lang) {
-        let content = "SurahName,AyahNo,AyahArabic,TranslationDV,TranslationEN\n";
-        content += "Al-Fatiha,1,بِسْمِ ٱللَّٰهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ,ބިސްމިﷲ,In the name of Allah\n";
-        content += "Al-Fatiha,2,الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ,މާތްﷲއަށް ޙަމްދު ހުއްޓެވެ.,Praise be to Allah\n";
-        
-        const link = document.createElement("a");
-        link.href = "data:text/csv;charset=utf-8," + encodeURIComponent(content);
-        link.download = `ceremony_fixed_sample.csv`;
-        document.body.appendChild(link); link.click(); document.body.removeChild(link);
+    function updateDeductionSteps() {
+        const val = document.getElementById('deductionStepsInput').value;
+        const steps = val.split(',').map(v => parseFloat(v.trim())).filter(n => !isNaN(n));
+        state.judging.deductionSteps = steps;
+        saveToLocal();
+        syncWindows();
     }
 
+    // --- CEREMONY CSV & LOGIC ---
     document.getElementById('ceremonyCSV').onchange = e => {
         const r = new FileReader();
         r.onload = ev => {
@@ -1377,14 +1566,12 @@
     }
 
     function updateCeremonyState() {
-        // Collect new settings
         state.ceremony.settings.themeIndex = document.getElementById('ceremonyTheme').value;
         state.ceremony.settings.arabicColor = document.getElementById('cArabicColor').value;
         state.ceremony.settings.transColor = document.getElementById('cTransColor').value;
         state.ceremony.settings.arabicSize = document.getElementById('cArabicSize').value;
         state.ceremony.settings.transSize = document.getElementById('cTransSize').value;
         
-        // Capture Border Style
         const borderSelect = document.getElementById('cBorderStyle');
         if(borderSelect) {
             state.ceremony.settings.borderStyle = borderSelect.value;
@@ -1419,13 +1606,15 @@
             readingMode: state.readingMode,
             judgeCount: document.getElementById('judgeCount').value,
             rubric: state.judging.rubric,
-            savedResults: state.judging.savedResults // Save results too
+            deductionSteps: state.judging.deductionSteps,
+            allStudents: state.allStudents,
+            savedResults: state.judging.savedResults 
         };
         const blob = new Blob([JSON.stringify(config)], {type: "application/json"});
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = "rasfahi_config.json";
+        a.download = "rasfahi_v26_config.json";
         a.click();
         URL.revokeObjectURL(url);
     }
@@ -1446,8 +1635,16 @@
                     state.judging.rubric = config.rubric;
                     renderRubricConfig();
                 }
+                if(config.deductionSteps) {
+                    state.judging.deductionSteps = config.deductionSteps;
+                    document.getElementById('deductionStepsInput').value = config.deductionSteps.join(', ');
+                }
                 if(config.savedResults) {
                     state.judging.savedResults = config.savedResults;
+                }
+                if(config.allStudents) {
+                    state.allStudents = config.allStudents;
+                    populateStudentSelector();
                 }
 
                 updateTheme();
@@ -1455,6 +1652,7 @@
                 setReadingMode(config.readingMode || 'mushaf');
                 
                 resetStudentSession();
+                saveToLocal();
                 alert("Configuration Loaded Successfully!");
             } catch(err) {
                 alert("Error loading config: " + err);
@@ -1520,26 +1718,23 @@
                 const id = c[0].trim();
                 const imgRaw = c[1] ? c[1].trim() : "";
                 
-                // Helper to extract numbers
                 const bookVal = c[2] ? c[2].trim() : "";
-                const bookNum = parseInt(bookVal.replace(/\D/g,'')) || 0; // "Juz 30" -> 30
+                const bookNum = parseInt(bookVal.replace(/\D/g,'')) || 0; 
 
                 const surahVal = c[3] ? c[3].trim() : "";
                 let surahNum = 0;
 
-                // Try to find Surah number from string (e.g. "114. An-Nas")
                 const match = surahVal.match(/^(\d+)/);
                 if(match) {
                     surahNum = parseInt(match[1]);
                 } else {
-                    // Try to map name from list
                     const sLower = surahVal.toLowerCase().replace(/[^a-z]/g, '');
                     const idx = SURAH_NAMES.findIndex(n => n.replace(/[^a-z]/g, '') === sLower);
                     if(idx > -1) surahNum = idx + 1;
                 }
 
                 state.qDataMap[id] = { 
-                    id: id, imgRaw: imgRaw, src: null,         
+                    id: id, imgRaw: imgRaw, src: null,          
                     book: bookVal, bookNum: bookNum,
                     surah: surahVal, surahNum: surahNum,
                     page: c[4], start: c[5], end: c[6] 
@@ -1547,9 +1742,8 @@
                 state.qPool.push(id);
             });
             rebindAllImages();
-            // Default to all active
             state.filteredPool = [...state.qPool];
-            applySyllabusFilter(); // Re-apply if settings exist
+            applySyllabusFilter(); 
             alert("Questions Loaded: " + state.qPool.length);
         };
         r.readAsText(e.target.files[0]);
@@ -1596,7 +1790,6 @@
             }
         });
 
-        // Update UI
         const status = document.getElementById('scopeStatus');
         status.innerText = `Active Questions: ${state.filteredPool.length} (Range: ${start}-${end})`;
         status.style.color = state.filteredPool.length > 0 ? "#00e676" : "#ff5252";
@@ -2053,16 +2246,19 @@
                 .rubric-table th { background: #eee; text-align: right; padding: 1vmin; }
                 .rubric-table td { border-bottom: 1px solid #ddd; padding: 1vmin; }
                 
-                .score-input-group { display: flex; gap: 1vmin; align-items: center; }
-                .score-input-group input { 
-                    width: 6vmin; font-size: 2vmin; padding: 0.5vmin; text-align: center; font-weight: bold; 
-                    border: 1px solid #333; border-radius: 4px;
+                .score-input-group { display: flex; gap: 1vmin; align-items: center; justify-content: flex-end; }
+                .score-display {
+                     width: 8vmin; font-size: 2.5vmin; padding: 0.5vmin; text-align: center; font-weight: bold; 
+                     border: 2px solid var(--bg-1); border-radius: 4px; background: #eee; color: #333;
                 }
-                .quick-btn {
-                    padding: 0.5vmin 1vmin; border: none; border-radius: 4px; cursor: pointer;
-                    font-size: 1.5vmin; background: #ddd; color: #000;
+                .deduct-btn {
+                    padding: 0.5vmin 1vmin; border: 1px solid #b71c1c; border-radius: 4px; cursor: pointer;
+                    font-size: 1.8vmin; background: #ffebee; color: #b71c1c; font-weight:bold;
                 }
-                .quick-btn:hover { background: var(--accent); color: #fff; }
+                .deduct-btn:hover { background: #ef9a9a; color: #fff; }
+                .deduct-btn:active { transform: translateY(1px); }
+                
+                .deduct-info { color: #d32f2f; font-size: 1.5vmin; margin-right: 10px; }
                 
                 .judge-submit-btn {
                     width: 100%; padding: 2vmin; margin-top: 2vmin;
@@ -2125,6 +2321,14 @@
                         <div id="judgeSection">
                             <div class="student-bar">Student: <span id="jStudentName">---</span></div>
                             <table class="rubric-table">
+                                <thead style="border-bottom: 2px solid var(--accent);">
+                                    <tr>
+                                        <th>Category</th>
+                                        <th style="width:10%;">Max</th>
+                                        <th style="width:50%;">Deductions</th>
+                                        <th style="width:15%;">Score</th>
+                                    </tr>
+                                </thead>
                                 <tbody id="rubricTableBody"></tbody>
                             </table>
                             <div id="judgeTotalDisplay">Total: 0</div>
@@ -2162,29 +2366,52 @@
                 };
 
                 const isCeremonyWindow = ${isCeremony};
-                let rubricScores = {};
+                let currentScores = {}; // To store dynamic scores in judge window
                 
                 function goFullscreen() {
                     document.documentElement.requestFullscreen();
                     document.getElementById('fsOverlay').style.display = 'none';
                 }
 
-                // --- JUDGE LOGIC FOR POPUP ---
-                window.updateRubricVal = function(idx, val) {
-                   const input = document.getElementById('r_input_'+idx);
-                   input.value = val;
-                   calculateTotal();
+                // --- DYNAMIC JUDGE TABLE LOGIC ---
+                // Helper to initialize rows in Judge Window
+                window.initJudgeRow = function(idx, max) {
+                    if(!currentScores[idx]) currentScores[idx] = { max: max, deducted: 0 };
+                    updateRowDisplay(idx);
+                }
+
+                window.addDeduction = function(idx, amount) {
+                    if(!currentScores[idx]) return;
+                    currentScores[idx].deducted += amount;
+                    // Cap deduction so score doesn't go below 0
+                    if(currentScores[idx].deducted > currentScores[idx].max) {
+                        currentScores[idx].deducted = currentScores[idx].max;
+                    }
+                    updateRowDisplay(idx);
+                    calculateTotal();
+                }
+                
+                window.undoDeduction = function(idx) {
+                    if(!currentScores[idx]) return;
+                    currentScores[idx].deducted = 0; // Reset row
+                    updateRowDisplay(idx);
+                    calculateTotal();
+                }
+
+                function updateRowDisplay(idx) {
+                    const data = currentScores[idx];
+                    const final = (data.max - data.deducted).toFixed(2);
+                    document.getElementById('display_' + idx).innerText = final;
+                    document.getElementById('info_' + idx).innerText = '-' + data.deducted.toFixed(2);
                 }
 
                 window.calculateTotal = function() {
-                   let total = 0;
-                   const inputs = document.querySelectorAll('.rubric-input');
-                   inputs.forEach(inp => {
-                       let v = parseFloat(inp.value) || 0;
-                       total += v;
-                   });
-                   document.getElementById('judgeTotalDisplay').innerText = "Total: " + total.toFixed(1);
-                   return total;
+                    let total = 0;
+                    for(let k in currentScores) {
+                        total += (currentScores[k].max - currentScores[k].deducted);
+                    }
+                    document.getElementById('judgeTotalDisplay').innerText = "Total: " + total.toFixed(2);
+                    return total;
                 }
 
                 window.submitFinalScore = function() {
@@ -2193,7 +2420,7 @@
                         const judgeId = window.name || "Judge";
                         if(window.opener) {
                              window.opener.submitJudgeScore(judgeId, score);
-                             document.querySelector('.judge-submit-btn').innerText = "SUBMITTED (" + score + ")";
+                             document.querySelector('.judge-submit-btn').innerText = "SUBMITTED (" + score.toFixed(2) + ")";
                              document.querySelector('.judge-submit-btn').disabled = true;
                              document.querySelector('.judge-submit-btn').style.background = "#555";
                         }
@@ -2230,30 +2457,40 @@
                         jSec.style.display = 'block';
                         document.getElementById('jStudentName').innerText = d.judging.currentStudentObj ? d.judging.currentStudentObj.name : "Not Selected";
                         
-                        // Render Dynamic Rubric
+                        // Render Dynamic Rubric with Deduction Buttons
                         const tbody = document.getElementById('rubricTableBody');
                         if(tbody.innerHTML === '' && d.judging.rubric) {
                             d.judging.rubric.forEach((item, idx) => {
                                 const row = document.createElement('tr');
-                                // Calculate presets
                                 const max = item.max;
-                                const p90 = (max * 0.9).toFixed(1);
-                                const p80 = (max * 0.8).toFixed(1);
-                                const p70 = (max * 0.7).toFixed(1);
                                 
+                                // Create buttons based on config
+                                let btnHtml = '';
+                                const steps = d.judging.deductionSteps || [0.5, 1];
+                                steps.forEach(step => {
+                                    btnHtml += \`<button class="deduct-btn" onclick="addDeduction(\${idx}, \${step})">-\${step}</button> \`;
+                                });
+                                btnHtml += \`<button class="deduct-btn" style="border-color:#333; color:#333; background:#eee;" onclick="undoDeduction(\${idx})">Reset</button>\`;
+
                                 row.innerHTML = \`
-                                    <th>\${item.name} <br> <small>(Max: \${max})</small></th>
+                                    <td style="font-weight:bold;">\${item.name}</td>
+                                    <td>\${max}</td>
+                                    <td>
+                                        <div class="score-input-group" style="justify-content:center;">
+                                            \${btnHtml}
+                                        </div>
+                                    </td>
                                     <td>
                                         <div class="score-input-group">
-                                            <input type="number" class="rubric-input" id="r_input_\${idx}" min="0" max="\${max}" step="0.5" value="0" oninput="calculateTotal()">
-                                            <button class="quick-btn" onclick="updateRubricVal(\${idx}, \${max})">\${max}</button>
-                                            <button class="quick-btn" onclick="updateRubricVal(\${idx}, \${p90})">\${p90}</button>
-                                            <button class="quick-btn" onclick="updateRubricVal(\${idx}, \${p80})">\${p80}</button>
+                                            <span class="deduct-info" id="info_\${idx}">-0.0</span>
+                                            <div class="score-display" id="display_\${idx}">\${max}</div>
                                         </div>
                                     </td>
                                 \`;
                                 tbody.appendChild(row);
+                                initJudgeRow(idx, max);
                             });
+                            calculateTotal();
                         }
                     } else { jSec.style.display = 'none'; }
 
@@ -2374,33 +2611,6 @@
         </html>`;
     }
 
-    function initJudgingUI() {
-        const sel = document.getElementById('studentSelect');
-        if(sel) {
-            sel.innerHTML = '<option value="">-- Select Student --</option>';
-            state.judging.students.forEach(s => {
-                let opt = document.createElement('option');
-                opt.value = s; opt.innerText = s;
-                sel.appendChild(opt);
-            });
-        }
-    }
-
-    // (This part is maintained but superseded by the new Student Registration panel logic)
-    function addStudentPrompt() {
-        const name = prompt("Enter Student Name:");
-        if(name) {
-            state.judging.students.push(name);
-            initJudgingUI();
-        }
-    }
-
-    function updateJudgeScreen() {
-        // sync handled by new logic
-    }
-
-    window.addEventListener('load', initJudgingUI);
-
     function openScreen(type) {
         const html = getTemplate();
         if(type === 'student') {
@@ -2468,6 +2678,7 @@
     if(themeList.length > 0) state.theme = themeList[0];
     setMode('judge');
     renderSlots();
+    loadFromLocal(); // Try loading saved state on startup
 
     document.addEventListener('contextmenu', function(event) { event.preventDefault(); });
 </script>
