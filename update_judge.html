@@ -2709,19 +2709,32 @@
 
     function syncWindows() {
         const packet = {
-            slots: state.session.slots, activeIndex: state.session.activeIndex,
-            phase: state.session.phase, light: state.session.light,
-            grid: state.grid, readingMode: state.readingMode,
-            currentLang: currentLang, fontData: state.fontData,
+            slots: state.session.slots, 
+            activeIndex: state.session.activeIndex,
+            phase: state.session.phase, 
+            light: state.session.light,
+            grid: state.grid, 
+            readingMode: state.readingMode,
+            currentLang: currentLang, 
+            fontData: state.fontData,
+            
+            // މުހިންމު ބައި: ދަރިވަރުގެ ނަން ޖަޖުންނަށް ފޮނުވުން
             judging: state.judging,
             
             ceremony: state.ceremony,
             ceremonyTitle: document.getElementById('ceremonyTitle') ? document.getElementById('ceremonyTitle').value : "Ceremony"
         };
+        
+        // Send to Student & Ceremony Screens
         const send = w => { if(w && !w.closed && w.updateState) w.updateState(packet); };
+        
         send(state.windows.student);
         send(state.windows.ceremony);
-        state.windows.judges.forEach(w => send(w));
+        
+        // Send to Judge Screens
+        if(state.windows.judges) {
+            state.windows.judges.forEach(w => send(w));
+        }
     }
     
     // INITIALIZATION
