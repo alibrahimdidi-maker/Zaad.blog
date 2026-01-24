@@ -1150,7 +1150,7 @@
         syncWindows();
         saveToLocal(); // Auto save
     }
-    // Load Batch from CSV (Google Forms Format)
+    // Load Batch from CSV (Updated to read Institution Type)
     function loadStudentBatch() {
         const file = document.getElementById('batchCsv').files[0];
         if(!file) return;
@@ -1158,14 +1158,13 @@
         const r = new FileReader();
         r.onload = e => {
             const rows = e.target.result.split('\n');
-            // Assuming Headers or Standard Format:
-            // Name, ID, Group, Branch, Age, Address, Phone, Parent, P.Phone, Email
-            // Skipping header row 0
             state.allStudents = [];
             
+            // Skipping header row 0
             for(let i=1; i<rows.length; i++) {
                 const cols = rows[i].split(',');
                 if(cols.length < 2) continue; 
+                
                 state.allStudents.push({
                     name: cols[0]?.trim(),
                     id: cols[1]?.trim(),
@@ -1176,16 +1175,17 @@
                     phone: cols[6]?.trim(),
                     parent: cols[7]?.trim(),
                     parentPhone: cols[8]?.trim(),
-                    email: cols[9]?.trim()
+                    email: cols[9]?.trim(),
+                    // ★ Reading the new column (Index 10)
+                    instType: cols[10]?.trim() || "School" 
                 });
             }
             populateStudentSelector();
             saveToLocal();
-            alert(`Loaded ${state.allStudents.length} students.`);
+            alert(`Loaded ${state.allStudents.length} students with Institution Types.`);
         };
         r.readAsText(file);
     }
-
     function populateStudentSelector() {
         const sel = document.getElementById('studentSelector');
         sel.innerHTML = '<option value="">-- Manual Entry --</option>';
