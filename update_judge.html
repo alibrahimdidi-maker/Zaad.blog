@@ -2854,45 +2854,76 @@
                     const jSec = document.getElementById('judgeSection');
 
                     if(isJudge) {
-                        jSec.style.display = 'block';
-                        document.getElementById('jStudentName').innerText = d.judging.currentStudentObj ? d.judging.currentStudentObj.name : "Not Selected";
-                        
-                        // Render Dynamic Rubric with Deduction Buttons
-                        const tbody = document.getElementById('rubricTableBody');
-                        if(tbody.innerHTML === '' && d.judging.rubric) {
-                            d.judging.rubric.forEach((item, idx) => {
-                                const row = document.createElement('tr');
-                                const max = item.max;
-                                
-                                // Create buttons based on config
-                                let btnHtml = '';
-                                const steps = d.judging.deductionSteps || [0.5, 1];
-                                steps.forEach(step => {
-                                    btnHtml += \`<button class="deduct-btn" onclick="addDeduction(\${idx}, \${step})">-\${step}</button> \`;
-                                });
-                                btnHtml += \`<button class="deduct-btn" style="border-color:#333; color:#333; background:#eee;" onclick="undoDeduction(\${idx})">Reset</button>\`;
+       jSec.style.display = 'block';
+       
+       // --- 1. ދަރިވަރުގެ ޕްރޮފައިލް އަޕްޑޭޓްކުރާ ބައި (NEW CODE) ---
+       if(d.judging.currentStudentObj) {
+           const s = d.judging.currentStudentObj;
+           // ނަމާއި އެހެނިހެން މަޢުލޫމާތު
+           document.getElementById('jNameVal').innerText = s.name || "-";
+           document.getElementById('jRegVal').innerText = s.reg || "-";
+           document.getElementById('jIDVal').innerText = s.id || "-";
+           document.getElementById('jBranchVal').innerText = s.branch || "-";
+           document.getElementById('jGroupVal').innerText = s.group || "-";
+           document.getElementById('jAddrVal').innerText = s.address || "-";
+           
+           // ފޮޓޯ އަޕްޑޭޓްކުރާ ބައި
+           const pImg = document.getElementById('jPhoto');
+           if(d.studentPhoto) {
+               pImg.src = d.studentPhoto;
+           } else {
+               pImg.src = ''; // ފޮޓޯ ނެތްނަމަ ހުސްކޮށްލާ
+               pImg.alt = "No Photo";
+           }
+       } else {
+           // ދަރިވަރަކު ނެތްނަމަ ހުރިހާ އެއްޗެއް ފޮހެލާ
+           document.getElementById('jNameVal').innerText = "---";
+           document.getElementById('jRegVal').innerText = "---";
+           document.getElementById('jIDVal').innerText = "---";
+           document.getElementById('jBranchVal').innerText = "---";
+           document.getElementById('jGroupVal').innerText = "---";
+           document.getElementById('jAddrVal').innerText = "---";
+           document.getElementById('jPhoto').src = "";
+       }
+       // -------------------------------------------------------
 
-                                row.innerHTML = \`
-                                    <td style="font-weight:bold;">\${item.name}</td>
-                                    <td>\${max}</td>
-                                    <td>
-                                        <div class="score-input-group" style="justify-content:center;">
-                                            \${btnHtml}
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="score-input-group">
-                                            <span class="deduct-info" id="info_\${idx}">-0.0</span>
-                                            <div class="score-display" id="display_\${idx}">\${max}</div>
-                                        </div>
-                                    </td>
-                                \`;
-                                tbody.appendChild(row);
-                                initJudgeRow(idx, max);
-                            });
-                            calculateTotal();
-                        }
-                    } else { jSec.style.display = 'none'; }
+       // --- 2. ރުބްރިކް ޓޭބަލް (މާކުސްދޭ ބައި) ---
+       const tbody = document.getElementById('rubricTableBody');
+       if(tbody.innerHTML === '' && d.judging.rubric) {
+           d.judging.rubric.forEach((item, idx) => {
+               const row = document.createElement('tr');
+               const max = item.max;
+               
+               let btnHtml = '';
+               const steps = d.judging.deductionSteps || [0.5, 1];
+               steps.forEach(step => {
+                   btnHtml += `<button class="deduct-btn" onclick="addDeduction(${idx}, ${step})">-${step}</button> `;
+               });
+               btnHtml += `<button class="deduct-btn" style="border-color:#333; color:#333; background:#eee;" onclick="undoDeduction(${idx})">Reset</button>`;
+
+               row.innerHTML = `
+                   <td style="font-weight:bold;">${item.name}</td>
+                   <td>${max}</td>
+                   <td>
+                       <div class="score-input-group" style="justify-content:center;">
+                           ${btnHtml}
+                       </div>
+                   </td>
+                   <td>
+                       <div class="score-input-group">
+                          <span class="deduct-info" id="info_${idx}">-0.0</span>
+                          <div class="score-display" id="display_${idx}">${max}</div>
+                       </div>
+                   </td>
+               `;
+               tbody.appendChild(row);
+               initJudgeRow(idx, max);
+           });
+           calculateTotal();
+       }
+   } else { 
+       jSec.style.display = 'none'; 
+   }
 
                     if(d.grid.visible) {
                         document.getElementById('gridScreen').style.display = 'flex';
