@@ -701,7 +701,52 @@
                 <button class="btn-green" style="margin-top:10px;" onclick="registerStudent()">💾 Register & Set Active</button>
                 <p style="font-size:10px; color:#aaa;" id="currentStdLabel">No student active.</p>
             </div>
-            
+            <div class="panel" style="border:1px solid #ff9800;">
+    <h2 style="color:#ff9800;">6. ފޮޓޯ & ޝެޑިއުލް (Photos & Schedule)</h2>
+    
+    <label>1. ދަރިވަރުންގެ ފޮޓޯ (Folder):</label>
+    <div style="display:flex; gap:5px; margin-bottom:5px;">
+        <input type="file" id="stdPhotoDir" webkitdirectory directory multiple>
+    </div>
+    <small style="color:#aaa; display:block; margin-bottom:10px;">
+        File name must match Reg No (e.g. "R-001.png")
+    </small>
+    <small id="stdPhotoStatus" style="color:#00e676; display:block; margin-bottom:10px;"></small>
+
+    <hr style="border-color:#333; margin:8px 0;">
+
+    <label style="color:#FFD700;">2. ހާޒިރީ ޝެޑިއުލް (Notice Board):</label>
+    
+    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:5px;">
+        <input type="date" id="schDate">
+        <input type="time" id="schTime">
+    </div>
+    <input type="text" id="schSessionName" placeholder="ދަންފަޅި (މިސާލު: ހެނދުނު/ރޭގަނޑު)">
+    
+    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:5px; margin-top:5px;">
+        <select id="schFilterBranch">
+            <option value="All">All Branches</option>
+            <option value="Balaiygen">Balaiygen</option>
+            <option value="Nubalai">Nubalai</option>
+        </select>
+        <select id="schFilterGroup">
+            <option value="All">All Ages</option>
+            <option value="Under 6">6 ދަށް</option>
+            <option value="Under 9">9 ދަށް</option>
+            <option value="Under 11">11 ދަށް</option>
+            <option value="Under 13">13 ދަށް</option>
+            <option value="Under 16">16 ދަށް</option>
+            <option value="Under 19">19 ދަށް</option>
+            <option value="General">ޢާއްމު</option>
+        </select>
+    </div>
+
+    <div style="display:flex; gap:5px; margin-top:5px; align-items:center;">
+        <label style="margin:0; width:50px;">Limit:</label>
+        <input type="number" id="schLimit" placeholder="Count (e.g. 10)" style="margin:0;">
+        <button class="btn-cyan" onclick="printSessionSchedule()">🖨️ Print Schedule</button>
+    </div>
+</div>
             <div class="panel">
                 <h2 style="color:#ff4081;">7. މާކުސް ދިނުމުގެ ގަވާއިދު (Rubric)</h2>
                 
