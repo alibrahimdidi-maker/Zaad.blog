@@ -1156,7 +1156,13 @@
                 { name: "މަޤާމާތު (Maqamat)", max: 5 }
             ]
         },
-
+quiz: {
+            active: false,
+            pool: [], // Stores loaded quiz questions
+            currentQ: null, // Current active question
+            revealed: false, // Is answer shown?
+            isCorrect: false // Did judge mark correct/wrong?
+        },
         // Ceremony Data
         ceremony: {
             active: false,
