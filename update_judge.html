@@ -3145,18 +3145,6 @@
        }
    }
         
-        // Send to Student & Ceremony Screens
-        const send = w => { if(w && !w.closed && w.updateState) w.updateState(packet); };
-        
-        send(state.windows.student);
-        send(state.windows.ceremony);
-        
-        // Send to Judge Screens
-        if(state.windows.judges) {
-            state.windows.judges.forEach(w => send(w));
-        }
-    }
-    
     // INITIALIZATION
     initThemes();
     if(themeList.length > 0) state.theme = themeList[0];
