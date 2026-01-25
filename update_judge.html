@@ -2086,8 +2086,40 @@ quiz: {
         }
     }
 
-    // --- GRID ---
     window.handleGridClick = function(boxID) {
+        
+        // ★ 1. NEW: Quiz Mode Check (ކުއިޒް މޯޑުގައި އިންނަނަމަ)
+        // Check if state.quiz exists and is active
+        if (state.quiz && state.quiz.active) {
+            
+            // Check if already taken
+            if(state.grid.taken.includes(boxID)) return;
+            
+            // Mark as taken
+            state.grid.taken.push(boxID);
+            
+            // Get Question from Grid Map
+            const q = state.grid.map[boxID];
+            
+            if (q) {
+                state.quiz.currentQ = q;
+                state.quiz.revealed = false;
+                state.quiz.isCorrect = false;
+
+                // Update Admin Sidebar Preview
+                const pQ = document.getElementById('quizPreviewQ');
+                const pA = document.getElementById('quizPreviewA');
+                if(pQ) pQ.innerText = q.q;
+                if(pA) pA.innerText = q.a; // Show answer to admin
+            }
+
+            // Close Grid & Update Screens
+            state.grid.visible = false;
+            syncWindows();
+            return; // Stop here (Don't run Quran logic)
+        }
+
+        // ★ 2. EXISTING: Quran Logic (ކުރީގެ ޤުރްއާން ބައި)
         const limit = parseInt(document.getElementById('qLimit').value);
         if(state.session.selectionIDs.length >= limit) return;
 
@@ -2097,6 +2129,33 @@ quiz: {
              return;
         }
 
+        state.grid.taken.push(boxID);
+        state.session.selectionIDs.push(qID);
+
+        // Remove from pools to avoid repeat
+        const idx = state.qPool.indexOf(qID);
+        if(idx > -1) state.qPool.splice(idx, 1);
+        
+        const fIdx = state.filteredPool.indexOf(qID);
+        if(fIdx > -1) state.filteredPool.splice(fIdx, 1);
+
+        state.qUsed.push(qID);
+
+        updateSelectionUI();
+
+        if(state.session.selectionIDs.length === limit) {
+            state.grid.visible = false;
+            state.session.phase = 'ready';
+            prepareSlotsFromSelection();
+            document.getElementById('btnStartReading').classList.remove('hidden');
+        } else {
+            state.session.phase = 'selection';
+        }
+        
+        renderSlots(); 
+        updateGridPreview(); 
+        syncWindows();
+    }
         state.grid.taken.push(boxID);
         state.session.selectionIDs.push(qID);
 
