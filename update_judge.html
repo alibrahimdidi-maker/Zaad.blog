@@ -2606,21 +2606,35 @@ quiz: {
                         <div id="judgeSection">
     <h1 id="judgeTitleDisplay" style="text-align:center; color:#b71c1c; border-bottom:2px solid #ccc; padding-bottom:10px; font-size:40px;">JUDGE SCREEN</h1>
     
-    <div class="student-bar">Student: <span id="jStudentName">---</span></div>
-                            <table class="rubric-table">
-                                <thead style="border-bottom: 2px solid var(--accent);">
-                                    <tr>
-                                        <th>Category</th>
-                                        <th style="width:10%;">Max</th>
-                                        <th style="width:50%;">Deductions</th>
-                                        <th style="width:15%;">Score</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="rubricTableBody"></tbody>
-                            </table>
-                            <div id="judgeTotalDisplay">Total: 0</div>
-                            <button class="judge-submit-btn" onclick="submitFinalScore()">✅ SUBMIT SCORE</button>
-                        </div>
+    <div class="student-info-bar">
+        <div class="si-item"><span class="si-lbl">Name</span><span class="si-val" id="dispName">--</span></div>
+        <div class="si-item"><span class="si-lbl">ID / Reg</span><span class="si-val" id="dispID">--</span></div>
+        <div class="si-item"><span class="si-lbl">Age / Group</span><span class="si-val" id="dispAge">--</span></div>
+        <div class="si-item"><span class="si-lbl">Branch</span><span class="si-val" id="dispBranch">--</span></div>
+    </div>
+
+    <div id="quizArea" style="display:none; border:1px solid #ccc; margin-bottom:10px;">
+        <div class="quiz-display" id="qText"></div>
+        <div class="quiz-ans" id="aText"></div>
+    </div>
+
+    <div class="student-bar" style="display:none;">Student: <span id="jStudentName">---</span></div>
+    
+    <table class="rubric-table">
+        <thead style="border-bottom: 2px solid var(--accent);">
+            <tr>
+                <th>Category</th>
+                <th style="width:10%;">Max</th>
+                <th style="width:50%;">Deductions</th>
+                <th style="width:15%;">Score</th>
+            </tr>
+        </thead>
+        <tbody id="rubricTableBody"></tbody>
+    </table>
+    
+    <div id="judgeTotalDisplay">Total: 0</div>
+    <button class="judge-submit-btn" onclick="submitFinalScore()">✅ SUBMIT SCORE</button>
+</div>
 
                     </div>
                 </div>
