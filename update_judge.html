@@ -455,23 +455,7 @@
             
             <div class="panel panel-live">
                 <h2 data-translate="liveCtrl">1. ލައިވް ކޮންޓްރޯލް (Live)</h2>
-                <div class="mode-switch" style="margin-bottom:10px;">
-    <button id="tabQuran" class="mode-btn active" onclick="switchMainMode('quran')">📖 ޤުރްއާން</button>
-    <button id="tabQuiz" class="mode-btn" onclick="switchMainMode('quiz')">❓ ކުއިޒް</button>
-</div>
-
-<div id="quizControls" class="hidden" style="border:1px dashed #7c4dff; padding:5px; margin-bottom:10px;">
-    <label style="color:#b388ff;">ކުއިޒް ކޮންޓްރޯލް:</label>
-    <div style="background:#000; padding:5px; margin-bottom:5px; text-align:center;">
-        <span id="quizPreviewQ" style="color:#fff; display:block;">No Question</span>
-        <span id="quizPreviewA" style="color:#777; font-size:10px;">(Answer Hidden)</span>
-    </div>
-    <div style="display:flex; gap:5px;">
-        <button class="btn-green" onclick="judgeQuiz(true)">✅ ރަނގަޅު</button>
-        <button class="btn-red" onclick="judgeQuiz(false)">❌ ނުބައި</button>
-    </div>
-    <button class="btn-blue" style="margin-top:5px;" onclick="resetQuizAns()">Hide Answer 🙈</button>
-</div>
+                
                 <div id="statusDisplay">WAITING...</div>
                 
                 <div class="mode-switch">
@@ -618,12 +602,7 @@
                         ⬇️ Sample / Bank
                     </a>
                 </div>
-                <label style="color:#b388ff;">★ ކުއިޒް ސުވާލު (CSV):</label>
-<div style="display:flex; gap:5px;">
-    <input type="file" id="csvQuiz" accept=".csv" onchange="loadQuizData(this)">
-    <button onclick="downloadQuizTemplate()" class="btn-purple" style="width:40px;">⬇️</button>
-</div>
-<small style="color:#aaa;">Format: ID, Question, Answer</small>
+                
                 <label data-translate="lblImg">3. އާޔަތްތަކުގެ ފޮޓޯ (Folder):</label>
                 <div style="display:flex; gap:5px;">
                     <input type="file" id="imgF" webkitdirectory directory multiple>
@@ -659,8 +638,7 @@
             
             <div class="panel">
                 <h2 style="color:#ff9800;">5. ދަރިވަރުންގެ މަޢުލޫމާތު (Student Info)</h2>
-                <label>🔍 ދަރިވަރުން ހޯދާ (Search):</label>
-<input type="text" id="stdSearchInput" placeholder="Name / ID / Reg No..." oninput="filterStudentList()" style="border:1px solid #00e676; margin-bottom:5px;">
+                
                 <label>1. Bulk Import (Google Forms / Master CSV):</label>
 <div style="display:flex; gap:5px; margin-bottom:5px;">
     <input type="file" id="batchCsv" accept=".csv">
@@ -751,9 +729,7 @@
         <div id="adminScoreMonitor" style="font-size:12px; color:#aaa; margin-top:5px;">Waiting for judges...</div>
         <button class="btn-green" id="btnFinalize" style="margin-top:5px;" onclick="finalizeStudentResult()">✅ Save Student Result</button>
     </div>
-<hr style="border-color:#333; margin:8px 0;">
-<label>Attendance:</label>
-<button class="btn-blue" onclick="printAttendanceList()">📄 Print Attendance List (Notice Board)</button>
+
     <hr style="border-color:#333; margin:8px 0;">
 
     <label style="color:#FFD700;">1. Report Headers (ރިޕޯޓުގެ މަޢުލޫމާތު):</label>
@@ -1180,13 +1156,7 @@
                 { name: "މަޤާމާތު (Maqamat)", max: 5 }
             ]
         },
-quiz: {
-            active: false,
-            pool: [], // Stores loaded quiz questions
-            currentQ: null, // Current active question
-            revealed: false, // Is answer shown?
-            isCorrect: false // Did judge mark correct/wrong?
-        },
+
         // Ceremony Data
         ceremony: {
             active: false,
@@ -2086,40 +2056,8 @@ quiz: {
         }
     }
 
+    // --- GRID ---
     window.handleGridClick = function(boxID) {
-        
-        // ★ 1. NEW: Quiz Mode Check (ކުއިޒް މޯޑުގައި އިންނަނަމަ)
-        // Check if state.quiz exists and is active
-        if (state.quiz && state.quiz.active) {
-            
-            // Check if already taken
-            if(state.grid.taken.includes(boxID)) return;
-            
-            // Mark as taken
-            state.grid.taken.push(boxID);
-            
-            // Get Question from Grid Map
-            const q = state.grid.map[boxID];
-            
-            if (q) {
-                state.quiz.currentQ = q;
-                state.quiz.revealed = false;
-                state.quiz.isCorrect = false;
-
-                // Update Admin Sidebar Preview
-                const pQ = document.getElementById('quizPreviewQ');
-                const pA = document.getElementById('quizPreviewA');
-                if(pQ) pQ.innerText = q.q;
-                if(pA) pA.innerText = q.a; // Show answer to admin
-            }
-
-            // Close Grid & Update Screens
-            state.grid.visible = false;
-            syncWindows();
-            return; // Stop here (Don't run Quran logic)
-        }
-
-        // ★ 2. EXISTING: Quran Logic (ކުރީގެ ޤުރްއާން ބައި)
         const limit = parseInt(document.getElementById('qLimit').value);
         if(state.session.selectionIDs.length >= limit) return;
 
@@ -2129,33 +2067,6 @@ quiz: {
              return;
         }
 
-        state.grid.taken.push(boxID);
-        state.session.selectionIDs.push(qID);
-
-        // Remove from pools to avoid repeat
-        const idx = state.qPool.indexOf(qID);
-        if(idx > -1) state.qPool.splice(idx, 1);
-        
-        const fIdx = state.filteredPool.indexOf(qID);
-        if(fIdx > -1) state.filteredPool.splice(fIdx, 1);
-
-        state.qUsed.push(qID);
-
-        updateSelectionUI();
-
-        if(state.session.selectionIDs.length === limit) {
-            state.grid.visible = false;
-            state.session.phase = 'ready';
-            prepareSlotsFromSelection();
-            document.getElementById('btnStartReading').classList.remove('hidden');
-        } else {
-            state.session.phase = 'selection';
-        }
-        
-        renderSlots(); 
-        updateGridPreview(); 
-        syncWindows();
-    }
         state.grid.taken.push(boxID);
         state.session.selectionIDs.push(qID);
 
@@ -2665,35 +2576,21 @@ quiz: {
                         <div id="judgeSection">
     <h1 id="judgeTitleDisplay" style="text-align:center; color:#b71c1c; border-bottom:2px solid #ccc; padding-bottom:10px; font-size:40px;">JUDGE SCREEN</h1>
     
-    <div class="student-info-bar">
-        <div class="si-item"><span class="si-lbl">Name</span><span class="si-val" id="dispName">--</span></div>
-        <div class="si-item"><span class="si-lbl">ID / Reg</span><span class="si-val" id="dispID">--</span></div>
-        <div class="si-item"><span class="si-lbl">Age / Group</span><span class="si-val" id="dispAge">--</span></div>
-        <div class="si-item"><span class="si-lbl">Branch</span><span class="si-val" id="dispBranch">--</span></div>
-    </div>
-
-    <div id="quizArea" style="display:none; border:1px solid #ccc; margin-bottom:10px;">
-        <div class="quiz-display" id="qText"></div>
-        <div class="quiz-ans" id="aText"></div>
-    </div>
-
-    <div class="student-bar" style="display:none;">Student: <span id="jStudentName">---</span></div>
-    
-    <table class="rubric-table">
-        <thead style="border-bottom: 2px solid var(--accent);">
-            <tr>
-                <th>Category</th>
-                <th style="width:10%;">Max</th>
-                <th style="width:50%;">Deductions</th>
-                <th style="width:15%;">Score</th>
-            </tr>
-        </thead>
-        <tbody id="rubricTableBody"></tbody>
-    </table>
-    
-    <div id="judgeTotalDisplay">Total: 0</div>
-    <button class="judge-submit-btn" onclick="submitFinalScore()">✅ SUBMIT SCORE</button>
-</div>
+    <div class="student-bar">Student: <span id="jStudentName">---</span></div>
+                            <table class="rubric-table">
+                                <thead style="border-bottom: 2px solid var(--accent);">
+                                    <tr>
+                                        <th>Category</th>
+                                        <th style="width:10%;">Max</th>
+                                        <th style="width:50%;">Deductions</th>
+                                        <th style="width:15%;">Score</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="rubricTableBody"></tbody>
+                            </table>
+                            <div id="judgeTotalDisplay">Total: 0</div>
+                            <button class="judge-submit-btn" onclick="submitFinalScore()">✅ SUBMIT SCORE</button>
+                        </div>
 
                     </div>
                 </div>
@@ -3446,47 +3343,6 @@ quiz: {
                     body { -webkit-print-color-adjust: exact; }
                     @page { size: A4 landscape; margin: 10mm; } 
                 }
-                @media print {
-            button { display: none; }
-            body { -webkit-print-color-adjust: exact; }
-            @page { size: A4 landscape; margin: 10mm; } 
-        }
-
-        /* ★★★ މިތަނަށް ތިރީގައިވާ ކޯޑު ޕޭސްޓް ކުރައްވާ! ★★★ */
-
-        .student-info-bar {
-            background: #fff; 
-            border: 2px solid #D4AF37; 
-            padding: 10px; 
-            border-radius: 8px; 
-            margin-bottom: 15px;
-            display: flex; 
-            justify-content: space-around; 
-            align-items: center;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
-        .si-item { text-align: center; }
-        .si-lbl { font-size: 10px; color: #666; display: block; }
-        .si-val { font-size: 16px; font-weight: bold; color: #000; }
-
-        .quiz-display { 
-            text-align: center; 
-            padding: 20px; 
-            font-size: 30px; 
-            font-weight: bold; 
-            color: #000; 
-        }
-        .quiz-ans { 
-            margin-top: 20px; 
-            padding: 15px; 
-            color: #fff; 
-            border-radius: 10px; 
-            display: none; 
-        }
-
-    </style> 
-
-މިގޮތަށް ޕޭސްޓް ކޮށްލެއްވުމުން CSS ގެ ބައި ނިމުނީއެވެ. ދެން އޮތީ HTML އާއި JavaScript ގެ ބަޔަށް ބަދަލު ގެނައުމެވެ.
             </style>
         </head>
         <body>
@@ -3573,145 +3429,6 @@ quiz: {
         link.click();
         document.body.removeChild(link);
     }
-    function filterStudentList() {
-    const term = document.getElementById('stdSearchInput').value.toLowerCase();
-    const sel = document.getElementById('studentSelector');
-    sel.innerHTML = '<option value="">-- Manual Entry --</option>';
-    
-    if(!state.allStudents) return;
-
-    state.allStudents.forEach((s, idx) => {
-        // Search by Name, ID, or Reg No
-        const txt = `${s.name} (${s.id} / ${s.reg})`;
-        if (txt.toLowerCase().includes(term)) {
-            let opt = document.createElement('option');
-            opt.value = idx;
-            opt.innerText = txt;
-            sel.appendChild(opt);
-        }
-    });
-}
-    // Switch between Quran and Quiz
-function switchMainMode(mode) {
-    state.quiz.active = (mode === 'quiz');
-    
-    document.getElementById('tabQuran').classList.toggle('active', mode === 'quran');
-    document.getElementById('tabQuiz').classList.toggle('active', mode === 'quiz');
-    
-    // Toggle Controls
-    document.getElementById('quizControls').classList.toggle('hidden', mode !== 'quiz');
-    document.getElementById('judgeControls').classList.toggle('hidden', mode === 'quiz'); // Hide normal Quran controls
-    
-    // Clear Screens
-    state.session.phase = 'idle';
-    syncWindows();
-}
-
-// Load Quiz CSV
-function loadQuizData(input) {
-    const file = input.files[0];
-    if(!file) return;
-    const r = new FileReader();
-    r.onload = e => {
-        const rows = e.target.result.split('\n');
-        state.quiz.pool = [];
-        rows.slice(1).forEach(row => {
-            const cols = row.split(',');
-            if(cols.length >= 3) {
-                state.quiz.pool.push({
-                    id: cols[0].trim(),
-                    q: cols[1].trim(),
-                    a: cols[2].trim()
-                });
-            }
-        });
-        alert(`Loaded ${state.quiz.pool.length} Quiz Questions!`);
-        if(state.quiz.active) reshuffleGrid(); // Refresh grid if in quiz mode
-    };
-    r.readAsText(file);
-}
-
-// Quiz Logic for Grid Click (Update existing handleGridClick logic inside handling)
-// NOTE: You need to update your existing 'handleGridClick' to check 'state.quiz.active'
-/* Existing handleGridClick function at top needs modification:
-   if (state.quiz.active) {
-       const q = state.quiz.pool[state.grid.map[boxID]]; // Logic to pick quiz Q
-       state.quiz.currentQ = q;
-       state.quiz.revealed = false;
-       document.getElementById('quizPreviewQ').innerText = q.q;
-       document.getElementById('quizPreviewA').innerText = q.a;
-       syncWindows();
-       return; 
-   }
-*/
-
-// Quiz Judging
-function judgeQuiz(isCorrect) {
-    state.quiz.revealed = true;
-    state.quiz.isCorrect = isCorrect;
-    syncWindows();
-}
-
-function resetQuizAns() {
-    state.quiz.revealed = false;
-    syncWindows();
-}
-
-function downloadQuizTemplate() {
-    const csv = "ID,Question,Answer\n1,Sample Question?,Sample Answer";
-    const blob = new Blob([csv], {type: 'text/csv'});
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-    a.download = "Quiz_Template.csv";
-    a.click();
-}
-    function printAttendanceList() {
-    if(!state.allStudents || state.allStudents.length === 0) {
-        alert("No students loaded!"); return;
-    }
-    
-    let rows = "";
-    state.allStudents.forEach((s, i) => {
-        rows += `
-        <tr>
-            <td>${i+1}</td>
-            <td>${s.reg}</td>
-            <td style="text-align:right; padding-right:10px;">${s.name}</td>
-            <td style="font-size:12px;">${s.address}</td>
-            <td></td>
-        </tr>`;
-    });
-
-    const html = `
-    <html dir="rtl" lang="dv"><head><style>
-        body { font-family: 'Noto Sans Thaana', sans-serif; padding: 20px; }
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        th, td { border: 1px solid #000; padding: 8px; text-align: center; }
-        .header { text-align:center; border-bottom:2px solid #000; padding-bottom:10px; margin-bottom:20px; }
-    </style></head><body>
-        <div class="header">
-            <h2>Attendance List / Notice Board</h2>
-            <p>Date: ${new Date().toLocaleDateString()}</p>
-        </div>
-        <table>
-            <thead>
-                <tr>
-                    <th width="5%">#</th>
-                    <th width="15%">Reg No</th>
-                    <th width="35%">Name</th>
-                    <th width="30%">Address</th>
-                    <th width="15%">Signature</th>
-                </tr>
-            </thead>
-            <tbody>${rows}</tbody>
-        </table>
-        <script>window.print();<\/script>
-    </body></html>`;
-    
-    const w = window.open("", "Attendance", "width=900,height=900");
-    w.document.write(html);
-    w.document.close();
-}
 </script>
 </body>
 </html>
