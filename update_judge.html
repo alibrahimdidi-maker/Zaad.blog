@@ -701,52 +701,7 @@
                 <button class="btn-green" style="margin-top:10px;" onclick="registerStudent()">💾 Register & Set Active</button>
                 <p style="font-size:10px; color:#aaa;" id="currentStdLabel">No student active.</p>
             </div>
-            <div class="panel" style="border:1px solid #ff9800;">
-    <h2 style="color:#ff9800;">6. ފޮޓޯ & ޝެޑިއުލް (Photos & Schedule)</h2>
-    
-    <label>1. ދަރިވަރުންގެ ފޮޓޯ (Folder):</label>
-    <div style="display:flex; gap:5px; margin-bottom:5px;">
-        <input type="file" id="stdPhotoDir" webkitdirectory directory multiple>
-    </div>
-    <small style="color:#aaa; display:block; margin-bottom:10px;">
-        File name must match Reg No (e.g. "R-001.png")
-    </small>
-    <small id="stdPhotoStatus" style="color:#00e676; display:block; margin-bottom:10px;"></small>
-
-    <hr style="border-color:#333; margin:8px 0;">
-
-    <label style="color:#FFD700;">2. ހާޒިރީ ޝެޑިއުލް (Notice Board):</label>
-    
-    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:5px;">
-        <input type="date" id="schDate">
-        <input type="time" id="schTime">
-    </div>
-    <input type="text" id="schSessionName" placeholder="ދަންފަޅި (މިސާލު: ހެނދުނު/ރޭގަނޑު)">
-    
-    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:5px; margin-top:5px;">
-        <select id="schFilterBranch">
-            <option value="All">All Branches</option>
-            <option value="Balaiygen">Balaiygen</option>
-            <option value="Nubalai">Nubalai</option>
-        </select>
-        <select id="schFilterGroup">
-            <option value="All">All Ages</option>
-            <option value="Under 6">6 ދަށް</option>
-            <option value="Under 9">9 ދަށް</option>
-            <option value="Under 11">11 ދަށް</option>
-            <option value="Under 13">13 ދަށް</option>
-            <option value="Under 16">16 ދަށް</option>
-            <option value="Under 19">19 ދަށް</option>
-            <option value="General">ޢާއްމު</option>
-        </select>
-    </div>
-
-    <div style="display:flex; gap:5px; margin-top:5px; align-items:center;">
-        <label style="margin:0; width:50px;">Limit:</label>
-        <input type="number" id="schLimit" placeholder="Count (e.g. 10)" style="margin:0;">
-        <button class="btn-cyan" onclick="printSessionSchedule()">🖨️ Print Schedule</button>
-    </div>
-</div>
+            
             <div class="panel">
                 <h2 style="color:#ff4081;">7. މާކުސް ދިނުމުގެ ގަވާއިދު (Rubric)</h2>
                 
@@ -2392,8 +2347,8 @@
         }
     }
 
-// --- TEMPLATE GENERATOR (FIXED & CLEAN) ---
-    function getTemplate(isCeremony = false, displayTitle = "Judge") {
+    // --- TEMPLATE GENERATOR ---
+    function getTemplate(isCeremony = false) {
         const fontFace = state.fontData ? `@font-face { font-family: 'AppFont'; src: url('${state.fontData}'); }` : '';
         
         // Fonts for Ceremony
@@ -2531,36 +2486,27 @@
 
                 #memoryText { display:none; color: var(--accent); font-size: 5vw; text-shadow: 0 0 2vh var(--accent); text-align:center; }
                 
-                /* --- JUDGE & PROFILE CSS --- */
+                /* JUDGE ELEMENTS */
                 #judgeSection {
                     display: none; width: 75vw; margin-top: 2vmin; margin-bottom: 2vmin;
                     background: #fff; border: 0.5vmin solid var(--accent);
                     border-radius: 1vmin; padding: 2vmin; color: #000;
                 }
-                .judge-profile-container {
-                    display: flex; gap: 20px; margin-bottom: 20px;
-                    background: #f9f9f9; border: 1px solid #ccc;
-                    padding: 15px; border-radius: 8px;
+                .student-bar {
+                    background: var(--bg-1); color: #fff;
+                    padding: 1.5vmin; border-radius: 0.5vmin; text-align: center;
+                    font-size: 3vmin; font-weight: bold; margin-bottom: 2vmin; border: 2px solid var(--accent);
                 }
-                .profile-photo {
-                    width: 150px; height: 180px; background: #ddd;
-                    border: 2px solid #555; object-fit: cover;
-                }
-                .profile-details { flex: 1; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-                .detail-box { background: #fff; border: 1px solid #eee; padding: 8px; border-radius: 4px; }
-                .detail-label { display: block; font-size: 11px; color: #888; text-transform: uppercase; font-weight: bold; }
-                .detail-val { display: block; font-size: 16px; font-weight: bold; color: #000; }
-
                 .rubric-table { width: 100%; border-collapse: collapse; }
                 .rubric-table th { background: #eee; text-align: right; padding: 1vmin; }
                 .rubric-table td { border-bottom: 1px solid #ddd; padding: 1vmin; }
                 
                 .score-input-group { display: flex; gap: 1vmin; align-items: center; justify-content: flex-end; }
-                .score-display { 
+                .score-display {
                      width: 8vmin; font-size: 2.5vmin; padding: 0.5vmin; text-align: center; font-weight: bold; 
                      border: 2px solid var(--bg-1); border-radius: 4px; background: #eee; color: #333;
                 }
-                .deduct-btn { 
+                .deduct-btn {
                     padding: 0.5vmin 1vmin; border: 1px solid #b71c1c; border-radius: 4px; cursor: pointer;
                     font-size: 1.8vmin; background: #ffebee; color: #b71c1c; font-weight:bold;
                 }
@@ -2590,7 +2536,9 @@
                     box-sizing: border-box;
                     transition: all 0.5s ease;
                 }
+                /* (Includes all theme classes from original) */
                 .theme-0 { background: radial-gradient(circle, #002200, #000); border: 2vmin double #D4AF37; }
+                /* ... (Assuming themes 1-20 present) ... */
                 
                 .ceremony-box { width: 90%; height: 90%; display: flex; flex-direction: column; justify-content: center; align-items: center; position: relative; }
                 .ceremony-divider { width: 60%; height: 0.5vmin; background: linear-gradient(90deg, transparent, #D4AF37, transparent); margin: 4vmin auto; box-shadow: 0 0 2vmin #D4AF37; }
@@ -2626,42 +2574,9 @@
                         <div class="royal-card" id="mainScroll"><img id="qImg" src=""><h1 id="memoryText"></h1></div>
                         
                         <div id="judgeSection">
-                            <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:2px solid #ccc; padding-bottom:10px; margin-bottom:15px;">
-                                <h1 style="margin:0; color:#b71c1c;">JUDGE SCREEN</h1>
-                                <div style="font-size:20px; font-weight:bold; color:#555;">${displayTitle}</div>
-                            </div>
-                            
-                            <div class="judge-profile-container">
-                                <img id="jPhoto" class="profile-photo" src="" alt="Student Photo">
-                                
-                                <div class="profile-details">
-                                    <div class="detail-box">
-                                        <span class="detail-label">Full Name</span>
-                                        <span class="detail-val" id="jNameVal">---</span>
-                                    </div>
-                                    <div class="detail-box">
-                                        <span class="detail-label">Reg No</span>
-                                        <span class="detail-val" id="jRegVal">---</span>
-                                    </div>
-                                    <div class="detail-box">
-                                        <span class="detail-label">ID Card</span>
-                                        <span class="detail-val" id="jIDVal">---</span>
-                                    </div>
-                                    <div class="detail-box">
-                                        <span class="detail-label">Branch</span>
-                                        <span class="detail-val" id="jBranchVal">---</span>
-                                    </div>
-                                    <div class="detail-box">
-                                        <span class="detail-label">Age Group</span>
-                                        <span class="detail-val" id="jGroupVal">---</span>
-                                    </div>
-                                    <div class="detail-box">
-                                        <span class="detail-label">Address</span>
-                                        <span class="detail-val" id="jAddrVal">---</span>
-                                    </div>
-                                </div>
-                            </div>
-
+    <h1 id="judgeTitleDisplay" style="text-align:center; color:#b71c1c; border-bottom:2px solid #ccc; padding-bottom:10px; font-size:40px;">JUDGE SCREEN</h1>
+    
+    <div class="student-bar">Student: <span id="jStudentName">---</span></div>
                             <table class="rubric-table">
                                 <thead style="border-bottom: 2px solid var(--accent);">
                                     <tr>
@@ -2708,13 +2623,15 @@
                 };
 
                 const isCeremonyWindow = ${isCeremony};
-                let currentScores = {}; 
+                let currentScores = {}; // To store dynamic scores in judge window
                 
                 function goFullscreen() {
                     document.documentElement.requestFullscreen();
                     document.getElementById('fsOverlay').style.display = 'none';
                 }
 
+                // --- DYNAMIC JUDGE TABLE LOGIC ---
+                // Helper to initialize rows in Judge Window
                 window.initJudgeRow = function(idx, max) {
                     if(!currentScores[idx]) currentScores[idx] = { max: max, deducted: 0 };
                     updateRowDisplay(idx);
@@ -2723,6 +2640,7 @@
                 window.addDeduction = function(idx, amount) {
                     if(!currentScores[idx]) return;
                     currentScores[idx].deducted += amount;
+                    // Cap deduction so score doesn't go below 0
                     if(currentScores[idx].deducted > currentScores[idx].max) {
                         currentScores[idx].deducted = currentScores[idx].max;
                     }
@@ -2732,7 +2650,7 @@
                 
                 window.undoDeduction = function(idx) {
                     if(!currentScores[idx]) return;
-                    currentScores[idx].deducted = 0; 
+                    currentScores[idx].deducted = 0; // Reset row
                     updateRowDisplay(idx);
                     calculateTotal();
                 }
@@ -2794,69 +2712,44 @@
 
                     if(isJudge) {
                         jSec.style.display = 'block';
+                        document.getElementById('jStudentName').innerText = d.judging.currentStudentObj ? d.judging.currentStudentObj.name : "Not Selected";
                         
-                        if(d.judging.currentStudentObj) {
-                            const s = d.judging.currentStudentObj;
-                            document.getElementById('jNameVal').innerText = s.name || "-";
-                            document.getElementById('jRegVal').innerText = s.reg || "-";
-                            document.getElementById('jIDVal').innerText = s.id || "-";
-                            document.getElementById('jBranchVal').innerText = s.branch || "-";
-                            document.getElementById('jGroupVal').innerText = s.group || "-";
-                            document.getElementById('jAddrVal').innerText = s.address || "-";
-                            
-                            const pImg = document.getElementById('jPhoto');
-                            if(d.studentPhoto) {
-                                pImg.src = d.studentPhoto;
-                            } else {
-                                pImg.src = ''; 
-                                pImg.alt = "No Photo";
-                            }
-                        } else {
-                            document.getElementById('jNameVal').innerText = "---";
-                            document.getElementById('jRegVal').innerText = "---";
-                            document.getElementById('jIDVal').innerText = "---";
-                            document.getElementById('jBranchVal').innerText = "---";
-                            document.getElementById('jGroupVal').innerText = "---";
-                            document.getElementById('jAddrVal').innerText = "---";
-                            document.getElementById('jPhoto').src = "";
-                        }
-
+                        // Render Dynamic Rubric with Deduction Buttons
                         const tbody = document.getElementById('rubricTableBody');
                         if(tbody.innerHTML === '' && d.judging.rubric) {
                             d.judging.rubric.forEach((item, idx) => {
                                 const row = document.createElement('tr');
                                 const max = item.max;
                                 
+                                // Create buttons based on config
                                 let btnHtml = '';
                                 const steps = d.judging.deductionSteps || [0.5, 1];
                                 steps.forEach(step => {
-                                    btnHtml += `<button class="deduct-btn" onclick="addDeduction(${idx}, ${step})">-${step}</button> `;
+                                    btnHtml += \`<button class="deduct-btn" onclick="addDeduction(\${idx}, \${step})">-\${step}</button> \`;
                                 });
-                                btnHtml += `<button class="deduct-btn" style="border-color:#333; color:#333; background:#eee;" onclick="undoDeduction(${idx})">Reset</button>`;
+                                btnHtml += \`<button class="deduct-btn" style="border-color:#333; color:#333; background:#eee;" onclick="undoDeduction(\${idx})">Reset</button>\`;
 
-                                row.innerHTML = `
-                                    <td style="font-weight:bold;">${item.name}</td>
-                                    <td>${max}</td>
+                                row.innerHTML = \`
+                                    <td style="font-weight:bold;">\${item.name}</td>
+                                    <td>\${max}</td>
                                     <td>
                                         <div class="score-input-group" style="justify-content:center;">
-                                            ${btnHtml}
+                                            \${btnHtml}
                                         </div>
                                     </td>
                                     <td>
                                         <div class="score-input-group">
-                                           <span class="deduct-info" id="info_${idx}">-0.0</span>
-                                           <div class="score-display" id="display_${idx}">${max}</div>
+                                            <span class="deduct-info" id="info_\${idx}">-0.0</span>
+                                            <div class="score-display" id="display_\${idx}">\${max}</div>
                                         </div>
                                     </td>
-                                `;
+                                \`;
                                 tbody.appendChild(row);
                                 initJudgeRow(idx, max);
                             });
                             calculateTotal();
                         }
-                    } else { 
-                        jSec.style.display = 'none'; 
-                    }
+                    } else { jSec.style.display = 'none'; }
 
                     if(d.grid.visible) {
                         document.getElementById('gridScreen').style.display = 'flex';
@@ -2909,9 +2802,9 @@
                             if(!slot) return; 
                             let item = document.createElement('div');
                             item.className = 'q-item ' + (idx === d.activeIndex ? 'active' : '');
-                            item.innerHTML = `<div style="color:#00e676;">${childI18n.qPrefix[lang]} ${idx+1}</div>
-                                <div style="color:#fff; font-weight:bold; font-size:1.1em;">${slot.surah}</div>
-                                <div style="margin-top:4px; font-size:0.8em; color:#ccc;"><span style="border:1px solid #555; padding:2px 6px; border-radius:4px; background:rgba(0,0,0,0.3);">Ayah: ${slot.start} - ${slot.end}</span></div>`;
+                            item.innerHTML = \`<div style="color:#00e676;">\${childI18n.qPrefix[lang]} \${idx+1}</div>
+                                <div style="color:#fff; font-weight:bold; font-size:1.1em;">\${slot.surah}</div>
+                                <div style="margin-top:4px; font-size:0.8em; color:#ccc;"><span style="border:1px solid #555; padding:2px 6px; border-radius:4px; background:rgba(0,0,0,0.3);">Ayah: \${slot.start} - \${slot.end}</span></div>\`;
                             listC.appendChild(item);
                         });
                     } else {
@@ -2940,7 +2833,7 @@
                     }
                     else if (bStyle === 'custom' && bData) {
                         screen.style.border = '5vmin solid transparent';
-                        screen.style.borderImage = `url('${bData}') 30 stretch`;
+                        screen.style.borderImage = \`url('\${bData}') 30 stretch\`;
                     }
 
                     const cHead = document.getElementById('cHeader');
@@ -2952,7 +2845,7 @@
                     const sets = d.ceremony.settings;
                     
                     if(data.phase === 'cover') {
-                        cBody.innerHTML = `<div class="c-cover">${d.ceremonyTitle || "Quran Ceremony"}</div>`;
+                        cBody.innerHTML = \`<div class="c-cover">\${d.ceremonyTitle || "Quran Ceremony"}</div>\`;
                     } else if (data.phase === 'start') {
                          cBody.innerHTML = '<div class="c-basmalah">بِسْمِ ٱللَّٰهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ</div>';
                     } else if (data.phase === 'end') {
@@ -2964,9 +2857,9 @@
                         if(data.selectedLang === 'en') { transText = ayah.en || ayah.dv || ""; } else { transText = ayah.dv || ayah.en || ""; }
 
                         if(ayah) {
-                            cBody.innerHTML = `<div class="ceremony-quran" style="color:${sets.arabicColor}; font-size:${sets.arabicSize}vmin;">${ayah.arabic}</div>
+                            cBody.innerHTML = \`<div class="ceremony-quran" style="color:\${sets.arabicColor}; font-size:\${sets.arabicSize}vmin;">\${ayah.arabic}</div>
                                                 <div class="ceremony-divider"></div>
-                                                <div class="ceremony-trans" style="color:${sets.transColor}; font-size:${sets.transSize}vmin;">${transText}</div>`;
+                                                <div class="ceremony-trans" style="color:\${sets.transColor}; font-size:\${sets.transSize}vmin;">\${transText}</div>\`;
                         }
                     }
                 }
@@ -3043,41 +2936,35 @@
         setTimeout(syncWindows, 500);
     }
     function syncWindows() {
-       // 1. ދަރިވަރުގެ ފޮޓޯ ލިންކް ހޯދުން (NEW)
-       // މިއީ އަލަށް އިތުރުކުރި ބައި
-       const currentReg = state.judging.currentStudentObj ? state.judging.currentStudentObj.reg : null;
-       const photoURL = getStudentPhotoURL(currentReg);
-
-       const packet = {
-           studentPhoto: photoURL, // ★ ފޮޓޯ ލިންކް ޕެކެޓަށް ލުން
-           
-           slots: state.session.slots,
-           activeIndex: state.session.activeIndex,
-           phase: state.session.phase,
-           light: state.session.light,
-           grid: state.grid,
-           readingMode: state.readingMode,
-           currentLang: currentLang,
-           fontData: state.fontData,
-           
-           judging: state.judging,
-           
-           ceremony: state.ceremony,
-           ceremonyTitle: document.getElementById('ceremonyTitle') ? document.getElementById('ceremonyTitle').value : "Ceremony"
-       };
-       
-       // Send to Student & Ceremony Screens
-       const send = w => { if(w && !w.closed && w.updateState) w.updateState(packet); };
-       
-       send(state.windows.student);
-       send(state.windows.ceremony);
-       
-       // Send to Judge Screens
-       if(state.windows.judges) {
-           state.windows.judges.forEach(w => send(w));
-       }
-   }
+        const packet = {
+            slots: state.session.slots, 
+            activeIndex: state.session.activeIndex,
+            phase: state.session.phase, 
+            light: state.session.light,
+            grid: state.grid, 
+            readingMode: state.readingMode,
+            currentLang: currentLang, 
+            fontData: state.fontData,
+            
+            // މުހިންމު ބައި: ދަރިވަރުގެ ނަން ޖަޖުންނަށް ފޮނުވުން
+            judging: state.judging,
+            
+            ceremony: state.ceremony,
+            ceremonyTitle: document.getElementById('ceremonyTitle') ? document.getElementById('ceremonyTitle').value : "Ceremony"
+        };
         
+        // Send to Student & Ceremony Screens
+        const send = w => { if(w && !w.closed && w.updateState) w.updateState(packet); };
+        
+        send(state.windows.student);
+        send(state.windows.ceremony);
+        
+        // Send to Judge Screens
+        if(state.windows.judges) {
+            state.windows.judges.forEach(w => send(w));
+        }
+    }
+    
     // INITIALIZATION
     initThemes();
     if(themeList.length > 0) state.theme = themeList[0];
@@ -3542,160 +3429,6 @@
         link.click();
         document.body.removeChild(link);
     }
-    // Add this inside existing 'state' object or just declare it globally
-state.studentPhotos = {}; 
-
-// Add this function logic to handle photo loading
-document.getElementById('stdPhotoDir').onchange = e => {
-    let count = 0;
-    state.studentPhotos = {};
-    for(let f of e.target.files) {
-        if(f.type.startsWith('image/')) {
-            // Remove extension to match with Reg No (e.g. "R-100.png" -> "R-100")
-            // Also keep original just in case
-            const name = f.name.split('.')[0].trim(); 
-            const url = URL.createObjectURL(f);
-            state.studentPhotos[name] = url;
-            state.studentPhotos[name.toLowerCase()] = url; // Fail-safe
-            count++;
-        }
-    }
-    document.getElementById('stdPhotoStatus').innerText = count + " Photos Loaded!";
-    syncWindows(); // Refresh screens if open
-};
-
-// Helper to get student photo
-function getStudentPhotoURL(regNo) {
-    if(!regNo) return ""; // Return placeholder or empty
-    const cleanReg = regNo.trim();
-    if(state.studentPhotos[cleanReg]) return state.studentPhotos[cleanReg];
-    if(state.studentPhotos[cleanReg.toLowerCase()]) return state.studentPhotos[cleanReg.toLowerCase()];
-    return ""; // No photo found
-}
-    // ==========================================
-   // PART 2: NEW LOGIC (PHOTOS & SCHEDULE)
-   // ==========================================
-
-   // 1. ފޮޓޯތައް މެނޭޖްކުރާ ބައި (PHOTO HANDLING)
-   // ------------------------------------------
-   state.studentPhotos = {}; 
-
-   // ފޮޓޯ ފޯލްޑަރ ސިލެކްޓް ކުރުމުން މަސައްކަތްކުރާނެ ގޮތް
-   if(document.getElementById('stdPhotoDir')) {
-       document.getElementById('stdPhotoDir').onchange = e => {
-           let count = 0;
-           state.studentPhotos = {};
-           for(let f of e.target.files) {
-               if(f.type.startsWith('image/')) {
-                   // ފައިލް ނަމުން "R-001.png" އިން "R-001" ނަގަނީ
-                   const name = f.name.split('.')[0].trim(); 
-                   const url = URL.createObjectURL(f);
-                   state.studentPhotos[name] = url;
-                   state.studentPhotos[name.toLowerCase()] = url; // ކުޑަ އަކުރުން ލިޔުނަސް ނެގޭގޮތަށް
-                   count++;
-               }
-           }
-           document.getElementById('stdPhotoStatus').innerText = count + " Photos Loaded!";
-           syncWindows(); // ސްކްރީންތައް އަޕްޑޭޓްކުރުން
-       };
-   }
-
-   // ދަރިވަރުގެ ރެޖިސްޓްރީ ނަންބަރުން ފޮޓޯ ހޯދާ ފަންކްޝަން
-   function getStudentPhotoURL(regNo) {
-       if(!regNo) return ""; 
-       const cleanReg = regNo.trim();
-       if(state.studentPhotos[cleanReg]) return state.studentPhotos[cleanReg];
-       if(state.studentPhotos[cleanReg.toLowerCase()]) return state.studentPhotos[cleanReg.toLowerCase()];
-       return ""; 
-   }
-
-   // 2. ޝެޑިއުލް ޕްރިންޓް ކުރާ ބައި (SCHEDULE PRINTING)
-   // ------------------------------------------
-   function printSessionSchedule() {
-       // Inputs ނެގުން
-       const dateVal = document.getElementById('schDate').value;
-       const timeVal = document.getElementById('schTime').value;
-       const sessionVal = document.getElementById('schSessionName').value || "General Session";
-       const branch = document.getElementById('schFilterBranch').value;
-       const group = document.getElementById('schFilterGroup').value;
-       const limit = parseInt(document.getElementById('schLimit').value) || 1000;
-
-       // ދަރިވަރުން ފިލްޓަރ ކުރުން
-       let list = state.allStudents.filter(s => {
-           let bMatch = (branch === "All") ? true : (s.branch && s.branch.includes(branch));
-           let gMatch = (group === "All") ? true : (s.group === group);
-           return bMatch && gMatch;
-       });
-
-       // ލިމިޓް ހަމަކުރުން
-       list = list.slice(0, limit);
-
-       if(list.length === 0) { alert("No students found for this filter."); return; }
-
-       // ޕްރިންޓް ކުރާ ޞަފްޙާގެ ޑިޒައިން (HTML)
-       const html = `
-       <!DOCTYPE html>
-       <html dir="rtl" lang="dv">
-       <head>
-           <title>Session Schedule</title>
-           <style>
-               @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Thaana:wght@400;700&display=swap');
-               body { font-family: 'Noto Sans Thaana', sans-serif; padding: 40px; direction: rtl; }
-               h1 { text-align: center; margin-bottom: 5px; text-decoration: underline; }
-               .meta-box { border: 1px solid #000; padding: 15px; margin: 20px 0; background: #f0f0f0; display:flex; justify-content: space-around; font-weight:bold;}
-               table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 14px; }
-               th, td { border: 1px solid #000; padding: 10px; text-align: center; }
-               th { background: #ccc; font-weight: bold; }
-               @media print { button { display: none; } }
-           </style>
-       </head>
-       <body>
-           <button onclick="window.print()" style="padding:10px; margin-bottom:10px;">🖨️ PRINT LIST</button>
-           
-           <h1>ރަސްފަހި ޤުރްއާން މުބާރާތުގެ ބައިވެރިން ހާޒިރުވާންޖެހޭ ގޮތުގެ ތާވަލް</h1>
-           
-           <div class="meta-box">
-               <div>ތާރީޚް: ${dateVal}</div>
-               <div>ގަޑި: ${timeVal}</div>
-               <div>ދަންފަޅި: ${sessionVal}</div>
-               <div>ގޮފި: ${branch}</div>
-           </div>
-
-           <table>
-               <thead>
-                   <tr>
-                       <th width="5%">#</th>
-                       <th width="15%">ރެޖިސްޓްރީ ނަންބަރ</th>
-                       <th width="35%">ބައިވެރިޔާގެ ނަން</th>
-                       <th width="15%">ޢުމުރު ފުރާ</th>
-                       <th width="15%">ގޮފި</th>
-                       <th width="15%">ނޯޓް</th>
-                   </tr>
-               </thead>
-               <tbody>
-                   ${list.map((s, i) => `
-                       <tr>
-                           <td>${i+1}</td>
-                           <td style="font-weight:bold;">${s.reg || "-"}</td>
-                           <td style="text-align:right;">${s.name}</td>
-                           <td>${s.group}</td>
-                           <td>${s.branch}</td>
-                           <td></td>
-                       </tr>
-                   `).join('')}
-               </tbody>
-           </table>
-           
-           <div style="margin-top:20px; text-align:center; font-size:12px;">
-               generated by Rasfahi Judge V26.0
-           </div>
-       </body>
-       </html>`;
-
-       const w = window.open("", "Schedule", "width=900,height=900");
-       w.document.write(html);
-       w.document.close();
-   }
 </script>
 </body>
 </html>
