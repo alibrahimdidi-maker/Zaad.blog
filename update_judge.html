@@ -3416,6 +3416,87 @@
         link.click();
         document.body.removeChild(link);
     }
+    // --- PRINT ATTENDANCE LIST FUNCTION ---
+    function printAttendanceList() {
+        // 1. Get Session Details
+        const date = document.getElementById('attDate').value || "....................";
+        const time = document.getElementById('attTime').value || "..........";
+        const venue = document.getElementById('attVenue').value || "....................";
+        const branchFilter = document.getElementById('rptFilterBranch').value; // Uses existing filter
+        const groupFilter = document.getElementById('rptFilterGroup').value;   // Uses existing filter
+
+        // 2. Filter Students
+        let list = getFilteredResults(); // Reusing your existing filter logic
+        // If getting "Filtered Results" sorts by Score, we might want to just sort by Name or Reg for attendance
+        list.sort((a, b) => (a.reg || "").localeCompare(b.reg || "")); 
+
+        if(list.length === 0) { alert("No students found in selected Category/Branch!"); return; }
+
+        // 3. Build HTML
+        const html = `
+        <!DOCTYPE html>
+        <html dir="rtl" lang="dv">
+        <head>
+            <title>Attendance List</title>
+            <style>
+                @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Thaana:wght@400;700&display=swap');
+                body { font-family: 'Noto Sans Thaana', sans-serif; padding: 40px; direction: rtl; }
+                h1 { text-align: center; margin-bottom: 5px; }
+                .meta-box { border: 1px solid #000; padding: 15px; margin-bottom: 20px; display:flex; justify-content: space-between; font-weight:bold; }
+                table { width: 100%; border-collapse: collapse; font-size: 12px; }
+                th, td { border: 1px solid #000; padding: 8px; text-align: center; }
+                th { background: #eee; }
+                @media print { button { display: none; } }
+            </style>
+        </head>
+        <body>
+            <button onclick="window.print()" style="margin-bottom:20px; padding:10px;">Print List</button>
+            <h1>ހާޒިރީ ލިސްޓް (Attendance Sheet)</h1>
+            
+            <div class="meta-box">
+                <div>ތާރީޚް: ${date}</div>
+                <div>ގަޑި: ${time}</div>
+                <div>ތަން: ${venue}</div>
+            </div>
+            <div class="meta-box" style="margin-top:-21px; border-top:none; background:#f9f9f9;">
+                <div>ގޮފި: ${branchFilter}</div>
+                <div>ޢުމުރު: ${groupFilter}</div>
+            </div>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th width="5%">#</th>
+                        <th width="10%">Reg No</th>
+                        <th width="25%">Student Name</th>
+                        <th width="20%">Address</th>
+                        <th width="15%">Phone</th>
+                        <th width="10%">Signature</th>
+                        <th width="15%">Remarks</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${list.map((s, i) => `
+                        <tr>
+                            <td>${i+1}</td>
+                            <td>${s.reg || "-"}</td>
+                            <td style="text-align:right; font-weight:bold;">${s.name}</td>
+                            <td style="text-align:right;">${s.address || "-"}</td>
+                            <td>${s.phone || "-"}</td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    `).join('')}
+                </tbody>
+            </table>
+        </body>
+        </html>
+        `;
+
+        const w = window.open("", "AttList", "width=1000,height=900");
+        w.document.write(html);
+        w.document.close();
+    }
 </script>
 </body>
 </html>
