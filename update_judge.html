@@ -3474,6 +3474,36 @@
         link.click();
         document.body.removeChild(link);
     }
+    // Add this inside existing 'state' object or just declare it globally
+state.studentPhotos = {}; 
+
+// Add this function logic to handle photo loading
+document.getElementById('stdPhotoDir').onchange = e => {
+    let count = 0;
+    state.studentPhotos = {};
+    for(let f of e.target.files) {
+        if(f.type.startsWith('image/')) {
+            // Remove extension to match with Reg No (e.g. "R-100.png" -> "R-100")
+            // Also keep original just in case
+            const name = f.name.split('.')[0].trim(); 
+            const url = URL.createObjectURL(f);
+            state.studentPhotos[name] = url;
+            state.studentPhotos[name.toLowerCase()] = url; // Fail-safe
+            count++;
+        }
+    }
+    document.getElementById('stdPhotoStatus').innerText = count + " Photos Loaded!";
+    syncWindows(); // Refresh screens if open
+};
+
+// Helper to get student photo
+function getStudentPhotoURL(regNo) {
+    if(!regNo) return ""; // Return placeholder or empty
+    const cleanReg = regNo.trim();
+    if(state.studentPhotos[cleanReg]) return state.studentPhotos[cleanReg];
+    if(state.studentPhotos[cleanReg.toLowerCase()]) return state.studentPhotos[cleanReg.toLowerCase()];
+    return ""; // No photo found
+}
 </script>
 </body>
 </html>
