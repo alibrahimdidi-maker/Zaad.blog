@@ -3373,6 +3373,47 @@ quiz: {
                     body { -webkit-print-color-adjust: exact; }
                     @page { size: A4 landscape; margin: 10mm; } 
                 }
+                @media print {
+            button { display: none; }
+            body { -webkit-print-color-adjust: exact; }
+            @page { size: A4 landscape; margin: 10mm; } 
+        }
+
+        /* ★★★ މިތަނަށް ތިރީގައިވާ ކޯޑު ޕޭސްޓް ކުރައްވާ! ★★★ */
+
+        .student-info-bar {
+            background: #fff; 
+            border: 2px solid #D4AF37; 
+            padding: 10px; 
+            border-radius: 8px; 
+            margin-bottom: 15px;
+            display: flex; 
+            justify-content: space-around; 
+            align-items: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .si-item { text-align: center; }
+        .si-lbl { font-size: 10px; color: #666; display: block; }
+        .si-val { font-size: 16px; font-weight: bold; color: #000; }
+
+        .quiz-display { 
+            text-align: center; 
+            padding: 20px; 
+            font-size: 30px; 
+            font-weight: bold; 
+            color: #000; 
+        }
+        .quiz-ans { 
+            margin-top: 20px; 
+            padding: 15px; 
+            color: #fff; 
+            border-radius: 10px; 
+            display: none; 
+        }
+
+    </style> 
+
+މިގޮތަށް ޕޭސްޓް ކޮށްލެއްވުމުން CSS ގެ ބައި ނިމުނީއެވެ. ދެން އޮތީ HTML އާއި JavaScript ގެ ބަޔަށް ބަދަލު ގެނައުމެވެ.
             </style>
         </head>
         <body>
