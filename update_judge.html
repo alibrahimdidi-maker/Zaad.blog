@@ -3459,6 +3459,24 @@ quiz: {
         link.click();
         document.body.removeChild(link);
     }
+    function filterStudentList() {
+    const term = document.getElementById('stdSearchInput').value.toLowerCase();
+    const sel = document.getElementById('studentSelector');
+    sel.innerHTML = '<option value="">-- Manual Entry --</option>';
+    
+    if(!state.allStudents) return;
+
+    state.allStudents.forEach((s, idx) => {
+        // Search by Name, ID, or Reg No
+        const txt = `${s.name} (${s.id} / ${s.reg})`;
+        if (txt.toLowerCase().includes(term)) {
+            let opt = document.createElement('option');
+            opt.value = idx;
+            opt.innerText = txt;
+            sel.appendChild(opt);
+        }
+    });
+}
 </script>
 </body>
 </html>
