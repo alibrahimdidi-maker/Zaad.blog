@@ -862,7 +862,20 @@
                         <input type="range" id="cTransSize" class="range-slider" min="2" max="15" step="0.5" value="5" oninput="updateCeremonyState()">
                     </div>
                 </div>
+<input type="range" id="cTransSize" class="range-slider" min="2" max="15" step="0.5" value="5" oninput="updateCeremonyState()">
+                </div>
+            </div>
 
+            <div style="margin-top:5px; margin-bottom:5px;">
+                <small style="color:#aaa;">Translation Mode (ތަރުޖަމާ ދައްކާގޮތް):</small>
+                <select id="cTransMode" onchange="updateCeremonyState()">
+                    <option value="both">Both (ދިވެހި & English)</option>
+                    <option value="dv">Dhivehi Only (ހަމައެކަނި ދިވެހި)</option>
+                    <option value="en">English Only (ހަމައެކަނި އިނގިރޭސި)</option>
+                </select>
+            </div>
+
+            <hr style="border-color:#333; margin:8px 0;">
                 <hr style="border-color:#333; margin:8px 0;">
 
                 <label style="margin-top:10px; color:#00e5ff;">3. ކިޔެވުން ސެލެކްޓް (Selection):</label>
