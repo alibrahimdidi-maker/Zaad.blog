@@ -1398,14 +1398,30 @@
         });
     }
 
+    // ... މަތީގައި މިބައި އިންނާނެ ...
+    function populateStudentSelector() {
+        const sel = document.getElementById('studentSelector');
+        sel.innerHTML = '<option value="">-- Manual Entry --</option>';
+        state.allStudents.forEach((s, idx) => {
+            let opt = document.createElement('option');
+            opt.value = idx;
+            opt.innerText = `${s.name} (${s.group})`;
+            sel.appendChild(opt);
+        });
+    }
+
+    // ▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼
+    // މިއޮތީ ބަދަލުކުރަންވީ ފަންކްޝަން ލާނެތަން:
+    
     function populateStudentForm(idx) {
         if(idx === "") return;
         const s = state.allStudents[idx];
         if(!s) return;
         
+        // ފޯމު ފުރިހަމަ ކުރުން
         document.getElementById('stdName').value = s.name || "";
         document.getElementById('stdID').value = s.id || "";
-        document.getElementById('stdGroup').value = s.group || "Under 6"; // Try to match or leave default
+        document.getElementById('stdGroup').value = s.group || "Under 6"; 
         document.getElementById('stdBranch').value = s.branch || "";
         document.getElementById('stdAge').value = s.age || "";
         document.getElementById('stdAddr').value = s.address || "";
@@ -1413,13 +1429,13 @@
         document.getElementById('stdParent').value = s.parent || "";
         document.getElementById('stdParentPhone').value = s.parentPhone || "";
         document.getElementById('stdEmail').value = s.email || "";
+        document.getElementById('stdInstType').value = s.instType || "School";
+
+        registerStudent();
     }
 
     window.submitJudgeScore = function(judgeId, totalScore) {
-        state.judging.liveScores[judgeId] = totalScore;
-        updateScoreMonitor();
     }
-
     function updateScoreMonitor() {
         let txt = "";
         let count = 0;
