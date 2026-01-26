@@ -1353,8 +1353,7 @@
         saveToLocal(); // ޑޭޓާ ސޭވްކުރުން
         syncWindows(); // ★ ހުރިހާ ވިންޑޯއަކަށް (ޖަޖުންނަށް) ވަގުތުން ފޮނުވުން
     }
-    // Load Batch from CSV (Updated to read Institution Type)
-    function loadStudentBatch() {
+function loadStudentBatch() {
         const file = document.getElementById('batchCsv').files[0];
         if(!file) return;
         
@@ -1363,29 +1362,34 @@
             const rows = e.target.result.split('\n');
             state.allStudents = [];
             
-            // Skipping header row 0
+            // 1 ވަނަ ރޯ (Headers) ދޫކޮށްލުމަށްފަހު ޑޭޓާ ނެގުން
             for(let i=1; i<rows.length; i++) {
-                const cols = rows[i].split(',');
-                if(cols.length < 2) continue; 
+                // ކޮމާ (,) އިން ވަކިކޮށްފައިވާ ބައިތައް ނެގުން
+                // CSV ގައި ކޮލަމްތައް ހުރި ތަރުތީބު: 
+                // 0:Name, 1:ID, 2:Group, 3:Branch, 4:Age, 5:Address, 
+                // 6:Phone, 7:Parent, 8:ParentPhone, 9:Email, 10:InstType
+                
+                const cols = rows[i].split(','); 
+                if(cols.length < 2) continue; // ހުސް ރޯތައް ދޫކޮށްލުން
                 
                 state.allStudents.push({
-                    name: cols[0]?.trim(),
-                    id: cols[1]?.trim(),
-                    group: cols[2]?.trim(),
-                    branch: cols[3]?.trim(),
-                    age: cols[4]?.trim(),
-                    address: cols[5]?.trim(),
-                    phone: cols[6]?.trim(),
-                    parent: cols[7]?.trim(),
-                    parentPhone: cols[8]?.trim(),
-                    email: cols[9]?.trim(),
-                    // ★ Reading the new column (Index 10)
+                    name: cols[0]?.trim(),         // Name
+                    id: cols[1]?.trim(),           // ID
+                    group: cols[2]?.trim(),        // Group
+                    branch: cols[3]?.trim(),       // Branch
+                    age: cols[4]?.trim(),          // Age
+                    address: cols[5]?.trim(),      // Address
+                    phone: cols[6]?.trim(),        // Phone
+                    parent: cols[7]?.trim(),       // Parent
+                    parentPhone: cols[8]?.trim(),  // ParentPhone
+                    email: cols[9]?.trim(),        // Email
+                    // 10 ވަނަ ކޮލަމަކީ މުއައްސަސާގެ ވައްތަރު (School/Office/Private)
                     instType: cols[10]?.trim() || "School" 
                 });
             }
             populateStudentSelector();
             saveToLocal();
-            alert(`Loaded ${state.allStudents.length} students with Institution Types.`);
+            alert(`✅ Successfully Loaded ${state.allStudents.length} Students from CSV!`);
         };
         r.readAsText(file);
     }
