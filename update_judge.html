@@ -1353,53 +1353,59 @@
         saveToLocal(); // ޑޭޓާ ސޭވްކުރުން
         syncWindows(); // ★ ހުރިހާ ވިންޑޯއަކަށް (ޖަޖުންނަށް) ވަގުތުން ފޮނުވުން
     }
-function loadStudentBatch() {
+// --- 1. CSV ލޯޑުކުރާ ފަންކްޝަން (Updated for Fake Master Sheet) ---
+    function loadStudentBatch() {
         const file = document.getElementById('batchCsv').files[0];
-        if(!file) return;
+        if(!file) { alert("Please select a CSV file first!"); return; }
         
         const r = new FileReader();
         r.onload = e => {
+            // CSV ލައިންތަކަށް ބަހާލުން
             const rows = e.target.result.split('\n');
             state.allStudents = [];
             
-            // 1 ވަނަ ރޯ (Headers) ދޫކޮށްލުމަށްފަހު ޑޭޓާ ނެގުން
+            // ހެޑަރ (ފުރަތަމަ ލައިން) ދޫކޮށްލާފައި ޑޭޓާ ނެގުން
             for(let i=1; i<rows.length; i++) {
-                // ކޮމާ (,) އިން ވަކިކޮށްފައިވާ ބައިތައް ނެގުން
-                // CSV ގައި ކޮލަމްތައް ހުރި ތަރުތީބު: 
-                // 0:Name, 1:ID, 2:Group, 3:Branch, 4:Age, 5:Address, 
-                // 6:Phone, 7:Parent, 8:ParentPhone, 9:Email, 10:InstType
+                // ރޯ އެއްކޮށް ނެގުމަށްފަހު، ކޮމާތަކުން ވަކިކުރުން
+                // ނޯޓް: މިއީ ސާދާ ގޮތަކަށް ހަދާފައިވާ ކޯޑެއް ކަމުން، އެޑްރެސް ތެރޭގައި ކޮމާ ހުރެއްޖެނަމަ މައްސަލަ ޖެހިދާނެ.
+                // އެކަމަކު އަޅުގަނޑުމެން ޖެނެރޭޓްކުރި ފޭކް ފައިލްގައި އެޑްރެސްގައި ކޮމާ ނުހުންނާނެތީ މައްސަލައެއް ނުޖެހޭނެ.
+                const cols = rows[i].split(',');
                 
-                const cols = rows[i].split(','); 
-                if(cols.length < 2) continue; // ހުސް ރޯތައް ދޫކޮށްލުން
+                // ޑޭޓާ ހަމައަށް ހުރިތޯ ބެލުން (ނަމާއި އައިޑީ ނެތްނަމަ ދޫކޮށްލާނެ)
+                if(cols.length < 5) continue; 
                 
                 state.allStudents.push({
-                    name: cols[0]?.trim(),         // Name
-                    id: cols[1]?.trim(),           // ID
-                    group: cols[2]?.trim(),        // Group
-                    branch: cols[3]?.trim(),       // Branch
-                    age: cols[4]?.trim(),          // Age
-                    address: cols[5]?.trim(),      // Address
-                    phone: cols[6]?.trim(),        // Phone
-                    parent: cols[7]?.trim(),       // Parent
-                    parentPhone: cols[8]?.trim(),  // ParentPhone
-                    email: cols[9]?.trim(),        // Email
-                    // 10 ވަނަ ކޮލަމަކީ މުއައްސަސާގެ ވައްތަރު (School/Office/Private)
-                    instType: cols[10]?.trim() || "School" 
+                    name: cols[0]?.trim(),          // Name
+                    id: cols[1]?.trim(),            // ID Card
+                    reg: cols[1]?.trim(),           // Fake Data ގައި ID އާއި Reg އެއްވަރުކުރަނީ
+                    group: cols[2]?.trim(),         // Group
+                    branch: cols[3]?.trim(),        // Branch
+                    age: cols[4]?.trim(),           // Age
+                    address: cols[5]?.trim().replace(/"/g, ''), // Address
+                    phone: cols[6]?.trim(),         // Phone
+                    parent: cols[7]?.trim(),        // Parent Name
+                    parentPhone: cols[8]?.trim(),   // Parent Phone
+                    email: cols[9]?.trim(),         // Email
+                    instType: cols[10]?.trim() || "School" // Institution Type
                 });
             }
-            populateStudentSelector();
-            saveToLocal();
-            alert(`✅ Successfully Loaded ${state.allStudents.length} Students from CSV!`);
+            
+            populateStudentSelector(); // ލިސްޓަށް ނަންތައް އެޅުން
+            saveToLocal(); // ސޭވްކުރުން
+            alert(`✅ Successfully Loaded ${state.allStudents.length} Students from Master Sheet!`);
         };
         r.readAsText(file);
     }
+
+    // --- 2. ޑްރޮޕްޑައުން ލިސްޓަށް ނަންތައް އަޅައިދޭ ފަންކްޝަން ---
     function populateStudentSelector() {
         const sel = document.getElementById('studentSelector');
         sel.innerHTML = '<option value="">-- Manual Entry --</option>';
         state.allStudents.forEach((s, idx) => {
             let opt = document.createElement('option');
             opt.value = idx;
-            opt.innerText = `${s.name} (${s.group})`;
+            // ލިސްޓުގައި ދައްކާނީ: ނަން (ގްރޫޕް) - އައިޑީ
+            opt.innerText = `${s.name} (${s.group}) - ${s.id}`;
             sel.appendChild(opt);
         });
     }
