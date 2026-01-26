@@ -2363,8 +2363,8 @@
         }
     }
 
-    // --- TEMPLATE GENERATOR ---
-    function getTemplate(isCeremony = false) {
+    // --- TEMPLATE GENERATOR (UPDATED FULL FUNCTION) ---
+    function getTemplate(isCeremony = false, titleOverride = "") {
         const fontFace = state.fontData ? `@font-face { font-family: 'AppFont'; src: url('${state.fontData}'); }` : '';
         
         // Fonts for Ceremony
@@ -2380,6 +2380,14 @@
         let borderCSS = `border: 1.5vmin ${th.borderType} ${th.accent}; box-shadow: 0 0 5vmin ${th.accent}80;`;
         if(bStyle === 'custom' && state.borderData) borderCSS = `border: 4vmin solid transparent; border-image: url('${state.borderData}') 30 stretch;`;
         if(bStyle === 'none') borderCSS = "border:none;";
+
+        // Title logic for Judges
+        let displayTitleHTML = "";
+        if(titleOverride) {
+            displayTitleHTML = `<h1 style="text-align:center; color:#b71c1c; border-bottom:2px solid #ccc; padding-bottom:10px; font-size:40px;">${titleOverride}</h1>`;
+        } else {
+             displayTitleHTML = `<h1 id="judgeTitleDisplay" style="text-align:center; color:#b71c1c; border-bottom:2px solid #ccc; padding-bottom:10px; font-size:40px;">JUDGE SCREEN</h1>`;
+        }
 
         return `
         <!DOCTYPE html>
@@ -2590,9 +2598,9 @@
                         <div class="royal-card" id="mainScroll"><img id="qImg" src=""><h1 id="memoryText"></h1></div>
                         
                         <div id="judgeSection">
-    <h1 id="judgeTitleDisplay" style="text-align:center; color:#b71c1c; border-bottom:2px solid #ccc; padding-bottom:10px; font-size:40px;">JUDGE SCREEN</h1>
+                            ${displayTitleHTML}
     
-    <div class="student-bar">Student: <span id="jStudentName">---</span></div>
+                            <div class="student-bar">Student: <span id="jStudentName">---</span></div>
                             <table class="rubric-table">
                                 <thead style="border-bottom: 2px solid var(--accent);">
                                     <tr>
@@ -2647,7 +2655,6 @@
                 }
 
                 // --- DYNAMIC JUDGE TABLE LOGIC ---
-                // Helper to initialize rows in Judge Window
                 window.initJudgeRow = function(idx, max) {
                     if(!currentScores[idx]) currentScores[idx] = { max: max, deducted: 0 };
                     updateRowDisplay(idx);
@@ -2836,7 +2843,6 @@
                     screen.style.display = 'flex';
                     screen.className = 'theme-' + (d.ceremony.settings.themeIndex || 0);
 
-                    // --- BORDER LOGIC (Existing) ---
                     const bStyle = d.ceremony.settings.borderStyle || 'theme';
                     const bData = d.ceremony.settings.borderData;
                     screen.style.border = ''; screen.style.borderImage = '';
@@ -2850,7 +2856,7 @@
                     }
                     else if (bStyle === 'custom' && bData) {
                         screen.style.border = '5vmin solid transparent';
-                        screen.style.borderImage = `url('${bData}') 30 stretch`;
+                        screen.style.borderImage = \`url('\${bData}') 30 stretch\`;
                     }
 
                     const cHead = document.getElementById('cHeader');
@@ -2860,11 +2866,12 @@
 
                     const data = d.ceremony;
                     const sets = d.ceremony.settings;
-                    // ★ NEW: Get the mode
-                    const tMode = sets.transMode || 'both'; 
                     
+                    // --- MODE SELECTION ---
+                    const tMode = sets.transMode || 'both';
+
                     if(data.phase === 'cover') {
-                        cBody.innerHTML = `<div class="c-cover">${d.ceremonyTitle || "Quran Ceremony"}</div>`;
+                        cBody.innerHTML = \`<div class="c-cover">\${d.ceremonyTitle || "Quran Ceremony"}</div>\`;
                     } else if (data.phase === 'start') {
                          cBody.innerHTML = '<div class="c-basmalah">بِسْمِ ٱللَّٰهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ</div>';
                     } else if (data.phase === 'end') {
@@ -2874,32 +2881,27 @@
                         const ayah = data.activeData[data.currentIndex];
                         
                         if(ayah) {
-                            // --- NEW TRANSLATION LOGIC ---
                             let transHTML = "";
                             
-                            // Check Modes
+                            // Check Modes and Build HTML
                             if (tMode === 'both') {
-                                // ދެބަސް އެކުގައި: ދިވެހި މަތީގައި، އިނގިރޭސި ތިރީގައި
-                                if(ayah.dv) transHTML += `<div class="ceremony-trans" style="color:${sets.transColor}; font-size:${sets.transSize}vmin; margin-bottom:1vmin;">${ayah.dv}</div>`;
-                                if(ayah.en) transHTML += `<div class="ceremony-trans" style="color:${sets.transColor}; font-size:${sets.transSize * 0.9}vmin; opacity:0.9; font-family:sans-serif !important;">${ayah.en}</div>`;
+                                if(ayah.dv) transHTML += \`<div class="ceremony-trans" style="color:\${sets.transColor}; font-size:\${sets.transSize}vmin; margin-bottom:1vmin;">\${ayah.dv}</div>\`;
+                                if(ayah.en) transHTML += \`<div class="ceremony-trans" style="color:\${sets.transColor}; font-size:\${sets.transSize * 0.9}vmin; opacity:0.9; font-family:sans-serif !important;">\${ayah.en}</div>\`;
                             } 
                             else if (tMode === 'dv') {
-                                // ހަމައެކަނި ދިވެހި
-                                if(ayah.dv) transHTML = `<div class="ceremony-trans" style="color:${sets.transColor}; font-size:${sets.transSize}vmin;">${ayah.dv}</div>`;
+                                if(ayah.dv) transHTML = \`<div class="ceremony-trans" style="color:\${sets.transColor}; font-size:\${sets.transSize}vmin;">\${ayah.dv}</div>\`;
                             } 
                             else if (tMode === 'en') {
-                                // ހަމައެކަނި އިނގިރޭސި
-                                if(ayah.en) transHTML = `<div class="ceremony-trans" style="color:${sets.transColor}; font-size:${sets.transSize}vmin; font-family:sans-serif !important;">${ayah.en}</div>`;
+                                if(ayah.en) transHTML = \`<div class="ceremony-trans" style="color:\${sets.transColor}; font-size:\${sets.transSize}vmin; font-family:sans-serif !important;">\${ayah.en}</div>\`;
                             }
 
-                            // Render
-                            cBody.innerHTML = `<div class="ceremony-quran" style="color:${sets.arabicColor}; font-size:${sets.arabicSize}vmin;">${ayah.arabic}</div>
+                            cBody.innerHTML = \`<div class="ceremony-quran" style="color:\${sets.arabicColor}; font-size:\${sets.arabicSize}vmin;">\${ayah.arabic}</div>
                                                <div class="ceremony-divider"></div>
-                                               ${transHTML}`;
+                                               \${transHTML}\`;
                         }
                     }
                 }
-            <\/script>
+            </script>
         </body>
         </html>`;
     }
