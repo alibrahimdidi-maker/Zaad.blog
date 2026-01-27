@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rasfahi Event & Graduation Software</title>
+    <title>Rasfahi Event & Graduation Software (Ultimate Edition)</title>
     <style>
         /* --- 1. GLOBAL FONTS & VARIABLES --- */
         @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Amiri:wght@400;700&family=Noto+Sans+Thaana:wght@400;700&display=swap');
@@ -13,11 +13,12 @@
             --gold-dim: #aa8c2c;
             --gold-bright: #FFD700;
             --royal-blue: #001a33;
+            --royal-green: #002b15;
             --panel-bg: #0b1016;
             --text-main: #ffffff;
         }
 
-        /* Default Font Placeholder - Will be overridden by uploader */
+        /* Default Font Placeholder */
         @font-face { font-family: 'CustomDv'; src: local('Faruuma'), local('Waheed'), url(''); }
 
         * { box-sizing: border-box; user-select: none; outline: none; }
@@ -31,7 +32,21 @@
             font-family: 'Cinzel', sans-serif;
         }
 
-        /* --- 2. SECURITY OVERLAY (LOCK SCREEN) --- */
+        /* --- 2. ROYAL FRAME (THE MAIN CONTAINER) --- */
+        .app-container {
+            width: 98vw; height: 96vh;
+            /* Royal Border */
+            border: 4px double var(--gold);
+            border-radius: 15px;
+            display: flex;
+            /* Royal Background Gradient: Deep Blue to Emerald Green */
+            background: linear-gradient(135deg, #001a33 0%, #002b15 100%);
+            box-shadow: 0 0 60px rgba(212, 175, 55, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* --- 3. SECURITY OVERLAY (LOCK SCREEN) --- */
         #securityOverlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: radial-gradient(circle, #001a33, #000); 
@@ -50,15 +65,12 @@
             font-size: 32px; margin: 0 0 10px 0; letter-spacing: 2px;
             text-shadow: 0 2px 5px #000;
         }
-        .login-card p { color: #ccc; font-size: 14px; margin-bottom: 30px; }
         
         .pass-input {
             width: 80%; padding: 15px; font-size: 20px; text-align: center;
             border: 2px solid var(--gold-dim); background: #111; color: var(--gold);
             border-radius: 8px; font-family: monospace; letter-spacing: 3px;
         }
-        .pass-input:focus { border-color: var(--gold-bright); box-shadow: 0 0 15px var(--gold-dim); }
-
         .auth-btn {
             background: linear-gradient(to bottom, #D4AF37, #aa8c2c);
             color: #000; font-weight: 900; font-size: 18px;
@@ -74,19 +86,21 @@
             line-height: 1.5; text-align: left;
         }
 
-        /* --- 3. SIDEBAR (CONTROLS) --- */
+        /* --- 4. SIDEBAR (CONTROLS) --- */
         .sidebar {
-            width: 480px; flex-shrink: 0;
-            background: linear-gradient(180deg, var(--panel-bg) 0%, #000 100%);
+            width: 450px; flex-shrink: 0;
+            background: rgba(0, 0, 0, 0.6); /* Glass effect */
+            backdrop-filter: blur(15px);
             display: flex; flex-direction: column;
-            z-index: 100; box-shadow: 0 0 40px #000;
+            z-index: 100; 
+            box-shadow: 0 0 40px rgba(0,0,0,0.8);
             transition: all 0.3s ease;
-            /* Border side is set by JS based on language */
+            /* Border side handled by JS */
         }
 
         .header {
-            padding: 25px; text-align: center;
-            background: linear-gradient(to bottom, #002244, #001122);
+            padding: 20px; text-align: center;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.8), rgba(0,0,0,0));
             border-bottom: 2px solid var(--gold);
         }
         .app-title {
@@ -94,59 +108,106 @@
             text-shadow: 0 2px 5px #000; letter-spacing: 1px; font-weight: bold;
         }
 
-        .content { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 15px; }
+        .content { flex: 1; overflow-y: auto; padding: 15px; display: flex; flex-direction: column; gap: 10px; }
 
         /* Panels */
         .panel {
             background: rgba(255,255,255,0.03);
-            border: 1px solid #334455; border-radius: 8px; padding: 15px;
+            border: 1px solid rgba(212, 175, 55, 0.3); 
+            border-radius: 8px; padding: 12px;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
         }
         h2 {
-            color: var(--gold); margin: 0 0 10px 0; font-size: 15px;
-            border-bottom: 1px dashed #555; padding-bottom: 8px;
+            color: var(--gold); margin: 0 0 8px 0; font-size: 14px;
+            border-bottom: 1px dashed rgba(212, 175, 55, 0.3); padding-bottom: 5px;
             font-family: 'Noto Sans Thaana', sans-serif; 
         }
-        label { color: #aaa; font-size: 13px; display: block; margin: 10px 0 4px; font-family: sans-serif; }
+        label { color: #ccc; font-size: 12px; display: block; margin: 8px 0 2px; font-family: sans-serif; }
         
         input, select, button {
-            width: 100%; padding: 10px; background: #1a222c;
+            width: 100%; padding: 8px; background: rgba(0,0,0,0.6);
             border: 1px solid #445566; color: #fff; border-radius: 5px;
-            font-size: 14px; margin-bottom: 5px;
+            font-size: 13px; margin-bottom: 4px;
         }
-        button { cursor: pointer; background: linear-gradient(to bottom, #334455, #223344); font-weight: bold; border-color: #556677; }
+        button { cursor: pointer; background: linear-gradient(to bottom, #334455, #223344); font-weight: bold; border-color: #556677; transition:0.2s; }
         button:hover { border-color: var(--gold); color: var(--gold); }
         
-        .btn-gold { background: linear-gradient(to bottom, #D4AF37, #aa8c2c) !important; color: #000 !important; }
-        .btn-green { background: linear-gradient(to bottom, #003300, #002200) !important; border-color: #005500 !important; }
-        .btn-red { background: linear-gradient(to bottom, #550000, #330000) !important; border-color: #770000 !important; }
+        .btn-gold { background: linear-gradient(to bottom, #D4AF37, #aa8c2c) !important; color: #000 !important; border:1px solid #fff !important; }
+        .btn-green { background: linear-gradient(to bottom, #004d00, #003300) !important; border-color: #006600 !important; }
+        .btn-red { background: linear-gradient(to bottom, #660000, #440000) !important; border-color: #990000 !important; }
 
         .sidebar-footer {
-            padding: 15px; text-align: center; font-size: 11px; color: #555;
-            border-top: 1px solid #222; background: #000;
-            font-family: sans-serif; line-height: 1.6;
+            padding: 10px; text-align: center; font-size: 10px; color: #aaa;
+            border-top: 1px solid var(--gold); background: rgba(0,0,0,0.8);
+            font-family: sans-serif; line-height: 1.4;
         }
+        
+        .drive-link-btn {
+            display: block; margin-top: 5px; padding: 10px;
+            background: linear-gradient(90deg, rgba(212, 175, 55, 0.1), transparent); 
+            border: 1px solid var(--gold);
+            color: var(--gold); text-decoration: none; border-radius: 5px;
+            font-weight: bold; font-size: 11px;
+        }
+        .drive-link-btn:hover { background: rgba(212, 175, 55, 0.3); }
 
-        /* --- 4. MAIN PREVIEW MONITOR --- */
+        /* --- 5. MAIN PREVIEW MONITOR (UPDATED LARGER SIZE) --- */
         .main-view {
-            flex: 1; background: #111;
+            flex: 1; 
+            background-image: radial-gradient(circle, rgba(255,255,255,0.03) 1px, transparent 1px);
+            background-size: 30px 30px;
             display: flex; flex-direction: column;
             justify-content: center; align-items: center;
             position: relative;
-            background-image: radial-gradient(circle, #1a1a1a 1px, transparent 1px);
-            background-size: 20px 20px;
         }
+
+        /* NEW: INFO BANNER STYLE */
+        .info-banner {
+            width: 85%;
+            padding: 10px 20px;
+            margin-bottom: 15px;
+            background: linear-gradient(90deg, transparent, rgba(0,0,0,0.8), transparent);
+            border-top: 1px solid var(--gold);
+            border-bottom: 1px solid var(--gold);
+            color: var(--gold-bright);
+            font-family: 'Noto Sans Thaana', 'Cinzel', sans-serif;
+            text-align: center;
+            font-size: 18px;
+            text-shadow: 0 0 10px rgba(212,175,55,0.5);
+            min-height: 45px;
+            display: flex; align-items: center; justify-content: center;
+        }
+
         #previewContainer {
-            width: 60%; aspect-ratio: 16/9;
-            border: 5px double var(--gold);
+            /* MADE LARGER AS REQUESTED */
+            width: 85%; 
+            height: 75%; /* Significantly larger height */
+            border: 8px double var(--gold);
             display: flex; justify-content: center; align-items: center;
             background: #000; color: #fff;
-            box-shadow: 0 0 80px rgba(0,0,0,1);
+            box-shadow: 0 0 100px rgba(0,0,0,0.9);
             position: relative; overflow: hidden;
+            border-radius: 10px;
         }
         
-        /* Language Switcher */
+        /* --- 6. ROYAL FULLSCREEN BUTTON (ROUND) --- */
+        #fsToggleBtn {
+            position: absolute; bottom: 30px; right: 30px;
+            width: 70px; height: 70px;
+            border-radius: 50%;
+            background: radial-gradient(circle, var(--gold), #8a6e15);
+            border: 3px solid #fff;
+            box-shadow: 0 0 30px rgba(212, 175, 55, 0.6);
+            cursor: pointer; z-index: 200;
+            display: flex; justify-content: center; align-items: center;
+            font-size: 28px; color: #000;
+            transition: all 0.3s;
+        }
+        #fsToggleBtn:hover { transform: scale(1.1); box-shadow: 0 0 50px var(--gold); }
+
+        /* Helpers */
         .lang-bar { display: flex; margin-bottom: 15px; border: 1px solid #333; border-radius: 5px; overflow: hidden; }
-        .lang-btn { flex: 1; background: #000; color: #888; border: none; font-size: 12px; margin: 0; border-right: 1px solid #333; border-radius: 0; }
+        .lang-btn { flex: 1; background: rgba(0,0,0,0.5); color: #888; border: none; font-size: 12px; margin: 0; border-right: 1px solid #333; border-radius: 0; }
         .lang-btn.active { background: var(--royal-blue); color: var(--gold); font-weight: bold; }
 
         .row { display: flex; gap: 5px; }
@@ -159,7 +220,7 @@
     <div id="securityOverlay">
         <div class="login-card">
             <h1>RASFAHI EVENT & GRADUATION</h1>
-            <p>Quran Recitation Module</p>
+            <p style="color:#ccc; margin-bottom:20px;">Quran Recitation Module (Royal Edition)</p>
             
             <input type="password" id="passcode" class="pass-input" placeholder="PASTE LICENSE KEY HERE">
             <br>
@@ -174,96 +235,128 @@
         </div>
     </div>
 
-    <div class="sidebar" id="sidebar">
-        <div class="header">
-            <div class="app-title">Quran Recitation Module</div>
-            <div style="font-size:11px; color:#888;">Professional Quran Recitation Display System</div>
-        </div>
-
-        <div class="content">
-            <div class="lang-bar">
-                <button class="lang-btn active" onclick="setLang('en')">ENGLISH (LTR)</button>
-                <button class="lang-btn" onclick="setLang('dv')">ދިވެހި (RTL)</button>
-                <button class="lang-btn" onclick="setLang('ar')">عربي (RTL)</button>
+    <div class="app-container" id="mainAppContainer">
+        
+        <div class="sidebar" id="sidebar">
+            <div class="header">
+                <div class="app-title">RASFAHI EVENT SOFTWARE</div>
+                <div style="font-size:11px; color:#aaa;">Professional Quran Recitation Display System</div>
             </div>
 
-            <div class="panel">
-                <h2 data-key="fonts">1. FONT INSTALLATION</h2>
-                <label data-key="lblFont">Install Dhivehi Font (e.g. Faruuma):</label>
-                <input type="file" id="fontInput" accept=".ttf,.otf,.woff">
-            </div>
-
-            <div class="panel">
-                <h2 data-key="data">2. DATA SOURCE (CSV)</h2>
-                <label data-key="lblCsv">Load Quran CSV Database:</label>
-                <input type="file" id="csvInput" accept=".csv">
-                <small style="color:#666;">Format: Surah, Ayah, Arabic, Dhivehi, English</small>
-            </div>
-
-            <div class="panel">
-                <h2 data-key="select">3. SELECTION</h2>
-                <label data-key="lblSurah">Select Surah:</label>
-                <select id="selSurah" onchange="updateRanges()"></select>
-                
-                <div class="row">
-                    <div><label data-key="lblStart">Start Ayah:</label><select id="selStart" onchange="setAyahRange()"></select></div>
-                    <div><label data-key="lblEnd">End Ayah:</label><select id="selEnd" onchange="setAyahRange()"></select></div>
+            <div class="content">
+                <div class="lang-bar">
+                    <button class="lang-btn active" onclick="setLang('en')">ENGLISH</button>
+                    <button class="lang-btn" onclick="setLang('dv')">ދިވެހި</button>
                 </div>
 
-                <label data-key="lblTransMode">Translation Display Mode:</label>
-                <select id="transMode" onchange="updateLive()">
-                    <option value="both">Dual (Dhivehi & English)</option>
-                    <option value="dv">Dhivehi Only</option>
-                    <option value="en">English Only</option>
-                    <option value="none">Arabic Only (No Translation)</option>
-                </select>
-            </div>
+                <div class="panel">
+                    <h2 data-key="config">CONFIGURATION</h2>
+                    <div class="row">
+                        <button class="btn-green" onclick="saveConfig()" data-key="btnSave">💾 SAVE CONFIG</button>
+                        <button class="btn-green" onclick="document.getElementById('confInput').click()" data-key="btnLoad">📂 LOAD CONFIG</button>
+                        <input type="file" id="confInput" accept=".json" class="hidden" onchange="loadConfig(this)">
+                    </div>
+                    <div id="autoSaveStatus" style="font-size:10px; color:var(--gold); text-align:center; opacity:0; transition:opacity 0.5s;">Autosaved to System</div>
+                </div>
 
-            <div class="panel">
-                <h2 data-key="themes">4. PRESIDENTIAL THEMES (100+)</h2>
-                <label data-key="lblThemeSelect">Select Royal Style:</label>
-                <select id="themeSelect" onchange="applyTheme(this.value)">
+                <div class="panel">
+                    <h2 data-key="data">DATA & FONTS</h2>
+                    <label data-key="lblFont">Install Font (Faruuma/Waheed):</label>
+                    <input type="file" id="fontInput" accept=".ttf,.otf,.woff">
+                    <label data-key="lblCsv">Load Quran Database (CSV):</label>
+                    <input type="file" id="csvInput" accept=".csv">
+                </div>
+
+                <div class="panel">
+                    <h2 data-key="select">SELECTION</h2>
+                    <label data-key="lblSurah">Select Surah:</label>
+                    <select id="selSurah" onchange="updateRanges()"></select>
+                    
+                    <div class="row">
+                        <div><label data-key="lblStart">Start Ayah:</label><select id="selStart" onchange="setAyahRange()"></select></div>
+                        <div><label data-key="lblEnd">End Ayah:</label><select id="selEnd" onchange="setAyahRange()"></select></div>
+                    </div>
+
+                    <label data-key="lblTransMode">Translation Display Mode:</label>
+                    <select id="transMode" onchange="updateLive()">
+                        <option value="both">Dual (Dhivehi & English)</option>
+                        <option value="dv">Dhivehi Only</option>
+                        <option value="en">English Only</option>
+                        <option value="none">Arabic Only</option>
                     </select>
+                </div>
+
+                <div class="panel">
+                    <h2 data-key="adjust">TEXT ADJUSTMENT</h2>
+                    <label data-key="lblArSize">Arabic Size/Color:</label>
+                    <div class="row">
+                        <input type="color" id="colAr" value="#D4AF37" style="width:40px;" onchange="updateLive()">
+                        <input type="range" id="sizeAr" min="1" max="10" step="0.1" value="3.5" oninput="updateLive()">
+                    </div>
+                    <label data-key="lblDvSize">Dhivehi Size/Color:</label>
+                    <div class="row">
+                        <input type="color" id="colDv" value="#ffffff" style="width:40px;" onchange="updateLive()">
+                        <input type="range" id="sizeDv" min="1" max="8" step="0.1" value="1.8" oninput="updateLive()">
+                    </div>
+                    <label data-key="lblEnSize">English Size/Color:</label>
+                    <div class="row">
+                        <input type="color" id="colEn" value="#cccccc" style="width:40px;" onchange="updateLive()">
+                        <input type="range" id="sizeEn" min="1" max="8" step="0.1" value="1.5" oninput="updateLive()">
+                    </div>
+                </div>
+
+                <div class="panel">
+                    <h2 data-key="themes">PRESIDENTIAL THEMES</h2>
+                    <select id="themeSelect" onchange="applyTheme(this.value)">
+                        </select>
+                </div>
+
+                <div class="panel" style="border:1px solid var(--gold); background: rgba(212, 175, 55, 0.1);">
+                    <h2 style="color:#fff;" data-key="live">LIVE PROJECTION</h2>
+                    <button class="btn-gold" onclick="openProjector()" data-key="btnLaunch">📺 LAUNCH BIG SCREEN</button>
+                    <div class="row" style="margin-top:5px;">
+                        <button class="btn-green" onclick="sendPhase('start')">BASMALAH</button>
+                        <button class="btn-red" onclick="sendPhase('end')">SADAQALLAH</button>
+                    </div>
+                    <div class="row">
+                        <button onclick="navigate(-1)">◀ PREV</button>
+                        <button onclick="navigate(1)">NEXT ▶</button>
+                    </div>
+                    <input type="text" id="eventTitle" placeholder="Event Title" oninput="updateLive()" style="text-align:center;">
+                    <button onclick="sendPhase('cover')">SHOW TITLE CARD</button>
+                </div>
+
+            </div>
+
+            <div class="sidebar-footer">
+                Software Designed & Developed by:<br>
+                <strong style="color:#ccc;">RASFAHI - ALI IBRAHIM DIDI</strong><br>
                 
-                <label data-key="lblTextSize">Adjust Text Size (Auto-Scaling):</label>
-                <input type="range" id="sizeRange" min="2" max="10" step="0.5" value="5" oninput="updateLive()">
+                <a href="https://drive.google.com/drive/folders/17DleEUNHdJkYlfiDefSghez-wIpA9MYL?usp=sharing" target="_blank" class="drive-link-btn">
+                    📥 DOWNLOAD FONTS & CSV (GOOGLE DRIVE)
+                </a>
+            </div>
+        </div>
+
+        <div class="main-view">
+            
+            <div id="infoBanner" class="info-banner">
+                Select a Surah to Begin / ސޫރަތެއް ޚިޔާރުކުރައްވާ
             </div>
 
-            <div class="panel" style="border:1px solid var(--gold); background: rgba(212, 175, 55, 0.05);">
-                <h2 style="color:#fff;" data-key="live">5. LIVE PROJECTION</h2>
-                <button class="btn-gold" onclick="openProjector()" data-key="btnLaunch">📺 LAUNCH BIG SCREEN</button>
-                <div class="row" style="margin-top:5px;">
-                    <button class="btn-green" onclick="sendPhase('start')">BASMALAH</button>
-                    <button class="btn-red" onclick="sendPhase('end')">SADAQALLAH</button>
+            <div style="margin-bottom:5px; color:#aaa; font-size:10px; letter-spacing:1px;">LIVE PREVIEW</div>
+            
+            <div id="previewContainer">
+                <div style="text-align:center; padding:20px;">
+                    <div id="prevAr" style="font-family:'Amiri'; font-size:24px; color:var(--gold);">بِسْمِ ٱللَّٰهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ</div>
+                    <div id="prevTr" style="font-family:'CustomDv'; font-size:14px; margin-top:10px; color:#ccc;">Preview Active</div>
                 </div>
-                <div class="row">
-                    <button onclick="navigate(-1)">◀ PREV</button>
-                    <button onclick="navigate(1)">NEXT ▶</button>
-                </div>
-                <input type="text" id="eventTitle" placeholder="Event Title (e.g. Opening Ceremony)" oninput="updateLive()" style="text-align:center;">
-                <button onclick="sendPhase('cover')">SHOW TITLE CARD</button>
             </div>
-
+            
+            <button id="fsToggleBtn" onclick="toggleAppFullscreen()" title="Fullscreen Mode">⛶</button>
         </div>
 
-        <div class="sidebar-footer">
-            Software Designed & Developed by:<br>
-            <strong style="color:#ccc;">RASFAHI - ALI IBRAHIM DIDI</strong><br>
-            <span style="opacity:0.5;">Event Edition V26.0 | Protected System</span>
-        </div>
-    </div>
-
-    <div class="main-view">
-        <div style="margin-bottom:10px; color:#555; font-size:12px; letter-spacing:1px;">OPERATOR PREVIEW MONITOR</div>
-        <div id="previewContainer">
-            <div style="text-align:center; padding:20px;">
-                <div id="prevAr" style="font-family:'Amiri'; font-size:24px; color:var(--gold);">بِسْمِ ٱللَّٰهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ</div>
-                <div id="prevTr" style="font-family:'CustomDv'; font-size:14px; margin-top:10px; color:#ccc;">Preview Active</div>
-            </div>
-        </div>
-    </div>
-
-    <script>
+    </div> <script>
         // --- DATA & STATE ---
         const DB = {}; 
         let themes = [];
@@ -273,32 +366,31 @@
         let projWin = null;
         let customFontData = null;
 
-        // --- LOCALIZATION ---
+        // --- LOCALIZATION DATA ---
         const langData = {
             en: {
-                fonts: "1. FONT INSTALLATION", lblFont: "Install Dhivehi Font:",
-                data: "2. DATA SOURCE", lblCsv: "Load CSV Database:",
-                select: "3. SELECTION", lblSurah: "Select Surah:", lblStart: "Start Ayah:", lblEnd: "End Ayah:", lblTransMode: "Translation Mode:",
-                themes: "4. PRESIDENTIAL THEMES", lblThemeSelect: "Select Royal Style:", lblTextSize: "Text Size:",
-                live: "5. LIVE PROJECTION", btnLaunch: "📺 LAUNCH BIG SCREEN"
+                config: "CONFIGURATION", btnSave: "💾 SAVE CONFIG", btnLoad: "📂 LOAD CONFIG",
+                data: "DATA & FONTS", lblFont: "Install Font:", lblCsv: "Load CSV Database:",
+                select: "SELECTION", lblSurah: "Select Surah:", lblStart: "Start Ayah:", lblEnd: "End Ayah:", lblTransMode: "Translation Mode:",
+                adjust: "TEXT ADJUSTMENT", lblArSize: "Arabic Size/Color:", lblDvSize: "Dhivehi Size/Color:", lblEnSize: "English Size/Color:",
+                themes: "PRESIDENTIAL THEMES", 
+                live: "LIVE PROJECTION", btnLaunch: "📺 LAUNCH BIG SCREEN",
+                lblBannerDef: "Select a Surah to Begin",
+                lblReciting: "Reciting:"
             },
             dv: {
-                fonts: "1. ފޮންޓް އިންސްޓޯލް", lblFont: "ދިވެހި ފޮންޓް (ފަރުމާ/ވަހީދު) ނަގާ:",
-                data: "2. ޑޭޓާ ނެގުން", lblCsv: "ޑޭޓާބޭސް ފައިލް:",
-                select: "3. އާޔަތް ނެގުން", lblSurah: "ސޫރަތް ނަގާ:", lblStart: "ފަށާ އާޔަތް:", lblEnd: "ނިމޭ އާޔަތް:", lblTransMode: "ތަރުޖަމާ ދައްކާގޮތް:",
-                themes: "4. ޕްރެޒިޑެންޝަލް ތީމްތައް", lblThemeSelect: "ޝާހީ ޑިޒައިން ނަގާ:", lblTextSize: "އަކުރުގެ ސައިޒް:",
-                live: "5. ލައިވް ކޮންޓްރޯލް", btnLaunch: "📺 ސްކްރީން އަރުވާ"
-            },
-            ar: {
-                fonts: "1. تثبيت الخط", lblFont: "تثبيت خط الديفيحي:",
-                data: "2. مصدر البيانات", lblCsv: "تحميل قاعدة البيانات:",
-                select: "3. الاختيار", lblSurah: "سورة:", lblStart: "من:", lblEnd: "إلى:", lblTransMode: "وضع الترجمة:",
-                themes: "4. الثيمات الرئاسية", lblThemeSelect: "اختر التصميم:", lblTextSize: "حجم النص:",
-                live: "5. تحكم مباشر", btnLaunch: "📺 فتح الشاشة"
+                config: "ސިސްޓަމް ކޮންފިގަރޭޝަން", btnSave: "💾 ސޭވް ކޮންފިގް", btnLoad: "📂 ލޯޑް ކޮންފިގް",
+                data: "ޑޭޓާ އަދި ފޮންޓް", lblFont: "ފޮންޓް އިންސްޓޯލް:", lblCsv: "ޑޭޓާބޭސް ފައިލް:",
+                select: "އާޔަތް ނެގުން", lblSurah: "ސޫރަތް ނަގާ:", lblStart: "ފަށާ އާޔަތް:", lblEnd: "ނިމޭ އާޔަތް:", lblTransMode: "ތަރުޖަމާ ދައްކާގޮތް:",
+                adjust: "ލިޔުން ބަދަލުކުރުން", lblArSize: "ޢަރަބި ސައިޒް/ކުލަ:", lblDvSize: "ދިވެހި ސައިޒް/ކުލަ:", lblEnSize: "އިނގިރޭސި ސައިޒް/ކުލަ:",
+                themes: "ޝާހީ ތީމްތައް", 
+                live: "ލައިވް ކޮންޓްރޯލް", btnLaunch: "📺 ސްކްރީން އަރުވާ",
+                lblBannerDef: "ކިޔެވުމަށް ސޫރަތެއް ޚިޔާރުކުރައްވާ",
+                lblReciting: "މިޖަލްސާގައި ކިޔަވަން ހަމަޖެހިފައިވަނީ:"
             }
         };
 
-        // --- 1. SECURITY (KEY VERIFICATION) ---
+        // --- 1. SECURITY & KEY VERIFICATION ---
         function unlockSystem() {
             const inp = document.getElementById('passcode').value.trim();
             const err = document.getElementById('errMsg');
@@ -310,47 +402,46 @@
                 const decoded = atob(inp); // Format: ROYAL_EXP_YYYY-MM-DD_CUST_Name
                 const parts = decoded.split('_');
 
-                // Validation Logic
                 if(parts[0] !== "ROYAL" || parts[1] !== "EXP") throw "Invalid Format";
                 
-                // Check Expiry
                 const expDate = new Date(parts[2]);
                 const today = new Date();
                 if(expDate < today) throw "License Expired on " + parts[2];
 
-                // Check Customer (Basic check that it exists)
                 if(!parts[4]) throw "Invalid Customer Data";
 
                 // Success
                 document.getElementById('securityOverlay').style.display = 'none';
                 initThemes(); 
+                loadFromLocal(); // Auto Load
+                setInterval(saveToLocal, 5000); // Auto Save Interval
                 alert("WELCOME " + parts[4] + "\nSystem Unlocked Successfully.");
 
             } catch(e) {
-                // Master Key Bypass for Developer (Optional, strictly for you)
                 if(inp === "AIDD-2026-MASTER") {
                     document.getElementById('securityOverlay').style.display = 'none';
                     initThemes();
                 } else {
-                    err.innerText = "⛔ ACCESS DENIED: " + (typeof e === 'string' ? e : "Invalid Key");
+                    err.innerText = "⛔ ACCESS DENIED";
                 }
             }
         }
         
-        // Disable Shortcuts (Protection)
         document.onkeydown = function(e) {
-            if(e.keyCode == 123) return false; // F12
+            if(e.keyCode == 123) return false; 
             if(e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) return false;
             if(e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) return false;
         };
 
-        // --- 2. LANGUAGE SWITCHER ---
+        // --- 2. LANGUAGE SWITCHER & AUTO-SAVE ---
         function setLang(l) {
             const sb = document.getElementById('sidebar');
             const btns = document.querySelectorAll('.lang-btn');
             
             btns.forEach(b => b.classList.remove('active'));
             document.querySelector(`button[onclick="setLang('${l}')"]`).classList.add('active');
+
+            document.documentElement.lang = l; // Set html lang attribute
 
             // Apply translations
             const t = langData[l];
@@ -360,17 +451,73 @@
             });
 
             // Layout Logic (LTR vs RTL)
+            const app = document.getElementById('mainAppContainer');
             if(l === 'en') {
-                document.body.style.flexDirection = 'row'; // Sidebar Left
-                sb.style.borderRight = "3px solid var(--gold)";
+                app.style.flexDirection = 'row'; 
+                sb.style.borderRight = "2px solid var(--gold)";
                 sb.style.borderLeft = "none";
                 document.documentElement.dir = "ltr";
             } else {
-                document.body.style.flexDirection = 'row-reverse'; // Sidebar Right
-                sb.style.borderLeft = "3px solid var(--gold)";
+                app.style.flexDirection = 'row-reverse'; 
+                sb.style.borderLeft = "2px solid var(--gold)";
                 sb.style.borderRight = "none";
                 document.documentElement.dir = "rtl";
             }
+            updateBanner(); // Update banner text language
+        }
+
+        // Auto Save Logic
+        function saveToLocal() {
+            const state = {
+                evtTitle: document.getElementById('eventTitle').value,
+                theme: document.getElementById('themeSelect').value,
+                transMode: document.getElementById('transMode').value,
+                styles: {
+                    ar: {c:document.getElementById('colAr').value, s:document.getElementById('sizeAr').value},
+                    dv: {c:document.getElementById('colDv').value, s:document.getElementById('sizeDv').value},
+                    en: {c:document.getElementById('colEn').value, s:document.getElementById('sizeEn').value}
+                }
+            };
+            localStorage.setItem('rasfahi_royal_state', JSON.stringify(state));
+            const stat = document.getElementById('autoSaveStatus');
+            stat.style.opacity = 1; setTimeout(()=>stat.style.opacity=0, 1000);
+        }
+
+        function loadFromLocal() {
+            const s = localStorage.getItem('rasfahi_royal_state');
+            if(s) applyState(JSON.parse(s));
+        }
+
+        function saveConfig() {
+            const config = JSON.parse(localStorage.getItem('rasfahi_royal_state'));
+            const blob = new Blob([JSON.stringify(config)], {type: "application/json"});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url; a.download = "Rasfahi_Config.json";
+            a.click();
+        }
+
+        function loadConfig(input) {
+            const f = input.files[0];
+            if(!f) return;
+            const r = new FileReader();
+            r.onload = e => {
+                applyState(JSON.parse(e.target.result));
+                alert("Configuration Loaded!");
+            };
+            r.readAsText(f);
+        }
+
+        function applyState(s) {
+            if(s.evtTitle) document.getElementById('eventTitle').value = s.evtTitle;
+            if(s.theme) document.getElementById('themeSelect').value = s.theme;
+            if(s.transMode) document.getElementById('transMode').value = s.transMode;
+            if(s.styles) {
+                document.getElementById('colAr').value = s.styles.ar.c; document.getElementById('sizeAr').value = s.styles.ar.s;
+                document.getElementById('colDv').value = s.styles.dv.c; document.getElementById('sizeDv').value = s.styles.dv.s;
+                document.getElementById('colEn').value = s.styles.en.c; document.getElementById('sizeEn').value = s.styles.en.s;
+            }
+            updateLive();
         }
 
         // --- 3. FONT LOADING ---
@@ -439,10 +586,33 @@
                 activeAyahs = DB[s].slice(i1, i2 + 1);
                 curIndex = 0;
                 sendPhase('reciting');
+                updateBanner();
             }
         }
 
-        // --- 5. THEME GENERATOR (100 THEMES) ---
+        // --- 5. BANNER LOGIC ---
+        function updateBanner() {
+            const s = document.getElementById('selSurah').value;
+            const st = document.getElementById('selStart');
+            const en = document.getElementById('selEnd');
+            const banner = document.getElementById('infoBanner');
+            const lang = document.documentElement.lang || 'en';
+
+            if(s && st.options.length > 0) {
+                const startTxt = st.options[st.selectedIndex].text;
+                const endTxt = en.options[en.selectedIndex].text;
+                
+                if(lang === 'dv') {
+                    banner.innerText = `މިޖަލްސާގައި ކިޔަވަން ހަމަޖެހިފައިވަނީ: ${s} (${startTxt} ން ${endTxt} އަށް)`;
+                } else {
+                    banner.innerText = `Scheduled Recitation: ${s} (${startTxt} to ${endTxt})`;
+                }
+            } else {
+                banner.innerText = langData[lang].lblBannerDef;
+            }
+        }
+
+        // --- 6. THEMES ---
         function initThemes() {
             const colors = [
                 {n:"Royal Green", bg:"radial-gradient(circle, #004400, #000)", b:"#006600"},
@@ -479,14 +649,11 @@
                     count++;
                 });
             });
-            // Ensure 100+ themes logic works by mixing logic if array is small, 
-            // but the loops above create 8 * 8 = 64. Let's duplicate to reach 100+.
-            // For brevity in code, 64 high quality ones are generated.
         }
 
         function applyTheme(idx) { updateLive(); }
 
-        // --- 6. LIVE CONTROL ---
+        // --- 7. LIVE CONTROL ---
         function sendPhase(p) {
             curPhase = p;
             if(p === 'reciting') curIndex = 0;
@@ -517,8 +684,14 @@
         function getDisplayData() {
             const title = document.getElementById('eventTitle').value;
             const themeIdx = document.getElementById('themeSelect').value || 0;
-            const sizeMod = document.getElementById('sizeRange').value;
             const mode = document.getElementById('transMode').value;
+            
+            // Manual Styles
+            const styles = {
+                ar: {c:document.getElementById('colAr').value, s:document.getElementById('sizeAr').value},
+                dv: {c:document.getElementById('colDv').value, s:document.getElementById('sizeDv').value},
+                en: {c:document.getElementById('colEn').value, s:document.getElementById('sizeEn').value}
+            };
 
             let ar = "", tr = "";
 
@@ -537,7 +710,6 @@
                 else if(mode === 'en') tr = `<div class="en-text">${ay.en}</div>`;
                 else if(mode === 'none') tr = "";
                 else if(mode === 'both') {
-                    // Dhivehi TOP, Line MIDDLE, English BOTTOM
                     tr = `
                         <div class="dv-text">${ay.dv}</div>
                         <div class="royal-line"></div>
@@ -552,12 +724,21 @@
                 theme: themes[themeIdx] || themes[0],
                 phase: curPhase,
                 fontData: customFontData, 
-                scale: sizeMod,
+                styles: styles,
                 transMode: mode
             };
         }
 
-        // --- 7. PROJECTOR WINDOW (AUTO SCALING 45" - 100") ---
+        // --- 8. TOGGLE APP FULLSCREEN ---
+        function toggleAppFullscreen() {
+            if(!document.fullscreenElement) {
+                document.documentElement.requestFullscreen();
+            } else {
+                if(document.exitFullscreen) document.exitFullscreen();
+            }
+        }
+
+        // --- 9. PROJECTOR WINDOW ---
         function openProjector() {
             if(projWin && !projWin.closed) { projWin.focus(); return; }
 
@@ -578,7 +759,6 @@
                         font-family: 'Amiri', serif;
                     }
                     
-                    /* AUTO-SCALING CARD USING VIEWPORT UNITS (vw/vh) */
                     #card {
                         width: 92vw; height: 90vh; 
                         display: flex; flex-direction: column; 
@@ -590,7 +770,6 @@
                         box-sizing: border-box;
                     }
 
-                    /* Arabic Text Handling */
                     #arabicText {
                         direction: rtl; line-height: 1.6;
                         text-shadow: 0 0.4vw 0.8vw rgba(0,0,0,0.6);
@@ -598,7 +777,6 @@
                         margin-bottom: 3vh;
                     }
 
-                    /* Translation Container */
                     #transContainer {
                         width: 100%;
                         display: flex; flex-direction: column; align-items: center;
@@ -608,7 +786,6 @@
                     .dv-text { font-family: 'CustomDv', 'Noto Sans Thaana'; direction: rtl; line-height: 1.6; margin-bottom: 1vh; }
                     .en-text { font-family: 'Cinzel', sans-serif; direction: ltr; margin-top: 1vh; text-transform: uppercase; letter-spacing: 0.1vw; }
 
-                    /* The Royal Line Separator */
                     .royal-line {
                         width: 50%; height: 0.2vw;
                         background: linear-gradient(90deg, transparent, #D4AF37, transparent);
@@ -618,7 +795,6 @@
 
                     .title-mode { font-family: 'Cinzel', serif !important; text-transform: uppercase; color: #D4AF37 !important; text-shadow: 0 0 2vw #000; }
 
-                    /* Watermark */
                     .watermark {
                         position: fixed; bottom: 2vh; left: 2vw;
                         color: rgba(255,255,255,0.15); font-family: 'Cinzel', sans-serif;
@@ -665,26 +841,32 @@
                         arBox.innerHTML = data.arabic;
                         trBox.innerHTML = data.htmlTrans;
 
-                        // Auto-Scaling Logic (Based on Viewport Width 'vw')
-                        const base = parseFloat(data.scale);
+                        // APPLY MANUAL STYLES & AUTO SCALING
+                        // Using 'vw' units for scaling based on sliders
                         
                         if(data.phase === 'cover') {
                             arBox.className = 'title-mode';
-                            arBox.style.fontSize = (base * 1.5) + 'vw';
+                            arBox.style.fontSize = (data.styles.ar.s * 1.5) + 'vw';
+                            arBox.style.color = data.styles.ar.c;
                         } else if (data.phase === 'start' || data.phase === 'end') {
                             arBox.className = '';
-                            arBox.style.fontSize = (base * 1.5) + 'vw';
+                            arBox.style.fontSize = (data.styles.ar.s * 1.5) + 'vw';
                             arBox.style.color = '#fff';
                         } else {
                             arBox.className = '';
-                            arBox.style.fontSize = (base * 1.0) + 'vw'; // Arabic Size
-                            arBox.style.color = th.accentColor;
+                            arBox.style.fontSize = data.styles.ar.s + 'vw'; 
+                            arBox.style.color = data.styles.ar.c;
                             
-                            // Translation Sizing relative to Arabic
                             const dv = document.querySelector('.dv-text');
                             const en = document.querySelector('.en-text');
-                            if(dv) dv.style.fontSize = (base * 0.5) + 'vw';
-                            if(en) en.style.fontSize = (base * 0.4) + 'vw';
+                            if(dv) {
+                                dv.style.fontSize = data.styles.dv.s + 'vw';
+                                dv.style.color = data.styles.dv.c;
+                            }
+                            if(en) {
+                                en.style.fontSize = data.styles.en.s + 'vw';
+                                en.style.color = data.styles.en.c;
+                            }
                         }
                     }
                 <\/script>
