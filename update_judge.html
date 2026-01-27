@@ -1619,68 +1619,82 @@
         w.print();
     }
     
-    // --- PRINT BLANK JUDGE SHEET ---
+    // --- PRINT JUDGE SHEET (WITH STUDENT INFO) ---
     function printJudgeSheetTemplate() {
-        const headerTxt = document.getElementById('rptHeader').value;
+        const headerTxt = document.getElementById('rptHeader') ? document.getElementById('rptHeader').value : "JUDGE SCORE SHEET";
         
+        // އެވަގުތު ސެލެކްޓްކޮށްފައި އިން ދަރިވަރު ހޯދުން
+        const s = state.judging.currentStudentObj;
+        
+        // ދަރިވަރެއް ނެތްނަމަ ހުސްކޮށް ދައްކާނީ
+        const sName = s ? s.name : "_________________________________";
+        const sId = s ? s.id : "____________";
+        const sCat = s ? `${s.branch} / ${s.group}` : "_________________________________";
+
         let rows = "";
         let totalMax = 0;
-        state.judging.rubric.forEach(r => {
-            totalMax += r.max;
-            rows += `<tr>
-                <td style="text-align:right; font-weight:bold;">${r.name}</td>
-                <td>${r.max}</td>
-                <td></td>
-            </tr>`;
-        });
-
-        let html = `<html><head><title>Judge Sheet</title><style>
-            body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding: 40px; direction: rtl; }
-            h1 { text-align: center; margin-bottom: 40px; }
-            .info-box { border: 1px solid #000; padding: 10px; margin-bottom: 20px; display:flex; gap: 20px; }
-            .field { flex: 1; border-bottom: 1px dotted #000; height: 30px; margin-top:10px; }
-            table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 16px; }
-            th, td { border: 1px solid #333; padding: 15px; text-align: center; }
-            th { background: #f0f0f0; }
-        </style></head><body>
-            <h1>${headerTxt || "JUDGE SCORE SHEET"}</h1>
-            <div class="info-box">
-                <div style="flex:1;">Student Name: _______________________</div>
-                <div style="width:150px;">ID: ____________</div>
-            </div>
-             <div class="info-box">
-                <div style="flex:1;">Category: _______________________</div>
-                <div style="width:150px;">Judge ID: ____________</div>
-            </div>
-            
-            <table>
-                <thead>
-                    <tr>
-                        <th style="width:50%;">Criteria</th>
-                        <th style="width:15%;">Max Marks</th>
-                        <th>Score Given</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    ${rows}
-                    <tr>
-                        <td style="text-align:right; font-weight:bold;">TOTAL</td>
-                        <td><b>${totalMax}</b></td>
-                        <td></td>
-                    </tr>
-                </tbody>
-            </table>
-            
-            <div style="margin-top:50px;">
-                <p>Remarks: _________________________________________________________________</p>
-                <p style="margin-top:40px; text-align:left;">Signature: ______________________</p>
-            </div>
-        </body></html>`;
         
-        const w = window.open("", "PrintTemplate", "width=800,height=900");
+        // ރުބްރިކް ބައިތައް ލުން
+        if(state.judging.rubric) {
+            state.judging.rubric.forEach(r => {
+                totalMax += r.max;
+                rows += `<tr>
+                    <td style="text-align:right; font-weight:bold; font-family:'AppFont';">${r.name}</td>
+                    <td>${r.max}</td>
+                    <td></td>
+                </tr>`;
+            });
+        }
+
+        let html = `<html><head><title>Judge Sheet - ${sName}</title>
+            <style>
+                body { font-family: 'Segoe UI', 'Noto Sans Thaana', sans-serif; padding: 40px; direction: rtl; }
+                h1 { text-align: center; margin-bottom: 20px; text-transform: uppercase; }
+                .meta-box { border: 1px solid #000; padding: 15px; margin-bottom: 20px; display:flex; justify-content:space-between; font-weight:bold; font-size:14px; background:#f9f9f9; }
+                table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 16px; }
+                th, td { border: 1px solid #333; padding: 12px; text-align: center; }
+                th { background: #eee; }
+                td { height: 30px; }
+            </style></head><body>
+                <h1>${headerTxt}</h1>
+                
+                <div class="meta-box">
+                    <div style="flex:2; text-align:right;">ނަން: ${sName}</div>
+                    <div style="flex:1;">އައި.ޑީ: ${sId}</div>
+                </div>
+                <div class="meta-box">
+                    <div style="flex:2; text-align:right;">ކެޓަގަރީ: ${sCat}</div>
+                    <div style="flex:1;">ޖަޖު އައި.ޑީ: ____________</div>
+                </div>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width:50%;">ބައިތައް</th>
+                            <th style="width:15%;">މެކްސިމަމް</th>
+                            <th>ދިން މާކުސް</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${rows}
+                        <tr style="background:#fffbe6;">
+                            <td style="text-align:right; font-weight:bold;">ޖުމްލަ</td>
+                            <td><b>${totalMax}</b></td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <div style="margin-top:60px;">
+                    <p>ރިމާކްސް: _________________________________________________________________</p>
+                    <p style="margin-top:50px; text-align:left;">ސޮއި: ______________________</p>
+                </div>
+            </body></html>`;
+        
+        const w = window.open("", "PrintSheet", "width=850,height=900");
         w.document.write(html);
         w.document.close();
-        w.print();
+        // w.print(); // އޮޓޯއިން ޕްރިންޓަށް ނުފޮނުވަން (ޕްރިވިއު ބަލާލަން)
     }
 
     function clearAllResults() {
