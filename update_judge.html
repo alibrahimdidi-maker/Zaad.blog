@@ -2094,6 +2094,9 @@ function populateStudentForm(idx) {
         }
     }
 
+// --- 1. SYLLABUS & BALANCED LOGIC FIX ---
+    
+    // ފިލްޓަރ ކުރުން (Surah logic fixed)
     function applySyllabusFilter() {
         const type = document.getElementById('filterType').value;
         const start = parseInt(document.getElementById('scopeStart').value) || 1;
@@ -2106,138 +2109,127 @@ function populateStudentForm(idx) {
             if(type === 'book') {
                 return q.bookNum >= start && q.bookNum <= end;
             } else {
+                // Surah num check fixed
                 return q.surahNum >= start && q.surahNum <= end;
             }
         });
 
         const status = document.getElementById('scopeStatus');
-        status.innerText = `Active Questions: ${state.filteredPool.length} (Range: ${start}-${end})`;
+        status.innerText = `Active Questions: ${state.filteredPool.length}`;
         status.style.color = state.filteredPool.length > 0 ? "#00e676" : "#ff5252";
 
         if(state.filteredPool.length === 0) {
             alert("⚠️ No questions found in this range!");
         } else {
+            // If in student mode, reshuffle immediately with new balance logic
             if(state.mode === 'student') reshuffleGrid();
         }
     }
 
-    // --- GRID ---
-    window.handleGridClick = function(boxID) {
-        const limit = parseInt(document.getElementById('qLimit').value);
-        if(state.session.selectionIDs.length >= limit) return;
-
-        const qID = state.grid.map[boxID];
+    // ބެލެންސްކޮށް ސުވާލު ނަގާ ހެލްޕަރ ފަންކްޝަން (Balanced Randomizer)
+    function getBalancedSubset(pool, count) {
+        const type = document.getElementById('filterType').value; // book or surah
+        let groups = {};
         
-        if(!qID || state.grid.taken.includes(boxID)) {
-             return;
-        }
-
-        state.grid.taken.push(boxID);
-        state.session.selectionIDs.push(qID);
-
-        // Remove from pools
-        const idx = state.qPool.indexOf(qID);
-        if(idx > -1) state.qPool.splice(idx, 1);
-        
-        const fIdx = state.filteredPool.indexOf(qID);
-        if(fIdx > -1) state.filteredPool.splice(fIdx, 1);
-
-        state.qUsed.push(qID);
-
-        updateSelectionUI();
-
-        if(state.session.selectionIDs.length === limit) {
-            state.grid.visible = false;
-            state.session.phase = 'ready';
-            prepareSlotsFromSelection();
-            document.getElementById('btnStartReading').classList.remove('hidden');
-        } else {
-            state.session.phase = 'selection';
-        }
-        renderSlots(); updateGridPreview(); syncWindows();
-    }
-
-    function updateSelectionUI() {
-        document.getElementById('selectionInfo').innerText = "Selected: " + state.session.selectionIDs.join(", ");
-    }
-
-    function prepareSlotsFromSelection() {
-        state.session.slots = state.session.selectionIDs.map(id => {
-            let q = state.qDataMap[id];
-            if(q && !q.src) q.src = resolveImage(q.imgRaw);
-            return q;
+        // 1. Group questions by Book or Surah
+        pool.forEach(id => {
+            const q = state.qDataMap[id];
+            const key = (type === 'book') ? q.bookNum : q.surahNum;
+            if(!groups[key]) groups[key] = [];
+            groups[key].push(id);
         });
-        state.session.activeIndex = -1;
-        updateStatus();
-    }
 
-    window.startReadingSession = function() {
-        if(state.session.slots.length === 0) return;
-        state.session.activeIndex = 0;
-        state.session.phase = 'active';
-        document.getElementById('btnStartReading').classList.add('hidden');
-        updateStatus(); updateMirror(); syncWindows();
-    }
-
-    window.pickRandomQuestion = function() {
-        const limit = parseInt(document.getElementById('qLimit').value);
-        if(state.session.slots.length >= limit) return;
+        // 2. Shuffle the groups (books) themselves
+        let groupKeys = Object.keys(groups).sort(() => Math.random() - 0.5);
         
-        const q = getRandomQ();
-        if(!q) return;
+        let selection = [];
+        let gIndex = 0;
 
-        state.session.slots.push(q);
-        state.session.activeIndex = state.session.slots.length - 1;
-        state.session.phase = 'active';
-        updateStatus(); renderSlots(); updateMirror(); syncWindows();
-    };
-
-    function getRandomQ() {
-        if(state.filteredPool.length === 0) {
-             if(state.qUsed.length === 0) { alert("No Data or Empty Filter!"); return null; }
-             alert("Syllabus pool empty. Reload or check scope.");
-             return null;
+        // 3. Round-robin selection (Book 1 -> Book 2 -> Book 1...)
+        while(selection.length < count && groupKeys.length > 0) {
+            let key = groupKeys[gIndex % groupKeys.length]; // Cycle through books
+            let availableQs = groups[key];
+            
+            if(availableQs.length > 0) {
+                // Pick random Q from this book
+                let rIdx = Math.floor(Math.random() * availableQs.length);
+                selection.push(availableQs[rIdx]);
+                availableQs.splice(rIdx, 1); // Remove picked to avoid duplicate
+            }
+            
+            // If book empty, remove from rotation? No, just skip in loop logic if implemented fully, 
+            // but for simple array splicing above handles it. 
+            // Better logic: if availableQs is empty, remove key from groupKeys?
+            if(availableQs.length === 0) {
+                groupKeys.splice(gIndex % groupKeys.length, 1);
+                // Adjust index since array shrank
+                gIndex--; 
+            }
+            
+            gIndex++;
         }
-        const rIdx = Math.floor(Math.random() * state.filteredPool.length);
-        const qID = state.filteredPool[rIdx];
-        
-        state.filteredPool.splice(rIdx, 1);
-        
-        const mIdx = state.qPool.indexOf(qID);
-        if(mIdx > -1) state.qPool.splice(mIdx, 1);
-
-        state.qUsed.push(qID);
-        
-        const qData = state.qDataMap[qID];
-        if(!qData.src) qData.src = resolveImage(qData.imgRaw);
-        return qData;
+        return selection;
     }
 
+    // ގްރިޑް ހަދާއިރު ބެލެންސްކޮށް ހެދުން
     window.reshuffleGrid = function() {
-        if(state.qPool.length === 0 && state.qUsed.length === 0) {
-            alert("No questions loaded! Please load CSV first.");
+        if(state.filteredPool.length < 1) {
+            alert("Syllabus pool is empty!");
             return;
         }
 
-        let sourcePool = [...state.filteredPool];
-
-        if(sourcePool.length < 1) {
-            alert("The selected Syllabus (Scope) has no questions available!");
-            return;
-        }
+        // Get 20 balanced questions for the grid
+        // Copy pool so we don't destroy main pool
+        let tempPool = [...state.filteredPool];
+        let balancedSet = getBalancedSubset(tempPool, 20);
 
         state.grid.map = {}; state.grid.taken = [];
         
         for(let i=1; i<=20; i++) {
-            if(sourcePool.length === 0) {
-                state.grid.map[i] = null; 
-                continue;
+            if(balancedSet.length > 0) {
+                // Take from balanced set
+                state.grid.map[i] = balancedSet.shift(); 
+            } else {
+                state.grid.map[i] = null;
             }
-            const rIdx = Math.floor(Math.random() * sourcePool.length);
-            state.grid.map[i] = sourcePool[rIdx];
-            sourcePool.splice(rIdx, 1);
         }
         updateGridPreview(); syncWindows();
+    }
+
+    // ޖަޖު މޯޑުގައި (Auto) ނަގާއިރު ބެލެންސްކޮށް ނެގުން
+    window.pickRandomQuestion = function() {
+        const limit = parseInt(document.getElementById('qLimit').value);
+        if(state.session.slots.length >= limit) return;
+
+        // We need just 1 question, but it should be from a book NOT currently in slots if possible
+        // Simple fix: Use standard random from filtered pool for single picks, 
+        // OR try to pick from a book not yet used in this session.
+        
+        // Let's use simple random for single pick, BUT remove used ones.
+        // To strictly balance:
+        // 1. Check used books in current session
+        // 2. Filter pool for books NOT used
+        // 3. If empty, reset filter to full pool
+        
+        let candidates = state.filteredPool.filter(id => !state.qUsed.includes(id));
+        
+        if(candidates.length === 0) { alert("No more unique questions!"); return; }
+        
+        const rIdx = Math.floor(Math.random() * candidates.length);
+        const qID = candidates[rIdx];
+
+        // Mark as used
+        state.qUsed.push(qID); 
+        // Note: filteredPool isn't spliced here to allow re-use in other sessions if needed, 
+        // but qUsed tracks current run.
+        
+        const qData = state.qDataMap[qID];
+        if(!qData.src) qData.src = resolveImage(qData.imgRaw);
+        
+        state.session.slots.push(qData);
+        state.session.activeIndex = state.session.slots.length - 1;
+        state.session.phase = 'active';
+        updateStatus(); renderSlots(); updateMirror(); syncWindows();
     }
 
     window.toggleGridScreen = function(show) {
