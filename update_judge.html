@@ -654,19 +654,10 @@
                 <hr style="border-color:#333; margin:8px 0;">
                 
                 <label>2. Select Existing Student:</label>
-                <div style="position:relative; margin-bottom:10px;">
-    <input type="text" id="stdSearchBox" 
-           placeholder="🔍 Search Name, ID or Reg No..." 
-           oninput="searchStudent(this.value)" 
-           autocomplete="off"
-           style="border:1px solid #00e676; font-weight:bold; color:#fff; background:#002200;">
-    
-    <div id="stdSearchResults" 
-         style="display:none; position:absolute; top:100%; left:0; width:100%; 
-                max-height:200px; overflow-y:auto; background:#111; border:1px solid #00e676; 
-                z-index:9999; box-shadow:0 5px 15px rgba(0,0,0,0.9);">
-    </div>
-</div>
+                <select id="studentSelector" onchange="populateStudentForm(this.value)">
+                    <option value="">-- Manual Entry --</option>
+                </select>
+
                 <hr style="border-color:#333; margin:8px 0;">
 
                 <label>3. ދަރިވަރުގެ ފުރިހަމަ ނަން:</label>
@@ -784,14 +775,10 @@
             <option value="Private">Private</option>
         </select>
     </div>
-    </select>
-    </div>
-
     <label style="margin-top:10px;">3. Generate Report (PDF / Print):</label>
-    <div style="display:grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap:5px;">
+    <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:5px;">
         <button class="btn-orange" onclick="generateAdvancedReport('top3')">🥉 Top 3</button>
         <button class="btn-cyan" onclick="generateAdvancedReport('top5')">🏆 Top 5</button>
-        <button class="btn-gold" onclick="generateAdvancedReport('top10')">🌟 Top 10</button>
         <button class="btn-purple" onclick="generateAdvancedReport('all')">📄 Full List</button>
     </div>
 
@@ -1326,152 +1313,13 @@
         updateMirror(); syncWindows();
     }
 
-// ==========================================
-    // 1. SMART CSV IMPORT (With Progress Restore)
-    // ==========================================
-    function loadStudentBatch() {
-        const file = document.getElementById('batchCsv').files[0];
-        if(!file) { alert("Please select a CSV file first!"); return; }
-        
-        const r = new FileReader();
-        r.onload = e => {
-            const rows = e.target.result.split('\n');
-            state.allStudents = []; 
-            
-            let restoredCount = 0;
-
-            for(let i=1; i<rows.length; i++) {
-                // Regex Split to handle CSV commas correctly
-                const cols = rows[i].match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g);
-                if(!cols || cols.length < 5) continue;
-
-                const clean = (val) => val ? val.replace(/^"|"$/g, '').trim() : "";
-
-                // Construct Student Object
-                const std = {
-                    name: clean(cols[0]),
-                    id: clean(cols[1]),
-                    reg: clean(cols[1]), 
-                    group: clean(cols[2]),
-                    branch: clean(cols[3]),
-                    age: clean(cols[4]),
-                    address: clean(cols[5]),
-                    phone: clean(cols[6]),
-                    parent: clean(cols[7]),
-                    parentPhone: clean(cols[8]),
-                    email: clean(cols[9]),
-                    instType: clean(cols[10]) || "School"
-                };
-                
-                state.allStudents.push(std);
-
-                // --- RESTORE PREVIOUS SCORES ---
-                const finalScoreVal = parseFloat(clean(cols[cols.length - 2])); 
-                
-                if(!isNaN(finalScoreVal) && finalScoreVal > 0) {
-                    let restoredResult = { ...std, finalScore: finalScoreVal, scores: {} };
-                    const exists = state.judging.savedResults.find(r => r.id === std.id);
-                    if(!exists) {
-                        state.judging.savedResults.push(restoredResult);
-                        restoredCount++;
-                    }
-                }
-            }
-            
-            saveToLocal(); 
-            
-            let msg = `✅ Loaded ${state.allStudents.length} Students.`;
-            if(restoredCount > 0) msg += `\n♻️ Restored ${restoredCount} previously judged results!`;
-            
-            alert(msg);
-        };
-        r.readAsText(file);
+    function updateTheme() {
+        const idx = document.getElementById('themeSelect').value;
+        state.theme = themeList[idx];
+        syncWindows();
     }
 
-    // ==========================================
-    // 2. SMART SEARCH FUNCTION
-    // ==========================================
-    function searchStudent(query) {
-        const listDiv = document.getElementById('stdSearchResults');
-        
-        if(!query || query.trim() === "") {
-            listDiv.style.display = 'none';
-            return;
-        }
-
-        const q = query.toLowerCase();
-        
-        const matches = state.allStudents
-            .map((s, index) => ({ s, index })) 
-            .filter(item => {
-                const name = (item.s.name || "").toLowerCase();
-                const id = (item.s.id || "").toLowerCase();
-                const reg = (item.s.reg || "").toLowerCase();
-                return name.includes(q) || id.includes(q) || reg.includes(q);
-            })
-            .slice(0, 50);
-
-        listDiv.innerHTML = '';
-        if(matches.length === 0) {
-            listDiv.innerHTML = '<div style="padding:10px; color:#aaa;">No matches found</div>';
-        } else {
-            matches.forEach(m => {
-                const div = document.createElement('div');
-                div.style.padding = "8px";
-                div.style.borderBottom = "1px solid #333";
-                div.style.cursor = "pointer";
-                div.style.fontSize = "13px";
-                div.style.color = "#fff";
-                
-                div.onmouseover = () => { div.style.background = "#004d00"; };
-                div.onmouseout = () => { div.style.background = "transparent"; };
-                
-                div.innerHTML = `
-                    <span style="color:#00e676; font-weight:bold;">${m.s.name}</span> 
-                    <span style="color:#aaa; font-size:11px;">(${m.s.group})</span><br>
-                    <span style="color:#FFD700; font-size:10px;">ID: ${m.s.id}</span>
-                `;
-                
-                div.onclick = () => {
-                    populateStudentForm(m.index); 
-                    listDiv.style.display = 'none'; 
-                    document.getElementById('stdSearchBox').value = m.s.name; 
-                };
-                
-                listDiv.appendChild(div);
-            });
-        }
-        listDiv.style.display = 'block';
-    }
-
-    // ==========================================
-    // 3. POPULATE FORM & AUTO-REGISTER
-    // ==========================================
-    function populateStudentForm(idx) {
-        if(idx === "") return;
-        const s = state.allStudents[idx];
-        if(!s) return;
-        
-        document.getElementById('stdName').value = s.name || "";
-        document.getElementById('stdID').value = s.id || "";
-        document.getElementById('stdReg').value = s.reg || "";
-        document.getElementById('stdGroup').value = s.group || "Under 6"; 
-        document.getElementById('stdBranch').value = s.branch || "";
-        document.getElementById('stdAge').value = s.age || "";
-        document.getElementById('stdAddr').value = s.address || "";
-        document.getElementById('stdPhone').value = s.phone || "";
-        document.getElementById('stdParent').value = s.parent || "";
-        document.getElementById('stdParentPhone').value = s.parentPhone || "";
-        document.getElementById('stdEmail').value = s.email || "";
-        document.getElementById('stdInstType').value = s.instType || "School";
-
-        registerStudent();
-    }
-
-    // ==========================================
-    // 4. SYNC TO JUDGES (Register)
-    // ==========================================
-    function registerStudent() {
+   function registerStudent() {
         const s = {
             name: document.getElementById('stdName').value,
             id: document.getElementById('stdID').value,
@@ -1484,24 +1332,156 @@
             parent: document.getElementById('stdParent').value,
             parentPhone: document.getElementById('stdParentPhone').value,
             group: document.getElementById('stdGroup').value,
-            instType: document.getElementById('stdInstType').value,
+            instType: document.getElementById('stdInstType').value, 
             timestamp: new Date().toISOString()
         };
         
-        if(!s.name) return;
+        if(!s.name) { 
+            // ނަމެއް ނެތްނަމަ އެލަރޓް ނުކޮށް ހަމައެކަނި ރިޓަރން ކުރާގޮތަށް (އޮޓޯއިން ހިންގާއިރު އެރަރ ނުއރުވުމަށް)
+            return; 
+        }
         
         state.judging.currentStudentObj = s;
-        state.judging.liveScores = {}; 
+        state.judging.liveScores = {}; // ކުރީގެ ސްކޯތައް ފޮހެލުން
         
-        document.getElementById('currentStdLabel').innerText = `Active: ${s.name}`;
-        document.getElementById('currentStdLabel').style.color = "#00e676";
+        // ޔޫއައި އަޕްޑޭޓްކުރުން
+        const labelInfo = `${s.name} (${s.group})`;
+        document.getElementById('currentStdLabel').innerText = `Active: ${labelInfo}`;
+        document.getElementById('currentStdLabel').style.color = "#00e676"; // ފެހިކުލަ ޖެއްސުން
         
         document.getElementById('btnFinalize').innerText = "✅ Save Student Result";
         document.getElementById('btnFinalize').disabled = false;
         document.getElementById('adminScoreMonitor').innerText = "Waiting for judges...";
         
-        saveToLocal(); 
-        syncWindows(); 
+        saveToLocal(); // ޑޭޓާ ސޭވްކުރުން
+        syncWindows(); // ★ ހުރިހާ ވިންޑޯއަކަށް (ޖަޖުންނަށް) ވަގުތުން ފޮނުވުން
+    }
+// --- CSV ލޯޑުކޮށް + ރުބްރިކް އޮޓޯއިން އަޕްޑޭޓްކުރާ ފަންކްޝަން ---
+    function loadStudentBatch() {
+        const file = document.getElementById('batchCsv').files[0];
+        if(!file) { alert("Please select a CSV file first!"); return; }
+        
+        const r = new FileReader();
+        r.onload = e => {
+            const rows = e.target.result.split('\n');
+            state.allStudents = [];
+            
+            // 1. ހެޑަރތައް (Headers) ކިޔައި، ރުބްރިކް އުފެއްދުން
+            if(rows.length > 0) {
+                const headers = rows[0].split(',');
+                let newRubric = [];
+                
+                // އަޅުގަނޑުމެންގެ ސްޓޭންޑަޑް ކޮލަމްތައް (Name ... InstType) ހުންނަނީ 0-10 އަށް.
+                // ވީމާ ރުބްރިކް ފަށާނީ 11 ވަނަ ކޮލަމުން.
+                for(let i=11; i<headers.length; i++) {
+                    let h = headers[i].trim();
+                    
+                    // "TOTAL SCORE" އާ ހަމައިން ހުއްޓާލާނެ
+                    if(h === "TOTAL SCORE" || h === "RANK" || h === "REMARKS") break;
+                    
+                    if(h) {
+                        // ކޮލަމްގެ ނަމުން މާކުސް ވަކިކުރުން. މިސާލަކަށް: "Tajweed (20)"
+                        let maxMarks = 10; // ޑިފޯލްޓް
+                        let catName = h;
+                        
+                        // ބްރެކެޓް ތެރޭގައި އިންނަ އަދަދު ނެގުން (e.g. 20)
+                        const match = h.match(/\((\d+)\)/);
+                        if(match) {
+                            maxMarks = parseInt(match[1]);
+                            // ނަމުން މާކުސް ބައި ފޮހެލުން (ރީތިކޮށް ދެއްކުމަށް)
+                            catName = h.replace(/\(\d+\)/, '').trim(); 
+                        }
+                        
+                        newRubric.push({ name: catName, max: maxMarks });
+                    }
+                }
+                
+                // ރުބްރިކް އަޕްޑޭޓް ކުރުން (އެއްވެސް ބައެއް އިންނަމަ)
+                if(newRubric.length > 0) {
+                    state.judging.rubric = newRubric;
+                    renderRubricConfig(); // ސެޓިންގސް ޕެނަލްގައި ލިސްޓް އަޕްޑޭޓްކުރުން
+                }
+            }
+            
+            // 2. ދަރިވަރުންގެ ޑޭޓާ ނެގުން (ކުރިންވެސް ހަދާފައިވާ ގޮތަށް)
+            for(let i=1; i<rows.length; i++) {
+                const cols = rows[i].split(',');
+                if(cols.length < 5) continue; 
+                
+                state.allStudents.push({
+                    name: cols[0]?.trim(),
+                    id: cols[1]?.trim(),
+                    reg: cols[1]?.trim(),
+                    group: cols[2]?.trim(),
+                    branch: cols[3]?.trim(),
+                    age: cols[4]?.trim(),
+                    address: cols[5]?.trim().replace(/"/g, ''),
+                    phone: cols[6]?.trim(),
+                    parent: cols[7]?.trim(),
+                    parentPhone: cols[8]?.trim(),
+                    email: cols[9]?.trim(),
+                    instType: cols[10]?.trim() || "School"
+                });
+            }
+            
+            populateStudentSelector();
+            saveToLocal();
+            
+            // ޖަޖުންގެ ސްކްރީންތައް ވަގުތުން އަޕްޑޭޓްކުރުން
+            syncWindows(); 
+            
+            alert(`✅ Loaded ${state.allStudents.length} Students & Updated Rubric Structure!`);
+        };
+        r.readAsText(file);
+    }
+
+    // --- 2. ޑްރޮޕްޑައުން ލިސްޓަށް ނަންތައް އަޅައިދޭ ފަންކްޝަން ---
+    function populateStudentSelector() {
+        const sel = document.getElementById('studentSelector');
+        sel.innerHTML = '<option value="">-- Manual Entry --</option>';
+        state.allStudents.forEach((s, idx) => {
+            let opt = document.createElement('option');
+            opt.value = idx;
+            // ލިސްޓުގައި ދައްކާނީ: ނަން (ގްރޫޕް) - އައިޑީ
+            opt.innerText = `${s.name} (${s.group}) - ${s.id}`;
+            sel.appendChild(opt);
+        });
+    }
+
+    // ... މަތީގައި މިބައި އިންނާނެ ...
+    function populateStudentSelector() {
+        const sel = document.getElementById('studentSelector');
+        sel.innerHTML = '<option value="">-- Manual Entry --</option>';
+        state.allStudents.forEach((s, idx) => {
+            let opt = document.createElement('option');
+            opt.value = idx;
+            opt.innerText = `${s.name} (${s.group})`;
+            sel.appendChild(opt);
+        });
+    }
+
+function populateStudentForm(idx) {
+        if(idx === "") return;
+        const s = state.allStudents[idx];
+        if(!s) return;
+        
+        // 1. އިންޕުޓް ފީލްޑްތަކަށް ޑޭޓާ އެޅުން
+        document.getElementById('stdName').value = s.name || "";
+        document.getElementById('stdID').value = s.id || "";
+        document.getElementById('stdGroup').value = s.group || "Under 6"; 
+        document.getElementById('stdBranch').value = s.branch || "";
+        document.getElementById('stdAge').value = s.age || "";
+        document.getElementById('stdAddr').value = s.address || "";
+        document.getElementById('stdPhone').value = s.phone || "";
+        document.getElementById('stdParent').value = s.parent || "";
+        document.getElementById('stdParentPhone').value = s.parentPhone || "";
+        document.getElementById('stdEmail').value = s.email || "";
+        
+        // CSV ގައި އިން "Institution Type" މި ފީލްޑަށް ސެޓްކުރުން
+        document.getElementById('stdInstType').value = s.instType || "School";
+
+        // 2. އޮޓަމެޓިކުން ރެޖިސްޓަރކޮށް ޖަޖުންނަށް ފޮނުވުން
+        registerStudent();
     }
     window.submitJudgeScore = function(judgeId, totalScore) {
     }
@@ -1623,82 +1603,68 @@
         w.print();
     }
     
-    // --- PRINT JUDGE SHEET (WITH STUDENT INFO) ---
+    // --- PRINT BLANK JUDGE SHEET ---
     function printJudgeSheetTemplate() {
-        const headerTxt = document.getElementById('rptHeader') ? document.getElementById('rptHeader').value : "JUDGE SCORE SHEET";
+        const headerTxt = document.getElementById('rptHeader').value;
         
-        // އެވަގުތު ސެލެކްޓްކޮށްފައި އިން ދަރިވަރު ހޯދުން
-        const s = state.judging.currentStudentObj;
-        
-        // ދަރިވަރެއް ނެތްނަމަ ހުސްކޮށް ދައްކާނީ
-        const sName = s ? s.name : "_________________________________";
-        const sId = s ? s.id : "____________";
-        const sCat = s ? `${s.branch} / ${s.group}` : "_________________________________";
-
         let rows = "";
         let totalMax = 0;
-        
-        // ރުބްރިކް ބައިތައް ލުން
-        if(state.judging.rubric) {
-            state.judging.rubric.forEach(r => {
-                totalMax += r.max;
-                rows += `<tr>
-                    <td style="text-align:right; font-weight:bold; font-family:'AppFont';">${r.name}</td>
-                    <td>${r.max}</td>
-                    <td></td>
-                </tr>`;
-            });
-        }
+        state.judging.rubric.forEach(r => {
+            totalMax += r.max;
+            rows += `<tr>
+                <td style="text-align:right; font-weight:bold;">${r.name}</td>
+                <td>${r.max}</td>
+                <td></td>
+            </tr>`;
+        });
 
-        let html = `<html><head><title>Judge Sheet - ${sName}</title>
-            <style>
-                body { font-family: 'Segoe UI', 'Noto Sans Thaana', sans-serif; padding: 40px; direction: rtl; }
-                h1 { text-align: center; margin-bottom: 20px; text-transform: uppercase; }
-                .meta-box { border: 1px solid #000; padding: 15px; margin-bottom: 20px; display:flex; justify-content:space-between; font-weight:bold; font-size:14px; background:#f9f9f9; }
-                table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 16px; }
-                th, td { border: 1px solid #333; padding: 12px; text-align: center; }
-                th { background: #eee; }
-                td { height: 30px; }
-            </style></head><body>
-                <h1>${headerTxt}</h1>
-                
-                <div class="meta-box">
-                    <div style="flex:2; text-align:right;">ނަން: ${sName}</div>
-                    <div style="flex:1;">އައި.ޑީ: ${sId}</div>
-                </div>
-                <div class="meta-box">
-                    <div style="flex:2; text-align:right;">ކެޓަގަރީ: ${sCat}</div>
-                    <div style="flex:1;">ޖަޖު އައި.ޑީ: ____________</div>
-                </div>
-                
-                <table>
-                    <thead>
-                        <tr>
-                            <th style="width:50%;">ބައިތައް</th>
-                            <th style="width:15%;">މެކްސިމަމް</th>
-                            <th>ދިން މާކުސް</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        ${rows}
-                        <tr style="background:#fffbe6;">
-                            <td style="text-align:right; font-weight:bold;">ޖުމްލަ</td>
-                            <td><b>${totalMax}</b></td>
-                            <td></td>
-                        </tr>
-                    </tbody>
-                </table>
-                
-                <div style="margin-top:60px;">
-                    <p>ރިމާކްސް: _________________________________________________________________</p>
-                    <p style="margin-top:50px; text-align:left;">ސޮއި: ______________________</p>
-                </div>
-            </body></html>`;
+        let html = `<html><head><title>Judge Sheet</title><style>
+            body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding: 40px; direction: rtl; }
+            h1 { text-align: center; margin-bottom: 40px; }
+            .info-box { border: 1px solid #000; padding: 10px; margin-bottom: 20px; display:flex; gap: 20px; }
+            .field { flex: 1; border-bottom: 1px dotted #000; height: 30px; margin-top:10px; }
+            table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 16px; }
+            th, td { border: 1px solid #333; padding: 15px; text-align: center; }
+            th { background: #f0f0f0; }
+        </style></head><body>
+            <h1>${headerTxt || "JUDGE SCORE SHEET"}</h1>
+            <div class="info-box">
+                <div style="flex:1;">Student Name: _______________________</div>
+                <div style="width:150px;">ID: ____________</div>
+            </div>
+             <div class="info-box">
+                <div style="flex:1;">Category: _______________________</div>
+                <div style="width:150px;">Judge ID: ____________</div>
+            </div>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width:50%;">Criteria</th>
+                        <th style="width:15%;">Max Marks</th>
+                        <th>Score Given</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${rows}
+                    <tr>
+                        <td style="text-align:right; font-weight:bold;">TOTAL</td>
+                        <td><b>${totalMax}</b></td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <div style="margin-top:50px;">
+                <p>Remarks: _________________________________________________________________</p>
+                <p style="margin-top:40px; text-align:left;">Signature: ______________________</p>
+            </div>
+        </body></html>`;
         
-        const w = window.open("", "PrintSheet", "width=850,height=900");
+        const w = window.open("", "PrintTemplate", "width=800,height=900");
         w.document.write(html);
         w.document.close();
-        // w.print(); // އޮޓޯއިން ޕްރިންޓަށް ނުފޮނުވަން (ޕްރިވިއު ބަލާލަން)
+        w.print();
     }
 
     function clearAllResults() {
@@ -3073,65 +3039,94 @@
 
     document.addEventListener('contextmenu', function(event) { event.preventDefault(); });
     
-// --- 3. EXPORT FULL MASTER SHEET (WITH SCORES & UNSCORED STUDENTS) ---
+   // 1. Download Blank Master Template (Updated with Institution Type)
+    function downloadMasterCSVTemplate() {
+        // Headers ލިސްޓަށް "Institution Type" އިތުރުކޮށްފައި
+        const headers = [
+            "Name", "ID", "Group", "Branch", "Age", "Address", "Phone", 
+            "Parent", "ParentPhone", "Email", 
+            "Institution Type (School/Office/NGO)" // ★ New Column
+        ];
+
+        // Dynamic Headers (From Settings) - އޮޓަމެޓިކުން ކެޓަގަރީތައް ނަގާނެ
+        if(state.judging.rubric) {
+            state.judging.rubric.forEach(r => {
+                headers.push(`${r.name} (${r.max})`);
+            });
+        }
+
+        // Final Columns
+        headers.push("TOTAL SCORE", "RANK", "REMARKS");
+
+        const csvContent = "data:text/csv;charset=utf-8," + headers.join(",");
+        const encodedUri = encodeURI(csvContent);
+        const link = document.createElement("a");
+        link.setAttribute("href", encodedUri);
+        link.setAttribute("download", "Rasfahi_Master_Template.csv");
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+    // 3. Export Filled Master Sheet (FINAL UPDATED VERSION)
+    // Includes: Judge 1-7 Breakdown + Institution Type
     function exportMasterResultSheet() {
-        if(!state.allStudents || state.allStudents.length === 0) {
-            alert("No student data found!");
+        if(!state.judging.savedResults || state.judging.savedResults.length === 0) {
+            alert("No results to export! (މާކުސް ދެވިފައިވާ ކުދިންނެއް ނެތް)");
             return;
         }
 
         // 1. Headers Setup
-        let csv = "Name,ID,Group,Branch,Age,Address,Phone,Parent,ParentPhone,Email,Institution Type,";
+        // Added 'Institution Type' after Branch
+        let csv = "Name,ID,Group (Age),Branch (Gofi),Institution Type,Age,Address,Phone,Parent,ParentPhone,Email,";
         
-        // Rubric Headers
+        // Rubric Columns (Breakdown placeholders)
         if(state.judging.rubric) {
-            state.judging.rubric.forEach(r => csv += `${r.name} (${r.max}),`);
+            state.judging.rubric.forEach(r => {
+                csv += `${r.name} (Cat.),`; 
+            });
         }
 
-        // Judge Columns
-        for(let i=1; i<=7; i++) csv += `JUDGE ${i} TOTAL,`;
-        
+        // --- Add Headers for Up to 7 Judges ---
+        for(let i=1; i<=7; i++) {
+            csv += `JUDGE ${i} TOTAL,`;
+        }
+
         csv += "FINAL AVERAGE,RANK\n";
 
-        // 2. Merge Data (All Students + Saved Results)
-        // މާކުސް ލިބިފައިވާ ކުދިންގެ ޑޭޓާ ނެގުން
-        const scoredMap = {};
-        state.judging.savedResults.forEach(r => { scoredMap[r.id] = r; });
+        // 2. Sort Data (High Score to Low Score)
+        let sortedList = [...state.judging.savedResults].sort((a, b) => b.finalScore - a.finalScore);
 
-        // 3. Process ALL Students
-        state.allStudents.forEach((std) => {
+        // 3. Process Rows
+        sortedList.forEach((s, index) => {
             let row = [];
             
-            // މާކުސް ލިބިފައިވޭތޯ ބެލުން
-            const result = scoredMap[std.id]; 
-
-            // Student Info
-            row.push(`"${std.name||''}"`, `"${std.id||''}"`, `"${std.group||''}"`, `"${std.branch||''}"`);
-            row.push(`"${std.age||''}"`, `"${std.address||''}"`, `"${std.phone||''}"`, `"${std.parent||''}"`, `"${std.parentPhone||''}"`, `"${std.email||''}"`);
-            row.push(`"${std.instType||'School'}"`); 
-
-            // Rubric Scores (Empty if no result)
+            // Student Info - Note: Added s.instType
+            row.push(`"${s.name||''}"`, `"${s.id||''}"`, `"${s.group||''}"`, `"${s.branch||''}"`);
+            row.push(`"${s.instType||'School'}"`); // ★ This ensures School/Office appears
+            row.push(`"${s.age||''}"`, `"${s.address||''}"`, `"${s.phone||''}"`, `"${s.parent||''}"`, `"${s.parentPhone||''}"`, `"${s.email||''}"`);
+            
+            // Rubric Placeholders
             if(state.judging.rubric) {
                 state.judging.rubric.forEach(() => row.push("-")); 
             }
 
-            // Judge Scores
+            // --- Insert Individual Judge Scores ---
             for(let i=1; i<=7; i++) {
-                let key = `Judge_${i}`;
-                let val = (result && result.scores && result.scores[key] !== undefined) ? result.scores[key] : "-";
+                let key = `Judge_${i}`; 
+                let val = (s.scores && s.scores[key] !== undefined) ? s.scores[key] : "-";
                 row.push(val);
             }
 
-            // Final Score
-            row.push(result ? result.finalScore : "-");
-            row.push("-"); // Rank will be calculated in final report, leaving blank in master sheet for ongoing editing
+            // Final Average & Rank
+            row.push(s.finalScore);
+            row.push(index + 1);
 
             csv += row.join(",") + "\n";
         });
 
-        // 4. Download
+        // 4. Download File
         const dateStr = new Date().toISOString().split('T')[0];
-        const fileName = `Rasfahi_Master_Progress_${dateStr}.csv`;
+        const fileName = `Rasfahi_Master_FULL_DETAILS_${dateStr}.csv`;
 
         const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
         const link = document.createElement("a");
@@ -3165,93 +3160,119 @@
         return list.sort((a, b) => b.finalScore - a.finalScore);
     }
 
-// --- GENERATE REPORTS (TOP 3, 5, 10, ALL) ---
     function generateAdvancedReport(mode) {
-        // 1. ޔޫޒަރު ނަގާފައިވާ ފިލްޓަރުތައް ހޯދުން
-        const fBranch = document.getElementById('rptFilterBranch').value;
-        const fGroup = document.getElementById('rptFilterGroup').value;
-        const fInst = document.getElementById('rptFilterInstType').value;
-
-        // 2. ޑޭޓާ ފިލްޓަރ ކުރުން (ހަމައެކަނި މާކުސް ދީފައިވާ ކުދިން)
-        let list = state.judging.savedResults.filter(r => {
-            // Branch Check
-            let branchMatch = (fBranch === "All") ? true : (r.branch && r.branch.includes(fBranch));
-            if(fBranch === "Balaiygen" && r.branch && r.branch.toLowerCase().includes("balai")) branchMatch = true;
-            if(fBranch === "Nubalai" && r.branch && r.branch.toLowerCase().includes("nubalai")) branchMatch = true;
-
-            // Group Check
-            let groupMatch = (fGroup === "All") ? true : (r.group === fGroup);
-            
-            // Institution Check
-            let instMatch = (fInst === "All") ? true : (r.instType === fInst);
-
-            return branchMatch && groupMatch && instMatch;
-        });
-
-        // 3. މާކުސް ތަރުތީބުން (ގަދަ މީހާ މައްޗަށް)
-        list.sort((a, b) => b.finalScore - a.finalScore);
-
-        if(list.length === 0) { alert("މި ކެޓަގަރީގައި މާކުސް ދީފައިވާ އެއްވެސް ކުއްޖަކު ނެތެވެ."); return; }
-
-        // 4. މޯޑްތައް (Top 3, 5, 10, All)
-        let titleSuffix = "(މުޅި ލިސްޓު)";
-        if(mode === 'top3') { list = list.slice(0, 3); titleSuffix = "(ގަދަ 3 / 1 ވަނަ، 2 ވަނަ، 3 ވަނަ)"; }
-        if(mode === 'top5') { list = list.slice(0, 5); titleSuffix = "(ގަދަ 5)"; }
-        if(mode === 'top10') { list = list.slice(0, 10); titleSuffix = "(ގަދަ 10)"; } // ★ Top 10 Support
-
-        // 5. ރިޕޯޓް ޖެނެރޭޓް ކުރުން (HTML)
-        // ... (ކުރިން ދިން HTML ކޯޑު މިތަނުގައި ބޭނުންކުރެވޭނެ) ...
-        // ތިރީގައި މިވަނީ ކުރުކޮށް، އެކަމަކު ފުރިހަމައަށް:
+        let list = getFilteredResults();
         
-        const instName = document.getElementById('rptInstName').value || "މުއައްސަސާ";
-        const compName = document.getElementById('rptCompName').value || "ޤުރުއާން މުބާރާތް";
-        
-        // ޑްރޮޕްޑައުންގެ ޓެކްސްޓް ހޯދުން (ވެލިއު ނޫން)
-        const bSelect = document.getElementById('rptFilterBranch');
-        const gSelect = document.getElementById('rptFilterGroup');
-        const bText = bSelect.options[bSelect.selectedIndex].text;
-        const gText = gSelect.options[gSelect.selectedIndex].text;
+        // Slice for Top 3/5
+        let titleSuffix = "(Full List)";
+        if(mode === 'top3') { list = list.slice(0, 3); titleSuffix = "(TOP 3)"; }
+        if(mode === 'top5') { list = list.slice(0, 5); titleSuffix = "(TOP 5)"; }
 
-        let html = `
-        <!DOCTYPE html><html dir="rtl" lang="dv"><head><title>Report</title>
-        <style>
-            @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Thaana:wght@400;700&display=swap');
-            body { font-family: 'Noto Sans Thaana', sans-serif; padding: 40px; }
-            table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-            th, td { border: 1px solid #444; padding: 8px; text-align: center; }
-            th { background: #eee; }
-            .rank-1 { background: #fffde7; font-weight: bold; } /* Gold color for 1st */
-        </style></head><body>
-            <div style="text-align:center; border-bottom:2px solid #000; padding-bottom:10px;">
+        if(list.length === 0) { alert("No students found for this filter!"); return; }
+
+        // Get Custom Info
+        const instName = document.getElementById('rptInstName').value || "Quran Competition";
+        const compName = document.getElementById('rptCompName').value || "Official Results";
+        const chiefName = document.getElementById('rptChief').value || "__________________";
+        const judgeCount = parseInt(document.getElementById('rptJudgeCount').value) || 3;
+        
+        const branchTxt = document.getElementById('rptFilterBranch').value;
+        const groupTxt = document.getElementById('rptFilterGroup').value;
+
+        // Generate Signature Lines
+        let sigLines = '';
+        for(let i=1; i<=judgeCount; i++) {
+            sigLines += `
+                <div class="sig-box">
+                    <div class="line"></div>
+                    <div class="label">Judge ${i}</div>
+                </div>`;
+        }
+
+        // HTML Structure for Print
+        const html = `
+        <!DOCTYPE html>
+        <html dir="rtl">
+        <head>
+            <title>Result Report</title>
+            <style>
+                body { font-family: 'Segoe UI', Tahoma, sans-serif; padding: 40px; }
+                .header { text-align: center; margin-bottom: 40px; border-bottom: 3px double #000; padding-bottom: 20px; }
+                h1 { margin: 0; font-size: 28px; text-transform: uppercase; }
+                h2 { margin: 5px 0; font-size: 20px; color: #444; }
+                .meta { display: flex; justify-content: space-between; margin-top: 20px; font-weight: bold; font-size: 16px; border: 1px solid #ccc; padding: 10px; }
+                
+                table { width: 100%; border-collapse: collapse; margin-top: 30px; }
+                th, td { border: 1px solid #333; padding: 10px; text-align: center; }
+                th { background: #eee; font-weight: bold; }
+                tr:nth-child(1) td { background: #fffbe6; font-weight:bold; } /* 1st Place Highlight */
+
+                .footer { margin-top: 60px; page-break-inside: avoid; }
+                .chief-section { text-align: right; margin-bottom: 40px; }
+                .judges-grid { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 20px; }
+                .sig-box { width: 30%; text-align: center; margin-bottom: 30px; }
+                .line { border-bottom: 1px solid #000; margin-bottom: 5px; height: 30px; }
+                .label { font-size: 12px; color: #555; }
+                
+                @media print {
+                    button { display: none; }
+                    body { -webkit-print-color-adjust: exact; }
+                }
+            </style>
+        </head>
+        <body>
+            <button onclick="window.print()" style="position:fixed; top:10px; left:10px; padding:10px 20px; font-size:20px; background:blue; color:white; cursor:pointer;">🖨️ PRINT / SAVE AS PDF</button>
+
+            <div class="header">
                 <h1>${instName}</h1>
                 <h2>${compName}</h2>
-                <h3>ނަތީޖާ ޝީޓް ${titleSuffix}</h3>
+                <h3 style="margin-top:10px; text-decoration:underline;">OFFICIAL RESULT SHEET ${titleSuffix}</h3>
             </div>
-            <div style="margin-top:10px; display:flex; justify-content:space-between; font-weight:bold;">
-                <span>ގޮފި: ${bText}</span>
-                <span>ޢުމުރު: ${gText}</span>
-                <span>ތާރީޚް: ${new Date().toLocaleDateString()}</span>
+
+            <div class="meta">
+                <div>Branch: ${branchTxt}</div>
+                <div>Category: ${groupTxt}</div>
+                <div>Date: ${new Date().toLocaleDateString()}</div>
             </div>
+
             <table>
-                <thead><tr><th>ވަނަ</th><th>ނަން</th><th>އައި.ޑީ</th><th>މުއައްސަސާ</th><th>ޖުމްލަ</th></tr></thead>
+                <thead>
+                    <tr>
+                        <th width="10%">Rank</th>
+                        <th width="40%">Student Name</th>
+                        <th width="15%">ID Card</th>
+                        <th width="15%">Final Score</th>
+                        <th width="20%">Remarks</th>
+                    </tr>
+                </thead>
                 <tbody>
                     ${list.map((s, i) => `
-                        <tr class="${i===0 ? 'rank-1' : ''}">
+                        <tr>
                             <td>${i+1}</td>
                             <td style="text-align:right;">${s.name}</td>
                             <td>${s.id}</td>
-                            <td>${s.instType}</td>
                             <td><b>${s.finalScore}</b></td>
+                            <td></td>
                         </tr>
                     `).join('')}
                 </tbody>
             </table>
-            <div style="margin-top:50px;">
-                <p>އިސް ފަނޑިޔާރު: ________________________</p>
-            </div>
-        </body></html>`;
 
-        const w = window.open("", "ReportWin", "width=1000,height=900");
+            <div class="footer">
+                <div class="chief-section">
+                    <div>Endorsed By Chief Judge:</div>
+                    <div style="margin-top:40px; border-bottom:1px solid #000; display:inline-block; width:250px;"></div>
+                    <div style="margin-top:5px;">${chiefName}</div>
+                </div>
+
+                <div class="judges-grid">
+                    ${sigLines}
+                </div>
+            </div>
+        </body>
+        </html>`;
+
+        const w = window.open("", "Report", "width=900,height=900");
         w.document.write(html);
         w.document.close();
     }
@@ -3449,52 +3470,98 @@
         w.document.write(html);
         w.document.close();
     }
+    // --- FILTERED CSV EXPORT (Separate file for specific category) ---
+    function exportFilteredCSV() {
+        let list = getFilteredResults();
+        if(list.length === 0) { alert("No data found for this filter."); return; }
+
+        let csv = "Rank,Name,ID,Group,Branch,FinalScore\n";
+        
+        list.forEach((s, i) => {
+            csv += `${i+1},"${s.name}","${s.id}","${s.group}","${s.branch}",${s.finalScore}\n`;
+        });
+
+        const fBranch = document.getElementById('rptFilterBranch').value;
+        const fGroup = document.getElementById('rptFilterGroup').value;
+        const fileName = `Result_${fBranch}_${fGroup}.csv`;
+
+        const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement("a");
+        const url = URL.createObjectURL(blob);
+        link.setAttribute("href", url);
+        link.setAttribute("download", fileName);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
     // --- FAKE DATA GENERATOR (2000 Students) ---
     function generateFakeMasterData() {
-        // CSV Headers
+        // CSV Headers (ތިބާގެ ސިސްޓަމާ ދިމާވާގޮތަށް)
         let csv = "Name,ID,Group,Branch,Age,Address,Phone,Parent,ParentPhone,Email,Institution Type (School/Office/NGO),ތިލާވަތު (Thilawa) (30),ތަޖުވީދު (Tajweed) (20),މަޚްރަޖް (Makhraj) (20),ޞިފަ (Sifa) (10),ފަޞާޙާ (Fasaha) (10),ތަލައްފުޒާއި އަދާ (Talaffuz) (5),މަޤާމާތު (Maqamat) (5),TOTAL SCORE,RANK,REMARKS\n";
 
+        // ރެންޑަމްކޮށް ނަގާނެ ޑޭޓާތައް
         const firstNames = ["Ahmed", "Mohamed", "Ali", "Hassan", "Hussain", "Ibrahim", "Abdulla", "Yoosuf", "Ismail", "Fathimath", "Aishath", "Mariyam", "Aminath", "Hawwa", "Zuhura", "Shifa", "Niuma", "Reesha", "Zaara", "Khadheeja"];
         const lastNames = ["Nazeer", "Shareef", "Rasheed", "Manik", "Didi", "Saeed", "Waheed", "Latheef", "Jameel", "Naseem", "Zahir", "Moosa", "Adnan", "Fayaz", "Sattar", "Hameed"];
         const groups = ["Under 6", "Under 9", "Under 11", "Under 13", "Under 16", "Under 19", "General"];
         const branches = ["Main Branch", "Hulhumale", "Villimale", "North Wing", "South Wing"];
         const instTypes = ["School", "Office", "NGO", "University", "Private"];
 
-        const limit = 2000;
+        const limit = 2000; // ޖެނެރޭޓް ކުރަން ބޭނުންވާ އަދަދު
 
         for (let i = 0; i < limit; i++) {
+            // 1. Basic Info Randomization
             const fn = firstNames[Math.floor(Math.random() * firstNames.length)];
             const ln = lastNames[Math.floor(Math.random() * lastNames.length)];
             const name = `${fn} ${ln}`;
+            
+            // Unique ID generation
             const id = "A" + (Math.floor(Math.random() * 899999) + 100000);
+            
             const grp = groups[Math.floor(Math.random() * groups.length)];
             const branch = branches[Math.floor(Math.random() * branches.length)];
             const inst = instTypes[Math.floor(Math.random() * instTypes.length)];
-            const age = Math.floor(Math.random() * 15) + 6;
+            const age = Math.floor(Math.random() * 15) + 6; // Age 6 to 21
             const addr = `H. House ${Math.floor(Math.random() * 500)}`;
             const phone = "7" + (Math.floor(Math.random() * 899999) + 100000);
             const pPhone = "9" + (Math.floor(Math.random() * 899999) + 100000);
             const email = `${fn.toLowerCase()}.${ln.toLowerCase()}${i}@example.com`;
 
+            // 2. Marks Generation (Realistic Distribution)
+            // skillLevel: 0.0 to 1.0 (Higher is better student)
+            // This ensures marks across all criteria are consistent for a student
             let skillLevel = Math.random(); 
+            
+            // Bias towards good marks (make 60% of students above average)
             if(skillLevel < 0.5) skillLevel += 0.2; 
 
+            // Helper to generate score based on max marks and skill
             const getScore = (max) => {
                 let s = max * skillLevel; 
+                // Add slight variation (+- 10%) so it's not perfect math
                 s += (Math.random() * (max * 0.1)) - (max * 0.05);
                 if(s > max) s = max;
                 if(s < 0) s = 0;
                 return s.toFixed(1);
             };
 
-            const s1 = getScore(30); const s2 = getScore(20); const s3 = getScore(20);
-            const s4 = getScore(10); const s5 = getScore(10); const s6 = getScore(5); const s7 = getScore(5);
+            const s1 = getScore(30); // Thilawa
+            const s2 = getScore(20); // Tajweed
+            const s3 = getScore(20); // Makhraj
+            const s4 = getScore(10); // Sifa
+            const s5 = getScore(10); // Fasaha
+            const s6 = getScore(5);  // Talaffuz
+            const s7 = getScore(5);  // Maqamat
+
             const total = (parseFloat(s1)+parseFloat(s2)+parseFloat(s3)+parseFloat(s4)+parseFloat(s5)+parseFloat(s6)+parseFloat(s7)).toFixed(1);
 
+            // 3. Construct CSV Row
+            // Note: Added extra comma at end for Rank & Remarks columns to be empty
             let row = `\n${name},${id},${grp},${branch},${age},${addr},${phone},Parent of ${fn},${pPhone},${email},${inst},${s1},${s2},${s3},${s4},${s5},${s6},${s7},${total},,`;
+            
             csv += row;
         }
 
+        // 4. Download File
         const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
         const link = document.createElement("a");
         const url = URL.createObjectURL(blob);
@@ -3505,15 +3572,6 @@
         link.click();
         document.body.removeChild(link);
     }
-
-    // --- SEARCH BOX AUTO-HIDE LISTENER ---
-    document.addEventListener('click', function(e) {
-        const searchBox = document.getElementById('stdSearchBox');
-        const listDiv = document.getElementById('stdSearchResults');
-        if (e.target !== searchBox && e.target !== listDiv) {
-            listDiv.style.display = 'none';
-        }
-    });
 </script>
 </body>
 </html>
