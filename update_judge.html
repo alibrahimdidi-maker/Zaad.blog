@@ -645,8 +645,8 @@
     <button class="btn-blue" onclick="loadStudentBatch()">Load Batch</button>
 </div>
 
-<button class="btn-orange" onclick="generateFakeMasterData()" style="width:100%; margin-top:5px; font-size:11px; border:1px dashed #ff9800;">
-    🧪 Generate Fake 2000 Students Data
+<button class="btn-purple" onclick="downloadMasterCSVTemplate()" style="width:100%; margin-bottom:8px; font-size:11px;">
+    ⬇️ Download Master CSV Template (With Marks Columns)
 </button>
 
 <small style="color:#aaa;">Includes: Student Info + Rubric Columns (Thilawa, Tajweed etc.) + Rank</small>
@@ -1140,26 +1140,23 @@
             end: 30
         },
 
-       // ކޯޑުގެ މަތީގައި އިންނަ "let state" ގެ ތެރެއިން "judging" ބައި މިގޮތަށް ބަދަލުކޮށްލައްވާ:
-    
-    // ...
-    judging: {
-        currentStudentObj: null,
-        liveScores: {}, 
-        savedResults: [], 
-        deductionSteps: [0.25, 0.5, 1, 2],
-        
-        rubric: [
-            { name: "ތިލާވަތު (Thilawa)", max: 30 },
-            { name: "ތަޖުވީދު (Tajweed)", max: 20 },
-            { name: "މަޚްރަޖް (Makhraj)", max: 20 },
-            { name: "ޞިފަ (Sifa)", max: 10 },
-            { name: "ފަޞާޙާ (Fasaha)", max: 10 },
-            { name: "ތަލައްފުޒާއި އަދާ (Talaffuz)", max: 5 },
-            { name: "މަޤާމާތު (Maqamat)", max: 5 }
-        ]
-    },
-   
+        // Judging Data
+        judging: {
+            currentStudentObj: null,
+            liveScores: {}, // { "Judge_1": 95, "Judge_2": 90 }
+            savedResults: [], // Array of final student records
+            deductionSteps: [0.25, 0.5, 1, 2], // Configurable deduction buttons
+            rubric: [
+                { name: "ތިލާވަތު (Thilawa)", max: 30 },
+                { name: "ތަޖުވީދު (Tajweed)", max: 20 },
+                { name: "މަޚްރަޖް (Makhraj)", max: 20 },
+                { name: "ޞިފަ (Sifa)", max: 10 },
+                { name: "ފަޞާޙާ (Fasaha)", max: 10 },
+                { name: "ތަލައްފުޒާއި އަދާ (Talaffuz)", max: 5 },
+                { name: "މަޤާމާތު (Maqamat)", max: 5 }
+            ]
+        },
+
         // Ceremony Data
         ceremony: {
             active: false,
@@ -1319,7 +1316,8 @@
         syncWindows();
     }
 
-   function registerStudent() {
+   // Student Registration (Updated Logic)
+    function registerStudent() {
         const s = {
             name: document.getElementById('stdName').value,
             id: document.getElementById('stdID').value,
@@ -1332,123 +1330,63 @@
             parent: document.getElementById('stdParent').value,
             parentPhone: document.getElementById('stdParentPhone').value,
             group: document.getElementById('stdGroup').value,
+            
+            // ★ މުހިންމު ބައި: މުއައްސަސާގެ ބާވަތް މިތަނުން ސޭވްކުރާނެ
             instType: document.getElementById('stdInstType').value, 
+
             timestamp: new Date().toISOString()
         };
         
-        if(!s.name) { 
-            // ނަމެއް ނެތްނަމަ އެލަރޓް ނުކޮށް ހަމައެކަނި ރިޓަރން ކުރާގޮތަށް (އޮޓޯއިން ހިންގާއިރު އެރަރ ނުއރުވުމަށް)
-            return; 
-        }
+        if(!s.name) { alert("Enter Name!"); return; }
         
         state.judging.currentStudentObj = s;
-        state.judging.liveScores = {}; // ކުރީގެ ސްކޯތައް ފޮހެލުން
+        state.judging.liveScores = {}; // Reset live scores
         
-        // ޔޫއައި އަޕްޑޭޓްކުރުން
-        const labelInfo = `${s.name} (${s.group})`;
-        document.getElementById('currentStdLabel').innerText = `Active: ${labelInfo}`;
-        document.getElementById('currentStdLabel').style.color = "#00e676"; // ފެހިކުލަ ޖެއްސުން
-        
+        // Update UI Text
+        document.getElementById('currentStdLabel').innerText = `Active: ${s.name} (${s.group})`;
         document.getElementById('btnFinalize').innerText = "✅ Save Student Result";
         document.getElementById('btnFinalize').disabled = false;
         document.getElementById('adminScoreMonitor').innerText = "Waiting for judges...";
         
-        saveToLocal(); // ޑޭޓާ ސޭވްކުރުން
-        syncWindows(); // ★ ހުރިހާ ވިންޑޯއަކަށް (ޖަޖުންނަށް) ވަގުތުން ފޮނުވުން
+        syncWindows();
+        saveToLocal(); // Auto save
     }
-// --- CSV ލޯޑުކޮށް + ރުބްރިކް އޮޓޯއިން އަޕްޑޭޓްކުރާ ފަންކްޝަން ---
+    // Load Batch from CSV (Updated to read Institution Type)
     function loadStudentBatch() {
         const file = document.getElementById('batchCsv').files[0];
-        if(!file) { alert("Please select a CSV file first!"); return; }
+        if(!file) return;
         
         const r = new FileReader();
         r.onload = e => {
             const rows = e.target.result.split('\n');
             state.allStudents = [];
             
-            // 1. ހެޑަރތައް (Headers) ކިޔައި، ރުބްރިކް އުފެއްދުން
-            if(rows.length > 0) {
-                const headers = rows[0].split(',');
-                let newRubric = [];
-                
-                // އަޅުގަނޑުމެންގެ ސްޓޭންޑަޑް ކޮލަމްތައް (Name ... InstType) ހުންނަނީ 0-10 އަށް.
-                // ވީމާ ރުބްރިކް ފަށާނީ 11 ވަނަ ކޮލަމުން.
-                for(let i=11; i<headers.length; i++) {
-                    let h = headers[i].trim();
-                    
-                    // "TOTAL SCORE" އާ ހަމައިން ހުއްޓާލާނެ
-                    if(h === "TOTAL SCORE" || h === "RANK" || h === "REMARKS") break;
-                    
-                    if(h) {
-                        // ކޮލަމްގެ ނަމުން މާކުސް ވަކިކުރުން. މިސާލަކަށް: "Tajweed (20)"
-                        let maxMarks = 10; // ޑިފޯލްޓް
-                        let catName = h;
-                        
-                        // ބްރެކެޓް ތެރޭގައި އިންނަ އަދަދު ނެގުން (e.g. 20)
-                        const match = h.match(/\((\d+)\)/);
-                        if(match) {
-                            maxMarks = parseInt(match[1]);
-                            // ނަމުން މާކުސް ބައި ފޮހެލުން (ރީތިކޮށް ދެއްކުމަށް)
-                            catName = h.replace(/\(\d+\)/, '').trim(); 
-                        }
-                        
-                        newRubric.push({ name: catName, max: maxMarks });
-                    }
-                }
-                
-                // ރުބްރިކް އަޕްޑޭޓް ކުރުން (އެއްވެސް ބައެއް އިންނަމަ)
-                if(newRubric.length > 0) {
-                    state.judging.rubric = newRubric;
-                    renderRubricConfig(); // ސެޓިންގސް ޕެނަލްގައި ލިސްޓް އަޕްޑޭޓްކުރުން
-                }
-            }
-            
-            // 2. ދަރިވަރުންގެ ޑޭޓާ ނެގުން (ކުރިންވެސް ހަދާފައިވާ ގޮތަށް)
+            // Skipping header row 0
             for(let i=1; i<rows.length; i++) {
                 const cols = rows[i].split(',');
-                if(cols.length < 5) continue; 
+                if(cols.length < 2) continue; 
                 
                 state.allStudents.push({
                     name: cols[0]?.trim(),
                     id: cols[1]?.trim(),
-                    reg: cols[1]?.trim(),
                     group: cols[2]?.trim(),
                     branch: cols[3]?.trim(),
                     age: cols[4]?.trim(),
-                    address: cols[5]?.trim().replace(/"/g, ''),
+                    address: cols[5]?.trim(),
                     phone: cols[6]?.trim(),
                     parent: cols[7]?.trim(),
                     parentPhone: cols[8]?.trim(),
                     email: cols[9]?.trim(),
-                    instType: cols[10]?.trim() || "School"
+                    // ★ Reading the new column (Index 10)
+                    instType: cols[10]?.trim() || "School" 
                 });
             }
-            
             populateStudentSelector();
             saveToLocal();
-            
-            // ޖަޖުންގެ ސްކްރީންތައް ވަގުތުން އަޕްޑޭޓްކުރުން
-            syncWindows(); 
-            
-            alert(`✅ Loaded ${state.allStudents.length} Students & Updated Rubric Structure!`);
+            alert(`Loaded ${state.allStudents.length} students with Institution Types.`);
         };
         r.readAsText(file);
     }
-
-    // --- 2. ޑްރޮޕްޑައުން ލިސްޓަށް ނަންތައް އަޅައިދޭ ފަންކްޝަން ---
-    function populateStudentSelector() {
-        const sel = document.getElementById('studentSelector');
-        sel.innerHTML = '<option value="">-- Manual Entry --</option>';
-        state.allStudents.forEach((s, idx) => {
-            let opt = document.createElement('option');
-            opt.value = idx;
-            // ލިސްޓުގައި ދައްކާނީ: ނަން (ގްރޫޕް) - އައިޑީ
-            opt.innerText = `${s.name} (${s.group}) - ${s.id}`;
-            sel.appendChild(opt);
-        });
-    }
-
-    // ... މަތީގައި މިބައި އިންނާނެ ...
     function populateStudentSelector() {
         const sel = document.getElementById('studentSelector');
         sel.innerHTML = '<option value="">-- Manual Entry --</option>';
@@ -1460,15 +1398,14 @@
         });
     }
 
-function populateStudentForm(idx) {
+    function populateStudentForm(idx) {
         if(idx === "") return;
         const s = state.allStudents[idx];
         if(!s) return;
         
-        // 1. އިންޕުޓް ފީލްޑްތަކަށް ޑޭޓާ އެޅުން
         document.getElementById('stdName').value = s.name || "";
         document.getElementById('stdID').value = s.id || "";
-        document.getElementById('stdGroup').value = s.group || "Under 6"; 
+        document.getElementById('stdGroup').value = s.group || "Under 6"; // Try to match or leave default
         document.getElementById('stdBranch').value = s.branch || "";
         document.getElementById('stdAge').value = s.age || "";
         document.getElementById('stdAddr').value = s.address || "";
@@ -1476,15 +1413,13 @@ function populateStudentForm(idx) {
         document.getElementById('stdParent').value = s.parent || "";
         document.getElementById('stdParentPhone').value = s.parentPhone || "";
         document.getElementById('stdEmail').value = s.email || "";
-        
-        // CSV ގައި އިން "Institution Type" މި ފީލްޑަށް ސެޓްކުރުން
-        document.getElementById('stdInstType').value = s.instType || "School";
+    }
 
-        // 2. އޮޓަމެޓިކުން ރެޖިސްޓަރކޮށް ޖަޖުންނަށް ފޮނުވުން
-        registerStudent();
-    }
     window.submitJudgeScore = function(judgeId, totalScore) {
+        state.judging.liveScores[judgeId] = totalScore;
+        updateScoreMonitor();
     }
+
     function updateScoreMonitor() {
         let txt = "";
         let count = 0;
@@ -2094,9 +2029,6 @@ function populateStudentForm(idx) {
         }
     }
 
-// --- 1. SYLLABUS & BALANCED LOGIC FIX ---
-    
-    // ފިލްޓަރ ކުރުން (Surah logic fixed)
     function applySyllabusFilter() {
         const type = document.getElementById('filterType').value;
         const start = parseInt(document.getElementById('scopeStart').value) || 1;
@@ -2109,127 +2041,138 @@ function populateStudentForm(idx) {
             if(type === 'book') {
                 return q.bookNum >= start && q.bookNum <= end;
             } else {
-                // Surah num check fixed
                 return q.surahNum >= start && q.surahNum <= end;
             }
         });
 
         const status = document.getElementById('scopeStatus');
-        status.innerText = `Active Questions: ${state.filteredPool.length}`;
+        status.innerText = `Active Questions: ${state.filteredPool.length} (Range: ${start}-${end})`;
         status.style.color = state.filteredPool.length > 0 ? "#00e676" : "#ff5252";
 
         if(state.filteredPool.length === 0) {
             alert("⚠️ No questions found in this range!");
         } else {
-            // If in student mode, reshuffle immediately with new balance logic
             if(state.mode === 'student') reshuffleGrid();
         }
     }
 
-    // ބެލެންސްކޮށް ސުވާލު ނަގާ ހެލްޕަރ ފަންކްޝަން (Balanced Randomizer)
-    function getBalancedSubset(pool, count) {
-        const type = document.getElementById('filterType').value; // book or surah
-        let groups = {};
-        
-        // 1. Group questions by Book or Surah
-        pool.forEach(id => {
-            const q = state.qDataMap[id];
-            const key = (type === 'book') ? q.bookNum : q.surahNum;
-            if(!groups[key]) groups[key] = [];
-            groups[key].push(id);
-        });
+    // --- GRID ---
+    window.handleGridClick = function(boxID) {
+        const limit = parseInt(document.getElementById('qLimit').value);
+        if(state.session.selectionIDs.length >= limit) return;
 
-        // 2. Shuffle the groups (books) themselves
-        let groupKeys = Object.keys(groups).sort(() => Math.random() - 0.5);
+        const qID = state.grid.map[boxID];
         
-        let selection = [];
-        let gIndex = 0;
-
-        // 3. Round-robin selection (Book 1 -> Book 2 -> Book 1...)
-        while(selection.length < count && groupKeys.length > 0) {
-            let key = groupKeys[gIndex % groupKeys.length]; // Cycle through books
-            let availableQs = groups[key];
-            
-            if(availableQs.length > 0) {
-                // Pick random Q from this book
-                let rIdx = Math.floor(Math.random() * availableQs.length);
-                selection.push(availableQs[rIdx]);
-                availableQs.splice(rIdx, 1); // Remove picked to avoid duplicate
-            }
-            
-            // If book empty, remove from rotation? No, just skip in loop logic if implemented fully, 
-            // but for simple array splicing above handles it. 
-            // Better logic: if availableQs is empty, remove key from groupKeys?
-            if(availableQs.length === 0) {
-                groupKeys.splice(gIndex % groupKeys.length, 1);
-                // Adjust index since array shrank
-                gIndex--; 
-            }
-            
-            gIndex++;
+        if(!qID || state.grid.taken.includes(boxID)) {
+             return;
         }
-        return selection;
+
+        state.grid.taken.push(boxID);
+        state.session.selectionIDs.push(qID);
+
+        // Remove from pools
+        const idx = state.qPool.indexOf(qID);
+        if(idx > -1) state.qPool.splice(idx, 1);
+        
+        const fIdx = state.filteredPool.indexOf(qID);
+        if(fIdx > -1) state.filteredPool.splice(fIdx, 1);
+
+        state.qUsed.push(qID);
+
+        updateSelectionUI();
+
+        if(state.session.selectionIDs.length === limit) {
+            state.grid.visible = false;
+            state.session.phase = 'ready';
+            prepareSlotsFromSelection();
+            document.getElementById('btnStartReading').classList.remove('hidden');
+        } else {
+            state.session.phase = 'selection';
+        }
+        renderSlots(); updateGridPreview(); syncWindows();
     }
 
-    // ގްރިޑް ހަދާއިރު ބެލެންސްކޮށް ހެދުން
+    function updateSelectionUI() {
+        document.getElementById('selectionInfo').innerText = "Selected: " + state.session.selectionIDs.join(", ");
+    }
+
+    function prepareSlotsFromSelection() {
+        state.session.slots = state.session.selectionIDs.map(id => {
+            let q = state.qDataMap[id];
+            if(q && !q.src) q.src = resolveImage(q.imgRaw);
+            return q;
+        });
+        state.session.activeIndex = -1;
+        updateStatus();
+    }
+
+    window.startReadingSession = function() {
+        if(state.session.slots.length === 0) return;
+        state.session.activeIndex = 0;
+        state.session.phase = 'active';
+        document.getElementById('btnStartReading').classList.add('hidden');
+        updateStatus(); updateMirror(); syncWindows();
+    }
+
+    window.pickRandomQuestion = function() {
+        const limit = parseInt(document.getElementById('qLimit').value);
+        if(state.session.slots.length >= limit) return;
+        
+        const q = getRandomQ();
+        if(!q) return;
+
+        state.session.slots.push(q);
+        state.session.activeIndex = state.session.slots.length - 1;
+        state.session.phase = 'active';
+        updateStatus(); renderSlots(); updateMirror(); syncWindows();
+    };
+
+    function getRandomQ() {
+        if(state.filteredPool.length === 0) {
+             if(state.qUsed.length === 0) { alert("No Data or Empty Filter!"); return null; }
+             alert("Syllabus pool empty. Reload or check scope.");
+             return null;
+        }
+        const rIdx = Math.floor(Math.random() * state.filteredPool.length);
+        const qID = state.filteredPool[rIdx];
+        
+        state.filteredPool.splice(rIdx, 1);
+        
+        const mIdx = state.qPool.indexOf(qID);
+        if(mIdx > -1) state.qPool.splice(mIdx, 1);
+
+        state.qUsed.push(qID);
+        
+        const qData = state.qDataMap[qID];
+        if(!qData.src) qData.src = resolveImage(qData.imgRaw);
+        return qData;
+    }
+
     window.reshuffleGrid = function() {
-        if(state.filteredPool.length < 1) {
-            alert("Syllabus pool is empty!");
+        if(state.qPool.length === 0 && state.qUsed.length === 0) {
+            alert("No questions loaded! Please load CSV first.");
             return;
         }
 
-        // Get 20 balanced questions for the grid
-        // Copy pool so we don't destroy main pool
-        let tempPool = [...state.filteredPool];
-        let balancedSet = getBalancedSubset(tempPool, 20);
+        let sourcePool = [...state.filteredPool];
+
+        if(sourcePool.length < 1) {
+            alert("The selected Syllabus (Scope) has no questions available!");
+            return;
+        }
 
         state.grid.map = {}; state.grid.taken = [];
         
         for(let i=1; i<=20; i++) {
-            if(balancedSet.length > 0) {
-                // Take from balanced set
-                state.grid.map[i] = balancedSet.shift(); 
-            } else {
-                state.grid.map[i] = null;
+            if(sourcePool.length === 0) {
+                state.grid.map[i] = null; 
+                continue;
             }
+            const rIdx = Math.floor(Math.random() * sourcePool.length);
+            state.grid.map[i] = sourcePool[rIdx];
+            sourcePool.splice(rIdx, 1);
         }
         updateGridPreview(); syncWindows();
-    }
-
-    // ޖަޖު މޯޑުގައި (Auto) ނަގާއިރު ބެލެންސްކޮށް ނެގުން
-    window.pickRandomQuestion = function() {
-        const limit = parseInt(document.getElementById('qLimit').value);
-        if(state.session.slots.length >= limit) return;
-
-        // We need just 1 question, but it should be from a book NOT currently in slots if possible
-        // Simple fix: Use standard random from filtered pool for single picks, 
-        // OR try to pick from a book not yet used in this session.
-        
-        // Let's use simple random for single pick, BUT remove used ones.
-        // To strictly balance:
-        // 1. Check used books in current session
-        // 2. Filter pool for books NOT used
-        // 3. If empty, reset filter to full pool
-        
-        let candidates = state.filteredPool.filter(id => !state.qUsed.includes(id));
-        
-        if(candidates.length === 0) { alert("No more unique questions!"); return; }
-        
-        const rIdx = Math.floor(Math.random() * candidates.length);
-        const qID = candidates[rIdx];
-
-        // Mark as used
-        state.qUsed.push(qID); 
-        // Note: filteredPool isn't spliced here to allow re-use in other sessions if needed, 
-        // but qUsed tracks current run.
-        
-        const qData = state.qDataMap[qID];
-        if(!qData.src) qData.src = resolveImage(qData.imgRaw);
-        
-        state.session.slots.push(qData);
-        state.session.activeIndex = state.session.slots.length - 1;
-        state.session.phase = 'active';
-        updateStatus(); renderSlots(); updateMirror(); syncWindows();
     }
 
     window.toggleGridScreen = function(show) {
@@ -2953,32 +2896,43 @@ function populateStudentForm(idx) {
              alert("Please Allow Popups for this site!");
         }
     }
-// --- SINGLE JUDGE OPENER (FIXED) ---
+// --- SINGLE JUDGE OPENER (WITH NAME DISPLAY) ---
     function openSingleJudge() {
+        // 1. ނަންބަރާއި ނަން ހޯދުން
         const judgeNum = document.getElementById('targetJudgeSelect').value;
+        
+        // މިތަނުން މިބަލަނީ ތިބާ ދެންމެ ހެދި Input ގޮޅިތަކުގައި ނަމެއް އިންތޯ
         const nameInput = document.getElementById('jName' + judgeNum); 
         const judgeName = nameInput ? nameInput.value : ""; 
 
         const windowName = `Judge_${judgeNum}`;
         
-        // ޓައިޓްލް ހަދާގޮތް: ނަން އިންނަމަ ނަމާއެކު
+        // ★ ޓައިޓްލް ހަދާގޮތް: ނަން އިންނަމަ ނަމާއެކު، ނެތްނަމަ ހަމައެކަނި "JUDGE X"
         let displayTitle = `JUDGE ${judgeNum}`;
         if(judgeName) {
-            displayTitle += `<br><span style="font-size:0.6em; color:#fff;">${judgeName}</span>`;
+            displayTitle += `<br><span style="font-size:20px; color:#fff; font-family:'AppFont';">${judgeName}</span>`;
         }
 
+        // 2. ވިންޑޯ ހުޅުވުން
         let w = window.open("", windowName, "width=900,height=700");
+        
         if(w) {
             w.document.open();
-            // Pass true for isJudge, and the title
+            // ތައްޔާރުކުރި ޓައިޓްލް ފޮނުވުން
             w.document.write(getTemplate(false, displayTitle)); 
             w.document.close();
-            w.judgeID = windowName; // Internal ID for logic
+            
+            w.judgeID = windowName;
 
             if(!state.windows.judges) state.windows.judges = [];
+            
             const exists = state.windows.judges.some(win => win.judgeID === windowName);
-            if(!exists) state.windows.judges.push(w);
+            if(!exists) {
+                state.windows.judges.push(w);
+            }
         }
+        
+        // 3. ޑޭޓާ ފޮނުވުން
         setTimeout(syncWindows, 500);
     }
     function syncWindows() {
@@ -3471,84 +3425,6 @@ function populateStudentForm(idx) {
         const url = URL.createObjectURL(blob);
         link.setAttribute("href", url);
         link.setAttribute("download", fileName);
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-    }
-    // --- FAKE DATA GENERATOR (2000 Students) ---
-    function generateFakeMasterData() {
-        // CSV Headers (ތިބާގެ ސިސްޓަމާ ދިމާވާގޮތަށް)
-        let csv = "Name,ID,Group,Branch,Age,Address,Phone,Parent,ParentPhone,Email,Institution Type (School/Office/NGO),ތިލާވަތު (Thilawa) (30),ތަޖުވީދު (Tajweed) (20),މަޚްރަޖް (Makhraj) (20),ޞިފަ (Sifa) (10),ފަޞާޙާ (Fasaha) (10),ތަލައްފުޒާއި އަދާ (Talaffuz) (5),މަޤާމާތު (Maqamat) (5),TOTAL SCORE,RANK,REMARKS\n";
-
-        // ރެންޑަމްކޮށް ނަގާނެ ޑޭޓާތައް
-        const firstNames = ["Ahmed", "Mohamed", "Ali", "Hassan", "Hussain", "Ibrahim", "Abdulla", "Yoosuf", "Ismail", "Fathimath", "Aishath", "Mariyam", "Aminath", "Hawwa", "Zuhura", "Shifa", "Niuma", "Reesha", "Zaara", "Khadheeja"];
-        const lastNames = ["Nazeer", "Shareef", "Rasheed", "Manik", "Didi", "Saeed", "Waheed", "Latheef", "Jameel", "Naseem", "Zahir", "Moosa", "Adnan", "Fayaz", "Sattar", "Hameed"];
-        const groups = ["Under 6", "Under 9", "Under 11", "Under 13", "Under 16", "Under 19", "General"];
-        const branches = ["Main Branch", "Hulhumale", "Villimale", "North Wing", "South Wing"];
-        const instTypes = ["School", "Office", "NGO", "University", "Private"];
-
-        const limit = 2000; // ޖެނެރޭޓް ކުރަން ބޭނުންވާ އަދަދު
-
-        for (let i = 0; i < limit; i++) {
-            // 1. Basic Info Randomization
-            const fn = firstNames[Math.floor(Math.random() * firstNames.length)];
-            const ln = lastNames[Math.floor(Math.random() * lastNames.length)];
-            const name = `${fn} ${ln}`;
-            
-            // Unique ID generation
-            const id = "A" + (Math.floor(Math.random() * 899999) + 100000);
-            
-            const grp = groups[Math.floor(Math.random() * groups.length)];
-            const branch = branches[Math.floor(Math.random() * branches.length)];
-            const inst = instTypes[Math.floor(Math.random() * instTypes.length)];
-            const age = Math.floor(Math.random() * 15) + 6; // Age 6 to 21
-            const addr = `H. House ${Math.floor(Math.random() * 500)}`;
-            const phone = "7" + (Math.floor(Math.random() * 899999) + 100000);
-            const pPhone = "9" + (Math.floor(Math.random() * 899999) + 100000);
-            const email = `${fn.toLowerCase()}.${ln.toLowerCase()}${i}@example.com`;
-
-            // 2. Marks Generation (Realistic Distribution)
-            // skillLevel: 0.0 to 1.0 (Higher is better student)
-            // This ensures marks across all criteria are consistent for a student
-            let skillLevel = Math.random(); 
-            
-            // Bias towards good marks (make 60% of students above average)
-            if(skillLevel < 0.5) skillLevel += 0.2; 
-
-            // Helper to generate score based on max marks and skill
-            const getScore = (max) => {
-                let s = max * skillLevel; 
-                // Add slight variation (+- 10%) so it's not perfect math
-                s += (Math.random() * (max * 0.1)) - (max * 0.05);
-                if(s > max) s = max;
-                if(s < 0) s = 0;
-                return s.toFixed(1);
-            };
-
-            const s1 = getScore(30); // Thilawa
-            const s2 = getScore(20); // Tajweed
-            const s3 = getScore(20); // Makhraj
-            const s4 = getScore(10); // Sifa
-            const s5 = getScore(10); // Fasaha
-            const s6 = getScore(5);  // Talaffuz
-            const s7 = getScore(5);  // Maqamat
-
-            const total = (parseFloat(s1)+parseFloat(s2)+parseFloat(s3)+parseFloat(s4)+parseFloat(s5)+parseFloat(s6)+parseFloat(s7)).toFixed(1);
-
-            // 3. Construct CSV Row
-            // Note: Added extra comma at end for Rank & Remarks columns to be empty
-            let row = `\n${name},${id},${grp},${branch},${age},${addr},${phone},Parent of ${fn},${pPhone},${email},${inst},${s1},${s2},${s3},${s4},${s5},${s6},${s7},${total},,`;
-            
-            csv += row;
-        }
-
-        // 4. Download File
-        const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-        const link = document.createElement("a");
-        const url = URL.createObjectURL(blob);
-        link.setAttribute("href", url);
-        link.setAttribute("download", "Rasfahi_Fake_Master_Data_2000.csv");
-        link.style.visibility = 'hidden';
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
