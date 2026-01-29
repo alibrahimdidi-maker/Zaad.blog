@@ -2,7 +2,7 @@
 <html lang="dv" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>Rasfahi Judge System (Pro V3 Ultimate)</title>
+    <title>Rasfahi Judge System (Pro V3 Ultimate - Auto Gen)</title>
     <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Noto+Sans+Thaana:wght@400;700&display=swap" rel="stylesheet">
     <style>
         /* --- GLOBAL THEME --- */
@@ -48,7 +48,7 @@
         /* GRID STYLES */
         #gridContainer { 
             display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; padding: 40px; 
-            max-width: 900px; margin: 0 auto; width: 100%;
+            max-width: 900px; margin: 0 auto; width: 100%; overflow-y: auto;
         }
         .grid-box { 
             aspect-ratio: 1.2; background: #1a1a1a; border: 2px solid #333; 
@@ -66,9 +66,15 @@
         #previewText { 
             display:none; color: #fff; font-family: 'Amiri', serif; font-size: 40px; line-height: 1.8; 
             max-width: 80%; padding: 20px; border: 2px solid var(--gold); background: rgba(0,0,0,0.5); 
-            border-radius: 10px; text-shadow: 0 2px 4px #000;
+            border-radius: 10px; text-shadow: 0 2px 4px #000; direction: rtl;
         }
         #qDetails { margin-top: 15px; font-size: 18px; color: #aaa; }
+
+        /* TABS within Sidebar */
+        .tab-content { display: none; padding: 10px; border: 1px solid #333; background: #1a1a1a; margin-top: 5px; }
+        .tab-content.active { display: block; }
+        .tab-btn { background: #333; color: #aaa; border: none; padding: 5px; width: auto; font-size: 11px; margin-right: 2px; }
+        .tab-btn.active { background: var(--gold); color: #000; }
     </style>
 </head>
 <body>
@@ -76,7 +82,7 @@
 <div class="sidebar">
     <div style="text-align:center; padding:10px; border-bottom:2px solid var(--gold); margin-bottom:10px;">
         <h1 style="color:var(--gold); margin:0; font-size:20px;">RASFAHI JUDGE PRO</h1>
-        <small style="color:#aaa;">V3 Ultimate Edition</small>
+        <small style="color:#aaa;">V3 Ultimate + Auto Generator</small>
     </div>
 
     <div class="panel-box">
@@ -98,9 +104,36 @@
         </div>
 
         <div id="textInputs" style="display:none;">
-            <label>1. Quran Text CSV (For Ayahs):</label>
-            <input type="file" id="csvFileText" accept=".csv" onchange="loadCSV(this, 'text')">
-            <small style="color:#888;">Format: ID, ArabicText, Surah, Ayah, Branch, Group</small>
+            <div style="margin-bottom: 10px;">
+                <button class="tab-btn active" onclick="switchTextTab('auto')">Auto-Gen (Quran File)</button>
+                <button class="tab-btn" onclick="switchTextTab('manual')">Manual CSV</button>
+            </div>
+
+            <div id="tab-auto" class="tab-content active">
+                <label style="color:#81c784;">1. Quran Text File (quran-uthmani.txt):</label>
+                <input type="file" id="quranRawFile" accept=".txt">
+                
+                <div style="display:flex; gap:5px;">
+                    <div style="flex:1">
+                        <label>Min Verses:</label>
+                        <input type="number" id="genMin" value="5">
+                    </div>
+                    <div style="flex:1">
+                        <label>Max Verses:</label>
+                        <input type="number" id="genMax" value="8">
+                    </div>
+                </div>
+                <label>Total Questions to Generate:</label>
+                <input type="number" id="genTotal" value="2500">
+                
+                <button class="btn-gold" onclick="processQuranRawFile()">⚡ Generate & Load</button>
+            </div>
+
+            <div id="tab-manual" class="tab-content">
+                <label>Upload Pre-made CSV:</label>
+                <input type="file" id="csvFileText" accept=".csv" onchange="loadCSV(this, 'text')">
+                <small style="color:#888;">Format: ID, ArabicText, Surah, Ayah, Branch, Group</small>
+            </div>
         </div>
 
         <div id="dbStatus" style="font-size:11px; color:#00e676; margin-top:5px;">System Idle.</div>
@@ -227,6 +260,22 @@
         savedResults: []
     };
 
+    // --- CONSTANTS FOR GENERATOR ---
+    const suraNames = [
+        "Al-Fatiha", "Al-Baqarah", "Ali 'Imran", "An-Nisa", "Al-Ma'idah", "Al-An'am", "Al-A'raf", "Al-Anfal", "At-Tawbah", "Yunus",
+        "Hud", "Yusuf", "Ar-Ra'd", "Ibrahim", "Al-Hijr", "An-Nahl", "Al-Isra", "Al-Kahf", "Maryam", "Ta-Ha",
+        "Al-Anbiya", "Al-Hajj", "Al-Mu'minun", "An-Nur", "Al-Furqan", "Ash-Shu'ara", "An-Naml", "Al-Qasas", "Al-Ankabut", "Ar-Rum",
+        "Luqman", "As-Sajdah", "Al-Ahzab", "Saba", "Fatir", "Ya-Sin", "As-Saffat", "Sad", "Az-Zumar", "Ghafir",
+        "Fussilat", "Ash-Shura", "Az-Zukhruf", "Ad-Dukhan", "Al-Jathiyah", "Al-Ahqaf", "Muhammad", "Al-Fath", "Al-Hujurat", "Qaf",
+        "Adh-Dhariyat", "At-Tur", "An-Najm", "Al-Qamar", "Ar-Rahman", "Al-Waqi'ah", "Al-Hadid", "Al-Mujadila", "Al-Hashr", "Al-Mumtahanah",
+        "As-Saff", "Al-Jumu'ah", "Al-Munafiqun", "At-Taghabun", "At-Talaq", "At-Tahrim", "Al-Mulk", "Al-Qalam", "Al-Haqqah", "Al-Ma'arij",
+        "Nuh", "Al-Jinn", "Al-Muzzammil", "Al-Muddaththir", "Al-Qiyamah", "Al-Insan", "Al-Mursalat", "An-Naba", "An-Nazi'at", "Abasa",
+        "At-Takwir", "Al-Infitar", "Al-Mutaffifin", "Al-Inshiqaq", "Al-Buruj", "At-Tariq", "Al-A'la", "Al-Ghashiyah", "Al-Fajr", "Al-Balad",
+        "Ash-Shams", "Al-Layl", "Ad-Duhaa", "Ash-Sharh", "At-Tin", "Al-Alaq", "Al-Qadr", "Al-Bayyinah", "Az-Zalzalah", "Al-Adiyat",
+        "Al-Qari'ah", "At-Takathur", "Al-Asr", "Al-Humazah", "Al-Fil", "Quraysh", "Al-Ma'un", "Al-Kawthar", "Al-Kafirun", "An-Nasr",
+        "Al-Masad", "Al-Ikhlas", "Al-Falaq", "An-Nas"
+    ];
+
     // --- 1. SETUP & MODE ---
     function toggleMode() {
         state.mode = document.getElementById('qMode').value;
@@ -236,9 +285,23 @@
         document.getElementById('textInputs').style.display = isImg ? 'none' : 'block';
         
         document.getElementById('dbStatus').innerText = `Switched to ${state.mode.toUpperCase()} Mode.`;
-        filterQuestions(); // Re-filter based on new mode
+        filterQuestions(); 
     }
 
+    function switchTextTab(tab) {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+        
+        if (tab === 'auto') {
+            document.querySelector('#textInputs button:nth-child(1)').classList.add('active');
+            document.getElementById('tab-auto').classList.add('active');
+        } else {
+            document.querySelector('#textInputs button:nth-child(2)').classList.add('active');
+            document.getElementById('tab-manual').classList.add('active');
+        }
+    }
+
+    // --- CSV LOADER (Manual) ---
     function loadCSV(input, type) {
         const r = new FileReader();
         r.onload = e => {
@@ -248,31 +311,17 @@
             rows.slice(1).forEach(row => {
                 const c = row.split(',');
                 if(c.length > 1) {
-                    if(type === 'image') {
-                        // Image CSV: ID, ImageFile, Surah, Ayah, Branch, Group
-                        tempPool.push({
-                            id: c[0].trim(),
-                            type: 'image',
-                            content: c[1].trim(), // Image Filename
-                            surah: c[2] ? c[2].trim() : "",
-                            ayah: c[3] ? c[3].trim() : "",
-                            branch: c[4] ? c[4].trim() : "All",
-                            group: c[5] ? c[5].trim() : "All",
-                            numID: parseInt(c[0].replace(/\D/g, '')) || 0
-                        });
-                    } else {
-                        // Text CSV: ID, ArabicText, Surah, Ayah, Branch, Group
-                        tempPool.push({
-                            id: c[0].trim(),
-                            type: 'text',
-                            content: c[1].trim(), // Arabic Text
-                            surah: c[2] ? c[2].trim() : "",
-                            ayah: c[3] ? c[3].trim() : "",
-                            branch: c[4] ? c[4].trim() : "All",
-                            group: c[5] ? c[5].trim() : "All",
-                            numID: parseInt(c[0].replace(/\D/g, '')) || 0
-                        });
-                    }
+                    const obj = {
+                        id: c[0].trim(),
+                        type: type,
+                        content: c[1].trim(), 
+                        surah: c[2] ? c[2].trim() : "",
+                        ayah: c[3] ? c[3].trim() : "",
+                        branch: c[4] ? c[4].trim() : "All",
+                        group: c[5] ? c[5].trim() : "All",
+                        numID: parseInt(c[0].replace(/\D/g, '')) || 0
+                    };
+                    tempPool.push(obj);
                 }
             });
 
@@ -285,6 +334,80 @@
         r.readAsText(input.files[0]);
     }
 
+    // --- QURAN GENERATOR (Auto) ---
+    function processQuranRawFile() {
+        const fileInput = document.getElementById('quranRawFile');
+        if (!fileInput.files.length) {
+            alert("Please select the 'quran-uthmani.txt' file first!");
+            return;
+        }
+        
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const content = e.target.result;
+            generateQuestionsFromRaw(content);
+        };
+        reader.readAsText(fileInput.files[0]);
+    }
+
+    function generateQuestionsFromRaw(text) {
+        const lines = text.split('\n');
+        const quranData = [];
+        
+        // Parse raw text
+        lines.forEach(line => {
+            const parts = line.split('|');
+            if (parts.length >= 3) {
+                quranData.push({
+                    sura: parseInt(parts[0]),
+                    ayah: parseInt(parts[1]),
+                    text: parts.slice(2).join('|').trim()
+                });
+            }
+        });
+
+        if (quranData.length === 0) {
+            alert("Invalid File Format. Ensure it is Standard Tanzil/Uthmani Text.");
+            return;
+        }
+
+        const minV = parseInt(document.getElementById('genMin').value);
+        const maxV = parseInt(document.getElementById('genMax').value);
+        const targetCount = parseInt(document.getElementById('genTotal').value);
+        
+        const newPool = [];
+        const totalVerses = quranData.length;
+
+        for (let i = 0; i < targetCount; i++) {
+            const qLength = Math.floor(Math.random() * (maxV - minV + 1)) + minV;
+            const startIndex = Math.floor(Math.random() * (totalVerses - qLength));
+            
+            let passageArr = [];
+            let startVerseObj = quranData[startIndex];
+            let endVerseObj = quranData[startIndex + qLength - 1];
+
+            for (let j = 0; j < qLength; j++) {
+                passageArr.push(quranData[startIndex + j].text + " (" + quranData[startIndex + j].ayah + ")");
+            }
+            
+            // Format for Rasfahi System
+            newPool.push({
+                id: (i + 1).toString(),
+                type: 'text',
+                content: passageArr.join(" "), // Full text for display
+                surah: suraNames[startVerseObj.sura - 1] || "Sura " + startVerseObj.sura,
+                ayah: startVerseObj.ayah + " - " + endVerseObj.ayah,
+                branch: "All",
+                group: "All",
+                numID: i + 1
+            });
+        }
+
+        state.textPool = newPool;
+        document.getElementById('dbStatus').innerText = `Generated & Loaded ${newPool.length} Questions from Quran!`;
+        filterQuestions();
+    }
+
     function loadImages(input) {
         let c = 0;
         for(let f of input.files) {
@@ -294,7 +417,7 @@
         document.getElementById('dbStatus').innerText += ` | Images: ${c}`;
     }
 
-    // --- 2. FILTER & GRID LOGIC (UPDATED WITH SYLLABUS) ---
+    // --- 2. FILTER & GRID LOGIC ---
     function filterQuestions() {
         const branch = document.getElementById('stdBranch').value;
         const group = document.getElementById('stdGroup').value;
@@ -379,7 +502,7 @@
     function startNewStudent() {
         state.student = {
             name: document.getElementById('stdName').value,
-            id: document.getElementById('stdID').value || "",
+            id: "",
             branch: document.getElementById('stdBranch').value,
             group: document.getElementById('stdGroup').value
         };
@@ -513,7 +636,7 @@
 
     // --- TEMPLATES ---
     
-    // 1. STUDENT SCREEN (Supports Text & Image)
+    // 1. STUDENT SCREEN
     function openStudentWindow() {
         const w = window.open("", "Student", "width=1280,height=720");
         w.document.write(`
@@ -525,22 +648,16 @@
                 .box { background:#111; border:2px solid #333; height:120px; color:#444; display:flex; justify-content:center; align-items:center; font-size:40px; border-radius:10px; }
                 .box.taken { opacity:0.1; }
                 
-                /* Image Display */
                 #qImage { max-height:95vh; max-width:95vw; border:5px solid #D4AF37; display:none; }
-                
-                /* Text Display */
                 #qText { 
                     display:none; color:#fff; font-family:'Amiri', serif; font-size:60px; 
                     line-height:2; text-align:center; max-width:90%; 
                     text-shadow: 0 0 10px rgba(255,255,255,0.3); direction:rtl; 
                 }
-                .hidden { display:none !important; }
             </style></head><body>
                 
                 <div id="grid" class="grid"></div>
-                
                 <img id="qImage">
-                
                 <div id="qText"></div>
 
                 <script>
@@ -582,7 +699,7 @@
         state.winStudent = w;
     }
 
-    // 2. JUDGE SCREEN (Standard)
+    // 2. JUDGE SCREEN
     function openJudgeWindow() {
         const id = "Judge_" + (state.winJudges.length + 1);
         const w = window.open("", id, "width=900,height=900");
