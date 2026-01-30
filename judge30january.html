@@ -657,8 +657,12 @@
 
     <hr style="border-color:#333; margin:8px 0;">
     
-    <label>2. Select Student (Search):</label>
-    <input type="text" id="studentSearch" placeholder="🔍 Search Name, ID or Reg..." onkeyup="filterStudentList()" style="margin-bottom:5px; border-color:#ff9800;">
+   <label>2. Select Student (Search):</label>
+    
+    <input type="text" id="studentSearch" 
+           placeholder="🔍 ނަން / އައިޑީ / ރެޖިސްޓްރީ ޖައްސަވާ..." 
+           oninput="filterStudentList()" 
+           style="margin-bottom:5px; border:1px solid #FFD700; background:#001a33; color:#fff; font-weight:bold;">
     
     <select id="studentSelector" onchange="populateStudentForm(this.value)">
         <option value="">-- Manual Entry --</option>
