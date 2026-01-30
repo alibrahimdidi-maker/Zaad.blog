@@ -3259,31 +3259,26 @@ function exportMasterResultSheet() {
         document.body.removeChild(link);
     }
    function getFilteredResults() {
-        const fBranch = document.getElementById('rptFilterBranch').value;
-        const fGroup = document.getElementById('rptFilterGroup').value;
-        // ★ އައު ފިލްޓަރ ނެގުން ★
-        const fInst = document.getElementById('rptFilterInstType').value;
+    const fBranch = document.getElementById('rptFilterBranch').value;
+    const fGroup = document.getElementById('rptFilterGroup').value;
+    const fInst = document.getElementById('rptFilterInstType').value;
 
-        // Filter Data
-        let list = state.judging.savedResults.filter(r => {
-            // Check Branch
-            let branchMatch = (fBranch === "All") ? true : (r.branch && r.branch.includes(fBranch));
-            if(fBranch === "Balaiygen" && r.branch && r.branch.toLowerCase().includes("balai")) branchMatch = true;
-            if(fBranch === "Nubalai" && r.branch && r.branch.toLowerCase().includes("nubalai")) branchMatch = true;
+    let list = state.judging.savedResults.filter(r => {
+        // Branch Check
+        let branchMatch = (fBranch === "All") ? true : (r.branch && r.branch.includes(fBranch));
+        
+        // Group Check
+        let groupMatch = (fGroup === "All") ? true : (r.group === fGroup);
+        
+        // Institution Check (New)
+        let instMatch = (fInst === "All") ? true : (r.institution && r.institution.includes(fInst));
+        if(fInst === "School" && r.institution && r.institution.toLowerCase().includes("school")) instMatch = true;
 
-            // Check Group
-            let groupMatch = (fGroup === "All") ? true : (r.group === fGroup);
+        return branchMatch && groupMatch && instMatch;
+    });
 
-            // ★ Check Institution Type (School, Office, etc.) ★
-            // Note: If old data didn't have instType, treat as valid if filter is All
-            let instMatch = (fInst === "All") ? true : (r.instType === fInst);
-
-            return branchMatch && groupMatch && instMatch;
-        });
-
-        // Sort Highest to Lowest
-        return list.sort((a, b) => b.finalScore - a.finalScore);
-    }
+    return list.sort((a, b) => b.finalScore - a.finalScore);
+}
     // --- ADVANCED REPORT GENERATION (UPDATED WITH FULL DETAILS) ---
     function generateAdvancedReport(mode) {
         // 1. Get Data & Filter
