@@ -3031,34 +3031,49 @@ function updateMirror() {
         setTimeout(syncWindows, 500);
     }
     function syncWindows() {
-        const packet = {
-            slots: state.session.slots, 
-            activeIndex: state.session.activeIndex,
-            phase: state.session.phase, 
-            light: state.session.light,
-            grid: state.grid, 
-            readingMode: state.readingMode,
-            currentLang: currentLang, 
-            fontData: state.fontData,
-            
-            // މުހިންމު ބައި: ދަރިވަރުގެ ނަން ޖަޖުންނަށް ފޮނުވުން
-            judging: state.judging,
-            
-            ceremony: state.ceremony,
-            ceremonyTitle: document.getElementById('ceremonyTitle') ? document.getElementById('ceremonyTitle').value : "Ceremony"
-        };
-        
-        // Send to Student & Ceremony Screens
-        const send = w => { if(w && !w.closed && w.updateState) w.updateState(packet); };
-        
-        send(state.windows.student);
-        send(state.windows.ceremony);
-        
-        // Send to Judge Screens
-        if(state.windows.judges) {
-            state.windows.judges.forEach(w => send(w));
-        }
+    // Determine active question text to send
+    let activeQText = null;
+    const q = state.session.slots[state.session.activeIndex];
+    
+    // If we have a question, text mode is on, and text is available
+    if(q && state.quranTextData) {
+        // Fallback for surah number if missing
+        let sNum = q.surahNum || getSurahNumberByName(q.surah);
+        // Generate the text for this specific question
+        activeQText = getVersesText(sNum, q.start, q.end);
     }
+
+    const packet = {
+        slots: state.session.slots, 
+        activeIndex: state.session.activeIndex,
+        phase: state.session.phase, 
+        light: state.session.light,
+        grid: state.grid, 
+        readingMode: state.readingMode,
+        currentLang: currentLang, 
+        fontData: state.fontData,
+        
+        // ★ NEW: Send the specific text of the active question
+        currentQText: activeQText,
+        // Send display mode setting
+        displayMode: document.getElementById('displaySource') ? document.getElementById('displaySource').value : 'image',
+
+        judging: state.judging,
+        ceremony: state.ceremony,
+        ceremonyTitle: document.getElementById('ceremonyTitle') ? document.getElementById('ceremonyTitle').value : "Ceremony"
+    };
+    
+    // Send to Student & Ceremony Screens
+    const send = w => { if(w && !w.closed && w.updateState) w.updateState(packet); };
+    
+    send(state.windows.student);
+    send(state.windows.ceremony);
+    
+    // Send to Judge Screens
+    if(state.windows.judges) {
+        state.windows.judges.forEach(w => send(w));
+    }
+}
     
     // INITIALIZATION
     initThemes();
