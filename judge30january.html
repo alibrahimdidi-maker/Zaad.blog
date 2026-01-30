@@ -1377,6 +1377,7 @@ function registerStudent() {
     
     alert("Student Registered Successfully!");
 }
+// B. ބެޗް އިމްޕޯޓް (Load Batch CSV) - FIXED & ALIGNED
 function loadStudentBatch() {
     const file = document.getElementById('batchCsv').files[0];
     if(!file) { alert("Please select a CSV file first!"); return; }
@@ -1386,32 +1387,48 @@ function loadStudentBatch() {
         const rows = e.target.result.split('\n');
         state.allStudents = []; // ކުރިން ހުރި ޑޭޓާ ފޮހެލުން
         
-        // ފުރަތަމަ ރޯ (Header) ދޫކޮށްލާފައި ދެން ހުރި ބައި ނެގުން
+        let loadedCount = 0;
+
+        // Row 0 is Header, start looping from 1
         for(let i=1; i<rows.length; i++) {
-            const cols = rows[i].split(',');
-            if(cols.length < 5) continue; // ހުސް ރޯ އެއް ނަމަ ދޫކޮށްލާ
+            let rowRaw = rows[i].trim();
+            if(!rowRaw) continue; // ހުސް ލައިނެއްނަމަ ދޫކޮށްލާ
+
+            // ޑޭޓާ ސްޕްލިޓް ކުރުމާއި، ކޮމާ އާއި " ފާހަގަ ސާފުކުރުން
+            const cols = rowRaw.split(',').map(c => c.replace(/^"|"$/g, '').trim());
             
-            // ތިބާ އެދިލެއްވި މާސްޓަރ ޝީޓް ތަރުތީބުން ޑޭޓާ ނެގުން:
+            // ޗެކް: މަދުވެގެން ނަމާއި ހަމައަށް (Column 5) ޑޭޓާ ހުރިތޯ ބެލުން
+            if(cols.length < 6) continue; 
+            
+            // === MAPPING (މި ތަރުތީބު ފޭކް ޝީޓާ ދިމާވާނެ) ===
+            // 0: Serial, 1: Reg, 2: Group, 3: Branch, 4: Inst, 5: Name...
+            
             state.allStudents.push({
-                serial: cols[0]?.trim(),     // 1. ސުމާރު ނަންބަރ
-                reg: cols[1]?.trim(),        // 2. ރެޖިސްޓްރޭޝަން ނަންބަރ
-                group: cols[2]?.trim(),      // 3. ޢުމުރުފުރާ
-                branch: cols[3]?.trim(),     // 4. ކިޔަވާ ގޮފި
-                institution: cols[4]?.trim(),// 5. މައިވެރިވާ މުއައްސަސާ
-                name: cols[5]?.trim(),       // 6. ފުރިހަމަ ނަން
-                gender: cols[6]?.trim(),     // 7. ޖިންސު (އަންހެން/ފިރިހެން)
-                address: cols[7]?.trim(),    // 8. ދާއިމީ އެޑްރެސް
-                id: cols[8]?.trim(),         // 9. އައިޑީ ނަންބަރ
-                phone: cols[9]?.trim(),      // 10. ގުޅޭނެ ނަންބަރ
-                parent: cols[10]?.trim(),    // 11. ބެލެނިވެރިޔާގެ ނަން
-                parentPhone: cols[11]?.trim(),// 12. ބެލެނިވެރިޔާ ފޯނު
-                email: cols[12]?.trim()      // 13. އީމެއިލް އެޑްރެސް
+                serial: cols[0],
+                reg: cols[1],
+                group: cols[2],       // ޢުމުރުފުރާ
+                branch: cols[3],      // ގޮފި
+                institution: cols[4], // މުއައްސަސާ
+                name: cols[5],        // ފުރިހަމަ ނަން
+                gender: cols[6],      // ޖިންސު
+                address: cols[7],
+                id: cols[8],          // އައިޑީ
+                phone: cols[9],
+                parent: cols[10],
+                parentPhone: cols[11],
+                email: cols[12]
             });
+            loadedCount++;
         }
         
         populateStudentSelector(); // ލިސްޓަށް ނަންތައް އެރުވުން
         saveToLocal(); // އޮޓޯ ސޭވް
-        alert(`Successfully Loaded ${state.allStudents.length} Students!`);
+        
+        if(loadedCount > 0) {
+            alert(`✅ Success! Loaded ${loadedCount} students.\n(Please check the Dropdown List)`);
+        } else {
+            alert("⚠️ Error: File format not recognized. Please use the Fake Data format.");
+        }
     };
     r.readAsText(file);
 }
