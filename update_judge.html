@@ -3574,9 +3574,8 @@ function toggleGenUI() {
     }
 }
 
-// 3. Generate Questions Logic (3000 Questions)
+// UPDATED GENERATOR LOGIC (BETTER RANDOMIZATION)
 function generateInternalPool() {
-    // Check if text file is loaded
     if(!state.quranSeq || state.quranSeq.length === 0) {
         alert("⚠️ Please upload 'quran-uthmani.txt' first!");
         return;
@@ -3589,11 +3588,38 @@ function generateInternalPool() {
     // Get Syllabus Scope
     const filterType = document.getElementById('filterType').value;
     const scopeStart = parseInt(document.getElementById('scopeStart').value) || 1;
-    const scopeEnd = parseInt(document.getElementById('scopeEnd').value) || 114;
+    const scopeEnd = parseInt(document.getElementById('scopeEnd').value) || 30;
 
     // Word Estimation (1 line ≈ 9 words)
     const minWords = minLines * 9;
     const maxWords = maxLines * 9;
+
+    // Helper for Juz
+    const getJuz = (s) => Math.ceil(s * 30 / 114);
+
+    // 1. First, create a list of ALL valid start indices within the scope
+    let validStartIndices = [];
+    
+    for(let i=0; i < state.quranSeq.length - 15; i++) {
+        const verse = state.quranSeq[i];
+        let inScope = false;
+        
+        if(filterType === 'surah') {
+            if(verse.sura >= scopeStart && verse.sura <= scopeEnd) inScope = true;
+        } else {
+            const j = getJuz(verse.sura);
+            if(j >= scopeStart && j <= scopeEnd) inScope = true;
+        }
+        
+        if(inScope) {
+            validStartIndices.push(i);
+        }
+    }
+
+    if(validStartIndices.length === 0) {
+        alert("⚠️ No verses found in this Syllabus Scope!");
+        return;
+    }
 
     // Reset Pools
     state.qPool = [];
@@ -3602,37 +3628,25 @@ function generateInternalPool() {
 
     let generatedCount = 0;
     let attempts = 0;
-    const maxAttempts = totalNeeded * 200; // Increase attempts for safety
+    const maxAttempts = totalNeeded * 50; 
 
-    // Helper for Juz
-    const getJuz = (s) => Math.ceil(s * 30 / 114);
-
-    // Start Generation Loop
+    // 2. Pick randomly from the Valid List
     while(generatedCount < totalNeeded && attempts < maxAttempts) {
         attempts++;
         
-        // Pick random start
-        const randIdx = Math.floor(Math.random() * (state.quranSeq.length - 15));
-        const startObj = state.quranSeq[randIdx];
+        // Pick a random index from our pre-filtered valid list
+        const randomPointer = Math.floor(Math.random() * validStartIndices.length);
+        const seqIndex = validStartIndices[randomPointer];
+        
+        const startObj = state.quranSeq[seqIndex];
 
-        // Check Scope
-        let inScope = false;
-        if(filterType === 'surah') {
-            if(startObj.sura >= scopeStart && startObj.sura <= scopeEnd) inScope = true;
-        } else {
-            const j = getJuz(startObj.sura);
-            if(j >= scopeStart && j <= scopeEnd) inScope = true;
-        }
-
-        if(!inScope) continue;
-
-        // Verify Length
+        // Check Length
         let currentWords = 0;
-        let endIndex = randIdx;
+        let endIndex = seqIndex;
         let valid = false;
 
-        for(let i = randIdx; i < state.quranSeq.length; i++) {
-            if(state.quranSeq[i].sura !== startObj.sura) break; // Same Surah constraint
+        for(let i = seqIndex; i < state.quranSeq.length; i++) {
+            if(state.quranSeq[i].sura !== startObj.sura) break; // Don't cross surah boundary
             
             currentWords += state.quranSeq[i].text.split(' ').length;
             endIndex = i;
@@ -3646,7 +3660,7 @@ function generateInternalPool() {
 
         if(valid) {
             const endObj = state.quranSeq[endIndex];
-            const qID = `Auto-${generatedCount + 1}`;
+            const qID = `Gen-${generatedCount + 1}`;
             
             const qData = {
                 id: qID,
@@ -3667,14 +3681,13 @@ function generateInternalPool() {
     }
 
     if(generatedCount > 0) {
-        alert(`✅ Success! Generated ${generatedCount} questions.\nMode: Text Mode active.`);
+        alert(`✅ Success! Generated ${generatedCount} questions from ${filterType} ${scopeStart}-${scopeEnd}.\nMode: Text Mode active.`);
         if(state.mode === 'student') reshuffleGrid();
         renderSlots();
     } else {
-        alert("⚠️ Failed to generate. Please check your Syllabus Scope.");
+        alert("⚠️ Failed to generate enough questions. Try adjusting line count.");
     }
 }
-
 // 4. Helpers
 const SURAH_LIST_LOOKUP = [
     "Al-Fatiha", "Al-Baqarah", "Ali 'Imran", "An-Nisa", "Al-Ma'idah", "Al-An'am", "Al-A'raf", "Al-Anfal", "At-Tawbah", "Yunus", "Hud", "Yusuf", "Ar-Ra'd", "Ibrahim", "Al-Hijr", "An-Nahl", "Al-Isra", "Al-Kahf", "Maryam", "Ta-Ha", "Al-Anbiya", "Al-Hajj", "Al-Mu'minun", "An-Nur", "Al-Furqan", "Ash-Shu'ara", "An-Naml", "Al-Qasas", "Al-Ankabut", "Ar-Rum", "Luqman", "As-Sajdah", "Al-Ahzab", "Saba", "Fatir", "Ya-Sin", "As-Saffat", "Sad", "Az-Zumar", "Ghafir", "Fussilat", "Ash-Shura", "Az-Zukhruf", "Ad-Dukhan", "Al-Jathiyah", "Al-Ahqaf", "Muhammad", "Al-Fath", "Al-Hujurat", "Qaf", "Adh-Dhariyat", "At-Tur", "An-Najm", "Al-Qamar", "Ar-Rahman", "Al-Waqi'ah", "Al-Hadid", "Al-Mujadila", "Al-Hashr", "Al-Mumtahanah", "As-Saff", "Al-Jumu'ah", "Al-Munafiqun", "At-Taghabun", "At-Talaq", "At-Tahrim", "Al-Mulk", "Al-Qalam", "Al-Haqqah", "Al-Ma'arij", "Nuh", "Al-Jinn", "Al-Muzzammil", "Al-Muddaththir", "Al-Qiyamah", "Al-Insan", "Al-Mursalat", "An-Naba", "An-Nazi'at", "Abasa", "At-Takwir", "Al-Infitar", "Al-Mutaffifin", "Al-Inshiqaq", "Al-Buruj", "At-Tariq", "Al-A'la", "Al-Ghashiyah", "Al-Fajr", "Al-Balad", "Ash-Shams", "Al-Layl", "Ad-Duha", "Ash-Sharh", "At-Tin", "Al-Alaq", "Al-Qadr", "Al-Bayyinah", "Az-Zalzalah", "Al-Adiyat", "Al-Qari'ah", "At-Takathur", "Al-Asr", "Al-Humazah", "Al-Fil", "Quraysh", "Al-Ma'un", "Al-Kawthar", "Al-Kafirun", "An-Nasr", "Al-Masad", "Al-Ikhlas", "Al-Falaq", "An-Nas"
