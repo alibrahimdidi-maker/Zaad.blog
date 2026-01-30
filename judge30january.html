@@ -4114,6 +4114,124 @@ function finalizeScore() {
     
     alert(`Saved Successfully!\nStudent: ${recordToSave.name}\nFinal Score: ${finalAvg}`);
 }
+    // ★ FIXED REPORT GENERATOR (WITH FARUUMA FONT) ★
+function generateAdvancedReport(mode) {
+    // 1. ލިސްޓް ފިލްޓަރ ކުރުން
+    let list = getFilteredResults(); 
+    
+    // 2. މޯޑް ޗެކްކުރުން (Top 3, 5, or Full)
+    let titleSuffix = "(މުޅި ލިސްޓު)";
+    if(mode === 'top3') { 
+        list.sort((a,b) => b.finalScore - a.finalScore); 
+        list = list.slice(0, 3); 
+        titleSuffix = "(ގަދަ 3)"; 
+    }
+    if(mode === 'top5') { 
+        list.sort((a,b) => b.finalScore - a.finalScore); 
+        list = list.slice(0, 5); 
+        titleSuffix = "(ގަދަ 5)"; 
+    }
+
+    if(list.length === 0) { alert("މިބައިގައި ދަރިވަރަކު ނެތެވެ."); return; }
+
+    // 3. ހެޑަރ މަޢުލޫމާތު ނެގުން
+    const instName = document.getElementById('rptInstName').value || "ޤުރުއާން މުބާރާތް";
+    const compName = document.getElementById('rptCompName').value || "ނަތީޖާ ޝީޓް";
+    
+    // ގޮފި އަދި އުމުރުފުރާ ޓެކްސްޓް ހޯދުން
+    const bSel = document.getElementById('rptFilterBranch');
+    const branchTxt = bSel.options[bSel.selectedIndex].text;
+    
+    const gSel = document.getElementById('rptFilterGroup');
+    const groupTxt = gSel.options[gSel.selectedIndex].text;
+
+    // 4. HTML ޖެނެރޭޓް ކުރުން (With Font Fix)
+    const html = `
+    <!DOCTYPE html>
+    <html dir="rtl" lang="dv">
+    <head>
+        <title>Result Report</title>
+        <style>
+            /* 1. Google Font Import (Fallback for Faruuma) */
+            @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Thaana:wght@400;700&display=swap');
+            
+            /* 2. Main Font Settings */
+            body { 
+                /* Faruuma first, then Waheed, then Google Font */
+                font-family: 'Faruuma', 'Waheed', 'Noto Sans Thaana', sans-serif !important;
+                background: white;
+                padding: 40px;
+                direction: rtl; 
+            }
+
+            /* 3. Table Styles */
+            table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 14px; }
+            th { background: #eee; font-weight: bold; border: 1px solid #444; padding: 10px; font-size:15px; }
+            td { border: 1px solid #444; padding: 8px; text-align: center; font-size:14px; }
+            
+            /* 4. Layout Styles */
+            h1 { font-size: 28px; text-decoration: underline; text-align: center; margin: 5px; }
+            h2 { font-size: 20px; text-align: center; margin: 5px; color:#333; }
+            h3 { font-size: 18px; text-align: center; margin: 5px; }
+            
+            .info-box { border:1px solid #ccc; padding:10px; margin-bottom:20px; display:flex; justify-content:space-between; font-weight:bold; background:#f9f9f9; }
+
+            .rank-1 { background-color: #fffacD; font-weight: bold; } /* 1st place highlight */
+
+            @media print { button { display: none; } }
+        </style>
+    </head>
+    <body>
+        <button onclick="window.print()" style="padding:15px; width:100%; background:navy; color:white; font-size:18px; margin-bottom:20px; cursor:pointer;">🖨️ ޕްރިންޓް ކުރައްވާ</button>
+
+        <h1>${instName}</h1>
+        <h2>${compName}</h2>
+        <h3>${titleSuffix}</h3>
+        
+        <div class="info-box">
+            <span>ގޮފި: ${branchTxt}</span>
+            <span>ޢުމުރު: ${groupTxt}</span>
+            <span>ތާރީޚް: ${new Date().toLocaleDateString()}</span>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th width="5%">ވަނަ</th>
+                    <th width="10%">ރެޖިސްޓްރީ</th>
+                    <th width="30%">ނަން</th>
+                    <th width="10%">އައިޑީ</th>
+                    <th width="15%">ގޮފި/ޢުމުރު</th>
+                    <th width="10%">ޖުމްލަ</th>
+                    <th width="5%">ރޭންކް</th>
+                </tr>
+            </thead>
+            <tbody>
+                ${list.map((s, i) => `
+                    <tr class="${i===0 ? 'rank-1' : ''}">
+                        <td>${i+1}</td>
+                        <td>${s.reg || '-'}</td>
+                        <td style="text-align:right; padding-right:15px;">${s.name}</td>
+                        <td>${s.id}</td>
+                        <td>${s.branch} / ${s.group}</td>
+                        <td style="font-weight:bold; font-size:16px;">${s.finalScore}</td>
+                        <td>${i+1}</td>
+                    </tr>
+                `).join('')}
+            </tbody>
+        </table>
+        
+        <div style="margin-top:50px; text-align:center;">
+            __________________________<br>
+            އިސް ފަނޑިޔާރުގެ ސޮއި
+        </div>
+    </body>
+    </html>`;
+
+    const w = window.open("", "Report", "width=1000,height=800");
+    w.document.write(html);
+    w.document.close();
+}
 </script>
 </body>
 </html>
