@@ -1426,23 +1426,28 @@ function loadStudentBatch() {
         });
     }
 
-    function populateStudentForm(idx) {
-        if(idx === "") return;
-        const s = state.allStudents[idx];
-        if(!s) return;
-        
-        document.getElementById('stdName').value = s.name || "";
-        document.getElementById('stdID').value = s.id || "";
-        document.getElementById('stdGroup').value = s.group || "Under 6"; // Try to match or leave default
-        document.getElementById('stdBranch').value = s.branch || "";
-        document.getElementById('stdAge').value = s.age || "";
-        document.getElementById('stdAddr').value = s.address || "";
-        document.getElementById('stdPhone').value = s.phone || "";
-        document.getElementById('stdParent').value = s.parent || "";
-        document.getElementById('stdParentPhone').value = s.parentPhone || "";
-        document.getElementById('stdEmail').value = s.email || "";
-    }
-
+    // Fix: Populate Form correctly mapping new fields
+function populateStudentForm(idx) {
+    if(idx === "") return;
+    const s = state.allStudents[idx];
+    if(!s) return;
+    
+    document.getElementById('stdName').value = s.name || "";
+    document.getElementById('stdID').value = s.id || "";
+    document.getElementById('stdReg').value = s.reg || "";
+    document.getElementById('stdGender').value = s.gender || "Male"; // Default to Male if empty
+    document.getElementById('stdPhone').value = s.phone || "";
+    document.getElementById('stdAddr').value = s.address || "";
+    
+    // Attempt to match dropdown value, otherwise default
+    document.getElementById('stdGroup').value = s.group || "Under 6"; 
+    document.getElementById('stdBranch').value = s.branch || "";
+    document.getElementById('stdInst').value = s.institution || ""; // New Field Mapping
+    
+    document.getElementById('stdParent').value = s.parent || "";
+    document.getElementById('stdParentPhone').value = s.parentPhone || "";
+    document.getElementById('stdEmail').value = s.email || "";
+}
     window.submitJudgeScore = function(judgeId, totalScore) {
         state.judging.liveScores[judgeId] = totalScore;
         updateScoreMonitor();
