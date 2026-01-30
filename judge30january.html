@@ -803,7 +803,22 @@
     <button class="btn-green" onclick="exportMasterResultSheet()">📥 Export FULL Master CSV</button>
     
     <button class="btn-gold" style="margin-top:5px;" onclick="downloadManualScoreSheet()">📄 Print Blank Sheet (PDF)</button>
-    
+    <hr style="border-color:#333; margin:8px 0;">
+    <label style="color:#FFD700; font-family:'Faruuma';">★ ޖަޖުންގެ ޝީޓްތައް (ބަލްކު ޕްރިންޓް):</label>
+    <div style="background:#111; padding:10px; border:1px dashed #444; border-radius:5px;">
+        <select id="bulkJudgeSelect" style="margin-bottom:5px;">
+            <option value="Judge_1">Judge 1 (ފަނޑިޔާރު 1)</option>
+            <option value="Judge_2">Judge 2 (ފަނޑިޔާރު 2)</option>
+            <option value="Judge_3">Judge 3 (ފަނޑިޔާރު 3)</option>
+            <option value="Judge_4">Judge 4 (ފަނޑިޔާރު 4)</option>
+            <option value="Judge_5">Judge 5 (ފަނޑިޔާރު 5)</option>
+            <option value="Judge_6">Judge 6 (ފަނޑިޔާރު 6)</option>
+            <option value="Judge_7">Judge 7 (ފަނޑިޔާރު 7)</option>
+        </select>
+        <button class="btn-green" onclick="printBulkJudgeSheets()">
+            🖨️ Print All Sheets (PDF)
+        </button>
+    </div>
     <button class="btn-red" style="font-size:10px; margin-top:5px;" onclick="clearAllResults()">Reset All Data</button>
 </div>
 
