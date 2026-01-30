@@ -3917,6 +3917,36 @@ function printBulkJudgeSheets() {
     w.document.write(fullHTML);
     w.document.close();
 }
+    // --- NEW SEARCH LOGIC (DATALIST) ---
+
+// 1. Update the Datalist when batch is loaded
+function populateStudentSelector() {
+    const dList = document.getElementById('studentDatalist');
+    dList.innerHTML = ''; // Clear old
+    
+    state.allStudents.forEach((s, idx) => {
+        const option = document.createElement('option');
+        // Value contains the unique identifier to find it later
+        option.value = `${s.name} (${s.id})`; 
+        dList.appendChild(option);
+    });
+}
+
+// 2. Handle Selection (When user picks from list or hits enter)
+function onStudentSelected(val) {
+    if(!val) return;
+    
+    // Find the index of the selected student string
+    // We check if "Name (ID)" matches the input
+    const index = state.allStudents.findIndex(s => `${s.name} (${s.id})` === val);
+    
+    if (index > -1) {
+        populateStudentForm(index);
+        // Optional: Clear input after selection if desired, or keep it
+    } else {
+        alert("Student not found! Please check the name.");
+    }
+}
 </script>
 </body>
 </html>
