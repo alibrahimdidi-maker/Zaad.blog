@@ -636,7 +636,7 @@
                 <input type="file" id="borderImg" accept="image/*" class="hidden" style="margin-top:5px;">
             </div>
             
-            <div class="panel">
+           <div class="panel">
     <h2 style="color:#ff9800;">5. ދަރިވަރުންގެ މަޢުލޫމާތު (Student Info)</h2>
     
     <label>1. Bulk Import (Master Sheet CSV):</label>
@@ -645,14 +645,21 @@
         <button class="btn-blue" onclick="loadStudentBatch()">Load Batch</button>
     </div>
 
-    <button class="btn-purple" onclick="downloadMasterCSVTemplate()" style="width:100%; margin-bottom:8px; font-size:11px;">
-        ⬇️ Download Blank Master Template (ފޯމެޓް)
-    </button>
-    <small style="color:#aaa;">Note: Use the template above to ensure correct column order.</small>
+    <div style="display:flex; gap:5px;">
+        <button class="btn-purple" onclick="downloadMasterCSVTemplate()" style="flex:1; font-size:11px;">
+            ⬇️ Blank Template
+        </button>
+        <button class="btn-orange" onclick="generateDummyMasterSheet()" style="flex:1; font-size:11px;">
+            🤖 Generate Fake Data
+        </button>
+    </div>
+    <small style="color:#aaa;">Use Fake Data to test the Master Sheet format.</small>
 
     <hr style="border-color:#333; margin:8px 0;">
     
-    <label>2. Select or Add Student:</label>
+    <label>2. Select Student (Search):</label>
+    <input type="text" id="studentSearch" placeholder="🔍 Search Name, ID or Reg..." onkeyup="filterStudentList()" style="margin-bottom:5px; border-color:#ff9800;">
+    
     <select id="studentSelector" onchange="populateStudentForm(this.value)">
         <option value="">-- Manual Entry --</option>
     </select>
