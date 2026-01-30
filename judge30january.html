@@ -3177,7 +3177,7 @@ function exportMasterResultSheet() {
         return list.sort((a, b) => b.finalScore - a.finalScore);
     }
 
-    // ADVANCED REPORT WITH FARUUMA FONT
+    // A. ADVANCED REPORT (FONT FIXED)
 function generateAdvancedReport(mode) {
     let list = getFilteredResults();
     
@@ -3192,8 +3192,12 @@ function generateAdvancedReport(mode) {
     const chiefName = document.getElementById('rptChief').value || "__________________";
     const judgeCount = parseInt(document.getElementById('rptJudgeCount').value) || 3;
     
-    const branchTxt = document.getElementById('rptFilterBranch').options[document.getElementById('rptFilterBranch').selectedIndex].text;
-    const groupTxt = document.getElementById('rptFilterGroup').options[document.getElementById('rptFilterGroup').selectedIndex].text;
+    // Get Text from Dropdown safely
+    const bSel = document.getElementById('rptFilterBranch');
+    const branchTxt = bSel.options[bSel.selectedIndex].text;
+    
+    const gSel = document.getElementById('rptFilterGroup');
+    const groupTxt = gSel.options[gSel.selectedIndex].text;
 
     let sigLines = '';
     for(let i=1; i<=judgeCount; i++) {
@@ -3206,11 +3210,15 @@ function generateAdvancedReport(mode) {
     <head>
         <title>Result Report</title>
         <style>
-            @font-face {
-                font-family: 'Faruuma';
-                src: local('Faruuma'), local('Waheed'), url('https://fonts.googleapis.com/earlyaccess/notosansthaana.css');
+            /* Load Noto Sans Thaana from Web as backup */
+            @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Thaana:wght@400;700&display=swap');
+            
+            body { 
+                /* Prioritize Faruuma, then Waheed, then Noto Sans */
+                font-family: 'Faruuma', 'Waheed', 'Noto Sans Thaana', sans-serif !important; 
+                padding: 40px; 
+                direction: rtl; 
             }
-            body { font-family: 'Faruuma', 'Noto Sans Thaana', sans-serif; padding: 40px; direction: rtl; }
             .header { text-align: center; margin-bottom: 30px; border-bottom: 3px double #000; padding-bottom: 20px; }
             h1 { margin: 5px 0; font-size: 26px; font-weight:bold; }
             h2 { margin: 5px 0; font-size: 20px; color: #333; }
