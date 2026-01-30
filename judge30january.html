@@ -792,16 +792,53 @@
         <button class="btn-purple" onclick="generateAdvancedReport('all')">📄 Full List</button>
     </div>
 
-    <label style="margin-top:5px;">4. Downloads:</label>
-    <button class="btn-blue" onclick="exportFilteredCSV()">📥 Download Filtered CSV</button>
-
-    <hr style="border-color:#333; margin:8px 0;">
-    
-    <button class="btn-green" onclick="exportMasterResultSheet()">📥 Export FULL Master CSV</button>
+<button class="btn-green" onclick="exportMasterResultSheet()">📥 Export FULL Master CSV</button>
 
     <button class="btn-cyan" style="margin-top:5px; background:#00bcd4; color:black;" onclick="downloadDetailedManualSheet()">
         📊 A3 Manual Master Sheet (5 Judges)
     </button>
+
+    <hr style="border-color:#333; margin:8px 0;">
+    <label style="color:#FFD700; font-family:'Faruuma';">★ ސެޝަން ހާޒިރީ / އިޢުލާން ލިސްޓު:</label>
+    
+    <div style="background:#1a1a1a; padding:10px; border:1px solid #444; border-radius:5px;">
+        <div style="display:flex; gap:5px; margin-bottom:5px;">
+            <input type="date" id="sessDate" style="flex:1; background:#000; color:#fff; border:1px solid #555;">
+            <input type="time" id="sessTime" style="flex:1; background:#000; color:#fff; border:1px solid #555;">
+        </div>
+        <div style="display:flex; gap:5px; margin-bottom:5px;">
+             <input type="text" id="sessName" placeholder="ދަންފަޅި (މިސާލު: ހެނދުނު)" style="flex:1; background:#000; color:#fff; border:1px solid #555; padding:5px;">
+        </div>
+
+        <div style="display:flex; gap:5px; margin-bottom:5px;">
+            <select id="sessFilterBranch" style="flex:1;">
+                <option value="">- ހުރިހާ ގޮތްޕެއް -</option>
+                <option value="Balaiygen">ބަލައިގެން</option>
+                <option value="Nubalai">ނުބަލައި</option>
+            </select>
+            <select id="sessFilterGender" style="flex:1;">
+                <option value="">- ޖިންސު -</option>
+                <option value="Male">ފިރިހެން</option>
+                <option value="Female">އަންހެން</option>
+            </select>
+        </div>
+        
+        <select id="sessFilterGroup" style="width:100%; margin-bottom:5px;">
+            <option value="">- ހުރިހާ ޢުމުރުފުރާއެއް -</option>
+            <option value="Under 6">6 އަހަރުން ދަށް</option>
+            <option value="Under 9">9 އަހަރުން ދަށް</option>
+            <option value="Under 11">11 އަހަރުން ދަށް</option>
+            <option value="Under 13">13 އަހަރުން ދަށް</option>
+            <option value="Under 16">16 އަހަރުން ދަށް</option>
+            <option value="Under 19">19 އަހަރުން ދަށް</option>
+            <option value="Under 21">21 އަހަރުން ދަށް</option>
+            <option value="General">ނުކުޅެދުންތެރިކަން ހުންނަ</option>
+        </select>
+
+        <button class="btn-gold" onclick="generateSessionList()">
+            🖨️ Print Session List (PDF)
+        </button>
+    </div>
     <button class="btn-gold" style="margin-top:5px;" onclick="downloadManualScoreSheet()">📄 Print Blank Sheet (PDF)</button>
     <hr style="border-color:#333; margin:8px 0;">
     <label style="color:#FFD700; font-family:'Faruuma';">★ ޖަޖުންގެ ޝީޓްތައް (ބަލްކު ޕްރިންޓް):</label>
