@@ -636,71 +636,81 @@
                 <input type="file" id="borderImg" accept="image/*" class="hidden" style="margin-top:5px;">
             </div>
             
-            <div class="panel">
-                <h2 style="color:#ff9800;">5. ދަރިވަރުންގެ މަޢުލޫމާތު (Student Info)</h2>
-                
-                <label>1. Bulk Import (Google Forms / Master CSV):</label>
-<div style="display:flex; gap:5px; margin-bottom:5px;">
-    <input type="file" id="batchCsv" accept=".csv">
-    <button class="btn-blue" onclick="loadStudentBatch()">Load Batch</button>
+           <div class="panel">
+    <h2 style="color:#ff9800;">5. ދަރިވަރުންގެ މަޢުލޫމާތު (Student Info)</h2>
+    
+    <label>1. Bulk Import (Master Sheet CSV):</label>
+    <div style="display:flex; gap:5px; margin-bottom:5px;">
+        <input type="file" id="batchCsv" accept=".csv">
+        <button class="btn-blue" onclick="loadStudentBatch()">Load Batch</button>
+    </div>
+
+    <div style="display:flex; gap:5px;">
+        <button class="btn-purple" onclick="downloadMasterCSVTemplate()" style="flex:1; font-size:11px;">
+            ⬇️ Blank Template
+        </button>
+        <button class="btn-orange" onclick="generateDummyMasterSheet()" style="flex:1; font-size:11px;">
+            🤖 Generate Fake Data
+        </button>
+    </div>
+    <small style="color:#aaa;">Use Fake Data to test the Master Sheet format.</small>
+
+    <hr style="border-color:#333; margin:8px 0;">
+    
+  <label>2. Select Student (Search & Select):</label>
+    
+    <input list="studentDatalist" id="studentSearchInput" 
+           placeholder="🔍 ނަން ޖައްސަވާ..." 
+           onchange="onStudentSelected(this.value)"
+           style="margin-bottom:5px; border:1px solid #FFD700; background:#001a33; color:#fff; font-weight:bold;">
+           
+    <datalist id="studentDatalist"></datalist>
+    <div style="margin-top:10px; border:1px dashed #444; padding:5px;">
+        <label>Personal Details:</label>
+        <input type="text" id="stdName" placeholder="ފުރިހަމަ ނަން (Full Name)">
+        
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:5px;">
+            <input type="text" id="stdID" placeholder="އައިޑީ (ID Card)">
+            <input type="text" id="stdReg" placeholder="ރެޖިސްޓްރީ (Reg No)">
+        </div>
+        
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:5px;">
+            <select id="stdGender">
+                <option value="Male">ފިރިހެން (Male)</option>
+                <option value="Female">އަންހެން (Female)</option>
+            </select>
+            <input type="text" id="stdPhone" placeholder="ފޯނު (Contact)">
+        </div>
+
+        <input type="text" id="stdAddr" placeholder="ދާއިމީ އެޑްރެސް (Address)">
+
+        <label style="margin-top:5px;">Competition Details:</label>
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:5px;">
+            <select id="stdGroup">
+                <option value="Under 6">6 އަހަރުން ދަށް</option>
+                <option value="Under 9">9 އަހަރުން ދަށް</option>
+                <option value="Under 11">11 އަހަރުން ދަށް</option>
+                <option value="Under 13">13 އަހަރުން ދަށް</option>
+                <option value="Under 16">16 އަހަރުން ދަށް</option>
+                <option value="Under 19">19 އަހަރުން ދަށް</option>
+                <option value="General">ޢާއްމު ބައި</option>
+            </select>
+            <input type="text" id="stdBranch" placeholder="ގޮފި (Branch)">
+        </div>
+        <input type="text" id="stdInst" placeholder="މުއައްސަސާ (Institution)">
+
+        <label style="margin-top:5px;">Parent Info:</label>
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:5px;">
+            <input type="text" id="stdParent" placeholder="ބެލެނިވެރިޔާ (Parent)">
+            <input type="text" id="stdParentPhone" placeholder="ބެލެނިވެރިޔާ ފޯނު">
+        </div>
+        <input type="text" id="stdEmail" placeholder="އީމެއިލް (Email)">
+
+        <button class="btn-green" style="margin-top:10px;" onclick="registerStudent()">💾 Register & Set Active</button>
+    </div>
+    
+    <p style="font-size:10px; color:#aaa; margin-top:5px;" id="currentStdLabel">No student active.</p>
 </div>
-
-<button class="btn-purple" onclick="downloadMasterCSVTemplate()" style="width:100%; margin-bottom:8px; font-size:11px;">
-    ⬇️ Download Master CSV Template (With Marks Columns)
-</button>
-
-<small style="color:#aaa;">Includes: Student Info + Rubric Columns (Thilawa, Tajweed etc.) + Rank</small>
-
-                <hr style="border-color:#333; margin:8px 0;">
-                
-                <label>2. Select Existing Student:</label>
-                <select id="studentSelector" onchange="populateStudentForm(this.value)">
-                    <option value="">-- Manual Entry --</option>
-                </select>
-
-                <hr style="border-color:#333; margin:8px 0;">
-
-                <label>3. ދަރިވަރުގެ ފުރިހަމަ ނަން:</label>
-                <input type="text" id="stdName" placeholder="Full Name">
-                
-                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:5px;">
-                    <input type="text" id="stdID" placeholder="ID Card No">
-                    <input type="text" id="stdReg" placeholder="Reg No">
-                </div>
-                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:5px;">
-                     <input type="text" id="stdAge" placeholder="Age (e.g. 12)">
-                     <input type="text" id="stdBranch" placeholder="Branch (e.g. Hifz)">
-                </div>
-                 <input type="text" id="stdAddr" placeholder="Permanent Address">
-                 <div style="display:grid; grid-template-columns: 1fr 1fr; gap:5px;">
-                    <input type="text" id="stdPhone" placeholder="Student Phone">
-                    <input type="text" id="stdEmail" placeholder="Email">
-                 </div>
-                 <input type="text" id="stdParent" placeholder="Parent Name">
-                 <input type="text" id="stdParentPhone" placeholder="Parent Phone">
-                
-               <label>4. އުމުރު ފުރާ (Age Group):</label>
-                <select id="stdGroup">
-                    <option value="Under 6">6 އަހަރުން ދަށް</option>
-                    <option value="Under 9">9 އަހަރުން ދަށް</option>
-                    <option value="Under 11">11 އަހަރުން ދަށް</option>
-                    <option value="Under 13">13 އަހަރުން ދަށް</option>
-                    <option value="Under 16">16 އަހަރުން ދަށް</option>
-                    <option value="Under 19">19 އަހަރުން ދަށް</option>
-                    <option value="General">ޢާއްމު ބައި (19 މަތި)</option>
-                </select>
-
-                <label style="display:block; margin-top:10px;">5. މުއައްސަސާގެ ބާވަތް (Institution Type):</label>
-                <select id="stdInstType" style="width:100%; margin-bottom:10px;">
-                    <option value="School">School (ސްކޫލް/މަދަރުސާ)</option>
-                    <option value="Office">Office/Company (އޮފީސް/ކުންފުނި)</option>
-                    <option value="NGO">NGO/Club (ޖަމިއްޔާ/ކުލަބު)</option>
-                    <option value="University">University/College (ޔުނިވަރސިޓީ/ކޮލެޖް)</option>
-                    <option value="Private">Private (އަމިއްލަ ގޮތުން)</option>
-                </select>
-                <button class="btn-green" style="margin-top:10px;" onclick="registerStudent()">💾 Register & Set Active</button>
-                <p style="font-size:10px; color:#aaa;" id="currentStdLabel">No student active.</p>
-            </div>
             
             <div class="panel">
                 <h2 style="color:#ff4081;">7. މާކުސް ދިނުމުގެ ގަވާއިދު (Rubric)</h2>
@@ -788,7 +798,24 @@
     <hr style="border-color:#333; margin:8px 0;">
     
     <button class="btn-green" onclick="exportMasterResultSheet()">📥 Export FULL Master CSV</button>
-    <button class="btn-gold" style="margin-top:5px;" onclick="printJudgeSheetTemplate()">📄 Blank Judge Sheet</button>
+    
+    <button class="btn-gold" style="margin-top:5px;" onclick="downloadManualScoreSheet()">📄 Print Blank Sheet (PDF)</button>
+    <hr style="border-color:#333; margin:8px 0;">
+    <label style="color:#FFD700; font-family:'Faruuma';">★ ޖަޖުންގެ ޝީޓްތައް (ބަލްކު ޕްރިންޓް):</label>
+    <div style="background:#111; padding:10px; border:1px dashed #444; border-radius:5px;">
+        <select id="bulkJudgeSelect" style="margin-bottom:5px;">
+            <option value="Judge_1">Judge 1 (ފަނޑިޔާރު 1)</option>
+            <option value="Judge_2">Judge 2 (ފަނޑިޔާރު 2)</option>
+            <option value="Judge_3">Judge 3 (ފަނޑިޔާރު 3)</option>
+            <option value="Judge_4">Judge 4 (ފަނޑިޔާރު 4)</option>
+            <option value="Judge_5">Judge 5 (ފަނޑިޔާރު 5)</option>
+            <option value="Judge_6">Judge 6 (ފަނޑިޔާރު 6)</option>
+            <option value="Judge_7">Judge 7 (ފަނޑިޔާރު 7)</option>
+        </select>
+        <button class="btn-green" onclick="printBulkJudgeSheets()">
+            🖨️ Print All Sheets (PDF)
+        </button>
+    </div>
     <button class="btn-red" style="font-size:10px; margin-top:5px;" onclick="clearAllResults()">Reset All Data</button>
 </div>
 
@@ -1316,77 +1343,111 @@
         syncWindows();
     }
 
-   // Student Registration (Updated Logic)
-    function registerStudent() {
-        const s = {
-            name: document.getElementById('stdName').value,
-            id: document.getElementById('stdID').value,
-            reg: document.getElementById('stdReg').value,
-            age: document.getElementById('stdAge').value,
-            branch: document.getElementById('stdBranch').value,
-            address: document.getElementById('stdAddr').value,
-            phone: document.getElementById('stdPhone').value,
-            email: document.getElementById('stdEmail').value,
-            parent: document.getElementById('stdParent').value,
-            parentPhone: document.getElementById('stdParentPhone').value,
-            group: document.getElementById('stdGroup').value,
-            
-            // ★ މުހިންމު ބައި: މުއައްސަސާގެ ބާވަތް މިތަނުން ސޭވްކުރާނެ
-            instType: document.getElementById('stdInstType').value, 
+   // C. މެނުއަލް ރެޖިސްޓްރޭޝަން (Register Student) - Updated Logic
+function registerStudent() {
+    // 1. އިންޕުޓް ފީލްޑްތަކުން ޑޭޓާ ނެގުން
+    const s = {
+        name: document.getElementById('stdName').value,          // ފުރިހަމަ ނަން
+        id: document.getElementById('stdID').value,              // އައިޑީ
+        reg: document.getElementById('stdReg').value,            // ރެޖިސްޓްރީ ނަންބަރ
+        gender: document.getElementById('stdGender').value,      // ★ ޖިންސު (އައު ބައި)
+        phone: document.getElementById('stdPhone').value,        // ފޯނު
+        address: document.getElementById('stdAddr').value,       // އެޑްރެސް
+        
+        group: document.getElementById('stdGroup').value,        // ޢުމުރުފުރާ
+        branch: document.getElementById('stdBranch').value,      // ގޮފި
+        institution: document.getElementById('stdInst').value,   // ★ މުއައްސަސާ (އައު ބައި)
+        
+        parent: document.getElementById('stdParent').value,      // ބެލެނިވެރިޔާ
+        parentPhone: document.getElementById('stdParentPhone').value, // ބެލެނިވެރިޔާ ފޯނު
+        email: document.getElementById('stdEmail').value,        // އީމެއިލް
+        
+        timestamp: new Date().toISOString() // ގަޑި ނެގުން
+    };
+    
+    // 2. ޗެކް ކުރުން (ނަމާއި އައިޑީ ނެތްނަމަ ކުރިއަށް ނުދާނެ)
+    if(!s.name || !s.id) { 
+        alert("Student Name and ID are required! (ނަމާއި އައިޑީ ޖަހަންވާނެ)"); 
+        return; 
+    }
+    
+    // 3. ސިސްޓަމްގެ އެކްޓިވް ކުއްޖާގެ ގޮތުގައި ސެޓްކުރުން
+    state.judging.currentStudentObj = s;
+    state.judging.liveScores = {}; // ކުރީގެ މާކުސްތައް ފޮހެލުން (ރީސެޓް)
+    
+    // 4. ސްކްރީންތަކަށް އެންގުން (UI Updates)
+    // އެޑްމިން ޕެނަލްގައި ނަން ދެއްކުން
+    document.getElementById('currentStdLabel').innerText = `Active: ${s.name} (${s.institution})`;
+    document.getElementById('currentStdLabel').style.color = "#00e676";
+    
+    // ސޭވް ބަޓަން ރެޑީ ކުރުން
+    const btn = document.getElementById('btnFinalize');
+    btn.innerText = "✅ Save Student Result";
+    btn.disabled = false;
+    
+    document.getElementById('adminScoreMonitor').innerText = "Ready for judges...";
+    
+    // 5. ޖަޖުންގެ ސްކްރީންތައް އަޕްޑޭޓް ކުރުން
+    syncWindows();
+    saveToLocal(); // ޑޭޓާ ގެއްލުނަ ނުދިނުމަށް ސޭވްކުރުން
+    
+    alert("Student Registered Successfully!");
+}
+// B. ބެޗް އިމްޕޯޓް (Load Batch CSV) - FIXED & ALIGNED
+function loadStudentBatch() {
+    const file = document.getElementById('batchCsv').files[0];
+    if(!file) { alert("Please select a CSV file first!"); return; }
+    
+    const r = new FileReader();
+    r.onload = e => {
+        const rows = e.target.result.split('\n');
+        state.allStudents = []; // ކުރިން ހުރި ޑޭޓާ ފޮހެލުން
+        
+        let loadedCount = 0;
 
-            timestamp: new Date().toISOString()
-        };
-        
-        if(!s.name) { alert("Enter Name!"); return; }
-        
-        state.judging.currentStudentObj = s;
-        state.judging.liveScores = {}; // Reset live scores
-        
-        // Update UI Text
-        document.getElementById('currentStdLabel').innerText = `Active: ${s.name} (${s.group})`;
-        document.getElementById('btnFinalize').innerText = "✅ Save Student Result";
-        document.getElementById('btnFinalize').disabled = false;
-        document.getElementById('adminScoreMonitor').innerText = "Waiting for judges...";
-        
-        syncWindows();
-        saveToLocal(); // Auto save
-    }
-    // Load Batch from CSV (Updated to read Institution Type)
-    function loadStudentBatch() {
-        const file = document.getElementById('batchCsv').files[0];
-        if(!file) return;
-        
-        const r = new FileReader();
-        r.onload = e => {
-            const rows = e.target.result.split('\n');
-            state.allStudents = [];
+        // Row 0 is Header, start looping from 1
+        for(let i=1; i<rows.length; i++) {
+            let rowRaw = rows[i].trim();
+            if(!rowRaw) continue; // ހުސް ލައިނެއްނަމަ ދޫކޮށްލާ
+
+            // ޑޭޓާ ސްޕްލިޓް ކުރުމާއި، ކޮމާ އާއި " ފާހަގަ ސާފުކުރުން
+            const cols = rowRaw.split(',').map(c => c.replace(/^"|"$/g, '').trim());
             
-            // Skipping header row 0
-            for(let i=1; i<rows.length; i++) {
-                const cols = rows[i].split(',');
-                if(cols.length < 2) continue; 
-                
-                state.allStudents.push({
-                    name: cols[0]?.trim(),
-                    id: cols[1]?.trim(),
-                    group: cols[2]?.trim(),
-                    branch: cols[3]?.trim(),
-                    age: cols[4]?.trim(),
-                    address: cols[5]?.trim(),
-                    phone: cols[6]?.trim(),
-                    parent: cols[7]?.trim(),
-                    parentPhone: cols[8]?.trim(),
-                    email: cols[9]?.trim(),
-                    // ★ Reading the new column (Index 10)
-                    instType: cols[10]?.trim() || "School" 
-                });
-            }
-            populateStudentSelector();
-            saveToLocal();
-            alert(`Loaded ${state.allStudents.length} students with Institution Types.`);
-        };
-        r.readAsText(file);
-    }
+            // ޗެކް: މަދުވެގެން ނަމާއި ހަމައަށް (Column 5) ޑޭޓާ ހުރިތޯ ބެލުން
+            if(cols.length < 6) continue; 
+            
+            // === MAPPING (މި ތަރުތީބު ފޭކް ޝީޓާ ދިމާވާނެ) ===
+            // 0: Serial, 1: Reg, 2: Group, 3: Branch, 4: Inst, 5: Name...
+            
+            state.allStudents.push({
+                serial: cols[0],
+                reg: cols[1],
+                group: cols[2],       // ޢުމުރުފުރާ
+                branch: cols[3],      // ގޮފި
+                institution: cols[4], // މުއައްސަސާ
+                name: cols[5],        // ފުރިހަމަ ނަން
+                gender: cols[6],      // ޖިންސު
+                address: cols[7],
+                id: cols[8],          // އައިޑީ
+                phone: cols[9],
+                parent: cols[10],
+                parentPhone: cols[11],
+                email: cols[12]
+            });
+            loadedCount++;
+        }
+        
+        populateStudentSelector(); // ލިސްޓަށް ނަންތައް އެރުވުން
+        saveToLocal(); // އޮޓޯ ސޭވް
+        
+        if(loadedCount > 0) {
+            alert(`✅ Success! Loaded ${loadedCount} students.\n(Please check the Dropdown List)`);
+        } else {
+            alert("⚠️ Error: File format not recognized. Please use the Fake Data format.");
+        }
+    };
+    r.readAsText(file);
+}
     function populateStudentSelector() {
         const sel = document.getElementById('studentSelector');
         sel.innerHTML = '<option value="">-- Manual Entry --</option>';
@@ -1398,28 +1459,48 @@
         });
     }
 
-    function populateStudentForm(idx) {
-        if(idx === "") return;
-        const s = state.allStudents[idx];
-        if(!s) return;
-        
-        document.getElementById('stdName').value = s.name || "";
-        document.getElementById('stdID').value = s.id || "";
-        document.getElementById('stdGroup').value = s.group || "Under 6"; // Try to match or leave default
-        document.getElementById('stdBranch').value = s.branch || "";
-        document.getElementById('stdAge').value = s.age || "";
-        document.getElementById('stdAddr').value = s.address || "";
-        document.getElementById('stdPhone').value = s.phone || "";
-        document.getElementById('stdParent').value = s.parent || "";
-        document.getElementById('stdParentPhone').value = s.parentPhone || "";
-        document.getElementById('stdEmail').value = s.email || "";
-    }
-
+    // Fix: Populate Form correctly mapping new fields
+function populateStudentForm(idx) {
+    if(idx === "") return;
+    const s = state.allStudents[idx];
+    if(!s) return;
+    
+    document.getElementById('stdName').value = s.name || "";
+    document.getElementById('stdID').value = s.id || "";
+    document.getElementById('stdReg').value = s.reg || "";
+    document.getElementById('stdGender').value = s.gender || "Male"; // Default to Male if empty
+    document.getElementById('stdPhone').value = s.phone || "";
+    document.getElementById('stdAddr').value = s.address || "";
+    
+    // Attempt to match dropdown value, otherwise default
+    document.getElementById('stdGroup').value = s.group || "Under 6"; 
+    document.getElementById('stdBranch').value = s.branch || "";
+    document.getElementById('stdInst').value = s.institution || ""; // New Field Mapping
+    
+    document.getElementById('stdParent').value = s.parent || "";
+    document.getElementById('stdParentPhone').value = s.parentPhone || "";
+    document.getElementById('stdEmail').value = s.email || "";
+}
     window.submitJudgeScore = function(judgeId, totalScore) {
         state.judging.liveScores[judgeId] = totalScore;
         updateScoreMonitor();
     }
+function filterStudentList() {
+        const input = document.getElementById('studentSearch');
+        const filter = input.value.toUpperCase();
+        const select = document.getElementById('studentSelector');
+        const options = select.getElementsByTagName('option');
 
+        for (let i = 0; i < options.length; i++) {
+            const txtValue = options[i].text; 
+            if (txtValue.toUpperCase().indexOf(filter) > -1 || filter === "") {
+                options[i].style.display = "";
+            } else {
+                if(options[i].value === "") options[i].style.display = "";
+                else options[i].style.display = "none";
+            }
+        }
+    }
     function updateScoreMonitor() {
         let txt = "";
         let count = 0;
@@ -2974,105 +3055,106 @@
 
     document.addEventListener('contextmenu', function(event) { event.preventDefault(); });
     
-   // 1. Download Blank Master Template (Updated with Institution Type)
-    function downloadMasterCSVTemplate() {
-        // Headers ލިސްޓަށް "Institution Type" އިތުރުކޮށްފައި
-        const headers = [
-            "Name", "ID", "Group", "Branch", "Age", "Address", "Phone", 
-            "Parent", "ParentPhone", "Email", 
-            "Institution Type (School/Office/NGO)" // ★ New Column
-        ];
-
-        // Dynamic Headers (From Settings) - އޮޓަމެޓިކުން ކެޓަގަރީތައް ނަގާނެ
-        if(state.judging.rubric) {
-            state.judging.rubric.forEach(r => {
-                headers.push(`${r.name} (${r.max})`);
-            });
-        }
-
-        // Final Columns
-        headers.push("TOTAL SCORE", "RANK", "REMARKS");
-
-        const csvContent = "data:text/csv;charset=utf-8," + headers.join(",");
-        const encodedUri = encodeURI(csvContent);
-        const link = document.createElement("a");
-        link.setAttribute("href", encodedUri);
-        link.setAttribute("download", "Rasfahi_Master_Template.csv");
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
+   function downloadMasterCSVTemplate() {
+    // ތިބާ ބޭނުންފުޅުވި ތަރުތީބު:
+    const headers = [
+        "Serial No",        // ސުމާރު ނަންބަރ
+        "Reg No",           // ރެޖިސްޓްރޭޝަން ނަންބަރ
+        "Age Group",        // ޢުމުރުފުރާ
+        "Branch",           // ކިޔަވާ ގޮފި
+        "Institution",      // މައިވެރިވާ މުއައްސަސާ
+        "Full Name",        // ފުރިހަމަ ނަން
+        "Gender",           // ޖިންސު (އަންހެން/ފިރިހެން)
+        "Address",          // ދާއިމީ އެޑްރެސް
+        "ID Card",          // އައިޑީ ނަންބަރ
+        "Contact No",       // ގުޅޭނެ ނަންބަރ
+        "Parent Name",      // ބެލެނިވެރިޔާގެ ނަން
+        "Parent Phone",     // ބެލެނިވެރިޔާ ފޯނު
+        "Email"             // އީމެއިލް
+    ];
+    
+    const csvContent = "data:text/csv;charset=utf-8," + headers.join(",");
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", "Rasfahi_Master_Template_V26.csv");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+}
+    // D. މާސްޓަރ ޝީޓް އެކްސްޕޯޓް (Export Master Sheet) - FINAL FIXED VERSION
+function exportMasterResultSheet() {
+    // 1. ނަތީޖާއެއް ހުރިތޯ ބެލުން
+    if(!state.judging.savedResults || state.judging.savedResults.length === 0) {
+        alert("No results to export! (މާކުސް ދެވިފައިވާ ކުދިންނެއް ނެތް)");
+        return;
     }
-    // 3. Export Filled Master Sheet (FINAL UPDATED VERSION)
-    // Includes: Judge 1-7 Breakdown + Institution Type
-    function exportMasterResultSheet() {
-        if(!state.judging.savedResults || state.judging.savedResults.length === 0) {
-            alert("No results to export! (މާކުސް ދެވިފައިވާ ކުދިންނެއް ނެތް)");
-            return;
-        }
 
-        // 1. Headers Setup
-        // Added 'Institution Type' after Branch
-        let csv = "Name,ID,Group (Age),Branch (Gofi),Institution Type,Age,Address,Phone,Parent,ParentPhone,Email,";
-        
-        // Rubric Columns (Breakdown placeholders)
-        if(state.judging.rubric) {
-            state.judging.rubric.forEach(r => {
-                csv += `${r.name} (Cat.),`; 
-            });
-        }
+    // 2. ހެޑަރތައް (Headers) - ތިބާ ބޭނުންފުޅުވި ތަރުތީބު
+    let csv = "Serial No,Reg No,Age Group,Branch,Institution,Full Name,Gender,Address,ID Card,Contact,Parent Name,Parent Phone,Email,";
 
-        // --- Add Headers for Up to 7 Judges ---
-        for(let i=1; i<=7; i++) {
-            csv += `JUDGE ${i} TOTAL,`;
-        }
-
-        csv += "FINAL AVERAGE,RANK\n";
-
-        // 2. Sort Data (High Score to Low Score)
-        let sortedList = [...state.judging.savedResults].sort((a, b) => b.finalScore - a.finalScore);
-
-        // 3. Process Rows
-        sortedList.forEach((s, index) => {
-            let row = [];
-            
-            // Student Info - Note: Added s.instType
-            row.push(`"${s.name||''}"`, `"${s.id||''}"`, `"${s.group||''}"`, `"${s.branch||''}"`);
-            row.push(`"${s.instType||'School'}"`); // ★ This ensures School/Office appears
-            row.push(`"${s.age||''}"`, `"${s.address||''}"`, `"${s.phone||''}"`, `"${s.parent||''}"`, `"${s.parentPhone||''}"`, `"${s.email||''}"`);
-            
-            // Rubric Placeholders
-            if(state.judging.rubric) {
-                state.judging.rubric.forEach(() => row.push("-")); 
-            }
-
-            // --- Insert Individual Judge Scores ---
-            for(let i=1; i<=7; i++) {
-                let key = `Judge_${i}`; 
-                let val = (s.scores && s.scores[key] !== undefined) ? s.scores[key] : "-";
-                row.push(val);
-            }
-
-            // Final Average & Rank
-            row.push(s.finalScore);
-            row.push(index + 1);
-
-            csv += row.join(",") + "\n";
+    // ކެޓަގަރީތަކުގެ ހެޑަރ (Rubric Headers)
+    if(state.judging.rubric) {
+        state.judging.rubric.forEach(r => {
+            csv += `${r.name} (Avg),`; 
         });
-
-        // 4. Download File
-        const dateStr = new Date().toISOString().split('T')[0];
-        const fileName = `Rasfahi_Master_FULL_DETAILS_${dateStr}.csv`;
-
-        const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-        const link = document.createElement("a");
-        const url = URL.createObjectURL(blob);
-        link.setAttribute("href", url);
-        link.setAttribute("download", fileName);
-        link.style.visibility = 'hidden';
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
     }
+
+    // ޖަޖުންގެ ޖުމްލަ ހެޑަރތައް (Judge 1 to 7)
+    for(let i=1; i<=7; i++) {
+        csv += `Judge ${i} Total,`;
+    }
+
+    // ފަހު ކޮލަމްތައް
+    csv += "FINAL AVERAGE,RANK,REMARKS\n";
+
+    // 3. ޑޭޓާ ސޯޓްކުރުން (އެންމެ މަތިން މާކުސް ހޯދި ކުދިން ކުރިއަށް)
+    let sortedList = [...state.judging.savedResults].sort((a, b) => b.finalScore - a.finalScore);
+
+    // 4. ކޮންމެ ކުއްޖެއްގެ މަޢުލޫމާތު ލިޔުން (Rows)
+    sortedList.forEach((s, index) => {
+        let row = [];
+        
+        // A. ކުއްޖާގެ މަޢުލޫމާތު (Personal Info) - New Order
+        row.push(index + 1); // 1. ސުމާރު ނަންބަރު (ރޭންކް ތަރުތީބުން)
+        row.push(`"${s.reg||''}"`, `"${s.group||''}"`, `"${s.branch||''}"`, `"${s.institution||''}"`);
+        row.push(`"${s.name||''}"`, `"${s.gender||''}"`, `"${s.address||''}"`, `"${s.id||''}"`);
+        row.push(`"${s.phone||''}"`, `"${s.parent||''}"`, `"${s.parentPhone||''}"`, `"${s.email||''}"`);
+
+        // B. ކެޓަގަރީތަކުގެ އެވްރެޖް (Placeholder)
+        if(state.judging.rubric) {
+            state.judging.rubric.forEach(() => row.push("-")); 
+        }
+
+        // C. ޖަޖުންގެ ވަކިވަކި ޖުމްލަ (Judge Totals)
+        for(let i=1; i<=7; i++) {
+            let key = `Judge_${i}`; 
+            let val = (s.scores && s.scores[key] !== undefined) ? s.scores[key] : "-";
+            row.push(val);
+        }
+
+        // D. ފައިނަލް ނަތީޖާ (Avg & Rank)
+        row.push(s.finalScore); // ޖުމްލަ އެވްރެޖް
+        row.push(index + 1);    // ރޭންކް (ވަނަ)
+        row.push("");           // ރިމާކްސް (ހުސްކޮށް)
+
+        // ރޯ ނިންމާލުން
+        csv += row.join(",") + "\n";
+    });
+
+    // 5. ފައިލް ޑައުންލޯޑް ކުރުން
+    const dateStr = new Date().toISOString().split('T')[0];
+    const fileName = `Rasfahi_Master_NEW_FORMAT_${dateStr}.csv`;
+
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement("a");
+    const url = URL.createObjectURL(blob);
+    link.setAttribute("href", url);
+    link.setAttribute("download", fileName);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+}
     function getFilteredResults() {
         const fBranch = document.getElementById('rptFilterBranch').value;
         const fGroup = document.getElementById('rptFilterGroup').value;
@@ -3095,123 +3177,116 @@
         return list.sort((a, b) => b.finalScore - a.finalScore);
     }
 
-    function generateAdvancedReport(mode) {
-        let list = getFilteredResults();
-        
-        // Slice for Top 3/5
-        let titleSuffix = "(Full List)";
-        if(mode === 'top3') { list = list.slice(0, 3); titleSuffix = "(TOP 3)"; }
-        if(mode === 'top5') { list = list.slice(0, 5); titleSuffix = "(TOP 5)"; }
+    // ADVANCED REPORT WITH FARUUMA FONT
+function generateAdvancedReport(mode) {
+    let list = getFilteredResults();
+    
+    let titleSuffix = "(މުޅި ލިސްޓު)";
+    if(mode === 'top3') { list = list.slice(0, 3); titleSuffix = "(ގަދަ 3)"; }
+    if(mode === 'top5') { list = list.slice(0, 5); titleSuffix = "(ގަދަ 5)"; }
 
-        if(list.length === 0) { alert("No students found for this filter!"); return; }
+    if(list.length === 0) { alert("މި ކެޓަގަރީގައި އެއްވެސް ދަރިވަރަކު ނެތެވެ!"); return; }
 
-        // Get Custom Info
-        const instName = document.getElementById('rptInstName').value || "Quran Competition";
-        const compName = document.getElementById('rptCompName').value || "Official Results";
-        const chiefName = document.getElementById('rptChief').value || "__________________";
-        const judgeCount = parseInt(document.getElementById('rptJudgeCount').value) || 3;
-        
-        const branchTxt = document.getElementById('rptFilterBranch').value;
-        const groupTxt = document.getElementById('rptFilterGroup').value;
+    const instName = document.getElementById('rptInstName').value || "މުއައްސަސާގެ ނަން";
+    const compName = document.getElementById('rptCompName').value || "ޤުރުއާން މުބާރާތް";
+    const chiefName = document.getElementById('rptChief').value || "__________________";
+    const judgeCount = parseInt(document.getElementById('rptJudgeCount').value) || 3;
+    
+    const branchTxt = document.getElementById('rptFilterBranch').options[document.getElementById('rptFilterBranch').selectedIndex].text;
+    const groupTxt = document.getElementById('rptFilterGroup').options[document.getElementById('rptFilterGroup').selectedIndex].text;
 
-        // Generate Signature Lines
-        let sigLines = '';
-        for(let i=1; i<=judgeCount; i++) {
-            sigLines += `
-                <div class="sig-box">
-                    <div class="line"></div>
-                    <div class="label">Judge ${i}</div>
-                </div>`;
-        }
-
-        // HTML Structure for Print
-        const html = `
-        <!DOCTYPE html>
-        <html dir="rtl">
-        <head>
-            <title>Result Report</title>
-            <style>
-                body { font-family: 'Segoe UI', Tahoma, sans-serif; padding: 40px; }
-                .header { text-align: center; margin-bottom: 40px; border-bottom: 3px double #000; padding-bottom: 20px; }
-                h1 { margin: 0; font-size: 28px; text-transform: uppercase; }
-                h2 { margin: 5px 0; font-size: 20px; color: #444; }
-                .meta { display: flex; justify-content: space-between; margin-top: 20px; font-weight: bold; font-size: 16px; border: 1px solid #ccc; padding: 10px; }
-                
-                table { width: 100%; border-collapse: collapse; margin-top: 30px; }
-                th, td { border: 1px solid #333; padding: 10px; text-align: center; }
-                th { background: #eee; font-weight: bold; }
-                tr:nth-child(1) td { background: #fffbe6; font-weight:bold; } /* 1st Place Highlight */
-
-                .footer { margin-top: 60px; page-break-inside: avoid; }
-                .chief-section { text-align: right; margin-bottom: 40px; }
-                .judges-grid { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 20px; }
-                .sig-box { width: 30%; text-align: center; margin-bottom: 30px; }
-                .line { border-bottom: 1px solid #000; margin-bottom: 5px; height: 30px; }
-                .label { font-size: 12px; color: #555; }
-                
-                @media print {
-                    button { display: none; }
-                    body { -webkit-print-color-adjust: exact; }
-                }
-            </style>
-        </head>
-        <body>
-            <button onclick="window.print()" style="position:fixed; top:10px; left:10px; padding:10px 20px; font-size:20px; background:blue; color:white; cursor:pointer;">🖨️ PRINT / SAVE AS PDF</button>
-
-            <div class="header">
-                <h1>${instName}</h1>
-                <h2>${compName}</h2>
-                <h3 style="margin-top:10px; text-decoration:underline;">OFFICIAL RESULT SHEET ${titleSuffix}</h3>
-            </div>
-
-            <div class="meta">
-                <div>Branch: ${branchTxt}</div>
-                <div>Category: ${groupTxt}</div>
-                <div>Date: ${new Date().toLocaleDateString()}</div>
-            </div>
-
-            <table>
-                <thead>
-                    <tr>
-                        <th width="10%">Rank</th>
-                        <th width="40%">Student Name</th>
-                        <th width="15%">ID Card</th>
-                        <th width="15%">Final Score</th>
-                        <th width="20%">Remarks</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    ${list.map((s, i) => `
-                        <tr>
-                            <td>${i+1}</td>
-                            <td style="text-align:right;">${s.name}</td>
-                            <td>${s.id}</td>
-                            <td><b>${s.finalScore}</b></td>
-                            <td></td>
-                        </tr>
-                    `).join('')}
-                </tbody>
-            </table>
-
-            <div class="footer">
-                <div class="chief-section">
-                    <div>Endorsed By Chief Judge:</div>
-                    <div style="margin-top:40px; border-bottom:1px solid #000; display:inline-block; width:250px;"></div>
-                    <div style="margin-top:5px;">${chiefName}</div>
-                </div>
-
-                <div class="judges-grid">
-                    ${sigLines}
-                </div>
-            </div>
-        </body>
-        </html>`;
-
-        const w = window.open("", "Report", "width=900,height=900");
-        w.document.write(html);
-        w.document.close();
+    let sigLines = '';
+    for(let i=1; i<=judgeCount; i++) {
+        sigLines += `<div class="sig-box"><div class="line"></div><div class="label">ފަނޑިޔާރު ${i}</div></div>`;
     }
 
+    const html = `
+    <!DOCTYPE html>
+    <html dir="rtl" lang="dv">
+    <head>
+        <title>Result Report</title>
+        <style>
+            @font-face {
+                font-family: 'Faruuma';
+                src: local('Faruuma'), local('Waheed'), url('https://fonts.googleapis.com/earlyaccess/notosansthaana.css');
+            }
+            body { font-family: 'Faruuma', 'Noto Sans Thaana', sans-serif; padding: 40px; direction: rtl; }
+            .header { text-align: center; margin-bottom: 30px; border-bottom: 3px double #000; padding-bottom: 20px; }
+            h1 { margin: 5px 0; font-size: 26px; font-weight:bold; }
+            h2 { margin: 5px 0; font-size: 20px; color: #333; }
+            h3 { margin: 5px 0; font-size: 18px; text-decoration: underline; }
+            
+            .report-info-box {
+                border: 1px solid #000; padding: 15px; margin-bottom: 20px;
+                display: flex; justify-content: space-between;
+                background: #f9f9f9; font-weight: bold; font-size: 14px;
+            }
+            table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 14px; }
+            th, td { border: 1px solid #444; padding: 8px; text-align: center; vertical-align: middle; }
+            th { background: #eee; font-weight: bold; font-size: 15px; }
+            tr:nth-child(1) td { background: #fffbe6; font-weight:bold; } 
+
+            .footer { margin-top: 50px; page-break-inside: avoid; }
+            .chief-section { text-align: left; margin-bottom: 50px; margin-top:20px; } 
+            .judges-grid { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 20px; }
+            .sig-box { width: 30%; text-align: center; margin-bottom: 30px; }
+            .line { border-bottom: 1px dotted #000; margin-bottom: 5px; height: 40px; }
+            .label { font-size: 12px; color: #555; }
+            @media print { button { display: none; } body { -webkit-print-color-adjust: exact; } }
+        </style>
+    </head>
+    <body>
+        <button onclick="window.print()" style="position:fixed; top:10px; left:10px; padding:10px 20px; background:blue; color:white; cursor:pointer;">🖨️ PRINT</button>
+        <div class="header">
+            <h1>${instName}</h1>
+            <h2>${compName}</h2>
+            <h3>ނަތީޖާ ޝީޓް ${titleSuffix}</h3>
+        </div>
+        <div class="report-info-box">
+            <div>ގޮފި: ${branchTxt}</div>
+            <div>ޢުމުރުފުރާ: ${groupTxt}</div>
+            <div>ތާރީޚް: ${new Date().toLocaleDateString()}</div>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th width="5%">ވަނަ</th>
+                    <th width="10%">ރެޖިސްޓްރީ</th>
+                    <th width="25%">ދަރިވަރުގެ ނަން</th>
+                    <th width="10%">އައި.ޑީ</th>
+                    <th width="25%">ދާއިމީ އެޑްރެސް</th>
+                    <th width="10%">ޖުމްލަ މާކުސް</th>
+                    <th width="15%">ރިމާކްސް</th>
+                </tr>
+            </thead>
+            <tbody>
+                ${list.map((s, i) => `
+                    <tr>
+                        <td>${i+1}</td>
+                        <td>${s.reg || "-"}</td>
+                        <td style="text-align:right; padding-right:10px;">${s.name}</td>
+                        <td>${s.id}</td>
+                        <td style="text-align:right; font-size:11px;">${s.address || "-"}</td>
+                        <td><b>${s.finalScore}</b></td>
+                        <td></td>
+                    </tr>`).join('')}
+            </tbody>
+        </table>
+        <div class="footer">
+            <div class="chief-section">
+                <div>އިސް ފަނޑިޔާރު:</div>
+                <div style="margin-top:40px; border-bottom:1px solid #000; display:inline-block; width:250px;"></div>
+                <div style="margin-top:5px;">${chiefName}</div>
+            </div>
+            <div class="judges-grid">${sigLines}</div>
+        </div>
+    </body>
+    </html>`;
+
+    const w = window.open("", "Report", "width=1100,height=800");
+    w.document.write(html);
+    w.document.close();
+}
     // --- FILTERED CSV EXPORT (Separate file for specific category) ---
     function exportFilteredCSV() {
         let list = getFilteredResults();
@@ -3237,31 +3312,26 @@
         document.body.removeChild(link);
     }
    function getFilteredResults() {
-        const fBranch = document.getElementById('rptFilterBranch').value;
-        const fGroup = document.getElementById('rptFilterGroup').value;
-        // ★ އައު ފިލްޓަރ ނެގުން ★
-        const fInst = document.getElementById('rptFilterInstType').value;
+    const fBranch = document.getElementById('rptFilterBranch').value;
+    const fGroup = document.getElementById('rptFilterGroup').value;
+    const fInst = document.getElementById('rptFilterInstType').value;
 
-        // Filter Data
-        let list = state.judging.savedResults.filter(r => {
-            // Check Branch
-            let branchMatch = (fBranch === "All") ? true : (r.branch && r.branch.includes(fBranch));
-            if(fBranch === "Balaiygen" && r.branch && r.branch.toLowerCase().includes("balai")) branchMatch = true;
-            if(fBranch === "Nubalai" && r.branch && r.branch.toLowerCase().includes("nubalai")) branchMatch = true;
+    let list = state.judging.savedResults.filter(r => {
+        // Branch Check
+        let branchMatch = (fBranch === "All") ? true : (r.branch && r.branch.includes(fBranch));
+        
+        // Group Check
+        let groupMatch = (fGroup === "All") ? true : (r.group === fGroup);
+        
+        // Institution Check (New)
+        let instMatch = (fInst === "All") ? true : (r.institution && r.institution.includes(fInst));
+        if(fInst === "School" && r.institution && r.institution.toLowerCase().includes("school")) instMatch = true;
 
-            // Check Group
-            let groupMatch = (fGroup === "All") ? true : (r.group === fGroup);
+        return branchMatch && groupMatch && instMatch;
+    });
 
-            // ★ Check Institution Type (School, Office, etc.) ★
-            // Note: If old data didn't have instType, treat as valid if filter is All
-            let instMatch = (fInst === "All") ? true : (r.instType === fInst);
-
-            return branchMatch && groupMatch && instMatch;
-        });
-
-        // Sort Highest to Lowest
-        return list.sort((a, b) => b.finalScore - a.finalScore);
-    }
+    return list.sort((a, b) => b.finalScore - a.finalScore);
+}
     // --- ADVANCED REPORT GENERATION (UPDATED WITH FULL DETAILS) ---
     function generateAdvancedReport(mode) {
         // 1. Get Data & Filter
@@ -3429,6 +3499,454 @@
         link.click();
         document.body.removeChild(link);
     }
+    // --- NEW FUNCTION: PRINT BLANK MANUAL SCORE SHEET ---
+function downloadManualScoreSheet() {
+    // 1. Get Rubric & Settings
+    const rubric = state.judging.rubric;
+    const instName = document.getElementById('rptInstName').value || "ޤުރުއާން މުބާރާތް";
+    const compName = document.getElementById('rptCompName').value || "Official Score Sheet";
+    
+    // Calculate Total Marks
+    let totalMax = 0;
+    rubric.forEach(r => totalMax += r.max);
+
+    // 2. Build Table Rows (Dynamic)
+    let rows = "";
+    rubric.forEach(r => {
+        rows += `
+        <tr>
+            <td style="text-align:right; font-weight:bold; font-family:'Faruuma', serif; font-size:16px;">
+                ${r.name}
+            </td>
+            <td style="font-weight:bold;">${r.max}</td>
+            <td></td> <td style="color:#ccc;">___________</td> </tr>`;
+    });
+
+    // 3. HTML Layout (A4 Design)
+    const html = `
+    <!DOCTYPE html>
+    <html dir="rtl" lang="dv">
+    <head>
+        <title>Judge Score Sheet</title>
+        <style>
+            @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Thaana:wght@400;700&display=swap');
+            
+            body { 
+                font-family: 'Noto Sans Thaana', 'Faruuma', sans-serif; 
+                padding: 40px; 
+                direction: rtl;
+                -webkit-print-color-adjust: exact;
+            }
+            .sheet-container {
+                border: 5px double #000;
+                padding: 30px;
+                height: 95vh;
+                box-sizing: border-box;
+                position: relative;
+            }
+            h1 { text-align: center; margin: 0; font-size: 24px; text-decoration: underline; }
+            h2 { text-align: center; margin: 5px 0 30px 0; font-size: 18px; color: #444; }
+
+            .info-grid {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 20px;
+                margin-bottom: 20px;
+                border: 1px solid #333;
+                padding: 15px;
+                background: #f9f9f9;
+            }
+            .input-line { margin-bottom: 15px; font-size: 14px; font-weight: bold; }
+            .dotted { border-bottom: 2px dotted #000; display: inline-block; width: 60%; }
+
+            table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+            th, td { border: 1px solid #000; padding: 12px; text-align: center; vertical-align: middle; }
+            th { background: #eee; font-size: 15px; font-weight: bold; }
+
+            .total-row td { background: #333; color: #fff; font-weight: bold; font-size: 18px; }
+            
+            .footer-sig {
+                margin-top: 50px;
+                display: flex;
+                justify-content: space-between;
+            }
+            .sig-box { text-align: center; width: 40%; }
+
+            @media print {
+                button { display: none; }
+                @page { size: A4 portrait; margin: 10mm; }
+            }
+        </style>
+    </head>
+    <body>
+        <button onclick="window.print()" style="width:100%; padding:20px; font-size:20px; background:#002200; color:#fff; cursor:pointer; margin-bottom:20px;">🖨️ CLICK TO PRINT / SAVE PDF</button>
+
+        <div class="sheet-container">
+            <h1>${instName}</h1>
+            <h2>${compName} - ޖަޖުންގެ މާކުސް ޝީޓް</h2>
+
+            <div class="info-grid">
+                <div>
+                    <div class="input-line">ދަރިވަރުގެ ނަން: <span class="dotted"></span></div>
+                    <div class="input-line">އައި.ޑީ / ރެޖިސްޓްރީ: <span class="dotted" style="width:50%"></span></div>
+                    <div class="input-line">ގޮފި / ޢުމުރު: <span class="dotted"></span></div>
+                </div>
+                <div style="text-align:left;">
+                    <div class="input-line" style="direction:ltr;">Date: __________________</div>
+                    <div class="input-line" style="direction:ltr;">Judge Name: __________________</div>
+                    <div class="input-line" style="direction:ltr;">Judge ID: _________</div>
+                </div>
+            </div>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th width="40%">ބައިތައް (Criteria)</th>
+                        <th width="15%">ޖުމްލަ</th>
+                        <th width="20%">ދޭ މާކުސް</th>
+                        <th width="25%">ރިމާކްސް</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${rows}
+                    <tr class="total-row">
+                        <td style="text-align:right;">ޖުމްލަ (TOTAL)</td>
+                        <td>${totalMax}</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div style="margin-top:40px; border:1px dashed #777; padding:15px; height:80px;">
+                <strong>އިތުރު ފާހަގަތައް (General Remarks):</strong>
+            </div>
+
+            <div class="footer-sig">
+                <div class="sig-box">
+                    <br>_______________________<br>
+                    ޖަޖުގެ ސޮއި (Signature)
+                </div>
+                <div class="sig-box">
+                     <div style="border:1px solid #000; height:50px; width:100px; margin:0 auto;"></div>
+                     އޮފިޝަލް ބޭނުމަށް
+                </div>
+            </div>
+        </div>
+    </body>
+    </html>
+    `;
+
+    // 4. Open Window & Print
+    const w = window.open("", "ManualSheet", "width=900,height=1000");
+    w.document.write(html);
+    w.document.close();
+}
+    // ... (މަތީގައި އެހެން ކޯޑުތައް ހުންނާނެ) ...
+
+    // ★ މިތަނަށް ތިރީގައިވާ ކޯޑު ޕޭސްޓް ކުރައްވާ ★
+
+    // C. ފޭކް ޑޭޓާ ޖެނެރޭޓަރ (Fake Master Data Generator)
+    function generateDummyMasterSheet() {
+        // 1. Headers (Matching your requested format)
+        let csv = "Serial No,Reg No,Age Group,Branch,Institution,Full Name,Gender,Address,ID Card,Contact,Parent Name,Parent Phone,Email,";
+
+        // Rubric Headers
+        const dummyRubric = (state.judging && state.judging.rubric && state.judging.rubric.length > 0) ? state.judging.rubric : [
+            {name:"Thilawa", max:30}, {name:"Tajweed", max:20}, {name:"Fasaha", max:10} // Fallback
+        ];
+        dummyRubric.forEach(r => csv += `${r.name} (Avg),`);
+
+        // Judge Totals (Assume 3 Judges for testing)
+        const judgeCount = 3;
+        for(let i=1; i<=judgeCount; i++) csv += `Judge ${i} Total,`;
+
+        csv += "FINAL AVERAGE,RANK,REMARKS\n";
+
+        // 2. Helper Arrays for Random Data
+        const names = ["Ahmed Ali", "Fathimath Zeena", "Mohamed Sinaan", "Aishath Yumna", "Ibrahim Rasheed", "Mariyam Naza", "Hassan Kinaan"];
+        const islands = ["Male'", "Hulhumale'", "Addu City", "Fuvahmulah", "Kulhudhuffushi", "Thinadhoo"];
+        const groups = ["Under 6", "Under 9", "Under 11", "Under 13", "General"];
+        const branches = ["Balaiygen", "Nubalai"];
+        const insts = ["Iskandhar School", "Arabiyya", "Majeedhiyya", "Villa College", "Private"];
+
+        // 3. Generate 50 Dummy Students
+        let students = [];
+        for(let i=0; i<50; i++) {
+            let scores = [];
+            let total = 0;
+            
+            // Generate random scores for 3 judges
+            for(let j=0; j<judgeCount; j++) {
+                let s = (Math.random() * (100 - 60) + 60).toFixed(2); // Score between 60 and 100
+                scores.push(parseFloat(s));
+                total += parseFloat(s);
+            }
+            let finalAvg = (total / judgeCount).toFixed(2);
+
+            students.push({
+                reg: `REG-${1000+i}`,
+                group: groups[Math.floor(Math.random()*groups.length)],
+                branch: branches[Math.floor(Math.random()*branches.length)],
+                inst: insts[Math.floor(Math.random()*insts.length)],
+                name: names[Math.floor(Math.random()*names.length)] + " " + i,
+                gender: Math.random() > 0.5 ? "Male" : "Female",
+                addr: islands[Math.floor(Math.random()*islands.length)],
+                id: `A${Math.floor(Math.random()*900000)+100000}`,
+                scores: scores,
+                finalScore: parseFloat(finalAvg)
+            });
+        }
+
+        // 4. Sort by Final Score
+        students.sort((a, b) => b.finalScore - a.finalScore);
+
+        // 5. Build CSV Rows
+        students.forEach((s, idx) => {
+            let row = [];
+            row.push(idx + 1); // Serial (Rank Based)
+            row.push(s.reg, s.group, s.branch, s.inst, s.name, s.gender, s.addr, s.id, "7770000", "Parent Name", "7771111", "test@email.com");
+            
+            // Empty Rubric Avgs
+            dummyRubric.forEach(() => row.push("-"));
+
+            // Judge Scores
+            s.scores.forEach(sc => row.push(sc));
+
+            // Final
+            row.push(s.finalScore);
+            row.push(idx + 1); // Rank
+            row.push("Generated");
+
+            csv += row.join(",") + "\n";
+        });
+
+        // 6. Download
+        const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.download = "Fake_Master_Data_For_Testing.csv";
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+    // --- BULK JUDGE SHEET PRINTING (FARUUMA FONT) ---
+function printBulkJudgeSheets() {
+    const judgeKey = document.getElementById('bulkJudgeSelect').value; // e.g., "Judge_1"
+    const savedData = state.judging.savedResults;
+
+    if (!savedData || savedData.length === 0) {
+        alert("މާކުސް ދީފައިވާ އެއްވެސް ދަރިވަރަކު ނެތެވެ.");
+        return;
+    }
+
+    // Report Headers
+    const instName = document.getElementById('rptInstName').value || "ޤުރުއާން މުބާރާތް";
+    const compName = document.getElementById('rptCompName').value || "މާކުސް ޝީޓް";
+
+    // Rubric Items
+    const rubric = state.judging.rubric;
+    
+    // Generate Sheets HTML
+    let sheetsHTML = "";
+
+    savedData.forEach((student, index) => {
+        // Calculate Marks given by THIS specific judge
+        let judgeTotal = student.scores[judgeKey] || 0;
+        let marksRows = "";
+        
+        // Note: Since we only save the Total Score per judge (to save memory), 
+        // we can't show the breakdown per category unless we change the saving logic.
+        // For now, we will show the Categories and leave marks blank or show Total.
+        // If you want breakdown, we need to change how data is SAVED first.
+        // Assuming user wants the "Total" shown and categories listed for signature.
+
+        rubric.forEach(r => {
+            marksRows += `
+            <tr>
+                <td style="text-align:right;">${r.name}</td>
+                <td>${r.max}</td>
+                <td>-</td> </tr>`;
+        });
+
+        // Add Page Break for all except last one
+        const pageBreak = (index < savedData.length - 1) ? "page-break-after: always;" : "";
+
+        sheetsHTML += `
+        <div class="sheet-page" style="${pageBreak}">
+            <div class="sheet-header">
+                <h1>${instName}</h1>
+                <h2>${compName}</h2>
+                <div class="judge-badge">${judgeKey.replace('_', ' ')}</div>
+            </div>
+
+            <div class="student-info">
+                <table class="info-table">
+                    <tr>
+                        <td class="label">ނަން:</td>
+                        <td class="data">${student.name}</td>
+                        <td class="label">އައިޑީ:</td>
+                        <td class="data">${student.id}</td>
+                    </tr>
+                    <tr>
+                        <td class="label">ގޮފި:</td>
+                        <td class="data">${student.branch}</td>
+                        <td class="label">ޢުމުރު:</td>
+                        <td class="data">${student.group}</td>
+                    </tr>
+                    <tr>
+                        <td class="label">މުއައްސަސާ:</td>
+                        <td class="data" colspan="3">${student.institution || student.instType || '-'}</td>
+                    </tr>
+                </table>
+            </div>
+
+            <table class="marks-table">
+                <thead>
+                    <tr>
+                        <th width="50%">ބައިތައް (Criteria)</th>
+                        <th width="20%">ޖުމްލަ</th>
+                        <th width="30%">ދިން މާކުސް</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${marksRows}
+                    <tr class="total-row">
+                        <td style="text-align:right; font-weight:bold;">ޖުމްލަ (TOTAL)</td>
+                        <td></td>
+                        <td style="font-size:24px;">${judgeTotal}</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="remarks-box">
+                <p>ރިމާކްސް: __________________________________________________</p>
+            </div>
+
+            <div class="signature-area">
+                <div>
+                    ____________________<br>
+                    ޖަޖުގެ ސޮއި
+                </div>
+                <div>
+                    ތާރީޚް: ${new Date().toLocaleDateString()}
+                </div>
+            </div>
+            
+            <div class="footer-tiny">Serial: ${index + 1} | Reg: ${student.reg || '-'}</div>
+        </div>
+        `;
+    });
+
+    // Full HTML Document with Faruuma Font
+    const fullHTML = `
+    <!DOCTYPE html>
+    <html dir="rtl" lang="dv">
+    <head>
+        <title>Bulk Judge Sheets</title>
+        <style>
+            /* Font Imports */
+            @font-face {
+                font-family: 'Faruuma';
+                src: local('Faruuma'), local('Waheed'), url('https://fonts.googleapis.com/earlyaccess/notosansthaana.css');
+            }
+            
+            body { 
+                font-family: 'Faruuma', 'Noto Sans Thaana', sans-serif; 
+                margin: 0; padding: 20px; background: #ccc; 
+            }
+            
+            .sheet-page {
+                background: white;
+                width: 210mm; /* A4 Width */
+                min-height: 297mm; /* A4 Height */
+                padding: 40px;
+                margin: 0 auto 20px auto;
+                box-sizing: border-box;
+                position: relative;
+                box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            }
+
+            h1, h2 { text-align: center; margin: 5px 0; }
+            h1 { font-size: 28px; text-decoration: underline; }
+            h2 { font-size: 20px; color: #444; }
+
+            .judge-badge {
+                position: absolute; top: 40px; left: 40px;
+                border: 2px solid #000; padding: 5px 10px;
+                font-weight: bold; font-size: 18px; text-transform: uppercase;
+                direction: ltr;
+            }
+
+            .info-table { width: 100%; border-collapse: collapse; margin-top: 30px; margin-bottom: 20px; }
+            .info-table td { padding: 8px; border: 1px solid #ddd; font-size: 16px; }
+            .label { background: #f9f9f9; font-weight: bold; width: 15%; }
+            .data { width: 35%; font-weight:bold; }
+
+            .marks-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+            .marks-table th { background: #eee; padding: 10px; border: 1px solid #000; font-weight: bold; }
+            .marks-table td { padding: 10px; border: 1px solid #000; text-align: center; font-size: 18px; }
+            
+            .total-row td { background: #333; color: white; border-color: #000; }
+
+            .remarks-box { margin-top: 40px; border: 1px dashed #000; padding: 20px; height: 60px; }
+            
+            .signature-area { margin-top: 60px; display: flex; justify-content: space-between; padding: 0 50px; font-size: 18px; }
+            
+            .footer-tiny { position: absolute; bottom: 20px; left: 0; width: 100%; text-align: center; font-size: 10px; color: #888; direction: ltr; }
+
+            @media print {
+                body { background: none; padding: 0; }
+                .sheet-page { margin: 0; box-shadow: none; width: 100%; }
+                button { display: none; }
+            }
+        </style>
+    </head>
+    <body>
+        <div style="text-align:center; margin-bottom:20px;">
+            <button onclick="window.print()" style="padding:15px 30px; font-size:20px; background:blue; color:white; border:none; cursor:pointer;">
+                🖨️ CLICK TO PRINT / SAVE AS PDF
+            </button>
+        </div>
+        ${sheetsHTML}
+    </body>
+    </html>
+    `;
+
+    const w = window.open("", "BulkPrint", "width=900,height=1000");
+    w.document.write(fullHTML);
+    w.document.close();
+}
+    // --- NEW SEARCH LOGIC (DATALIST) ---
+
+// 1. Update the Datalist when batch is loaded
+function populateStudentSelector() {
+    const dList = document.getElementById('studentDatalist');
+    dList.innerHTML = ''; // Clear old
+    
+    state.allStudents.forEach((s, idx) => {
+        const option = document.createElement('option');
+        // Value contains the unique identifier to find it later
+        option.value = `${s.name} (${s.id})`; 
+        dList.appendChild(option);
+    });
+}
+
+// 2. Handle Selection (When user picks from list or hits enter)
+function onStudentSelected(val) {
+    if(!val) return;
+    
+    // Find the index of the selected student string
+    // We check if "Name (ID)" matches the input
+    const index = state.allStudents.findIndex(s => `${s.name} (${s.id})` === val);
+    
+    if (index > -1) {
+        populateStudentForm(index);
+        // Optional: Clear input after selection if desired, or keep it
+    } else {
+        alert("Student not found! Please check the name.");
+    }
+}
 </script>
 </body>
 </html>
