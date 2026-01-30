@@ -3950,6 +3950,100 @@ function onStudentSelected(val) {
         alert("Student not found! Please check the name.");
     }
 }
+    // --- GENERATE A3 MANUAL MASTER SHEET (CSV) ---
+function downloadDetailedManualSheet() {
+    // 1. ޗެކްކުރުން: ރުބްރިކް (މާކުސް ދޭ ބައިތައް) ހުރިތޯ
+    const rubric = (state.judging && state.judging.rubric && state.judging.rubric.length > 0) 
+                   ? state.judging.rubric 
+                   : [{name:"Category 1", max:100}]; // Fallback
+
+    // 2. CSV ހެޑަރތައް (Headers) ތައްޔާރުކުރުން
+    // ދަރިވަރުގެ ބައި
+    let headers = [
+        "Serial No", "Reg No", "Name", "ID Card", "Gender", 
+        "Group", "Branch", "Institution"
+    ];
+
+    // ޖަޖުންގެ ބައިތައް (Judge 1 to 5)
+    // ކޮންމެ ޖަޖަކަށް: ހުރިހާ ކެޓަގަރީއެއް + ޖުމްލަ
+    for(let j=1; j<=5; j++) {
+        rubric.forEach(r => {
+            headers.push(`J${j}-${r.name} (${r.max})`);
+        });
+        headers.push(`J${j}-TOTAL`); // ޖަޖުގެ ޖުމްލަ
+    }
+
+    // ފަހު ބައި
+    headers.push("AVERAGE (All Judges)", "RANK", "REMARKS");
+
+    // CSV ކޮންޓެންޓް ފެށުން
+    let csvContent = headers.join(",") + "\n";
+
+    // 3. ދަރިވަރުންގެ ލިސްޓް ނެގުން
+    // މެނުއަލްކޮށް އަޅަން ބޭނުންވާތީ، 'All Students' ނަގަނީ
+    const students = state.allStudents && state.allStudents.length > 0 
+                     ? state.allStudents 
+                     : state.judging.savedResults; // ނެތްނަމަ ސޭވްކޮށްފައި ތިބި ކުދިން
+
+    if(!students || students.length === 0) {
+        alert("No students found to generate sheet!");
+        return;
+    }
+
+    // 4. ކޮންމެ ކުއްޖަކަށް ރޯ (Row) އެއް ހެދުން
+    students.forEach((s, index) => {
+        let row = [];
+
+        // --- Personal Info ---
+        row.push(index + 1); // Serial
+        row.push(`"${s.reg || ''}"`);
+        row.push(`"${s.name || ''}"`);
+        row.push(`"${s.id || ''}"`);
+        row.push(`"${s.gender || ''}"`);
+        row.push(`"${s.group || ''}"`);
+        row.push(`"${s.branch || ''}"`);
+        row.push(`"${s.institution || s.instType || ''}"`);
+
+        // --- Judge Columns (Empty or Pre-filled) ---
+        // މިހާރު ސިސްޓަމްގައި ޑޭޓާ އިނިއްޔާ އަރާނެ، ނެތިއްޔާ ހުސްކޮށް އިންނާނީ (އަތުން ލިޔަން)
+        
+        // Check if student has saved marks (Cross-reference by ID)
+        const savedData = state.judging.savedResults.find(r => r.id === s.id);
+
+        for(let j=1; j<=5; j++) {
+            // Note: މިވަގުތު ސިސްޓަމްގައި ވަކިވަކި ކެޓަގަރީގެ މާކުސް ސޭވް ނުކުރާތީ،
+            // ކެޓަގަރީ ގޮޅިތައް ބަހައްޓާނީ ހުސްކޮށެވެ.
+            rubric.forEach(() => {
+                row.push(""); // Manual Entry Space for Criteria
+            });
+
+            // ޖަޖުގެ ޖުމްލަ (އޮތްނަމަ ލާނީ)
+            let jTotal = "";
+            if(savedData && savedData.scores && savedData.scores[`Judge_${j}`]) {
+                jTotal = savedData.scores[`Judge_${j}`];
+            }
+            row.push(jTotal); // Judge Total
+        }
+
+        // --- Final Columns ---
+        let finalAvg = savedData ? savedData.finalScore : "";
+        row.push(finalAvg); // Average
+        row.push("");       // Rank (To be filled manually or calculated)
+        row.push("");       // Remarks
+
+        csvContent += row.join(",") + "\n";
+    });
+
+    // 5. ޑައުންލޯޑް ކުރުން
+    const fileName = `Rasfahi_A3_Manual_Sheet_${new Date().toISOString().split('T')[0]}.csv`;
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = fileName;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+}
 </script>
 </body>
 </html>
