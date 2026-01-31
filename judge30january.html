@@ -4181,93 +4181,117 @@ function onStudentSelected(val) {
         alert("Student not found! Please check the name.");
     }
 }
-    // --- GENERATE A3 MANUAL MASTER SHEET (CSV) ---
+    // --- 3. A3 MANUAL MASTER SHEET (EXACT MATCH WITH TEMPLATE/DUMMY) ---
 function downloadDetailedManualSheet() {
-    // 1. ޗެކްކުރުން: ރުބްރިކް (މާކުސް ދޭ ބައިތައް) ހުރިތޯ
-    const rubric = (state.judging && state.judging.rubric && state.judging.rubric.length > 0) 
-                   ? state.judging.rubric 
-                   : [{name:"Category 1", max:100}]; // Fallback
+    // 1. SETUP HEADERS & CRITERIA
+    // މާކުސް ދޭ ބައިތައް (Must match exactly with other sheets)
+    const criteria = (state.judging.rubric && state.judging.rubric.length > 0) 
+        ? state.judging.rubric 
+        : [
+            { name: "Thilawa", max: 30 }, { name: "Tajweed", max: 20 }, 
+            { name: "Makhraj", max: 20 }, { name: "Sifa", max: 10 }, 
+            { name: "Fasaha", max: 10 }, { name: "Talaffuz", max: 5 }, { name: "Maqamat", max: 5 }
+          ];
 
-    // 2. CSV ހެޑަރތައް (Headers) ތައްޔާރުކުރުން
-    // ދަރިވަރުގެ ބައި
-    let headers = [
-        "Serial No", "Reg No", "Name", "ID Card", "Gender", 
-        "Group", "Branch", "Institution"
-    ];
+    // CSV Headers - Part 1: Personal Info
+    let csv = "Serial No,Reg No,Age Group,Branch,Institution,Full Name,Gender,Address,ID Card,Contact,Parent Name,Parent Phone,Email,";
 
-    // ޖަޖުންގެ ބައިތައް (Judge 1 to 5)
-    // ކޮންމެ ޖަޖަކަށް: ހުރިހާ ކެޓަގަރީއެއް + ޖުމްލަ
-    for(let j=1; j<=5; j++) {
-        rubric.forEach(r => {
-            headers.push(`J${j}-${r.name} (${r.max})`);
-        });
-        headers.push(`J${j}-TOTAL`); // ޖަޖުގެ ޖުމްލަ
+    // CSV Headers - Part 2: 5 Judges Detailed Columns
+    for (let j = 1; j <= 5; j++) {
+        criteria.forEach(c => { csv += `J${j}-${c.name} (${c.max}),`; });
+        csv += `J${j}-TOTAL,`;
     }
 
-    // ފަހު ބައި
-    headers.push("AVERAGE (All Judges)", "RANK", "REMARKS");
+    // CSV Headers - Part 3: Final Summary
+    csv += "GRAND TOTAL (5 Judges),FINAL AVERAGE,RANK,REMARKS\n";
 
-    // CSV ކޮންޓެންޓް ފެށުން
-    let csvContent = headers.join(",") + "\n";
-
-    // 3. ދަރިވަރުންގެ ލިސްޓް ނެގުން
-    // މެނުއަލްކޮށް އަޅަން ބޭނުންވާތީ، 'All Students' ނަގަނީ
-    const students = state.allStudents && state.allStudents.length > 0 
-                     ? state.allStudents 
-                     : state.judging.savedResults; // ނެތްނަމަ ސޭވްކޮށްފައި ތިބި ކުދިން
-
+    // 2. GET STUDENTS
+    // Use savedResults if available (has scores), otherwise allStudents (raw list)
+    // We try to merge them to show scores if they exist.
+    let students = state.allStudents; 
     if(!students || students.length === 0) {
-        alert("No students found to generate sheet!");
+        // If allStudents is empty, try savedResults
+        students = state.judging.savedResults;
+    }
+
+    if (!students || students.length === 0) {
+        alert("No students found to generate sheet! (Please load a batch first)");
         return;
     }
 
-    // 4. ކޮންމެ ކުއްޖަކަށް ރޯ (Row) އެއް ހެދުން
+    // 3. GENERATE ROWS
     students.forEach((s, index) => {
         let row = [];
 
-        // --- Personal Info ---
+        // --- A. Personal Info (Aligned with Template) ---
+        // 0:Serial, 1:Reg, 2:Group, 3:Branch, 4:Inst, 5:Name, 6:Gender, 7:Addr, 8:ID...
         row.push(index + 1); // Serial
         row.push(`"${s.reg || ''}"`);
-        row.push(`"${s.name || ''}"`);
-        row.push(`"${s.id || ''}"`);
-        row.push(`"${s.gender || ''}"`);
         row.push(`"${s.group || ''}"`);
         row.push(`"${s.branch || ''}"`);
-        row.push(`"${s.institution || s.instType || ''}"`);
+        row.push(`"${s.institution || s.inst || ''}"`);
+        row.push(`"${s.name || ''}"`);
+        row.push(`"${s.gender || ''}"`);
+        row.push(`"${s.address || s.addr || ''}"`);
+        row.push(`"${s.id || ''}"`);
+        row.push(`"${s.phone || '7770000'}"`);
+        row.push(`"${s.parent || ''}"`);
+        row.push(`"${s.parentPhone || ''}"`);
+        row.push(`"${s.email || ''}"`);
 
-        // --- Judge Columns (Empty or Pre-filled) ---
-        // މިހާރު ސިސްޓަމްގައި ޑޭޓާ އިނިއްޔާ އަރާނެ، ނެތިއްޔާ ހުސްކޮށް އިންނާނީ (އަތުން ލިޔަން)
+        // --- B. Judges Detailed Columns (Logic to fill or leave blank) ---
         
-        // Check if student has saved marks (Cross-reference by ID)
-        const savedData = state.judging.savedResults.find(r => r.id === s.id);
-
-        for(let j=1; j<=5; j++) {
-            // Note: މިވަގުތު ސިސްޓަމްގައި ވަކިވަކި ކެޓަގަރީގެ މާކުސް ސޭވް ނުކުރާތީ،
-            // ކެޓަގަރީ ގޮޅިތައް ބަހައްޓާނީ ހުސްކޮށެވެ.
-            rubric.forEach(() => {
-                row.push(""); // Manual Entry Space for Criteria
-            });
-
-            // ޖަޖުގެ ޖުމްލަ (އޮތްނަމަ ލާނީ)
-            let jTotal = "";
-            if(savedData && savedData.scores && savedData.scores[`Judge_${j}`]) {
-                jTotal = savedData.scores[`Judge_${j}`];
+        // Check if we have detailed data from the "Dummy Generator" (judgeColumns)
+        if (s.judgeColumns && s.judgeColumns.length > 0) {
+            // If data comes from the Fake Generator, it has all details perfectly
+            s.judgeColumns.forEach(val => row.push(val));
+        
+        } else {
+            // If data comes from Live Judging or Raw List:
+            // The system usually stores scores in `s.scores` like {Judge_1: 90, Judge_2: 85}
+            // It rarely stores the "Thilawa" breakdown individually for live judging to save memory.
+            // So we will fill the TOTALS if we have them, and leave criteria BLANK for manual entry.
+            
+            for (let j = 1; j <= 5; j++) {
+                // Criteria Columns (Empty for manual marking)
+                criteria.forEach(() => row.push("")); 
+                
+                // Judge Total (Fill if exists in saved results)
+                let jKey = `Judge_${j}`;
+                let jTot = (s.scores && s.scores[jKey]) ? s.scores[jKey] : "";
+                
+                // If it's a "Result Object" from savedResults, it might have finalScore but maybe not individual judge breakdown depending on how it was saved.
+                // We assume basic compatibility here.
+                row.push(jTot);
             }
-            row.push(jTotal); // Judge Total
         }
 
-        // --- Final Columns ---
-        let finalAvg = savedData ? savedData.finalScore : "";
-        row.push(finalAvg); // Average
-        row.push("");       // Rank (To be filled manually or calculated)
-        row.push("");       // Remarks
+        // --- C. Final Calculations ---
+        // Use pre-calculated values if from Dummy, otherwise calculate or leave blank
+        let gTotal = s.grandTotal || ""; 
+        let fAvg = s.finalScore || s.finalAvg || "";
+        let rank = ""; // Rank needs sorting to be accurate, usually filled after competition
+        let rem = "";
 
-        csvContent += row.join(",") + "\n";
+        // If we have live scores but no grand total pre-calculated
+        if (gTotal === "" && s.scores) {
+            let sum = 0;
+            Object.values(s.scores).forEach(v => sum += parseFloat(v));
+            if(sum > 0) gTotal = sum.toFixed(2);
+        }
+
+        row.push(gTotal);
+        row.push(fAvg);
+        row.push(rank);
+        row.push(rem);
+
+        csv += row.join(",") + "\n";
     });
 
-    // 5. ޑައުންލޯޑް ކުރުން
-    const fileName = `Rasfahi_A3_Manual_Sheet_${new Date().toISOString().split('T')[0]}.csv`;
-    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    // 4. DOWNLOAD CSV
+    const dateStr = new Date().toISOString().split('T')[0];
+    const fileName = `Rasfahi_A3_Full_Master_${dateStr}.csv`;
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
     const link = document.createElement("a");
     link.href = URL.createObjectURL(blob);
     link.download = fileName;
