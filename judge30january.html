@@ -798,67 +798,76 @@
         📊 A3 Manual Master Sheet (5 Judges)
     </button>
 <hr style="border-color:#333; margin:8px 0;">
-    <label style="color:#FFD700; font-family:'Faruuma';">★ ސެޝަން ޖަޖް ޝީޓް (Session Judge Sheet):</label>
+<label style="color:#FFD700; font-family:'Faruuma';">★ ސެޝަން މެނޭޖްމަންޓް (ނޯޓިސް ބޯޑު & ޖަޖް ޝީޓް):</label>
+
+<div style="background:#1a1a1a; padding:10px; border:1px solid #444; border-radius:5px;">
+    <div style="display:flex; gap:5px; margin-bottom:5px;">
+        <input type="date" id="sessDate" style="flex:1; background:#000; color:#fff; border:1px solid #555;">
+        <input type="time" id="sessTime" style="flex:1; background:#000; color:#fff; border:1px solid #555;">
+    </div>
+    <div style="display:flex; gap:5px; margin-bottom:5px;">
+         <input type="text" id="sessName" placeholder="ދަންފަޅި (މިސާލު: ހެނދުނު)" style="flex:1; background:#000; color:#fff; border:1px solid #555; padding:5px;">
+         <input type="text" id="sessHall" placeholder="ހޯލު / ތަން (Venue)" style="flex:1; background:#000; color:#fff; border:1px solid #555; padding:5px;">
+    </div>
+
+    <div style="display:flex; gap:5px; margin-bottom:5px;">
+        <select id="sessFilterBranch" style="flex:1;">
+            <option value="">- ހުރިހާ ގޮތްޕެއް -</option>
+            <option value="Balaiygen">ބަލައިގެން</option>
+            <option value="Nubalai">ނުބަލައި</option>
+        </select>
+        <select id="sessFilterGender" style="flex:1;">
+            <option value="">- ޖިންސު -</option>
+            <option value="Male">ފިރިހެން</option>
+            <option value="Female">އަންހެން</option>
+        </select>
+    </div>
     
-    <div style="background:#1a1a1a; padding:10px; border:1px solid #444; border-radius:5px;">
-        <div style="display:flex; gap:5px; margin-bottom:5px;">
-            <input type="date" id="sessDate" style="flex:1; background:#000; color:#fff; border:1px solid #555;">
-            <input type="time" id="sessTime" style="flex:1; background:#000; color:#fff; border:1px solid #555;">
-        </div>
-        <div style="display:flex; gap:5px; margin-bottom:5px;">
-             <input type="text" id="sessName" placeholder="ދަންފަޅި (މިސާލު: ހެނދުނު)" style="flex:1; background:#000; color:#fff; border:1px solid #555; padding:5px;">
-        </div>
+    <select id="sessFilterGroup" style="width:100%; margin-bottom:5px;">
+        <option value="">- ހުރިހާ ޢުމުރުފުރާއެއް -</option>
+        <option value="Under 6">6 އަހަރުން ދަށް</option>
+        <option value="Under 9">9 އަހަރުން ދަށް</option>
+        <option value="Under 11">11 އަހަރުން ދަށް</option>
+        <option value="Under 13">13 އަހަރުން ދަށް</option>
+        <option value="Under 16">16 އަހަރުން ދަށް</option>
+        <option value="Under 19">19 އަހަރުން ދަށް</option>
+        <option value="Under 21">21 އަހަރުން ދަށް</option>
+        <option value="General">ނުކުޅެދުންތެރިކަން ހުންނަ</option>
+    </select>
 
-        <div style="display:flex; gap:5px; margin-bottom:5px;">
-            <select id="sessFilterBranch" style="flex:1;">
-                <option value="">- ހުރިހާ ގޮތްޕެއް -</option>
-                <option value="Balaiygen">ބަލައިގެން</option>
-                <option value="Nubalai">ނުބަލައި</option>
-            </select>
-            <select id="sessFilterGender" style="flex:1;">
-                <option value="">- ޖިންސު -</option>
-                <option value="Male">ފިރިހެން</option>
-                <option value="Female">އަންހެން</option>
-            </select>
-        </div>
-        
-        <select id="sessFilterGroup" style="width:100%; margin-bottom:5px;">
-            <option value="">- ހުރިހާ ޢުމުރުފުރާއެއް -</option>
-            <option value="Under 6">6 އަހަރުން ދަށް</option>
-            <option value="Under 9">9 އަހަރުން ދަށް</option>
-            <option value="Under 11">11 އަހަރުން ދަށް</option>
-            <option value="Under 13">13 އަހަރުން ދަށް</option>
-            <option value="Under 16">16 އަހަރުން ދަށް</option>
-            <option value="Under 19">19 އަހަރުން ދަށް</option>
-            <option value="Under 21">21 އަހަރުން ދަށް</option>
-            <option value="General">ނުކުޅެދުންތެރިކަން ހުންނަ</option>
+    <select id="sessFilterInst" style="width:100%; margin-bottom:5px; border-color:#00bcd4; color:#00e676;">
+        <option value="">- ހުރިހާ މުއައްސަސާއެއް (All) -</option>
+        <option value="School">Schools Only (ސްކޫލްތައް)</option>
+        <option value="University">Universities (ޔުނިވަރސިޓީ/ކޮލެޖް)</option>
+        <option value="Quran Class">Quran Classes (ޤުރުއާން ކްލާސް)</option>
+        <option value="Club">Clubs/Jamiyya (ކްލަބް ޖަމިއްޔާ)</option>
+        <option value="Private">Private (އަމިއްލަ ގޮތުން)</option>
+    </select>
+
+    <div style="display:flex; gap:5px; margin-bottom:10px; align-items:center;">
+        <label style="color:#ccc; font-size:12px;">ލިސްޓަށް ނަގާނީ:</label>
+        <select id="sessLimit" style="flex:1; background:#002200; color:#fff;">
+            <option value="All">All (ހުރިހާ ކުދިން)</option>
+            <option value="5">5 ކުދިން</option>
+            <option value="10">10 ކުދިން</option>
+            <option value="15">15 ކުދިން</option>
+            <option value="20">20 ކުދިން</option>
+            <option value="25">25 ކުދިން</option>
+            <option value="50">50 ކުދިން</option>
+            <option value="75">75 ކުދިން</option>
+            <option value="100">100 ކުދިން</option>
         </select>
+    </div>
 
-        <select id="sessFilterInst" style="width:100%; margin-bottom:5px; border-color:#00bcd4; color:#00e676;">
-            <option value="">- ހުރިހާ މުއައްސަސާއެއް (All Institutions) -</option>
-            <option value="School">Schools Only (ސްކޫލްތައް)</option>
-            <option value="University">Universities/Colleges (ޔުނިވަރސިޓީ/ކޮލެޖް)</option>
-            <option value="Quran Class">Quran Classes (ޤުރުއާން ކްލާސް)</option>
-            <option value="Club">Clubs/Jamiyya (ކްލަބް ޖަމިއްޔާ)</option>
-            <option value="Private">Private Candidates (އަމިއްލަ ގޮތުން)</option>
-        </select>
-
-        <div style="display:flex; gap:5px; margin-bottom:10px; align-items:center;">
-            <label style="color:#ccc; font-size:12px;">ލިސްޓަށް ނަގާނީ:</label>
-            <select id="sessLimit" style="flex:1; background:#002200; color:#fff;">
-                <option value="All">All (ހުރިހާ ކުދިން)</option>
-                <option value="5">5 ކުދިން</option>
-                <option value="10">10 ކުދިން</option>
-                <option value="15">15 ކުދިން</option>
-                <option value="20">20 ކުދިން</option>
-                <option value="25">25 ކުދިން</option>
-            </select>
-        </div>
-
-        <button class="btn-cyan" style="width:100%; font-weight:bold; border:1px solid #00bcd4;" onclick="generateJudgeSessionSheet()">
-            ⚖️ ޕްރިންޓް ޖަޖް ޝީޓް (A4 Landscape)
+    <div style="display:flex; gap:5px;">
+        <button class="btn-gold" style="flex:1; font-size:12px;" onclick="generateSessionList()">
+            📌 Notice Board List
+        </button>
+        <button class="btn-cyan" style="flex:1; font-size:12px; font-weight:bold;" onclick="generateJudgeSessionSheet()">
+            ⚖️ Judge Mark Sheet
         </button>
     </div>
+</div>
     <hr style="border-color:#333; margin:8px 0;">
     <label style="color:#FFD700; font-family:'Faruuma';">★ ސެޝަން ހާޒިރީ / އިޢުލާން ލިސްޓު:</label>
     
