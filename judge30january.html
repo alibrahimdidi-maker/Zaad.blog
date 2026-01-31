@@ -4399,6 +4399,356 @@ function generateSessionList() {
     w.document.write(html);
     w.document.close();
 }
+    // ======================================================
+// ★ FIXED PRINT FUNCTIONS (WITH FARUUMA FONT SUPPORT) ★
+// ======================================================
+
+// 1. SESSION ATTENDANCE LIST (FIXED)
+function generateSessionList() {
+    // A. Inputs & Validation
+    const dateInput = document.getElementById('sessDate').value;
+    const timeInput = document.getElementById('sessTime').value;
+    const sessionName = document.getElementById('sessName').value || "-";
+    const filterBranch = document.getElementById('sessFilterBranch').value;
+    const filterGroup = document.getElementById('sessFilterGroup').value;
+    const filterGender = document.getElementById('sessFilterGender').value;
+
+    // Day Name Generation
+    let dayName = "-";
+    if(dateInput) {
+        const d = new Date(dateInput);
+        const dvDays = ["އާދީއްތަ", "ހޯމަ", "އަންގާރަ", "ބުދަ", "ބުރާސްފަތި", "ހުކުރު", "ހޮނިހިރު"];
+        dayName = dvDays[d.getDay()];
+    }
+
+    // B. Filter Students
+    let students = (state.allStudents && state.allStudents.length > 0) ? state.allStudents : state.judging.savedResults;
+    if(!students || students.length === 0) { alert("No students found!"); return; }
+
+    let list = students.filter(s => {
+        let matchBranch = filterBranch === "" || (s.branch && s.branch.trim() === filterBranch);
+        let matchGroup = filterGroup === "" || (s.group && s.group.trim() === filterGroup);
+        let matchGender = filterGender === "" || (s.gender && s.gender.trim() === filterGender);
+        return matchBranch && matchGroup && matchGender;
+    });
+
+    if(list.length === 0) { alert("No students match filters."); return; }
+    list.sort((a, b) => a.reg.localeCompare(b.reg));
+
+    // C. Font Injection (CRITICAL FIX)
+    const customFontCSS = state.fontData ? `@font-face { font-family: 'Faruuma'; src: url('${state.fontData}'); }` : '';
+
+    // D. Generate HTML
+    const instName = document.getElementById('rptInstName').value || "ޤުރުއާން މުބާރާތް";
+    const title = `${filterBranch} - ${filterGroup} - ސެޝަން ލިސްޓު`;
+
+    const html = `
+    <!DOCTYPE html>
+    <html dir="rtl" lang="dv">
+    <head>
+        <title>Session List</title>
+        <style>
+            ${customFontCSS}
+            @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Thaana:wght@400;700&display=swap');
+            
+            body { 
+                font-family: 'Faruuma', 'Waheed', 'Noto Sans Thaana', sans-serif !important;
+                padding: 20px; direction: rtl; 
+            }
+            h1 { font-size: 24px; text-decoration: underline; text-align:center; margin:5px; }
+            h2 { font-size: 18px; text-align:center; margin:5px; color:#444; }
+            
+            table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 13px; }
+            th { background: #eee; font-weight: bold; border: 1px solid #444; padding: 8px; font-size: 14px; }
+            td { border: 1px solid #444; padding: 6px; text-align: center; }
+            
+            @media print { 
+                button { display: none; } 
+                @page { size: A4 landscape; margin: 10mm; } 
+            }
+        </style>
+    </head>
+    <body>
+        <button onclick="window.print()" style="padding:15px; width:100%; background:navy; color:white; font-size:18px; margin-bottom:20px; cursor:pointer;">🖨️ ޕްރިންޓް ކުރައްވާ</button>
+
+        <h1>${instName}</h1>
+        <h2>${title}</h2>
+        
+        <div style="border:1px solid #000; padding:10px; margin:10px 0; display:flex; justify-content:space-between; font-weight:bold;">
+            <span>ތާރީޚް: ${dateInput || '-'} (${dayName})</span>
+            <span>ގަޑި: ${timeInput || '-'}</span>
+            <span>ދަންފަޅި: ${sessionName}</span>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th width="3%">#</th>
+                    <th width="8%">ރެޖިސްޓްރީ</th>
+                    <th width="25%">ފުރިހަމަ ނަން</th>
+                    <th width="8%">އައި.ޑީ</th>
+                    <th width="5%">ޖިންސު</th>
+                    <th width="8%">ގޮފި</th>
+                    <th width="8%">ޢުމުރު</th>
+                    <th width="10%">ހާޒިރުވީގަޑި</th>
+                    <th width="10%">ސޮއި</th>
+                    <th width="15%">ރިމާކްސް</th>
+                </tr>
+            </thead>
+            <tbody>
+                ${list.map((s, i) => `
+                    <tr>
+                        <td>${i+1}</td>
+                        <td>${s.reg}</td>
+                        <td style="text-align:right; padding-right:10px;">${s.name}</td>
+                        <td>${s.id}</td>
+                        <td>${s.gender}</td>
+                        <td>${s.branch}</td>
+                        <td>${s.group}</td>
+                        <td></td> <td></td> <td></td>
+                    </tr>`).join('')}
+            </tbody>
+        </table>
+        <div style="margin-top:20px; font-size:12px; color:#555;">
+            ޖުމްލަ: ${list.length} ދަރިވަރުން | ޕްރިންޓްކުރީ: ${new Date().toLocaleDateString()}
+        </div>
+    </body>
+    </html>`;
+
+    const w = window.open("", "SessionList", "width=1200,height=800");
+    w.document.write(html);
+    w.document.close();
+}
+
+// 2. ADVANCED REPORT (TOP LISTS & FULL RESULTS) - FIXED
+function generateAdvancedReport(mode) {
+    let list = getFilteredResults();
+    
+    let titleSuffix = "(މުޅި ލިސްޓު)";
+    if(mode === 'top3') { list = list.slice(0, 3); titleSuffix = "(ގަދަ 3)"; }
+    if(mode === 'top5') { list = list.slice(0, 5); titleSuffix = "(ގަދަ 5)"; }
+
+    if(list.length === 0) { alert("މި ކެޓަގަރީގައި އެއްވެސް ދަރިވަރަކު ނެތެވެ!"); return; }
+
+    const instName = document.getElementById('rptInstName').value || "މުއައްސަސާގެ ނަން";
+    const compName = document.getElementById('rptCompName').value || "ނަތީޖާ ޝީޓް";
+    const judgeCount = parseInt(document.getElementById('rptJudgeCount').value) || 3;
+    
+    // Safety check for dropdowns
+    const bEl = document.getElementById('rptFilterBranch');
+    const gEl = document.getElementById('rptFilterGroup');
+    const branchTxt = bEl.options[bEl.selectedIndex].text;
+    const groupTxt = gEl.options[gEl.selectedIndex].text;
+
+    const chiefName = document.getElementById('rptChief').value || "__________________";
+
+    let sigLines = '';
+    for(let i=1; i<=judgeCount; i++) {
+        sigLines += `<div class="sig-box"><div class="line"></div><div class="label">ފަނޑިޔާރު ${i}</div></div>`;
+    }
+
+    // Font Injection
+    const customFontCSS = state.fontData ? `@font-face { font-family: 'Faruuma'; src: url('${state.fontData}'); }` : '';
+
+    const html = `
+    <!DOCTYPE html>
+    <html dir="rtl" lang="dv">
+    <head>
+        <title>Result Report</title>
+        <style>
+            ${customFontCSS}
+            @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Thaana:wght@400;700&display=swap');
+            
+            body { 
+                font-family: 'Faruuma', 'Waheed', 'Noto Sans Thaana', sans-serif !important;
+                padding: 40px; direction: rtl; 
+            }
+            .header { text-align: center; margin-bottom: 30px; border-bottom: 3px double #000; padding-bottom: 20px; }
+            h1 { margin: 5px 0; font-size: 26px; font-weight:bold; }
+            h2 { margin: 5px 0; font-size: 20px; color: #333; }
+            h3 { margin: 5px 0; font-size: 18px; text-decoration: underline; }
+            
+            .report-info-box {
+                border: 1px solid #000; padding: 15px; margin-bottom: 20px;
+                display: flex; justify-content: space-between;
+                background: #f9f9f9; font-weight: bold; font-size: 14px;
+            }
+            table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 14px; }
+            th, td { border: 1px solid #444; padding: 8px; text-align: center; vertical-align: middle; }
+            th { background: #eee; font-weight: bold; font-size: 15px; }
+            tr:nth-child(1) td { background: #fffbe6; font-weight:bold; } 
+
+            .footer { margin-top: 50px; }
+            .judges-grid { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 20px; }
+            .sig-box { width: 30%; text-align: center; margin-bottom: 30px; }
+            .line { border-bottom: 1px dotted #000; margin-bottom: 5px; height: 40px; }
+            .label { font-size: 12px; color: #555; }
+            @media print { button { display: none; } body { -webkit-print-color-adjust: exact; } }
+        </style>
+    </head>
+    <body>
+        <button onclick="window.print()" style="position:fixed; top:10px; left:10px; padding:10px 20px; background:blue; color:white; cursor:pointer;">🖨️ PRINT</button>
+        <div class="header">
+            <h1>${instName}</h1>
+            <h2>${compName}</h2>
+            <h3>ނަތީޖާ ޝީޓް ${titleSuffix}</h3>
+        </div>
+        <div class="report-info-box">
+            <div>ގޮފި: ${branchTxt}</div>
+            <div>ޢުމުރުފުރާ: ${groupTxt}</div>
+            <div>ތާރީޚް: ${new Date().toLocaleDateString()}</div>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th width="5%">ވަނަ</th>
+                    <th width="10%">ރެޖިސްޓްރީ</th>
+                    <th width="25%">ދަރިވަރުގެ ނަން</th>
+                    <th width="10%">އައި.ޑީ</th>
+                    <th width="25%">ދާއިމީ އެޑްރެސް</th>
+                    <th width="10%">ޖުމްލަ މާކުސް</th>
+                    <th width="15%">ރިމާކްސް</th>
+                </tr>
+            </thead>
+            <tbody>
+                ${list.map((s, i) => `
+                    <tr>
+                        <td>${i+1}</td>
+                        <td>${s.reg || "-"}</td>
+                        <td style="text-align:right; padding-right:10px;">${s.name}</td>
+                        <td>${s.id}</td>
+                        <td style="text-align:right; font-size:11px;">${s.address || "-"}</td>
+                        <td><b>${s.finalScore}</b></td>
+                        <td></td>
+                    </tr>`).join('')}
+            </tbody>
+        </table>
+        <div class="footer">
+            <div style="text-align:left; margin-bottom:30px;">
+                އިސް ފަނޑިޔާރު: ________________ ${chiefName}
+            </div>
+            <div class="judges-grid">${sigLines}</div>
+        </div>
+    </body>
+    </html>`;
+
+    const w = window.open("", "Report", "width=1100,height=800");
+    w.document.write(html);
+    w.document.close();
+}
+
+// 3. BLANK JUDGE SHEET (FIXED)
+function downloadManualScoreSheet() {
+    const rubric = state.judging.rubric;
+    const instName = document.getElementById('rptInstName').value || "ޤުރުއާން މުބާރާތް";
+    const compName = document.getElementById('rptCompName').value || "މާކުސް ޝީޓް";
+    
+    let totalMax = 0;
+    rubric.forEach(r => totalMax += r.max);
+
+    let rows = "";
+    rubric.forEach(r => {
+        rows += `
+        <tr>
+            <td style="text-align:right; font-weight:bold; font-size:16px;">${r.name}</td>
+            <td style="font-weight:bold;">${r.max}</td>
+            <td></td> <td style="color:#ccc;">___________</td> 
+        </tr>`;
+    });
+
+    const customFontCSS = state.fontData ? `@font-face { font-family: 'Faruuma'; src: url('${state.fontData}'); }` : '';
+
+    const html = `
+    <!DOCTYPE html>
+    <html dir="rtl" lang="dv">
+    <head>
+        <title>Judge Score Sheet</title>
+        <style>
+            ${customFontCSS}
+            @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Thaana:wght@400;700&display=swap');
+            
+            body { 
+                font-family: 'Faruuma', 'Waheed', 'Noto Sans Thaana', sans-serif !important; 
+                padding: 40px; direction: rtl; -webkit-print-color-adjust: exact;
+            }
+            .sheet-container { border: 5px double #000; padding: 30px; height: 95vh; box-sizing: border-box; }
+            h1 { text-align: center; margin: 0; font-size: 24px; text-decoration: underline; }
+            h2 { text-align: center; margin: 5px 0 30px 0; font-size: 18px; color: #444; }
+
+            .info-grid {
+                display: grid; grid-template-columns: 1fr 1fr; gap: 20px;
+                margin-bottom: 20px; border: 1px solid #333; padding: 15px; background: #f9f9f9;
+            }
+            .input-line { margin-bottom: 15px; font-size: 14px; font-weight: bold; }
+            .dotted { border-bottom: 2px dotted #000; display: inline-block; width: 60%; }
+
+            table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+            th, td { border: 1px solid #000; padding: 12px; text-align: center; vertical-align: middle; }
+            th { background: #eee; font-size: 15px; font-weight: bold; }
+            .total-row td { background: #333; color: #fff; font-weight: bold; font-size: 18px; }
+            
+            .footer-sig { margin-top: 50px; display: flex; justify-content: space-between; }
+            .sig-box { text-align: center; width: 40%; }
+
+            @media print { button { display: none; } @page { size: A4 portrait; margin: 10mm; } }
+        </style>
+    </head>
+    <body>
+        <button onclick="window.print()" style="width:100%; padding:20px; font-size:20px; background:#002200; color:#fff; cursor:pointer; margin-bottom:20px;">🖨️ CLICK TO PRINT</button>
+
+        <div class="sheet-container">
+            <h1>${instName}</h1>
+            <h2>${compName} - ޖަޖުންގެ މާކުސް ޝީޓް</h2>
+
+            <div class="info-grid">
+                <div>
+                    <div class="input-line">ދަރިވަރުގެ ނަން: <span class="dotted"></span></div>
+                    <div class="input-line">އައި.ޑީ / ރެޖިސްޓްރީ: <span class="dotted" style="width:50%"></span></div>
+                    <div class="input-line">ގޮފި / ޢުމުރު: <span class="dotted"></span></div>
+                </div>
+                <div style="text-align:left;">
+                    <div class="input-line" style="direction:ltr;">Date: __________________</div>
+                    <div class="input-line" style="direction:ltr;">Judge Name: __________________</div>
+                </div>
+            </div>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th width="40%">ބައިތައް (Criteria)</th>
+                        <th width="15%">ޖުމްލަ</th>
+                        <th width="20%">ދޭ މާކުސް</th>
+                        <th width="25%">ރިމާކްސް</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${rows}
+                    <tr class="total-row">
+                        <td style="text-align:right;">ޖުމްލަ (TOTAL)</td>
+                        <td>${totalMax}</td>
+                        <td></td> <td></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div style="margin-top:40px; border:1px dashed #777; padding:15px; height:80px;">
+                <strong>އިތުރު ފާހަގަތައް (General Remarks):</strong>
+            </div>
+
+            <div class="footer-sig">
+                <div class="sig-box">
+                    <br>_______________________<br>
+                    ޖަޖުގެ ސޮއި (Signature)
+                </div>
+            </div>
+        </div>
+    </body>
+    </html>`;
+
+    const w = window.open("", "ManualSheet", "width=900,height=1000");
+    w.document.write(html);
+    w.document.close();
+}
 </script>
 </body>
 </html>
