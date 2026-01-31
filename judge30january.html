@@ -5345,6 +5345,307 @@ function loadStudentBatch() {
     };
     r.readAsText(file);
 }
+    // ======================================================
+// ★ 1. NOTICE BOARD LIST (NO SIGNATURE, INFO ONLY) ★
+// ======================================================
+function generateSessionList() {
+    // 1. INPUTS
+    const dateInput = document.getElementById('sessDate').value;
+    const timeInput = document.getElementById('sessTime').value;
+    const sessionName = document.getElementById('sessName').value || "-";
+    const hallName = document.getElementById('sessHall') ? document.getElementById('sessHall').value : "-";
+    const limitVal = document.getElementById('sessLimit').value;
+    
+    // Filters
+    const filterBranch = document.getElementById('sessFilterBranch').value;
+    const filterGroup = document.getElementById('sessFilterGroup').value;
+    const filterGender = document.getElementById('sessFilterGender').value;
+    const filterInst = document.getElementById('sessFilterInst').value;
+
+    // Day Name
+    let dayName = "_______";
+    if(dateInput) {
+        const d = new Date(dateInput);
+        const dvDays = ["އާދީއްތަ", "ހޯމަ", "އަންގާރަ", "ބުދަ", "ބުރާސްފަތި", "ހުކުރު", "ހޮނިހިރު"];
+        dayName = dvDays[d.getDay()];
+    }
+
+    // 2. GET STUDENTS
+    let students = (state.allStudents && state.allStudents.length > 0) ? state.allStudents : state.judging.savedResults;
+    if(!students || students.length === 0) { alert("Please Load CSV First"); return; }
+
+    // Filter Logic
+    let list = students.filter(s => {
+        let matchBranch = filterBranch === "" || (s.branch && s.branch.trim() === filterBranch);
+        let matchGroup = filterGroup === "" || (s.group && s.group.trim() === filterGroup);
+        let matchGender = filterGender === "" || (s.gender && s.gender.trim() === filterGender);
+        
+        let matchInst = true;
+        if(filterInst !== "") {
+            const instName = (s.institution || s.inst || "").toLowerCase();
+            const typeCheck = filterInst.toLowerCase();
+            if(instName.includes(typeCheck)) matchInst = true;
+            else if(filterInst === "Private" && (instName === "" || instName.includes("private") || instName.includes("amilla"))) matchInst = true;
+            else matchInst = false;
+        }
+        return matchBranch && matchGroup && matchGender && matchInst;
+    });
+
+    if(list.length === 0) { alert("No students match filters."); return; }
+    list.sort((a, b) => a.reg.localeCompare(b.reg));
+    
+    if(limitVal !== "All") list = list.slice(0, parseInt(limitVal));
+
+    // 3. GENERATE HTML
+    const instName = document.getElementById('rptInstName').value || "މުއައްސަސާގެ ނަން";
+    const compName = document.getElementById('rptCompName').value || "ޤުރުއާން މުބާރާތް";
+    const customFontCSS = state.fontData ? `@font-face { font-family: 'Faruuma'; src: url('${state.fontData}'); }` : '';
+
+    const html = `
+    <!DOCTYPE html>
+    <html dir="rtl" lang="dv">
+    <head>
+        <title>Notice Board List</title>
+        <style>
+            ${customFontCSS}
+            @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Thaana:wght@400;700&display=swap');
+            body { font-family: 'Faruuma', 'Waheed', 'Noto Sans Thaana', sans-serif !important; padding: 20px; direction: rtl; }
+            h1 { font-size: 26px; text-decoration: underline; text-align:center; margin:5px; font-weight:bold; }
+            h2 { font-size: 20px; text-align:center; margin:5px; color:#333; }
+            h3 { font-size: 18px; text-align:center; margin-top:5px; background:#000; color:#fff; padding:5px; display:inline-block; width:100%; }
+            
+            .meta-box {
+                border: 2px solid #000; padding: 15px; margin: 20px 0;
+                display: flex; justify-content: space-between; align-items: center;
+                font-weight: bold; font-size: 16px; background: #f0f0f0;
+            }
+            .meta-col { display:flex; flex-direction:column; gap:5px; }
+
+            table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 14px; }
+            th { background: #ddd; font-weight: bold; border: 1px solid #000; padding: 10px; font-size: 15px; }
+            td { border: 1px solid #000; padding: 8px; text-align: center; vertical-align: middle; }
+            
+            @media print { button { display: none; } }
+        </style>
+    </head>
+    <body>
+        <button onclick="window.print()" style="padding:15px; width:100%; background:navy; color:white; font-size:18px; margin-bottom:20px; cursor:pointer;">🖨️ ޕްރިންޓް ނޯޓިސް (PRINT)</button>
+
+        <h1>${instName}</h1>
+        <h2>${compName}</h2>
+        <h3>މުބާރާތުގެ ކިޔެވުމަށް ހާޒިރުވާންޖެހޭ ގޮތުގެ ތާވަލު</h3>
+        
+        <div class="meta-box">
+            <div class="meta-col" style="text-align:right;">
+                <div>ތާރީޚް: ${dateInput || '_______'} (${dayName})</div>
+                <div>ގަޑި: ${timeInput || '_______'}</div>
+            </div>
+            <div class="meta-col" style="text-align:center;">
+                <div style="font-size:18px; text-decoration:underline;">${sessionName}</div>
+                <div>ތަން (Venue): ${hallName}</div>
+            </div>
+            <div class="meta-col" style="text-align:left;">
+                <div>ގޮފި: ${filterBranch || 'All'}</div>
+                <div>ޢުމުރު: ${filterGroup || 'All'}</div>
+            </div>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th width="5%">#</th>
+                    <th width="10%">ރެޖިސްޓްރީ</th>
+                    <th width="25%">ދަރިވަރުގެ ނަން</th>
+                    <th width="10%">އައި.ޑީ</th>
+                    <th width="20%">މުއައްސަސާ / ސްކޫލް</th>
+                    <th width="10%">ޖިންސު</th>
+                    <th width="20%">ބައިވެރިވާ ގޮފި/ޢުމުރު</th>
+                </tr>
+            </thead>
+            <tbody>
+                ${list.map((s, i) => `
+                    <tr>
+                        <td>${i+1}</td>
+                        <td>${s.reg}</td>
+                        <td style="text-align:right; padding-right:10px; font-weight:bold;">${s.name}</td>
+                        <td>${s.id}</td>
+                        <td>${s.institution || s.inst || 'Private'}</td>
+                        <td>${s.gender}</td>
+                        <td>${s.branch} - ${s.group}</td>
+                    </tr>
+                `).join('')}
+            </tbody>
+        </table>
+        
+        <div style="margin-top:20px; font-size:12px; color:#555; text-align:center;">
+            މި ސެޝަންގައި ކިޔަވާ ޖުމްލަ ދަރިވަރުން: ${list.length}
+        </div>
+    </body>
+    </html>`;
+
+    const w = window.open("", "NoticeBoard", "width=1200,height=800");
+    w.document.write(html);
+    w.document.close();
+}
+
+// ======================================================
+// ★ 2. JUDGE MARK SHEET (WITH SCORING COLUMNS) ★
+// ======================================================
+function generateJudgeSessionSheet() {
+    // 1. INPUTS
+    const dateInput = document.getElementById('sessDate').value;
+    const timeInput = document.getElementById('sessTime').value;
+    const sessionName = document.getElementById('sessName').value || "-";
+    const hallName = document.getElementById('sessHall') ? document.getElementById('sessHall').value : "-";
+    const limitVal = document.getElementById('sessLimit').value;
+    
+    // Filters
+    const filterBranch = document.getElementById('sessFilterBranch').value;
+    const filterGroup = document.getElementById('sessFilterGroup').value;
+    const filterGender = document.getElementById('sessFilterGender').value;
+    const filterInst = document.getElementById('sessFilterInst').value;
+
+    let dayName = "-";
+    if(dateInput) {
+        const d = new Date(dateInput);
+        const dvDays = ["އާދީއްތަ", "ހޯމަ", "އަންގާރަ", "ބުދަ", "ބުރާސްފަތި", "ހުކުރު", "ހޮނިހިރު"];
+        dayName = dvDays[d.getDay()];
+    }
+
+    // 2. GET STUDENTS
+    let students = (state.allStudents && state.allStudents.length > 0) ? state.allStudents : state.judging.savedResults;
+    if(!students || students.length === 0) { alert("Please Load CSV First"); return; }
+
+    let list = students.filter(s => {
+        let matchBranch = filterBranch === "" || (s.branch && s.branch.trim() === filterBranch);
+        let matchGroup = filterGroup === "" || (s.group && s.group.trim() === filterGroup);
+        let matchGender = filterGender === "" || (s.gender && s.gender.trim() === filterGender);
+        
+        let matchInst = true;
+        if(filterInst !== "") {
+            const instName = (s.institution || s.inst || "").toLowerCase();
+            const typeCheck = filterInst.toLowerCase();
+            if(instName.includes(typeCheck)) matchInst = true;
+            else if(filterInst === "Private" && (instName === "" || instName.includes("private") || instName.includes("amilla"))) matchInst = true;
+            else matchInst = false;
+        }
+        return matchBranch && matchGroup && matchGender && matchInst;
+    });
+
+    if(list.length === 0) { alert("No students found."); return; }
+    list.sort((a, b) => a.reg.localeCompare(b.reg));
+    
+    if(limitVal !== "All") list = list.slice(0, parseInt(limitVal));
+
+    // 3. RUBRIC HEADERS
+    const rubric = (state.judging && state.judging.rubric && state.judging.rubric.length > 0) 
+                   ? state.judging.rubric 
+                   : [{name:"Criteria", max:100}];
+    let criteriaHeaders = "";
+    let totalMax = 0;
+    rubric.forEach(r => {
+        criteriaHeaders += `<th style="width:70px; font-size:11px;">${r.name}<br>(${r.max})</th>`;
+        totalMax += r.max;
+    });
+
+    // 4. GENERATE HTML (LANDSCAPE)
+    const customFontCSS = state.fontData ? `@font-face { font-family: 'Faruuma'; src: url('${state.fontData}'); }` : '';
+
+    const html = `
+    <!DOCTYPE html>
+    <html dir="rtl" lang="dv">
+    <head>
+        <title>Judge Mark Sheet</title>
+        <style>
+            ${customFontCSS}
+            @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Thaana:wght@400;700&display=swap');
+            body { font-family: 'Faruuma', 'Waheed', 'Noto Sans Thaana', sans-serif !important; padding: 0; margin: 0; direction: rtl; }
+            @page { size: A4 landscape; margin: 10mm; }
+            
+            .sheet-container { width: 100%; text-align: center; padding:20px; box-sizing:border-box; }
+            h1 { font-size: 22px; text-decoration: underline; margin: 0; font-weight:bold; }
+            h2 { font-size: 16px; margin: 5px 0; font-weight:bold; }
+            
+            .meta-box {
+                display: flex; justify-content: space-between;
+                border: 2px solid #000; padding: 10px; margin: 10px 0;
+                font-size: 13px; font-weight: bold; background: #f9f9f9;
+            }
+
+            table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 13px; }
+            th { background: #e0e0e0; border: 1px solid #000; padding: 5px; font-weight:bold; }
+            td { border: 1px solid #000; padding: 5px; text-align: center; height: 35px; }
+            
+            .footer { margin-top: 30px; display: flex; justify-content: space-between; }
+            .sig-line { width: 200px; border-top: 1px dotted #000; padding-top: 5px; margin-top:30px; text-align:center; }
+            
+            @media print { button { display: none; } }
+        </style>
+    </head>
+    <body>
+        <button onclick="window.print()" style="position:fixed; top:0; left:0; width:100%; padding:10px; background:navy; color:white; cursor:pointer;">🖨️ PRINT SHEET</button>
+        
+        <div class="sheet-container">
+            <h1>ރަސްފަހި ޤުރްއާން މުބާރާތް - ޖަޖުންގެ މާކުސް ޝީޓް</h1>
+            
+            <div class="meta-box">
+                <div>
+                    ތާރީޚް: ${dateInput || '_______'} (${dayName}) <br>
+                    ދަންފަޅި: ${sessionName}
+                </div>
+                <div style="text-align:center;">
+                    ގޮފި: ${filterBranch || 'All'} <br>
+                    ޢުމުރު: ${filterGroup || 'All'}
+                </div>
+                <div style="text-align:left;">
+                    ޖަޖުގެ ނަން: ___________________ <br>
+                    ހޯލު: ${hallName}
+                </div>
+            </div>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th width="3%">#</th>
+                        <th width="8%">ރެޖިސްޓްރީ</th>
+                        <th width="20%">ދަރިވަރުގެ ނަން / މުއައްސަސާ</th>
+                        ${criteriaHeaders}
+                        <th width="6%">ޖުމްލަ<br>(${totalMax})</th>
+                        <th width="15%">ރިމާކްސް</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${list.map((s, i) => {
+                        let emptyCells = rubric.map(() => `<td></td>`).join('');
+                        return `
+                        <tr>
+                            <td>${i+1}</td>
+                            <td>${s.reg}</td>
+                            <td style="text-align:right;">
+                                <b>${s.name}</b><br>
+                                <span style="font-size:11px; color:#555;">${s.institution || 'Private'}</span>
+                            </td>
+                            ${emptyCells}
+                            <td></td>
+                            <td></td>
+                        </tr>`;
+                    }).join('')}
+                </tbody>
+            </table>
+
+            <div class="footer">
+                <div><div class="sig-line">ޖަޖުގެ ސޮއި</div></div>
+                <div><div class="sig-line">އިސް ފަނޑިޔާރު</div></div>
+                <div><div class="sig-line">ތާރީޚް</div></div>
+            </div>
+        </div>
+    </body>
+    </html>`;
+
+    const w = window.open("", "JudgeSheet", "width=1200,height=800");
+    w.document.write(html);
+    w.document.close();
+}
 </script>
 </body>
 </html>
