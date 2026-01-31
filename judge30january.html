@@ -3747,10 +3747,14 @@ function downloadManualScoreSheet() {
 
     // ★ މިތަނަށް ތިރީގައިވާ ކޯޑު ޕޭސްޓް ކުރައްވާ ★
 
-  // --- COMPLETE NATIONAL MASTER SHEET GENERATOR (DETAILED BREAKDOWN) ---
+  // --- ULTIMATE NATIONAL MASTER SHEET GENERATOR (ALIGNED & DETAILED) ---
 function generateDummyMasterSheet() {
-    // 1. SETUP RUBRIC COLUMNS (މާކުސް ދޭ ބައިތައް)
-    // މިއީ ސޮފްޓްވެއަރގައި އިންނަ ބައިތަކާ އެއްގޮތަށް
+    // 1. ALIGNMENT SETUP (ސޮފްޓްވެއަރގެ Load Batch އާ ދިމާވާގޮތަށް)
+    // Index Mapping:
+    // 0:Serial, 1:Reg, 2:Group, 3:Branch, 4:Inst, 5:Name, 6:Gender, 
+    // 7:Addr, 8:ID, 9:Contact, 10:Parent, 11:ParentPhone, 12:Email
+    
+    // Rubric Criteria (މާކުސް ދޭ ބައިތައް)
     const criteria = [
         { name: "Thilawa", max: 30 },
         { name: "Tajweed", max: 20 },
@@ -3761,133 +3765,141 @@ function generateDummyMasterSheet() {
         { name: "Maqamat", max: 5 }
     ];
 
-    // 2. CSV HEADERS (Columns)
-    let csv = "Serial No,Reg No,Name,ID Card,Gender,Group,Branch,Institution,Address,Contact,Parent,Parent Phone,Email,";
+    // 2. CSV HEADERS CONSTRUCTION
+    let csv = "Serial No,Reg No,Age Group,Branch,Institution,Full Name,Gender,Address,ID Card,Contact,Parent Name,Parent Phone,Email,";
 
-    // Dynamic Headers for 5 Judges
+    // Dynamic Headers for 5 Judges (Detailed Columns)
     for (let j = 1; j <= 5; j++) {
-        // Judge's Individual Criteria
         criteria.forEach(c => {
-            csv += `J${j}-${c.name} (${c.max}),`;
+            csv += `J${j}-${c.name} (${c.max}),`; // Individual Criteria
         });
-        // Judge's Total
-        csv += `J${j}-TOTAL,`;
+        csv += `J${j}-TOTAL,`; // Judge's Total
     }
 
     // Final Summary Columns
-    csv += "GRAND TOTAL (All Judges),FINAL AVERAGE,RANK,REMARKS\n";
+    csv += "GRAND TOTAL (5 Judges),FINAL AVERAGE,RANK,REMARKS (Top list)\n";
 
-    // 3. DATA POOLS (For Random Generation)
+    // 3. DATA POOLS (Random Data Sources)
     const institutions = [
         "Arabiyya School", "Iskandhar School", "Majeedhiyya School", "Aminiya School", 
         "Jamaluddin School", "Kulliyya", "Villa College", "MNU", "IUM", 
-        "Fathura Quran Class", "Tharteel Academy", "Private Candidate", "Imaduddin School", "Rehendhi School"
+        "Fathura Quran Class", "Tharteel Academy", "Private Candidate", "Imaduddin School"
     ];
-    
-    const islands = ["Male'", "Hulhumale'", "Villingili", "Addu City", "Fuvahmulah", "Kulhudhuffushi", "Thinadhoo", "Naifaru", "Eydhafushi", "Hinnavaru"];
+    const islands = ["Male'", "Hulhumale'", "Addu City", "Fuvahmulah", "Kulhudhuffushi", "Thinadhoo", "Naifaru"];
     const branches = ["Balaiygen", "Nubalai"];
     const groups = ["Under 6", "Under 9", "Under 11", "Under 13", "Under 16", "Under 19", "Under 21", "General"];
-    
-    const firstNames = ["Ahmed", "Mohamed", "Ibrahim", "Hassan", "Ali", "Abdulla", "Hussain", "Fathimath", "Aishath", "Mariyam", "Aminath", "Khadheeja", "Zainab", "Yusuf", "Easa", "Moosa", "Zaid", "Umar", "Sara", "Leena"];
-    const lastNames = ["Rasheed", "Nazeer", "Fayaz", "Shareef", "Maniku", "Didi", "Saeed", "Zahir", "Riza", "Nasir", "Latheef", "Jameel", "Waheed", "Sattar"];
+    const names = ["Ahmed", "Mohamed", "Ibrahim", "Ali", "Hussain", "Fathimath", "Aishath", "Mariyam", "Aminath", "Zainab", "Yusuf", "Musa"];
+    const lastNames = ["Rasheed", "Nazeer", "Fayaz", "Manik", "Didi", "Saeed", "Zahir", "Riza", "Nasir"];
 
     let students = [];
     let serialCounter = 1;
 
-    // 4. GENERATION LOOP (Ensuring Variety)
-    // Loop through every combination to ensure filters work correctly
+    // 4. GENERATION LOOP (Creating 300+ Students)
     institutions.forEach(inst => {
         branches.forEach(branch => {
             groups.forEach(group => {
-                // Generate 1-2 students for EVERY combination (Ensures 300+ students)
-                const count = Math.floor(Math.random() * 2) + 1; 
+                const count = Math.floor(Math.random() * 2) + 1; // 1-2 students per combo
                 
                 for(let k=0; k<count; k++) {
-                    // Basic Details
-                    const fname = firstNames[Math.floor(Math.random() * firstNames.length)];
+                    // --- Personal Info Generation ---
+                    const fname = names[Math.floor(Math.random() * names.length)];
                     const lname = lastNames[Math.floor(Math.random() * lastNames.length)];
                     const fullName = `${fname} ${lname}`;
-                    const gender = (["Fathimath","Aishath","Mariyam","Aminath","Khadheeja","Zainab","Sara","Leena"].includes(fname)) ? "Female" : "Male";
+                    const gender = (["Fathimath","Aishath","Mariyam","Aminath","Zainab"].includes(fname)) ? "Female" : "Male";
                     const addr = islands[Math.floor(Math.random() * islands.length)];
                     const idCard = `A${Math.floor(Math.random() * 899999) + 100000}`;
                     const regNo = `REG-${1000 + serialCounter}`;
 
-                    // --- SCORING ENGINE (Detailed Breakdown) ---
-                    let studentRowData = {
-                        info: [serialCounter, regNo, fullName, idCard, gender, group, branch, inst, addr, "7770000", "Parent Name", "7771111", "test@email.com"],
-                        judgeDetails: [], // Stores J1..J5 detailed columns
-                        grandTotal: 0
+                    // --- SCORING ENGINE (5 Judges) ---
+                    let rowData = {
+                        // Store basic info in specific object keys to map correctly later
+                        reg: regNo, group: group, branch: branch, inst: inst, 
+                        name: fullName, gender: gender, addr: addr, id: idCard,
+                        
+                        // Score Data
+                        judgeColumns: [], // Stores J1-Crit1, J1-Crit2... J1-Total...
+                        grandTotal: 0,
+                        finalAvg: 0
                     };
 
-                    let scoreSum = 0;
+                    let grandTotal = 0;
 
-                    // Loop for 5 Judges
                     for(let j=1; j<=5; j++) {
-                        // Base ability of student (60% to 98%)
-                        let ability = Math.random() * (0.98 - 0.60) + 0.60; 
-                        // Small variance per judge (so they don't give exact same marks)
+                        // Student Ability (Base) + Judge Variance
+                        let ability = Math.random() * (0.98 - 0.65) + 0.65; 
                         let variance = (Math.random() * 0.10) - 0.05; 
-                        let judgePerformance = Math.min(1.0, Math.max(0, ability + variance));
+                        let performance = Math.min(1.0, Math.max(0, ability + variance));
 
                         let judgeTotal = 0;
 
-                        // Calculate marks for EACH criteria based on Max Mark * Performance
+                        // Generate Criteria Scores
                         criteria.forEach(c => {
-                            // Add some randomness per category too
-                            let catVariance = (Math.random() * 2) - 1; 
-                            let rawScore = (c.max * judgePerformance) + catVariance;
-                            let finalCatScore = Math.min(c.max, Math.max(0, rawScore)); // Clamp between 0 and Max
-                            
-                            // Round to 2 decimals
-                            let formattedScore = parseFloat(finalCatScore.toFixed(2));
-                            
-                            studentRowData.judgeDetails.push(formattedScore); // Add Category Score to row
-                            judgeTotal += formattedScore;
+                            let raw = (c.max * performance) + ((Math.random()*2)-1);
+                            let val = parseFloat(Math.min(c.max, Math.max(0, raw)).toFixed(2));
+                            rowData.judgeColumns.push(val); // Add to CSV line
+                            judgeTotal += val;
                         });
 
-                        // Add Judge Total to row
+                        // Add Judge Total Column
                         let jTotalFixed = parseFloat(judgeTotal.toFixed(2));
-                        studentRowData.judgeDetails.push(jTotalFixed);
-                        
-                        scoreSum += jTotalFixed;
+                        rowData.judgeColumns.push(jTotalFixed);
+                        grandTotal += jTotalFixed;
                     }
 
-                    studentRowData.grandTotal = scoreSum;
-                    studentRowData.finalAverage = parseFloat((scoreSum / 5).toFixed(2));
+                    rowData.grandTotal = parseFloat(grandTotal.toFixed(2));
+                    rowData.finalAvg = parseFloat((grandTotal / 5).toFixed(2));
                     
-                    students.push(studentRowData);
+                    students.push(rowData);
                     serialCounter++;
                 }
             });
         });
     });
 
-    // 5. RANKING (Sort by Final Average High to Low)
-    students.sort((a, b) => b.finalAverage - a.finalAverage);
+    // 5. SORTING & RANKING
+    students.sort((a, b) => b.finalAvg - a.finalAvg);
 
-    // 6. BUILD CSV CONTENT
+    // 6. BUILD CSV ROWS (Correct Alignment)
     students.forEach((s, idx) => {
         let rank = idx + 1;
-        // Update Serial to match Rank (Optional, or keep original serial)
-        s.info[0] = rank; 
+        let remarks = "";
+        if(rank <= 3) remarks = "Top 3 🏆";
+        else if(rank <= 5) remarks = "Top 5 🎖️";
 
-        // Combine all parts
-        // 1. Info -> 2. Judge Details -> 3. Summary
-        let row = [
-            ...s.info.map(f => `"${f}"`), // Quote strings to be safe
-            ...s.judgeDetails,
-            s.grandTotal.toFixed(2),
-            s.finalAverage,
-            rank,
-            rank <= 10 ? "Top 10" : ""
-        ];
+        let row = [];
+        
+        // --- COLUMNS 0 to 12 (Must match LoadBatch) ---
+        row.push(rank); // Serial (Rank Based)
+        row.push(`"${s.reg}"`);
+        row.push(`"${s.group}"`);
+        row.push(`"${s.branch}"`);
+        row.push(`"${s.inst}"`);
+        row.push(`"${s.name}"`);
+        row.push(`"${s.gender}"`);
+        row.push(`"${s.addr}"`);
+        row.push(`"${s.id}"`);
+        row.push("7770000"); // Contact
+        row.push("Parent Name");
+        row.push("7771111");
+        row.push("test@email.com");
+
+        // --- JUDGE COLUMNS (Detailed) ---
+        s.judgeColumns.forEach(val => row.push(val));
+
+        // --- FINAL CALCULATIONS ---
+        row.push(s.grandTotal); // Sum of 5 Judges
+        row.push(s.finalAvg);   // Average
+        row.push(rank);         // Rank
+        row.push(`"${remarks}"`); // Remarks
 
         csv += row.join(",") + "\n";
     });
 
-    // 7. DOWNLOAD FILE
+    
+
+    // 7. DOWNLOAD
     const dateStr = new Date().toISOString().split('T')[0];
-    const fileName = `Rasfahi_Full_National_Master_${dateStr}.csv`;
+    const fileName = `Rasfahi_Ultimate_Master_${dateStr}.csv`;
     const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
     const link = document.createElement("a");
     link.href = URL.createObjectURL(blob);
