@@ -453,80 +453,55 @@
                 Licensed To: <span id="licenseName"></span>
             </div>
             
-     <div class="panel panel-live">
-    <h2 data-translate="liveCtrl">1. ލައިވް ކޮންޓްރޯލް (Live)</h2>
-    
-    <div id="statusDisplay">WAITING...</div>
-    
-    <div class="mode-switch">
-        <button id="modeJudge" class="mode-btn active" onclick="setMode('judge')" data-translate="mJudge">⚖️ ޖަޖު މެތަޑް (އޮޓޯ)</button>
-        <button id="modeStudent" class="mode-btn" onclick="setMode('student')" data-translate="mStudent">🎓 ދަރިވަރު މެތަޑް (މެނުއަލް)</button>
-    </div>
+            <div class="panel panel-live">
+                <h2 data-translate="liveCtrl">1. ލައިވް ކޮންޓްރޯލް (Live)</h2>
+                
+                <div id="statusDisplay">WAITING...</div>
+                
+                <div class="mode-switch">
+                    <button id="modeJudge" class="mode-btn active" onclick="setMode('judge')" data-translate="mJudge">⚖️ ޖަޖު މެތަޑް (އޮޓޯ)</button>
+                    <button id="modeStudent" class="mode-btn" onclick="setMode('student')" data-translate="mStudent">🎓 ދަރިވަރު މެތަޑް (މެނުއަލް)</button>
+                </div>
 
-    <div class="read-switch">
-        <button id="rmMushaf" class="read-btn active" onclick="setReadingMode('mushaf')" data-translate="rmMushaf">📖 މުޞްޙަފު (ބަލައިގެން)</button>
-        <button id="rmMemory" class="read-btn" onclick="setReadingMode('memory')" data-translate="rmMemory">🧠 ހިތުން (ނުބަލައި)</button>
-    </div>
+                <div class="read-switch">
+                    <button id="rmMushaf" class="read-btn active" onclick="setReadingMode('mushaf')" data-translate="rmMushaf">📖 މުޞްޙަފު (ބަލައިގެން)</button>
+                    <button id="rmMemory" class="read-btn" onclick="setReadingMode('memory')" data-translate="rmMemory">🧠 ހިތުން (ނުބަލައި)</button>
+                </div>
 
-    <div class="tools-box" style="background:rgba(0,0,0,0.3); padding:8px; border-radius:4px; margin-bottom:10px; border:1px dashed #444;">
-        <label style="color:#FFD700; font-size:12px; font-weight:bold; margin-bottom:5px; display:block;">DISPLAY & TEXT TOOLS:</label>
-        
-        <div style="margin-bottom:5px;">
-            <select id="displaySource" onchange="syncWindows()" style="width:100%; background:#000; color:#fff; border:1px solid #555; padding:5px; border-radius:4px;">
-                <option value="auto">Auto (Text if available)</option>
-                <option value="image">Force Image (ފޮޓޯ އެކަނި)</option>
-                <option value="text">Force Text (ލިޔުން އެކަނި)</option>
-            </select>
-        </div>
+                <div id="judgeControls">
+                    <button class="btn-gold" style="padding:12px;" onclick="pickRandomQuestion()" data-translate="btnPick">🎲 ސުވާލު ނަގާ (ރެންޑަމް)</button>
+                </div>
 
-        <div style="display:flex; align-items:center; gap:5px; margin-bottom:3px;">
-            <span style="font-size:10px; color:#aaa; width:35px;">Size:</span>
-            <input type="range" id="qTextSize" min="3" max="25" step="0.5" value="6" oninput="syncWindows()" style="flex:1; accent-color:var(--gold);">
-        </div>
+                <div id="studentControls" class="hidden">
+                    <div style="display:flex; gap:5px; margin-bottom:5px;">
+                        <button class="btn-blue" onclick="toggleGridScreen(true)" data-translate="btnShowGrid">1. ގްރިޑް ދައްކާ (Show Grid)</button>
+                        <button class="btn-gold" onclick="reshuffleGrid()" data-translate="btnShuffle">🔄 ގްރިޑް ބަދަލުކުރޭ</button>
+                    </div>
+                    
+                    <div id="selectionInfo" style="background:#000; padding:5px; border:1px solid #444; margin:5px 0; font-size:12px; text-align:center; color:var(--gold);">
+                        No selection yet.
+                    </div>
 
-        <div style="display:flex; align-items:center; gap:5px; margin-bottom:3px;">
-            <span style="font-size:10px; color:#aaa; width:35px;">Pos:</span>
-            <input type="range" id="qTextPos" min="-30" max="30" step="1" value="0" oninput="syncWindows()" style="flex:1; accent-color:var(--gold);" title="Move Text Up/Down">
-        </div>
+                    <button id="btnStartReading" class="btn-green hidden" onclick="startReadingSession()" data-translate="btnStartQ1">2. ފަށާ (Start Question 1)</button>
+                </div>
 
-        <div style="display:flex; align-items:center; gap:5px;">
-            <span style="font-size:10px; color:#aaa; width:35px;">Gap:</span>
-            <input type="range" id="qLineHeight" min="1" max="4" step="0.1" value="2.2" oninput="syncWindows()" style="flex:1; accent-color:var(--gold);" title="Line Spacing">
-        </div>
-    </div>
-    <div id="judgeControls">
-        <button class="btn-gold" style="padding:12px; width:100%;" onclick="pickRandomQuestion()" data-translate="btnPick">🎲 ސުވާލު ނަގާ (ރެންޑަމް)</button>
-    </div>
+                <div style="display:flex; gap:5px; margin-top:10px;">
+                    <button class="btn-gold" style="width:30%;" onclick="prevQuestion()" data-translate="btnPrev">◀ Previous</button>
+                    <button class="btn-gold" style="flex:1;" onclick="nextQuestion()" data-translate="btnNext">Next Question ⏩</button>
+                </div>
 
-    <div id="studentControls" class="hidden">
-        <div style="display:flex; gap:5px; margin-bottom:5px;">
-            <button class="btn-blue" onclick="toggleGridScreen(true)" data-translate="btnShowGrid">1. ގްރިޑް ދައްކާ (Show Grid)</button>
-            <button class="btn-gold" onclick="reshuffleGrid()" data-translate="btnShuffle">🔄 ގްރިޑް ބަދަލުކުރޭ</button>
-        </div>
-        
-        <div id="selectionInfo" style="background:#000; padding:5px; border:1px solid #444; margin:5px 0; font-size:12px; text-align:center; color:var(--gold);">
-            No selection yet.
-        </div>
+                <div id="slotGrid"></div>
 
-        <button id="btnStartReading" class="btn-green hidden" onclick="startReadingSession()" data-translate="btnStartQ1">2. ފަށާ (Start Question 1)</button>
-    </div>
+                <hr style="border-color:#334455; margin:15px 0;">
 
-    <div style="display:flex; gap:5px; margin-top:10px;">
-        <button class="btn-gold" style="width:30%;" onclick="prevQuestion()" data-translate="btnPrev">◀ Previous</button>
-        <button class="btn-gold" style="flex:1;" onclick="nextQuestion()" data-translate="btnNext">Next Question ⏩</button>
-    </div>
+                <div style="display:flex; gap:10px;">
+                    <button class="btn-green" onclick="toggleBell(true)" data-translate="btnBellStart">🔔 ފަށާ (ބެލް)</button>
+                    <button class="btn-red" onclick="toggleBell(false)" data-translate="btnBellStop">🛑 ހުއްޓާ (ބެލް)</button>
+                </div>
 
-    <div id="slotGrid"></div>
+                <button style="margin-top:10px; background:#442222; border:1px solid #aa3333;" onclick="resetStudentSession()" data-translate="btnReset">🔄 އައު ދަރިވަރެއް (Reset)</button>
+            </div>
 
-    <hr style="border-color:#334455; margin:15px 0;">
-
-    <div style="display:flex; gap:10px;">
-        <button class="btn-green" onclick="toggleBell(true)" data-translate="btnBellStart">🔔 ފަށާ (ބެލް)</button>
-        <button class="btn-red" onclick="toggleBell(false)" data-translate="btnBellStop">🛑 ހުއްޓާ (ބެލް)</button>
-    </div>
-
-    <button style="margin-top:10px; background:#442222; border:1px solid #aa3333;" onclick="resetStudentSession()" data-translate="btnReset">🔄 އައު ދަރިވަރެއް (Reset)</button>
-</div>
             <div class="panel">
                 <h2 data-translate="lblSyllabus">2. މުޤައްރަރު (Syllabus Scope)</h2>
                 
@@ -546,39 +521,7 @@
                         <input type="number" id="scopeEnd" value="30" placeholder="End">
                     </div>
                 </div>
-<div class="panel">
-                <h2 data-translate="lblSyllabus">2. މުޤައްރަރު (Syllabus Scope)</h2>
-                
-                <label data-translate="lblFilterType">ފިލްޓަރ ކުރާގޮތް:</label>
-                <select id="filterType" onchange="updateFilterUI()">
-                    <option value="book" selected>By Book/Juz (ފޮތުން)</option>
-                    <option value="surah">By Surah Order (ސޫރަތުން)</option>
-                </select>
 
-                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:5px; margin-top:8px;">
-                    <div>
-                        <label id="lblStartVal">ފަށާ ފޮތް (Start):</label>
-                        <input type="number" id="scopeStart" value="1" placeholder="Start">
-                    </div>
-                    <div>
-                        <label id="lblEndVal">ނިމޭ ފޮތް (End):</label>
-                        <input type="number" id="scopeEnd" value="30" placeholder="End">
-                    </div>
-                </div>
-
-                <div style="margin-top:10px; padding:5px; background:rgba(0,0,0,0.2); border:1px dashed #555; border-radius:4px;">
-                    <label style="color:#FFD700; margin-top:0;">އާޔަތުގެ ޢަދަދު (Length Filter):</label>
-                    <div style="display:flex; gap:5px;">
-                        <input type="number" id="lenMin" placeholder="Min (މަދުވެގެން)" style="width:50%;">
-                        <input type="number" id="lenMax" placeholder="Max (ގިނަވެގެން)" style="width:50%;">
-                    </div>
-                    <small style="color:#aaa; font-size:10px;">(މިސާލު: 7 - 10 ޖެހުމުން، ދޭތެރޭގެ ސުވާލުތައް ނަގާނެ)</small>
-                </div>
-                <button class="btn-green" onclick="applySyllabusFilter()" style="margin-top:10px;">✅ Apply Syllabus</button>
-                <div id="scopeStatus" style="font-size:11px; color:#aaa; margin-top:5px; text-align:center;">
-                    System contains all questions.
-                </div>
-            </div>
                 <button class="btn-green" onclick="applySyllabusFilter()" style="margin-top:10px;">✅ Apply Syllabus</button>
                 <div id="scopeStatus" style="font-size:11px; color:#aaa; margin-top:5px; text-align:center;">
                     System contains all questions.
@@ -5703,365 +5646,6 @@ function generateJudgeSessionSheet() {
     w.document.write(html);
     w.document.close();
 }
-    // =========================================================
-    // ★ FINAL INTEGRATED LOGIC (TEXT + IMAGE + TOOLS) ★
-    // =========================================================
-
-    // 1. UPDATED CSV LOADER (Captures 'QuestionText' column)
-    document.getElementById('csvQ').onchange = e => {
-        const r = new FileReader();
-        r.onload = ev => {
-            const rows = ev.target.result.split('\n');
-            state.qPool = []; state.qDataMap = {};
-            
-            rows.slice(1).forEach(r => {
-                // Regex to split CSV correctly even with commas in text
-                const c = r.match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g);
-                if(!c || c.length < 2) return;
-                
-                const clean = c.map(val => val.replace(/^"|"$/g, '').trim());
-                const id = clean[0];
-                const imgRaw = clean[1] || "";
-                
-                // Try to grab Text from the last column if available
-                let qText = "";
-                if(clean.length >= 8) { 
-                    qText = clean[clean.length - 1]; 
-                }
-
-                state.qDataMap[id] = { 
-                    id: id, imgRaw: imgRaw, src: null,           
-                    book: clean[2]||"", surah: clean[3]||"",
-                    page: clean[4]||"", start: clean[5]||"", end: clean[6]||"",
-                    text: qText // Stores the Quran Text
-                };
-                state.qPool.push(id);
-            });
-            rebindAllImages();
-            
-            // Re-apply existing filters if any
-            if(state.filteredPool.length === 0) state.filteredPool = [...state.qPool];
-            else applySyllabusFilter();
-            
-            alert("Loaded " + state.qPool.length + " questions successfully!");
-        };
-        r.readAsText(e.target.files[0]);
-    };
-
-    // 2. WINDOW SYNC (Sends Sidebar Tools to Child Screen)
-    function syncWindows() {
-        const elDisp = document.getElementById('displaySource');
-        const elSize = document.getElementById('qTextSize');
-        const elPos = document.getElementById('qTextPos');
-        const elGap = document.getElementById('qLineHeight');
-
-        const packet = {
-            slot: state.session.slots[0], // Single slot focus for view
-            slots: state.session.slots,   // All slots for lists
-            activeIndex: state.session.activeIndex,
-            phase: state.session.phase, 
-            light: state.session.light,
-            grid: state.grid, 
-            readingMode: state.readingMode,
-            currentLang: currentLang, 
-            fontData: state.fontData,
-            
-            // ★ NEW SETTINGS FROM SIDEBAR ★
-            displaySource: elDisp ? elDisp.value : 'auto',
-            textSize: elSize ? elSize.value : 6,
-            textPos: elPos ? elPos.value : 0,
-            lineHeight: elGap ? elGap.value : 2.2,
-            
-            judging: state.judging,
-            ceremony: state.ceremony,
-            ceremonyTitle: document.getElementById('ceremonyTitle') ? document.getElementById('ceremonyTitle').value : "Ceremony",
-            border: document.getElementById('borderStyle').value
-        };
-
-        const send = w => { if(w && !w.closed && w.updateState) w.updateState(packet); };
-        
-        send(state.windows.student);
-        send(state.windows.ceremony);
-        if(state.windows.judges) state.windows.judges.forEach(send);
-        
-        // Also update local Admin Mirror
-        updateMirror();
-    }
-
-    // 3. UPDATED ADMIN MIRROR (Shows Text in Admin View)
-    function updateMirror() {
-        const gp = document.getElementById('gridPreview');
-        const mCont = document.getElementById('mirrorContainer');
-        const mImg = document.getElementById('mImg');
-        
-        // Create Text Element for Admin if missing
-        let mText = document.getElementById('mText');
-        if(!mText) {
-            mText = document.createElement('div');
-            mText.id = 'mText';
-            mText.style.cssText = "display:none; width:100%; height:100%; overflow-y:auto; padding:20px; font-family:'Amiri', serif; font-size:24px; line-height:2; text-align:center; color:#fff; direction:rtl;";
-            document.querySelector('.mirror-img-container').appendChild(mText);
-        }
-
-        const mReady = document.getElementById('mReadyText');
-        const mFin = document.getElementById('mFinishText');
-        const banner = document.getElementById('adminBanner');
-        const mMemory = document.getElementById('mMemoryText');
-        
-        document.getElementById('mirrorLight').style.background = state.session.light ? '#00e676' : '#333';
-
-        if(state.grid.visible) {
-            mCont.style.display = 'none'; gp.style.display = 'grid';
-            updateGridPreview(); return;
-        } 
-        
-        gp.style.display = 'none'; mCont.style.display = 'flex';
-        mImg.style.display = 'none'; mText.style.display = 'none';
-        mReady.style.display = 'none'; mFin.style.display = 'none'; 
-        banner.style.display = 'none'; mMemory.style.display = 'none';
-
-        if(state.session.phase === 'ready') {
-             mReady.style.display = 'block';
-             document.getElementById('mirrorStatus').innerText = "WAITING";
-             return;
-        }
-        if(state.session.phase === 'finished') {
-            mFin.style.display = 'block';
-            mFin.innerHTML = i18n.msgFinished[currentLang];
-            document.getElementById('mirrorStatus').innerText = "FINISHED";
-            return;
-        }
-
-        const q = state.session.slots[state.session.activeIndex];
-
-        if(q && state.session.phase === 'active') {
-            document.getElementById('mBook').innerText = q.book;
-            document.getElementById('mSurah').innerText = q.surah;
-            banner.style.display = 'flex'; 
-
-            // Check Display Logic
-            const dispEl = document.getElementById('displaySource');
-            const mode = dispEl ? dispEl.value : 'auto';
-            let showText = false;
-
-            if(mode === 'text') showText = true;
-            else if(mode === 'image') showText = false;
-            else { if(q.text && q.text.length > 5) showText = true; }
-
-            if(state.readingMode === 'memory') {
-                mMemory.style.display = 'block'; 
-                if(showText) { mText.innerText = q.text; mText.style.display = 'block'; mText.style.opacity = "0.1"; }
-                else if(q.src) { mImg.src = q.src; mImg.style.display = 'block'; mImg.style.opacity = "0.2"; }
-            } else {
-                if(showText) { mText.innerText = q.text; mText.style.display = 'block'; mText.style.opacity = "1"; }
-                else if(q.src) { mImg.src = q.src; mImg.style.display = 'block'; mImg.style.opacity = "1"; }
-            }
-            document.getElementById('mirrorStatus').innerText = "LIVE";
-        } else {
-            document.getElementById('mirrorStatus').innerText = "IDLE";
-        }
-    }
-
-    // 4. UPDATED STUDENT TEMPLATE (Supports Dynamic Text Styles)
-    function getTemplate(isCeremony = false) {
-        const fontCSS = state.fontData ? `@font-face { font-family: 'AppFont'; src: url('${state.fontData}'); }` : '';
-        
-        // Ceremony Logic Preserved
-        let ceremonyFonts = '';
-        if(isCeremony) {
-             if(state.ceremony.fonts.quran) ceremonyFonts += `@font-face { font-family: 'QuranFont'; src: url('${state.ceremony.fonts.quran}'); }`;
-             if(state.ceremony.fonts.trans) ceremonyFonts += `@font-face { font-family: 'TransFont'; src: url('${state.ceremony.fonts.trans}'); }`;
-        }
-
-        const bStyle = document.getElementById('borderStyle').value;
-        const th = state.theme || themeList[0]; 
-        let borderCSS = `border: 1.5vmin ${th.borderType} ${th.accent}; box-shadow: 0 0 5vmin ${th.accent}80;`;
-        if(bStyle === 'none') borderCSS = "border:none;";
-
-        return `
-        <!DOCTYPE html>
-        <html lang="dv" dir="rtl">
-        <head>
-            <style>
-                ${fontCSS} ${ceremonyFonts}
-                @import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Scheherazade+New:wght@400;700&display=swap');
-                
-                body { margin:0; background:#000; overflow:hidden; display:flex; justify-content:center; align-items:center; font-family: 'AppFont', 'Amiri', serif; }
-                
-                #royalFrame {
-                    position: absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:10;
-                    border: 2vmin solid #D4AF37; box-shadow: inset 0 0 5vmin rgba(0,0,0,0.8);
-                }
-                
-                .card {
-                    width: 85vw; height: 70vh;
-                    background: #fff; border-radius: 10px;
-                    display: flex; justify-content: center; align-items: center; 
-                    box-shadow: 0 0 50px rgba(255,255,255,0.1);
-                    position: relative; overflow: hidden; 
-                }
-                
-                img { max-width: 100%; max-height: 100%; display: block; }
-                
-                /* DYNAMIC QURAN TEXT STYLE */
-                .quran-text {
-                    width: 90%;
-                    text-align: center;
-                    color: #000;
-                    font-family: 'Amiri', 'Scheherazade New', serif;
-                    white-space: pre-wrap; 
-                    direction: rtl;
-                    /* Dynamic properties (Size, Pos, Gap) set by JS below */
-                }
-
-                #idle { color: #D4AF37; font-size: 5vw; }
-                #mem { color: #D4AF37; font-size: 4vw; display:none; position:absolute; z-index:5; text-shadow:0 2px 5px #000; }
-                
-                #light { 
-                    position:absolute; top:20px; right:20px; width:50px; height:50px; 
-                    border-radius:50%; background:#333; border:2px solid #fff; z-index:20; transition:0.3s;
-                }
-                
-                /* Ceremony & Judge Styles preserved... */
-                .ceremony-box { width: 90%; height: 90%; display: flex; flex-direction: column; justify-content: center; align-items: center; }
-                .c-cover { font-size: 8vmin; color: #D4AF37; font-family: serif; text-transform: uppercase; }
-                .c-basmalah, .c-sadaqallah { font-size: 8vmin; color: #fff; font-family: 'Amiri', serif; }
-                .ceremony-quran { font-family: 'QuranFont', 'Amiri', serif; line-height: 1.6; text-align:center; color:#D4AF37; }
-                .ceremony-trans { font-family: 'TransFont', sans-serif; margin-top: 2vmin; text-align:center; color:#fff; }
-                .ceremony-divider { width: 50%; height: 2px; background: #D4AF37; margin: 2vmin auto; }
-
-                .judge-container { width: 90%; height: 90%; background: #fff; padding: 20px; overflow-y: auto; text-align:center; color:#000; }
-            </style>
-        </head>
-        <body>
-            <div id="light"></div>
-            <div id="royalFrame" style="display:none;"></div>
-            
-            <h1 id="idle">WAITING...</h1>
-            
-            <div id="card" class="card" style="display:none;">
-                <h1 id="mem">MEMORY TEST</h1>
-                <img id="qImg" src="">
-                <div id="qText" class="quran-text"></div>
-            </div>
-
-            <div id="ceremonyBox" class="ceremony-box" style="display:none;">
-                <div id="cContent"></div>
-            </div>
-
-            <div id="judgeBox" class="judge-container" style="display:none;">
-                <h1>JUDGE SCREEN</h1>
-                <div id="jBody"></div>
-            </div>
-
-            <script>
-                window.updateState = function(d) {
-                    // Check Window Type
-                    const isCeremony = window.name.includes("Ceremony");
-                    const isJudge = window.name.includes("Judge");
-
-                    if(isCeremony) {
-                        document.getElementById('card').style.display = 'none';
-                        document.getElementById('idle').style.display = 'none';
-                        document.getElementById('light').style.display = 'none';
-                        renderCeremony(d);
-                        return;
-                    }
-                    
-                    if(isJudge) {
-                        document.getElementById('card').style.display = 'none';
-                        document.getElementById('idle').style.display = 'none';
-                        document.getElementById('judgeBox').style.display = 'block';
-                        // Judge logic here (kept simple for this update)
-                        return;
-                    }
-
-                    // --- STUDENT SCREEN LOGIC ---
-                    document.getElementById('royalFrame').style.display = (d.border === 'royal') ? 'block' : 'none';
-                    document.getElementById('light').style.background = d.light ? '#00e676' : '#333';
-                    document.getElementById('light').style.boxShadow = d.light ? '0 0 30px #00e676' : 'none';
-
-                    const idle = document.getElementById('idle');
-                    const card = document.getElementById('card');
-                    const img = document.getElementById('qImg');
-                    const txt = document.getElementById('qText');
-                    const mem = document.getElementById('mem');
-
-                    if(d.phase === 'idle') {
-                        idle.style.display = 'block';
-                        card.style.display = 'none';
-                        return;
-                    }
-
-                    idle.style.display = 'none';
-                    card.style.display = 'flex';
-                    
-                    // Memory Mode
-                    if(d.mode === 'memory') {
-                        mem.style.display = 'block';
-                        img.style.opacity = '0.1';
-                        txt.style.opacity = '0.1';
-                    } else {
-                        mem.style.display = 'none';
-                        img.style.opacity = '1';
-                        txt.style.opacity = '1';
-                    }
-
-                    // Display Source Logic
-                    let showText = false;
-                    const q = d.slot || {};
-                    
-                    if(d.displaySource === 'text') showText = true;
-                    else if(d.displaySource === 'image') showText = false;
-                    else { // Auto: Use text if available
-                        if(q.text && q.text.length > 2) showText = true;
-                    }
-
-                    // ★ APPLY TEXT TOOLS (Size, LineHeight, Position) ★
-                    txt.style.fontSize = (d.textSize || 6) + "vmin";
-                    txt.style.lineHeight = (d.lineHeight || 2.2);
-                    txt.style.marginTop = (d.textPos || 0) + "vmin"; // Moves text Up/Down
-
-                    if(showText && q.text) {
-                        img.style.display = 'none';
-                        txt.style.display = 'block';
-                        txt.innerText = q.text;
-                    } else {
-                        txt.style.display = 'none';
-                        img.style.display = 'block';
-                        img.src = q.src || "";
-                    }
-                }
-
-                function renderCeremony(d) {
-                    const box = document.getElementById('ceremonyBox');
-                    const content = document.getElementById('cContent');
-                    box.style.display = 'flex';
-                    document.body.style.background = "radial-gradient(circle, #002200, #000)"; 
-                    
-                    const data = d.ceremony;
-                    const sets = d.ceremony.settings;
-
-                    if(data.phase === 'cover') {
-                        content.innerHTML = \`<div class="c-cover">\${d.ceremonyTitle}</div>\`;
-                    } else if (data.phase === 'start') {
-                        content.innerHTML = '<div class="c-basmalah">بِسْمِ ٱللَّٰهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ</div>';
-                    } else if (data.phase === 'end') {
-                        content.innerHTML = '<div class="c-sadaqallah">صَدَقَ ٱللّٰهُ ٱلْعَظِيمُ</div>';
-                    } else if (data.phase === 'reciting') {
-                        const ayah = data.activeData[data.currentIndex];
-                        let trans = (data.selectedLang === 'en') ? (ayah.en||ayah.dv) : (ayah.dv||ayah.en);
-                        content.innerHTML = \`<div class="ceremony-quran" style="color:\${sets.arabicColor}; font-size:\${sets.arabicSize}vmin;">\${ayah.arabic}</div>
-                                             <div class="ceremony-divider"></div>
-                                             <div class="ceremony-trans" style="color:\${sets.transColor}; font-size:\${sets.transSize}vmin;">\${trans}</div>\`;
-                    }
-                }
-            <\/script>
-        </body>
-        </html>
-        `;
-    }
-    
 </script>
 </body>
 </html>
