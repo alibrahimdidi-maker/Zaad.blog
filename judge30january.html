@@ -498,35 +498,7 @@
                     <button class="btn-green" onclick="toggleBell(true)" data-translate="btnBellStart">🔔 ފަށާ (ބެލް)</button>
                     <button class="btn-red" onclick="toggleBell(false)" data-translate="btnBellStop">🛑 ހުއްޓާ (ބެލް)</button>
                 </div>
-<hr style="border-color:#444; margin:10px 0;">
-<label style="color:#FFD700; font-size:12px;">★ ޤުރްއާން ވިއު (Mode):</label>
-<div style="display:flex; gap:5px; margin-bottom:5px;">
-    <button id="btnViewImg" class="btn-blue" onclick="setViewMode('image')">🖼️ ފޮޓޯ (Image)</button>
-    <button id="btnViewTxt" onclick="setViewMode('text')">📜 ޓެކްސްޓް (Text)</button>
-</div>
 
-<div id="textTools" style="display:none; background:#1a1a1a; padding:8px; border:1px dashed #FFD700; border-radius:5px; margin-bottom:5px;">
-    <div style="display:flex; gap:2px; margin-bottom:5px;">
-        <button onclick="adjustText('up')" style="font-size:16px;">⬆️</button>
-        <button onclick="adjustText('down')" style="font-size:16px;">⬇️</button>
-        <button onclick="adjustText('zoomIn')" style="font-size:16px;">🔍+</button>
-        <button onclick="adjustText('zoomOut')" style="font-size:16px;">🔍-</button>
-    </div>
-    <div style="display:flex; gap:5px; align-items:center;">
-        <button onclick="adjustText('center')" style="font-size:10px; flex:1;">↔ Center/Justify</button>
-        <input type="color" onchange="adjustText('color', this.value)" value="#ffffff" style="height:30px; width:40px; padding:0; border:none;">
-    </div>
-</div>
-
-<label style="color:#aaa;">ސިޔާސަތު (Reading Policy):</label>
-<select id="qPolicy" onchange="setPolicy(this.value)" style="background:#002200; color:#00e676; font-weight:bold; margin-bottom:10px;">
-    <option value="default">Default Spacing</option>
-    <option value="short">4-5 Ayahs (Large Spacing)</option>
-    <option value="medium">5-6 Ayahs (Medium Spacing)</option>
-    <option value="long">6-8 Ayahs (Compact)</option>
-    <option value="xl">8-10 Ayahs (Very Compact)</option>
-</select>
-<hr style="border-color:#444; margin:10px 0;">
                 <button style="margin-top:10px; background:#442222; border:1px solid #aa3333;" onclick="resetStudentSession()" data-translate="btnReset">🔄 އައު ދަރިވަރެއް (Reset)</button>
             </div>
 
@@ -5674,7 +5646,6 @@ function generateJudgeSessionSheet() {
     w.document.write(html);
     w.document.close();
 }
-    
 </script>
 </body>
 </html>
