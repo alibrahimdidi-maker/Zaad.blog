@@ -5646,12 +5646,13 @@ function generateJudgeSessionSheet() {
     w.document.write(html);
     w.document.close();
 }
-    // ======================================================
-// ★ ULTIMATE UPDATE: JUDGE NAME, PDF PRINT & MASTER EXPORT ★
-// (Paste this block just above the closing </script> tag)
+    
+// ======================================================
+// ★ FIXED ULTIMATE UPDATE: NO "ANTS" ERROR ★
+// (Paste this inside the <script> tag, at the very bottom)
 // ======================================================
 
-// 1. OPEN JUDGE SCREEN (WITH NAME & PDF LOGIC INJECTION)
+// 1. OPEN JUDGE SCREEN (With Judge Name)
 function openSingleJudge() {
     const judgeNum = document.getElementById('targetJudgeSelect').value;
     const nameInput = document.getElementById('jName' + judgeNum); 
@@ -5764,7 +5765,7 @@ function exportMasterResultSheet() {
     document.body.removeChild(link);
 }
 
-// 4. UPDATED TEMPLATE GENERATOR (This enables PDF Printing inside Judge Screen)
+// 4. UPDATED TEMPLATE GENERATOR (FIXED SCRIPT TAGS)
 function getTemplate(isCeremony = false, titleOverride = null) {
     const fontFace = state.fontData ? `@font-face { font-family: 'AppFont'; src: url('${state.fontData}'); }` : '';
     let ceremonyFonts = '';
@@ -5778,11 +5779,9 @@ function getTemplate(isCeremony = false, titleOverride = null) {
     if(bStyle === 'custom' && state.borderData) borderCSS = `border: 4vmin solid transparent; border-image: url('${state.borderData}') 30 stretch;`;
     if(bStyle === 'none') borderCSS = "border:none;";
 
-    // Script to be injected into the popup window
+    // Script to be injected into the popup window (Correctly Escaped)
     const popupScript = `
         <script>
-            // ... (Previous logic kept implicitly by updateState) ...
-            
             // ★ PDF PRINT LOGIC FOR JUDGE ★
             window.submitFinalScore = function() {
                 if(confirm("Submit Score & Print Sheet (PDF)?")) {
@@ -5824,7 +5823,7 @@ function getTemplate(isCeremony = false, titleOverride = null) {
         <\/script>
     `;
 
-    // Returning the Full HTML String (Compact version of original with new script)
+    // Returning the Full HTML String
     return `
     <!DOCTYPE html>
     <html lang="dv" dir="rtl">
@@ -5876,6 +5875,7 @@ function getTemplate(isCeremony = false, titleOverride = null) {
         </div>
 
         <div id="idleScreen"><h1 style="font-size:8vw; color:var(--accent);">RASFAHI</h1></div>
+        
         <script>
             // --- JUDGE LOGIC ---
             let currentScores = {};
