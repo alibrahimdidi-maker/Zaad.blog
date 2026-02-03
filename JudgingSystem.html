@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Royal Judge Ultimate - Rubric Pro</title>
+    <title>Royal Judge - Deduction Pro</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
@@ -13,17 +13,17 @@
 
     <style>
         :root {
-            --gold: #d4af37;
-            --gold-dim: #997b20;
-            --dark: #0f0f0f;
-            --panel: #1a1a1a;
-            --green: #064e3b;
+            --royal-gold: #d4af37;
+            --royal-green: #064e3b;
+            --bg-dark: #0f0f0f;
+            --panel-bg: #1a1a1a;
+            --text-light: #e5e7eb;
         }
 
         body {
             font-family: 'Noto Sans Thaana', 'Amiri', sans-serif;
-            background-color: var(--dark);
-            color: #eee;
+            background-color: var(--bg-dark);
+            color: var(--text-light);
             height: 100vh;
             display: flex;
             flex-direction: column;
@@ -32,67 +32,66 @@
 
         /* --- Header --- */
         header {
-            background: linear-gradient(to right, #000, var(--green));
-            border-bottom: 2px solid var(--gold);
+            background: linear-gradient(to right, #000, var(--royal-green));
+            border-bottom: 2px solid var(--royal-gold);
             padding: 10px 20px;
             display: flex; justify-content: space-between; align-items: center;
         }
 
         /* --- Layout --- */
-        .main-container { display: flex; flex: 1; overflow: hidden; }
-        
-        .sidebar {
-            width: 260px; background: #111; border-left: 1px solid #333;
-            display: flex; flex-direction: column; padding: 10px; gap: 5px;
-        }
-        
-        .nav-btn {
-            padding: 12px; border-radius: 6px; cursor: pointer; color: #888; text-align: right;
-            border: 1px solid transparent; transition: 0.2s;
-        }
-        .nav-btn:hover { background: #222; color: var(--gold); }
-        .nav-btn.active { background: var(--green); color: white; border-right: 4px solid var(--gold); font-weight: bold; }
-
+        .main-layout { display: flex; flex: 1; overflow: hidden; }
+        .sidebar { width: 250px; background: #111; border-left: 1px solid #333; display: flex; flex-direction: column; padding: 10px; gap: 5px; }
         .content { flex: 1; padding: 20px; overflow-y: auto; background: #141414; }
+
+        /* --- Components --- */
+        .nav-btn {
+            padding: 12px; border-radius: 6px; cursor: pointer; color: #888; text-align: right; transition: 0.2s;
+        }
+        .nav-btn.active { background: var(--royal-green); color: white; border-right: 4px solid var(--royal-gold); font-weight: bold; }
+
+        .card {
+            background: var(--panel-bg); border: 1px solid #333; border-radius: 8px;
+            padding: 20px; margin-bottom: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.5);
+        }
+        .gold-text { color: var(--royal-gold); text-shadow: 0 1px 1px black; }
+
         .section { display: none; animation: fadeIn 0.3s; }
         .section.active { display: block; }
         @keyframes fadeIn { from{opacity:0;transform:translateY(5px)} to{opacity:1;transform:translateY(0)} }
 
-        /* --- UI Components --- */
-        .card {
-            background: var(--panel); border: 1px solid #333; border-radius: 8px;
-            padding: 20px; margin-bottom: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.5);
-        }
-        .gold-text { color: var(--gold); text-shadow: 0 1px 1px black; }
-        
-        button { transition: 0.2s; }
-        .btn-gold { background: var(--gold); color: black; font-weight: bold; padding: 8px 16px; border-radius: 4px; }
-        .btn-gold:hover { background: white; }
+        /* --- DEDUCTION TABLE STYLES --- */
+        .rubric-table { width: 100%; border-collapse: separate; border-spacing: 0 8px; }
+        .rubric-row { background: #222; }
+        .rubric-cell { padding: 10px; vertical-align: middle; border-top: 1px solid #333; border-bottom: 1px solid #333; }
+        .rubric-row td:first-child { border-left: 1px solid #333; border-radius: 0 6px 6px 0; border-right: 4px solid var(--royal-gold); }
+        .rubric-row td:last-child { border-right: 1px solid #333; border-radius: 6px 0 0 6px; }
 
-        input, select { background: #222; border: 1px solid #444; color: white; padding: 8px; border-radius: 4px; }
-
-        /* --- RUBRIC MATRIX --- */
-        .rubric-table { width: 100%; border-collapse: separate; border-spacing: 0 10px; }
-        .rubric-row { background: #222; border-radius: 8px; overflow: hidden; }
-        .rubric-cell { padding: 15px; vertical-align: middle; border-top: 1px solid #333; border-bottom: 1px solid #333; }
-        .rubric-row td:first-child { border-left: 1px solid #333; border-radius: 0 8px 8px 0; border-right: 4px solid var(--gold); }
-        .rubric-row td:last-child { border-right: 1px solid #333; border-radius: 8px 0 0 8px; }
-        
-        .deduct-btn {
-            background: #333; border: 1px solid #555; color: #aaa; width: 50px; height: 40px;
-            border-radius: 4px; font-weight: bold; font-size: 0.8rem; margin: 0 2px;
+        /* Deduction Buttons */
+        .deduct-grid {
+            display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px;
         }
-        .deduct-btn:hover { background: #7f1d1d; color: white; border-color: red; }
-        .deduct-btn:active { transform: scale(0.95); }
+        .btn-deduct {
+            background: #333; border: 1px solid #555; color: #ccc;
+            font-weight: bold; padding: 10px 0; border-radius: 4px;
+            transition: all 0.1s active;
+            cursor: pointer; user-select: none;
+        }
+        .btn-deduct:hover { background: #7f1d1d; border-color: red; color: white; }
+        .btn-deduct:active { transform: scale(0.95); background: red; }
 
         .score-display {
-            background: black; color: var(--gold); font-size: 1.5rem; font-weight: bold;
-            width: 70px; text-align: center; padding: 5px; border-radius: 5px; border: 1px solid var(--gold);
+            font-size: 1.5rem; font-weight: bold; color: var(--royal-gold);
+            background: black; padding: 10px; border-radius: 6px; border: 1px solid var(--royal-gold);
+            text-align: center; width: 80px; margin: 0 auto;
         }
 
-        /* --- Profile Header --- */
+        .reset-btn {
+            color: #4ade80; font-size: 0.8rem; cursor: pointer; text-decoration: underline; display: block; text-align: center; margin-top: 5px;
+        }
+
+        /* Profile Header */
         .profile-header {
-            display: flex; gap: 15px; background: #000; border: 1px solid var(--gold);
+            display: flex; gap: 15px; background: #000; border: 1px solid var(--royal-gold);
             padding: 15px; border-radius: 8px; margin-bottom: 20px; align-items: center;
         }
         .profile-info { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; flex: 1; text-align: right; }
@@ -105,39 +104,38 @@
 
     <header>
         <div class="flex items-center gap-3">
-            <i class="fa-solid fa-medal text-3xl text-yellow-500"></i>
+            <i class="fa-solid fa-gavel text-3xl text-yellow-500"></i>
             <div>
-                <h1 class="text-xl font-bold gold-text">Royal Judging System</h1>
-                <div class="text-xs text-gray-400">Ultimate Edition v4.0</div>
+                <h1 class="text-xl font-bold gold-text">Royal Judge</h1>
+                <div class="text-xs text-gray-400">Deduction Based System</div>
             </div>
         </div>
         <div class="flex gap-4 items-center">
-            <select id="comp-mode" onchange="changeMode()" class="bg-gray-900 border-yellow-600 text-yellow-500 font-bold">
-                <option value="quran">Quran (Hifz/Thilawa)</option>
+            <select id="comp-mode" onchange="changeMode()" class="bg-gray-900 border-yellow-600 text-yellow-500 font-bold p-1 rounded">
+                <option value="quran">Quran Competition</option>
                 <option value="madhaha">Madhaha</option>
                 <option value="speech">Speech</option>
                 <option value="lhen">Lhen</option>
                 <option value="quiz">Quiz</option>
             </select>
-            <button onclick="saveData()" class="btn-gold text-sm"><i class="fa-solid fa-save"></i> Save</button>
+            <button onclick="saveData()" class="bg-yellow-600 text-black font-bold px-4 py-1 rounded hover:bg-yellow-500">Save</button>
         </div>
     </header>
 
-    <div class="main-container">
+    <div class="main-layout">
         <nav class="sidebar">
-            <div class="nav-btn active" onclick="nav('setup')"><i class="fa-solid fa-sliders"></i> Configuration</div>
+            <div class="nav-btn active" onclick="nav('setup')"><i class="fa-solid fa-sliders"></i> Setup</div>
             <div class="nav-btn" onclick="nav('judging')"><i class="fa-solid fa-gavel"></i> Judging Panel</div>
             <div class="nav-btn" onclick="nav('results')"><i class="fa-solid fa-list-check"></i> Results</div>
-            
             <div class="mt-auto p-4 border-t border-gray-800">
-                <button onclick="exportBulkPDF()" class="w-full bg-red-900 text-white py-2 rounded mb-2 hover:bg-red-800">
+                <button onclick="exportBulkPDF()" class="w-full bg-red-900 text-white py-2 rounded text-sm hover:bg-red-800">
                     <i class="fa-solid fa-file-pdf"></i> Bulk PDF Export
                 </button>
             </div>
         </nav>
 
         <main class="content">
-
+            
             <div id="setup" class="section active">
                 <div class="card">
                     <h2 class="text-xl gold-text mb-4">1. Import Data</h2>
@@ -150,75 +148,66 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="card">
-                    <div class="flex justify-between items-center mb-4">
-                        <h2 class="text-xl gold-text">2. Customize Rubric: <span id="lbl-mode" class="text-white">Quran</span></h2>
-                        <button onclick="addCriteria()" class="bg-green-700 text-white px-3 py-1 rounded text-sm">+ Add Item</button>
+                    <div class="flex justify-between mb-4">
+                        <h2 class="text-xl gold-text">2. Rubric Settings</h2>
+                        <button onclick="addCriteria()" class="text-green-400 text-sm border border-green-400 px-2 rounded">+ Add Row</button>
                     </div>
-                    <div id="rubric-config-container" class="space-y-2">
-                        </div>
-                    <div class="mt-4 flex justify-between">
-                         <button onclick="restoreDefaults()" class="text-xs text-red-400 underline">Restore Defaults</button>
-                         <div class="text-xl font-bold">Total: <span id="config-total" class="gold-text">100</span></div>
-                    </div>
+                    <div id="config-container" class="space-y-2"></div>
+                    <button onclick="restoreDefaults()" class="mt-4 text-xs text-red-400 underline">Restore Defaults</button>
                 </div>
             </div>
 
             <div id="judging" class="section">
-                <div class="card bg-gray-900 sticky top-0 z-20 p-2 border-b-2 border-yellow-600">
-                    <div class="flex gap-4 items-center">
-                        <div class="flex-1">
-                            <label class="text-xs text-gray-500 uppercase">Participant</label>
-                            <select id="judge-student-select" onchange="loadStudent()" class="w-full bg-black border-gray-600"></select>
-                        </div>
-                        <div class="text-right">
-                            <div class="text-xs text-gray-500 uppercase">Current Score</div>
-                            <div id="live-total" class="text-4xl font-bold gold-text">0.0</div>
-                        </div>
+                <div class="card bg-gray-900 sticky top-0 z-20 p-2 border-b-2 border-yellow-600 flex gap-4 items-center">
+                    <div class="flex-1">
+                        <label class="text-xs text-gray-500 uppercase">Participant</label>
+                        <select id="judge-student-select" onchange="loadStudent()" class="w-full bg-black border-gray-600 p-2 rounded text-white"></select>
+                    </div>
+                    <div class="text-right px-4">
+                        <div class="text-xs text-gray-500 uppercase">Total Score</div>
+                        <div id="live-total" class="text-4xl font-bold gold-text">0.0</div>
                     </div>
                 </div>
 
                 <div id="profile-area" class="profile-header hidden">
-                    <div class="w-20 h-20 bg-gray-800 rounded-full flex items-center justify-center border-2 border-yellow-500 text-2xl">
-                        <i class="fa-solid fa-user"></i>
-                    </div>
+                    <div class="w-16 h-16 bg-gray-800 rounded-full flex items-center justify-center border border-yellow-500 text-2xl"><i class="fa-solid fa-user"></i></div>
                     <div class="profile-info">
                         <div><div class="info-label">Name</div><div class="info-val text-yellow-400" id="p-name">--</div></div>
-                        <div><div class="info-label">ID</div><div class="info-val" id="p-id">--</div></div>
                         <div><div class="info-label">Category</div><div class="info-val" id="p-cat">--</div></div>
                         <div><div class="info-label">Branch</div><div class="info-val text-blue-300" id="p-branch">--</div></div>
+                        <div><div class="info-label">ID</div><div class="info-val" id="p-id">--</div></div>
                         <div><div class="info-label">Institute</div><div class="info-val" id="p-inst">--</div></div>
                     </div>
                 </div>
 
                 <div class="flex gap-2 mb-4">
-                    <button onclick="setJudge(1)" id="jb-1" class="btn-gold">Judge 1</button>
-                    <button onclick="setJudge(2)" id="jb-2" class="bg-gray-700 text-white px-4 py-2 rounded font-bold">Judge 2</button>
-                    <button onclick="setJudge(3)" id="jb-3" class="bg-gray-700 text-white px-4 py-2 rounded font-bold">Judge 3</button>
-                    <button onclick="setJudge(4)" id="jb-4" class="bg-gray-700 text-white px-4 py-2 rounded font-bold">Judge 4</button>
-                    <button onclick="setJudge(5)" id="jb-5" class="bg-gray-700 text-white px-4 py-2 rounded font-bold">Judge 5</button>
+                    <button onclick="setJudge(1)" id="jb-1" class="bg-yellow-600 text-black font-bold px-4 py-1 rounded">Judge 1</button>
+                    <button onclick="setJudge(2)" id="jb-2" class="bg-gray-700 text-white font-bold px-4 py-1 rounded">Judge 2</button>
+                    <button onclick="setJudge(3)" id="jb-3" class="bg-gray-700 text-white font-bold px-4 py-1 rounded">Judge 3</button>
+                    <button onclick="setJudge(4)" id="jb-4" class="bg-gray-700 text-white font-bold px-4 py-1 rounded">Judge 4</button>
+                    <button onclick="setJudge(5)" id="jb-5" class="bg-gray-700 text-white font-bold px-4 py-1 rounded">Judge 5</button>
                 </div>
 
                 <div class="card">
                     <table class="rubric-table">
                         <thead>
                             <tr>
-                                <th class="text-right pl-4">Criteria</th>
-                                <th class="text-center">Deduction (Click to Subtract)</th>
-                                <th class="text-center w-24">Score</th>
+                                <th class="text-right pl-4 w-1/3 text-gray-400">Criteria</th>
+                                <th class="text-center text-gray-400">Click to Deduct</th>
+                                <th class="text-center w-24 text-gray-400">Score</th>
                             </tr>
                         </thead>
-                        <tbody id="rubric-matrix-body">
+                        <tbody id="rubric-body">
                             </tbody>
                     </table>
 
                     <div class="mt-6">
-                        <label class="text-xs text-gray-500 uppercase">General Comments</label>
-                        <textarea id="judge-comment" class="w-full bg-black border-gray-700 text-white p-2 h-20"></textarea>
+                        <label class="text-xs text-gray-500 uppercase">Comments</label>
+                        <textarea id="judge-comment" class="w-full bg-black border-gray-700 text-white p-2 h-20 rounded"></textarea>
                     </div>
 
-                    <button onclick="saveScore()" class="w-full mt-4 bg-green-700 text-white py-3 font-bold rounded hover:bg-green-600">
+                    <button onclick="saveScore()" class="w-full mt-4 bg-green-700 text-white py-3 font-bold rounded hover:bg-green-600 shadow-lg text-lg">
                         SUBMIT SCORE FOR JUDGE <span id="lbl-judge-num">1</span>
                     </button>
                 </div>
@@ -235,7 +224,7 @@
                             <tr>
                                 <th class="p-2">ID</th>
                                 <th class="p-2">Name</th>
-                                <th class="p-2">Category</th>
+                                <th class="p-2">Cat</th>
                                 <th class="p-2">J1</th><th class="p-2">J2</th><th class="p-2">J3</th><th class="p-2">J4</th><th class="p-2">J5</th>
                                 <th class="p-2">AVG</th>
                                 <th class="p-2">Total</th>
@@ -253,72 +242,66 @@
         const { jsPDF } = window.jspdf;
 
         // --- PRESET RUBRICS ---
-        // Quran has specific logic for Hifz vs Thilawa based on user request
         const RUBRICS = {
             quran_thilawa: [
-                { id: 'tajweed', name: 'Tajweed Rules (Ahkam)', max: 20 },
-                { id: 'makhraj', name: 'Makhraj / Letters', max: 20 },
-                { id: 'sifa', name: 'Sifaat', max: 10 },
-                { id: 'voice', name: 'Voice & Tone', max: 10 },
-                { id: 'fili', name: 'Vowels (Fili)', max: 10 },
+                { id: 'thilawa', name: 'Thilawa', max: 30 },
+                { id: 'tajweed', name: 'Tajweed Rules', max: 20 },
+                { id: 'makhraj', name: 'Makhraj', max: 20 },
+                { id: 'sifa', name: 'Sifa', max: 10 },
                 { id: 'fasaha', name: 'Fasaha', max: 10 },
-                { id: 'adaa', name: 'Adaa / Talaffuz', max: 10 },
-                { id: 'quality', name: 'Overall Quality', max: 10 }
+                { id: 'voice', name: 'Voice/Tone', max: 5 },
+                { id: 'maqamat', name: 'Maqamat', max: 5 }
             ],
             quran_hifz: [
-                { id: 'hifz', name: 'Hifz / Fluency', max: 40 },
+                { id: 'hifz', name: 'Hifz (Fluency)', max: 40 },
                 { id: 'tajweed', name: 'Tajweed', max: 20 },
                 { id: 'makhraj', name: 'Makhraj', max: 15 },
                 { id: 'voice', name: 'Voice & Tone', max: 15 },
                 { id: 'quality', name: 'Overall Quality', max: 10 }
             ],
             madhaha: [
-                { id: 'voice', name: 'Voice Quality', max: 30 },
-                { id: 'melody', name: 'Melody & Rhythm', max: 30 },
-                { id: 'lyrics', name: 'Lyrics Clarity', max: 20 },
+                { id: 'voice', name: 'Voice', max: 30 },
+                { id: 'melody', name: 'Melody', max: 30 },
+                { id: 'lyrics', name: 'Lyrics', max: 20 },
                 { id: 'perf', name: 'Performance', max: 20 }
             ],
             speech: [
-                { id: 'content', name: 'Content / Ideas', max: 40 },
-                { id: 'delivery', name: 'Delivery / Fluency', max: 30 },
+                { id: 'content', name: 'Content', max: 40 },
+                { id: 'deliv', name: 'Delivery', max: 30 },
                 { id: 'lang', name: 'Language', max: 20 },
-                { id: 'timing', name: 'Timing & Presentation', max: 10 }
+                { id: 'time', name: 'Timing', max: 10 }
             ],
             lhen: [
-                { id: 'meter', name: 'Baa / Vazan', max: 30 },
-                { id: 'meaning', name: 'Meaning / Maana', max: 30 },
-                { id: 'lang', name: 'Language / Bas', max: 20 },
+                { id: 'meter', name: 'Meter (Baa)', max: 30 },
+                { id: 'mean', name: 'Meaning', max: 30 },
+                { id: 'lang', name: 'Language', max: 20 },
                 { id: 'pres', name: 'Presentation', max: 20 }
             ],
-            quiz: [
-                { id: 'ans', name: 'Correct Answer', max: 10 }
-            ]
+            quiz: [ { id: 'ans', name: 'Answer', max: 10 } ]
         };
 
         // --- STATE ---
         let app = {
             mode: 'quran',
             students: [],
-            scores: {}, // { studentId: { judge1: { ... } } }
-            // Store customized rubrics per mode
+            scores: {}, 
             config: JSON.parse(JSON.stringify(RUBRICS)),
             activeStudent: null
         };
-
         let currJudge = 1;
 
         // --- INIT ---
         window.onload = function() {
-            const saved = localStorage.getItem('royalUltimate_v1');
+            const saved = localStorage.getItem('royalDeduct_v1');
             if(saved) {
                 const parsed = JSON.parse(saved);
                 app.students = parsed.students || [];
                 app.scores = parsed.scores || {};
-                // Merge config to keep customized rubrics
                 if(parsed.config) app.config = parsed.config;
             }
-            changeMode(); // Initialize UI
+            changeMode();
             populateStudentSelect();
+            renderResults();
         };
 
         function nav(sec) {
@@ -331,387 +314,306 @@
 
         function changeMode() {
             app.mode = document.getElementById('comp-mode').value;
-            document.getElementById('lbl-mode').innerText = app.mode.toUpperCase();
-            renderConfigTable();
-            if(app.activeStudent) loadStudent(); // Refresh active view
+            renderConfig();
+            if(app.activeStudent) loadStudent();
         }
 
-        // --- CONFIGURATION ---
-        function renderConfigTable() {
-            // Pick correct config array based on mode
-            // For Quran config screen, we default to showing Thilawa, user can swap to Hifz view if needed? 
-            // Simplified: If mode is Quran, we edit Thilawa default, Hifz is auto-handled or we provide tabs.
-            // For simplicity in this single-file UI, let's just edit the generic list for the mode selected.
-            // Special handling: if Quran, we edit 'quran_thilawa' primarily.
-            
-            let key = app.mode;
-            if(key === 'quran') key = 'quran_thilawa'; // Default editor view
-
+        // --- CONFIG ---
+        function renderConfig() {
+            let key = app.mode === 'quran' ? 'quran_thilawa' : app.mode;
             const list = app.config[key];
-            const con = document.getElementById('rubric-config-container');
+            const con = document.getElementById('config-container');
             con.innerHTML = '';
-            let tot = 0;
-
+            
             list.forEach((c, i) => {
-                tot += parseFloat(c.max);
                 con.innerHTML += `
                     <div class="flex gap-2 items-center bg-gray-900 p-2 rounded">
-                        <input type="text" value="${c.name}" onchange="updateConfig('${key}', ${i}, 'name', this.value)" class="flex-1 bg-black text-sm">
-                        <input type="number" value="${c.max}" onchange="updateConfig('${key}', ${i}, 'max', this.value)" class="w-16 text-center bg-black text-sm">
-                        <button onclick="removeConfigItem('${key}', ${i})" class="text-red-500 hover:text-red-400 px-2"><i class="fa-solid fa-trash"></i></button>
+                        <input type="text" value="${c.name}" onchange="updateCfg('${key}', ${i}, 'name', this.value)" class="flex-1 bg-black text-sm">
+                        <input type="number" value="${c.max}" onchange="updateCfg('${key}', ${i}, 'max', this.value)" class="w-16 text-center bg-black text-sm">
+                        <button onclick="remCfg('${key}', ${i})" class="text-red-500 px-2"><i class="fa-solid fa-trash"></i></button>
                     </div>
                 `;
             });
-            document.getElementById('config-total').innerText = tot;
         }
-
-        function updateConfig(key, idx, field, val) {
-            app.config[key][idx][field] = (field === 'max') ? parseFloat(val) : val;
-            saveData();
-            renderConfigTable();
+        function updateCfg(k, i, f, v) { app.config[k][i][f] = f=='max'?parseFloat(v):v; saveData(); }
+        function addCriteria() { 
+            let k = app.mode==='quran'?'quran_thilawa':app.mode; 
+            app.config[k].push({id:Date.now(), name:'New', max:10}); 
+            renderConfig(); saveData(); 
         }
-
-        function addCriteria() {
-            let key = app.mode === 'quran' ? 'quran_thilawa' : app.mode;
-            app.config[key].push({ id: Date.now(), name: 'New Criteria', max: 10 });
-            renderConfigTable();
-            saveData();
-        }
-        
-        function removeConfigItem(key, idx) {
-            app.config[key].splice(idx, 1);
-            renderConfigTable();
-            saveData();
-        }
-
+        function remCfg(k, i) { app.config[k].splice(i,1); renderConfig(); saveData(); }
         function restoreDefaults() {
-            if(confirm("Restore default rubric for " + app.mode + "?")) {
-                let key = app.mode === 'quran' ? 'quran_thilawa' : app.mode;
-                app.config[key] = JSON.parse(JSON.stringify(RUBRICS[key]));
-                if(app.mode === 'quran') app.config['quran_hifz'] = JSON.parse(JSON.stringify(RUBRICS['quran_hifz']));
-                renderConfigTable();
-                saveData();
+            if(confirm("Reset Rubric?")) {
+                app.config = JSON.parse(JSON.stringify(RUBRICS));
+                renderConfig(); saveData();
             }
         }
 
-        // --- JUDGING LOGIC ---
+        // --- JUDGING ---
         function populateStudentSelect() {
             const s = document.getElementById('judge-student-select');
-            s.innerHTML = '<option value="">-- Select Student --</option>';
+            s.innerHTML = '<option value="">-- Select --</option>';
             app.students.forEach(st => {
-                const label = `${st['ID Card'] || st.ID} - ${st['Full Name'] || st.Name}`;
-                s.innerHTML += `<option value="${st['ID Card'] || st.ID}">${label}</option>`;
+                s.innerHTML += `<option value="${st.ID}">${st.ID} - ${st.Name}</option>`;
             });
         }
 
         function loadStudent() {
             const id = document.getElementById('judge-student-select').value;
             if(!id) return;
-            app.activeStudent = app.students.find(s => (s['ID Card'] || s.ID) == id);
+            app.activeStudent = app.students.find(s => s.ID == id);
             
-            // Show Profile
             document.getElementById('profile-area').classList.remove('hidden');
-            const p = app.activeStudent;
-            document.getElementById('p-name').innerText = p['Full Name'] || p.Name;
-            document.getElementById('p-id').innerText = p['ID Card'] || p.ID;
-            document.getElementById('p-cat').innerText = p['Category'] || p['Age Group'] || '-';
-            document.getElementById('p-branch').innerText = p['Branch'] || '-';
-            document.getElementById('p-inst').innerText = p['Institution'] || '-';
+            document.getElementById('p-name').innerText = app.activeStudent.Name;
+            document.getElementById('p-id').innerText = app.activeStudent.ID;
+            document.getElementById('p-cat').innerText = app.activeStudent.Category;
+            document.getElementById('p-branch').innerText = app.activeStudent.Branch;
+            document.getElementById('p-inst').innerText = app.activeStudent.Institution || '-';
 
-            // Determine Rubric (Hifz vs Thilawa vs Other Modes)
             renderRubricMatrix();
         }
 
-        function setJudge(num) {
-            currJudge = num;
-            document.getElementById('lbl-judge-num').innerText = num;
-            // UI Toggle
-            for(let i=1; i<=5; i++) {
+        function setJudge(n) {
+            currJudge = n;
+            document.getElementById('lbl-judge-num').innerText = n;
+            for(let i=1;i<=5;i++) {
                 const btn = document.getElementById(`jb-${i}`);
-                if(i===num) {
-                    btn.className = "btn-gold";
-                    btn.style.color = "black";
-                } else {
-                    btn.className = "bg-gray-700 text-white px-4 py-2 rounded font-bold";
-                    btn.style.color = "white";
-                }
+                if(i===n) { btn.className = "bg-yellow-600 text-black font-bold px-4 py-1 rounded"; }
+                else { btn.className = "bg-gray-700 text-white font-bold px-4 py-1 rounded"; }
             }
             renderRubricMatrix();
         }
 
         function renderRubricMatrix() {
-            const tbody = document.getElementById('rubric-matrix-body');
+            const tbody = document.getElementById('rubric-body');
             tbody.innerHTML = '';
             
             if(!app.activeStudent) return;
-            const id = app.activeStudent['ID Card'] || app.activeStudent.ID;
+            const id = app.activeStudent.ID;
 
-            // Determine which config to use
-            let rubricKey = app.mode;
+            let rKey = app.mode;
             if(app.mode === 'quran') {
-                const branch = (app.activeStudent['Branch'] || "").toLowerCase();
-                // Auto-detect Hifz
-                if(branch.includes('hifz') || branch.includes('nubalai')) {
-                    rubricKey = 'quran_hifz';
-                } else {
-                    rubricKey = 'quran_thilawa';
-                }
+                const br = (app.activeStudent.Branch || "").toLowerCase();
+                rKey = (br.includes('hifz') || br.includes('nubalai')) ? 'quran_hifz' : 'quran_thilawa';
             }
 
-            const criteriaList = app.config[rubricKey];
-            const savedScores = app.scores[id]?.[`judge${currJudge}`] || {}; // Load saved
+            const list = app.config[rKey];
+            const saved = app.scores[id]?.[`judge${currJudge}`] || {};
+            let total = 0;
 
-            let currentTotal = 0;
+            list.forEach(c => {
+                let val = saved[c.id] !== undefined ? saved[c.id] : c.max;
+                total += parseFloat(val);
 
-            criteriaList.forEach(c => {
-                // If saved value exists, use it. Else default to Max.
-                let val = savedScores[c.id] !== undefined ? savedScores[c.id] : c.max;
-                currentTotal += parseFloat(val);
-
-                // Create row
                 const tr = document.createElement('tr');
                 tr.className = 'rubric-row';
                 
-                // Name Cell
-                tr.innerHTML = `
-                    <td class="rubric-cell">
-                        <div class="text-lg font-bold text-gray-200">${c.name}</div>
-                        <div class="text-xs text-gray-500">Max: ${c.max}</div>
-                    </td>
-                `;
+                // Name
+                tr.innerHTML = `<td class="rubric-cell">
+                    <div class="text-lg font-bold text-gray-200">${c.name}</div>
+                    <div class="text-xs text-gray-500">Max: ${c.max}</div>
+                </td>`;
 
-                // Deduction Buttons Cell
+                // Buttons Column
                 const btnCell = document.createElement('td');
-                btnCell.className = 'rubric-cell text-center';
+                btnCell.className = 'rubric-cell';
+                const div = document.createElement('div');
+                div.className = 'deduct-grid';
                 
-                // Deduction steps
-                const deductions = [0.25, 0.5, 1.0, 2.0, 5.0];
-                
-                // Reset Button
-                const resetBtn = document.createElement('button');
-                resetBtn.className = 'deduct-btn text-green-500 border-green-800';
-                resetBtn.innerText = "Reset";
-                resetBtn.onclick = () => {
-                    updateRowScore(c.id, c.max, c.max);
-                };
-                btnCell.appendChild(resetBtn);
-
-                // Deduction Buttons
-                deductions.forEach(d => {
+                [0.25, 0.5, 1.0, 2.0].forEach(amt => {
                     const btn = document.createElement('button');
-                    btn.className = 'deduct-btn';
-                    btn.innerText = `-${d}`;
-                    btn.onclick = () => {
-                        let cur = parseFloat(document.getElementById(`val-${c.id}`).innerText);
-                        let newVal = cur - d;
-                        if(newVal < 0) newVal = 0;
-                        updateRowScore(c.id, c.max, newVal);
-                    };
-                    btnCell.appendChild(btn);
+                    btn.className = 'btn-deduct';
+                    btn.innerText = `-${amt}`;
+                    btn.onclick = () => deduct(c.id, c.max, amt);
+                    div.appendChild(btn);
                 });
+                btnCell.appendChild(div);
                 tr.appendChild(btnCell);
 
-                // Score Display Cell
-                tr.innerHTML += `
-                    <td class="rubric-cell text-center">
-                        <div id="val-${c.id}" class="score-display mx-auto">${val}</div>
-                    </td>
-                `;
+                // Score Display
+                tr.innerHTML += `<td class="rubric-cell text-center">
+                    <div id="sc-${c.id}" class="score-display">${parseFloat(val).toFixed(2)}</div>
+                    <div class="reset-btn" onclick="resetRow('${c.id}', ${c.max})"><i class="fa-solid fa-rotate-left"></i> Reset</div>
+                </td>`;
 
                 tbody.appendChild(tr);
             });
 
-            document.getElementById('live-total').innerText = currentTotal.toFixed(2);
-            document.getElementById('judge-comment').value = savedScores.comment || "";
+            document.getElementById('live-total').innerText = total.toFixed(2);
+            document.getElementById('judge-comment').value = saved.comment || "";
         }
 
-        function updateRowScore(cid, max, newVal) {
-            // Update visual
-            const el = document.getElementById(`val-${cid}`);
-            el.innerText = parseFloat(newVal).toFixed(2);
+        function deduct(cid, max, amt) {
+            const el = document.getElementById(`sc-${cid}`);
+            let cur = parseFloat(el.innerText);
+            let n = cur - amt;
+            if(n < 0) n = 0;
+            el.innerText = n.toFixed(2);
             
-            // Update color if deducted
-            if(newVal < max) {
-                el.style.color = "#ef4444"; // Red
-                el.style.borderColor = "#ef4444";
-            } else {
-                el.style.color = "#d4af37"; // Gold
-                el.style.borderColor = "#d4af37";
-            }
+            // Visual feedback
+            if(n < max) el.style.color = "#ef4444"; // Red
+            
+            calcTotal();
+        }
 
-            // Update Total
-            let total = 0;
-            // Iterate visible score boxes
-            const boxes = document.querySelectorAll('.score-display');
-            boxes.forEach(b => total += parseFloat(b.innerText));
-            document.getElementById('live-total').innerText = total.toFixed(2);
+        function resetRow(cid, max) {
+            const el = document.getElementById(`sc-${cid}`);
+            el.innerText = max.toFixed(2);
+            el.style.color = "#d4af37"; // Gold
+            calcTotal();
+        }
+
+        function calcTotal() {
+            let t = 0;
+            const displays = document.querySelectorAll('.score-display');
+            displays.forEach(d => t += parseFloat(d.innerText));
+            document.getElementById('live-total').innerText = t.toFixed(2);
         }
 
         function saveScore() {
             if(!app.activeStudent) return;
-            const id = app.activeStudent['ID Card'] || app.activeStudent.ID;
-            
+            const id = app.activeStudent.ID;
             if(!app.scores[id]) app.scores[id] = {};
-            
-            // Re-determine key for saving structure consistency
-            let rubricKey = app.mode;
+
+            let rKey = app.mode;
             if(app.mode === 'quran') {
-                const branch = (app.activeStudent['Branch'] || "").toLowerCase();
-                rubricKey = branch.includes('hifz') ? 'quran_hifz' : 'quran_thilawa';
+                const br = (app.activeStudent.Branch || "").toLowerCase();
+                rKey = (br.includes('hifz') || br.includes('nubalai')) ? 'quran_hifz' : 'quran_thilawa';
             }
-            const criteriaList = app.config[rubricKey];
 
-            let scoreObj = { total: 0 };
-            
-            criteriaList.forEach(c => {
-                const val = parseFloat(document.getElementById(`val-${c.id}`).innerText);
-                scoreObj[c.id] = val;
-                scoreObj.total += val;
+            let obj = { total: 0 };
+            app.config[rKey].forEach(c => {
+                const v = parseFloat(document.getElementById(`sc-${c.id}`).innerText);
+                obj[c.id] = v;
+                obj.total += v;
             });
-            scoreObj.comment = document.getElementById('judge-comment').value;
+            obj.comment = document.getElementById('judge-comment').value;
 
-            app.scores[id][`judge${currJudge}`] = scoreObj;
+            app.scores[id][`judge${currJudge}`] = obj;
             saveData();
-            alert(`Saved Judge ${currJudge} Score: ${scoreObj.total.toFixed(2)}`);
+            alert(`Score Saved: ${obj.total}`);
             renderResults();
         }
 
-        // --- RESULTS & PDF ---
+        // --- RESULTS ---
         function renderResults() {
             const tb = document.getElementById('res-body');
             tb.innerHTML = '';
             app.students.forEach(s => {
-                const id = s['ID Card'] || s.ID;
-                const sc = app.scores[id] || {};
-                
-                let row = `<tr class="border-b border-gray-800">
-                    <td class="p-2">${id}</td>
-                    <td class="p-2 font-bold">${s['Full Name'] || s.Name}</td>
-                    <td class="p-2 text-xs text-gray-400">${s['Branch']}</td>`;
-                
-                let sum = 0, count = 0;
-                for(let i=1; i<=5; i++) {
-                    const val = sc[`judge${i}`]?.total || 0;
-                    if(val > 0) { sum+=val; count++; }
-                    row += `<td class="p-2 text-gray-400">${val > 0 ? val.toFixed(2) : '-'}</td>`;
+                const sc = app.scores[s.ID] || {};
+                let row = `<tr class="border-b border-gray-800"><td class="p-2">${s.ID}</td><td class="p-2">${s.Name}</td><td class="p-2 text-xs">${s.Branch}</td>`;
+                let sum=0, c=0;
+                for(let i=1;i<=5;i++){
+                    let v = sc[`judge${i}`]?.total || 0;
+                    if(v>0){sum+=v;c++}
+                    row += `<td class="p-2 text-gray-400">${v||'-'}</td>`;
                 }
-                const avg = count ? (sum/count).toFixed(2) : 0;
-                row += `<td class="p-2 text-yellow-500 font-bold">${avg}</td>
-                        <td class="p-2 font-bold">${sum.toFixed(2)}</td></tr>`;
+                let avg = c ? (sum/c).toFixed(2) : 0;
+                row += `<td class="p-2 text-yellow-500 font-bold">${avg}</td><td class="p-2 font-bold">${sum.toFixed(2)}</td></tr>`;
                 tb.innerHTML += row;
             });
         }
 
-        async function exportBulkPDF() {
-            const { jsPDF } = window.jspdf;
+        // --- EXPORT PDF ---
+        function exportBulkPDF() {
             const doc = new jsPDF();
-            
             let hasData = false;
-
-            for(let i=0; i<app.students.length; i++) {
-                const s = app.students[i];
-                const id = s['ID Card'] || s.ID;
-                const scores = app.scores[id];
+            
+            app.students.forEach((s, idx) => {
+                const sc = app.scores[s.ID];
+                if(!sc) return;
                 
-                if(!scores) continue;
-                hasData = true;
-
-                // For each Judge that scored this student
                 for(let j=1; j<=5; j++) {
-                    const jScore = scores[`judge${j}`];
-                    if(!jScore) continue;
+                    const js = sc[`judge${j}`];
+                    if(!js) continue;
+                    hasData = true;
+                    if(idx>0 || j>1) doc.addPage();
 
-                    if(i > 0 || j > 1) doc.addPage(); // New page for each sheet
+                    doc.setFillColor(6, 78, 59);
+                    doc.rect(0,0,210,30,'F');
+                    doc.setTextColor(255,255,255);
+                    doc.setFontSize(18);
+                    doc.text("JUDGE SCORE SHEET", 105, 20, null, null, "center");
 
-                    // Determine Rubric Key again for labels
-                    let rubricKey = app.mode;
-                    if(app.mode === 'quran') {
-                        const branch = (s['Branch'] || "").toLowerCase();
-                        rubricKey = branch.includes('hifz') ? 'quran_hifz' : 'quran_thilawa';
-                    }
-                    const criteriaList = app.config[rubricKey];
-
-                    // Header
-                    doc.setFillColor(6, 78, 59); // Royal Green
-                    doc.rect(0, 0, 210, 40, 'F');
-                    doc.setTextColor(212, 175, 55); // Gold
-                    doc.setFontSize(22);
-                    doc.text("JUDGING SCORE SHEET", 105, 20, null, null, "center");
+                    doc.setTextColor(0,0,0);
+                    doc.setFontSize(11);
+                    doc.text(`Name: ${s.Name}`, 14, 40);
+                    doc.text(`ID: ${s.ID}`, 14, 46);
+                    doc.text(`Category: ${s.Branch}`, 14, 52);
+                    doc.text(`Judge: ${j}`, 150, 40);
                     
-                    // Info
-                    doc.setTextColor(0, 0, 0);
-                    doc.setFontSize(12);
-                    doc.text(`Participant: ${s['Full Name'] || s.Name}`, 14, 50);
-                    doc.text(`ID: ${id}`, 14, 58);
-                    doc.text(`Category: ${s['Branch'] || s['Category']}`, 14, 66);
-                    doc.text(`Judge: ${j}`, 150, 50);
-                    doc.text(`Date: ${new Date().toLocaleDateString()}`, 150, 58);
-
-                    // Table Data
-                    const body = criteriaList.map(c => [
-                        c.name,
-                        c.max,
-                        jScore[c.id] !== undefined ? jScore[c.id].toFixed(2) : '-'
-                    ]);
-
-                    // Add Total Row
-                    body.push(['TOTAL', '', jScore.total.toFixed(2)]);
+                    // Rubric items
+                    let rKey = app.mode;
+                    if(app.mode === 'quran') {
+                        const br = (s.Branch || "").toLowerCase();
+                        rKey = (br.includes('hifz') || br.includes('nubalai')) ? 'quran_hifz' : 'quran_thilawa';
+                    }
+                    
+                    const body = app.config[rKey].map(c => [c.name, c.max, (js[c.id]||0).toFixed(2)]);
+                    body.push(['TOTAL', '', js.total.toFixed(2)]);
 
                     doc.autoTable({
-                        startY: 75,
-                        head: [['Criteria', 'Max Marks', 'Score Given']],
+                        startY: 60,
+                        head: [['Criteria', 'Max', 'Score']],
                         body: body,
-                        theme: 'grid',
-                        headStyles: { fillColor: [6, 78, 59], textColor: [255, 255, 255] },
-                        footStyles: { fillColor: [200, 200, 200] }
+                        theme: 'grid'
                     });
-
-                    // Comments
-                    let finalY = doc.lastAutoTable.finalY + 10;
-                    doc.setFontSize(10);
-                    doc.text("Judge's Comments:", 14, finalY);
-                    doc.rect(14, finalY + 2, 180, 20);
-                    if(jScore.comment) {
-                        doc.text(jScore.comment, 16, finalY + 8, {maxWidth: 175});
+                    
+                    if(js.comment) {
+                        let y = doc.lastAutoTable.finalY + 10;
+                        doc.text("Comments:", 14, y);
+                        doc.text(js.comment, 14, y+6);
                     }
-
-                    // Signature Line
-                    doc.text("_______________________", 150, finalY + 40);
-                    doc.text("Signature", 160, finalY + 45);
                 }
-            }
+            });
 
-            if(hasData) {
-                doc.save(`Judges_Bulk_Report_${app.mode}.pdf`);
-            } else {
-                alert("No scores to export!");
-            }
+            if(hasData) doc.save("Bulk_Judges_Report.pdf");
+            else alert("No data to export");
         }
 
-        // --- UTILS ---
-        function loadCSV(type) {
-            const f = document.getElementById(`file-${type}`).files[0];
+        // --- CSV & SAVE ---
+        function loadCSV(t) {
+            const f = document.getElementById('file-students').files[0];
             if(!f) return;
-            const reader = new FileReader();
-            reader.onload = e => {
+            const r = new FileReader();
+            r.onload = e => {
                 const rows = e.target.result.split('\n').map(r=>r.split(','));
-                const headers = rows[0].map(h=>h.trim().replace(/"/g,''));
-                const data = rows.slice(1).filter(r=>r.length>1).map(r=>{
-                    let o={}; headers.forEach((h,i)=>o[h]=r[i]?.trim().replace(/"/g,'')||''); return o;
+                const h = rows[0].map(x=>x.trim().replace(/"/g,''));
+                app.students = rows.slice(1).filter(r=>r.length>1).map(r=>{
+                    let o={}; h.forEach((k,i)=>o[k]=r[i]?.trim().replace(/"/g,'')||'');
+                    // Normalize keys
+                    if(o['ID Card']) o.ID = o['ID Card'];
+                    if(o['Full Name']) o.Name = o['Full Name'];
+                    if(o['Class']) o.Branch = o['Class']; // Map Class to Branch if needed
+                    return o;
                 });
-                if(type==='students') { app.students = data; document.getElementById('st-status').innerText=data.length+' loaded'; populateStudentSelect(); }
+                document.getElementById('st-status').innerText = app.students.length + " loaded";
+                populateStudentSelect();
                 saveData();
             };
-            reader.readAsText(f);
+            r.readAsText(f);
         }
 
         function saveData() {
-            localStorage.setItem('royalUltimate_v1', JSON.stringify({
-                students: app.students,
-                scores: app.scores,
-                config: app.config
+            localStorage.setItem('royalDeduct_v1', JSON.stringify({
+                students: app.students, scores: app.scores, config: app.config
             }));
-            alert("System Data Saved!");
+            alert("Saved!");
+        }
+        function exportCSV() {
+            let csv = "ID,Name,Branch,J1,J2,J3,J4,J5,AVG,Total\n";
+            app.students.forEach(s => {
+                let sc = app.scores[s.ID] || {};
+                let row = [s.ID, `"${s.Name}"`, s.Branch];
+                let sum=0, c=0;
+                for(let i=1;i<=5;i++){ let v=sc[`judge${i}`]?.total||0; if(v>0){sum+=v;c++} row.push(v); }
+                row.push(c?(sum/c).toFixed(2):0); row.push(sum);
+                csv += row.join(",") + "\n";
+            });
+            const l = document.createElement("a");
+            l.href = 'data:text/csv;charset=utf-8,' + encodeURI(csv);
+            l.download = "Final_Results.csv";
+            l.click();
         }
 
     </script>
