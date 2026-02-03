@@ -632,30 +632,67 @@
                             </script>
                         </select>
                     </div>
+<input type="file" id="borderImg" accept="image/*" class="hidden" style="margin-top:5px;">
+        </div> 
+
+        <div class="panel" style="border:2px solid #ff9800; background:rgba(255, 152, 0, 0.05);">
+            <h2 style="color:#ff9800;">🚀 ސްޕީޑް މޯޑް (Rapid Entry)</h2>
+            <div style="font-size:11px; color:#aaa; margin-bottom:5px;">ވަކި ގިންތިއެއް ސެލެކްޓްކޮށް ތަރުތީބުން ކުރިއަށްދިއުމަށް:</div>
+
+            <div style="display:flex; gap:5px; margin-bottom:5px;">
+                <select id="rapidBranch" style="flex:1;">
+                    <option value="">- ހުރިހާ ގޮތްޕެއް -</option>
+                    <option value="Balaiygen">ބަލައިގެން</option>
+                    <option value="Nubalai">ނުބަލައި</option>
+                </select>
+                <select id="rapidGroup" style="flex:1;">
+                    <option value="">- ހުރިހާ ޢުމުރެއް -</option>
+                    <option value="Under 6">6 އަހަރުން ދަށް</option>
+                    <option value="Under 9">9 އަހަރުން ދަށް</option>
+                    <option value="Under 11">11 އަހަރުން ދަށް</option>
+                    <option value="Under 13">13 އަހަރުން ދަށް</option>
+                    <option value="Under 16">16 އަހަރުން ދަށް</option>
+                    <option value="Under 19">19 އަހަރުން ދަށް</option>
+                    <option value="Under 21">21 އަހަރުން ދަށް</option>
+                    <option value="General">ޢާއްމު ބައި</option>
+                </select>
+            </div>
+
+            <button class="btn-orange" onclick="startRapidMode()">▶ ލިސްޓު ފަށާ (Start List)</button>
+
+            <div id="rapidControls" class="hidden" style="margin-top:10px; border-top:1px dashed #555; padding-top:10px;">
+                <div style="text-align:center; color:#ff9800; font-weight:bold; margin-bottom:5px;">
+                    Student <span id="rCurrent">0</span> / <span id="rTotal">0</span>
                 </div>
-                <input type="file" id="borderImg" accept="image/*" class="hidden" style="margin-top:5px;">
+                
+                <div style="display:flex; gap:5px;">
+                    <button class="btn-blue" onclick="navRapid(-1)">◀ Prev</button>
+                    <button class="btn-green" onclick="navRapid(1)">Next ▶</button>
+                </div>
+                <div id="rNameDisplay" style="text-align:center; color:#fff; font-size:12px; margin-top:5px;">...</div>
+            </div>
+        </div>
+
+        <div class="panel">
+            <h2 style="color:#ff9800;">5. ދަރިވަރުންގެ މަޢުލޫމާތު (Student Info)</h2>
+            
+            <label>1. Bulk Import (Master Sheet CSV):</label>
+            <div style="display:flex; gap:5px; margin-bottom:5px;">
+                <input type="file" id="batchCsv" accept=".csv">
+                <button class="btn-blue" onclick="loadStudentBatch()">Load Batch</button>
+            </div>
+
+            <div style="display:flex; gap:5px;">
+                <button class="btn-purple" onclick="downloadMasterCSVTemplate()" style="flex:1; font-size:11px;">
+                    ⬇️ Blank Template
+                </button>
+                <button class="btn-orange" onclick="generateDummyMasterSheet()" style="flex:1; font-size:11px;">
+                    🤖 Generate Fake Data
+                </button>
             </div>
             
-           <div class="panel">
-    <h2 style="color:#ff9800;">5. ދަރިވަރުންގެ މަޢުލޫމާތު (Student Info)</h2>
-    
-    <label>1. Bulk Import (Master Sheet CSV):</label>
-    <div style="display:flex; gap:5px; margin-bottom:5px;">
-        <input type="file" id="batchCsv" accept=".csv">
-        <button class="btn-blue" onclick="loadStudentBatch()">Load Batch</button>
-    </div>
-
-    <div style="display:flex; gap:5px;">
-        <button class="btn-purple" onclick="downloadMasterCSVTemplate()" style="flex:1; font-size:11px;">
-            ⬇️ Blank Template
-        </button>
-        <button class="btn-orange" onclick="generateDummyMasterSheet()" style="flex:1; font-size:11px;">
-            🤖 Generate Fake Data
-        </button>
-    </div>
-    <small style="color:#aaa;">Use Fake Data to test the Master Sheet format.</small>
-
-    <hr style="border-color:#333; margin:8px 0;">
+            <small style="color:#aaa;">Use Fake Data to test the Master Sheet format.</small>
+            <hr style="border-color:#333; margin:8px 0;">
     
   <label>2. Select Student (Search & Select):</label>
     
@@ -7804,6 +7841,90 @@ function getTemplate(isCeremony = false, windowTitle = "") {
     </body>
     </html>
     `;
+}
+    // ==========================================
+// ★ RAPID ENTRY LOGIC (SPEED MODE) ★
+// ==========================================
+
+// State for Rapid Mode
+let rapidState = {
+    active: false,
+    list: [],
+    currentIndex: -1
+};
+
+function startRapidMode() {
+    // 1. Get Filter Values
+    const branch = document.getElementById('rapidBranch').value;
+    const group = document.getElementById('rapidGroup').value;
+
+    if(!state.allStudents || state.allStudents.length === 0) {
+        alert("Please load Student CSV first!");
+        return;
+    }
+
+    // 2. Filter the Master List
+    const filtered = state.allStudents.filter(s => {
+        const matchBranch = branch === "" || (s.branch && s.branch.trim() === branch);
+        const matchGroup = group === "" || (s.group && s.group.trim() === group);
+        return matchBranch && matchGroup;
+    });
+
+    if(filtered.length === 0) {
+        alert("No students found for this selection!");
+        return;
+    }
+
+    // 3. Sort by ID/Reg (Optional)
+    filtered.sort((a, b) => a.reg.localeCompare(b.reg));
+
+    // 4. Initialize State
+    rapidState.list = filtered;
+    rapidState.currentIndex = 0;
+    rapidState.active = true;
+
+    // 5. Update UI
+    document.getElementById('rapidControls').classList.remove('hidden');
+    document.getElementById('rTotal').innerText = filtered.length;
+    
+    // Load First Student
+    loadRapidStudent(0);
+}
+
+function loadRapidStudent(index) {
+    if(index < 0 || index >= rapidState.list.length) return;
+
+    const s = rapidState.list[index];
+    rapidState.currentIndex = index;
+
+    // A. Set as Current Active Student
+    state.judging.currentStudentObj = s;
+    state.judging.liveScores = {}; // Reset scores for new student
+
+    // B. Update Admin UI Displays
+    document.getElementById('rCurrent').innerText = index + 1;
+    document.getElementById('rNameDisplay').innerText = `${s.name} (${s.reg})`;
+    document.getElementById('currentStdLabel').innerText = `Active: ${s.name}`;
+    document.getElementById('currentStdLabel').style.color = "#ff9800"; // Orange to indicate Rapid Mode
+    
+    // Reset Save Button
+    const btn = document.getElementById('btnFinalize');
+    if(btn) { btn.innerText = "✅ Save Student Result"; btn.disabled = false; }
+
+    // C. Sync to Judges
+    syncWindows();
+}
+
+function navRapid(direction) {
+    const newIndex = rapidState.currentIndex + direction;
+    
+    if(newIndex >= 0 && newIndex < rapidState.list.length) {
+        // Save current progress warning? (Optional)
+        // load next
+        loadRapidStudent(newIndex);
+    } else {
+        alert("End of list reached!");
+    }
 }
 </script>
 </body>
