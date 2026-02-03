@@ -3,717 +3,796 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ultimate Judging System</title>
+    <title>Ultimate All-in-One Judging System</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thaana:wght@400;700&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
-
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Noto+Sans+Thaana:wght@400;700&display=swap" rel="stylesheet">
+    
     <style>
-        /* Custom Fonts & Styles */
+        /* --- THEME CONFIGURATION --- */
         :root {
-            --primary-color: #0f766e; /* Teal 700 */
+            --royal-gold: #d4af37;
+            --royal-gold-dim: #aa8c2c;
+            --royal-green: #064e3b;
+            --royal-dark: #022c22;
+            --bg-dark: #1a1a1a;
+            --text-light: #f3f4f6;
         }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        .font-thaana { font-family: 'Noto Sans Thaana', sans-serif; line-height: 1.8; }
-        .font-arabic { font-family: 'Amiri', serif; }
-        
-        /* Print Styles */
-        @media print {
-            .no-print { display: none !important; }
-            .print-only { display: block !important; }
-            body { background: white; color: black; }
-            .page-break { page-break-after: always; }
-        }
-        .print-only { display: none; }
 
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #f1f1f1; }
-        ::-webkit-scrollbar-thumb { background: #888; border-radius: 4px; }
+        body {
+            font-family: 'Noto Sans Thaana', 'Amiri', sans-serif;
+            background-color: #121212;
+            color: var(--text-light);
+            overflow: hidden; /* App-like feel */
+        }
+
+        /* --- LAYOUT UTILS --- */
+        .app-container { display: flex; height: 100vh; flex-direction: column; }
         
-        /* Tab Active State */
-        .tab-active { border-bottom: 3px solid var(--primary-color); color: var(--primary-color); font-weight: bold; }
+        header {
+            background: linear-gradient(to right, var(--royal-dark), var(--royal-green));
+            border-bottom: 3px solid var(--royal-gold);
+            padding: 0.8rem 1.5rem;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+
+        .main-body { display: flex; flex: 1; overflow: hidden; }
+        
+        /* Sidebar */
+        .sidebar {
+            width: 260px; background: #0f0f0f; border-left: 1px solid #333;
+            display: flex; flex-direction: column; padding: 10px;
+        }
+        
+        .nav-btn {
+            text-align: right; padding: 12px 15px; margin-bottom: 5px;
+            border-radius: 6px; cursor: pointer; color: #aaa; transition: 0.3s;
+            border: 1px solid transparent;
+        }
+        .nav-btn:hover { background: #222; color: var(--royal-gold); }
+        .nav-btn.active { 
+            background: var(--royal-green); color: white; 
+            border-right: 4px solid var(--royal-gold); font-weight: bold; 
+        }
+
+        /* Content Area */
+        .content { flex: 1; padding: 20px; overflow-y: auto; background: #18181b; }
+        .section { display: none; animation: fadeIn 0.4s; }
+        .section.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* --- COMPONENTS --- */
+        .card {
+            background: #27272a; border: 1px solid #3f3f46; border-radius: 8px;
+            padding: 20px; margin-bottom: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        }
+        .gold-text { color: var(--royal-gold); text-shadow: 0 1px 2px rgba(0,0,0,0.8); }
+        
+        .btn-gold {
+            background: linear-gradient(135deg, var(--royal-gold), var(--royal-gold-dim));
+            color: black; font-weight: bold; padding: 8px 20px; border-radius: 4px;
+            border: 1px solid white; transition: 0.2s;
+        }
+        .btn-gold:hover { transform: scale(1.05); box-shadow: 0 0 15px rgba(212,175,55,0.5); }
+
+        input, select, textarea {
+            background: #18181b; border: 1px solid #52525b; color: white;
+            padding: 8px; border-radius: 4px; width: 100%;
+        }
+        input:focus, select:focus { border-color: var(--royal-gold); outline: none; }
+
+        /* --- GRID SYSTEM --- */
+        .grid-wrapper {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); gap: 10px;
+        }
+        .grid-item {
+            background: #333; border: 2px solid #555; color: #fff;
+            height: 60px; display: flex; justify-content: center; align-items: center;
+            font-size: 1.2rem; font-weight: bold; cursor: pointer; border-radius: 8px;
+        }
+        .grid-item:hover { border-color: var(--royal-gold); }
+        .grid-item.selected { background: var(--royal-gold); color: black; border-color: white; }
+        .grid-item.used { background: #111; color: #444; border-color: #222; cursor: not-allowed; }
+
+        /* --- TABLE --- */
+        table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+        th { background: var(--royal-green); color: white; padding: 10px; text-align: right; }
+        td { border-bottom: 1px solid #3f3f46; padding: 8px; }
+        tr:hover { background: #3f3f46; }
+
+        /* --- JUDGE SLIDERS --- */
+        .rubric-row {
+            display: flex; align-items: center; justify-content: space-between;
+            background: #3f3f46; padding: 10px; margin-bottom: 8px; border-radius: 6px;
+        }
+        input[type=range] { accent-color: var(--royal-gold); width: 60%; }
+        
+        /* Hifz Mode Badge */
+        .badge { padding: 2px 8px; border-radius: 4px; font-size: 0.8rem; }
+        .badge-hifz { background: #7f1d1d; color: #fca5a5; border: 1px solid #f87171; }
+        .badge-read { background: #064e3b; color: #6ee7b7; border: 1px solid #34d399; }
     </style>
 </head>
-<body class="bg-gray-100 min-h-screen flex flex-col font-thaana text-gray-800 transition-all duration-300">
+<body>
 
-    <nav class="bg-white shadow-md no-print sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-16">
-                <div class="flex items-center">
-                    <i class="fa-solid fa-scale-balanced text-teal-700 text-2xl ml-3"></i>
-                    <h1 class="text-xl font-bold text-teal-800" id="nav-title">Judging System Pro</h1>
-                </div>
-                <div class="flex items-center space-x-4 space-x-reverse">
-                    <select id="lang-select" onchange="changeLanguage()" class="border rounded p-1 text-sm">
-                        <option value="dv">ދިވެހި</option>
-                        <option value="en">English</option>
-                        <option value="ar">العربية</option>
-                    </select>
-                    <button onclick="toggleDisplayWindow()" class="bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700">
-                        <i class="fa-solid fa-desktop"></i> <span data-t="openDisplay">Display</span>
-                    </button>
-                    <button onclick="saveData()" class="bg-green-600 text-white px-3 py-1 rounded text-sm hover:bg-green-700">
-                        <i class="fa-solid fa-save"></i> <span data-t="save">Save</span>
-                    </button>
+    <div class="app-container">
+        <header>
+            <div class="flex items-center gap-3">
+                <i class="fa-solid fa-trophy text-3xl text-yellow-500"></i>
+                <div>
+                    <h1 class="text-xl font-bold gold-text leading-tight">Ultimate Judging System</h1>
+                    <div class="text-xs text-gray-400">Quran • Madhaha • Speech • Quiz</div>
                 </div>
             </div>
-            <div class="flex space-x-8 space-x-reverse border-t overflow-x-auto">
-                <button onclick="switchTab('setup')" class="tab-btn py-3 px-2 tab-active" id="tab-setup" data-t="setup">Setup</button>
-                <button onclick="switchTab('registration')" class="tab-btn py-3 px-2" id="tab-reg" data-t="registration">Registration</button>
-                <button onclick="switchTab('judging')" class="tab-btn py-3 px-2" id="tab-judge" data-t="judging">Judging</button>
-                <button onclick="switchTab('results')" class="tab-btn py-3 px-2" id="tab-results" data-t="results">Results</button>
+            
+            <div class="flex items-center gap-4">
+                <select id="comp-mode-select" onchange="changeMode()" style="width: 200px;" class="bg-gray-800 border-yellow-600">
+                    <option value="quran">Quran Competition</option>
+                    <option value="madhaha">Madhaha / Song</option>
+                    <option value="speech">Speech / Debate</option>
+                    <option value="quiz">Quiz Competition</option>
+                </select>
+                <button onclick="openDisplay()" class="btn-gold"><i class="fa-solid fa-desktop"></i> Screen</button>
             </div>
+        </header>
+
+        <div class="main-body">
+            <nav class="sidebar">
+                <div class="nav-btn active" onclick="nav('setup')"><i class="fa-solid fa-cogs"></i> Setup & Data</div>
+                <div class="nav-btn" onclick="nav('grid')" id="btn-grid"><i class="fa-solid fa-th"></i> Question Grid</div>
+                <div class="nav-btn" onclick="nav('judging')"><i class="fa-solid fa-gavel"></i> Judging Panel</div>
+                <div class="nav-btn" onclick="nav('results')"><i class="fa-solid fa-chart-bar"></i> Results</div>
+                
+                <div class="mt-auto p-4 border-t border-gray-700">
+                    <button onclick="saveData()" class="w-full bg-blue-900 text-blue-200 py-1 rounded text-sm mb-2">Save Data</button>
+                    <button onclick="resetSystem()" class="w-full bg-red-900 text-red-200 py-1 rounded text-sm">Reset All</button>
+                </div>
+            </nav>
+
+            <main class="content">
+                
+                <div id="setup" class="section active">
+                    <div class="card">
+                        <h2 class="text-xl gold-text mb-4">1. Import Data</h2>
+                        <div class="grid grid-cols-2 gap-6">
+                            <div class="p-4 border border-gray-600 rounded">
+                                <h3 class="font-bold mb-2">Participants List (CSV)</h3>
+                                <input type="file" id="file-students" accept=".csv">
+                                <button onclick="processCSV('students')" class="mt-2 bg-gray-700 text-white px-4 py-1 rounded text-sm hover:bg-gray-600">Upload</button>
+                                <p id="status-students" class="text-xs text-green-400 mt-1"></p>
+                            </div>
+                            <div class="p-4 border border-gray-600 rounded">
+                                <h3 class="font-bold mb-2">Questions Bank (CSV)</h3>
+                                <input type="file" id="file-questions" accept=".csv">
+                                <button onclick="processCSV('questions')" class="mt-2 bg-gray-700 text-white px-4 py-1 rounded text-sm hover:bg-gray-600">Upload</button>
+                                <p id="status-questions" class="text-xs text-green-400 mt-1"></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h2 class="text-xl gold-text mb-4">2. Scoring Criteria Configuration</h2>
+                        <div class="flex justify-between items-center mb-2">
+                            <p class="text-sm text-gray-400">Default criteria loaded based on selected mode.</p>
+                            <button onclick="resetCriteria()" class="text-xs text-yellow-500 underline">Reset to Default</button>
+                        </div>
+                        <div id="criteria-editor">
+                            </div>
+                    </div>
+                </div>
+
+                <div id="grid" class="section">
+                    <div class="card flex justify-between items-center">
+                        <div>
+                            <h2 class="text-xl gold-text">Question Selector</h2>
+                            <p class="text-xs text-gray-400">Mode: <span id="grid-mode-label">Quran</span></p>
+                        </div>
+                        <div class="flex gap-2">
+                            <input type="number" id="grid-size" value="20" style="width:60px" placeholder="Qty">
+                            <button onclick="generateGrid()" class="bg-gray-700 px-3 py-1 rounded text-sm">Generate</button>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-3 gap-6">
+                        <div class="col-span-2 card">
+                            <div id="grid-container" class="grid-wrapper">
+                                <div class="text-center w-full text-gray-500 py-10">Load questions & click generate.</div>
+                            </div>
+                        </div>
+
+                        <div class="col-span-1">
+                            <div class="card bg-black border-yellow-700 text-center relative">
+                                <div id="timer-box" class="hidden absolute top-2 right-2 text-yellow-500 font-mono text-xl">00:00</div>
+                                <h3 class="text-gray-400 text-sm uppercase mb-2">Selected Question</h3>
+                                <div id="active-q-display" class="font-bold text-3xl py-6 gold-text min-h-[100px] flex items-center justify-center">
+                                    --
+                                </div>
+                                <div id="active-q-details" class="text-sm text-gray-400 mb-4 font-arabic"></div>
+                                
+                                <div class="grid grid-cols-2 gap-2 mb-2">
+                                    <button onclick="screenAction('show')" class="bg-green-800 text-white py-2 rounded hover:bg-green-700">
+                                        <i class="fa-solid fa-eye"></i> Show
+                                    </button>
+                                    <button onclick="screenAction('hide')" class="bg-red-900 text-white py-2 rounded hover:bg-red-800">
+                                        <i class="fa-solid fa-eye-slash"></i> Hide
+                                    </button>
+                                </div>
+                                <div id="quiz-controls" class="hidden grid-cols-2 gap-2 mt-2">
+                                    <button onclick="startTimer()" class="bg-blue-800 text-white py-1 rounded">Start Timer</button>
+                                    <button onclick="screenAction('correct')" class="bg-green-600 text-white py-1 rounded">Correct</button>
+                                </div>
+                                <div id="quran-controls" class="hidden mt-2">
+                                    <button onclick="screenAction('end_ayah')" class="w-full bg-yellow-700 text-black font-bold py-1 rounded">
+                                        "Sadaqallah" Screen
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="judging" class="section">
+                    <div class="card bg-gray-900 sticky top-0 z-10 border-b-2 border-yellow-600">
+                        <div class="flex gap-4 items-center">
+                            <div class="flex-1">
+                                <label class="text-xs text-gray-400">Select Participant</label>
+                                <select id="judge-student-select" onchange="loadStudent()"></select>
+                            </div>
+                            <div class="text-center">
+                                <div id="student-mode-badge" class="badge bg-gray-700 text-gray-300">Standard</div>
+                            </div>
+                            <div class="flex-1 text-right">
+                                <h1 id="total-score-display" class="text-4xl font-bold gold-text">0.0</h1>
+                                <span class="text-xs text-gray-400">Total Score</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        <div class="lg:col-span-2">
+                            <div class="card">
+                                <div class="flex gap-2 mb-4 border-b border-gray-700 pb-2">
+                                    <button onclick="setJudge(1)" id="btn-j1" class="px-4 py-1 rounded bg-green-800 text-white">Judge 1</button>
+                                    <button onclick="setJudge(2)" id="btn-j2" class="px-4 py-1 rounded bg-gray-700">Judge 2</button>
+                                    <button onclick="setJudge(3)" id="btn-j3" class="px-4 py-1 rounded bg-gray-700">Judge 3</button>
+                                    <button onclick="setJudge(4)" id="btn-j4" class="px-4 py-1 rounded bg-gray-700">Judge 4</button>
+                                    <button onclick="setJudge(5)" id="btn-j5" class="px-4 py-1 rounded bg-gray-700">Judge 5</button>
+                                </div>
+                                
+                                <div id="rubric-container">
+                                    </div>
+
+                                <div class="mt-4">
+                                    <label class="text-xs text-gray-400">Comments</label>
+                                    <textarea id="judge-comments" rows="2" class="w-full bg-black border-gray-700"></textarea>
+                                </div>
+                                
+                                <button onclick="saveScore()" class="mt-4 w-full btn-gold py-3 text-lg">
+                                    Save Score for Judge <span id="lbl-curr-judge">1</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="lg:col-span-1">
+                            <div class="card">
+                                <h3 class="gold-text border-b border-gray-700 pb-2 mb-2">Participant Info</h3>
+                                <div id="p-info-box" class="text-sm space-y-2">
+                                    <p>Select a student...</p>
+                                </div>
+                            </div>
+                            <div class="card">
+                                <h3 class="gold-text border-b border-gray-700 pb-2 mb-2">Active Question</h3>
+                                <div id="judge-q-view" class="font-arabic text-lg text-right leading-loose"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="results" class="section">
+                    <div class="card flex justify-between">
+                        <h2 class="text-xl gold-text">Competition Results</h2>
+                        <button onclick="exportResults()" class="bg-green-700 text-white px-4 py-1 rounded hover:bg-green-600">
+                            <i class="fa-solid fa-file-csv"></i> Export CSV
+                        </button>
+                    </div>
+                    <div class="card overflow-x-auto">
+                        <table id="results-table">
+                            <thead></thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </main>
         </div>
-    </nav>
-
-    <main class="flex-grow max-w-7xl mx-auto w-full p-4 no-print">
-        
-        <section id="setup-view" class="view-section">
-            <div class="bg-white p-6 rounded-lg shadow mb-6">
-                <h2 class="text-xl font-bold mb-4 border-b pb-2" data-t="compDetails">Competition Details</h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <input type="text" id="comp-name" placeholder="Competition Name" class="border p-2 rounded w-full">
-                    <select id="comp-type" class="border p-2 rounded w-full">
-                        <option value="quran">Quran Competition</option>
-                        <option value="madhaha">Madhaha</option>
-                        <option value="speech">Speech</option>
-                        <option value="quiz">Quiz</option>
-                        <option value="general">General</option>
-                    </select>
-                </div>
-            </div>
-
-            <div class="bg-white p-6 rounded-lg shadow">
-                <div class="flex justify-between items-center mb-4">
-                    <h2 class="text-xl font-bold" data-t="criteriaSetup">Judging Criteria Setup</h2>
-                    <button onclick="addCriteriaRow()" class="bg-teal-600 text-white px-3 py-1 rounded hover:bg-teal-700">+ Add</button>
-                </div>
-                <table class="w-full border-collapse">
-                    <thead>
-                        <tr class="bg-gray-200 text-right">
-                            <th class="p-2 border">Criteria Name</th>
-                            <th class="p-2 border w-24">Max Marks</th>
-                            <th class="p-2 border w-20">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody id="criteria-list">
-                        </tbody>
-                    <tfoot>
-                        <tr class="bg-gray-100 font-bold">
-                            <td class="p-2 text-right">Total</td>
-                            <td class="p-2 text-center" id="total-max-marks">0</td>
-                            <td></td>
-                        </tr>
-                    </tfoot>
-                </table>
-                <div class="mt-4 text-sm text-gray-600">
-                    <p>* Rubric: Each criteria will have a 5-level deduction system automatically generated.</p>
-                </div>
-            </div>
-        </section>
-
-        <section id="registration-view" class="view-section hidden">
-            <div class="bg-white p-6 rounded-lg shadow mb-6">
-                <h2 class="text-xl font-bold mb-4" data-t="addParticipant">Add Participant</h2>
-                <form id="reg-form" onsubmit="event.preventDefault(); addParticipant();" class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <input type="text" id="p-name" placeholder="Student Name" required class="border p-2 rounded">
-                    <input type="text" id="p-id" placeholder="ID/Index Number" required class="border p-2 rounded">
-                    <input type="text" id="p-parent" placeholder="Parent Name" class="border p-2 rounded">
-                    <input type="text" id="p-class" placeholder="Class/Branch" class="border p-2 rounded">
-                    <select id="p-age-group" class="border p-2 rounded">
-                        <option value="Key Stage 1">Key Stage 1 (Age 6-9)</option>
-                        <option value="Key Stage 2">Key Stage 2 (Age 10-12)</option>
-                        <option value="Key Stage 3">Key Stage 3 (Age 13-16)</option>
-                    </select>
-                    
-                    <div class="col-span-1 md:col-span-3 grid grid-cols-4 gap-2 bg-teal-50 p-2 rounded border border-teal-200">
-                        <input type="text" id="q-surah" placeholder="Surah Name" class="border p-2 rounded">
-                        <input type="number" id="q-verse-start" placeholder="Start Verse" class="border p-2 rounded">
-                        <input type="number" id="q-verse-end" placeholder="End Verse" class="border p-2 rounded">
-                        <select id="p-session" class="border p-2 rounded">
-                            <option value="1">Session 1</option>
-                            <option value="2">Session 2</option>
-                        </select>
-                    </div>
-
-                    <button type="submit" class="bg-blue-600 text-white p-2 rounded col-span-1 md:col-span-3 hover:bg-blue-700" data-t="registerBtn">Register Student</button>
-                </form>
-            </div>
-
-            <div class="bg-white p-6 rounded-lg shadow overflow-x-auto">
-                <div class="flex justify-between items-center mb-2">
-                    <h2 class="text-xl font-bold" data-t="masterSheet">Master Sheet</h2>
-                    <div>
-                        <button onclick="exportJSON()" class="text-sm bg-gray-600 text-white px-2 py-1 rounded">Backup Data</button>
-                        <input type="file" id="import-file" class="hidden" onchange="importJSON(this)">
-                        <button onclick="document.getElementById('import-file').click()" class="text-sm bg-gray-600 text-white px-2 py-1 rounded">Restore</button>
-                    </div>
-                </div>
-                <table class="w-full text-sm text-right border">
-                    <thead class="bg-gray-200">
-                        <tr>
-                            <th class="p-2 border">ID</th>
-                            <th class="p-2 border">Name</th>
-                            <th class="p-2 border">Class</th>
-                            <th class="p-2 border">Surah/Topic</th>
-                            <th class="p-2 border">Status</th>
-                            <th class="p-2 border">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody id="participants-list"></tbody>
-                </table>
-            </div>
-        </section>
-
-        <section id="judging-view" class="view-section hidden">
-            <div class="bg-white p-4 rounded shadow mb-4 flex flex-wrap gap-4 items-center">
-                <div class="w-full md:w-1/3">
-                    <label class="block text-sm font-bold mb-1" data-t="selectStudent">Select Student to Judge</label>
-                    <select id="judge-student-select" onchange="loadStudentForJudging()" class="w-full border p-2 rounded bg-yellow-50">
-                        <option value="">-- Select Student --</option>
-                    </select>
-                </div>
-                <div class="flex-grow text-center bg-teal-50 p-2 rounded border border-teal-200">
-                    <h3 id="active-student-display" class="font-bold text-lg">No Student Selected</h3>
-                    <p id="active-details-display" class="text-sm text-gray-600">-</p>
-                </div>
-                <button onclick="updateDisplayScreen()" class="bg-purple-600 text-white px-4 py-2 rounded shadow hover:bg-purple-700">
-                    <i class="fa-solid fa-tv"></i> Update Screen
-                </button>
-            </div>
-
-            <div class="mb-4 overflow-x-auto">
-                <div class="flex space-x-2 space-x-reverse" id="judge-tabs-container">
-                    </div>
-            </div>
-
-            <div id="scoring-area" class="bg-white p-6 rounded shadow hidden">
-                <div class="flex justify-between items-center border-b pb-2 mb-4">
-                    <h3 class="font-bold text-lg"><span id="current-judge-label">Judge 1</span> Score Sheet</h3>
-                    <span class="text-2xl font-bold text-teal-700" id="current-total-score">0.0</span>
-                </div>
-
-                <div id="rubric-container" class="space-y-6">
-                    </div>
-
-                <div class="mt-6 border-t pt-4">
-                    <label class="block font-bold mb-2" data-t="comments">Comments</label>
-                    <textarea id="judge-comment" class="w-full border p-2 rounded h-20" placeholder="Write comments here..."></textarea>
-                </div>
-
-                <div class="mt-4 flex justify-end gap-2">
-                    <button onclick="saveJudgeScore()" class="bg-green-600 text-white px-6 py-2 rounded font-bold hover:bg-green-700">
-                        <i class="fa-solid fa-check"></i> Save Score
-                    </button>
-                </div>
-            </div>
-        </section>
-
-        <section id="results-view" class="view-section hidden">
-            <div class="bg-white p-6 rounded shadow">
-                <div class="flex justify-between mb-4">
-                    <h2 class="text-xl font-bold" data-t="finalResults">Final Results</h2>
-                    <button onclick="printResults()" class="bg-gray-800 text-white px-3 py-1 rounded">
-                        <i class="fa-solid fa-print"></i> Print Report
-                    </button>
-                </div>
-                <div class="overflow-x-auto">
-                    <table class="w-full text-sm text-right border" id="results-table">
-                        <thead class="bg-gray-800 text-white">
-                            <tr>
-                                <th class="p-2">Rank</th>
-                                <th class="p-2">ID</th>
-                                <th class="p-2">Name</th>
-                                <th class="p-2">Class</th>
-                                <th class="p-2 text-center">Avg/Total</th>
-                            </tr>
-                        </thead>
-                        <tbody id="results-body"></tbody>
-                    </table>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <div id="display-template" style="display:none;">
-        <!DOCTYPE html>
-        <html dir="rtl">
-        <head>
-            <title>Display Screen</title>
-            <script src="https://cdn.tailwindcss.com"></script>
-            <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thaana:wght@400;700&display=swap" rel="stylesheet">
-            <style>
-                body { background: #000; color: white; font-family: 'Noto Sans Thaana', sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; overflow: hidden; }
-                .card { background: #111827; border: 2px solid #0f766e; border-radius: 20px; padding: 40px; text-align: center; width: 90%; max-width: 1000px; box-shadow: 0 0 50px rgba(15, 118, 110, 0.5); }
-                h1 { font-size: 4rem; margin-bottom: 20px; color: #2dd4bf; }
-                h2 { font-size: 2.5rem; margin-bottom: 30px; }
-                .info-box { font-size: 1.8rem; margin: 10px 0; color: #d1d5db; }
-                .grid-score { font-size: 5rem; font-weight: bold; color: #facc15; margin-top: 30px; display: none; }
-            </style>
-        </head>
-        <body>
-            <div class="card">
-                <h2 id="disp-event">Competition 2026</h2>
-                <h1 id="disp-name">Waiting...</h1>
-                <div class="info-box" id="disp-details"></div>
-                <div class="info-box" id="disp-quran"></div>
-                <div id="disp-score" class="grid-score"></div>
-            </div>
-            <script>
-                // Listen to parent window updates
-                window.addEventListener('storage', (e) => {
-                    if (e.key === 'judging_display_data') {
-                        const data = JSON.parse(e.newValue);
-                        document.getElementById('disp-event').innerText = data.event || '';
-                        document.getElementById('disp-name').innerText = data.name || '';
-                        document.getElementById('disp-details').innerText = data.details || '';
-                        document.getElementById('disp-quran').innerText = data.quran || '';
-                        
-                        const scoreEl = document.getElementById('disp-score');
-                        if(data.showScore) {
-                            scoreEl.style.display = 'block';
-                            scoreEl.innerText = data.score + "%";
-                        } else {
-                            scoreEl.style.display = 'none';
-                        }
-                    }
-                });
-            </script>
-        </body>
-        </html>
     </div>
 
     <script>
-        // --- 1. STATE MANAGEMENT ---
-        let appData = {
-            config: {
-                name: "Quran Competition",
-                judgesCount: 3,
-                maxScore: 100
-            },
-            criteria: [
-                { id: 1, name: "Tajweed / Sound", max: 40 },
-                { id: 2, name: "Hifz / Fluency", max: 40 },
-                { id: 3, name: "Voice / Tone", max: 20 }
+        // --- DATA STORE ---
+        let app = {
+            mode: 'quran', // quran, madhaha, speech, quiz
+            participants: [],
+            questions: [],
+            scores: {}, // { studentId: { judge1: { ... }, judge2: ... } }
+            gridUsed: [], // Array of question IDs used
+            criteria: [],
+            activeStudent: null,
+            activeQuestion: null
+        };
+
+        // --- PRESETS ---
+        const PRESETS = {
+            quran: [
+                { id: 'thilawa', name: 'Thilawa', max: 30 },
+                { id: 'tajweed', name: 'Tajweed', max: 20 },
+                { id: 'makhraj', name: 'Makhraj', max: 20 },
+                { id: 'sifa', name: 'Sifa', max: 10 },
+                { id: 'fasaha', name: 'Fasaha', max: 10 },
+                { id: 'fluency', name: 'Fluency', max: 10 }
             ],
-            participants: [], // Array of student objects
-            scores: {} // Map: studentID -> { judge1: {c1: 10, c2: 5}, judge2: ... }
+            madhaha: [
+                { id: 'voice', name: 'Voice Quality', max: 30 },
+                { id: 'melody', name: 'Melody/Tune', max: 30 },
+                { id: 'lyrics', name: 'Lyrics Clarity', max: 20 },
+                { id: 'performance', name: 'Performance', max: 20 }
+            ],
+            speech: [
+                { id: 'content', name: 'Content', max: 40 },
+                { id: 'delivery', name: 'Delivery/Fluency', max: 30 },
+                { id: 'language', name: 'Language Use', max: 20 },
+                { id: 'timing', name: 'Timing', max: 10 }
+            ],
+            quiz: [
+                { id: 'answer', name: 'Correct Answer', max: 10 } // Simplified for quiz
+            ]
         };
 
-        const translations = {
-            dv: {
-                setup: "ސެޓަޕް", registration: "ރެޖިސްޓްރޭޝަން", judging: "ޖަޖިންގ", results: "ނަތީޖާ",
-                compDetails: "މުބާރާތުގެ ތަފްޞީލް", criteriaSetup: "މާކްސްދޭ މިންގަނޑު",
-                addParticipant: "ބައިވެރިއެއް އިތުރުކުރައްވާ", registerBtn: "ރެޖިސްޓަރ ކުރައްވާ",
-                masterSheet: "މާސްޓަރ ޝީޓް", selectStudent: "ޖަޖްކުރުމަށް ދަރިވަރަކު ނަގާ",
-                comments: "ކޮމެންޓް", finalResults: "ޖުމްލަ ނަތީޖާ",
-                openDisplay: "ޑިސްޕްލޭ", save: "ސޭވް"
-            },
-            en: {
-                setup: "Setup", registration: "Registration", judging: "Judging", results: "Results",
-                compDetails: "Competition Details", criteriaSetup: "Criteria Setup",
-                addParticipant: "Add Participant", registerBtn: "Register",
-                masterSheet: "Master Sheet", selectStudent: "Select Student",
-                comments: "Comments", finalResults: "Final Results",
-                openDisplay: "Display", save: "Save"
-            },
-            ar: {
-                setup: "إعداد", registration: "تسجيل", judging: "تحكيم", results: "النتائج",
-                compDetails: "تفاصيل المسابقة", criteriaSetup: "معايير التحكيم",
-                addParticipant: "إضافة مشارك", registerBtn: "تسجيل",
-                masterSheet: "القائمة الرئيسية", selectStudent: "اختر الطالب",
-                comments: "ملاحظات", finalResults: "النتائج النهائية",
-                openDisplay: "شاشة العرض", save: "حفظ"
-            }
-        };
-
-        // --- 2. INITIALIZATION ---
+        // --- INIT ---
         window.onload = function() {
-            loadFromLocal();
-            renderCriteria();
-            renderParticipants();
-            setupJudgeTabs();
-            changeLanguage();
+            // Load saved data
+            const saved = localStorage.getItem('royal_judge_data');
+            if(saved) {
+                app = JSON.parse(saved);
+                document.getElementById('comp-mode-select').value = app.mode;
+            } else {
+                app.criteria = [...PRESETS['quran']]; // Default
+            }
+            changeMode(false); // Update UI
+            renderCriteriaEditor();
+            populateStudentSelect();
+            renderResults();
         };
 
-        function switchTab(tabName) {
-            document.querySelectorAll('.view-section').forEach(el => el.classList.add('hidden'));
-            document.getElementById(tabName + '-view').classList.remove('hidden');
+        function nav(section) {
+            document.querySelectorAll('.section').forEach(el => el.classList.remove('active'));
+            document.getElementById(section).classList.add('active');
+            document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
             
-            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('tab-active'));
-            // Fix for tab button ID matching
-            let btnId = 'tab-' + (tabName === 'registration' ? 'reg' : (tabName === 'judging' ? 'judge' : tabName));
-            document.getElementById(btnId).classList.add('tab-active');
+            // Highlight active button logic
+            const btnMap = { 'setup':0, 'grid':1, 'judging':2, 'results':3 };
+            document.querySelectorAll('.nav-btn')[btnMap[section]].classList.add('active');
 
-            if(tabName === 'judging') populateStudentSelect();
-            if(tabName === 'results') calculateResults();
+            if(section === 'results') renderResults();
         }
 
-        function changeLanguage() {
-            const lang = document.getElementById('lang-select').value;
-            document.documentElement.lang = lang;
-            document.documentElement.dir = (lang === 'en') ? 'ltr' : 'rtl';
-            document.body.classList.toggle('font-thaana', lang === 'dv');
-            document.body.classList.toggle('font-arabic', lang === 'ar');
+        function changeMode(resetCrit = true) {
+            app.mode = document.getElementById('comp-mode-select').value;
+            document.getElementById('grid-mode-label').innerText = app.mode.toUpperCase();
+            
+            // Show/Hide specific controls
+            if(app.mode === 'quiz') {
+                document.getElementById('quiz-controls').classList.remove('hidden');
+                document.getElementById('quiz-controls').classList.add('grid');
+                document.getElementById('quran-controls').classList.add('hidden');
+                document.getElementById('timer-box').classList.remove('hidden');
+            } else if (app.mode === 'quran') {
+                document.getElementById('quiz-controls').classList.add('hidden');
+                document.getElementById('quiz-controls').classList.remove('grid');
+                document.getElementById('quran-controls').classList.remove('hidden');
+                document.getElementById('timer-box').classList.add('hidden');
+            } else {
+                // Speech/Madhaha - Grid less important usually, but kept enabled
+                document.getElementById('quiz-controls').classList.add('hidden');
+                document.getElementById('quran-controls').classList.add('hidden');
+            }
 
-            const t = translations[lang];
-            document.querySelectorAll('[data-t]').forEach(el => {
-                const key = el.getAttribute('data-t');
-                if(t[key]) el.innerText = t[key];
-            });
-        }
-
-        // --- 3. SETUP LOGIC ---
-        function renderCriteria() {
-            const tbody = document.getElementById('criteria-list');
-            tbody.innerHTML = '';
-            let total = 0;
-            appData.criteria.forEach((c, index) => {
-                total += parseInt(c.max);
-                tbody.innerHTML += `
-                    <tr class="border-b">
-                        <td class="p-2"><input type="text" value="${c.name}" onchange="updateCriteria(${index}, 'name', this.value)" class="w-full border p-1 rounded"></td>
-                        <td class="p-2"><input type="number" value="${c.max}" onchange="updateCriteria(${index}, 'max', this.value)" class="w-full border p-1 rounded text-center"></td>
-                        <td class="p-2 text-center"><button onclick="removeCriteria(${index})" class="text-red-600"><i class="fa-solid fa-trash"></i></button></td>
-                    </tr>
-                `;
-            });
-            document.getElementById('total-max-marks').innerText = total;
-        }
-
-        function addCriteriaRow() {
-            appData.criteria.push({ id: Date.now(), name: "New Criteria", max: 10 });
-            renderCriteria();
-        }
-
-        function updateCriteria(index, field, value) {
-            appData.criteria[index][field] = value;
-            if(field === 'max') renderCriteria(); // Update total
-        }
-
-        function removeCriteria(index) {
-            appData.criteria.splice(index, 1);
-            renderCriteria();
-        }
-
-        // --- 4. REGISTRATION LOGIC ---
-        function addParticipant() {
-            const p = {
-                id: document.getElementById('p-id').value,
-                name: document.getElementById('p-name').value,
-                parent: document.getElementById('p-parent').value,
-                class: document.getElementById('p-class').value,
-                ageGroup: document.getElementById('p-age-group').value,
-                surah: document.getElementById('q-surah').value,
-                verseStart: document.getElementById('q-verse-start').value,
-                verseEnd: document.getElementById('q-verse-end').value,
-                session: document.getElementById('p-session').value,
-                status: 'Pending'
-            };
-            appData.participants.push(p);
-            renderParticipants();
-            document.getElementById('reg-form').reset();
-            saveData();
-            alert('Student Added');
-        }
-
-        function renderParticipants() {
-            const tbody = document.getElementById('participants-list');
-            tbody.innerHTML = '';
-            appData.participants.forEach((p, index) => {
-                tbody.innerHTML += `
-                    <tr class="border-b hover:bg-gray-50">
-                        <td class="p-2 border">${p.id}</td>
-                        <td class="p-2 border font-bold">${p.name}</td>
-                        <td class="p-2 border">${p.class}</td>
-                        <td class="p-2 border text-xs">${p.surah || '-'} (${p.verseStart || ''}-${p.verseEnd || ''})</td>
-                        <td class="p-2 border"><span class="px-2 rounded text-xs text-white ${p.status === 'Completed' ? 'bg-green-500' : 'bg-yellow-500'}">${p.status}</span></td>
-                        <td class="p-2 border text-center">
-                            <button onclick="deleteParticipant(${index})" class="text-red-500"><i class="fa-solid fa-times"></i></button>
-                        </td>
-                    </tr>
-                `;
-            });
-        }
-
-        function deleteParticipant(index) {
-            if(confirm("Are you sure?")) {
-                appData.participants.splice(index, 1);
-                renderParticipants();
+            if(resetCrit) {
+                app.criteria = JSON.parse(JSON.stringify(PRESETS[app.mode] || PRESETS['quran']));
+                renderCriteriaEditor();
                 saveData();
             }
         }
 
-        // --- 5. JUDGING LOGIC ---
-        let currentStudentId = null;
-        let currentJudgeIndex = 0; // 0 to 9 (Judge 1 to 10)
-
-        function setupJudgeTabs() {
-            const container = document.getElementById('judge-tabs-container');
-            container.innerHTML = '';
-            // Allow up to 10 judges (configurable, but hardcoded loop for UI)
-            for(let i=0; i<5; i++) { // Default 5 judges shown
-                const activeClass = i === 0 ? 'bg-teal-600 text-white' : 'bg-gray-200 text-gray-700';
-                container.innerHTML += `
-                    <button onclick="selectJudge(${i})" id="btn-judge-${i}" class="px-4 py-2 rounded font-bold whitespace-nowrap ${activeClass}">
-                        Judge ${i+1}
-                    </button>
-                `;
-            }
-        }
-
-        function selectJudge(index) {
-            currentJudgeIndex = index;
-            document.querySelectorAll('#judge-tabs-container button').forEach(b => {
-                b.className = 'px-4 py-2 rounded font-bold whitespace-nowrap bg-gray-200 text-gray-700';
-            });
-            document.getElementById(`btn-judge-${index}`).className = 'px-4 py-2 rounded font-bold whitespace-nowrap bg-teal-600 text-white';
-            document.getElementById('current-judge-label').innerText = `Judge ${index+1}`;
-            
-            if(currentStudentId) loadScoreSheet();
-        }
-
-        function populateStudentSelect() {
-            const select = document.getElementById('judge-student-select');
-            select.innerHTML = '<option value="">-- Select Student --</option>';
-            appData.participants.forEach(p => {
-                select.innerHTML += `<option value="${p.id}">${p.id} - ${p.name}</option>`;
-            });
-        }
-
-        function loadStudentForJudging() {
-            const id = document.getElementById('judge-student-select').value;
-            currentStudentId = id;
-            if(!id) {
-                document.getElementById('scoring-area').classList.add('hidden');
-                return;
-            }
-
-            const p = appData.participants.find(x => x.id === id);
-            document.getElementById('active-student-display').innerText = p.name;
-            document.getElementById('active-details-display').innerText = `${p.surah || ''} : Ayah ${p.verseStart || ''} - ${p.verseEnd || ''}`;
-            document.getElementById('scoring-area').classList.remove('hidden');
-            
-            loadScoreSheet();
-            updateDisplayScreen(false); // Update screen but don't show score
-        }
-
-        function loadScoreSheet() {
-            const container = document.getElementById('rubric-container');
-            container.innerHTML = '';
-            
-            // Initialize score structure if not exists
-            if(!appData.scores[currentStudentId]) appData.scores[currentStudentId] = {};
-            if(!appData.scores[currentStudentId][`judge${currentJudgeIndex}`]) {
-                appData.scores[currentStudentId][`judge${currentJudgeIndex}`] = { details: {}, total: 0, comments: "" };
-            }
-
-            const currentScoreObj = appData.scores[currentStudentId][`judge${currentJudgeIndex}`];
-            document.getElementById('judge-comment').value = currentScoreObj.comments || "";
-
-            appData.criteria.forEach((c, cIdx) => {
-                const savedScore = currentScoreObj.details[c.id] !== undefined ? currentScoreObj.details[c.id] : parseInt(c.max);
-                
-                // Rubric Logic: 5 buttons (Full, -10%, -25%, -50%, 0)
-                // Simplified for this demo: Slider + Deduction Buttons
-                container.innerHTML += `
-                    <div class="border p-4 rounded bg-gray-50">
-                        <div class="flex justify-between mb-2">
-                            <label class="font-bold text-lg">${c.name}</label>
-                            <span class="font-bold text-teal-700"><span id="score-disp-${c.id}">${savedScore}</span> / ${c.max}</span>
-                        </div>
-                        
-                        <div class="flex gap-2 mb-2 flex-wrap">
-                            <button onclick="setScore(${c.id}, ${c.max}, ${c.max})" class="text-xs bg-green-100 hover:bg-green-200 border border-green-300 px-2 py-1 rounded">Full</button>
-                            <button onclick="deductScore(${c.id}, 0.5)" class="text-xs bg-yellow-100 hover:bg-yellow-200 border border-yellow-300 px-2 py-1 rounded">-0.5</button>
-                            <button onclick="deductScore(${c.id}, 1)" class="text-xs bg-orange-100 hover:bg-orange-200 border border-orange-300 px-2 py-1 rounded">-1.0</button>
-                             <button onclick="deductScore(${c.id}, 2)" class="text-xs bg-red-100 hover:bg-red-200 border border-red-300 px-2 py-1 rounded">-2.0</button>
-                        </div>
-                        <input type="range" id="range-${c.id}" min="0" max="${c.max}" step="0.5" value="${savedScore}" 
-                            oninput="manualScoreChange(${c.id}, this.value)" class="w-full">
-                    </div>
-                `;
-            });
-            calculateTotalDisplay();
-        }
-
-        function setScore(cId, val) {
-            document.getElementById(`range-${cId}`).value = val;
-            manualScoreChange(cId, val);
-        }
-
-        function deductScore(cId, amount) {
-            let el = document.getElementById(`range-${cId}`);
-            let val = parseFloat(el.value) - amount;
-            if(val < 0) val = 0;
-            el.value = val;
-            manualScoreChange(cId, val);
-        }
-
-        function manualScoreChange(cId, val) {
-            document.getElementById(`score-disp-${cId}`).innerText = val;
-            
-            // Save temporarily to memory
-            const scoreObj = appData.scores[currentStudentId][`judge${currentJudgeIndex}`];
-            scoreObj.details[cId] = parseFloat(val);
-            calculateTotalDisplay();
-        }
-
-        function calculateTotalDisplay() {
-            const scoreObj = appData.scores[currentStudentId][`judge${currentJudgeIndex}`];
-            let total = 0;
-            appData.criteria.forEach(c => {
-                const s = scoreObj.details[c.id];
-                total += (s !== undefined) ? s : parseInt(c.max);
-            });
-            scoreObj.total = total;
-            document.getElementById('current-total-score').innerText = total.toFixed(1);
-        }
-
-        function saveJudgeScore() {
-            const scoreObj = appData.scores[currentStudentId][`judge${currentJudgeIndex}`];
-            scoreObj.comments = document.getElementById('judge-comment').value;
-            
-            // Mark student as active/judged
-            const p = appData.participants.find(x => x.id === currentStudentId);
-            p.status = 'In Progress';
-            
-            saveData();
-            alert('Score Saved for Judge ' + (currentJudgeIndex + 1));
-        }
-
-        // --- 6. DISPLAY / PROJECTOR ---
-        function toggleDisplayWindow() {
-            const content = document.getElementById('display-template').innerHTML;
-            const win = window.open("", "DisplayWindow", "width=800,height=600");
-            win.document.write(content);
-            win.document.close();
-        }
-
-        function updateDisplayScreen(showScore = false) {
-            if(!currentStudentId) return;
-            const p = appData.participants.find(x => x.id === currentStudentId);
-            
-            // Calculate Average or Total if requested
-            let displayScore = 0;
-            if(showScore) {
-                // Simple average logic for demo
-                let sum = 0, count = 0;
-                for(let j=0; j<5; j++) {
-                    if(appData.scores[p.id] && appData.scores[p.id][`judge${j}`]) {
-                        sum += appData.scores[p.id][`judge${j}`].total;
-                        count++;
-                    }
-                }
-                displayScore = count > 0 ? (sum / count).toFixed(2) : 0;
-            }
-
-            const data = {
-                event: document.getElementById('comp-name').value || "Quran Competition",
-                name: p.name,
-                details: `${p.class} | ${p.ageGroup}`,
-                quran: p.surah ? `${p.surah} (Ayah: ${p.verseStart}-${p.verseEnd})` : '',
-                showScore: showScore,
-                score: displayScore
-            };
-            
-            localStorage.setItem('judging_display_data', JSON.stringify(data));
-        }
-
-        // --- 7. RESULTS & REPORTS ---
-        function calculateResults() {
-            const tbody = document.getElementById('results-body');
-            tbody.innerHTML = '';
-            
-            // Build table header dynamically
-            const theadRow = document.querySelector('#results-table thead tr');
-            // Reset to base cols
-            theadRow.innerHTML = `<th class="p-2">Rank</th><th class="p-2">ID</th><th class="p-2">Name</th><th class="p-2">Class</th>`;
-            for(let i=0; i<5; i++) {
-                theadRow.innerHTML += `<th class="p-2 text-center text-xs">J${i+1}</th>`;
-            }
-            theadRow.innerHTML += `<th class="p-2 text-center font-bold">Total</th>`;
-
-            // Process Scores
-            let results = appData.participants.map(p => {
-                let jScores = [];
-                let grandTotal = 0;
-                let jCount = 0;
-                
-                for(let i=0; i<5; i++) {
-                    const s = appData.scores[p.id] && appData.scores[p.id][`judge${i}`] ? appData.scores[p.id][`judge${i}`].total : 0;
-                    jScores.push(s);
-                    if(s > 0) { grandTotal += s; jCount++; }
-                }
-                
-                // Logic: Average or Sum? Let's use Average for grid
-                let finalScore = jCount > 0 ? (grandTotal / jCount) : 0;
-                
-                return { ...p, jScores, finalScore };
-            });
-
-            // Sort by score
-            results.sort((a, b) => b.finalScore - a.finalScore);
-
-            results.forEach((r, idx) => {
-                let rowHtml = `
-                    <tr class="border-b ${idx % 2 === 0 ? 'bg-gray-50' : 'bg-white'}">
-                        <td class="p-2 font-bold">${idx + 1}</td>
-                        <td class="p-2">${r.id}</td>
-                        <td class="p-2 font-bold">${r.name}</td>
-                        <td class="p-2">${r.class}</td>
-                `;
-                r.jScores.forEach(s => {
-                    rowHtml += `<td class="p-2 text-center text-gray-600 text-xs">${s > 0 ? s : '-'}</td>`;
-                });
-                rowHtml += `<td class="p-2 text-center font-bold text-teal-700">${r.finalScore.toFixed(2)}</td></tr>`;
-                tbody.innerHTML += rowHtml;
-            });
-        }
-
-        function printResults() {
-            window.print();
-        }
-
-        // --- 8. DATA PERSISTENCE ---
-        function saveData() {
-            localStorage.setItem('competitionData', JSON.stringify(appData));
-            // Also notify display
-        }
-
-        function loadFromLocal() {
-            const data = localStorage.getItem('competitionData');
-            if(data) {
-                appData = JSON.parse(data);
-                // Refresh criteria names in setup
-                document.getElementById('comp-name').value = appData.config.name || "";
-            }
-        }
-
-        function exportJSON() {
-            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(appData));
-            const downloadAnchorNode = document.createElement('a');
-            downloadAnchorNode.setAttribute("href", dataStr);
-            downloadAnchorNode.setAttribute("download", "competition_backup_" + Date.now() + ".json");
-            document.body.appendChild(downloadAnchorNode);
-            downloadAnchorNode.click();
-            downloadAnchorNode.remove();
-        }
-
-        function importJSON(input) {
+        // --- CSV HANDLING ---
+        function processCSV(type) {
+            const input = document.getElementById(`file-${type}`);
             const file = input.files[0];
+            if(!file) return;
+
             const reader = new FileReader();
             reader.onload = function(e) {
-                appData = JSON.parse(e.target.result);
+                const text = e.target.result;
+                const rows = text.split('\n').map(r => r.split(','));
+                const headers = rows[0].map(h => h.trim().replace(/"/g, ''));
+                
+                const data = rows.slice(1).filter(r => r.length > 1).map(r => {
+                    let obj = {};
+                    headers.forEach((h, i) => {
+                        obj[h] = r[i] ? r[i].trim().replace(/"/g, '') : '';
+                    });
+                    return obj;
+                });
+
+                if(type === 'students') {
+                    app.participants = data;
+                    document.getElementById('status-students').innerText = `${data.length} Loaded`;
+                    populateStudentSelect();
+                } else {
+                    app.questions = data;
+                    document.getElementById('status-questions').innerText = `${data.length} Loaded`;
+                }
                 saveData();
-                location.reload();
             };
             reader.readAsText(file);
         }
+
+        // --- GRID SYSTEM ---
+        function generateGrid() {
+            if(!app.questions.length) return alert('Upload Questions first!');
+            const size = parseInt(document.getElementById('grid-size').value);
+            const container = document.getElementById('grid-container');
+            container.innerHTML = '';
+
+            // If randomizing from a large set, create indices. 
+            // Here, we just assume 1 to N for simplicity of specific accurate grid request.
+            // "Accurate Grid" -> Maps directly to questions or specific subsets.
+            
+            let displaySet = app.questions.slice(0, size); // Just take first N or random N
+            // Ideally shuffle
+            // displaySet = displaySet.sort(() => 0.5 - Math.random());
+
+            displaySet.forEach((q, idx) => {
+                const div = document.createElement('div');
+                div.className = `grid-item ${app.gridUsed.includes(q.ID || idx) ? 'used' : ''}`;
+                div.innerText = idx + 1;
+                div.onclick = () => selectQuestion(q, div, idx);
+                container.appendChild(div);
+            });
+        }
+
+        function selectQuestion(q, div, idx) {
+            if(div.classList.contains('used')) return;
+            
+            // Visuals
+            document.querySelectorAll('.grid-item').forEach(el => el.classList.remove('selected'));
+            div.classList.add('selected');
+            
+            // Set Active
+            app.activeQuestion = q;
+            app.activeQuestionIdx = q.ID || idx;
+
+            // Display in Admin Panel
+            const displayText = q.QuestionText || q.Surah || "Question " + (idx+1);
+            document.getElementById('active-q-display').innerText = displayText.substring(0, 50) + "...";
+            
+            let details = "";
+            if(app.mode === 'quran') details = `${q.Surah} (Ayah ${q.StartAyah}-${q.EndAyah})`;
+            document.getElementById('active-q-details').innerText = details;
+
+            // Send to Judge View
+            document.getElementById('judge-q-view').innerText = displayText + "\n" + details;
+        }
+
+        // --- JUDGING ---
+        function renderCriteriaEditor() {
+            const el = document.getElementById('criteria-editor');
+            el.innerHTML = '';
+            app.criteria.forEach((c, i) => {
+                el.innerHTML += `
+                    <div class="flex gap-2 mb-2">
+                        <input value="${c.name}" onchange="updateCrit(${i}, 'name', this.value)" class="flex-1">
+                        <input type="number" value="${c.max}" onchange="updateCrit(${i}, 'max', this.value)" class="w-20 text-center">
+                    </div>
+                `;
+            });
+        }
+        
+        function updateCrit(idx, key, val) {
+            app.criteria[idx][key] = val;
+            if(key === 'max') app.criteria[idx].max = parseFloat(val);
+            saveData();
+        }
+
+        function populateStudentSelect() {
+            const sel = document.getElementById('judge-student-select');
+            sel.innerHTML = '<option value="">-- Select --</option>';
+            app.participants.forEach(p => {
+                const label = p['Full Name'] || p['Name'] || p['ID'];
+                sel.innerHTML += `<option value="${p['ID Card'] || p['ID']}">${label}</option>`;
+            });
+        }
+
+        let currJudge = 1;
+
+        function loadStudent() {
+            const id = document.getElementById('judge-student-select').value;
+            app.activeStudent = app.participants.find(p => (p['ID Card'] || p['ID']) == id);
+            
+            // Check Hifz vs Reading based on Class/Branch
+            const branch = (app.activeStudent['Branch'] || app.activeStudent['Class'] || "").toLowerCase();
+            const isHifz = branch.includes('hifz') || branch.includes('nubalai');
+            const badge = document.getElementById('student-mode-badge');
+            
+            if(isHifz) {
+                badge.className = "badge badge-hifz";
+                badge.innerText = "Hifz (Nubalai)";
+            } else {
+                badge.className = "badge badge-read";
+                badge.innerText = "Reading (Balaiygen)";
+            }
+
+            // Update Info Box
+            document.getElementById('p-info-box').innerHTML = `
+                <p><strong>Name:</strong> ${app.activeStudent['Full Name']}</p>
+                <p><strong>ID:</strong> ${app.activeStudent['ID Card']}</p>
+                <p><strong>Cat:</strong> ${app.activeStudent['Branch']}</p>
+            `;
+
+            // Send to Screen (Name)
+            updateDisplay({ type: 'student', name: app.activeStudent['Full Name'], mode: badge.innerText });
+            
+            renderRubricInputs();
+        }
+
+        function setJudge(num) {
+            currJudge = num;
+            // UI Update
+            for(let i=1; i<=5; i++) {
+                const btn = document.getElementById(`btn-j${i}`);
+                if(i === num) {
+                    btn.className = "px-4 py-1 rounded bg-green-800 text-white border border-green-500";
+                } else {
+                    btn.className = "px-4 py-1 rounded bg-gray-700 text-gray-400";
+                }
+            }
+            document.getElementById('lbl-curr-judge').innerText = num;
+            renderRubricInputs();
+        }
+
+        function renderRubricInputs() {
+            const container = document.getElementById('rubric-container');
+            container.innerHTML = '';
+            
+            if(!app.activeStudent) return;
+            const id = app.activeStudent['ID Card'] || app.activeStudent['ID'];
+            
+            // Get existing score
+            const scoreData = app.scores[id]?.[`judge${currJudge}`] || {};
+
+            let currentTotal = 0;
+
+            app.criteria.forEach(c => {
+                const val = scoreData[c.id] !== undefined ? scoreData[c.id] : c.max;
+                currentTotal += parseFloat(val);
+
+                container.innerHTML += `
+                    <div class="rubric-row">
+                        <div class="w-1/3">
+                            <div class="font-bold text-gray-300">${c.name}</div>
+                            <div class="text-xs text-gray-500">Max: ${c.max}</div>
+                        </div>
+                        <div class="w-2/3 flex items-center gap-2">
+                            <input type="range" min="0" max="${c.max}" step="0.5" value="${val}" 
+                                oninput="updateRange('${c.id}', this.value)">
+                            <input type="number" id="inp-${c.id}" value="${val}" class="w-16 text-center font-bold text-yellow-500 bg-black" readonly>
+                        </div>
+                    </div>
+                `;
+            });
+            document.getElementById('total-score-display').innerText = currentTotal.toFixed(1);
+        }
+
+        function updateRange(id, val) {
+            document.getElementById(`inp-${id}`).value = val;
+            // Calc live total
+            let tot = 0;
+            document.querySelectorAll('[id^="inp-"]').forEach(el => tot += parseFloat(el.value));
+            document.getElementById('total-score-display').innerText = tot.toFixed(1);
+        }
+
+        function saveScore() {
+            if(!app.activeStudent) return;
+            const id = app.activeStudent['ID Card'] || app.activeStudent['ID'];
+            
+            if(!app.scores[id]) app.scores[id] = {};
+            
+            let judgeScore = {};
+            let total = 0;
+            
+            app.criteria.forEach(c => {
+                const val = parseFloat(document.getElementById(`inp-${c.id}`).value);
+                judgeScore[c.id] = val;
+                total += val;
+            });
+            judgeScore.total = total;
+            judgeScore.comment = document.getElementById('judge-comments').value;
+
+            app.scores[id][`judge${currJudge}`] = judgeScore;
+            saveData();
+            alert(`Saved Judge ${currJudge} Score: ${total}`);
+        }
+
+        // --- RESULTS ---
+        function renderResults() {
+            const table = document.getElementById('results-table');
+            // Headers
+            let hHTML = `<tr><th>ID</th><th>Name</th>`;
+            for(let i=1; i<=5; i++) hHTML += `<th>J${i}</th>`;
+            hHTML += `<th>AVG</th><th>Total</th></tr>`;
+            table.querySelector('thead').innerHTML = hHTML;
+
+            // Body
+            const tbody = table.querySelector('tbody');
+            tbody.innerHTML = '';
+            
+            app.participants.forEach(p => {
+                const id = p['ID Card'] || p['ID'];
+                const s = app.scores[id] || {};
+                
+                let row = `<tr><td>${id}</td><td>${p['Full Name'] || p.Name}</td>`;
+                let sum = 0;
+                let count = 0;
+                
+                for(let i=1; i<=5; i++) {
+                    const js = s[`judge${i}`]?.total || 0;
+                    if(js > 0) { sum += js; count++; }
+                    row += `<td>${js || '-'}</td>`;
+                }
+                
+                const avg = count ? (sum/count).toFixed(2) : 0;
+                row += `<td class="text-yellow-500 font-bold">${avg}</td><td>${sum.toFixed(2)}</td></tr>`;
+                tbody.innerHTML += row;
+            });
+        }
+
+        function exportResults() {
+            // Simple CSV Export Logic
+            let csv = "ID,Name,J1,J2,J3,J4,J5,Average,Total\n";
+            app.participants.forEach(p => {
+                const id = p['ID Card'] || p['ID'];
+                const s = app.scores[id] || {};
+                let row = [id, `"${p['Full Name']}"`];
+                let sum = 0, count = 0;
+                for(let i=1; i<=5; i++) {
+                     const js = s[`judge${i}`]?.total || 0;
+                     if(js>0) { sum+=js; count++; }
+                     row.push(js);
+                }
+                row.push(count ? (sum/count).toFixed(2) : 0);
+                row.push(sum);
+                csv += row.join(",") + "\n";
+            });
+            
+            const link = document.createElement("a");
+            link.href = 'data:text/csv;charset=utf-8,' + encodeURI(csv);
+            link.download = "Results_" + app.mode + ".csv";
+            link.click();
+        }
+
+        // --- SCREEN / DISPLAY ---
+        let dispWin = null;
+        function openDisplay() {
+            dispWin = window.open("", "Display", "width=1000,height=700");
+            dispWin.document.write(`
+                <html>
+                <head>
+                    <title>Competition Display</title>
+                    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Noto+Sans+Thaana:wght@400;700&display=swap" rel="stylesheet">
+                    <style>
+                        body { background: #000; color: white; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; font-family: 'Noto Sans Thaana'; text-align: center; }
+                        .card { border: 4px solid #d4af37; padding: 40px; border-radius: 20px; width: 80%; background: #111; }
+                        h1 { font-size: 4rem; color: #d4af37; margin: 0; }
+                        h2 { font-size: 2rem; color: #aaa; margin-top: 10px; }
+                        .q-box { font-family: 'Amiri'; font-size: 3.5rem; margin-top: 30px; line-height: 1.8; }
+                        .hidden { display: none; }
+                        .correct { color: #4ade80; animation: pulse 1s infinite; }
+                        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
+                    </style>
+                </head>
+                <body>
+                    <div id="container" class="card">
+                        <h1>Waiting...</h1>
+                    </div>
+                    <script>
+                        window.update = function(data) {
+                            const c = document.getElementById('container');
+                            if(data.type === 'student') {
+                                c.innerHTML = '<h1>' + data.name + '</h1><h2>' + data.mode + '</h2>';
+                            } else if (data.type === 'question') {
+                                let html = '<h2 style="color:#d4af37;">Question</h2>';
+                                html += '<div class="q-box">' + data.text + '</div>';
+                                if(data.timer) html += '<h2 style="color:red; font-size:3rem;">' + data.timer + '</h2>';
+                                c.innerHTML = html;
+                            } else if (data.type === 'correct') {
+                                c.querySelector('.q-box').classList.add('correct');
+                            } else if (data.type === 'end_ayah') {
+                                c.innerHTML = '<div style="font-family:Amiri; font-size:5rem;">صَدَقَ اللّٰهُ الْعَظِيمُ</div>';
+                            }
+                        }
+                    <\/script>
+                </body>
+                </html>
+            `);
+        }
+
+        function updateDisplay(data) {
+            if(dispWin && !dispWin.closed) {
+                dispWin.update(data);
+            }
+        }
+
+        // Screen Actions
+        let timerInt;
+        function screenAction(action) {
+            if(!app.activeQuestion) return;
+            
+            if(action === 'show') {
+                updateDisplay({ 
+                    type: 'question', 
+                    text: app.activeQuestion.QuestionText || app.activeQuestion.Surah 
+                });
+                
+                // Mark as used
+                if(!app.gridUsed.includes(app.activeQuestionIdx)) {
+                    app.gridUsed.push(app.activeQuestionIdx);
+                    document.querySelector('.grid-item.selected').classList.add('used');
+                    saveData();
+                }
+
+            } else if (action === 'end_ayah') {
+                updateDisplay({ type: 'end_ayah' });
+            } else if (action === 'correct') {
+                updateDisplay({ type: 'correct' });
+            }
+        }
+
+        function startTimer() {
+            let sec = 30; // Default 30s for quiz
+            clearInterval(timerInt);
+            const display = document.getElementById('timer-box');
+            display.innerText = sec;
+            
+            timerInt = setInterval(() => {
+                sec--;
+                display.innerText = sec;
+                // Sync to screen (simplified)
+                if(dispWin && !dispWin.closed) {
+                   // In a real scenario, you'd push just the timer, but here we redraw active Q + Timer
+                   updateDisplay({ 
+                       type: 'question', 
+                       text: app.activeQuestion.QuestionText, 
+                       timer: sec 
+                   });
+                }
+                if(sec <= 0) clearInterval(timerInt);
+            }, 1000);
+        }
+
+        // --- UTILS ---
+        function saveData() {
+            localStorage.setItem('royal_judge_data', JSON.stringify(app));
+        }
+        function resetSystem() {
+            if(confirm('Delete all data?')) {
+                localStorage.removeItem('royal_judge_data');
+                location.reload();
+            }
+        }
+        function resetCriteria() {
+            changeMode(true);
+        }
+
     </script>
 </body>
 </html>
