@@ -5905,6 +5905,375 @@ window.syncWindows = function() {
 };
 
 alert("✅ System Upgraded: Text Mode Support Added!\nUse the new button in Live Control.");
+    // ===============================================================
+// ★ ULTIMATE UPGRADE V2: PRO TEXT ENGINE & CONTROLS ★
+// ===============================================================
+
+// 1. INITIALIZE SETTINGS STATE
+state.useTextMode = false;
+state.textSettings = {
+    fontSize: 6,       // vmin unit
+    lineHeight: 2.0,   // unitless
+    align: 'center',   // center, justify, right
+    padding: 5,        // vmin
+    lineStart: 1,      // Start line
+    lineEnd: 15        // End line
+};
+
+// 2. INJECT CONTROLS INTO SIDEBAR (SETTINGS PANEL)
+function injectTextControls() {
+    // Find Settings Panel (Panel 4)
+    const panels = document.querySelectorAll('.panel');
+    const settingsPanel = panels[3]; // Assuming 4th panel is Settings
+    
+    const div = document.createElement('div');
+    div.style.marginTop = "10px";
+    div.style.borderTop = "1px dashed #444";
+    div.style.paddingTop = "10px";
+    div.innerHTML = `
+        <label style="color:#00e676; font-weight:bold;">🔤 Text Mode Controls:</label>
+        
+        <button id="btnToggleMode" class="btn-purple" onclick="toggleTextScreenMode()" style="margin-bottom:10px;">
+            🖼️ Image Mode (Active)
+        </button>
+
+        <div class="control-row">
+            <span style="font-size:12px; color:#aaa; width:60px;">Size:</span>
+            <input type="range" min="2" max="15" step="0.5" value="6" 
+                   class="range-slider" oninput="updateTextSettings('fontSize', this.value)">
+            <span id="dispFS" style="font-size:10px; width:20px;">6</span>
+        </div>
+
+        <div class="control-row">
+            <span style="font-size:12px; color:#aaa; width:60px;">Gap:</span>
+            <input type="range" min="1" max="4" step="0.1" value="2" 
+                   class="range-slider" oninput="updateTextSettings('lineHeight', this.value)">
+            <span id="dispLH" style="font-size:10px; width:20px;">2.0</span>
+        </div>
+
+        <div style="display:flex; gap:5px; margin-top:5px;">
+            <button class="lang-btn" onclick="updateTextSettings('align', 'right')">Right</button>
+            <button class="lang-btn active" onclick="updateTextSettings('align', 'center')">Center</button>
+            <button class="lang-btn" onclick="updateTextSettings('align', 'justify')">Justify</button>
+        </div>
+
+        <label style="margin-top:8px; color:#FFD700;">✂️ Line Limiter (ފޮޅުވަތް):</label>
+        <div style="display:flex; gap:5px;">
+            <input type="number" id="txtLineStart" placeholder="From" value="1" style="width:50px;" onchange="updateTextSettings('lines', null)">
+            <span style="color:#fff; padding-top:5px;">to</span>
+            <input type="number" id="txtLineEnd" placeholder="To" value="15" style="width:50px;" onchange="updateTextSettings('lines', null)">
+        </div>
+        <small style="color:#666; font-size:9px;">Shows only lines within range from CSV text.</small>
+    `;
+    settingsPanel.appendChild(div);
+}
+
+// Call injection once
+injectTextControls();
+
+// 3. LOGIC FUNCTIONS
+function toggleTextScreenMode() {
+    state.useTextMode = !state.useTextMode;
+    const btn = document.getElementById('btnToggleMode');
+    if(state.useTextMode) {
+        btn.innerHTML = '🔤 Text Mode (Active)';
+        btn.className = 'btn-green';
+        alert("Switched to TEXT Mode.\nEnsure CSV Column 8 has Arabic Text.\n(Use the controls below to resize/fit)");
+    } else {
+        btn.innerHTML = '🖼️ Image Mode (Active)';
+        btn.className = 'btn-purple';
+    }
+    syncWindows(); updateMirror();
+}
+
+function updateTextSettings(key, val) {
+    if(key === 'lines') {
+        state.textSettings.lineStart = parseInt(document.getElementById('txtLineStart').value) || 1;
+        state.textSettings.lineEnd = parseInt(document.getElementById('txtLineEnd').value) || 20;
+    } else {
+        state.textSettings[key] = val;
+        // Update display numbers
+        if(key === 'fontSize') document.getElementById('dispFS').innerText = val;
+        if(key === 'lineHeight') document.getElementById('dispLH').innerText = val;
+    }
+    syncWindows(); updateMirror();
+}
+
+// Helper to slice text based on settings
+function processTextContent(rawText) {
+    if(!rawText) return "";
+    // Split by new line
+    const lines = rawText.split(/\r?\n/);
+    
+    // Adjust 1-based index to 0-based
+    const start = Math.max(0, state.textSettings.lineStart - 1);
+    const end = Math.min(lines.length, state.textSettings.lineEnd);
+    
+    if(start >= lines.length) return "(No lines in this range)";
+    
+    const selectedLines = lines.slice(start, end);
+    return selectedLines.join('<br>');
+}
+
+// 4. OVERRIDE CSV READER (To get Col 8)
+document.getElementById('csvQ').onchange = e => {
+    const r = new FileReader();
+    r.onload = ev => {
+        const rows = ev.target.result.split('\n');
+        state.qPool = []; state.qUsed = []; state.filteredPool = [];
+        
+        rows.slice(1).forEach(r => {
+            // Robust CSV split logic
+            const c = r.match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g);
+            if(!c || c.length < 2) return;
+            const clean = c.map(val => val.replace(/^"|"$/g, '').trim());
+
+            const id = clean[0];
+            // Format: ID, Img, Book, Surah, Page, Start, End, TEXT
+            let txt = "";
+            if(clean.length >= 8) txt = clean[7].replace(/\\n/g, '\n'); // Handle escaped newlines
+
+            state.qDataMap[id] = { 
+                id: id, imgRaw: clean[1], src: null,           
+                book: clean[2], bookNum: parseInt(clean[2].replace(/\D/g,''))||0,
+                surah: clean[3], surahNum: parseInt(clean[3])||0,
+                start: clean[5], end: clean[6],
+                textData: txt // Store text
+            };
+            state.qPool.push(id);
+        });
+        rebindAllImages();
+        state.filteredPool = [...state.qPool];
+        applySyllabusFilter(); 
+        alert("Loaded! Text Mode Ready.");
+    };
+    r.readAsText(e.target.files[0]);
+};
+
+// 5. UPDATE MIRROR (ADMIN SCREEN FIX)
+// We need to override updateMirror to show text correctly in Admin Panel
+const originalUpdateMirror = updateMirror;
+updateMirror = function() {
+    const mCont = document.getElementById('mirrorContainer');
+    const mImg = document.getElementById('mImg');
+    // Create or find text container in admin mirror
+    let mText = document.getElementById('mTextPreview');
+    if(!mText) {
+        mText = document.createElement('div');
+        mText.id = 'mTextPreview';
+        mText.style.width = '100%';
+        mText.style.height = '100%';
+        mText.style.overflowY = 'auto';
+        mText.style.display = 'none';
+        // Add to container before image
+        mCont.insertBefore(mText, mImg);
+    }
+
+    // Call original logic first
+    originalUpdateMirror();
+
+    // Now override if Text Mode
+    if(state.useTextMode && state.session.phase === 'active') {
+        const q = state.session.slots[state.session.activeIndex];
+        if(q) {
+            mImg.style.display = 'none';
+            mText.style.display = 'block';
+            
+            // Apply Settings to Admin View
+            mText.style.fontFamily = "'Amiri', 'QuranFont', serif";
+            mText.style.fontSize = (state.textSettings.fontSize * 3) + 'px'; // Scale for small screen
+            mText.style.lineHeight = state.textSettings.lineHeight;
+            mText.style.textAlign = state.textSettings.align;
+            mText.style.padding = '10px';
+            mText.style.color = state.theme ? state.theme.text : '#000';
+            if(state.theme && state.theme.bg1) mText.style.backgroundColor = state.theme.bg2; // Match Dark Mode
+
+            mText.innerHTML = processTextContent(q.textData);
+        }
+    } else {
+        mText.style.display = 'none';
+    }
+};
+
+// 6. OVERRIDE TEMPLATE (STUDENT SCREEN FIX)
+window.getTemplate = function(isCeremony = false, titleOverride = "") {
+    const fontFace = state.fontData ? `@font-face { font-family: 'AppFont'; src: url('${state.fontData}'); }` : '';
+    // Use Ceremony Quran Font if loaded, else standard
+    let qFont = state.ceremony.fonts.quran || "https://fonts.googleapis.com/earlyaccess/notosansthaana.css"; 
+    let qFontFace = state.ceremony.fonts.quran ? `@font-face { font-family: 'QFont'; src: url('${state.ceremony.fonts.quran}'); }` : '';
+
+    const th = state.theme || {bg1:'#001a33', bg2:'#000', accent:'#D4AF37', borderType:'double', text:'#fff'}; 
+    const bStyle = document.getElementById('borderStyle').value;
+    let borderCSS = `border: 1.5vmin ${th.borderType} ${th.accent}; box-shadow: 0 0 5vmin ${th.accent}80;`;
+    if(bStyle === 'custom' && state.borderData) borderCSS = `border: 4vmin solid transparent; border-image: url('${state.borderData}') 30 stretch;`;
+    if(bStyle === 'none') borderCSS = "border:none;";
+
+    return `
+    <!DOCTYPE html>
+    <html lang="dv" dir="rtl">
+    <head>
+        <style>
+            ${fontFace}
+            ${qFontFace}
+            @import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&display=swap');
+
+            :root { --bg-1: ${th.bg1}; --bg-2: ${th.bg2}; --accent: ${th.accent}; --txt-col: ${th.text}; }
+            body { margin:0; width: 100vw; height: 100vh; overflow:hidden; color:var(--txt-col); display:flex; background: #000; font-family: 'AppFont', sans-serif; }
+            
+            #idleScreen, #gridScreen, #readScreen { display:none; width:100%; height:100%; }
+            
+            #idleScreen { display:flex; align-items:center; justify-content:center; background: radial-gradient(circle, var(--bg-1), var(--bg-2)); }
+            
+            #readScreen { flex-direction:column; background: radial-gradient(circle, var(--bg-1), var(--bg-2)); }
+            #topBar { height: 10vh; width: 100%; background: linear-gradient(to bottom, var(--bg-1), #000); border-bottom: 0.5vmin solid var(--accent); display: flex; align-items: center; justify-content: center; }
+            #topStatusText { color: var(--accent); font-size: 3vmin; font-weight: bold; }
+
+            #mainArea { flex: 1; display: flex; justify-content: center; align-items: center; width: 100%; padding: 2vmin; box-sizing: border-box; }
+            
+            .royal-card {
+                width: 90%; height: 85vh; 
+                background: #fff; ${borderCSS}
+                border-radius: 1vmin; display: flex; justify-content: center; align-items: center;
+                overflow: hidden; position: relative;
+            }
+            .royal-card img { width: 100%; height: auto; display: block; }
+            
+            /* ★ TEXT DISPLAY CONTAINER ★ */
+            #qTextDisplay {
+                display: none; 
+                width: 100%; height: 100%;
+                overflow-y: auto;
+                font-family: 'QFont', 'Amiri', serif !important;
+                color: #000;
+                box-sizing: border-box;
+                /* Flex to center text vertically if it's short */
+                flex-direction: column;
+                justify-content: center; 
+            }
+            
+            /* Scrollbar Styling */
+            #qTextDisplay::-webkit-scrollbar { width: 1vmin; }
+            #qTextDisplay::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 1vmin; }
+
+            /* Grid Reuse */
+            #gridScreen { display:none; align-items:center; justify-content:center; flex-direction:column; background: radial-gradient(circle, var(--bg-1), #000); }
+            #gridContainer { display:grid; grid-template-columns: repeat(5, 1fr); gap: 1.5vmin; width: 85vw; height: 75vh; }
+            .grid-btn { background: linear-gradient(135deg, var(--accent), var(--bg-1)); border: 0.3vmin solid #fff; color: #fff; font-size: 5vmin; font-weight: bold; display:flex; justify-content:center; align-items:center; cursor:pointer; }
+            .grid-btn.taken { opacity: 0.1; pointer-events: none; }
+        </style>
+    </head>
+    <body>
+        <div id="idleScreen"><h1 style="font-size:8vw; color:var(--accent);">RASFAHI</h1></div>
+        
+        <div id="gridScreen">
+            <h1 style="color:var(--accent); font-size: 5vh;">ސުވާލު ނަންބަރު ނަގާ</h1>
+            <div id="gridContainer"></div>
+        </div>
+
+        <div id="readScreen">
+            <div id="topBar"><div id="topStatusText"></div></div>
+            <div id="mainArea">
+                <div class="royal-card">
+                    <img id="qImg" src="">
+                    <div id="qTextDisplay"></div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            // Helper to handle text slice on student side as well
+            function processText(raw, start, end) {
+                if(!raw) return "";
+                const lines = raw.split(/\\r?\\n/);
+                const s = Math.max(0, start - 1);
+                const e = Math.min(lines.length, end);
+                if(s >= lines.length) return "";
+                return lines.slice(s, e).join('<br>');
+            }
+
+            window.updateState = function(d) {
+                ['idleScreen','gridScreen','readScreen'].forEach(id=>document.getElementById(id).style.display='none');
+
+                if(d.grid.visible) {
+                    document.getElementById('gridScreen').style.display = 'flex';
+                    const gc = document.getElementById('gridContainer');
+                    gc.innerHTML = '';
+                    for(let i=1; i<=20; i++) {
+                        let b = document.createElement('div');
+                        b.className = 'grid-btn ' + (d.grid.taken.includes(i) ? 'taken' : '');
+                        b.innerText = i;
+                        b.onclick = () => window.opener.handleGridClick(i);
+                        gc.appendChild(b);
+                    }
+                } else if(d.phase === 'active') {
+                    document.getElementById('readScreen').style.display = 'flex';
+                    const q = d.slots[d.activeIndex];
+                    
+                    if(q) {
+                        const img = document.getElementById('qImg');
+                        const txt = document.getElementById('qTextDisplay');
+                        const status = document.getElementById('topStatusText');
+                        
+                        status.innerText = "Reading Question " + (d.activeIndex + 1);
+
+                        // ★ RENDER LOGIC ★
+                        if(d.useTextMode) {
+                            img.style.display = 'none';
+                            txt.style.display = 'flex'; // Use flex to support alignment
+                            
+                            // Apply Dynamic Settings
+                            const s = d.textSettings;
+                            txt.style.fontSize = s.fontSize + 'vmin';
+                            txt.style.lineHeight = s.lineHeight;
+                            txt.style.textAlign = s.align;
+                            txt.style.padding = s.padding + 'vmin';
+                            
+                            // Process text range
+                            txt.innerHTML = processText(q.textData, s.lineStart, s.lineEnd);
+                            
+                        } else {
+                            txt.style.display = 'none';
+                            img.style.display = 'block';
+                            img.src = q.src;
+                        }
+                    }
+                } else {
+                    document.getElementById('idleScreen').style.display = 'flex';
+                }
+            }
+        <\/script>
+    </body>
+    </html>`;
+};
+
+// 7. SYNC FUNCTION UPDATE (PASS SETTINGS)
+const oldSync2 = window.syncWindows;
+window.syncWindows = function() {
+    const packet = {
+        slots: state.session.slots, 
+        activeIndex: state.session.activeIndex,
+        phase: state.session.phase, 
+        light: state.session.light,
+        grid: state.grid, 
+        readingMode: state.readingMode,
+        currentLang: currentLang, 
+        fontData: state.fontData,
+        judging: state.judging,
+        ceremony: state.ceremony,
+        useTextMode: state.useTextMode,
+        // Pass the new settings object
+        textSettings: state.textSettings 
+    };
+    
+    const send = w => { if(w && !w.closed && w.updateState) w.updateState(packet); };
+    send(state.windows.student);
+    if(state.windows.judges) state.windows.judges.forEach(w => send(w));
+    
+    // Update Admin Mirror as well
+    updateMirror();
+};
+
+alert("✅ ULTIMATE UPDATE APPLIED:\n- Text Mode with Grid\n- Font Size, Gap & Alignment Controls\n- Line Limiter (Start/End Line)");
 </script>
 </body>
 </html>
