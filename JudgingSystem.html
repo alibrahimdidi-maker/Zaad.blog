@@ -1052,7 +1052,7 @@
 
             </div>
 <div class="panel" style="border: 1px solid #FFD700; background: linear-gradient(180deg, #001a00, #000);">
-    <h2 style="color: #FFD700; font-family:'Cinzel', serif;">★ ޝާހީ ސްކްރީން (Master V10)</h2>
+    <h2 style="color: #FFD700; font-family:'Cinzel', serif;">★ ޝާހީ ސްކްރީން (Master V12)</h2>
 
     <div style="background:#111; padding:5px; border:1px dashed #555; margin-bottom:5px;">
         <label style="color:#00e676; font-size:11px;">1. ޑޭޓާބޭސް (CSV) ލޯޑުކުރައްވާ:</label>
@@ -1071,12 +1071,12 @@
     </div>
 
     <div id="divJuzSelect" style="display:grid; grid-template-columns: 1fr 1fr; gap:5px;">
-        <div><small>ފަށާ ފޮތް</small><select id="startJuz" class="filter-dd" style="width:100%"><option>-</option></select></div>
-        <div><small>ނިމޭ ފޮތް</small><select id="endJuz" class="filter-dd" style="width:100%"><option>-</option></select></div>
+        <div><small>ފަށާ ފޮތް</small><select id="startJuz" class="filter-dd" style="width:100%"></select></div>
+        <div><small>ނިމޭ ފޮތް</small><select id="endJuz" class="filter-dd" style="width:100%"></select></div>
     </div>
     <div id="divSurahSelect" style="display:none; grid-template-columns: 1fr 1fr; gap:5px;">
-        <div><small>ފަށާ ސޫރަތް</small><select id="startSurah" class="filter-dd" style="width:100%"><option>-</option></select></div>
-        <div><small>ނިމޭ ސޫރަތް</small><select id="endSurah" class="filter-dd" style="width:100%"><option>-</option></select></div>
+        <div><small>ފަށާ ސޫރަތް</small><select id="startSurah" class="filter-dd" style="width:100%"></select></div>
+        <div><small>ނިމޭ ސޫރަތް</small><select id="endSurah" class="filter-dd" style="width:100%"></select></div>
     </div>
 
     <button class="btn-red" style="width:100%; margin-top:5px; font-size:11px;" onclick="resetExtraSession()">
@@ -1205,12 +1205,17 @@
         <div id="exMonitor" style="background:#000; color:#FFD700; padding:5px; text-align:center; font-size:11px; border:1px solid #333; margin-bottom:5px;">
             [IDLE]
         </div>
-        <button id="btnNextQ" class="btn-green" style="width:100%; padding:10px;" onclick="extraNextQ()">
-            ▶ START / NEXT QUESTION
-        </button>
+        
+        <div style="display:flex; gap:5px;">
+            <button class="btn-blue" style="flex:1; padding:10px;" onclick="extraPrevQ()">
+                ◀ PREV
+            </button>
+            <button class="btn-green" style="flex:2; padding:10px;" onclick="extraNextQ()">
+                START / NEXT ▶
+            </button>
+        </div>
     </div>
 </div>
-
 <div class="panel" style="border: 1px solid #e91e63;">
     <h2 style="color: #e91e63;">★ އެޑްމިން މެނުއަލް ސްކޯރިންގ</h2>
     <div style="background:#1a000d; padding:10px; border:1px dashed #e91e63;">
@@ -9529,6 +9534,465 @@ function syncExtraScreen() {
     // Generate Theme CSS on the fly
     const themeData = getRoyalThemeCSS(state.extra.settings.theme);
     
+    state.extra.window.updateView({
+        phase: state.extra.phase,
+        selection: state.extra.selection,
+        currentIdx: state.extra.currentIndex,
+        taken: state.extra.selection.map(s => s.gridNum),
+        settings: state.extra.settings,
+        themeData: themeData
+    });
+}
+    // ========================================================
+// ★ ULTIMATE EXTRA SCREEN LOGIC (V12 - COMPLETE) ★
+// ========================================================
+
+state.extra = {
+    allData: [],        
+    filteredPool: [],   
+    gridMapping: {},    
+    selection: [],      
+    currentIndex: -1,   
+    phase: 'idle',      
+    settings: {
+        zoom: 6, boxW: 90, boxH: 80, textX: 0, textY: 0,
+        mode: 'tilawa', theme: 'green_1', textColor: '#ffffff'
+    },
+    window: null
+};
+
+// --- 1. SURAH DATA (1-114) ---
+const SURAH_LIST_FULL = [
+    "Al-Fatiha", "Al-Baqarah", "Aali Imran", "An-Nisa", "Al-Ma'idah", "Al-An'am", "Al-A'raf", "Al-Anfal", "At-Tawbah", "Yunus",
+    "Hud", "Yusuf", "Ar-Ra'd", "Ibrahim", "Al-Hijr", "An-Nahl", "Al-Isra", "Al-Kahf", "Maryam", "Ta-Ha",
+    "Al-Anbiya", "Al-Hajj", "Al-Mu'minun", "An-Nur", "Al-Furqan", "Ash-Shu'ara", "An-Naml", "Al-Qasas", "Al-Ankabut", "Ar-Rum",
+    "Luqman", "As-Sajdah", "Al-Ahzab", "Saba", "Fatir", "Ya-Sin", "As-Saffat", "Sad", "Az-Zumar", "Ghafir",
+    "Fussilat", "Ash-Shura", "Az-Zukhruf", "Ad-Dukhan", "Al-Jathiyah", "Al-Ahqaf", "Muhammad", "Al-Fath", "Al-Hujurat", "Qaf",
+    "Adh-Dhariyat", "At-Tur", "An-Najm", "Al-Qamar", "Ar-Rahman", "Al-Waqi'ah", "Al-Hadid", "Al-Mujadila", "Al-Hashr", "Al-Mumtahanah",
+    "As-Saff", "Al-Jumu'ah", "Al-Munafiqun", "At-Taghabun", "At-Talaq", "At-Tahrim", "Al-Mulk", "Al-Qalam", "Al-Haqqah", "Al-Ma'arij",
+    "Nuh", "Al-Jinn", "Al-Muzzammil", "Al-Muddaththir", "Al-Qiyamah", "Al-Insan", "Al-Mursalat", "An-Naba", "An-Nazi'at", "Abasa",
+    "At-Takwir", "Al-Infitar", "Al-Mutaffifin", "Al-Inshiqaq", "Al-Buruj", "At-Tariq", "Al-A'la", "Al-Ghashiyah", "Al-Fajr", "Al-Balad",
+    "Ash-Shams", "Al-Layl", "Ad-Duha", "Ash-Sharh", "At-Tin", "Al-Alaq", "Al-Qadr", "Al-Bayyinah", "Az-Zalzalah", "Al-Adiyat",
+    "Al-Qari'ah", "At-Takathur", "Al-Asr", "Al-Humazah", "Al-Fil", "Quraysh", "Al-Ma'un", "Al-Kawthar", "Al-Kafirun", "An-Nasr",
+    "Al-Masad", "Al-Ikhlas", "Al-Falaq", "An-Nas"
+];
+
+// --- 2. DROPDOWN INITIALIZER ---
+function initExtraDropdowns() {
+    // Populate Juz 1-30
+    const startJ = document.getElementById('startJuz');
+    const endJ = document.getElementById('endJuz');
+    startJ.innerHTML = ''; endJ.innerHTML = '';
+    
+    for(let i=1; i<=30; i++) {
+        let opt = new Option(`Juz ${i}`, i);
+        startJ.add(opt);
+        endJ.add(opt.cloneNode(true));
+    }
+    endJ.value = 30; // Default
+
+    // Populate Surah 1-114
+    const startS = document.getElementById('startSurah');
+    const endS = document.getElementById('endSurah');
+    startS.innerHTML = ''; endS.innerHTML = '';
+
+    SURAH_LIST_FULL.forEach((name, idx) => {
+        let val = idx + 1;
+        let txt = `${val}. ${name}`;
+        let opt = new Option(txt, val);
+        startS.add(opt);
+        endS.add(opt.cloneNode(true));
+    });
+    endS.value = 114;
+}
+
+// Call init immediately
+window.addEventListener('DOMContentLoaded', initExtraDropdowns);
+
+// --- 3. THEME ENGINE (50 THEMES) ---
+function getRoyalThemeCSS(themeID) {
+    let css = "";
+    
+    // Base Colors
+    const colors = {
+        green: { bg1: "#002200", bg2: "#000000", border: "#FFD700" },
+        blue: { bg1: "#001a33", bg2: "#000000", border: "#C0C0C0" },
+        red: { bg1: "#330000", bg2: "#1a0000", border: "#FFD700" },
+        black: { bg1: "#111111", bg2: "#000000", border: "#D4AF37" },
+        mix: { bg1: "#1a0033", bg2: "#000000", border: "#FFD700" }
+    };
+
+    const parts = themeID.split('_');
+    const cat = parts[0];
+    const num = parseInt(parts[1]);
+    const c = colors[cat] || colors.green;
+
+    let borderStyle = "double";
+    let borderWidth = "10px";
+    let borderRadius = "20px";
+    let shadow = "0 0 30px rgba(0,0,0,0.8)";
+
+    if (num === 1) { borderStyle = "double"; borderWidth = "15px"; }
+    if (num === 2) { borderStyle = "solid"; borderWidth = "5px"; borderRadius = "30px"; }
+    if (num === 3) { borderStyle = "groove"; borderWidth = "20px"; borderRadius = "0px"; }
+    if (num === 4) { borderStyle = "ridge"; borderWidth = "10px"; borderRadius = "10px"; }
+    if (num === 5) { borderStyle = "solid"; borderWidth = "3px"; shadow = "0 0 20px " + c.border; }
+    if (num === 6) { borderStyle = "inset"; borderWidth = "15px"; borderRadius = "50px"; }
+    if (num === 7) { borderStyle = "outset"; borderWidth = "10px"; }
+    if (num === 8) { borderStyle = "double"; borderWidth = "8px"; borderRadius = "0px"; }
+    if (num === 9) { borderStyle = "solid"; borderWidth = "1px"; shadow = "inset 0 0 50px #000"; }
+    if (num === 10) { borderStyle = "dotted"; borderWidth = "5px"; borderRadius = "15px"; }
+
+    let bg = `radial-gradient(circle, ${c.bg1}, ${c.bg2})`;
+    if(cat === 'mix') {
+        if(num===1) bg = "linear-gradient(135deg, #4a148c, #000)";
+        if(num===2) { bg = "#f5f5f5"; c.border = "#D4AF37"; } 
+        if(num===3) bg = "linear-gradient(#5d4037, #000)"; 
+        if(num===10) bg = "rgba(255,255,255,0.1)"; 
+    }
+
+    css = `background: ${bg}; border: ${borderWidth} ${borderStyle} ${c.border}; border-radius: ${borderRadius}; box-shadow: ${shadow};`;
+    return { box: css };
+}
+
+// --- 4. CSV LOADER ---
+function loadExtraCSV(input) {
+    const file = input.files[0];
+    if(!file) return;
+    const r = new FileReader();
+    r.onload = e => {
+        const rows = e.target.result.split('\n');
+        state.extra.allData = [];
+        
+        for(let i=1; i<rows.length; i++) {
+            let row = rows[i].trim();
+            if(!row) continue;
+            const cols = row.match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g);
+            if(cols && cols.length >= 7) {
+                const clean = cols.map(c => c.replace(/^"|"$/g, '').trim());
+                
+                // Map Surah Name to ID
+                let sId = 0;
+                let sName = clean[3];
+                let foundIdx = SURAH_LIST_FULL.findIndex(s => s.toLowerCase() === sName.toLowerCase());
+                if(foundIdx > -1) sId = foundIdx + 1;
+                else sId = parseInt(sName) || 0;
+
+                state.extra.allData.push({
+                    id: parseInt(clean[0]),
+                    juz: parseInt(clean[1]),
+                    page: clean[2],
+                    surah: sName,
+                    surahId: sId,
+                    start: clean[4],
+                    end: clean[5],
+                    text: clean[6]
+                });
+            }
+        }
+        document.getElementById('extraStatus').innerText = `✅ Loaded ${state.extra.allData.length} Qs.`;
+        // Refresh dropdowns just in case
+        initExtraDropdowns();
+    };
+    r.readAsText(file);
+}
+
+// --- 5. UI TOGGLE ---
+function toggleFilterUI() {
+    const type = document.getElementById('filterType').value;
+    document.getElementById('divJuzSelect').style.display = (type === 'juz') ? 'grid' : 'none';
+    document.getElementById('divSurahSelect').style.display = (type === 'surah') ? 'grid' : 'none';
+}
+
+// --- 6. RESET & FILTER ---
+function resetExtraSession() {
+    if(state.extra.allData.length === 0) { alert("Please load CSV first!"); return; }
+    
+    const type = document.getElementById('filterType').value;
+    
+    if(type === 'juz') {
+        const s = parseInt(document.getElementById('startJuz').value);
+        const e = parseInt(document.getElementById('endJuz').value);
+        state.extra.filteredPool = state.extra.allData.filter(q => q.juz >= s && q.juz <= e);
+    } else {
+        const s = parseInt(document.getElementById('startSurah').value);
+        const e = parseInt(document.getElementById('endSurah').value);
+        state.extra.filteredPool = state.extra.allData.filter(q => q.surahId >= s && q.surahId <= e);
+    }
+
+    if(state.extra.filteredPool.length === 0) { 
+        document.getElementById('exMonitor').innerText = "⚠️ No Questions in Range!"; 
+        return; 
+    }
+
+    // Generate 20 Grid Boxes
+    state.extra.gridMapping = {};
+    let temp = [...state.extra.filteredPool];
+    for(let i=1; i<=20; i++) {
+        if(temp.length > 0) {
+            const r = Math.floor(Math.random() * temp.length);
+            state.extra.gridMapping[i] = temp[r];
+            temp.splice(r, 1);
+        } else {
+            const r = Math.floor(Math.random() * state.extra.filteredPool.length);
+            state.extra.gridMapping[i] = state.extra.filteredPool[r];
+        }
+    }
+
+    state.extra.selection = [];
+    state.extra.currentIndex = -1;
+    state.extra.phase = 'grid';
+    state.extra.settings.mode = document.getElementById('exMode').value;
+    
+    document.getElementById('exMonitor').innerText = `Grid Ready (${state.extra.filteredPool.length} Qs)`;
+    syncExtraScreen();
+}
+
+// --- 7. OPEN SCREEN (FULLSCREEN CLICK & THIN BORDER) ---
+function openExtraScreen() {
+    if(state.extra.window) state.extra.window.close();
+    
+    const fontCSS = `
+        @import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cinzel:wght@700&display=swap');
+        @font-face { font-family: 'Faruuma'; src: local('Faruuma'), url('https://fonts.googleapis.com/earlyaccess/notosansthaana.css'); } 
+    `;
+    
+    const html = `
+    <!DOCTYPE html>
+    <html lang="dv" dir="rtl">
+    <head>
+        <title>Student Screen</title>
+        <style>
+            ${fontCSS}
+            body { 
+                margin: 0; overflow: hidden; background: #000;
+                font-family: 'Amiri', serif;
+                display: flex; height: 100vh; width: 100vw;
+                cursor: pointer;
+            }
+
+            /* --- OUTER BORDER (THIN GOLD) --- */
+            #royalWrapper {
+                width: 100vw; height: 100vh;
+                background: #002200; /* Dark Green Base */
+                border: 3px solid #FFD700; /* THIN GOLD BORDER */
+                box-sizing: border-box;
+                display: flex; align-items: center; justify-content: center;
+                position: relative;
+            }
+            
+            #innerLine {
+                position: absolute; top: 10px; left: 10px; right: 10px; bottom: 10px;
+                border: 1px solid rgba(255,255,255,0.5); pointer-events: none; z-index: 0;
+            }
+
+            #gridContainer {
+                width: 90%; height: 80%; display: grid; grid-template-columns: repeat(5, 1fr); gap: 20px; 
+                z-index: 2; align-content: center;
+            }
+            .grid-box {
+                background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(0,0,0,0.5));
+                border: 2px solid #FFD700; border-radius: 10px;
+                display: flex; justify-content: center; align-items: center;
+                font-size: 5vw; color: #FFD700; cursor: pointer;
+                font-family: 'Cinzel', serif; font-weight: bold;
+                transition: 0.3s;
+            }
+            .grid-box:hover { transform: scale(1.1); background: #FFD700; color: #000; }
+            .grid-box.taken { opacity: 0; transform: scale(0); pointer-events: none; }
+
+            #readContainer { width: 100%; height: 100%; display: none; flex-direction: row; z-index: 2; }
+            
+            #sideBar {
+                width: 25%; height: 100%; background: rgba(0,0,0,0.8); 
+                border-left: 2px solid #FFD700; padding: 20px; display: flex; flex-direction: column; gap: 15px;
+            }
+            #sbHeader { color: #FFD700; font-family: 'Faruuma', sans-serif; font-size: 1.5vw; text-align: center; border-bottom: 1px dashed #aaa; padding-bottom: 10px; }
+            .q-card { border: 1px solid #555; padding: 15px; border-radius: 5px; background: rgba(0,0,0,0.5); color: #ccc; }
+            .q-card.active { border-color: #FFD700; background: rgba(255,215,0,0.1); color: #fff; }
+
+            #mainContent { flex: 1; display: flex; justify-content: center; align-items: center; position:relative; }
+            
+            /* ROYAL BOX (Uses Theme CSS) */
+            #royalBox {
+                padding: 30px; display: flex; justify-content: center; align-items: center;
+                overflow: hidden; transition: all 0.3s;
+            }
+            
+            #displayText {
+                width: 100%; height: 100%; overflow-y: auto;
+                text-align: center; font-weight: bold;
+                line-height: 2.2; direction: rtl;
+                white-space: pre-wrap; 
+                display: flex; align-items: center; justify-content: center;
+                transition: font-size 0.3s, color 0.3s, transform 0.3s;
+            }
+            #displayText::-webkit-scrollbar { width: 8px; }
+            #displayText::-webkit-scrollbar-thumb { background: #FFD700; border-radius: 4px; }
+            #displayText.scroll-active { display: block; } 
+
+            .hifz-badge { font-family: 'Faruuma', sans-serif; font-size: 4vw; color: #FFD700; text-align:center; margin:auto; }
+
+        </style>
+    </head>
+    <body>
+        <div id="royalWrapper">
+            <div id="innerLine"></div>
+            <div id="gridContainer"></div>
+            <div id="readContainer">
+                <div id="sideBar"><div id="sbHeader"></div><div id="sideList"></div></div>
+                <div id="mainContent"><div id="royalBox"><div id="displayText"></div></div></div>
+            </div>
+        </div>
+        <script>
+            document.addEventListener('click', function() {
+                if (!document.fullscreenElement) document.documentElement.requestFullscreen().catch(e => console.log(e));
+                else if (document.exitFullscreen) document.exitFullscreen();
+            });
+
+            window.opener.initExtra(window);
+
+            function renderGrid(taken) {
+                const gc = document.getElementById('gridContainer'); gc.innerHTML = '';
+                for(let i=1; i<=20; i++) {
+                    let b = document.createElement('div');
+                    b.className = 'grid-box ' + (taken.includes(i) ? 'taken' : '');
+                    b.innerText = i;
+                    b.onclick = () => window.opener.extraGridClick(i);
+                    gc.appendChild(b);
+                }
+            }
+
+            function updateView(d) {
+                const gridDiv = document.getElementById('gridContainer');
+                const readDiv = document.getElementById('readContainer');
+                const box = document.getElementById('royalBox');
+                const txt = document.getElementById('displayText');
+                const sbHeader = document.getElementById('sbHeader');
+                
+                box.style.width = d.settings.boxW + '%';
+                box.style.height = d.settings.boxH + '%';
+                
+                txt.style.color = d.settings.textColor;
+                txt.style.fontSize = d.settings.zoom + 'vw';
+                txt.style.transform = \`translate(\${d.settings.textX}px, \${d.settings.textY}px)\`;
+
+                sbHeader.innerText = (d.settings.mode === 'hifz') ? 
+                    "ނުބަލައި ކިޔެވުމަށް އިޚްތިޔާރުކުރި ސުވާލުތައް" : 
+                    "ބަލައިގެން ކިޔެވުމަށް އިޚްތިޔާރުކުރި ސުވާލުތައް";
+
+                if (d.phase === 'grid') {
+                    gridDiv.style.display = 'grid'; readDiv.style.display = 'none';
+                    renderGrid(d.taken);
+                } else {
+                    gridDiv.style.display = 'none'; readDiv.style.display = 'flex';
+                    
+                    const sl = document.getElementById('sideList'); sl.innerHTML = '';
+                    d.selection.forEach((q, i) => {
+                        let div = document.createElement('div');
+                        div.className = 'q-card ' + (i===d.currentIdx ? 'active' : '');
+                        div.innerHTML = \`<div style="font-family:'Cinzel',serif; font-size:12px; color:#FFD700">Question \${i+1}</div>
+                                           <div style="font-size:16px;">\${q.surah}</div>
+                                           <div style="font-size:12px; color:#aaa">Ayah: \${q.start}</div>\`;
+                        sl.appendChild(div);
+                    });
+
+                    // APPLY THEME CSS
+                    if(d.themeData) {
+                        const cw = box.style.width; const ch = box.style.height;
+                        box.style.cssText = d.themeData.box;
+                        box.style.width = cw; box.style.height = ch;
+                    }
+
+                    if(d.phase === 'ready') {
+                        txt.className = 'hifz-badge'; txt.innerText = "ފަނޑިޔާރުން ފަށަންދެން މަޑުކުރައްވާ";
+                        txt.style.transform = 'none'; txt.style.color = '#FFD700';
+                        box.style.border = 'none'; box.style.background = 'transparent'; box.style.boxShadow = 'none';
+                    } else if(d.phase === 'reading') {
+                        const cur = d.selection[d.currentIdx];
+                        if(d.settings.mode === 'hifz') {
+                            txt.className = 'hifz-badge'; 
+                            txt.innerHTML = "ނުބަލައި ކިޔެވުމުގެ ގޮފި<br><span style='font-size:20px;'>(Reciting from Memory)</span>";
+                            txt.style.transform = 'none'; txt.style.color = '#FFD700';
+                        } else {
+                            txt.className = '';
+                            txt.innerText = cur.text;
+                            txt.style.color = d.settings.textColor;
+                            if(txt.scrollHeight > txt.clientHeight) txt.classList.add('scroll-active');
+                            else txt.classList.remove('scroll-active');
+                        }
+                    }
+                }
+            }
+        <\/script>
+    </body>
+    </html>`;
+    state.extra.window = window.open("", "Extra", "width=1280,height=720");
+    state.extra.window.document.write(html);
+    state.extra.window.document.close();
+    setTimeout(syncExtraScreen, 500);
+}
+
+// --- 8. CONTROLS (NAVIGATION) ---
+window.initExtra = function(w) { 
+    initExtraDropdowns(); // Ensure dropdowns populated on init
+    syncExtraScreen(); 
+}
+
+window.extraGridClick = function(num) {
+    if(state.extra.phase !== 'grid') return;
+    if(state.extra.selection.some(s => s.gridNum === num)) return;
+    
+    const limit = parseInt(document.getElementById('exPickCount').value) || 3;
+    const qData = state.extra.gridMapping[num];
+    if(qData) state.extra.selection.push({ ...qData, gridNum: num });
+
+    if(state.extra.selection.length >= limit) {
+        state.extra.phase = 'ready';
+        document.getElementById('exMonitor').innerText = "READY TO START";
+    }
+    syncExtraScreen();
+}
+
+// NEXT BUTTON
+window.extraNextQ = function() {
+    if(state.extra.phase === 'ready') { state.extra.phase = 'reading'; state.extra.currentIndex = 0; }
+    else if(state.extra.phase === 'reading') {
+        if(state.extra.currentIndex < state.extra.selection.length - 1) state.extra.currentIndex++;
+        else { alert("Finished!"); return; }
+    }
+    updateMonitor(); syncExtraScreen();
+}
+
+// PREV BUTTON
+window.extraPrevQ = function() {
+    if(state.extra.phase === 'reading') {
+        if(state.extra.currentIndex > 0) {
+            state.extra.currentIndex--;
+        } else {
+            // Go back to ready
+            state.extra.phase = 'ready';
+            state.extra.currentIndex = -1;
+        }
+    }
+    updateMonitor(); syncExtraScreen();
+}
+
+function updateMonitor() {
+    if(state.extra.currentIndex > -1) {
+        const q = state.extra.selection[state.extra.currentIndex];
+        document.getElementById('exMonitor').innerText = `Active: Q${state.extra.currentIndex + 1} - ${q.surah}`;
+    }
+}
+
+window.updateExtraScreen = function(key, val) { 
+    state.extra.settings[key] = val; 
+    syncExtraScreen(); 
+}
+
+function syncExtraScreen() {
+    if(!state.extra.window || state.extra.window.closed) return;
+    const themeData = getRoyalThemeCSS(state.extra.settings.theme);
     state.extra.window.updateView({
         phase: state.extra.phase,
         selection: state.extra.selection,
