@@ -6340,6 +6340,218 @@ alert("✅ ULTIMATE UPDATE APPLIED:\n- Text Mode with Grid\n- Font Size, Gap & A
         updateGridPreview(); 
         syncWindows();
     }
+    <script>
+/**
+ * SYSTEM FIX PACK - RASFAHI V26
+ * Fixes: Grid Click Not Working, Empty Grid Issue
+ */
+
+// 1. GRID CLICK LOGIC (MAIN WINDOW SIDE)
+window.handleGridClick = function(boxID) {
+    // A. Check Limit
+    const limit = parseInt(document.getElementById('qLimit').value) || 3;
+    if(state.session.selectionIDs.length >= limit) {
+        // Optional: Alert remove kurey beynun nuhiyya
+        console.log("Limit reached"); 
+        return;
+    }
+
+    // B. Check if Data Exists
+    if(!state.grid.map || !state.grid.map[boxID]) {
+        // Try to reshuffle automatically if data exists but grid is empty
+        if(state.filteredPool.length > 0 || state.qPool.length > 0) {
+            reshuffleGrid();
+            // Retry the click immediately after shuffle
+            if(state.grid.map[boxID]) {
+                window.handleGridClick(boxID); 
+            }
+            return;
+        }
+        alert("⚠️ ސަމާލުކަމަށް: ސުވާލު ޑޭޓާ ލޯޑުވެފައެއް ނެތެވެ. (Please Load CSV First)");
+        return;
+    }
+
+    // C. Check if already taken
+    if(state.grid.taken.includes(boxID)) return;
+
+    // D. Process Selection
+    const qID = state.grid.map[boxID];
+    state.grid.taken.push(boxID);
+    state.session.selectionIDs.push(qID);
+
+    // Remove from pools
+    const idx = state.qPool.indexOf(qID);
+    if(idx > -1) state.qPool.splice(idx, 1);
+    
+    const fIdx = state.filteredPool.indexOf(qID);
+    if(fIdx > -1) state.filteredPool.splice(fIdx, 1);
+
+    state.qUsed.push(qID);
+
+    // Update UI
+    updateSelectionUI(); // Small text in control panel
+    renderSlots();       // Update Main Slots
+    syncWindows();       // Update Student Screen
+    updateGridPreview(); // Update Admin Monitor
+
+    // E. Check Phase Change (Ready?)
+    if(state.session.selectionIDs.length === limit) {
+        state.grid.visible = false;
+        state.session.phase = 'ready';
+        prepareSlotsFromSelection();
+        document.getElementById('btnStartReading').classList.remove('hidden');
+        syncWindows(); // Force close grid on student screen
+    }
+};
+
+// 2. STUDENT SCREEN GENERATOR (FIXED CLICK BUTTONS)
+window.getTemplate = function(isCeremony = false, titleOverride = "") {
+    const fontFace = state.fontData ? `@font-face { font-family: 'AppFont'; src: url('${state.fontData}'); }` : '';
+    let qFontFace = state.ceremony.fonts.quran ? `@font-face { font-family: 'QFont'; src: url('${state.ceremony.fonts.quran}'); }` : '';
+
+    const th = state.theme || {bg1:'#001a33', bg2:'#000', accent:'#D4AF37', borderType:'double', text:'#fff'}; 
+    const bStyle = document.getElementById('borderStyle').value;
+    let borderCSS = `border: 1.5vmin ${th.borderType} ${th.accent}; box-shadow: 0 0 5vmin ${th.accent}80;`;
+    if(bStyle === 'custom' && state.borderData) borderCSS = `border: 4vmin solid transparent; border-image: url('${state.borderData}') 30 stretch;`;
+    if(bStyle === 'none') borderCSS = "border:none;";
+
+    return `
+    <!DOCTYPE html>
+    <html lang="dv" dir="rtl">
+    <head>
+        <meta charset="UTF-8">
+        <style>
+            ${fontFace} ${qFontFace}
+            @import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&display=swap');
+            @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Thaana:wght@400;700&display=swap');
+
+            :root { --bg-1: ${th.bg1}; --bg-2: ${th.bg2}; --accent: ${th.accent}; --txt-col: ${th.text}; }
+            body { margin:0; width: 100vw; height: 100vh; overflow:hidden; color:var(--txt-col); display:flex; background: #000; font-family: 'AppFont', 'Noto Sans Thaana', sans-serif; }
+            
+            #idleScreen, #gridScreen, #readScreen, #waitScreen { display:none; width:100%; height:100%; }
+            
+            #idleScreen { display:flex; align-items:center; justify-content:center; background: radial-gradient(circle, var(--bg-1), var(--bg-2)); }
+            
+            /* GRID STYLES */
+            #gridScreen { display:none; align-items:center; justify-content:center; flex-direction:column; background: radial-gradient(circle, var(--bg-1), #000); }
+            #gridContainer { display:grid; grid-template-columns: repeat(5, 1fr); gap: 1.5vmin; width: 85vw; height: 75vh; }
+            .grid-btn { 
+                background: linear-gradient(135deg, var(--accent), var(--bg-1)); 
+                border: 0.3vmin solid #fff; color: #fff; 
+                font-size: 5vmin; font-weight: bold; 
+                display:flex; justify-content:center; align-items:center; cursor:pointer; 
+                box-shadow: 0 1vmin 2vmin rgba(0,0,0,0.5);
+                transition: transform 0.1s;
+            }
+            .grid-btn:active { transform: scale(0.95); }
+            .grid-btn.taken { opacity: 0.2; pointer-events: none; filter: grayscale(1); }
+
+            /* READ SCREEN */
+            #readScreen { flex-direction:column; background: radial-gradient(circle, var(--bg-1), var(--bg-2)); }
+            #topBar { height: 10vh; width: 100%; background: linear-gradient(to bottom, var(--bg-1), #000); border-bottom: 0.5vmin solid var(--accent); display: flex; align-items: center; justify-content: center; }
+            #topStatusText { color: var(--accent); font-size: 3vmin; font-weight: bold; }
+            #mainArea { flex: 1; display: flex; justify-content: center; align-items: center; width: 100%; padding: 2vmin; box-sizing: border-box; }
+            
+            .royal-card { width: 90%; height: 85vh; background: #fff; ${borderCSS} border-radius: 1vmin; display: flex; justify-content: center; align-items: center; overflow: hidden; position: relative; }
+            .royal-card img { width: 100%; height: auto; display: block; }
+            
+            #qTextDisplay { display: none; width: 100%; height: 100%; overflow-y: auto; font-family: 'QFont', 'Amiri', serif !important; color: #000; box-sizing: border-box; flex-direction: column; justify-content: center; text-align: center; padding: 20px; }
+            
+            /* Wait Screen */
+            #waitScreen { display:flex; flex-direction:column; align-items:center; justify-content:center; background: #000; }
+        </style>
+    </head>
+    <body>
+        <div id="idleScreen"><h1 style="font-size:8vw; color:var(--accent);">RASFAHI JUDGE</h1></div>
+        
+        <div id="gridScreen">
+            <h1 style="color:var(--accent); font-size: 5vh; margin-bottom: 2vh;">ސުވާލު ނަންބަރު ނަގާ</h1>
+            <div id="gridContainer"></div>
+        </div>
+
+        <div id="waitScreen">
+            <h1 style="color:var(--accent); font-size: 6vh;">SELECTION COMPLETE</h1>
+            <h2 style="color:#fff; font-size: 4vh;">Waiting for Judge...</h2>
+        </div>
+
+        <div id="readScreen">
+            <div id="topBar"><div id="topStatusText"></div></div>
+            <div id="mainArea">
+                <div class="royal-card">
+                    <img id="qImg" src="">
+                    <div id="qTextDisplay"></div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            // HELPER: Process Text
+            function processText(raw, start, end) {
+                if(!raw) return "";
+                const lines = raw.split(/\\r?\\n/);
+                const s = Math.max(0, start - 1);
+                const e = Math.min(lines.length, end);
+                if(s >= lines.length) return "";
+                return lines.slice(s, e).join('<br>');
+            }
+
+            // UPDATE STATE FUNCTION
+            window.updateState = function(d) {
+                ['idleScreen','gridScreen','readScreen','waitScreen'].forEach(id=>document.getElementById(id).style.display='none');
+
+                if(d.grid.visible) {
+                    document.getElementById('gridScreen').style.display = 'flex';
+                    const gc = document.getElementById('gridContainer');
+                    gc.innerHTML = '';
+                    for(let i=1; i<=20; i++) {
+                        let b = document.createElement('div');
+                        b.className = 'grid-btn ' + (d.grid.taken.includes(i) ? 'taken' : '');
+                        b.innerText = i;
+                        // ★ FIXED: Direct Call to Opener ★
+                        b.setAttribute('onclick', 'if(window.opener) window.opener.handleGridClick(' + i + ')');
+                        gc.appendChild(b);
+                    }
+                } 
+                else if (d.phase === 'ready') {
+                    document.getElementById('waitScreen').style.display = 'flex';
+                }
+                else if(d.phase === 'active') {
+                    document.getElementById('readScreen').style.display = 'flex';
+                    const q = d.slots[d.activeIndex];
+                    
+                    if(q) {
+                        const img = document.getElementById('qImg');
+                        const txt = document.getElementById('qTextDisplay');
+                        const status = document.getElementById('topStatusText');
+                        
+                        status.innerText = "Reading Question " + (d.activeIndex + 1);
+
+                        // TEXT MODE LOGIC
+                        if(d.useTextMode) {
+                            img.style.display = 'none';
+                            txt.style.display = 'flex';
+                            const s = d.textSettings || {fontSize:6, lineHeight:2, align:'center', padding:5};
+                            txt.style.fontSize = s.fontSize + 'vmin';
+                            txt.style.lineHeight = s.lineHeight;
+                            txt.style.textAlign = s.align;
+                            txt.style.padding = s.padding + 'vmin';
+                            txt.innerHTML = processText(q.textData, s.lineStart, s.lineEnd);
+                        } else {
+                            txt.style.display = 'none';
+                            img.style.display = 'block';
+                            img.src = q.src;
+                        }
+                    }
+                } else {
+                    document.getElementById('idleScreen').style.display = 'flex';
+                }
+            }
+        <\/script>
+    </body>
+    </html>`;
+};
+
+alert("✅ SYSTEM REPAIRED: Grid Clicks & Student Screen Logic Updated!");
 </script>
 </body>
 </html>
