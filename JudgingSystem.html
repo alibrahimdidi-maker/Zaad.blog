@@ -1051,57 +1051,55 @@
                 <button class="btn-gold" style="margin-top:5px;" onclick="ceremonySetPhase('cover')">Show Cover / Hide</button>
 
             </div>
-<div class="panel" style="border: 1px solid #ff9800; box-shadow: inset 0 0 10px rgba(255, 152, 0, 0.1);">
-    <h2 style="color: #ff9800;">★ އިތުރު ސްކްރީން (Extra Screen)</h2>
+<div class="panel" style="border: 1px solid #FFD700; background: linear-gradient(180deg, #001a00, #000);">
+    <h2 style="color: #FFD700; font-family:'Cinzel', serif;">★ ޝާހީ ސްކްރީން (Royal Screen)</h2>
 
-    <label>1. ސުވާލު ސެޓް (CSV) ލޯޑުކުރައްވާ:</label>
-    <div style="display:flex; gap:5px;">
+    <label style="color:#00e676;">1. ސުވާލު ޑޭޓާ (CSV) ލޯޑުކުރައްވާ:</label>
+    <div style="background:#111; padding:5px; border:1px dashed #555; margin-bottom:5px;">
         <input type="file" id="extraCSV" accept=".csv" onchange="loadExtraCSV(this)">
+        <small style="color:#aaa; display:block; margin-top:2px;">Format: ID, QuranText, Surah, Ayah, Juz</small>
     </div>
     <div id="extraStatus" style="font-size:10px; color:#aaa; margin-top:2px;">No Data Loaded</div>
 
     <hr style="border-color:#444; margin:10px 0;">
 
-    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:5px;">
-        <div>
-            <label>ސުވާލުގެ ޢަދަދު:</label>
-            <select id="extraQLimit">
-                <option value="1">1</option><option value="2">2</option>
-                <option value="3" selected>3</option><option value="4">4</option>
-                <option value="5">5</option>
-            </select>
-        </div>
-        <div>
-            <label>ލައިން/އާޔަތް ލިމިޓް:</label>
-            <input type="number" id="extraLineLimit" value="0" placeholder="0 = All">
-        </div>
-    </div>
+    <label style="color:#FFD700;">2. ޝާހީ ތީމް (Royal Themes):</label>
+    <select id="extraThemeSelect" onchange="updateExtraScreen('theme', this.value)" style="background:#002200; color:#fff; border:1px solid #FFD700;">
+        <option value="random">🔀 Random Royal Mix</option>
+        <optgroup label="Royal Green Styles">
+            <option value="green_gold_border">Green & Gold Border</option>
+            <option value="green_minimal">Green Minimal</option>
+            <option value="green_ornament">Green Ornamental</option>
+        </optgroup>
+        <optgroup label="Royal Blue Styles">
+            <option value="blue_gold_border">Blue & Gold Border</option>
+            <option value="blue_silver">Blue & Silver</option>
+            <option value="midnight_blue">Midnight Blue</option>
+        </optgroup>
+        <optgroup label="Presidential Styles">
+            <option value="pres_red">Presidential Red</option>
+            <option value="pres_black">Onyx Black & Gold</option>
+            <option value="white_gold">Pearl White & Gold</option>
+        </optgroup>
+    </select>
 
-    <label style="color:#ff9800; margin-top:10px;">2. ޓެކްސްޓް އެޖަސްޓްމަންޓް:</label>
-    
+    <label style="margin-top:10px;">3. ޓެކްސްޓް އެޖަސްޓްމަންޓް:</label>
     <div class="control-row">
         <label style="width:50px;">Size:</label>
-        <input type="range" class="range-slider" min="2" max="15" step="0.5" value="5" oninput="updateExtraScreen('size', this.value)">
+        <input type="range" class="range-slider" min="4" max="25" step="0.5" value="8" oninput="updateExtraScreen('size', this.value)">
     </div>
-    
     <div class="control-row">
-        <label style="width:50px;">Up/Down:</label>
-        <input type="range" class="range-slider" min="-50" max="50" value="0" oninput="updateExtraScreen('posY', this.value)">
+        <label style="width:50px;">Up/Dn:</label>
+        <input type="range" class="range-slider" min="-100" max="100" value="0" oninput="updateExtraScreen('posY', this.value)">
     </div>
 
-    <div class="control-row">
-        <label style="width:50px;">L/R:</label>
-        <input type="range" class="range-slider" min="-50" max="50" value="0" oninput="updateExtraScreen('posX', this.value)">
-    </div>
+    <button class="btn-gold" style="margin-top:5px; font-weight:bold; padding:12px;" onclick="openExtraScreen()">
+        🖥️ ލޯންޗް ސްކްރީން (LAUNCH)
+    </button>
 
-    <div style="display:flex; gap:5px; margin-top:5px;">
-        <input type="color" id="extraColor" value="#ffffff" style="height:35px; width:50px;" oninput="updateExtraScreen('color', this.value)">
-        <button class="btn-blue" onclick="openExtraScreen()">🖥️ ލޯންޗް ސްކްރީން</button>
-    </div>
-
-    <div style="display:flex; gap:5px; margin-top:10px; background:#000; padding:5px; border:1px solid #333;">
-        <button class="btn-gold" style="flex:1;" onclick="extraGridReset()">Grid Reset</button>
-        <button class="btn-green" style="flex:1;" onclick="extraNextQ()">Next Q</button>
+    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:5px; margin-top:10px;">
+        <button class="btn-red" onclick="extraGridReset()">Reset Grid</button>
+        <button class="btn-green" onclick="extraNextQ()">Next Question ⏩</button>
     </div>
 </div>
 
@@ -1118,9 +1116,10 @@
         </select>
 
         <div id="manualEntryContainer"></div> 
+        
         <div style="display:flex; justify-content:space-between; margin-top:10px; border-top:1px solid #555; padding-top:5px;">
             <span style="color:#fff; font-weight:bold;">TOTAL:</span>
-            <span id="manualTotalDisplay" style="color:#00e676; font-weight:bold; font-size:18px;">0.00</span>
+            <span id="manualTotalDisplay" style="color:#00e676; font-weight:bold; font-size:22px;">0.00</span>
         </div>
 
         <button class="btn-purple" style="margin-top:10px;" onclick="saveManualScore()">💾 Save to System</button>
@@ -5973,6 +5972,374 @@ function saveManualScore() {
 // INITIALIZER CALL
 // Call this once to setup the admin panel UI
 renderAdminManualScoring();
+// ========================================================
+// ★ ULTIMATE EXTRA SCREEN & ADMIN LOGIC (V2) ★
+// ========================================================
+
+state.extra = {
+    pool: [],       
+    gridTaken: [], 
+    currentQ: null, 
+    settings: {
+        size: 8, posY: 0, posX: 0, color: '#ffffff', theme: 'green_gold_border'
+    },
+    window: null
+};
+
+// 1. UPDATED CSV LOADER (Handles 5 Columns)
+// CSV Format Expectation: ID, QuranText, SurahName, AyahNumber, JuzName
+function loadExtraCSV(input) {
+    const file = input.files[0];
+    if(!file) return;
+    const r = new FileReader();
+    r.onload = e => {
+        const rows = e.target.result.split('\n');
+        state.extra.pool = [];
+        
+        rows.slice(1).forEach(row => {
+            // Smart split handling commas inside quotes
+            const cols = row.match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g);
+            if(cols && cols.length >= 2) {
+                const clean = cols.map(c => c.replace(/^"|"$/g, '').trim());
+                state.extra.pool.push({
+                    id: clean[0],           // Col 1: Question ID
+                    text: clean[1],         // Col 2: Quran Text (The Verse)
+                    surah: clean[2] || "",  // Col 3: Surah Name
+                    ayah: clean[3] || "",   // Col 4: Ayah Number
+                    juz: clean[4] || ""     // Col 5: Juz/Book Name
+                });
+            }
+        });
+        document.getElementById('extraStatus').innerText = `✅ Loaded ${state.extra.pool.length} Questions.`;
+        extraGridReset();
+    };
+    r.readAsText(file);
+}
+
+// 2. LAUNCH THE ULTIMATE ROYAL SCREEN
+function openExtraScreen() {
+    if(state.extra.window) state.extra.window.close();
+    
+    // Arabic Font (Amiri/Uthman Taha) & English Fonts
+    const fonts = `
+        @import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cinzel:wght@700&display=swap');
+    `;
+    
+    const html = `
+    <!DOCTYPE html>
+    <html lang="dv" dir="rtl">
+    <head>
+        <title>Royal Student Screen</title>
+        <style>
+            ${fonts}
+            body { 
+                margin: 0; overflow: hidden; background: #000;
+                font-family: 'Amiri', serif;
+                display: flex; justify-content: center; align-items: center;
+                height: 100vh; width: 100vw;
+            }
+
+            /* --- 100 ROYAL THEMES ENGINE --- */
+            /* Base Style */
+            #mainContainer {
+                width: 90vw; height: 90vh;
+                position: relative;
+                display: flex; flex-direction: column;
+                justify-content: flex-start; align-items: center;
+                border-radius: 20px;
+                transition: all 0.5s ease;
+                box-shadow: 0 0 50px rgba(0,0,0,0.8);
+            }
+
+            /* --- THEME CLASSES --- */
+            .theme-green_gold_border {
+                background: radial-gradient(circle, #002200, #000);
+                border: 15px double #FFD700;
+                box-shadow: inset 0 0 50px rgba(0,0,0,0.8), 0 0 20px #FFD700;
+            }
+            .theme-blue_gold_border {
+                background: radial-gradient(circle, #001a33, #000);
+                border: 15px double #FFD700;
+                box-shadow: inset 0 0 50px rgba(0,0,0,0.8), 0 0 20px #FFD700;
+            }
+            .theme-pres_red {
+                background: linear-gradient(135deg, #330000, #1a0000);
+                border: 10px solid #800000;
+                outline: 2px solid #FFD700;
+            }
+            .theme-pres_black {
+                background: #0a0a0a;
+                border: 5px solid #FFD700;
+                border-radius: 0 !important;
+            }
+            .theme-white_gold {
+                background: #fdfdfd;
+                color: #000 !important;
+                border: 20px solid #e0e0e0;
+                border-image: linear-gradient(to bottom, #FFD700, #AA8800) 1;
+            }
+            /* Add more dynamic styles via JS if needed */
+
+            /* --- ROYAL BANNER --- */
+            .royal-banner {
+                width: 80%;
+                background: linear-gradient(90deg, rgba(0,0,0,0), rgba(212, 175, 55, 0.2), rgba(0,0,0,0));
+                border-top: 2px solid #FFD700;
+                border-bottom: 2px solid #FFD700;
+                padding: 15px 0;
+                margin-top: 40px;
+                margin-bottom: 30px;
+                display: flex; justify-content: space-around; align-items: center;
+                color: #FFD700;
+                font-family: 'Cinzel', serif; /* English headers */
+                text-shadow: 0 2px 5px #000;
+                direction: ltr; /* Force LTR for layout stability, inner text can be RTL */
+                opacity: 0; transform: translateY(-20px); transition: 0.5s;
+            }
+            .banner-item { font-size: 1.8vw; font-weight: bold; }
+            .banner-label { font-size: 0.8vw; color: #aaa; text-transform: uppercase; display:block; }
+
+            /* --- QURAN TEXT AREA --- */
+            #contentArea {
+                flex: 1; width: 80%;
+                display: flex; justify-content: center; align-items: center;
+                text-align: center;
+                position: relative;
+            }
+            #qText {
+                color: #fff;
+                font-size: 8vmin;
+                line-height: 1.8;
+                font-weight: bold;
+                text-shadow: 0 4px 10px rgba(0,0,0,0.5);
+                direction: rtl;
+                opacity: 0; transition: opacity 0.5s;
+                white-space: pre-wrap; /* Keeps formatting */
+            }
+
+            /* --- GRID SYSTEM --- */
+            #gridWrapper {
+                display: grid; grid-template-columns: repeat(5, 1fr); gap: 15px;
+                width: 80%; height: 70%;
+                position: absolute; top: 15%;
+            }
+            .grid-box {
+                background: rgba(255,255,255,0.05);
+                border: 2px solid #FFD700; border-radius: 10px;
+                display: flex; justify-content: center; align-items: center;
+                font-size: 4vw; color: #FFD700; cursor: pointer;
+                transition: 0.3s; box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+                font-family: 'Cinzel', serif;
+            }
+            .grid-box:hover { background: #FFD700; color: #000; transform: scale(1.05); }
+            .grid-box.taken { opacity: 0; pointer-events: none; transform: scale(0.5); }
+
+        </style>
+    </head>
+    <body>
+        <div id="mainContainer" class="theme-green_gold_border">
+            
+            <div id="topBanner" class="royal-banner">
+                <div class="banner-item"><span class="banner-label">Question No</span><span id="bQNo">-</span></div>
+                <div class="banner-item"><span class="banner-label">Surah</span><span id="bSurah">-</span></div>
+                <div class="banner-item"><span class="banner-label">Juz/Para</span><span id="bJuz">-</span></div>
+                <div class="banner-item"><span class="banner-label">Start Ayah</span><span id="bAyah">-</span></div>
+            </div>
+
+            <div id="contentArea">
+                <div id="qText"></div>
+            </div>
+
+            <div id="gridWrapper"></div>
+        </div>
+
+        <script>
+            window.opener.initExtraScreen(window);
+
+            function updateView(d) {
+                const main = document.getElementById('mainContainer');
+                const grid = document.getElementById('gridWrapper');
+                const qDiv = document.getElementById('qText');
+                const banner = document.getElementById('topBanner');
+
+                // 1. APPLY THEME
+                main.className = 'theme-' + d.settings.theme;
+                if(d.settings.theme === 'white_gold') {
+                    qDiv.style.color = "#000";
+                    qDiv.style.textShadow = "none";
+                } else {
+                    qDiv.style.color = "#fff";
+                    qDiv.style.textShadow = "0 4px 10px rgba(0,0,0,0.5)";
+                }
+
+                // 2. MODE SWITCH (GRID vs CONTENT)
+                if(d.mode === 'grid') {
+                    grid.style.display = 'grid';
+                    qDiv.style.opacity = '0';
+                    banner.style.opacity = '0';
+                    banner.style.transform = 'translateY(-20px)';
+                    
+                    grid.innerHTML = '';
+                    for(let i=1; i<=20; i++) {
+                        let b = document.createElement('div');
+                        b.className = 'grid-box ' + (d.taken.includes(i) ? 'taken' : '');
+                        b.innerText = i;
+                        b.onclick = () => window.opener.extraGridClick(i);
+                        grid.appendChild(b);
+                    }
+                } else {
+                    // SHOW CONTENT
+                    grid.style.display = 'none';
+                    qDiv.style.opacity = '1';
+                    banner.style.opacity = '1';
+                    banner.style.transform = 'translateY(0)';
+
+                    // Fill Data
+                    const data = d.currentQ || {};
+                    qDiv.innerText = data.text || "No Text Available";
+                    document.getElementById('bQNo').innerText = data.id || "-";
+                    document.getElementById('bSurah').innerText = data.surah || "-";
+                    document.getElementById('bJuz').innerText = data.juz || "-";
+                    document.getElementById('bAyah').innerText = data.ayah || "-";
+
+                    // Apply Adjustments
+                    qDiv.style.fontSize = d.settings.size + 'vmin';
+                    qDiv.style.transform = \`translate(\${d.settings.posX}px, \${d.settings.posY}px)\`;
+                }
+            }
+        <\/script>
+    </body>
+    </html>`;
+
+    state.extra.window = window.open("", "ExtraScreen", "width=1280,height=720");
+    state.extra.window.document.write(html);
+    state.extra.window.document.close();
+}
+
+// 3. LOGIC CONNECTORS
+window.initExtraScreen = function(win) { syncExtraScreen(); };
+
+function extraGridReset() {
+    state.extra.gridTaken = [];
+    state.extra.currentQ = null;
+    syncExtraScreen('grid');
+}
+
+window.extraGridClick = function(num) {
+    if(state.extra.gridTaken.includes(num)) return;
+    state.extra.gridTaken.push(num);
+    
+    // Logic: Pick corresponding ID from pool or Random if pool is smaller
+    // Trying to match Grid Num 1 to Question 1 if possible
+    let selectedQ = null;
+    
+    // Ensure we have data
+    if(state.extra.pool.length > 0) {
+        // Try to find Question with ID == num
+        selectedQ = state.extra.pool.find(q => parseInt(q.id) === num);
+        
+        // If not found (or IDs are weird), pick by index
+        if(!selectedQ) {
+            if(num <= state.extra.pool.length) selectedQ = state.extra.pool[num-1];
+            else selectedQ = state.extra.pool[Math.floor(Math.random() * state.extra.pool.length)];
+        }
+    } else {
+        selectedQ = { text: "Please Load CSV Data First", id: num };
+    }
+
+    state.extra.currentQ = selectedQ;
+    syncExtraScreen('content');
+};
+
+function updateExtraScreen(key, val) {
+    state.extra.settings[key] = val;
+    syncExtraScreen('content');
+}
+
+function extraNextQ() {
+    // Return to grid for next pick
+    syncExtraScreen('grid');
+}
+
+function syncExtraScreen(forceMode) {
+    if(!state.extra.window || state.extra.window.closed) return;
+    
+    const packet = {
+        mode: forceMode || (state.extra.currentQ ? 'content' : 'grid'),
+        taken: state.extra.gridTaken,
+        currentQ: state.extra.currentQ,
+        settings: state.extra.settings
+    };
+    state.extra.window.updateView(packet);
+}
+
+
+// --- B. ADMIN MANUAL SCORING LOGIC (DECIMAL FIX) ---
+
+function renderAdminManualScoring() {
+    const container = document.getElementById('manualEntryContainer');
+    container.innerHTML = '';
+    
+    if(!state.judging.rubric || state.judging.rubric.length === 0) {
+        container.innerHTML = '<p style="color:#aaa;">No Rubric defined.</p>';
+        return;
+    }
+
+    state.judging.rubric.forEach((r, idx) => {
+        const div = document.createElement('div');
+        div.style.cssText = "display:flex; justify-content:space-between; margin-bottom:5px; align-items:center;";
+        
+        // ADDED step="0.01" for decimal input support
+        div.innerHTML = `
+            <span style="color:#ccc; font-size:14px;">${r.name} (${r.max}):</span>
+            <input type="number" class="manual-score-input" 
+                   data-max="${r.max}" step="0.01"
+                   style="width:70px; padding:5px; text-align:center; font-weight:bold;" 
+                   placeholder="0" oninput="calcManualTotal()">
+        `;
+        container.appendChild(div);
+    });
+}
+
+function calcManualTotal() {
+    const inputs = document.querySelectorAll('.manual-score-input');
+    let total = 0;
+    inputs.forEach(inp => {
+        let val = parseFloat(inp.value);
+        let max = parseFloat(inp.dataset.max);
+        if(isNaN(val)) val = 0;
+        if(val > max) { 
+            // Optional: Warn user or cap it. Let's cap visual but allow entry
+            inp.style.color = "red";
+        } else {
+            inp.style.color = "black";
+        }
+        total += val;
+    });
+    // Fix decimal places
+    document.getElementById('manualTotalDisplay').innerText = total.toFixed(2);
+    return total;
+}
+
+function saveManualScore() {
+    if(!state.judging.currentStudentObj) {
+        alert("Please register/select a student first!");
+        return;
+    }
+    const judgeID = document.getElementById('manualJudgeSelect').value;
+    const totalScore = calcManualTotal();
+    
+    state.judging.liveScores[judgeID] = parseFloat(totalScore.toFixed(2));
+    updateScoreMonitor();
+    
+    alert(`✅ Score Saved: ${totalScore.toFixed(2)} for ${judgeID}`);
+    // Clear inputs
+    document.querySelectorAll('.manual-score-input').forEach(i => i.value = '');
+    document.getElementById('manualTotalDisplay').innerText = "0.00";
+}
+
+// Init Admin Panel UI
+renderAdminManualScoring();    
 </script>
 </body>
 </html>
