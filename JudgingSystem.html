@@ -1052,18 +1052,17 @@
 
             </div>
 <div class="panel" style="border: 1px solid #FFD700; background: linear-gradient(180deg, #001a00, #000);">
-    <h2 style="color: #FFD700; font-family:'Cinzel', serif;">★ ޝާހީ ސްކްރީން (Master V4)</h2>
+    <h2 style="color: #FFD700; font-family:'Cinzel', serif;">★ ޝާހީ ސްކްރީން (Master V5)</h2>
 
-    <label style="color:#00e676;">1. ޑޭޓާބޭސް (CSV) ލޯޑުކުރައްވާ:</label>
     <div style="background:#111; padding:8px; border:1px dashed #555; margin-bottom:5px;">
+        <label style="color:#00e676; font-size:12px;">1. މާސްޓަރ ޑޭޓާބޭސް (CSV) ލޯޑުކުރައްވާ:</label>
         <input type="file" id="extraCSV" accept=".csv" onchange="loadExtraCSV(this)" style="width:100%;">
-        <div id="extraStatus" style="font-size:11px; color:#FFD700; margin-top:4px; font-weight:bold;">Waiting for file...</div>
-        <small style="color:#666;">Compatible with: Rasfahi_Quran_Master_3000</small>
+        <div id="extraStatus" style="font-size:11px; color:#FFD700; margin-top:4px;">Waiting for CSV...</div>
     </div>
 
     <hr style="border-color:#444; margin:8px 0;">
 
-    <label style="color:#FFD700;">2. ސިލަބަސް & ގްރިޑް ސެޓިންގ:</label>
+    <label style="color:#FFD700;">2. ސެޓިންގސް (Settings):</label>
     
     <div style="display:grid; grid-template-columns: 1fr 1fr; gap:5px; margin-bottom:5px;">
         <div>
@@ -1089,43 +1088,15 @@
         </div>
         <div>
             <label>Mode (ވައްތަރު):</label>
-            <select id="exMode" onchange="updateExtraScreen('mode', this.value)">
+            <select id="exMode" onchange="updateExtraScreen('mode', this.value)" style="background:#330000; color:#fff; border:1px solid #ff5252;">
                 <option value="tilawa">ތިލާވަތު (Text)</option>
                 <option value="hifz">ޙިފްޡު (Hidden)</option>
             </select>
         </div>
     </div>
 
-    <label style="margin-top:10px;">3. ސްކްރީން އެޖަސްޓްމަންޓް:</label>
-    <div style="display:flex; gap:5px;">
-        <div style="flex:1;">
-            <label>Theme:</label>
-            <select id="exTheme" onchange="updateExtraScreen('theme', this.value)">
-                <option value="green">Royal Green</option>
-                <option value="blue">Royal Blue</option>
-                <option value="red">Presidential Red</option>
-                <option value="black">Onyx Black</option>
-            </select>
-        </div>
-        <div style="flex:1;">
-            <label>Lines:</label>
-            <select id="exLines" onchange="updateExtraScreen('lines', this.value)">
-                <option value="0">All Lines</option>
-                <option value="3">3 Lines</option>
-                <option value="5">5 Lines</option>
-                <option value="7">7 Lines</option>
-                <option value="10">10 Lines</option>
-            </select>
-        </div>
-    </div>
-
-    <div class="control-row">
-        <label style="width:40px;">Size:</label>
-        <input type="range" class="range-slider" min="3" max="20" step="0.5" value="8" oninput="updateExtraScreen('size', this.value)">
-    </div>
-
     <div style="display:flex; gap:5px; margin-top:10px;">
-        <button class="btn-gold" style="flex:2; padding:10px;" onclick="openExtraScreen()">
+        <button class="btn-gold" style="flex:2; padding:10px; font-weight:bold;" onclick="openExtraScreen()">
             🖥️ LAUNCH SCREEN
         </button>
         <button class="btn-red" style="flex:1;" onclick="resetExtraSession()">
@@ -1133,13 +1104,17 @@
         </button>
     </div>
 
-    <div id="exMonitor" style="background:#000; color:#00e676; padding:5px; text-align:center; font-size:12px; margin-top:5px; border:1px solid #333;">
-        [IDLE]
+    <div style="margin-top:10px; border-top:1px dashed #555; padding-top:10px;">
+        <label style="color:#00e676;">3. ޖަޖުންގެ ކޮންޓްރޯލް:</label>
+        
+        <div id="exMonitor" style="background:#000; color:#FFD700; padding:8px; text-align:center; font-size:13px; border:1px solid #333; margin-bottom:5px;">
+            [STATUS: IDLE]
+        </div>
+
+        <button id="btnNextQ" class="btn-green" style="width:100%; padding:10px; font-size:14px;" onclick="extraNextQ()">
+            ▶ START / NEXT QUESTION
+        </button>
     </div>
-    
-    <button class="btn-blue" style="margin-top:5px;" onclick="extraNextQ()">
-        Show Next Selected Q ⏩
-    </button>
 </div>
 
 <div class="panel" style="border: 1px solid #e91e63;">
@@ -7103,6 +7078,384 @@ function syncExtraScreen() {
         settings: state.extra.settings
     };
     state.extra.window.updateView(packet);
+}
+    // ========================================================
+// ★ MASTER EXTRA SCREEN LOGIC (V5 - HIFZ & GRID FIXED) ★
+// ========================================================
+
+state.extra = {
+    allData: [],        // Full CSV Data
+    filteredPool: [],   // Data filtered by Syllabus
+    gridMapping: {},    // Grid Box 1-20 -> Question Data
+    selection: [],      // Selected Questions
+    currentIndex: -1,   // Active Question Index (-1 = Not started)
+    phase: 'idle',      // phases: 'grid', 'ready', 'active', 'finished'
+    settings: {
+        size: 8, theme: 'green', mode: 'tilawa' // 'tilawa' or 'hifz'
+    },
+    window: null
+};
+
+// --- 1. CSV LOADER (RASFAHI MASTER FORMAT) ---
+function loadExtraCSV(input) {
+    const file = input.files[0];
+    if(!file) return;
+    const r = new FileReader();
+    r.onload = e => {
+        const rows = e.target.result.split('\n');
+        state.extra.allData = [];
+        
+        // Skip Header
+        for(let i=1; i<rows.length; i++) {
+            let row = rows[i].trim();
+            if(!row) continue;
+            // Handle quotes in CSV
+            const cols = row.match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g);
+            if(cols && cols.length >= 7) {
+                const clean = cols.map(c => c.replace(/^"|"$/g, '').trim());
+                state.extra.allData.push({
+                    id: parseInt(clean[0]),
+                    juz: clean[1],
+                    page: clean[2],
+                    surah: clean[3],
+                    start: clean[4],
+                    end: clean[5],
+                    text: clean[6] // Arabic Text
+                });
+            }
+        }
+        document.getElementById('extraStatus').innerText = `✅ Loaded ${state.extra.allData.length} Qs`;
+        resetExtraSession();
+    };
+    r.readAsText(file);
+}
+
+// --- 2. RESET & GRID SETUP ---
+function resetExtraSession() {
+    // Filter by Scope
+    const startID = parseInt(document.getElementById('exStart').value) || 1;
+    const endID = parseInt(document.getElementById('exEnd').value) || 9999;
+    
+    state.extra.filteredPool = state.extra.allData.filter(q => q.id >= startID && q.id <= endID);
+    
+    if(state.extra.filteredPool.length === 0) {
+        document.getElementById('exMonitor').innerText = "⚠️ Scope Empty!";
+        return;
+    }
+
+    // Setup 20 Grid Boxes Randomly
+    state.extra.gridMapping = {};
+    let tempPool = [...state.extra.filteredPool];
+    
+    for(let i=1; i<=20; i++) {
+        if(tempPool.length > 0) {
+            const rIdx = Math.floor(Math.random() * tempPool.length);
+            state.extra.gridMapping[i] = tempPool[rIdx];
+            tempPool.splice(rIdx, 1);
+        } else {
+            // Recycle if pool is small
+            const rIdx = Math.floor(Math.random() * state.extra.filteredPool.length);
+            state.extra.gridMapping[i] = state.extra.filteredPool[rIdx];
+        }
+    }
+
+    // Reset State
+    state.extra.selection = [];
+    state.extra.currentIndex = -1;
+    state.extra.phase = 'grid'; // Start with Grid
+    state.extra.settings.mode = document.getElementById('exMode').value;
+    
+    document.getElementById('exMonitor').innerText = "WAITING FOR SELECTION...";
+    document.getElementById('btnNextQ').innerText = "▶ START / NEXT";
+    document.getElementById('btnNextQ').disabled = true; // Disable until selection done
+
+    syncExtraScreen();
+}
+
+// --- 3. OPEN STUDENT SCREEN ---
+function openExtraScreen() {
+    if(state.extra.window) state.extra.window.close();
+    
+    const fonts = `
+        @import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cinzel:wght@700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Thaana:wght@400;700&display=swap');
+    `;
+    
+    const html = `
+    <!DOCTYPE html>
+    <html lang="dv" dir="rtl">
+    <head>
+        <title>Student Screen</title>
+        <style>
+            ${fonts}
+            body { 
+                margin: 0; overflow: hidden; background: #000;
+                font-family: 'Amiri', serif;
+                display: flex; height: 100vh; width: 100vw;
+            }
+
+            /* --- 1. GRID SCREEN --- */
+            #gridContainer {
+                width: 100%; height: 100%;
+                display: grid; grid-template-columns: repeat(5, 1fr); gap: 20px; 
+                padding: 50px; box-sizing: border-box;
+                background: radial-gradient(circle, #002200, #000);
+                align-content: center;
+            }
+            .grid-box {
+                background: linear-gradient(135deg, rgba(255,215,0,0.1), rgba(0,0,0,0.8));
+                border: 2px solid #FFD700; border-radius: 15px;
+                display: flex; justify-content: center; align-items: center;
+                font-size: 4vw; color: #FFD700; cursor: pointer;
+                font-family: 'Cinzel', serif; font-weight: bold;
+                box-shadow: 0 0 20px rgba(0,0,0,0.5);
+                transition: all 0.3s;
+            }
+            .grid-box:hover { transform: scale(1.05); background: #FFD700; color: #000; }
+            .grid-box.taken { opacity: 0; pointer-events: none; transform: scale(0); }
+
+            /* --- 2. READING SCREEN --- */
+            #readContainer {
+                width: 100%; height: 100%; display: none; 
+                flex-direction: row; /* Sidebar Left (RTL) */
+                background: #000;
+            }
+
+            /* Sidebar (Questions List) */
+            #sideBar {
+                width: 25%; height: 100%;
+                background: #0a0a0a; border-left: 3px solid #FFD700;
+                padding: 20px; box-sizing: border-box;
+                display: flex; flex-direction: column; gap: 15px;
+            }
+            .q-card {
+                border: 1px solid #333; padding: 15px; border-radius: 8px;
+                background: #111; color: #777; transition: 0.3s;
+            }
+            .q-card.active {
+                border-color: #FFD700; background: #001a00; color: #fff;
+                box-shadow: 0 0 15px rgba(212,175,55,0.2);
+            }
+            .q-title { font-family: 'Cinzel', serif; font-size: 14px; color: #FFD700; }
+            .q-info { font-size: 18px; font-weight:bold; margin-top:5px; }
+
+            /* Main Content Area */
+            #mainContent {
+                flex: 1; display: flex; flex-direction: column;
+                justify-content: center; align-items: center;
+                position: relative; padding: 40px;
+            }
+
+            /* Royal Banner */
+            #topBanner {
+                position: absolute; top: 0; left: 0; width: 100%;
+                height: 80px; background: linear-gradient(90deg, #000, #1a1a1a, #000);
+                border-bottom: 2px solid #FFD700;
+                display: flex; justify-content: space-around; align-items: center;
+                color: #FFD700; font-family: 'Cinzel', serif;
+                direction: ltr; /* English headers */
+                opacity: 0; transition: 0.5s;
+            }
+            .b-item { text-align: center; }
+            .b-label { font-size: 10px; color: #888; text-transform:uppercase; }
+            .b-val { font-size: 20px; font-weight: bold; }
+
+            /* Quran / Hifz Text */
+            #displayText {
+                font-size: 6vw; line-height: 2.0; color: #fff;
+                text-align: center; font-weight: bold;
+                text-shadow: 0 4px 10px rgba(0,0,0,0.8);
+                opacity: 0; transition: opacity 0.5s;
+                direction: rtl; width: 90%;
+            }
+            
+            /* Hifz Mode Style */
+            .hifz-badge {
+                font-family: 'Noto Sans Thaana', sans-serif;
+                font-size: 5vw; color: #FFD700;
+                border: 4px double #FFD700; padding: 40px;
+                border-radius: 20px; background: rgba(0,0,0,0.5);
+            }
+
+        </style>
+    </head>
+    <body>
+        
+        <div id="gridContainer"></div>
+
+        <div id="readContainer">
+            <div id="sideBar"></div>
+
+            <div id="mainContent">
+                <div id="topBanner">
+                    <div class="b-item"><div class="b-label">Surah</div><div class="b-val" id="dSurah">-</div></div>
+                    <div class="b-item"><div class="b-label">Ayah</div><div class="b-val" id="dAyah">-</div></div>
+                    <div class="b-item"><div class="b-label">Juz</div><div class="b-val" id="dJuz">-</div></div>
+                </div>
+                <div id="displayText"></div>
+            </div>
+        </div>
+
+        <script>
+            function renderGrid(taken) {
+                const gc = document.getElementById('gridContainer');
+                gc.innerHTML = '';
+                for(let i=1; i<=20; i++) {
+                    let b = document.createElement('div');
+                    b.className = 'grid-box ' + (taken.includes(i) ? 'taken' : '');
+                    b.innerText = i;
+                    b.onclick = () => { if(window.opener) window.opener.extraGridClick(i); };
+                    gc.appendChild(b);
+                }
+            }
+
+            function updateView(d) {
+                const gridDiv = document.getElementById('gridContainer');
+                const readDiv = document.getElementById('readContainer');
+                const txt = document.getElementById('displayText');
+                const banner = document.getElementById('topBanner');
+                const sideBar = document.getElementById('sideBar');
+
+                // PHASE LOGIC
+                if (d.phase === 'grid') {
+                    gridDiv.style.display = 'grid';
+                    readDiv.style.display = 'none';
+                    renderGrid(d.taken);
+                } 
+                else {
+                    // READY or READING
+                    gridDiv.style.display = 'none';
+                    readDiv.style.display = 'flex';
+
+                    // Update Sidebar
+                    sideBar.innerHTML = '';
+                    d.selection.forEach((q, idx) => {
+                        let card = document.createElement('div');
+                        let isActive = (d.phase === 'reading' && idx === d.currentIdx);
+                        card.className = 'q-card ' + (isActive ? 'active' : '');
+                        card.innerHTML = \`
+                            <div class="q-title">Question \${idx+1}</div>
+                            <div class="q-info">\${q.surah}</div>
+                            <div style="font-size:12px;">Ayah: \${q.start}</div>
+                        \`;
+                        sideBar.appendChild(card);
+                    });
+
+                    // Update Main Content
+                    if (d.phase === 'ready') {
+                        // Waiting for Judge
+                        txt.style.opacity = '1';
+                        txt.className = 'hifz-badge'; // Reuse style
+                        txt.innerText = "ފަނޑިޔާރުން ފަށަންދެން މަޑުކުރައްވާ";
+                        txt.style.fontSize = "3vw";
+                        banner.style.opacity = '0';
+                    }
+                    else if (d.phase === 'reading') {
+                        const cur = d.selection[d.currentIdx];
+                        if(cur) {
+                            // Update Banner
+                            banner.style.opacity = '1';
+                            document.getElementById('dSurah').innerText = cur.surah;
+                            document.getElementById('dAyah').innerText = cur.start + '-' + cur.end;
+                            document.getElementById('dJuz').innerText = cur.juz;
+
+                            // Update Text (Hifz vs Tilawa)
+                            txt.style.opacity = '1';
+                            if (d.settings.mode === 'hifz') {
+                                txt.className = 'hifz-badge';
+                                txt.innerHTML = "ނުބަލައި ކިޔެވުމުގެ ގޮފި<br><span style='font-size:20px; color:#aaa;'>(Reciting from Memory)</span>";
+                            } else {
+                                txt.className = ''; // Remove badge style
+                                txt.innerText = cur.text;
+                                txt.style.fontSize = d.settings.size + 'vw'; // Dynamic Size
+                            }
+                        }
+                    }
+                }
+            }
+        <\/script>
+    </body>
+    </html>`;
+
+    state.extra.window = window.open("", "ExtraScreen", "width=1280,height=720");
+    state.extra.window.document.write(html);
+    state.extra.window.document.close();
+    
+    // Initial Sync
+    setTimeout(syncExtraScreen, 500);
+}
+
+// --- 4. CONTROLLER LOGIC ---
+window.extraGridClick = function(num) {
+    if(state.extra.phase !== 'grid') return;
+    if(state.extra.selection.some(s => s.gridNum === num)) return; // Prevent double pick
+
+    const limit = parseInt(document.getElementById('exPickCount').value);
+    
+    // Get Question Data
+    const qData = state.extra.gridMapping[num];
+    if(qData) {
+        state.extra.selection.push({ ...qData, gridNum: num });
+    }
+
+    // Check Limit
+    if(state.extra.selection.length >= limit) {
+        state.extra.phase = 'ready'; // Move to Waiting Phase
+        document.getElementById('exMonitor').innerText = "SELECTION COMPLETE. READY TO START.";
+        document.getElementById('btnNextQ').disabled = false; // Enable Judge Control
+    } else {
+        document.getElementById('exMonitor').innerText = `Picked ${state.extra.selection.length} / ${limit}`;
+    }
+
+    syncExtraScreen();
+};
+
+window.extraNextQ = function() {
+    if(state.extra.phase === 'ready') {
+        // Start First Question
+        state.extra.phase = 'reading';
+        state.extra.currentIndex = 0;
+    } 
+    else if(state.extra.phase === 'reading') {
+        // Move Next
+        if(state.extra.currentIndex < state.extra.selection.length - 1) {
+            state.extra.currentIndex++;
+        } else {
+            // Finished
+            alert("All questions finished!");
+            return;
+        }
+    }
+    
+    updateMonitor();
+    syncExtraScreen();
+};
+
+function updateMonitor() {
+    const cur = state.extra.selection[state.extra.currentIndex];
+    const info = cur ? `${cur.surah} (Ayah ${cur.start})` : "";
+    document.getElementById('exMonitor').innerText = `Active: Q${state.extra.currentIndex + 1} - ${info}`;
+}
+
+window.updateExtraScreen = function(key, val) {
+    state.extra.settings[key] = val;
+    syncExtraScreen();
+};
+
+function syncExtraScreen() {
+    if(!state.extra.window || state.extra.window.closed) return;
+    
+    const packet = {
+        phase: state.extra.phase,
+        selection: state.extra.selection, // Send full selection list for sidebar
+        currentIdx: state.extra.currentIndex,
+        taken: state.extra.selection.map(s => s.gridNum), // For grid hiding
+        settings: state.extra.settings
+    };
+    
+    if(state.extra.window.updateView) {
+        state.extra.window.updateView(packet);
+    }
 }
 </script>
 </body>
