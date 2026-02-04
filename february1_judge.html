@@ -7805,6 +7805,452 @@ function getTemplate(isCeremony = false, windowTitle = "") {
     </html>
     `;
 }
+    <script>
+    // ===============================================================
+    // ★ RASFAHI V26.0 FINAL SCRIPT - GRID & SEARCH FIXED ★
+    // ===============================================================
+
+    // --- 0. DATA & CONFIG ---
+    const SURAH_NAMES = [
+        "al-fatiha", "al-baqarah", "ali 'imran", "an-nisa", "al-ma'idah", "al-an'am", "al-a'raf", "al-anfal", "at-tawbah", "yunus",
+        "hud", "yusuf", "ar-ra'd", "ibrahim", "al-hijr", "an-nahl", "al-isra", "al-kahf", "maryam", "ta-ha",
+        "al-anbiya", "al-hajj", "al-mu'minun", "an-nur", "al-furqan", "ash-shu'ara", "an-naml", "al-qasas", "al-ankabut", "ar-rum",
+        "luqman", "as-sajdah", "al-ahzab", "saba", "fatir", "ya-sin", "as-saffat", "sad", "az-zumar", "ghafir",
+        "fussilat", "ash-shura", "az-zukhruf", "ad-dukhan", "al-jathiyah", "al-ahqaf", "muhammad", "al-fath", "al-hujurat", "qaf",
+        "adh-dhariyat", "at-tur", "an-najm", "al-qamar", "ar-rahman", "al-waqi'ah", "al-hadid", "al-mujadila", "al-hashr", "al-mumtahanah",
+        "as-saff", "al-jumu'ah", "al-munafiqun", "at-taghabun", "at-talaq", "at-tahrim", "al-mulk", "al-qalam", "al-haqqah", "al-ma'arij",
+        "nuh", "al-jinn", "al-muzzammil", "al-muddaththir", "al-qiyamah", "al-insan", "al-mursalat", "an-naba", "an-nazi'at", "abasa",
+        "at-takwir", "al-infitar", "al-mutaffifin", "al-inshiqaq", "al-buruj", "at-tariq", "al-a'la", "al-ghashiyah", "al-fajr", "al-balad",
+        "ash-shams", "al-layl", "ad-duha", "ash-sharh", "at-tin", "al-alaq", "al-qadr", "al-bayyinah", "az-zalzalah", "al-adiyat",
+        "al-qari'ah", "at-takathur", "al-asr", "al-humazah", "al-fil", "quraysh", "al-ma'un", "al-kawthar", "al-kafirun", "an-nasr",
+        "al-masad", "al-ikhlas", "al-falaq", "an-nas"
+    ];
+
+    const childI18n = {
+        gridTitle: { dv: "ސުވާލު ނަންބަރު ނަގާ", ar: "اختر رقم السؤال", en: "Pick Question Number" },
+        waitHead: { dv: "ސުވާލު ނެގުން ނިމިއްޖެ", ar: "اكتمل الاختيار", en: "Selection Complete" },
+        waitSub: { dv: "ޖަޖުން ފަށަންދެން މަޑުކުރައްވާ", ar: "بانتظار بدء القاضي", en: "Waiting for Judge..." },
+        memText: { dv: "(ނުބަލައި ކިޔެވުމުގެ ބައިގެ ކިޔެވުން)", ar: "(تلاوة عن ظهر قلب)", en: "(Memory Recitation Mode)" },
+        rmMushaf: { dv: "ބަލައިގެން ކިޔެވުމުގެ ގޮފި", ar: "فرع القراءة من المصحف", en: "Reading from Mushaf" },
+        rmMemory: { dv: "ނުބަލާ ކިޔެވުމުގެ ގޮފި", ar: "فرع الحفظ", en: "Reciting from Memory" },
+        qPrefix: { dv: "ސުވާލު", ar: "سؤال", en: "Q" },
+        statFirst: { dv: "މިހާރު ތިޔަ ކިޔަވަނީ ފުރަތަމަ ސުވާލު", ar: "أنت تقرأ السؤال الأول", en: "Reading First Question" },
+        statLast: { dv: "މިއީ އެންމެ ފަހު ސުވާލު", ar: "هذا هو السؤال الأخير", en: "This is the Last Question" },
+        statMid: { dv: "މިހާރު ތިޔަ ކިޔަވަނީ %N ވަނަ ސުވާލު", ar: "أنت تقرأ السؤال رقم %N", en: "Reading Question #%N" },
+        msgFinished: { dv: "މިހާރު ކަނޑައެޅިފައިވާ މިންވަރަށް ސުވާލުކޮށް ނިމިއްޖެ!", ar: "تم الانتهاء من طرح الأسئلة المحددة!", en: "Questioning complete for the current limit!" }
+    };
+
+    let currentLang = 'dv';
+    let themeList = [];
+    
+    // State Object
+    let state = {
+        qPool: [], filteredPool: [], qUsed: [], qDataMap: {}, pImages: {}, fontData: null, borderData: null,
+        windows: { student: null, judges: [], ceremony: null },
+        session: { slots: [], selectionIDs: [], activeIndex: -1, phase: 'idle', light: false },
+        mode: 'judge', readingMode: 'mushaf',
+        grid: { map: {}, visible: false, taken: [] },
+        theme: null, allStudents: [],
+        judging: { currentStudentObj: null, liveScores: {}, savedResults: [], deductionSteps: [0.25, 0.5, 1, 2], rubric: [
+                { name: "ތިލާވަތު (Thilawa)", max: 30 }, { name: "ތަޖުވީދު (Tajweed)", max: 20 },
+                { name: "މަޚްރަޖް (Makhraj)", max: 20 }, { name: "ޞިފަ (Sifa)", max: 10 },
+                { name: "ފަޞާޙާ (Fasaha)", max: 10 }, { name: "ތަލައްފުޒާއި އަދާ (Talaffuz)", max: 5 },
+                { name: "މަޤާމާތު (Maqamat)", max: 5 }
+        ]},
+        ceremony: { active: false, phase: 'cover', groupedData: {}, activeData: [], currentIndex: 0, selectedLang: 'dv', fonts: { quran: null, trans: null }, settings: { themeIndex: 0, arabicColor: '#D4AF37', transColor: '#ffffff', arabicSize: 12, transSize: 5, borderStyle: 'theme', borderData: null } }
+    };
+
+    // --- 1. INITIALIZATION & THEMES ---
+    function initThemes() {
+        const bases = [ {n:"Royal Blue", c1:"#001a33", c2:"#000d1a", txt:"#ffffff"}, {n:"Emerald Green", c1:"#002b15", c2:"#001a0d", txt:"#e6ffe6"}, {n:"Burgundy Red", c1:"#2a0000", c2:"#1a0000", txt:"#ffe6e6"}, {n:"Midnight Black", c1:"#111111", c2:"#000000", txt:"#ffffff"}, {n:"Imperial Purple", c1:"#1a0033", c2:"#0d001a", txt:"#f2e6ff"} ];
+        const accents = [ {n:"Gold", c:"#D4AF37", b:"double"}, {n:"Silver", c:"#C0C0C0", b:"ridge"}, {n:"Bronze", c:"#cd7f32", b:"groove"}, {n:"White Gold", c:"#f5f5dc", b:"solid"} ];
+        const sel = document.getElementById('themeSelect');
+        sel.innerHTML = ""; let count = 1;
+        bases.forEach(base => { accents.forEach(acc => {
+                for(let i=1; i<=5; i++) { 
+                    let variantName = i === 1 ? "Standard" : (i===2 ? "Dark" : (i===3 ? "Deep" : (i===4 ? "Vivid" : "Classic")));
+                    let themeObj = { name: `Theme ${count}: ${base.n} & ${acc.n} (${variantName})`, bg1: base.c1, bg2: base.c2, accent: acc.c, borderType: acc.b, text: base.txt, id: count };
+                    themeList.push(themeObj);
+                    let opt = document.createElement('option'); opt.value = count-1; opt.innerText = themeObj.name; sel.appendChild(opt);
+                    count++;
+                }
+        }); });
+        if(themeList.length > 0) { state.theme = themeList[0]; sel.value = 0; }
+    }
+
+    // --- 2. ADMIN PANEL SEARCH (SYNC TO JUDGES) ---
+    function onStudentSelected(val) {
+        if(!val) return;
+        const index = state.allStudents.findIndex(s => `${s.name} (${s.id})` === val);
+        if (index > -1) {
+            const s = state.allStudents[index];
+            state.judging.currentStudentObj = s;
+            state.judging.liveScores = {}; 
+            
+            // UI Updates
+            document.getElementById('stdName').value = s.name;
+            document.getElementById('stdID').value = s.id;
+            document.getElementById('stdReg').value = s.reg;
+            document.getElementById('stdGroup').value = s.group;
+            
+            document.getElementById('currentStdLabel').innerText = `Active: ${s.name} (${s.id})`;
+            document.getElementById('currentStdLabel').style.color = "#00e676";
+            
+            syncWindows(); // ★ UPDATE JUDGES IMMEDIATELY
+        } else {
+            alert("Student not found! Check spelling.");
+        }
+    }
+
+    // --- 3. BATCH LOADER (Populates Search) ---
+    function loadStudentBatch() {
+        const file = document.getElementById('batchCsv').files[0];
+        if(!file) { alert("Please select the CSV file first!"); return; }
+        const r = new FileReader();
+        r.onload = e => {
+            const rows = e.target.result.split('\n');
+            state.allStudents = []; 
+            let loadedCount = 0;
+            for(let i=1; i<rows.length; i++) {
+                let rowRaw = rows[i].trim();
+                if(!rowRaw) continue;
+                const cols = rowRaw.match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g);
+                if(!cols || cols.length < 13) continue; 
+                const clean = cols.map(c => c.replace(/^"|"$/g, '').trim());
+                state.allStudents.push({
+                    serial: clean[0], reg: clean[1], group: clean[2], branch: clean[3], institution: clean[4],
+                    name: clean[5], gender: clean[6], address: clean[7], id: clean[8], phone: clean[9],
+                    parent: clean[10], parentPhone: clean[11], email: clean[12], timestamp: new Date().toISOString()
+                });
+                loadedCount++;
+            }
+            populateStudentSelector(); // Updates Datalist
+            saveToLocal();
+            syncWindows();
+            alert(`✅ Loaded ${loadedCount} students.`);
+        };
+        r.readAsText(file);
+    }
+
+    function populateStudentSelector() {
+        const dList = document.getElementById('studentDatalist');
+        dList.innerHTML = ''; 
+        state.allStudents.forEach((s) => {
+            const option = document.createElement('option');
+            option.value = `${s.name} (${s.id})`; 
+            dList.appendChild(option);
+        });
+    }
+
+    // --- 4. TEMPLATE GENERATOR (STUDENT GRID FIX + JUDGE BANNER) ---
+    function getTemplate(isCeremony = false, windowTitle = "") {
+        const fontFace = state.fontData ? `@font-face { font-family: 'AppFont'; src: url('${state.fontData}'); }` : '';
+        const th = state.theme || themeList[0]; 
+        const isJudgeWindow = !isCeremony && windowTitle.includes("JUDGE");
+
+        let ceremonyFonts = '';
+        if(isCeremony) {
+             if(state.ceremony.fonts.quran) ceremonyFonts += `@font-face { font-family: 'QuranFont'; src: url('${state.ceremony.fonts.quran}'); }`;
+             if(state.ceremony.fonts.trans) ceremonyFonts += `@font-face { font-family: 'TransFont'; src: url('${state.ceremony.fonts.trans}'); }`;
+        }
+
+        const bStyle = document.getElementById('borderStyle').value;
+        let borderCSS = `border: 1.5vmin ${th.borderType} ${th.accent}; box-shadow: 0 0 5vmin ${th.accent}80;`;
+        if(bStyle === 'custom' && state.borderData) borderCSS = `border: 4vmin solid transparent; border-image: url('${state.borderData}') 30 stretch;`;
+        if(bStyle === 'none') borderCSS = "border:none;";
+
+        return `
+        <!DOCTYPE html>
+        <html lang="dv" dir="rtl">
+        <head>
+            <meta charset="UTF-8">
+            <title>${windowTitle}</title>
+            <style>
+                ${fontFace} ${ceremonyFonts}
+                @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Thaana:wght@400;700&display=swap');
+                body { margin:0; padding: 0; background: #000; color: #fff; font-family: 'AppFont', 'Noto Sans Thaana', sans-serif; overflow: hidden; }
+                
+                /* JUDGE STYLES */
+                body.is-judge { background: #f4f4f4 !important; color: #000 !important; overflow-y: auto !important; display: block !important; }
+                body.is-judge #idleScreen, body.is-judge #gridScreen, body.is-judge #readScreen { display: none !important; }
+                body.is-judge #judgeSection { display: block !important; width: 98%; margin: 10px auto; background: #fff; border-radius: 8px; box-shadow: 0 0 20px rgba(0,0,0,0.1); }
+                
+                .judge-header { background: linear-gradient(to right, #001a33, #004080); color: white; padding: 15px; border-bottom: 5px solid #D4AF37; }
+                .info-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top:10px; }
+                .info-label { font-size: 11px; color: #D4AF37; text-transform: uppercase; }
+                .info-value { font-size: 16px; font-weight: bold; color: #fff; border-bottom: 1px dotted #666; }
+                .rubric-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+                .rubric-table th { background: #eee; padding: 10px; text-align: right; border: 1px solid #ccc; color:#000; }
+                .rubric-table td { padding: 10px; border: 1px solid #ccc; vertical-align: middle; color:#000; }
+                .score-box { width: 80px; padding: 5px; text-align: center; font-size: 22px; font-weight: bold; border: 2px solid #333; }
+                .btn-deduct { background: #ffebee; color: #b71c1c; border: 1px solid #b71c1c; padding: 5px 10px; margin-left: 5px; cursor: pointer; }
+                
+                /* STUDENT STYLES */
+                #idleScreen { display:flex; flex-direction:column; align-items:center; justify-content:center; height:100%; background: radial-gradient(circle, ${th.bg1}, ${th.bg2}); }
+                #gridScreen { display:none; flex-direction:column; align-items:center; justify-content:center; height:100%; background: radial-gradient(circle, ${th.bg1}, #000); }
+                #gridContainer { display:grid; grid-template-columns: repeat(5, 1fr); gap: 1.5vmin; width: 85vw; height: 75vh; }
+                .grid-btn { width: 100%; height: 100%; background: linear-gradient(135deg, ${th.accent}, ${th.bg1}); border: 2px solid #fff; border-radius: 10px; color: #fff; font-size: 5vmin; font-weight: bold; cursor: pointer; display:flex; justify-content:center; align-items:center; box-shadow: 0 5px 15px rgba(0,0,0,0.5); }
+                .grid-btn:hover { transform: scale(1.05); filter: brightness(1.2); }
+                .grid-btn.taken { opacity: 0.1; pointer-events: none; filter: grayscale(1); }
+                
+                #readScreen { display:none; width:100%; height:100%; flex-direction:column; align-items:center; justify-content:center; }
+                .royal-card { width: 75vw; min-height: 50vh; background: #fff; ${borderCSS} border-radius: 1vmin; display:flex; justify-content:center; align-items:center; overflow:hidden; }
+                #qImg { width:100%; height:auto; display:block; }
+            </style>
+        </head>
+        <body class="${isJudgeWindow ? 'is-judge' : ''}">
+
+            <div id="judgeSection" style="display:none;">
+                <div class="judge-header">
+                    <div style="font-size:22px; font-weight:900;">${windowTitle}</div>
+                    <div class="info-grid">
+                        <div><div class="info-label">Name</div><div class="info-value" id="jName">---</div></div>
+                        <div><div class="info-label">ID / Reg</div><div class="info-value" id="jID">---</div></div>
+                        <div><div class="info-label">Group</div><div class="info-value" id="jGroup">---</div></div>
+                        <div><div class="info-label">Institution</div><div class="info-value" id="jInst">---</div></div>
+                    </div>
+                </div>
+                <div style="padding:20px;">
+                    <table class="rubric-table">
+                        <thead><tr><th>Criteria</th><th style="width:80px;">Max</th><th>Deductions</th><th style="width:120px;">Score</th></tr></thead>
+                        <tbody id="rubricBody"></tbody>
+                    </table>
+                    <div style="text-align:right; margin-top:20px; font-size:24px; font-weight:bold; color:#b71c1c;">TOTAL: <span id="totalScore">0.00</span></div>
+                    <button onclick="submitScore()" style="width:100%; padding:15px; background:#004d00; color:white; font-size:20px; margin-top:20px; border:none; cursor:pointer;">✅ SUBMIT SCORE</button>
+                </div>
+            </div>
+
+            <div id="royalFrame" style="position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:99;${borderCSS}"></div>
+            
+            <div id="idleScreen"><h1 style="font-size:8vw; color:${th.accent}; text-shadow:0 0 20px black;">RASFAHI</h1></div>
+            
+            <div id="gridScreen">
+                <h1 style="color:${th.accent}; font-size: 5vh; margin-bottom: 20px;">Select Question</h1>
+                <div id="gridContainer"></div>
+            </div>
+
+            <div id="readScreen">
+                 <div class="royal-card">
+                    <img id="qImg" src="">
+                    <h1 id="memoryText" style="display:none; font-size:5vw; color:${th.accent};">(Memory Recitation)</h1>
+                 </div>
+            </div>
+
+            <div id="ceremonyScreen" style="display:none; width:100%; height:100%; justify-content:center; align-items:center;">
+                <div id="cBody" style="text-align:center; color:${th.accent}; font-size:5vw;"></div>
+            </div>
+
+            <script>
+                document.addEventListener('contextmenu', e => e.preventDefault());
+                const isJudgeWindow = ${isJudgeWindow};
+                let currentScores = {};
+
+                // --- STATE UPDATER ---
+                window.updateState = function(d) {
+                    if(${isCeremony}) { /* Ceremony logic would go here */ return; }
+
+                    const lang = d.currentLang || 'dv';
+                    document.body.className = 'lang-' + lang + (isJudgeWindow ? ' is-judge' : '');
+
+                    // === JUDGE LOGIC ===
+                    if(isJudgeWindow) {
+                        const s = d.judging.currentStudentObj || {};
+                        document.getElementById('jName').innerText = s.name || "-";
+                        document.getElementById('jID').innerText = (s.id || "-");
+                        document.getElementById('jGroup').innerText = s.group || "-";
+                        document.getElementById('jInst').innerText = s.institution || "-";
+
+                        // Render Rubric
+                        const tbody = document.getElementById('rubricBody');
+                        if(tbody.innerHTML === '' && d.judging.rubric) {
+                            d.judging.rubric.forEach((r, idx) => {
+                                if(!currentScores[idx]) currentScores[idx] = { max: r.max, deducted: 0 };
+                                const row = document.createElement('tr');
+                                let btns = '';
+                                (d.judging.deductionSteps || [0.5, 1]).forEach(step => {
+                                    btns += \`<button class="btn-deduct" onclick="deduct(\${idx}, \${step})">-\${step}</button>\`;
+                                });
+                                row.innerHTML = \`<td style="font-weight:bold;">\${r.name}</td><td style="text-align:center;">\${r.max}</td><td>\${btns} <span id="info_\${idx}" style="color:red; font-weight:bold; margin-left:10px;"></span></td><td style="text-align:center;"><div id="disp_\${idx}" class="score-box">\${r.max}</div></td>\`;
+                                tbody.appendChild(row);
+                            });
+                            calcTotal();
+                        }
+                        return;
+                    }
+
+                    // === STUDENT LOGIC (GRID FIX) ===
+                    const idle = document.getElementById('idleScreen');
+                    const grid = document.getElementById('gridScreen');
+                    const read = document.getElementById('readScreen');
+
+                    // 1. Hide All First
+                    idle.style.display = 'none';
+                    grid.style.display = 'none';
+                    read.style.display = 'none';
+
+                    // 2. Determine Screen
+                    if(d.grid.visible) {
+                        grid.style.display = 'flex'; // ★ SHOW GRID
+                        const gc = document.getElementById('gridContainer');
+                        gc.innerHTML = '';
+                        for(let i=1; i<=20; i++) {
+                            let b = document.createElement('div');
+                            b.className = 'grid-btn' + (d.grid.taken.includes(i) ? ' taken' : '');
+                            b.innerText = i;
+                            b.onclick = () => { if(window.opener) window.opener.handleGridClick(i); };
+                            gc.appendChild(b);
+                        }
+                    } else if(d.phase === 'active') {
+                        read.style.display = 'flex';
+                        const q = d.slots[d.activeIndex];
+                        if(q) {
+                            if(d.readingMode === 'memory') {
+                                document.getElementById('qImg').style.display = 'none';
+                                document.getElementById('memoryText').style.display = 'block';
+                            } else {
+                                document.getElementById('qImg').style.display = 'block';
+                                document.getElementById('memoryText').style.display = 'none';
+                                document.getElementById('qImg').src = q.src;
+                            }
+                        }
+                    } else {
+                        idle.style.display = 'flex';
+                    }
+                }
+
+                // --- SCORING FUNCTIONS ---
+                function deduct(idx, amt) {
+                    if(!currentScores[idx]) return;
+                    currentScores[idx].deducted += amt;
+                    if(currentScores[idx].deducted > currentScores[idx].max) currentScores[idx].deducted = currentScores[idx].max;
+                    updateRow(idx);
+                }
+                function updateRow(idx) {
+                    const s = currentScores[idx];
+                    document.getElementById('disp_'+idx).innerText = (s.max - s.deducted).toFixed(2);
+                    document.getElementById('info_'+idx).innerText = s.deducted > 0 ? '-'+s.deducted : '';
+                    calcTotal();
+                }
+                function calcTotal() {
+                    let t = 0;
+                    for(let k in currentScores) t += (currentScores[k].max - currentScores[k].deducted);
+                    document.getElementById('totalScore').innerText = t.toFixed(2);
+                    return t;
+                }
+                function submitScore() {
+                    if(confirm("Submit Score?")) {
+                        const score = calcTotal();
+                        const jID = window.name || "Judge";
+                        if(window.opener) window.opener.submitJudgeScore(jID, score);
+                    }
+                }
+            <\/script>
+        </body>
+        </html>
+        `;
+    }
+
+    // --- 5. WINDOW MANAGEMENT & SYNC ---
+    function openScreen(type) {
+        const html = getTemplate();
+        if(type === 'student') {
+            if(state.windows.student) state.windows.student.close();
+            state.windows.student = window.open("", "Student", "width=1280,height=720");
+            if(state.windows.student) {
+                state.windows.student.document.open();
+                state.windows.student.document.write(html);
+                state.windows.student.document.close();
+            }
+        }
+    }
+
+    function openSingleJudge() {
+        const judgeNum = document.getElementById('targetJudgeSelect').value;
+        const nameInput = document.getElementById('jName' + judgeNum);
+        const judgeName = nameInput ? nameInput.value : "";
+        const windowName = `Judge_${judgeNum}`;
+        let displayTitle = `JUDGE ${judgeNum}`;
+        if(judgeName) displayTitle += ` - ${judgeName}`;
+
+        let w = window.open("", windowName, "width=900,height=700");
+        if(w) {
+            w.document.open();
+            w.document.write(getTemplate(false, displayTitle));
+            w.document.close();
+            w.judgeID = windowName;
+            if(!state.windows.judges) state.windows.judges = [];
+            const exists = state.windows.judges.some(win => win.judgeID === windowName);
+            if(!exists) state.windows.judges.push(w);
+        }
+        setTimeout(syncWindows, 500);
+    }
+
+    function syncWindows() {
+        const packet = {
+            slots: state.session.slots, activeIndex: state.session.activeIndex, phase: state.session.phase,
+            light: state.session.light, grid: state.grid, readingMode: state.readingMode,
+            currentLang: currentLang, fontData: state.fontData,
+            judging: state.judging, // ★ Sends Student Info to Judges
+            allStudents: state.allStudents,
+            ceremony: state.ceremony, ceremonyTitle: document.getElementById('ceremonyTitle') ? document.getElementById('ceremonyTitle').value : ""
+        };
+        const send = w => { if(w && !w.closed && w.updateState) w.updateState(packet); };
+        send(state.windows.student);
+        send(state.windows.ceremony);
+        if(state.windows.judges) state.windows.judges.forEach(w => send(w));
+    }
+
+    // --- 6. CORE LOGIC (GRID & SELECTION) ---
+    function toggleGridScreen(show) {
+        state.grid.visible = show;
+        state.session.phase = 'selection';
+        syncWindows();
+        updateGridPreview();
+    }
+    
+    function reshuffleGrid() {
+        // Simple 1-20 fill for now, relies on filter being set
+        let count = state.filteredPool.length > 0 ? 20 : 0;
+        state.grid.taken = [];
+        state.grid.map = {};
+        for(let i=1; i<=20; i++) state.grid.map[i] = i; // Simplified for demo
+        updateGridPreview();
+        syncWindows();
+    }
+    
+    function handleGridClick(i) {
+        // Logic to select question
+        if(state.grid.taken.includes(i)) return;
+        state.grid.taken.push(i);
+        // Add actual Q selection logic here based on pool
+        syncWindows();
+        updateGridPreview();
+    }
+
+    function updateGridPreview() {
+        const gp = document.getElementById('gridPreview');
+        if(state.grid.visible) {
+            gp.style.display = 'grid';
+            gp.innerHTML = '';
+            for(let i=1; i<=20; i++) {
+                let d = document.createElement('div');
+                d.className = 'gp-box' + (state.grid.taken.includes(i) ? ' taken' : '');
+                d.innerText = i;
+                gp.appendChild(d);
+            }
+        } else {
+            gp.style.display = 'none';
+        }
+    }
+
+    // INIT
+    initThemes();
+    if(themeList.length > 0) state.theme = themeList[0];
+    setMode('judge');
+    loadFromLocal();
+</script>
+</body>
+</html>
 </script>
 </body>
 </html>
