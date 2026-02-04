@@ -5973,6 +5973,338 @@ window.submitJudgeScore = function(judgeId, totalScore) {
         saveToLocal();
     }
 }
+// --- UPDATED: OPEN JUDGE SCREEN (DIRECT TO RUBRIC) ---
+function openSingleJudge() {
+    // 1. ޖަޖުގެ މަޢުލޫމާތު ނެގުން
+    const judgeNum = document.getElementById('targetJudgeSelect').value;
+    const nameInput = document.getElementById('jName' + judgeNum); 
+    const judgeName = nameInput ? nameInput.value : "Judge " + judgeNum; 
+
+    const windowName = `Judge_${judgeNum}`;
+    
+    // 2. ޓެމްޕްލޭޓް ޖެނެރޭޓް ކުރުން (ހަމައެކަނި ރުބްރިކް ޝީޓް)
+    const html = getJudgeTemplate(judgeName, judgeNum);
+
+    // 3. ވިންޑޯ ހުޅުވުން
+    let w = window.open("", windowName, "width=1100,height=900,scrollbars=yes");
+    
+    if(w) {
+        w.document.open();
+        w.document.write(html);
+        w.document.close();
+        
+        // 4. ސިންކް ކުރުމަށްޓަކައި އައިޑީ ދިނުން
+        w.judgeID = windowName; 
+
+        if(!state.windows.judges) state.windows.judges = [];
+        
+        // ލިސްޓަށް އިތުރުކުރުން (ކުރިން ނެތްނަމަ)
+        const exists = state.windows.judges.some(win => win.judgeID === windowName);
+        if(!exists) {
+            state.windows.judges.push(w);
+        }
+        
+        // 5. ވަގުތުން ދަރިވަރުގެ މަޢުލޫމާތު ފޮނުވުން
+        setTimeout(syncWindows, 500);
+    } else {
+        alert("Please allow popups for Judge Screen!");
+    }
+}
+// --- JUDGE SCREEN DESIGN (NO GRID, ONLY RUBRIC & INFO) ---
+function getJudgeTemplate(judgeName, judgeNum) {
+    const customFontCSS = state.fontData ? `@font-face { font-family: 'Faruuma'; src: url('${state.fontData}'); }` : '';
+
+    return `
+    <!DOCTYPE html>
+    <html lang="dv" dir="rtl">
+    <head>
+        <title>Judge ${judgeNum} - Marking</title>
+        <style>
+            ${customFontCSS}
+            @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Thaana:wght@400;700&display=swap');
+            
+            body { 
+                font-family: 'Faruuma', 'Waheed', 'Noto Sans Thaana', sans-serif !important; 
+                margin: 0; padding: 20px; 
+                background: #e3e4e6; color: #000;
+            }
+
+            /* --- 1. ROYAL BANNER (STUDENT INFO) --- */
+            .royal-banner {
+                background: linear-gradient(135deg, #001a33 0%, #000000 100%);
+                border: 4px double #D4AF37; /* Royal Gold Border */
+                border-radius: 10px;
+                padding: 20px;
+                color: #fff;
+                margin-bottom: 20px;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+                position: relative;
+            }
+            
+            /* Banner Title */
+            .banner-top {
+                text-align: center;
+                border-bottom: 1px solid rgba(212, 175, 55, 0.5);
+                padding-bottom: 10px; margin-bottom: 15px;
+            }
+            .banner-label { 
+                color: #D4AF37; font-size: 18px; font-weight: bold; letter-spacing: 2px; text-transform: uppercase;
+            }
+
+            /* Info Grid */
+            .student-grid {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr); /* 3 Columns */
+                gap: 15px;
+                font-size: 14px;
+            }
+            
+            .info-field { background: rgba(255,255,255,0.05); padding: 8px; border-radius: 5px; }
+            .field-label { color: #aaa; font-size: 11px; display: block; margin-bottom: 3px; }
+            .field-value { color: #fff; font-size: 16px; font-weight: bold; }
+            
+            /* Highlight Name & ID */
+            .highlight-val { color: #00e676; font-size: 18px; text-shadow: 0 0 10px rgba(0,230,118,0.3); }
+
+            /* --- 2. JUDGE BAR --- */
+            .judge-bar {
+                background: #fff; border-left: 6px solid #D4AF37;
+                padding: 15px; margin-bottom: 20px;
+                display: flex; justify-content: space-between; align-items: center;
+                font-weight: bold; font-size: 18px;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.1); border-radius: 4px;
+            }
+
+            /* --- 3. RUBRIC TABLE --- */
+            .rubric-card { background: #fff; padding: 25px; border-radius: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+            
+            table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+            th { background: #002200; color: #fff; padding: 12px; text-align: right; font-size: 16px; }
+            td { border-bottom: 1px solid #ddd; padding: 10px; vertical-align: middle; font-size: 16px; }
+            
+            /* Deduction Buttons */
+            .deduct-btn {
+                background: #ffebee; border: 1px solid #ffcdd2; color: #c62828;
+                padding: 8px 12px; cursor: pointer; border-radius: 4px; font-weight: bold; margin-right: 5px;
+                transition: 0.2s;
+            }
+            .deduct-btn:hover { background: #e53935; color: #fff; border-color: #b71c1c; }
+            .deduct-btn:active { transform: scale(0.95); }
+
+            .reset-btn { background: #eceff1; border: 1px solid #cfd8dc; color: #455a64; padding: 8px; cursor:pointer; border-radius: 4px;}
+
+            /* Score Box */
+            .score-box { 
+                font-size: 22px; font-weight: bold; width: 100%; text-align: center; 
+                border: 2px solid #002200; padding: 8px; border-radius: 6px; color: #002200; background: #e8f5e9;
+            }
+
+            /* Action Buttons */
+            .footer-actions { margin-top: 30px; display: flex; gap: 10px; }
+            .save-btn { 
+                flex: 1; padding: 15px; background: linear-gradient(to bottom, #006400, #004d00); color: #fff; 
+                font-size: 22px; font-weight: bold; border: 2px solid #00e676; cursor: pointer; border-radius: 6px;
+                box-shadow: 0 4px 10px rgba(0,100,0,0.3); transition: 0.2s;
+            }
+            .save-btn:hover { filter: brightness(1.2); transform: translateY(-2px); }
+            
+            .print-btn {
+                width: 150px; padding: 15px; background: #37474f; color: #fff;
+                font-size: 16px; font-weight: bold; border: none; cursor: pointer; border-radius: 6px;
+            }
+
+            /* Print Fixes */
+            @media print {
+                body { background: #fff; padding: 0; }
+                .save-btn, .print-btn, .deduct-btn, .reset-btn { display: none; }
+                .royal-banner { border: 2px solid #000; color: #000; background: #fff; box-shadow: none; }
+                .field-value, .field-label, .highlight-val { color: #000 !important; text-shadow: none !important; }
+                .info-field { background: none; border: 1px solid #ccc; }
+                .judge-bar { border: 1px solid #000; border-left: 10px solid #000; }
+                th { background: #ddd !important; color: #000 !important; -webkit-print-color-adjust: exact; }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="royal-banner">
+            <div class="banner-top">
+                <span class="banner-label">Student Information Profile</span>
+            </div>
+            
+            <div class="student-grid">
+                <div class="info-field">
+                    <span class="field-label">ފުރިހަމަ ނަން (Name):</span>
+                    <span class="field-value highlight-val" id="sName">---</span>
+                </div>
+                <div class="info-field">
+                    <span class="field-label">އައި.ޑީ (ID Card):</span>
+                    <span class="field-value" id="sID">---</span>
+                </div>
+                <div class="info-field">
+                    <span class="field-label">ރެޖިސްޓްރީ (Reg No):</span>
+                    <span class="field-value" id="sReg">---</span>
+                </div>
+
+                <div class="info-field">
+                    <span class="field-label">ޢުމުރުފުރާ (Age Group):</span>
+                    <span class="field-value" id="sGroup">---</span>
+                </div>
+                <div class="info-field">
+                    <span class="field-label">ގޮފި (Branch):</span>
+                    <span class="field-value" id="sBranch">---</span>
+                </div>
+                <div class="info-field">
+                    <span class="field-label">މުއައްސަސާ (Institution):</span>
+                    <span class="field-value" id="sInst">---</span>
+                </div>
+
+                <div class="info-field" style="grid-column: span 3;">
+                    <span class="field-label">ދާއިމީ އެޑްރެސް (Address):</span>
+                    <span class="field-value" id="sAddr">---</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="judge-bar">
+            <span>Judge Name: ${judgeName}</span>
+            <span>NO: ${judgeNum}</span>
+        </div>
+
+        <div class="rubric-card">
+            <table>
+                <thead>
+                    <tr>
+                        <th width="30%">ބައިތައް (Criteria)</th>
+                        <th width="10%" style="text-align:center;">Max</th>
+                        <th width="45%">ކުށް (Deductions)</th>
+                        <th width="15%">ދޭ މާކުސް</th>
+                    </tr>
+                </thead>
+                <tbody id="rubricBody"></tbody>
+                <tfoot>
+                    <tr style="background:#f1f8e9;">
+                        <td colspan="3" style="text-align:right; font-weight:bold; font-size:24px; padding:20px;">TOTAL SCORE:</td>
+                        <td id="grandTotal" style="font-size:28px; font-weight:bold; color:#d50000; text-align:center;">0.00</td>
+                    </tr>
+                </tfoot>
+            </table>
+
+            <div class="footer-actions">
+                <button class="save-btn" onclick="submitScore()">✅ SUBMIT SCORE (System Save)</button>
+                <button class="print-btn" onclick="window.print()">🖨️ PDF / PRINT</button>
+            </div>
+        </div>
+
+        <script>
+            let currentScores = {};
+            let rubricData = [];
+            const judgeID = "Judge_${judgeNum}";
+
+            // UPDATE DATA FROM MAIN SCREEN
+            window.updateState = function(d) {
+                const s = d.judging.currentStudentObj;
+                
+                if(s) {
+                    // Fill Banner
+                    document.getElementById('sName').innerText = s.name;
+                    document.getElementById('sID').innerText = s.id;
+                    document.getElementById('sReg').innerText = s.reg || '-';
+                    document.getElementById('sGroup').innerText = s.group;
+                    document.getElementById('sBranch').innerText = s.branch;
+                    document.getElementById('sInst').innerText = s.institution || s.inst || '-';
+                    document.getElementById('sAddr').innerText = s.address || '-';
+                } else {
+                    // Clear if no student
+                    document.getElementById('sName').innerText = "WAITING FOR SELECTION...";
+                    document.getElementById('sID').innerText = "---";
+                }
+
+                // Build Rubric Table (Only once)
+                const tbody = document.getElementById('rubricBody');
+                if(tbody.innerHTML === "" && d.judging.rubric) {
+                    rubricData = d.judging.rubric;
+                    const steps = d.judging.deductionSteps || [0.25, 0.5, 1]; // Default steps
+                    
+                    rubricData.forEach((r, idx) => {
+                        currentScores[idx] = { max: r.max, deducted: 0 };
+                        
+                        let buttons = "";
+                        steps.forEach(step => {
+                            buttons += \`<button class="deduct-btn" onclick="addDeduct(\${idx}, \${step})">-\${step}</button>\`;
+                        });
+                        buttons += \`<button class="reset-btn" onclick="resetRow(\${idx})">↺</button>\`;
+
+                        const row = \`
+                        <tr>
+                            <td style="font-weight:bold;">\${r.name}</td>
+                            <td style="text-align:center; color:#777;">\${r.max}</td>
+                            <td>
+                                \${buttons} 
+                                <span id="info_\${idx}" style="color:red; font-weight:bold; margin-right:10px;"></span>
+                            </td>
+                            <td>
+                                <div class="score-box" id="disp_\${idx}">\${r.max}</div>
+                            </td>
+                        </tr>\`;
+                        tbody.innerHTML += row;
+                    });
+                    calcTotal();
+                }
+            };
+
+            // SCORING LOGIC
+            function addDeduct(idx, amt) {
+                currentScores[idx].deducted += amt;
+                // Cap deduction at max marks
+                if(currentScores[idx].deducted > currentScores[idx].max) {
+                    currentScores[idx].deducted = currentScores[idx].max;
+                }
+                updateRow(idx);
+            }
+
+            function resetRow(idx) {
+                currentScores[idx].deducted = 0;
+                updateRow(idx);
+            }
+
+            function updateRow(idx) {
+                const final = currentScores[idx].max - currentScores[idx].deducted;
+                document.getElementById('disp_'+idx).innerText = final.toFixed(2);
+                document.getElementById('info_'+idx).innerText = currentScores[idx].deducted > 0 ? "-" + currentScores[idx].deducted.toFixed(2) : "";
+                calcTotal();
+            }
+
+            function calcTotal() {
+                let tot = 0;
+                for(let k in currentScores) {
+                    tot += (currentScores[k].max - currentScores[k].deducted);
+                }
+                document.getElementById('grandTotal').innerText = tot.toFixed(2);
+                return tot;
+            }
+
+            // SUBMIT TO MAIN WINDOW
+            function submitScore() {
+                const total = calcTotal();
+                if(confirm("Confirm Score: " + total + "?")) {
+                    if(window.opener && window.opener.submitJudgeScore) {
+                        window.opener.submitJudgeScore(judgeID, total);
+                        
+                        const btn = document.querySelector('.save-btn');
+                        btn.innerText = "SAVED (" + total + ")";
+                        btn.style.background = "#333";
+                        btn.style.borderColor = "#555";
+                        btn.disabled = true;
+                    } else {
+                        alert("Error: Main window not found!");
+                    }
+                }
+            }
+        </script>
+    </body>
+    </html>
+    `;
+}
 </script>
 </body>
 </html>
