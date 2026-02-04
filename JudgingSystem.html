@@ -5646,6 +5646,333 @@ function generateJudgeSessionSheet() {
     w.document.write(html);
     w.document.close();
 }
+    // --- NEW JUDGE SCREEN TEMPLATE (ROYAL BANNER & RUBRIC ONLY) ---
+function getJudgeTemplate(judgeName, judgeNum) {
+    const th = state.theme || { accent: '#D4AF37', bg1: '#001a33' }; // Default Gold/Blue
+    const customFontCSS = state.fontData ? `@font-face { font-family: 'Faruuma'; src: url('${state.fontData}'); }` : '';
+
+    return `
+    <!DOCTYPE html>
+    <html lang="dv" dir="rtl">
+    <head>
+        <title>Judge ${judgeNum} - Mark Sheet</title>
+        <style>
+            ${customFontCSS}
+            @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Thaana:wght@400;700&display=swap');
+            
+            body { 
+                font-family: 'Faruuma', 'Waheed', 'Noto Sans Thaana', sans-serif !important; 
+                margin: 0; padding: 20px; 
+                background: #f4f4f4; color: #000;
+            }
+
+            /* --- ROYAL BANNER STYLES --- */
+            .royal-banner {
+                background: linear-gradient(to bottom, #001a33, #000);
+                border: 4px double #D4AF37;
+                border-radius: 8px;
+                padding: 15px;
+                color: #fff;
+                margin-bottom: 20px;
+                box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+                position: relative;
+            }
+            .banner-header {
+                text-align: center;
+                border-bottom: 1px solid #D4AF37;
+                padding-bottom: 10px;
+                margin-bottom: 10px;
+            }
+            .banner-title { font-size: 18px; color: #D4AF37; font-weight: bold; letter-spacing: 1px; }
+            
+            .student-grid {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr); /* 3 Columns */
+                gap: 10px;
+                font-size: 14px;
+            }
+            .info-item { display: flex; flex-direction: column; }
+            .info-label { color: #aaa; font-size: 11px; margin-bottom: 2px; }
+            .info-val { font-weight: bold; font-size: 15px; color: #fff; border-bottom: 1px dotted #555; padding-bottom: 2px;}
+            
+            /* Highlight specific fields */
+            .val-highlight { color: #00e676; font-size: 16px; }
+
+            /* --- JUDGE INFO BAR --- */
+            .judge-bar {
+                background: #e0e0e0; border-left: 5px solid #D4AF37;
+                padding: 10px; margin-bottom: 20px;
+                display: flex; justify-content: space-between; align-items: center;
+                font-weight: bold; font-size: 16px;
+            }
+
+            /* --- RUBRIC TABLE --- */
+            .rubric-container { background: #fff; padding: 20px; border-radius: 8px; border: 1px solid #ccc; }
+            table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+            th { background: #001a33; color: #fff; padding: 12px; text-align: right; }
+            td { border-bottom: 1px solid #eee; padding: 8px; vertical-align: middle; }
+            
+            .score-box { 
+                font-size: 24px; font-weight: bold; width: 80px; text-align: center; 
+                border: 2px solid #001a33; padding: 5px; border-radius: 5px; color: #001a33;
+            }
+            .deduct-btn {
+                background: #ffebee; border: 1px solid #ef9a9a; color: #c62828;
+                padding: 5px 10px; cursor: pointer; border-radius: 4px; font-weight: bold; margin-right: 5px;
+            }
+            .deduct-btn:hover { background: #ef9a9a; color: #fff; }
+            .reset-btn { background: #eee; border: 1px solid #ccc; color: #333; padding: 5px; cursor:pointer; }
+
+            .action-bar { margin-top: 20px; display: flex; gap: 10px; }
+            .submit-btn { 
+                flex: 2; padding: 15px; background: #006400; color: #fff; 
+                font-size: 20px; font-weight: bold; border: none; cursor: pointer; border-radius: 5px;
+            }
+            .pdf-btn {
+                flex: 1; padding: 15px; background: #001a33; color: #D4AF37;
+                font-size: 16px; font-weight: bold; border: 1px solid #D4AF37; cursor: pointer; border-radius: 5px;
+            }
+
+            /* Print Styles */
+            @media print {
+                body { background: #fff; }
+                .submit-btn, .deduct-btn, .reset-btn { display: none; }
+                .royal-banner { border: 2px solid #000; color: #000; background: #fff; }
+                .info-val, .info-label { color: #000; }
+                .pdf-btn { display: none; }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="royal-banner">
+            <div class="banner-header">
+                <span class="banner-title">STUDENT INFORMATION PROFILE</span>
+            </div>
+            <div class="student-grid">
+                <div class="info-item">
+                    <span class="info-label">ފުރިހަމަ ނަން (Full Name):</span>
+                    <span class="info-val val-highlight" id="sName">---</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">އައި.ޑީ ކާޑު (ID Card):</span>
+                    <span class="info-val" id="sID">---</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">ރެޖިސްޓްރީ (Reg No):</span>
+                    <span class="info-val" id="sReg">---</span>
+                </div>
+                
+                <div class="info-item">
+                    <span class="info-label">ޢުމުރުފުރާ (Age Group):</span>
+                    <span class="info-val" id="sGroup">---</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">ގޮފި (Branch):</span>
+                    <span class="info-val" id="sBranch">---</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">މުއައްސަސާ (Institution):</span>
+                    <span class="info-val" id="sInst">---</span>
+                </div>
+
+                <div class="info-item" style="grid-column: span 3;">
+                    <span class="info-label">ދާއިމީ އެޑްރެސް (Address):</span>
+                    <span class="info-val" id="sAddr">---</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="judge-bar">
+            <span>Judge: ${judgeName}</span>
+            <span>NO: ${judgeNum}</span>
+        </div>
+
+        <div class="rubric-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ބައިތައް (Criteria)</th>
+                        <th width="10%">ޖުމްލަ</th>
+                        <th width="40%">ކުށް (Deductions)</th>
+                        <th width="15%">ދޭ މާކުސް</th>
+                    </tr>
+                </thead>
+                <tbody id="rubricBody"></tbody>
+                <tfoot>
+                    <tr style="background:#f9f9f9;">
+                        <td colspan="3" style="text-align:right; font-weight:bold; font-size:20px; padding:15px;">TOTAL SCORE:</td>
+                        <td id="grandTotal" style="font-size:24px; font-weight:bold; color:#d32f2f; text-align:center;">0.00</td>
+                    </tr>
+                </tfoot>
+            </table>
+
+            <div class="action-bar">
+                <button class="submit-btn" onclick="submitScore()">✅ SUBMIT & SAVE TO MASTER SHEET</button>
+                <button class="pdf-btn" onclick="window.print()">🖨️ SAVE PDF</button>
+            </div>
+        </div>
+
+        <script>
+            let currentScores = {};
+            let rubricData = [];
+            const judgeID = "Judge_${judgeNum}";
+
+            // Initialize UI from Data
+            window.updateState = function(d) {
+                // Populate Student Info
+                const s = d.judging.currentStudentObj;
+                if(s) {
+                    document.getElementById('sName').innerText = s.name;
+                    document.getElementById('sID').innerText = s.id;
+                    document.getElementById('sReg').innerText = s.reg || '-';
+                    document.getElementById('sGroup').innerText = s.group;
+                    document.getElementById('sBranch').innerText = s.branch;
+                    document.getElementById('sInst').innerText = s.institution || s.inst || '-';
+                    document.getElementById('sAddr').innerText = s.address || '-';
+                } else {
+                    document.body.innerHTML = "<h1 style='text-align:center; margin-top:50px;'>No Student Selected by Admin</h1>";
+                    return;
+                }
+
+                // Render Rubric if empty
+                const tbody = document.getElementById('rubricBody');
+                if(tbody.innerHTML === "") {
+                    rubricData = d.judging.rubric;
+                    const steps = d.judging.deductionSteps || [0.5, 1];
+                    
+                    rubricData.forEach((r, idx) => {
+                        currentScores[idx] = { max: r.max, deducted: 0 };
+                        
+                        let buttons = "";
+                        steps.forEach(step => {
+                            buttons += \`<button class="deduct-btn" onclick="addDeduct(\${idx}, \${step})">-\${step}</button>\`;
+                        });
+                        buttons += \`<button class="reset-btn" onclick="resetRow(\${idx})">↺</button>\`;
+
+                        const row = \`
+                        <tr>
+                            <td style="font-weight:bold; font-size:16px;">\${r.name}</td>
+                            <td style="text-align:center;">\${r.max}</td>
+                            <td>\${buttons} <span id="info_\${idx}" style="color:red; margin-right:10px;"></span></td>
+                            <td><div class="score-box" id="disp_\${idx}">\${r.max}</div></td>
+                        </tr>\`;
+                        tbody.innerHTML += row;
+                    });
+                    calcTotal();
+                }
+            };
+
+            function addDeduct(idx, amt) {
+                currentScores[idx].deducted += amt;
+                if(currentScores[idx].deducted > currentScores[idx].max) currentScores[idx].deducted = currentScores[idx].max;
+                updateRow(idx);
+            }
+
+            function resetRow(idx) {
+                currentScores[idx].deducted = 0;
+                updateRow(idx);
+            }
+
+            function updateRow(idx) {
+                const final = currentScores[idx].max - currentScores[idx].deducted;
+                document.getElementById('disp_'+idx).innerText = final.toFixed(1); // One decimal place usually enough for display
+                document.getElementById('info_'+idx).innerText = currentScores[idx].deducted > 0 ? "-" + currentScores[idx].deducted : "";
+                calcTotal();
+            }
+
+            function calcTotal() {
+                let tot = 0;
+                for(let k in currentScores) {
+                    tot += (currentScores[k].max - currentScores[k].deducted);
+                }
+                document.getElementById('grandTotal').innerText = tot.toFixed(2);
+                return tot;
+            }
+
+            function submitScore() {
+                const total = calcTotal();
+                if(confirm("Confirm Score: " + total + "?")) {
+                    // Send back to Main Window
+                    if(window.opener) {
+                        window.opener.submitJudgeScore(judgeID, total);
+                        
+                        const btn = document.querySelector('.submit-btn');
+                        btn.innerText = "SAVED (" + total + ")";
+                        btn.style.background = "#333";
+                        btn.disabled = true;
+                    }
+                }
+            }
+        </script>
+    </body>
+    </html>
+    `;
+}
+// --- UPDATED OPEN JUDGE FUNCTION ---
+function openSingleJudge() {
+    const judgeNum = document.getElementById('targetJudgeSelect').value;
+    const nameInput = document.getElementById('jName' + judgeNum); 
+    const judgeName = nameInput ? nameInput.value : "Judge " + judgeNum; 
+
+    const windowName = `Judge_${judgeNum}`;
+    
+    // Call the NEW Template function
+    const html = getJudgeTemplate(judgeName, judgeNum);
+
+    let w = window.open("", windowName, "width=1000,height=900,scrollbars=yes");
+    
+    if(w) {
+        w.document.open();
+        w.document.write(html);
+        w.document.close();
+        w.judgeID = windowName; // Tag for syncing
+
+        if(!state.windows.judges) state.windows.judges = [];
+        // Add to tracking if not exists
+        if(!state.windows.judges.some(win => win.judgeID === windowName)) {
+            state.windows.judges.push(w);
+        }
+        
+        // Sync data immediately so student info appears
+        setTimeout(syncWindows, 500);
+    } else {
+        alert("Please allow popups!");
+    }
+}
+// --- CENTRAL SCORE HANDLER ---
+window.submitJudgeScore = function(judgeId, totalScore) {
+    // 1. Update Live Scores Object
+    state.judging.liveScores[judgeId] = parseFloat(totalScore);
+    
+    // 2. Update Admin Monitor
+    updateScoreMonitor();
+
+    // 3. Auto-Save to LocalStorage just in case
+    // If a student record is already initialized in savedResults, update it immediately
+    const currentID = state.judging.currentStudentObj ? state.judging.currentStudentObj.id : null;
+    
+    if(currentID) {
+        // Find if this student already has a record in saved results
+        let existingRecord = state.judging.savedResults.find(s => s.id === currentID);
+        
+        if(existingRecord) {
+            // Update existing record
+            existingRecord.scores[judgeId] = totalScore;
+            // Recalculate Final Average
+            let sum = 0, count = 0;
+            for(let jKey in existingRecord.scores) {
+                sum += parseFloat(existingRecord.scores[jKey]);
+                count++;
+            }
+            existingRecord.finalScore = (count > 0 ? (sum/count) : 0).toFixed(2);
+        } else {
+            // If not finalized yet, we just keep it in liveScores until Admin clicks "Finalize/Save"
+            // But to be safe, let's allow "Partial Saves"
+            console.log("Score received. Waiting for Admin Finalize.");
+        }
+        saveToLocal();
+    }
+}
 </script>
 </body>
 </html>
