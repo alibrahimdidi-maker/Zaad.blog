@@ -6274,6 +6274,72 @@ window.syncWindows = function() {
 };
 
 alert("✅ ULTIMATE UPDATE APPLIED:\n- Text Mode with Grid\n- Font Size, Gap & Alignment Controls\n- Line Limiter (Start/End Line)");
+    // --- GRID FIXED FUNCTION ---
+    window.handleGridClick = function(boxID) {
+        // 1. ލިމިޓް ހަމަވެފައިވޭތޯ ބެލުން
+        const limit = parseInt(document.getElementById('qLimit').value);
+        if(state.session.selectionIDs.length >= limit) {
+            alert("މިހާރު ތިޔަވަނީ ކަނޑައެޅިފައިވާ ޢަދަދަށް (" + limit + ") ސުވާލު ނަގާފައެވެ.");
+            return;
+        }
+
+        // 2. ގްރިޑްގައި ސުވާލު ހުރިތޯ ޗެކްކުރުން (FIX)
+        // މެޕް ނެތްނަމަ ނުވަތަ ސުވާލެއް އެސައިން ނުވެ އިންނަމަ
+        if(!state.grid.map || !state.grid.map[boxID]) {
+            // ޕޫލްގައި ސުވާލު ހުރެފައި، ގްރިޑަށް ނާރާ އިންނަމަ އޮޓޯއިން ޝަފްލް ކޮށްދޭނެ
+            if(state.filteredPool && state.filteredPool.length > 0) {
+                reshuffleGrid(); 
+                // ރީ-ޝަފްލް ކުރުމަށްފަހު އަލުން އެ ނަންބަރު ނަގާނީ
+                if(state.grid.map[boxID]) {
+                    // Recursive call to try again immediately
+                    window.handleGridClick(boxID);
+                    return;
+                }
+            }
+            
+            alert("⚠️ ސަމާލުކަމަށް: ސުވާލު ޑޭޓާ ލޯޑުވެފައެއް ނެތެވެ. (Please Load CSV First)");
+            return;
+        }
+
+        const qID = state.grid.map[boxID];
+        
+        // 3. ނަގާފައިވާ ނަންބަރެއްތޯ ބެލުން
+        if(state.grid.taken.includes(boxID)) {
+            // Already taken - do nothing silently or alert
+            console.log("Box " + boxID + " already taken.");
+            return;
+        }
+
+        // 4. ސުވާލު ނެގުން (Process Selection)
+        state.grid.taken.push(boxID);
+        state.session.selectionIDs.push(qID);
+
+        // ޕޫލުން ސުވާލު އުނިކުރުން (Remove from pools)
+        const idx = state.qPool.indexOf(qID);
+        if(idx > -1) state.qPool.splice(idx, 1);
+        
+        const fIdx = state.filteredPool.indexOf(qID);
+        if(fIdx > -1) state.filteredPool.splice(fIdx, 1);
+
+        state.qUsed.push(qID);
+
+        updateSelectionUI();
+
+        // 5. ލިމިޓް ހަމަވުމުން ރެޑީ މޯޑަށް ބަދަލުކުރުން
+        if(state.session.selectionIDs.length === limit) {
+            state.grid.visible = false;
+            state.session.phase = 'ready';
+            prepareSlotsFromSelection();
+            document.getElementById('btnStartReading').classList.remove('hidden');
+        } else {
+            state.session.phase = 'selection';
+        }
+        
+        // ސްކްރީންތައް އަޕްޑޭޓް ކުރުން
+        renderSlots(); 
+        updateGridPreview(); 
+        syncWindows();
+    }
 </script>
 </body>
 </html>
