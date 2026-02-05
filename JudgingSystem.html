@@ -11668,6 +11668,162 @@ function finalizeStudentResult() {
     // މާސްޓަރ ޓޭބަލް ރިފްރެޝް ކުރުން (އިންނަނަމަ)
     if(typeof renderMasterTable === 'function') renderMasterTable();
 }
+    // --- ULTIMATE 2000 STUDENTS GENERATOR (WITH CRITERIA BREAKDOWN) ---
+function generateDetailedRankedCSV() {
+    // 1. Scoring Criteria definition
+    const criteriaList = [
+        { name: "Thilawa", max: 30 }, 
+        { name: "Tajweed", max: 20 }, 
+        { name: "Makhraj", max: 20 }, 
+        { name: "Sifa", max: 10 }, 
+        { name: "Fasaha", max: 10 }, 
+        { name: "Talaffuz", max: 5 }, 
+        { name: "Maqamat", max: 5 }
+    ];
+
+    // 2. Prepare Headers
+    let headers = [
+        "Serial No", "Reg No", "Age Group", "Branch", "Institution", 
+        "Full Name", "Gender", "Address", "ID Card", "Contact", 
+        "Parent Name", "Parent Phone", "Email"
+    ];
+
+    // ★ NEW: Add Headers for Criteria Averages (Categories)
+    criteriaList.forEach(c => {
+        headers.push(`${c.name} (AVG)`);
+    });
+
+    // Add Columns for EACH Judge Total
+    for (let j = 1; j <= 5; j++) {
+        headers.push(`Judge ${j} Total`);
+    }
+
+    // Final Summary Columns
+    headers.push("GRAND TOTAL", "FINAL AVERAGE", "RANK", "REMARKS");
+
+    // 3. Data Pools
+    const namesM = ["Ahmed", "Mohamed", "Ali", "Hussain", "Hassan", "Abdulla", "Ibrahim", "Yusuf", "Ismail", "Zaid"];
+    const namesF = ["Fathimath", "Aishath", "Mariyam", "Aminath", "Zainab", "Hawwa", "Khadheeja", "Shifa", "Yumna"];
+    const lastNames = ["Rasheed", "Nazeer", "Fayaz", "Manik", "Didi", "Saeed", "Zahir", "Riza", "Nasir", "Waheed"];
+    const islands = ["Male'", "Hulhumale'", "Addu City", "Fuvahmulah", "Kulhudhuffushi", "Thinadhoo", "Naifaru"];
+    const institutions = ["Arabiyya School", "Iskandhar School", "Majeedhiyya", "Aminiya", "Jamaluddin", "Ahmadhiyya", "Villa College", "MNU", "Quran Class"];
+    const groups = ["Under 6", "Under 9", "Under 11", "Under 13", "Under 16", "Under 19", "Under 21", "General"];
+    const branches = ["Balaiygen", "Nubalai"];
+
+    let allStudentsData = []; 
+
+    // 4. Generate 2000 Students
+    for (let i = 1; i <= 2000; i++) {
+        const isFem = Math.random() > 0.5;
+        const fName = isFem ? namesF[Math.floor(Math.random() * namesF.length)] : namesM[Math.floor(Math.random() * namesM.length)];
+        const lName = lastNames[Math.floor(Math.random() * lastNames.length)];
+        
+        // Setup Sums Tracker for Criteria Averages
+        let criteriaSums = {}; 
+        criteriaList.forEach(c => criteriaSums[c.name] = 0);
+
+        let studentObj = {
+            serial: i,
+            reg: `REG-${1000 + i}`,
+            group: groups[Math.floor(Math.random() * groups.length)],
+            branch: branches[Math.floor(Math.random() * branches.length)],
+            inst: institutions[Math.floor(Math.random() * institutions.length)],
+            name: `${fName} ${lName}`,
+            gender: isFem ? "Female" : "Male",
+            addr: islands[Math.floor(Math.random() * islands.length)],
+            id: `A${Math.floor(100000 + Math.random() * 900000)}`,
+            contact: "7770000", parent: "Parent Name", pPhone: "7771111", email: "test@mail.com",
+            
+            judgeTotals: [], // Store just the total for each judge
+            catAverages: [], // Store the calculated average for each category
+            grandTotal: 0
+        };
+
+        // Student Ability Factor (Consistency)
+        let ability = Math.random() * (0.99 - 0.50) + 0.50; 
+        let totalForAllJudges = 0;
+
+        // Loop through 5 Judges
+        for (let j = 1; j <= 5; j++) {
+            let judgeSum = 0;
+            let variance = (Math.random() * 0.1) - 0.05; 
+
+            criteriaList.forEach(c => {
+                let mark = c.max * (ability + variance);
+                mark += (Math.random() * 2) - 1;
+                mark = Math.max(0, Math.min(c.max, mark));
+                mark = Math.round(mark * 2) / 2;
+
+                // Add to sums tracker
+                criteriaSums[c.name] += mark;
+                
+                judgeSum += mark;
+            });
+
+            studentObj.judgeTotals.push(judgeSum.toFixed(2));
+            totalForAllJudges += judgeSum;
+        }
+
+        // Calculate Category Averages (Sum / 5 Judges)
+        criteriaList.forEach(c => {
+            let avg = criteriaSums[c.name] / 5;
+            studentObj.catAverages.push(avg.toFixed(2));
+        });
+
+        studentObj.grandTotal = totalForAllJudges;
+        studentObj.finalAvg = totalForAllJudges / 5;
+        allStudentsData.push(studentObj);
+    }
+
+    // 5. SORTING FOR RANK
+    allStudentsData.sort((a, b) => b.finalAvg - a.finalAvg);
+
+    // 6. Build Final CSV Content
+    let csvRows = [];
+    csvRows.push(headers.join(",")); 
+
+    allStudentsData.forEach((s, index) => {
+        let rank = index + 1;
+        let remarks = "";
+        if (rank <= 3) remarks = `Top ${rank} 🏆`;
+        else if (rank <= 10) remarks = "Top 10 🎖️";
+        else if (s.finalAvg > 90) remarks = "Mumthaz";
+
+        // A. Basic Info
+        let row = [
+            s.serial, s.reg, s.group, s.branch, s.inst, 
+            s.name, s.gender, s.addr, s.id, s.contact, 
+            s.parent, s.pPhone, s.email
+        ];
+        let rowString = row.map(v => `"${v}"`).join(","); 
+
+        // B. Criteria Averages (New Section)
+        let catString = s.catAverages.join(",");
+
+        // C. Judge Totals
+        let judgesString = s.judgeTotals.join(",");
+
+        // D. Final Stats
+        let statsString = `${s.grandTotal.toFixed(2)},${s.finalAvg.toFixed(2)},${rank},"${remarks}"`;
+
+        // Combine
+        csvRows.push(`${rowString},${catString},${judgesString},${statsString}`);
+    });
+
+    // 7. Download
+    const csvContent = csvRows.join("\n");
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    const d = new Date();
+    const dateStr = d.toISOString().split('T')[0];
+    
+    link.setAttribute("href", url);
+    link.setAttribute("download", `Rasfahi_Full_Ranked_Data_${dateStr}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+}
 </script>
 </body>
 </html>
