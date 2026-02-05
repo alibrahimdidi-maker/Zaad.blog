@@ -520,63 +520,6 @@
     <div id="autoSaveStatus">💾 Auto Saved</div>
 
 <div id="securityOverlay">
-    /* --- ★ FIXED LAYOUT ENGINE (FINAL) ★ --- */
-
-/* 1. Body: Forces Sidebar to Right, Main to Left (in RTL) */
-body {
-    display: flex !important;
-    flex-direction: row !important; /* Sidebar -> Main */
-    margin: 0 !important;
-    padding: 0 !important;
-    width: 100vw;
-    height: 100vh;
-    overflow: hidden; /* No Body Scroll */
-    background: #000;
-}
-
-/* 2. Sidebar: Fixed Width on the Right */
-.sidebar {
-    width: 450px !important; /* Fixed width */
-    flex-shrink: 0 !important; /* Never shrink */
-    height: 100vh !important;
-    overflow-y: auto !important;
-    border-left: 3px solid #FFD700; /* Separator line */
-    z-index: 100;
-    order: 1 !important; /* Ensures it stays first (Right in RTL) */
-}
-
-/* 3. Main View: Fills the remaining space */
-.main-view {
-    flex: 1 !important; /* Takes all empty space */
-    width: auto !important; /* Resets any fixed width */
-    height: 100vh !important;
-    order: 2 !important; /* Stays second (Left in RTL) */
-    position: relative;
-    border: none !important;
-}
-
-/* 4. Fix Auto-Save Notification (Floating) */
-#autoSaveStatus {
-    position: fixed !important; /* Floats on top */
-    top: 20px;
-    left: 20px; /* Moves to top-left corner */
-    z-index: 99999;
-    background: rgba(0, 50, 0, 0.9);
-    border: 1px solid #00e676;
-    padding: 8px 15px;
-    border-radius: 50px;
-    box-shadow: 0 0 15px #000;
-    pointer-events: none; /* Allows clicking through it */
-    opacity: 0; /* Hidden by default */
-    transition: opacity 0.5s;
-}
-
-/* 5. Mobile Responsiveness Fix */
-@media screen and (max-width: 900px) {
-    body { flex-direction: column-reverse !important; }
-    .sidebar { width: 100% !important; height: auto !important; order: 2 !important; }
-    .main-view { width: 100% !important; height: 50vh !important; order: 1 !important; }
-}
         <style>
             #securityOverlay {
                 position: fixed; top: 0; left: 0; width: 100%; height: 100%;
