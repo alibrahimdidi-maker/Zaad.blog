@@ -12894,6 +12894,84 @@ function saveSecretaryScore() {
         setTimeout(() => btn.innerText = old, 1500);
     }
 }
+    // --- 1. ULTIMATE DUMMY GENERATOR (ENABLES REPORTING & PRINTING) ---
+function generateDetailedRankedCSV() {
+    // A. Reset Both Memory Banks (To treat dummy as real data)
+    state.allStudents = []; 
+    state.judging.savedResults = []; // ★ Clears old results to load dummy as "Official"
+
+    const criteriaList = [
+        { name: "Thilawa", max: 30 }, { name: "Tajweed", max: 20 }, 
+        { name: "Makhraj", max: 20 }, { name: "Sifa", max: 10 }, 
+        { name: "Fasaha", max: 10 }, { name: "Talaffuz", max: 5 }, 
+        { name: "Maqamat", max: 5 }
+    ];
+    
+    // Config Data
+    const names = ["Ahmed", "Ali", "Hassan", "Ibrahim", "Fathimath", "Aishath", "Mariyam", "Zainab"];
+    // Ensure these match your Report Filter Dropdowns exactly
+    const groups = ["Under 6", "Under 9", "Under 11", "Under 13", "Under 16", "Under 19", "General"];
+    const branches = ["Balaiygen", "Nubalai"];
+    const institutions = ["Arabiyya School", "Majeedhiyya", "Aminiya", "Villa College", "Quran Class", "Private"];
+
+    // B. Generate 2000 Students
+    for (let i = 1; i <= 2000; i++) {
+        const name = names[i % names.length];
+        
+        let studentObj = {
+            serial: i, reg: `REG-${1000 + i}`,
+            group: groups[i % groups.length],
+            branch: branches[i % branches.length],
+            institution: institutions[i % institutions.length], // Added Inst
+            name: `${name} ${i}`,
+            gender: (i % 2 === 0) ? "Female" : "Male",
+            addr: "Male'", id: `A000${i}`,
+            
+            scores: {},          
+            detailedScores: {},  
+            finalScore: 0
+        };
+
+        let ability = Math.random() * (0.98 - 0.50) + 0.50; 
+        let grandTotal = 0;
+
+        for (let j = 1; j <= 5; j++) {
+            let jKey = `Judge_${j}`;
+            let judgeTotal = 0;
+            let variance = (Math.random() * 0.1) - 0.05; 
+            
+            studentObj.detailedScores[jKey] = {};
+
+            criteriaList.forEach(c => {
+                let mark = c.max * (ability + variance);
+                mark = Math.max(0, Math.min(c.max, mark));
+                mark = parseFloat(mark.toFixed(2));
+
+                studentObj.detailedScores[jKey][c.name] = mark;
+                judgeTotal += mark;
+            });
+
+            judgeTotal = parseFloat(judgeTotal.toFixed(2));
+            studentObj.scores[jKey] = judgeTotal;
+            grandTotal += judgeTotal;
+        }
+
+        studentObj.finalScore = parseFloat((grandTotal / 5).toFixed(2));
+        
+        // ★ THE FIX: Push to BOTH lists so Reporting buttons work ★
+        state.allStudents.push(studentObj);
+        state.judging.savedResults.push(studentObj);
+    }
+
+    // C. Save & Finalize
+    saveToLocal();
+    if(typeof renderMasterTable === 'function') renderMasterTable();
+    
+    // Auto-download the CSV as backup
+    exportFullMasterSheet(); 
+    
+    alert("✅ Dummy Data Generated & Set as OFFICIAL Results!\n\nYou can now click 'Top 3', 'Top 5', or 'Full List' buttons to print reports.");
+}
 </script>
 </body>
 </html>
