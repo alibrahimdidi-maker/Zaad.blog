@@ -1723,8 +1723,9 @@
             Students: <span id="tableCount" style="color:#fff;">0</span>
         </div>
         
-        <button class="btn-green" onclick="exportMasterResultSheet()" style="padding:5px 10px; font-size:11px;">📥 Export Excel</button>
-    </div>
+       <button class="btn-green" onclick="exportFullMasterSheet()" style="padding:5px 10px; font-size:11px; font-weight:bold; border:1px solid #00e676;">
+    📥 EXPORT FULL LIST (ALL)
+</button>
 
     <div class="ms-table-container">
         <table class="ms-table">
@@ -12267,6 +12268,130 @@ function saveSecretaryScore() {
         // ބަޓަން ނުފެނުނުނަމަ އެލާޓެއް
         alert(`Score Saved!\nJudge: ${judgeID}\nMark: ${totalScore}`);
     }
+}
+    // --- FIXED: EXPORT ALL DATA (IGNORES FILTERS) ---
+function exportFullMasterSheet() {
+    // 1. ޑޭޓާ ނަގާނެ މަސްދަރު ކަނޑައެޅުން
+    // އިސްކަންދޭނީ "Master List" (state.allStudents) އަށެވެ.
+    let sourceData = [];
+
+    if (state.allStudents && state.allStudents.length > 0) {
+        sourceData = [...state.allStudents]; // Copy Master List
+    } else if (state.judging.savedResults && state.judging.savedResults.length > 0) {
+        sourceData = [...state.judging.savedResults]; // Fallback to saved results
+    }
+
+    if (sourceData.length === 0) {
+        alert("No data found to export! (އެކްސްޕޯޓް ކުރާނެ ޑޭޓާއެއް ނެތް)");
+        return;
+    }
+
+    // 2. CSV Headers ތައްޔާރުކުރުން
+    // މިއީ ތިބާ ބޭނުންފުޅުވި ގޮތަށް: ވަކިވަކި ބައިތަކުގެ އެވްރެޖް + ޖަޖުންގެ ޖުމްލަ
+    const criteriaList = [
+        "Thilawa", "Tajweed", "Makhraj", "Sifa", "Fasaha", "Talaffuz", "Maqamat"
+    ];
+
+    let csv = "Serial No,Reg No,Age Group,Branch,Institution,Full Name,Gender,Address,ID Card,";
+    
+    // Add Criteria Average Columns Headers
+    criteriaList.forEach(c => csv += `${c} (AVG),`);
+    
+    // Add Judge Columns Headers
+    for(let j=1; j<=5; j++) csv += `Judge ${j} Total,`;
+    
+    // Final Summary Headers
+    csv += "GRAND TOTAL,FINAL AVERAGE,RANK,REMARKS\n";
+
+    // 3. ޑޭޓާ ލިޔުން (Loop through ALL students)
+    // ރޭންކް ކުރުމަށްޓަކައި އެވްރެޖް މަތިން ތިރިއަށް ސޯޓްކުރުން
+    sourceData.sort((a, b) => (b.finalScore || 0) - (a.finalScore || 0));
+
+    sourceData.forEach((s, idx) => {
+        let row = [];
+        
+        // --- A. Personal Info ---
+        row.push(idx + 1); // Serial (Rank Based)
+        row.push(`"${s.reg || ''}"`);
+        row.push(`"${s.group || ''}"`);
+        row.push(`"${s.branch || ''}"`);
+        row.push(`"${s.institution || s.inst || ''}"`);
+        row.push(`"${s.name || ''}"`);
+        row.push(`"${s.gender || ''}"`);
+        row.push(`"${s.address || s.addr || ''}"`);
+        row.push(`"${s.id || ''}"`);
+
+        // --- B. Criteria Averages Logic ---
+        // މިއީ ވަރަށް މުހިންމު ބައެއް. އަޅުގަނޑުމެން އަތުގައި އޮތީ ހަމައެކަނި ޖަޖުންގެ ޖުމްލަ ކަމަށްވާނަމަ
+        // މިބައި ފުރަން ދަތިވާނެ. އެހެންނަމަވެސް "Generate Dummy" އިން އައި ޑޭޓާނަމަ މިބައި އިންނާނެ.
+        // މެނުއަލްކޮށް ޖަޖުކުރި ކުދިންނަށް މިބައިގައި އަޅާނީ "-" އެވެ. (To prevent errors)
+        
+        // (If you created 'catAverages' in generator, use it. Else empty)
+        if(s.catAverages && s.catAverages.length > 0) {
+            s.catAverages.forEach(val => row.push(val));
+        } else {
+            // Fill blanks if data missing
+            criteriaList.forEach(() => row.push("-")); 
+        }
+
+        // --- C. Judge Totals (The most important part) ---
+        // Check s.scores object OR s.judgeTotals array
+        for(let j=1; j<=5; j++) {
+            let val = "0";
+            
+            // 1. Check Live Judging Object format { Judge_1: 90 }
+            if(s.scores && s.scores[`Judge_${j}`]) {
+                val = s.scores[`Judge_${j}`];
+            } 
+            // 2. Check Dummy Generator Array format [90, 80, ...]
+            else if(s.judgeTotals && s.judgeTotals[j-1]) {
+                val = s.judgeTotals[j-1];
+            }
+            
+            row.push(val);
+        }
+
+        // --- D. Final Calculations ---
+        // Recalculate Grand Total from the columns to be safe
+        let grandTotal = 0;
+        let activeJudges = 0;
+        
+        // Check scores again for calc
+        for(let j=1; j<=5; j++) {
+            let sc = 0;
+            if(s.scores && s.scores[`Judge_${j}`]) sc = parseFloat(s.scores[`Judge_${j}`]);
+            else if(s.judgeTotals && s.judgeTotals[j-1]) sc = parseFloat(s.judgeTotals[j-1]);
+            
+            if(sc > 0) {
+                grandTotal += sc;
+                activeJudges++;
+            }
+        }
+
+        // If 'finalScore' is already saved, use it. Else calculate.
+        let finalAvg = s.finalScore || 0;
+        if(finalAvg === 0 && activeJudges > 0) {
+            finalAvg = (grandTotal / activeJudges).toFixed(2);
+        }
+
+        row.push(grandTotal.toFixed(2));
+        row.push(finalAvg);
+        row.push(idx + 1); // Rank
+        row.push(""); // Remarks
+
+        csv += row.join(",") + "\n";
+    });
+
+    // 4. Download File
+    const dateStr = new Date().toISOString().split('T')[0];
+    const fileName = `Rasfahi_FULL_BACKUP_${dateStr}.csv`;
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = fileName;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
 }
 </script>
 </body>
