@@ -1482,68 +1482,64 @@
 
         </div>
     </div>
- <div id="studentRegDashboard" style="background: #0d1117; border-bottom: 4px solid #FFD700; padding: 15px; margin-bottom:10px; display:flex; flex-direction:column; gap:10px;">
-
-    <div style="display:flex; justify-content:space-between; align-items:center; background:#161b22; padding:10px; border-radius:6px; border:1px solid #334455;">
+<div id="masterViewPanel">
+    
+    <div class="ms-filter-bar">
+        <h4 style="color:#FFD700; margin:0; font-family:'Faruuma'; margin-right:10px;">މާސްޓަރ ޝީޓް:</h4>
         
-        <div style="display:flex; align-items:center; gap:10px;">
-            <div style="color:#FFD700; font-weight:bold; font-size:12px;">1. MASTER SHEET:</div>
-            <input type="file" id="masterSheetInput" accept=".csv" style="font-size:11px; color:#aaa;">
-            <button class="btn-blue" onclick="loadMasterSheetForQueue()" style="padding:5px 15px; font-size:11px;">📂 LOAD DATA</button>
-            <span id="queueStatus" style="font-size:11px; color:#00e676; margin-left:5px;"></span>
+        <input type="file" id="masterSheetInput" accept=".csv" style="display:none;" onchange="loadMasterSheetTable()">
+        <button class="btn-blue" onclick="document.getElementById('masterSheetInput').click()" style="padding:5px 10px; font-size:11px;">📂 Load CSV</button>
+        
+        <select id="filterBranch" onchange="renderMasterTable()" style="background:#000; color:#fff; border:1px solid #555; padding:5px;">
+            <option value="">- ހުރިހާ ގޮތްޕެއް -</option>
+            <option value="Balaiygen">Balaiygen (ބަލައިގެން)</option>
+            <option value="Nubalai">Nubalai (ނުބަލައި)</option>
+        </select>
+
+        <select id="filterGroup" onchange="renderMasterTable()" style="background:#000; color:#fff; border:1px solid #555; padding:5px;">
+            <option value="">- ހުރިހާ ޢުމުރެއް -</option>
+            <option value="Under 6">6 އަހަރުން ދަށް</option>
+            <option value="Under 9">9 އަހަރުން ދަށް</option>
+            <option value="Under 11">11 އަހަރުން ދަށް</option>
+            <option value="Under 13">13 އަހަރުން ދަށް</option>
+            <option value="Under 16">16 އަހަރުން ދަށް</option>
+            <option value="Under 19">19 އަހަރުން ދަށް</option>
+            <option value="General">ޢާއްމު ބައި</option>
+        </select>
+        
+        <div style="flex:1; text-align:right; font-size:11px; color:#aaa;">
+            Students: <span id="tableCount" style="color:#fff;">0</span>
         </div>
-
-        <div style="display:flex; align-items:center; gap:5px;">
-            <div style="color:#FFD700; font-weight:bold; font-size:12px;">2. CREATE SESSION:</div>
-            
-            <select id="qBranch" style="background:#000; color:#fff; border:1px solid #555; padding:5px; font-size:11px;">
-                <option value="">- Select Branch -</option>
-                <option value="Balaiygen">Balaiygen</option>
-                <option value="Nubalai">Nubalai</option>
-            </select>
-
-            <select id="qGroup" style="background:#000; color:#fff; border:1px solid #555; padding:5px; font-size:11px;">
-                <option value="">- Select Age -</option>
-                <option value="Under 6">Under 6</option>
-                <option value="Under 9">Under 9</option>
-                <option value="Under 11">Under 11</option>
-                <option value="Under 13">Under 13</option>
-                <option value="Under 16">Under 16</option>
-                <option value="Under 19">Under 19</option>
-                <option value="General">General</option>
-            </select>
-
-            <button class="btn-orange" onclick="createSessionQueue()" style="padding:5px 15px; font-size:11px;">
-                🔍 FILTER & START
-            </button>
-        </div>
+        
+        <button class="btn-green" onclick="exportMasterResultSheet()" style="padding:5px 10px; font-size:11px;">📥 Export Excel</button>
     </div>
 
-    <div id="activeStudentControl" style="display:none; background: linear-gradient(90deg, #002200, #001100); padding:10px; border:1px solid #006400; border-radius:6px; align-items:center; justify-content:space-between;">
-        
-        <div style="display:flex; gap:5px; align-items:center;">
-            <button class="btn-blue" onclick="prevQueueStudent()" style="padding:8px 15px;">◀ PREV</button>
-            <div style="text-align:center; min-width:150px;">
-                <span id="qCounter" style="color:#aaa; font-size:10px;">Student 0 of 0</span><br>
-                <span id="qRegNo" style="color:#FFD700; font-weight:bold; font-size:14px;">-</span>
-            </div>
-            <button class="btn-blue" onclick="nextQueueStudent()" style="padding:8px 15px;">NEXT ▶</button>
-        </div>
-
-        <div style="flex:1; text-align:center;">
-            <h2 id="qName" style="color:#fff; margin:0; font-family:'Faruuma'; font-size:24px;">(Select a Session to Start)</h2>
-            <div style="color:#888; font-size:12px;">
-                <span id="qID">-</span> | <span id="qInst">-</span>
-            </div>
-        </div>
-
-        <div style="display:none;">
-            <input type="text" id="stdName"><input type="text" id="stdID"><input type="text" id="stdReg">
-            <input type="text" id="stdGender"><input type="text" id="stdPhone"><input type="text" id="stdAddr">
-            <input type="text" id="stdGroup"><input type="text" id="stdBranch"><input type="text" id="stdInst">
-            <input type="text" id="stdParent"><input type="text" id="stdParentPhone"><input type="text" id="stdEmail">
-        </div>
-
+    <div class="ms-table-container">
+        <table class="ms-table">
+            <thead>
+                <tr>
+                    <th class="col-s">#</th>
+                    <th class="col-m">Reg No</th>
+                    <th class="col-l">Name (ނަން)</th>
+                    <th class="col-m">ID Card</th>
+                    <th class="col-m">Branch</th>
+                    <th class="col-m">Age Group</th>
+                    <th class="col-l">Institution</th>
+                    
+                    <th class="col-mark">J-1</th>
+                    <th class="col-mark">J-2</th>
+                    <th class="col-mark">J-3</th>
+                    <th class="col-mark">J-4</th>
+                    <th class="col-mark">J-5</th>
+                    
+                    <th class="col-final">AVG</th>
+                    <th class="col-final">Rank</th>
+                </tr>
+            </thead>
+            <tbody id="masterTableBody">
+                <tr><td colspan="14" style="padding:20px; color:#555;">Please Load CSV File to View Data</td></tr>
+            </tbody>
+        </table>
     </div>
 </div>
     <div id="adminMirror">
@@ -11218,6 +11214,149 @@ function saveAndNext() {
             alert("Session Complete! All students graded.");
         }
     }, 1000); // 1 second delay to see "Saved" message
+}
+    // --- MASTER SHEET TABLE LOGIC (LANDSCAPE VIEW) ---
+
+let activeRowIndex = -1;
+
+// 1. Load CSV to Table
+function loadMasterSheetTable() {
+    const fileInput = document.getElementById('masterSheetInput');
+    if (!fileInput.files.length) return;
+
+    const r = new FileReader();
+    r.onload = e => {
+        const rows = e.target.result.split('\n');
+        state.allStudents = []; // Reset Data
+        
+        for(let i=1; i<rows.length; i++) {
+            let row = rows[i].trim();
+            if(!row) continue;
+            // Handle quotes properly
+            const cols = row.match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g);
+            if(cols && cols.length >= 6) {
+                const c = cols.map(val => val.replace(/^"|"$/g, '').trim());
+                
+                // Create Student Object
+                let sObj = {
+                    serial: i, // Auto serial
+                    reg: c[1] || "", group: c[2] || "", branch: c[3] || "",
+                    institution: c[4] || "", name: c[5] || "", gender: c[6] || "",
+                    address: c[7] || "", id: c[8] || "",
+                    scores: {
+                        Judge_1: 0, Judge_2: 0, Judge_3: 0, Judge_4: 0, Judge_5: 0
+                    },
+                    finalScore: 0,
+                    rank: 0
+                };
+                state.allStudents.push(sObj);
+            }
+        }
+        alert("Data Loaded!");
+        renderMasterTable();
+    };
+    r.readAsText(fileInput.files[0]);
+}
+
+// 2. Render the Table (With Filters)
+function renderMasterTable() {
+    const fBranch = document.getElementById('filterBranch').value;
+    const fGroup = document.getElementById('filterGroup').value;
+    const tbody = document.getElementById('masterTableBody');
+    
+    tbody.innerHTML = '';
+
+    // Filter Logic
+    let displayList = state.allStudents.filter(s => {
+        return (fBranch === "" || s.branch === fBranch) && 
+               (fGroup === "" || s.group === fGroup);
+    });
+
+    // Sort by Rank or Name
+    displayList.sort((a,b) => b.finalScore - a.finalScore); // High score top
+
+    document.getElementById('tableCount').innerText = displayList.length;
+
+    displayList.forEach((s, idx) => {
+        let row = document.createElement('tr');
+        if(s.id === state.judging.currentStudentObj?.id) row.classList.add('selected-row');
+
+        // Calculate Rank (Dynamic)
+        let rank = (s.finalScore > 0) ? (idx + 1) : "-";
+
+        row.innerHTML = `
+            <td>${idx + 1}</td>
+            <td>${s.reg}</td>
+            <td style="text-align:left; font-weight:bold;">${s.name}</td>
+            <td>${s.id}</td>
+            <td>${s.branch}</td>
+            <td>${s.group}</td>
+            <td style="text-align:left;">${s.institution}</td>
+            
+            <td>${s.scores['Judge_1'] || '-'}</td>
+            <td>${s.scores['Judge_2'] || '-'}</td>
+            <td>${s.scores['Judge_3'] || '-'}</td>
+            <td>${s.scores['Judge_4'] || '-'}</td>
+            <td>${s.scores['Judge_5'] || '-'}</td>
+            
+            <td style="font-weight:bold; color:#00e676;">${s.finalScore || '-'}</td>
+            <td style="color:#FFD700;">${rank}</td>
+        `;
+
+        // Click to Select Student for Grading
+        row.onclick = () => selectStudentForGrading(s);
+        tbody.appendChild(row);
+    });
+}
+
+// 3. Select Logic (Links to Rubric & Banner)
+function selectStudentForGrading(student) {
+    // 1. Set Active Student
+    state.judging.currentStudentObj = student;
+    state.judging.liveScores = student.scores || {}; 
+
+    // 2. Update Banner (Secretary Panel) - You need to add this banner back inside secretary panel if removed
+    // Or we update the Banner Header if you kept it inside Secretary Panel
+    if(document.getElementById('secName')) {
+        document.getElementById('secStudentBanner').style.display = 'block';
+        document.getElementById('secName').innerText = student.name;
+        document.getElementById('secID').innerText = student.id;
+        document.getElementById('secReg').innerText = student.reg;
+        document.getElementById('secInst').innerText = student.institution;
+    }
+
+    // 3. Reset Rubric
+    renderSecretaryRubric(); 
+    
+    // 4. Refresh Table to show selection highlight
+    renderMasterTable();
+}
+
+// 4. Override Save Function to Update Table Immediately
+const oldSaveFunc = saveSecretaryScore;
+saveSecretaryScore = function() {
+    // Call original logic to calculate totals
+    if(!state.judging.currentStudentObj) return;
+    
+    const judgeID = document.getElementById('secJudgeSelect').value;
+    const finalScore = calculateSecTotal();
+
+    // Update Master Data
+    const sIdx = state.allStudents.findIndex(x => x.id === state.judging.currentStudentObj.id);
+    if(sIdx > -1) {
+        state.allStudents[sIdx].scores[judgeID] = parseFloat(finalScore.toFixed(2));
+        
+        // Recalculate Average
+        let total = 0; let count = 0;
+        Object.values(state.allStudents[sIdx].scores).forEach(v => {
+            if(v > 0) { total += v; count++; }
+        });
+        state.allStudents[sIdx].finalScore = count > 0 ? (total/count).toFixed(2) : 0;
+    }
+
+    // Visual Feedback
+    alert("Saved!");
+    renderMasterTable(); // Refresh table to show new scores
 }
 </script>
 </body>
