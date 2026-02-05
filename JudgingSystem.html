@@ -12186,6 +12186,88 @@ function renderSecretaryRubric() {
 
     calculateSecTotal(); // Update Total
 }
+    // --- FIXED SAVE FUNCTION (LINKS CARD UI TO MASTER DATA) ---
+function saveSecretaryScore() {
+    // 1. ދަރިވަރަކު ނެތްނަމަ ހުއްޓުވުން
+    if(!state.judging.currentStudentObj) {
+        alert("Please select a student first! (ދަރިވަރަކު އިޚްތިޔާރުކުރައްވާ)");
+        return;
+    }
+
+    // 2. ޖަޖު އަދި ޖުމްލަ މާކުސް ނެގުން
+    const judgeID = document.getElementById('secJudgeSelect').value; // e.g. "Judge_1"
+    
+    // ކާޑުތަކުން (secScores) ޖުމްލަ ހިސާބުކުރުން
+    let totalScore = 0;
+    if(typeof secScores !== 'undefined') {
+        for (let key in secScores) {
+            totalScore += (secScores[key].max - secScores[key].deducted);
+        }
+    } else {
+        // ސޭފްޓީ: އެއްވެސް އެއްޗެއް ނެތިއްޔާ 0
+        totalScore = 0;
+    }
+    
+    // ޕޮއިންޓްގެ މައްސަލަ ހައްލުކުރުން (2 ޑެސިމަލް)
+    totalScore = parseFloat(totalScore.toFixed(2));
+
+    // 3. ލައިވް މެމަރީ އަޕްޑޭޓްކުރުން
+    if (!state.judging.liveScores) state.judging.liveScores = {};
+    state.judging.liveScores[judgeID] = totalScore;
+
+    // ★ 4. މާސްޓަރ ލިސްޓް (ALL STUDENTS) އަޕްޑޭޓް ކުރުން ★
+    // މިއީ އެކްސްޕޯޓް ކުރާއިރު މާކުސް ނާރާ މައްސަލައިގެ ހައްލު
+    const currentID = state.judging.currentStudentObj.id;
+    
+    // މުޅި ލިސްޓުން މި ކުއްޖާ ހޯދުން
+    const sIdx = state.allStudents.findIndex(s => s.id === currentID);
+
+    if (sIdx > -1) {
+        // ސްކޯ އޮބްޖެކްޓް ނެތްނަމަ ހެދުން
+        if (!state.allStudents[sIdx].scores) {
+            state.allStudents[sIdx].scores = {};
+        }
+        
+        // ޖަޖުގެ މާކުސް ލިސްޓަށް ލުން
+        state.allStudents[sIdx].scores[judgeID] = totalScore;
+
+        // ވަގުތުން ފައިނަލް އެވްރެޖް އަޕްޑޭޓް ކުރުން (އޮޕްޝަނަލް)
+        let sum = 0; 
+        let count = 0;
+        const allS = state.allStudents[sIdx].scores;
+        for (let jKey in allS) {
+            let val = parseFloat(allS[jKey]);
+            if (val > 0) { sum += val; count++; }
+        }
+        // ޖަޖުންގެ އަދަދަށް ބަހާލުން
+        state.allStudents[sIdx].finalScore = count > 0 ? parseFloat((sum / count).toFixed(2)) : 0;
+    }
+
+    // 5. ސޭވްކޮށް ރިފްރެޝް ކުރުން
+    saveToLocal(); // ބްރައުޒާ މެމަރީއަށް
+    
+    if(typeof renderMasterTable === 'function') {
+        renderMasterTable(); // ތިރީގައި އިންނަ ޓޭބަލް ރިފްރެޝްވާނެ
+    }
+
+    // 6. ކާމިޔާބުވިކަން އެންގުން (Visual Feedback)
+    const saveBtn = document.getElementById('btnSaveNext'); // ނުވަތަ ބަޓަންގެ އައިޑީ
+    if(saveBtn) {
+        const oldTxt = saveBtn.innerText;
+        saveBtn.innerText = `✅ Saved! (${totalScore})`;
+        saveBtn.style.background = "#fff";
+        saveBtn.style.color = "#000";
+        
+        setTimeout(() => {
+            saveBtn.innerText = oldTxt;
+            saveBtn.style.background = ""; // Reset
+            saveBtn.style.color = "";
+        }, 1500);
+    } else {
+        // ބަޓަން ނުފެނުނުނަމަ އެލާޓެއް
+        alert(`Score Saved!\nJudge: ${judgeID}\nMark: ${totalScore}`);
+    }
+}
 </script>
 </body>
 </html>
