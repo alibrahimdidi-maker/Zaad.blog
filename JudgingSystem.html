@@ -10421,6 +10421,242 @@ function openJudgeMirror() {
     // Slight delay to ensure window loads before sync
     setTimeout(syncExtraScreen, 500);
 }
+    // ========================================================
+// ★ NEW ROYAL JUDGE SCREEN (WITH FULLSCREEN CLICK) ★
+// ========================================================
+
+function openJudgeMirror() {
+    // Close existing window if open
+    if(state.extra.judgeWindow) state.extra.judgeWindow.close();
+
+    const fontCSS = `
+        @import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cinzel:wght@700&display=swap');
+        @font-face { font-family: 'Faruuma'; src: local('Faruuma'), url('https://fonts.googleapis.com/earlyaccess/notosansthaana.css'); } 
+    `;
+
+    const html = `
+    <!DOCTYPE html>
+    <html lang="dv" dir="rtl">
+    <head>
+        <title>Judge Royal Screen</title>
+        <style>
+            ${fontCSS}
+            body { 
+                margin: 0; overflow: hidden; 
+                background: radial-gradient(circle at center, #001a33, #000510); /* Royal Dark Blue */
+                font-family: 'Amiri', serif;
+                display: flex; height: 100vh; width: 100vw;
+                cursor: pointer; /* Hand cursor to indicate clickable */
+            }
+            
+            /* HEADER BAR */
+            #judgeHeader {
+                position: absolute; top: 0; width: 100%; height: 60px;
+                background: rgba(0,0,0,0.6);
+                border-bottom: 1px solid #ffffff;
+                display: flex; justify-content: space-between; align-items: center;
+                padding: 0 20px; box-sizing: border-box; color: #fff; 
+                z-index: 10; backdrop-filter: blur(5px);
+            }
+            .judge-badge {
+                background: #fff; color: #001a33; padding: 5px 15px; 
+                border-radius: 4px; font-weight: bold; font-size: 14px; font-family: sans-serif;
+            }
+
+            /* LAYOUT CONTAINER */
+            #container {
+                display: flex; width: 100%; height: 100%; padding-top: 60px; box-sizing: border-box;
+            }
+            
+            /* SIDEBAR (List) */
+            #sidePanel {
+                width: 20%; background: rgba(0,0,0,0.3); border-left: 1px solid #444;
+                padding: 10px; overflow-y: auto;
+            }
+            .q-item {
+                background: rgba(255,255,255,0.05); padding: 12px; margin-bottom: 8px; border-radius: 4px;
+                color: #ccc; font-size: 14px; cursor: default; border: 1px solid transparent;
+            }
+            .q-item.active {
+                background: #004080; color: #fff; border-color: #fff; font-weight:bold;
+            }
+
+            /* MAIN VIEW AREA */
+            #mainView {
+                flex: 1; display: flex; flex-direction: column; 
+                justify-content: center; align-items: center; 
+                padding: 30px; position: relative;
+            }
+            
+            /* INFO BAR (Top of Text) */
+            #infoBar {
+                margin-bottom: 15px; font-size: 16px; color: #b3e5fc; 
+                font-family: 'Cinzel', serif; letter-spacing: 1px;
+                text-shadow: 0 2px 4px #000;
+            }
+
+            /* --- ROYAL WHITE BORDER BOX --- */
+            #judgeBox {
+                width: 85%; height: 75%;
+                border: 6px double #ffffff; /* Royal White Border */
+                border-radius: 15px;
+                padding: 30px;
+                background: rgba(255,255,255,0.02); /* Very subtle fill */
+                box-shadow: 0 0 40px rgba(0,0,0,0.5), inset 0 0 30px rgba(0,0,0,0.5);
+                display: flex; justify-content: center; align-items: center;
+                position: relative;
+            }
+
+            /* CORNER DECORATION */
+            #judgeBox::after {
+                content: ''; position: absolute; top: 5px; left: 5px; right: 5px; bottom: 5px;
+                border: 1px solid rgba(255,255,255,0.3); border-radius: 10px; pointer-events: none;
+            }
+
+            /* QURAN TEXT STYLING */
+            #quranText {
+                width: 100%; height: 100%;
+                overflow-y: auto; /* Allow Scrolling */
+                color: #ffffff;
+                font-size: 3.5vw; 
+                line-height: 2.2; 
+                font-weight: bold; 
+                text-align: center;
+                direction: rtl; 
+                white-space: pre-wrap;
+                text-shadow: 0 2px 5px #000;
+                
+                /* CENTERING TRICK */
+                display: flex; 
+                flex-direction: column;
+                align-items: center; 
+            }
+            
+            /* Scrollbar Styling for Blue Theme */
+            #quranText::-webkit-scrollbar { width: 10px; }
+            #quranText::-webkit-scrollbar-track { background: #001a33; }
+            #quranText::-webkit-scrollbar-thumb { background: #fff; border-radius: 5px; }
+
+            /* To allow centering when short, but scrolling when long */
+            #quranText.center-content { justify-content: center; }
+            #quranText.top-content { justify-content: flex-start; }
+
+            /* STATUS OVERLAY */
+            #statusOverlay {
+                position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+                background: rgba(0,26,51,0.95); color: #fff;
+                display: flex; justify-content: center; align-items: center;
+                font-size: 30px; font-weight: bold; z-index: 20;
+                font-family: 'Cinzel', serif;
+            }
+
+        </style>
+    </head>
+    <body>
+        <div id="judgeHeader">
+            <div class="judge-badge">JUDGE VIEW</div>
+            <div id="modeIndicator" style="color:#aaa;">-</div>
+        </div>
+
+        <div id="statusOverlay">WAITING FOR SELECTION...</div>
+
+        <div id="container">
+            <div id="sidePanel"></div>
+            <div id="mainView">
+                <div id="infoBar">
+                    <span id="jSurah">-</span> | Ayah: <span id="jAyah">-</span> | Juz: <span id="jJuz">-</span>
+                </div>
+                
+                <div id="judgeBox">
+                    <div id="quranText" class="center-content"></div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            // --- FULLSCREEN CLICK HANDLER ---
+            document.addEventListener('click', function() {
+                if (!document.fullscreenElement) {
+                    document.documentElement.requestFullscreen().catch(err => {
+                        console.log("Error attempting to enable full-screen mode: " + err.message);
+                    });
+                } else {
+                    if (document.exitFullscreen) {
+                        document.exitFullscreen();
+                    }
+                }
+            });
+
+            window.opener.initExtra(window); // Sync immediately
+
+            function updateView(d) {
+                const overlay = document.getElementById('statusOverlay');
+                const sidePanel = document.getElementById('sidePanel');
+                const qText = document.getElementById('quranText');
+                const modeInd = document.getElementById('modeIndicator');
+
+                // Update Mode Indicator
+                const modeText = (d.settings.mode === 'hifz') ? "HIFZ MODE (Student sees hidden text)" : "TILAWA MODE";
+                modeInd.innerText = modeText;
+                modeInd.style.color = (d.settings.mode === 'hifz') ? "#ff5252" : "#00e676";
+
+                // Phase Logic
+                if (d.phase === 'grid') {
+                    overlay.style.display = 'flex';
+                    overlay.innerText = "STUDENT SELECTING QUESTIONS...";
+                } 
+                else if (d.phase === 'ready') {
+                    overlay.style.display = 'flex';
+                    overlay.innerText = "READY TO START";
+                    renderSideList(d);
+                }
+                else if (d.phase === 'reading') {
+                    overlay.style.display = 'none';
+                    renderSideList(d);
+                    
+                    const cur = d.selection[d.currentIdx];
+                    if(cur) {
+                        // ALWAYS SHOW TEXT (Even if Hifz)
+                        qText.innerText = cur.text;
+                        
+                        document.getElementById('jSurah').innerText = cur.surah;
+                        document.getElementById('jAyah').innerText = cur.start + '-' + cur.end;
+                        document.getElementById('jJuz').innerText = cur.juz;
+
+                        // Check if text is long to handle centering vs scrolling
+                        qText.className = 'center-content';
+                        setTimeout(() => {
+                            if(qText.scrollHeight > qText.clientHeight) {
+                                qText.className = 'top-content'; // Align top if scrolling needed
+                            } else {
+                                qText.className = 'center-content'; // Center if fits
+                            }
+                        }, 50);
+                    }
+                }
+            }
+
+            function renderSideList(d) {
+                const sp = document.getElementById('sidePanel');
+                sp.innerHTML = '';
+                d.selection.forEach((q, i) => {
+                    let div = document.createElement('div');
+                    div.className = 'q-item ' + (i === d.currentIdx ? 'active' : '');
+                    div.innerText = \`Q\${i+1}: \${q.surah} (\${q.start})\`;
+                    sp.appendChild(div);
+                });
+            }
+        <\/script>
+    </body>
+    </html>`;
+
+    state.extra.judgeWindow = window.open("", "JudgeMirror", "width=1000,height=700");
+    state.extra.judgeWindow.document.write(html);
+    state.extra.judgeWindow.document.close();
+    
+    // Slight delay to ensure window loads before sync
+    setTimeout(syncExtraScreen, 500);
+}
 </script>
 </body>
 </html>
