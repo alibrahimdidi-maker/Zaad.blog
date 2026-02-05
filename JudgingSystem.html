@@ -453,37 +453,7 @@
                 Licensed To: <span id="licenseName"></span>
             </div>
             <div class="panel" style="border: 1px solid #FFD700; background: linear-gradient(180deg, #001a00, #000);">
-    <h2 style="color: #FFD700; font-family:'Cinzel', serif;">★ ޝާހީ ސްކްރީން (Master V13)</h2>
-
-    <div style="background:#0a0a0a; padding:10px; border:1px solid #333; border-radius:5px; margin-bottom:15px; box-shadow: 0 0 10px rgba(0,0,0,0.5);">
-        <label style="color:#FFD700; font-size:12px; font-weight:bold; display:block; margin-bottom:5px; text-align:center;">
-            🎮 ލައިވް ކޮންޓްރޯލް
-        </label>
-
-        <div style="display:flex; gap:5px; margin-bottom:5px;">
-            <button class="btn-gold" style="flex:1; padding:10px; font-weight:bold;" onclick="openExtraScreen()">
-                🖥️ STUDENT
-            </button>
-            <button class="btn-purple" style="flex:1; padding:10px; font-weight:bold; border-color:#d500f9;" onclick="openJudgeMirror()">
-                ⚖️ JUDGE
-            </button>
-        </div>
-        
-        <div id="exMonitor" style="background:#000; color:#00e676; padding:5px; text-align:center; font-size:11px; border:1px solid #333; margin-bottom:5px; font-weight:bold;">
-            [STATUS: IDLE]
-        </div>
-        
-        <div style="display:flex; gap:5px;">
-            <button class="btn-blue" style="flex:1; padding:8px;" onclick="extraPrevQ()">
-                ◀ PREV
-            </button>
-            <button class="btn-green" style="flex:2; padding:8px;" onclick="extraNextQ()">
-                START / NEXT ▶
-            </button>
-        </div>
-    </div>
-
-    <hr style="border-color:#444; margin:10px 0;">
+    <h2 style="color: #FFD700; font-family:'Cinzel', serif;">★ ޝާހީ ސްކްރީން (Master V12)</h2>
 
     <div style="background:#111; padding:5px; border:1px dashed #555; margin-bottom:5px;">
         <label style="color:#00e676; font-size:11px;">1. ޑޭޓާބޭސް (CSV) ލޯޑުކުރައްވާ:</label>
@@ -491,7 +461,9 @@
         <div id="extraStatus" style="font-size:10px; color:#FFD700; margin-top:2px;">Waiting for CSV...</div>
     </div>
 
-    <label style="color:#FFD700;">2. މުޤައްރަރު (Syllabus):</label>
+    <hr style="border-color:#444; margin:5px 0;">
+
+    <label style="color:#FFD700;">2. މުޤައްރަރު (Syllabus Filter):</label>
     <div style="margin-bottom:5px;">
         <select id="filterType" onchange="toggleFilterUI()" style="background:#003300; color:#fff; width:100%;">
             <option value="juz">By Juz (ފޮތް ވަކިން)</option>
@@ -509,7 +481,7 @@
     </div>
 
     <button class="btn-red" style="width:100%; margin-top:5px; font-size:11px;" onclick="resetExtraSession()">
-        🔄 APPLY FILTER & RESET GRID
+        🔄 APPLY FILTER & GENERATE GRID
     </button>
 
     <hr style="border-color:#444; margin:8px 0;">
@@ -518,85 +490,140 @@
     
     <div style="display:grid; grid-template-columns: 1fr 1fr; gap:5px; margin-bottom:5px;">
         <div>
-            <small>ނަގާ ޢަދަދު:</small>
+            <small>ނަގާ ޢަދަދު (1-100):</small>
             <input type="number" id="exPickCount" value="3" min="1" max="100" style="background:#222; color:#fff; font-weight:bold;">
         </div>
         <div>
             <small>ކިޔަވާ ގޮތް:</small>
             <select id="exMode" onchange="updateExtraScreen('mode', this.value)" style="background:#330000; color:#fff;">
-                <option value="tilawa">ތިލާވަތު</option>
-                <option value="hifz">ޙިފްޡު</option>
+                <option value="tilawa">ތިލާވަތު (Text)</option>
+                <option value="hifz">ޙިފްޡު (Hidden)</option>
             </select>
         </div>
     </div>
 
     <div style="margin-bottom:5px;">
-        <small>Theme (50 Styles):</small>
-        <select id="exTheme" onchange="updateExtraScreen('theme', this.value)" style="width:100%; background:#000; color:#FFD700;">
-            <optgroup label="ROYAL GREEN">
-                <option value="green_1" selected>Emerald & Gold</option>
-                <option value="green_2">Deep Forest</option>
-                <option value="green_3">Islamic Pattern</option>
-                <option value="green_4">Green Velvet</option>
-                <option value="green_5">Neon Green</option>
-                <option value="green_6">Olive Bronze</option>
-                <option value="green_7">Mint Royal</option>
-                <option value="green_8">Dark Moss</option>
-                <option value="green_9">Gradient</option>
-                <option value="green_10">Sultan</option>
+        <small>Select Theme (50 Styles):</small>
+        <select id="exTheme" onchange="updateExtraScreen('theme', this.value)" style="width:100%; background:#000; color:#FFD700; border:1px solid #555;">
+            <optgroup label="ROYAL GREEN (ގަދަ ފެހި)">
+                <option value="green_1" selected>1. Emerald & Gold (Double)</option>
+                <option value="green_2">2. Deep Forest (Rounded)</option>
+                <option value="green_3">3. Islamic Pattern</option>
+                <option value="green_4">4. Green Velvet</option>
+                <option value="green_5">5. Neon Green Border</option>
+                <option value="green_6">6. Olive & Bronze</option>
+                <option value="green_7">7. Mint Royal</option>
+                <option value="green_8">8. Dark Moss (Square)</option>
+                <option value="green_9">9. Green Gradient</option>
+                <option value="green_10">10. Sultan's Green</option>
             </optgroup>
-            <optgroup label="ROYAL BLUE">
-                <option value="blue_1">Midnight Blue</option>
-                <option value="blue_2">Ocean Deep</option>
-                <option value="blue_3">Sapphire</option>
-                <option value="blue_4">Navy Pres.</option>
-                <option value="blue_5">Electric</option>
-                <option value="blue_6">Azure</option>
-                <option value="blue_7">Teal</option>
-                <option value="blue_8">Velvet</option>
-                <option value="blue_9">Night Sky</option>
-                <option value="blue_10">Diamond</option>
+            <optgroup label="ROYAL BLUE (ގަދަ ނޫ)">
+                <option value="blue_1">11. Midnight Blue (Gold)</option>
+                <option value="blue_2">12. Ocean Deep (Silver)</option>
+                <option value="blue_3">13. Sapphire Box</option>
+                <option value="blue_4">14. Navy Presidential</option>
+                <option value="blue_5">15. Electric Blue Glow</option>
+                <option value="blue_6">16. Azure & White</option>
+                <option value="blue_7">17. Royal Teal</option>
+                <option value="blue_8">18. Blue Velvet</option>
+                <option value="blue_9">19. Night Sky</option>
+                <option value="blue_10">20. Blue Diamond</option>
             </optgroup>
-            <optgroup label="RED & BLACK">
-                <option value="red_1">Burgundy</option>
-                <option value="red_2">Ruby</option>
-                <option value="black_1">Pure Black</option>
-                <option value="black_2">Onyx</option>
+            <optgroup label="PRESIDENTIAL RED (ޝާހީ ރަތް)">
+                <option value="red_1">21. Burgundy Gold</option>
+                <option value="red_2">22. Ruby Red (Rounded)</option>
+                <option value="red_3">23. Maroon Majestic</option>
+                <option value="red_4">24. Red Carpet</option>
+                <option value="red_5">25. Crimson Glow</option>
+                <option value="red_6">26. Blood Red & Black</option>
+                <option value="red_7">27. Rose Gold</option>
+                <option value="red_8">28. Red Square Classic</option>
+                <option value="red_9">29. Fire Gradient</option>
+                <option value="red_10">30. Imperial Red</option>
             </optgroup>
-             <optgroup label="MIX">
-                <option value="mix_1">Purple</option>
-                <option value="mix_2">White Gold</option>
-                <option value="mix_3">Bronze</option>
+            <optgroup label="ONYX BLACK & GOLD (ކަޅާއި ރަން)">
+                <option value="black_1">31. Pure Black & Gold</option>
+                <option value="black_2">32. Onyx & Silver</option>
+                <option value="black_3">33. Matte Black</option>
+                <option value="black_4">34. Black Marble</option>
+                <option value="black_5">35. Golden Frame</option>
+                <option value="black_6">36. Dark Knight</option>
+                <option value="black_7">37. Luxury Carbon</option>
+                <option value="black_8">38. Black & Platinum</option>
+                <option value="black_9">39. Shadow Box</option>
+                <option value="black_10">40. Black Minimal</option>
+            </optgroup>
+            <optgroup label="SPECIAL MIX (މިކްސް)">
+                <option value="mix_1">41. Purple & Gold</option>
+                <option value="mix_2">42. White Gold (Clean)</option>
+                <option value="mix_3">43. Bronze Age</option>
+                <option value="mix_4">44. Copper Style</option>
+                <option value="mix_5">45. Pearl White</option>
+                <option value="mix_6">46. Sunset Royal</option>
+                <option value="mix_7">47. Lavender Mist</option>
+                <option value="mix_8">48. Chocolate & Gold</option>
+                <option value="mix_9">49. Gray Scale</option>
+                <option value="mix_10">50. Glass Morphism</option>
             </optgroup>
         </select>
     </div>
 
     <div style="display:flex; align-items:center; gap:10px; margin-bottom:5px;">
-        <small>Color:</small>
-        <input type="color" id="exTextColor" value="#ffffff" oninput="updateExtraScreen('textColor', this.value)" style="flex:1; height:25px;">
+        <small>Text Color:</small>
+        <input type="color" id="exTextColor" value="#ffffff" oninput="updateExtraScreen('textColor', this.value)" style="flex:1; height:30px;">
     </div>
 
     <div class="control-row" style="margin-bottom:2px;">
-        <label style="width:50px; font-size:10px;">Size:</label>
+        <label style="width:60px; font-size:10px;">Box W:</label>
         <input type="range" class="range-slider" min="50" max="100" value="90" oninput="updateExtraScreen('boxW', this.value)">
+    </div>
+    <div class="control-row" style="margin-bottom:2px;">
+        <label style="width:60px; font-size:10px;">Box H:</label>
+        <input type="range" class="range-slider" min="30" max="98" value="80" oninput="updateExtraScreen('boxH', this.value)">
     </div>
     
     <div style="display:grid; grid-template-columns: 1fr 1fr; gap:5px; margin-bottom:2px;">
         <div class="control-row">
-            <label style="width:20px; font-size:10px;">X:</label>
+            <label style="width:30px; font-size:10px;">X:</label>
             <input type="range" class="range-slider" min="-200" max="200" value="0" oninput="updateExtraScreen('textX', this.value)">
         </div>
         <div class="control-row">
-            <label style="width:20px; font-size:10px;">Y:</label>
+            <label style="width:30px; font-size:10px;">Y:</label>
             <input type="range" class="range-slider" min="-200" max="200" value="0" oninput="updateExtraScreen('textY', this.value)">
         </div>
     </div>
-<div class="control-row">
-        <label style="width:50px; color:#00e676;">ZOOM:</label>
+
+    <div class="control-row">
+        <label style="width:60px; color:#00e676;">ZOOM:</label>
         <input type="range" class="range-slider" min="2" max="15" step="0.5" value="6" oninput="updateExtraScreen('zoom', this.value)">
     </div>
 
-</div> 
+    <div style="margin-top:10px; border-top:1px dashed #555; padding-top:5px;">
+        
+        <div style="display:flex; gap:5px; margin-bottom:5px;">
+            <button class="btn-gold" style="flex:1; padding:10px; font-weight:bold;" onclick="openExtraScreen()">
+                🖥️ STUDENT
+            </button>
+            
+            <button class="btn-purple" style="flex:1; padding:10px; font-weight:bold; border-color:#d500f9;" onclick="openJudgeMirror()">
+                ⚖️ JUDGE
+            </button>
+        </div>
+        
+        <div id="exMonitor" style="background:#000; color:#FFD700; padding:5px; text-align:center; font-size:11px; border:1px solid #333; margin-bottom:5px;">
+            [IDLE]
+        </div>
+        
+        <div style="display:flex; gap:5px;">
+            <button class="btn-blue" style="flex:1; padding:10px;" onclick="extraPrevQ()">
+                ◀ PREV
+            </button>
+            <button class="btn-green" style="flex:2; padding:10px;" onclick="extraNextQ()">
+                START / NEXT ▶
+            </button>
+        </div>
+    </div>
+</div>
 <div class="panel" style="border: 1px solid #e91e63;">
     <h2 style="color: #e91e63;">★ އެޑްމިން މެނުއަލް ސްކޯރިންގ</h2>
     <div style="background:#1a000d; padding:10px; border:1px dashed #e91e63;">
@@ -608,8 +635,6 @@
             <option value="Judge_4">Judge 4</option>
             <option value="Judge_5">Judge 5</option>
         </select>
-        </div>
-</div>
 
         <div id="manualEntryContainer"></div> 
         
