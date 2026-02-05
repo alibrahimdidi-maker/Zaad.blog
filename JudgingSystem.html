@@ -12699,6 +12699,201 @@ function exportFullMasterSheet() {
     link.click();
     document.body.removeChild(link);
 }
+    // --- 1. DUMMY GENERATOR (UPDATES MEMORY + DOWNLOADS CSV) ---
+function generateDetailedRankedCSV() {
+    state.allStudents = []; // Reset Data
+    
+    // Config
+    const criteriaList = [
+        { name: "Thilawa", max: 30 }, { name: "Tajweed", max: 20 }, 
+        { name: "Makhraj", max: 20 }, { name: "Sifa", max: 10 }, 
+        { name: "Fasaha", max: 10 }, { name: "Talaffuz", max: 5 }, 
+        { name: "Maqamat", max: 5 }
+    ];
+    
+    // Arrays for Random Data
+    const names = ["Ahmed", "Ali", "Hassan", "Ibrahim", "Fathimath", "Aishath", "Mariyam"];
+    const groups = ["Under 6", "Under 9", "Under 13", "General"];
+    const branches = ["Balaiygen", "Nubalai"];
+
+    // GENERATE 2000 STUDENTS
+    for (let i = 1; i <= 2000; i++) {
+        const name = names[i % names.length];
+        
+        let studentObj = {
+            serial: i, reg: `REG-${1000 + i}`,
+            group: groups[i % groups.length],
+            branch: branches[i % branches.length],
+            inst: "School " + (i % 5),
+            name: `${name} ${i}`,
+            gender: (i % 2 === 0) ? "Female" : "Male",
+            addr: "Male'", id: `A000${i}`,
+            
+            scores: {},          // Simple Totals
+            detailedScores: {},  // Full Breakdown
+            finalScore: 0
+        };
+
+        let ability = Math.random() * (0.95 - 0.50) + 0.50; 
+        let grandTotal = 0;
+
+        // Simulate 5 Judges
+        for (let j = 1; j <= 5; j++) {
+            let jKey = `Judge_${j}`;
+            let judgeTotal = 0;
+            let variance = (Math.random() * 0.1) - 0.05; 
+            
+            // Initialize Judge Object
+            studentObj.detailedScores[jKey] = {};
+
+            criteriaList.forEach(c => {
+                let mark = c.max * (ability + variance);
+                mark = Math.max(0, Math.min(c.max, mark));
+                mark = parseFloat(mark.toFixed(2));
+
+                // ★ STORE BREAKDOWN HERE ★
+                studentObj.detailedScores[jKey][c.name] = mark;
+                judgeTotal += mark;
+            });
+
+            judgeTotal = parseFloat(judgeTotal.toFixed(2));
+            studentObj.scores[jKey] = judgeTotal;
+            grandTotal += judgeTotal;
+        }
+
+        studentObj.finalScore = parseFloat((grandTotal / 5).toFixed(2));
+        state.allStudents.push(studentObj);
+    }
+
+    // Update Table & Save
+    saveToLocal();
+    if(typeof renderMasterTable === 'function') renderMasterTable();
+    
+    // ★ TRIGGER DOWNLOAD IMMEDIATELY ★
+    exportFullMasterSheet(); 
+    alert("✅ Generated & Downloaded!");
+}
+    // --- 2. EXPORT FUNCTION (CALCULATES CATEGORY AVERAGES) ---
+function exportFullMasterSheet() {
+    let sourceData = (state.allStudents && state.allStudents.length > 0) ? [...state.allStudents] : [...state.judging.savedResults];
+    if (sourceData.length === 0) { alert("No data to export!"); return; }
+
+    const criteriaNames = ["Thilawa", "Tajweed", "Makhraj", "Sifa", "Fasaha", "Talaffuz", "Maqamat"];
+
+    // 1. Build CSV Headers
+    let csv = "Serial No,Reg No,Age Group,Branch,Institution,Full Name,Gender,Address,ID Card,";
+    
+    // Criteria Headers
+    criteriaNames.forEach(c => csv += `${c} (AVG),`);
+    
+    // Judge Headers
+    for(let j=1; j<=5; j++) csv += `Judge ${j} Total,`;
+    
+    csv += "GRAND TOTAL,FINAL AVERAGE,RANK\n";
+
+    // 2. Sort Data
+    sourceData.sort((a, b) => (b.finalScore || 0) - (a.finalScore || 0));
+
+    // 3. Loop Rows
+    sourceData.forEach((s, idx) => {
+        let row = [];
+        row.push(idx + 1, `"${s.reg||''}"`, `"${s.group||''}"`, `"${s.branch||''}"`, `"${s.institution||s.inst||''}"`, `"${s.name||''}"`, `"${s.gender||''}"`, `"${s.address||''}"`, `"${s.id||''}"`);
+
+        // ★ CRITICAL: Calculate Average for Each Criteria ★
+        criteriaNames.forEach(crit => {
+            let sum = 0;
+            let count = 0;
+
+            // Check if detailed scores exist
+            if (s.detailedScores) {
+                // Loop through Judge_1 to Judge_5 keys
+                for (let key in s.detailedScores) {
+                    let score = s.detailedScores[key][crit]; // e.g. detailedScores['Judge_1']['Thilawa']
+                    if (score !== undefined) {
+                        sum += parseFloat(score);
+                        count++;
+                    }
+                }
+            }
+
+            let avg = count > 0 ? (sum / count).toFixed(2) : "0.00";
+            row.push(avg); // Add to CSV Row
+        });
+
+        // Add Judge Totals
+        let grandTotal = 0;
+        let activeJudges = 0;
+        for(let j=1; j<=5; j++) {
+            let val = (s.scores && s.scores[`Judge_${j}`]) ? s.scores[`Judge_${j}`] : "0";
+            row.push(val);
+            if(parseFloat(val) > 0) { grandTotal += parseFloat(val); activeJudges++; }
+        }
+
+        let finalAvg = s.finalScore || (activeJudges > 0 ? (grandTotal/activeJudges).toFixed(2) : 0);
+        row.push(grandTotal.toFixed(2), finalAvg, idx + 1);
+
+        csv += row.join(",") + "\n";
+    });
+
+    // 4. Download Logic
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = `Rasfahi_Full_Report_${new Date().toISOString().split('T')[0]}.csv`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+}
+    // --- 3. SAVE FUNCTION (STORES DETAILS FOR EXPORT) ---
+function saveSecretaryScore() {
+    if(!state.judging.currentStudentObj) { alert("Select student first!"); return; }
+
+    const judgeID = document.getElementById('secJudgeSelect').value;
+    const currentID = state.judging.currentStudentObj.id;
+    
+    // 1. Get Details from Cards
+    let totalScore = 0;
+    let detailsObj = {}; // Holds Thilawa: 25, Tajweed: 15 etc.
+
+    if(state.judging.rubric && typeof secScores !== 'undefined') {
+        state.judging.rubric.forEach((r, idx) => {
+            const val = secScores[idx].max - secScores[idx].deducted;
+            detailsObj[r.name] = val; // Store Category Score
+            totalScore += val;
+        });
+    }
+    totalScore = parseFloat(totalScore.toFixed(2));
+
+    // 2. Save to Master List
+    const sIdx = state.allStudents.findIndex(s => s.id === currentID);
+    if (sIdx > -1) {
+        if (!state.allStudents[sIdx].scores) state.allStudents[sIdx].scores = {};
+        state.allStudents[sIdx].scores[judgeID] = totalScore;
+
+        // ★ THIS LINE SAVES THE BREAKDOWN ★
+        if (!state.allStudents[sIdx].detailedScores) state.allStudents[sIdx].detailedScores = {};
+        state.allStudents[sIdx].detailedScores[judgeID] = detailsObj; 
+
+        // Update Final Avg
+        let sum = 0, count = 0;
+        for (let j in state.allStudents[sIdx].scores) {
+            let v = state.allStudents[sIdx].scores[j];
+            if(v > 0) { sum += v; count++; }
+        }
+        state.allStudents[sIdx].finalScore = count > 0 ? parseFloat((sum / count).toFixed(2)) : 0;
+    }
+
+    saveToLocal();
+    if(typeof renderMasterTable === 'function') renderMasterTable();
+    
+    // Button Feedback
+    const btn = document.querySelector('#secretaryPanel .btn-green');
+    if(btn) {
+        let old = btn.innerText;
+        btn.innerText = `✅ SAVED (${totalScore})`;
+        setTimeout(() => btn.innerText = old, 1500);
+    }
+}
 </script>
 </body>
 </html>
