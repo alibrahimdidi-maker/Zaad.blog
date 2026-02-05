@@ -12533,6 +12533,172 @@ function exportFullMasterSheet() {
     link.click();
     document.body.removeChild(link);
 }
+    // --- 1. FIXED DUMMY GENERATOR (SAVES TO MEMORY FIRST) ---
+function generateDetailedRankedCSV() {
+    // A. Setup Criteria
+    const criteriaList = [
+        { name: "Thilawa", max: 30 }, { name: "Tajweed", max: 20 }, 
+        { name: "Makhraj", max: 20 }, { name: "Sifa", max: 10 }, 
+        { name: "Fasaha", max: 10 }, { name: "Talaffuz", max: 5 }, 
+        { name: "Maqamat", max: 5 }
+    ];
+
+    // B. Reset System Data
+    state.allStudents = []; 
+    
+    const namesM = ["Ahmed", "Mohamed", "Ali", "Hussain", "Hassan", "Abdulla"];
+    const namesF = ["Fathimath", "Aishath", "Mariyam", "Aminath", "Zainab"];
+    const groups = ["Under 6", "Under 9", "Under 13", "General"];
+    const branches = ["Balaiygen", "Nubalai"];
+
+    // C. Generate 2000 Students
+    for (let i = 1; i <= 2000; i++) {
+        const isFem = Math.random() > 0.5;
+        const name = isFem ? namesF[i % namesF.length] : namesM[i % namesM.length];
+        
+        let studentObj = {
+            serial: i, reg: `REG-${1000 + i}`,
+            group: groups[i % groups.length],
+            branch: branches[i % branches.length],
+            inst: "School " + (i % 10),
+            name: `${name} ${i}`,
+            gender: isFem ? "Female" : "Male",
+            addr: "Male'", id: `A000${i}`,
+            
+            // ★ IMPORTANT STORAGE STRUCTURES ★
+            scores: {},          // Stores { Judge_1: 90, Judge_2: 85 }
+            detailedScores: {},  // Stores Breakdown { Judge_1: { Thilawa: 28... } }
+            finalScore: 0
+        };
+
+        // Student Ability (Consistent across judges)
+        let ability = Math.random() * (0.95 - 0.50) + 0.50; 
+        let grandTotal = 0;
+
+        // Loop 5 Judges
+        for (let j = 1; j <= 5; j++) {
+            let jKey = `Judge_${j}`;
+            let judgeTotal = 0;
+            let variance = (Math.random() * 0.1) - 0.05; 
+            
+            // Create Judge's Object inside Detailed Scores
+            studentObj.detailedScores[jKey] = {};
+
+            criteriaList.forEach(c => {
+                let mark = c.max * (ability + variance);
+                mark = Math.max(0, Math.min(c.max, mark));
+                mark = parseFloat(mark.toFixed(2)); // Round appropriately
+
+                // Store Breakdown
+                studentObj.detailedScores[jKey][c.name] = mark;
+                judgeTotal += mark;
+            });
+
+            // Store Totals
+            judgeTotal = parseFloat(judgeTotal.toFixed(2));
+            studentObj.scores[jKey] = judgeTotal;
+            grandTotal += judgeTotal;
+        }
+
+        studentObj.finalScore = parseFloat((grandTotal / 5).toFixed(2));
+        state.allStudents.push(studentObj);
+    }
+
+    // D. Save & Update UI
+    saveToLocal();
+    if(typeof renderMasterTable === 'function') renderMasterTable();
+    
+    alert("✅ 2000 Students Generated with FULL BREAKDOWN!\nNow click 'Export Full List' to see averages.");
+}
+    // --- 2. FIXED EXPORT FUNCTION (CALCULATES CATEGORY AVERAGES) ---
+function exportFullMasterSheet() {
+    // A. Get Data
+    let sourceData = [];
+    if (state.allStudents && state.allStudents.length > 0) sourceData = [...state.allStudents];
+    else if (state.judging.savedResults && state.judging.savedResults.length > 0) sourceData = [...state.judging.savedResults];
+
+    if (sourceData.length === 0) { alert("No data to export!"); return; }
+
+    // B. Define Criteria
+    const criteriaList = [
+        "Thilawa", "Tajweed", "Makhraj", "Sifa", "Fasaha", "Talaffuz", "Maqamat"
+    ];
+
+    // C. Build CSV Header
+    let csv = "Serial No,Reg No,Age Group,Branch,Institution,Full Name,Gender,Address,ID Card,";
+    
+    // 1. Criteria Average Headers
+    criteriaList.forEach(c => csv += `${c} (AVG),`);
+    
+    // 2. Judge Total Headers
+    for(let j=1; j<=5; j++) csv += `Judge ${j} Total,`;
+    
+    csv += "GRAND TOTAL,FINAL AVERAGE,RANK,REMARKS\n";
+
+    // D. Sort Data
+    sourceData.sort((a, b) => (b.finalScore || 0) - (a.finalScore || 0));
+
+    // E. Build Rows
+    sourceData.forEach((s, idx) => {
+        let row = [];
+        row.push(idx + 1, `"${s.reg||''}"`, `"${s.group||''}"`, `"${s.branch||''}"`, `"${s.institution||s.inst||''}"`, `"${s.name||''}"`, `"${s.gender||''}"`, `"${s.address||''}"`, `"${s.id||''}"`);
+
+        // --- ★ CRITICAL LOGIC: CALCULATE CRITERIA AVERAGES ★ ---
+        criteriaList.forEach(critName => {
+            let sum = 0;
+            let count = 0;
+
+            // Check detailedScores (created by generator or manual save)
+            if (s.detailedScores) {
+                for (let jKey in s.detailedScores) {
+                    // Check if this judge has a score for this criteria
+                    if (s.detailedScores[jKey][critName] !== undefined) {
+                        sum += parseFloat(s.detailedScores[jKey][critName]);
+                        count++;
+                    }
+                }
+            }
+
+            // If data exists, calc average. Else "-"
+            let avg = count > 0 ? (sum / count).toFixed(2) : "-";
+            row.push(avg);
+        });
+
+        // --- Judge Totals ---
+        let grandTotal = 0;
+        let activeJudges = 0;
+        
+        for(let j=1; j<=5; j++) {
+            let jKey = `Judge_${j}`;
+            let val = (s.scores && s.scores[jKey]) ? s.scores[jKey] : "0";
+            row.push(val);
+            
+            if(parseFloat(val) > 0) {
+                grandTotal += parseFloat(val);
+                activeJudges++;
+            }
+        }
+
+        // --- Final Stats ---
+        let finalAvg = s.finalScore || (activeJudges > 0 ? (grandTotal/activeJudges).toFixed(2) : 0);
+        
+        row.push(grandTotal.toFixed(2));
+        row.push(finalAvg);
+        row.push(idx + 1);
+        row.push("");
+
+        csv += row.join(",") + "\n";
+    });
+
+    // F. Download
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = `Rasfahi_Full_Report_${new Date().toISOString().split('T')[0]}.csv`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+}
 </script>
 </body>
 </html>
