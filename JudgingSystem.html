@@ -1435,89 +1435,66 @@
 
         </div>
     </div>
- <div id="studentRegDashboard" style="background: #0d1117; border-bottom: 4px double #FFD700; padding: 15px; margin-bottom:10px; display:flex; flex-direction:column; gap:10px;">
+ <div id="studentRegDashboard" style="background: #0d1117; border-bottom: 4px solid #FFD700; padding: 15px; margin-bottom:10px; display:flex; flex-direction:column; gap:10px;">
 
-    <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #333; padding-bottom:10px;">
-        <h3 style="color:#ff9800; margin:0; font-family:'Faruuma'; font-size:18px;">
-            👤 ދަރިވަރުންގެ މަޢުލޫމާތު & ރެޖިސްޓްރޭޝަން
-        </h3>
+    <div style="display:flex; justify-content:space-between; align-items:center; background:#161b22; padding:10px; border-radius:6px; border:1px solid #334455;">
         
-        <div style="display:flex; gap:5px;">
-            <input type="file" id="batchCsv" accept=".csv" style="display:none;" onchange="loadStudentBatch()">
-            
-            <button class="btn-blue" onclick="document.getElementById('batchCsv').click()" style="padding:5px 10px; font-size:11px; display:flex; align-items:center; gap:5px;">
-                📂 Load CSV
-            </button>
-            
-            <button class="btn-purple" onclick="downloadMasterCSVTemplate()" style="padding:5px 10px; font-size:11px;">
-                ⬇️ Template
-            </button>
-            
-            <button class="btn-orange" onclick="generateDummyMasterSheet()" style="padding:5px 10px; font-size:11px;">
-                🤖 Fake Data
-            </button>
-        </div>
-    </div>
-
-    <div style="display:flex; gap:10px;">
-        <input list="studentDatalist" id="studentSearchInput" 
-               placeholder="🔍 ދަރިވަރު ސާރޗް ކުރައްވާ... (ނަން ނުވަތަ އައިޑީ ޖައްސަވާ)" 
-               onchange="onStudentSelected(this.value)"
-               style="flex:1; padding:10px; background:#001a33; border:1px solid #00e676; color:#fff; font-weight:bold; font-size:14px; border-radius:6px;">
-        <datalist id="studentDatalist"></datalist>
-    </div>
-
-    <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; background:#161b22; padding:10px; border-radius:6px; border:1px solid #30363d;">
-        
-        <div style="display:flex; flex-direction:column; gap:5px;">
-            <label style="color:#FFD700; font-size:12px; margin:0;">Student Details (ދަރިވަރު):</label>
-            <input type="text" id="stdName" placeholder="Full Name (ފުރިހަމަ ނަން)" style="background:#000;">
-            
-            <div style="display:flex; gap:5px;">
-                <input type="text" id="stdID" placeholder="ID Card" style="flex:1;">
-                <input type="text" id="stdReg" placeholder="Reg No" style="flex:1;">
-            </div>
-            
-            <div style="display:flex; gap:5px;">
-                <select id="stdGender" style="flex:1;">
-                    <option value="Male">Male (ފިރިހެން)</option>
-                    <option value="Female">Female (އަންހެން)</option>
-                </select>
-                <input type="text" id="stdPhone" placeholder="Phone" style="flex:1;">
-            </div>
-            <input type="text" id="stdAddr" placeholder="Permanent Address (އެޑްރެސް)">
+        <div style="display:flex; align-items:center; gap:10px;">
+            <div style="color:#FFD700; font-weight:bold; font-size:12px;">1. MASTER SHEET:</div>
+            <input type="file" id="masterSheetInput" accept=".csv" style="font-size:11px; color:#aaa;">
+            <button class="btn-blue" onclick="loadMasterSheetForQueue()" style="padding:5px 15px; font-size:11px;">📂 LOAD DATA</button>
+            <span id="queueStatus" style="font-size:11px; color:#00e676; margin-left:5px;"></span>
         </div>
 
-        <div style="display:flex; flex-direction:column; gap:5px;">
-            <label style="color:#FFD700; font-size:12px; margin:0;">Competition Info (މުބާރާތް):</label>
+        <div style="display:flex; align-items:center; gap:5px;">
+            <div style="color:#FFD700; font-weight:bold; font-size:12px;">2. CREATE SESSION:</div>
             
-            <select id="stdGroup" style="background:#002200; color:#fff;">
-                <option value="Under 6">6 އަހަރުން ދަށް</option>
-                <option value="Under 9">9 އަހަރުން ދަށް</option>
-                <option value="Under 11">11 އަހަރުން ދަށް</option>
-                <option value="Under 13">13 އަހަރުން ދަށް</option>
-                <option value="Under 16">16 އަހަރުން ދަށް</option>
-                <option value="Under 19">19 އަހަރުން ދަށް</option>
-                <option value="General">ޢާއްމު ބައި</option>
+            <select id="qBranch" style="background:#000; color:#fff; border:1px solid #555; padding:5px; font-size:11px;">
+                <option value="">- Select Branch -</option>
+                <option value="Balaiygen">Balaiygen</option>
+                <option value="Nubalai">Nubalai</option>
             </select>
 
-            <input type="text" id="stdBranch" placeholder="Branch (ގޮފި: ބަލައިގެން/ނުބަލައި)">
-            <input type="text" id="stdInst" placeholder="Institution (މުއައްސަސާ/ސްކޫލް)">
-            
-            <div style="text-align:right; margin-top:auto;">
-                <span id="currentStdLabel" style="font-size:11px; color:#aaa;">No active student selected.</span>
+            <select id="qGroup" style="background:#000; color:#fff; border:1px solid #555; padding:5px; font-size:11px;">
+                <option value="">- Select Age -</option>
+                <option value="Under 6">Under 6</option>
+                <option value="Under 9">Under 9</option>
+                <option value="Under 11">Under 11</option>
+                <option value="Under 13">Under 13</option>
+                <option value="Under 16">Under 16</option>
+                <option value="Under 19">Under 19</option>
+                <option value="General">General</option>
+            </select>
+
+            <button class="btn-orange" onclick="createSessionQueue()" style="padding:5px 15px; font-size:11px;">
+                🔍 FILTER & START
+            </button>
+        </div>
+    </div>
+
+    <div id="activeStudentControl" style="display:none; background: linear-gradient(90deg, #002200, #001100); padding:10px; border:1px solid #006400; border-radius:6px; align-items:center; justify-content:space-between;">
+        
+        <div style="display:flex; gap:5px; align-items:center;">
+            <button class="btn-blue" onclick="prevQueueStudent()" style="padding:8px 15px;">◀ PREV</button>
+            <div style="text-align:center; min-width:150px;">
+                <span id="qCounter" style="color:#aaa; font-size:10px;">Student 0 of 0</span><br>
+                <span id="qRegNo" style="color:#FFD700; font-weight:bold; font-size:14px;">-</span>
+            </div>
+            <button class="btn-blue" onclick="nextQueueStudent()" style="padding:8px 15px;">NEXT ▶</button>
+        </div>
+
+        <div style="flex:1; text-align:center;">
+            <h2 id="qName" style="color:#fff; margin:0; font-family:'Faruuma'; font-size:24px;">(Select a Session to Start)</h2>
+            <div style="color:#888; font-size:12px;">
+                <span id="qID">-</span> | <span id="qInst">-</span>
             </div>
         </div>
 
-        <div style="display:flex; flex-direction:column; gap:5px;">
-            <label style="color:#FFD700; font-size:12px; margin:0;">Parent / Guardian (ބެލެނިވެރިޔާ):</label>
-            <input type="text" id="stdParent" placeholder="Parent Name">
-            <input type="text" id="stdParentPhone" placeholder="Parent Phone">
-            <input type="text" id="stdEmail" placeholder="Email Address">
-
-            <button class="btn-green" onclick="registerStudent()" style="margin-top:auto; padding:12px; font-weight:bold; font-size:14px; box-shadow: 0 0 10px rgba(0,230,118,0.2);">
-                💾 REGISTER & SET ACTIVE
-            </button>
+        <div style="display:none;">
+            <input type="text" id="stdName"><input type="text" id="stdID"><input type="text" id="stdReg">
+            <input type="text" id="stdGender"><input type="text" id="stdPhone"><input type="text" id="stdAddr">
+            <input type="text" id="stdGroup"><input type="text" id="stdBranch"><input type="text" id="stdInst">
+            <input type="text" id="stdParent"><input type="text" id="stdParentPhone"><input type="text" id="stdEmail">
         </div>
 
     </div>
