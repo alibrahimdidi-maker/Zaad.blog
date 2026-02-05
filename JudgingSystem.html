@@ -12393,6 +12393,146 @@ function exportFullMasterSheet() {
     link.click();
     document.body.removeChild(link);
 }
+    // --- ADVANCED SAVE: STORES DETAILED BREAKDOWN ---
+function saveSecretaryScore() {
+    if(!state.judging.currentStudentObj) {
+        alert("Please select a student first!"); return;
+    }
+
+    const judgeID = document.getElementById('secJudgeSelect').value; // e.g., "Judge_1"
+    const currentID = state.judging.currentStudentObj.id;
+    
+    // 1. Calculate Details from Cards (Rubric)
+    let totalScore = 0;
+    let detailsObj = {}; // To store { "Thilawa": 28, "Tajweed": 19... }
+
+    if(state.judging.rubric && typeof secScores !== 'undefined') {
+        state.judging.rubric.forEach((r, idx) => {
+            const val = secScores[idx].max - secScores[idx].deducted;
+            detailsObj[r.name] = val; // Store category score
+            totalScore += val;
+        });
+    }
+    totalScore = parseFloat(totalScore.toFixed(2));
+
+    // 2. Find & Update Student in Master List
+    const sIdx = state.allStudents.findIndex(s => s.id === currentID);
+
+    if (sIdx > -1) {
+        // A. Update Totals (For Table View)
+        if (!state.allStudents[sIdx].scores) state.allStudents[sIdx].scores = {};
+        state.allStudents[sIdx].scores[judgeID] = totalScore;
+
+        // B. ★ SAVE DETAILED BREAKDOWN (New Feature) ★
+        if (!state.allStudents[sIdx].detailedScores) state.allStudents[sIdx].detailedScores = {};
+        state.allStudents[sIdx].detailedScores[judgeID] = detailsObj; 
+
+        // C. Update Final Average immediately
+        let sum = 0; let count = 0;
+        for (let j in state.allStudents[sIdx].scores) {
+            let v = state.allStudents[sIdx].scores[j];
+            if(v > 0) { sum += v; count++; }
+        }
+        state.allStudents[sIdx].finalScore = count > 0 ? parseFloat((sum / count).toFixed(2)) : 0;
+    }
+
+    // 3. Save & Refresh
+    saveToLocal();
+    if(typeof renderMasterTable === 'function') renderMasterTable();
+
+    // 4. Visual Feedback
+    const btn = document.querySelector('#secretaryPanel .btn-green'); // Or specific ID
+    if(btn) {
+        btn.innerText = `✅ Saved! (${totalScore})`;
+        setTimeout(() => btn.innerText = "💾 SAVE & NEXT STUDENT ▶", 1500);
+    }
+}
+    // --- ULTIMATE EXPORT: INCLUDES CRITERIA AVERAGES ---
+function exportFullMasterSheet() {
+    // Data Source
+    let sourceData = (state.allStudents && state.allStudents.length > 0) ? [...state.allStudents] : [...state.judging.savedResults];
+    
+    if (sourceData.length === 0) { alert("No data to export!"); return; }
+
+    // 1. Get Criteria Names Dynamically
+    const rubric = state.judging.rubric || [
+        {name:"Thilawa"}, {name:"Tajweed"}, {name:"Makhraj"}, 
+        {name:"Sifa"}, {name:"Fasaha"}, {name:"Talaffuz"}, {name:"Maqamat"}
+    ];
+
+    // 2. Build Headers
+    let csv = "Serial No,Reg No,Age Group,Branch,Institution,Full Name,Gender,Address,ID Card,";
+    
+    // A. Add Criteria Average Headers
+    rubric.forEach(r => csv += `${r.name} (AVG),`);
+    
+    // B. Add Judge Total Headers
+    for(let j=1; j<=5; j++) csv += `Judge ${j} Total,`;
+    
+    csv += "GRAND TOTAL,FINAL AVERAGE,RANK,REMARKS\n";
+
+    // 3. Sort by Rank
+    sourceData.sort((a, b) => (b.finalScore || 0) - (a.finalScore || 0));
+
+    // 4. Build Rows
+    sourceData.forEach((s, idx) => {
+        let row = [];
+        row.push(idx + 1, `"${s.reg||''}"`, `"${s.group||''}"`, `"${s.branch||''}"`, `"${s.institution||s.inst||''}"`, `"${s.name||''}"`, `"${s.gender||''}"`, `"${s.address||''}"`, `"${s.id||''}"`);
+
+        // --- ★ CALCULATE CRITERIA AVERAGES ★ ---
+        rubric.forEach(r => {
+            let critSum = 0;
+            let critCount = 0;
+
+            // Check detailedScores { Judge_1: {Thilawa: 28}, Judge_2: {Thilawa: 29} }
+            if (s.detailedScores) {
+                for (let jID in s.detailedScores) {
+                    let score = s.detailedScores[jID][r.name];
+                    if (score !== undefined) {
+                        critSum += parseFloat(score);
+                        critCount++;
+                    }
+                }
+            } 
+            // Fallback for Dummy Data (if using array format)
+            else if (s.catAverages) {
+                // ... logic for dummy data mapping if needed ...
+            }
+
+            // Calc Average for this criteria
+            let avg = critCount > 0 ? (critSum / critCount).toFixed(2) : "-";
+            row.push(avg);
+        });
+
+        // --- Judge Totals ---
+        let grandTotal = 0;
+        let activeJudges = 0;
+        for(let j=1; j<=5; j++) {
+            let val = (s.scores && s.scores[`Judge_${j}`]) ? s.scores[`Judge_${j}`] : "0";
+            row.push(val);
+            if(parseFloat(val) > 0) { grandTotal += parseFloat(val); activeJudges++; }
+        }
+
+        // --- Summary ---
+        let finalAvg = s.finalScore || (activeJudges > 0 ? (grandTotal/activeJudges).toFixed(2) : 0);
+        
+        row.push(grandTotal.toFixed(2));
+        row.push(finalAvg);
+        row.push(idx + 1);
+        row.push("");
+
+        csv += row.join(",") + "\n";
+    });
+
+    // 5. Download
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = `Rasfahi_Detailed_Report_${new Date().toISOString().split('T')[0]}.csv`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+}
 </script>
 </body>
 </html>
