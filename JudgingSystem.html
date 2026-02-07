@@ -14101,40 +14101,119 @@ function generateDummyMasterSheet() {
 
     } catch (e) { alert("Gen Error: " + e.message); }
 }
-    // --- ULTIMATE RUBRIC BACKUP EXPORTER (ALL JUDGES & CRITERIA) ---
-function exportCompleteRubricBackup() {
-    // 1. ޑޭޓާ ހުރިތޯ ބެލުން
-    // މާސްޓަރ ލިސްޓަށް އިސްކަންދޭނެ، ނެތްނަމަ ސޭވްކޮށްފައިވާ ނަތީޖާ ނަގާނެ
-    let data = (state.allStudents && state.allStudents.length > 0) ? state.allStudents : state.judging.savedResults;
-    
-    if (!data || data.length === 0) {
-        alert("އެކްސްޕޯޓް ކުރާނެ ޑޭޓާއެއް ނެތެވެ! (No data found to export)");
+// --- FIXED SAVE FUNCTION: STORES DETAILED RUBRIC BREAKDOWN ---
+function saveSecretaryScore() {
+    // 1. ދަރިވަރަކު ނެތްނަމަ ހުއްޓުވުން
+    if(!state.judging.currentStudentObj) {
+        alert("Please select a student first! (ދަރިވަރަކު އިޚްތިޔާރުކުރައްވާ)");
         return;
     }
 
-    // 2. ރުބްރިކް ކެޓަގަރީތައް ނެގުން
-    // ސެޓިންގސްގައި ހެދިފައިވާ ގޮތަށް އޮޓޮމެޓިކުން ނަގާނެ
+    // 2. ޖަޖު އަދި ކަރަންޓް އައިޑީ ނެގުން
+    const judgeID = document.getElementById('secJudgeSelect').value; // e.g. "Judge_1"
+    const currentID = state.judging.currentStudentObj.id;
+    
+    // 3. ވަކިވަކި ބައިތަކުގެ މާކުސް ނަގައި އޮބްޖެކްޓަކަށް ހެދުން
+    let totalScore = 0;
+    let detailsObj = {}; // Stores { "Thilawa": 28, "Tajweed": 19... }
+
+    if(state.judging.rubric && typeof secScores !== 'undefined') {
+        state.judging.rubric.forEach((r, idx) => {
+            // secScores އަކީ ބަޓަންތަކުން ކެނޑިވަރު ބަލަހައްޓާ ވޭރިއޭބަލް
+            // މާކުސް = ޖުމްލަ - ކެނޑިވަރު
+            let val = 0;
+            if (secScores[idx]) {
+                val = secScores[idx].max - secScores[idx].deducted;
+            } else {
+                val = r.max; // އެއްވެސް އެއްޗެއް ނުކަނޑާނަމަ ފުލް މާކްސް
+            }
+            
+            // ★ މުހިންމު ބައި: ކެޓަގަރީގެ ނަމުން މާކުސް ރައްކާކުރުން
+            detailsObj[r.name] = parseFloat(val.toFixed(2));
+            totalScore += val;
+        });
+    }
+    
+    totalScore = parseFloat(totalScore.toFixed(2));
+
+    // 4. މާސްޓަރ ލިސްޓް (ALL STUDENTS) އަޕްޑޭޓް ކުރުން
+    const sIdx = state.allStudents.findIndex(s => s.id === currentID);
+
+    if (sIdx > -1) {
+        // ބޭނުންވާ އޮބްޖެކްޓްތައް ނެތްނަމަ ހެދުން
+        if (!state.allStudents[sIdx].scores) state.allStudents[sIdx].scores = {};
+        if (!state.allStudents[sIdx].detailedScores) state.allStudents[sIdx].detailedScores = {};
+
+        // A. ޖުމްލަ މާކުސް ސޭވްކުރުން
+        state.allStudents[sIdx].scores[judgeID] = totalScore;
+
+        // B. ★ ވަކިވަކި ބައިތައް (DETAILED BREAKDOWN) ސޭވްކުރުން ★
+        state.allStudents[sIdx].detailedScores[judgeID] = detailsObj; 
+
+        // C. ފައިނަލް އެވްރެޖް އަޕްޑޭޓް ކުރުން
+        let sum = 0; let count = 0;
+        for (let j in state.allStudents[sIdx].scores) {
+            let v = state.allStudents[sIdx].scores[j];
+            if(v > 0) { sum += v; count++; }
+        }
+        state.allStudents[sIdx].finalScore = count > 0 ? parseFloat((sum / count).toFixed(2)) : 0;
+        
+        // Saved Results އަށްވެސް އަޅާލުން (ރިޕޯޓްތަކަށް ބޭނުންވާތީ)
+        const savedIdx = state.judging.savedResults.findIndex(s => s.id === currentID);
+        if(savedIdx > -1) {
+            state.judging.savedResults[savedIdx] = state.allStudents[sIdx];
+        } else {
+            state.judging.savedResults.push(state.allStudents[sIdx]);
+        }
+    }
+
+    // 5. ސޭވްކޮށް ރިފްރެޝް ކުރުން
+    saveToLocal();
+    if(typeof renderMasterTable === 'function') renderMasterTable();
+
+    // 6. ބަޓަން ފީޑްބެކް
+    const btn = document.querySelector('#secretaryPanel .btn-green');
+    if(btn) {
+        let old = btn.innerText;
+        btn.innerText = `✅ SAVED! (${totalScore})`;
+        btn.style.background = "white"; btn.style.color = "black";
+        setTimeout(() => { 
+            btn.innerText = "💾 SAVE & NEXT STUDENT ▶"; 
+            btn.style.background = ""; btn.style.color = ""; 
+        }, 1500);
+    }
+}
+    // --- ULTIMATE RUBRIC BACKUP EXPORTER (FIXED) ---
+function exportCompleteRubricBackup() {
+    // ޑޭޓާ ނަގާނެ ތަން
+    let data = (state.allStudents && state.allStudents.length > 0) ? state.allStudents : state.judging.savedResults;
+    
+    if (!data || data.length === 0) {
+        alert("އެކްސްޕޯޓް ކުރާނެ ޑޭޓާއެއް ނެތެވެ!");
+        return;
+    }
+
+    // ރުބްރިކް ކެޓަގަރީތަކުގެ ނަންތައް ހޯދުން
     let rubricNames = [];
     if(state.judging.rubric && state.judging.rubric.length > 0) {
         rubricNames = state.judging.rubric.map(r => r.name);
     } else {
-        // ސެޓިންގސް ނެތްނަމަ ޑިފޯލްޓް ނަންތައް
         rubricNames = ["Thilawa", "Tajweed", "Makhraj", "Sifa", "Fasaha", "Talaffuz", "Maqamat", "Quality"];
     }
 
-    // 3. CSV ހެޑަރތައް ތައްޔާރުކުރުން
+    // --- CSV HEADER ހެދުން ---
     let csv = "Serial,Reg No,Name,Institution,Gender,Group,Branch,";
 
-    // ކޮންމެ ޖަޖަކަށް (1-5) ހުރިހާ ކެޓަގަރީއެއްގެ ކޮލަމް ހެދުން
+    // 5 ޖަޖުންނަށް، ކޮންމެ ޖަޖަކަށް ހުރިހާ ބައިތަކެއްގެ ކޮލަމް ހެދުން
     for (let j = 1; j <= 5; j++) {
         rubricNames.forEach(name => {
-            csv += `J${j}-${name},`; // e.g., J1-Thilawa, J1-Tajweed
+            csv += `J${j}-${name},`; // މިސާލު: J1-Thilawa, J1-Tajweed
         });
         csv += `J${j}-TOTAL,`; // ޖަޖުގެ ޖުމްލަ
     }
     csv += "FINAL AVERAGE,RANK\n";
 
-    // 4. ދަރިވަރުންގެ މަޢުލޫމާތާއި މާކުސްތައް ލިޔުން
+    // --- ROWS ހެދުން ---
     data.forEach((s, idx) => {
         let row = [
             idx + 1,
@@ -14149,27 +14228,27 @@ function exportCompleteRubricBackup() {
         let grandTotal = 0;
         let activeJudges = 0;
 
-        // 5 ޖަޖުންނަށް ލޫޕް ހިންގުން
+        // 5 ޖަޖުންނަށް ލޫޕް ޖެހުން
         for (let j = 1; j <= 5; j++) {
             let jKey = `Judge_${j}`;
             let jTotalCalculated = 0;
 
-            // ކޮންމެ ކެޓަގަރީއެއްގެ މާކުސް ނެގުން
+            // ކޮންމެ ބައެއްގެ މާކުސް ހޯދުން (Detailed Scores ތެރެއިން)
             rubricNames.forEach(name => {
                 let val = "";
-                // Detailed Scores އޮބްޖެކްޓް ތެރޭގައި މާކުސް އިންތޯ ބެލުން
+                // ޗެކް: detailedScores އޮބްޖެކްޓް އެބައިންތޯ އަދި އެ ބައިގެ މާކުސް އެބައިންތޯ
                 if (s.detailedScores && s.detailedScores[jKey] && s.detailedScores[jKey][name] !== undefined) {
                     val = s.detailedScores[jKey][name];
                 }
                 
-                row.push(val); // މާކުސް ކޮލަމަށް ލުން
+                row.push(val); // މާކުސް (ނުވަތަ ހުސްކޮށް)
                 
                 if(val !== "" && !isNaN(val)) {
                     jTotalCalculated += parseFloat(val);
                 }
             });
 
-            // ޖަޖުގެ ޖުމްލަ
+            // ޖަޖުގެ ޖުމްލަ (Calculated or Saved Total)
             let displayTotal = jTotalCalculated > 0 ? jTotalCalculated.toFixed(2) : (s.scores && s.scores[jKey] ? s.scores[jKey] : "");
             row.push(displayTotal);
 
@@ -14182,16 +14261,15 @@ function exportCompleteRubricBackup() {
         // ފައިނަލް އެވްރެޖް
         let finalAvg = s.finalScore || (activeJudges > 0 ? (grandTotal / activeJudges).toFixed(2) : "0.00");
         row.push(finalAvg);
-        row.push(idx + 1); // ރޭންކް (ވަގުތީ)
+        row.push(idx + 1); // ރޭންކް
 
         csv += row.join(",") + "\n";
     });
 
-    // 5. ފައިލް ޑައުންލޯޑް ކުރުން
+    // --- DOWNLOAD ---
     const dateStr = new Date().toISOString().slice(0, 10);
     const fileName = `Rasfahi_Full_Rubric_Backup_${dateStr}.csv`;
     
-    // Add BOM for Excel Dhivehi Support
     const blob = new Blob(["\uFEFF" + csv], { type: 'text/csv;charset=utf-8;' });
     const link = document.createElement("a");
     link.href = URL.createObjectURL(blob);
