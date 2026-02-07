@@ -13105,15 +13105,16 @@ function generateDetailedRankedCSV() {
     alert("✅ 2000 Students Generated!\n1. File Download Started.\n2. Data Loaded into System for Reports.");
 }
 // =========================================================================
-// ★ RASFAHI ULTIMATE FIXED SUITE (V6 - ERROR SAFE & ALIGNED) ★
+// ★ RASFAHI ULTIMATE FIX (SELF-CONTAINED & ERROR PROOF) ★
 // =========================================================================
 
-// --- HELPER: GET CURRENT RUBRIC ---
-function getActiveRubricSafe() {
+// --- 0. SAFETY HELPER: GET RUBRIC ---
+// މިއީ އެހެން ތަނަކުން ރުބްރިކް ނުލިބުނަސް ޑިފޯލްޓް ނަގާނެ ފަންކްޝަނެވެ.
+function getSafeRubricList() {
     if (typeof state !== 'undefined' && state.judging && state.judging.rubric && state.judging.rubric.length > 0) {
         return state.judging.rubric;
     }
-    // Default Fallback
+    // Default Criteria if system is empty
     return [
         { name: "Thilawa", max: 30 }, { name: "Tajweed", max: 20 }, 
         { name: "Makhraj", max: 20 }, { name: "Sifa", max: 10 }, 
@@ -13124,20 +13125,20 @@ function getActiveRubricSafe() {
 // --- 1. BLANK TEMPLATE GENERATOR (ALIGNED) ---
 function downloadMasterCSVTemplate() {
     try {
-        const criteria = getActiveRubricSafe(); 
+        const criteria = getSafeRubricList(); 
 
-        // 14 Personal Columns
+        // ★ HEADER (Correct Order)
         let csv = "Serial No,Reg No,Full Name,ID Card,Gender,Age Group,Branch,Address,Institution,Inst Type,Contact,Parent Name,Parent Phone,Email,";
 
-        // Criteria Headers
+        // Add Criteria Avg Headers
         criteria.forEach(c => { csv += `${c.name} (AVG),`; });
 
-        // Judge Headers
+        // Add Judge Headers
         for (let j = 1; j <= 5; j++) csv += `Judge ${j} Total,`;
 
         csv += "GRAND TOTAL,FINAL AVERAGE,RANK,REMARKS\n";
 
-        // Sample Row (14 Columns Data)
+        // ★ SAMPLE ROW (Must match header order)
         let row = [];
         row.push("1", "REG-001", "Student Name", "AXXXXXX", "Male", "Under 6", "Balaiygen", "Male'", "Arabiyya School", "School", "7770000", "Parent Name", "7770000", "email@test.com");
         
@@ -13149,6 +13150,7 @@ function downloadMasterCSVTemplate() {
 
         csv += row.join(",") + "\n";
 
+        // Download Trigger
         const fileName = `Rasfahi_Master_Template_FIXED.csv`;
         const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
         const link = document.createElement("a");
@@ -13166,21 +13168,22 @@ function downloadMasterCSVTemplate() {
 // --- 2. DUMMY DATA GENERATOR (ALIGNED & WORKING) ---
 function generateDummyMasterSheet() {
     try {
-        // Reset Logic
+        // Safety Checks
         if(typeof state === 'undefined') { alert("System State Error! Refresh Page."); return; }
+        
         state.allStudents = []; 
         state.judging.savedResults = []; 
 
-        const criteriaList = getActiveRubricSafe(); 
+        const criteriaList = getSafeRubricList(); 
 
-        // ★ HEADER (14 Personal Info Cols)
+        // ★ HEADER
         let csvContent = "Serial No,Reg No,Full Name,ID Card,Gender,Age Group,Branch,Address,Institution,Inst Type,Contact,Parent Name,Parent Phone,Email,";
         
         criteriaList.forEach(c => csvContent += `${c.name} (AVG),`);
         for(let j=1; j<=5; j++) csvContent += `Judge ${j} Total,`;
         csvContent += "GRAND TOTAL,FINAL AVERAGE,RANK,REMARKS\n";
 
-        // Data Pools
+        // Data Sources
         const names = ["Ahmed", "Ali", "Hassan", "Ibrahim", "Fathimath", "Aishath", "Mariyam", "Zainab"];
         const groups = ["Under 6", "Under 9", "Under 11", "Under 13", "Under 16", "General"];
         const branches = ["Balaiygen", "Nubalai"];
@@ -13190,7 +13193,7 @@ function generateDummyMasterSheet() {
             { name: "Private Candidate", type: "Private" }
         ];
 
-        // Generate Loop
+        // Generation Loop
         for (let i = 1; i <= 2000; i++) {
             const name = names[i % names.length];
             const instData = instMap[i % instMap.length];
@@ -13235,10 +13238,11 @@ function generateDummyMasterSheet() {
 
             studentObj.finalScore = parseFloat((grandTotal / 5).toFixed(2));
             
+            // Push to System Memory
             state.allStudents.push(studentObj);
             state.judging.savedResults.push(studentObj);
 
-            // --- BUILD ROW (STRICT ORDER MATCHING HEADER) ---
+            // --- BUILD ROW (STRICT ORDER) ---
             let row = [];
             // 1. Personal Info (14 Cols)
             row.push(i, `"${studentObj.reg}"`, `"${studentObj.name}"`, `"${studentObj.id}"`, `"${studentObj.gender}"`, `"${studentObj.group}"`, `"${studentObj.branch}"`, `"${studentObj.address}"`, `"${studentObj.institution}"`, `"${studentObj.instType}"`, `"${studentObj.contact}"`, `"${studentObj.parent}"`, `"${studentObj.pPhone}"`, `"${studentObj.email}"`);
@@ -13259,22 +13263,21 @@ function generateDummyMasterSheet() {
         }
 
         // Save & Download
-        saveToLocal();
+        if(typeof saveToLocal === 'function') saveToLocal();
         if(typeof renderMasterTable === 'function') renderMasterTable();
 
         const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
         const link = document.createElement("a");
         link.href = URL.createObjectURL(blob);
-        link.download = `Rasfahi_Dummy_Aligned_V4.csv`;
+        link.download = `Rasfahi_Dummy_Data_${new Date().toISOString().slice(0,10)}.csv`;
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
         
-        alert("✅ 2000 Students Generated (Columns Aligned)!");
+        alert("✅ 2000 Students Generated (Aligned & Downloaded)!");
 
     } catch (e) {
         alert("Generator Error: " + e.message);
-        console.error(e);
     }
 }
 
@@ -13287,8 +13290,9 @@ function exportMasterResultSheet() {
 
         if (sourceData.length === 0) { alert("No data to export!"); return; }
 
-        const criteriaList = getActiveRubricSafe();
+        const criteriaList = getSafeRubricList();
         
+        // ★ HEADER
         let csv = "Serial No,Reg No,Full Name,ID Card,Gender,Age Group,Branch,Address,Institution,Inst Type,Contact,Parent Name,Parent Phone,Email,";
         
         criteriaList.forEach(c => csv += `${c.name} (AVG),`);
@@ -13299,7 +13303,7 @@ function exportMasterResultSheet() {
 
         sourceData.forEach((s, idx) => {
             let row = [];
-            // 1. Info (14 Cols) - Using || '' to prevent 'undefined'
+            // 1. Info (14 Cols) - Use OR empty string to avoid "undefined"
             row.push(idx + 1, `"${s.reg||''}"`, `"${s.name||''}"`, `"${s.id||''}"`, `"${s.gender||''}"`, `"${s.group||''}"`, `"${s.branch||''}"`, `"${s.address||''}"`, `"${s.institution||s.inst||''}"`, `"${s.instType||''}"`, `"${s.phone||''}"`, `"${s.parent||''}"`, `"${s.parentPhone||''}"`, `"${s.email||''}"`);
 
             // 2. Criteria Averages
@@ -13332,16 +13336,17 @@ function exportMasterResultSheet() {
         const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
         const link = document.createElement("a");
         link.href = URL.createObjectURL(blob);
-        link.download = `Rasfahi_Full_Report_Aligned_V4.csv`;
+        link.download = `Rasfahi_Full_Report_Aligned.csv`;
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
+
     } catch(e) {
         alert("Export Error: " + e.message);
     }
 }
 
-// --- 4. BATCH LOADER (UPDATED INDEX MAPPING) ---
+// --- 4. BATCH LOADER (UPDATED MAPPING) ---
 function loadStudentBatch() {
     const file = document.getElementById('batchCsv').files[0];
     if(!file) { alert("Please select the CSV file first!"); return; }
@@ -13357,11 +13362,11 @@ function loadStudentBatch() {
                 let rowRaw = rows[i].trim();
                 if(!rowRaw) continue;
                 const cols = rowRaw.match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g);
-                if(!cols || cols.length < 14) continue; // Min 14 info cols
+                if(!cols || cols.length < 14) continue; 
 
                 const clean = cols.map(c => c.replace(/^"|"$/g, '').trim());
                 
-                // ★ MAPPING MUST MATCH THE CSV ORDER WE JUST CREATED ★
+                // ★ MAPPING MUST MATCH THE CSV ORDER
                 // 0:Serial, 1:Reg, 2:Name, 3:ID, 4:Gender, 5:Group, 6:Branch, 7:Addr, 8:Inst, 9:Type, 10:Cont, 11:Par, 12:Pph, 13:Mail
                 const sObj = {
                     serial: clean[0], reg: clean[1], name: clean[2], id: clean[3], gender: clean[4],
@@ -13372,10 +13377,8 @@ function loadStudentBatch() {
 
                 state.allStudents.push(sObj);
 
-                // Check Scores (Start after col 13)
+                // Check Scores
                 if(clean.length > 20) { 
-                    // Usually Final Avg is near the end. Let's trust the system to recalculate or find it.
-                    // For reporting, we push to savedResults.
                     let finalAvgIndex = clean.length - 3; 
                     let finalScoreVal = parseFloat(clean[finalAvgIndex]);
                     
@@ -13388,9 +13391,10 @@ function loadStudentBatch() {
                 loadedCount++;
             }
             
-            populateStudentSelector();
-            saveToLocal();
-            alert(`✅ Loaded ${loadedCount} students (Aligned).\n📊 ${withScoresCount} records with scores.`);
+            if(typeof populateStudentSelector === 'function') populateStudentSelector();
+            if(typeof saveToLocal === 'function') saveToLocal();
+            
+            alert(`✅ Loaded ${loadedCount} students.\n📊 ${withScoresCount} records with scores.`);
         } catch(err) {
             alert("Load Error: " + err.message);
         }
@@ -13401,11 +13405,11 @@ function loadStudentBatch() {
 // --- 5. A3 MANUAL SHEET (ALIGNED) ---
 function downloadDetailedManualSheet() {
     try {
-        const criteria = getActiveRubricSafe(); 
+        const criteria = getSafeRubricList(); 
 
         let csv = "Serial No,Reg No,Full Name,ID Card,Gender,Age Group,Branch,Address,Institution,Inst Type,Contact,Parent Name,Parent Phone,Email,";
         
-        // 5 Judges Detailed Columns
+        // 5 Judges Columns
         for (let j = 1; j <= 5; j++) {
             criteria.forEach(c => { csv += `J${j}-${c.name} (${c.max}),`; });
             csv += `J${j}-TOTAL,`;
@@ -13443,7 +13447,7 @@ function downloadDetailedManualSheet() {
             csv += row.join(",") + "\n";
         });
 
-        const fileName = `Rasfahi_A3_Manual_Aligned_V4.csv`;
+        const fileName = `Rasfahi_A3_Manual_Aligned.csv`;
         const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
         const link = document.createElement("a");
         link.href = URL.createObjectURL(blob);
@@ -13451,7 +13455,8 @@ function downloadDetailedManualSheet() {
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
-    } catch (e) {
+
+    } catch(e) {
         alert("Sheet Error: " + e.message);
     }
 }
