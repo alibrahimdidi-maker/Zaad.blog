@@ -1729,11 +1729,14 @@
             Students: <span id="tableCount" style="color:#fff;">0</span>
         </div>
         
-        <button class="btn-green" onclick="exportFullMasterSheet()" style="padding:5px 10px; font-size:11px; font-weight:bold; border:2px solid #00e676;">
+       <button class="btn-green" onclick="exportFullMasterSheet()" style="padding:5px 10px; font-size:11px; font-weight:bold; border:2px solid #00e676;">
             📥 EXPORT FULL LIST
         </button>
-    </div>
 
+        <button onclick="downloadRubricMatrix()" style="background-color: #673AB7; color: white; padding: 5px 10px; font-size: 11px; font-weight: bold; border: 2px solid #512DA8; border-radius: 4px; cursor: pointer; margin-left: 5px;">
+            📊 7-PART MATRIX (5 JUDGES)
+        </button>
+        </div>
     <div class="ms-table-container">
         <table class="ms-table">
             <thead>
@@ -13618,7 +13621,104 @@ function exportMasterResultSheet() {
     } catch(e) {
         alert("Export Error: " + e.message);
     }
-}    
+}
+    // =========================================================================
+// ★ SPECIFIC FUNCTION: DOWNLOAD 7-PART RUBRIC MATRIX FOR 5 JUDGES ★
+// =========================================================================
+
+function downloadRubricMatrix() {
+    try {
+        // 1. Get Student Data
+        let data = [];
+        if (typeof state !== 'undefined') {
+            if (state.allStudents && state.allStudents.length > 0) data = state.allStudents;
+            else if (state.judging && state.judging.savedResults) data = state.judging.savedResults;
+        }
+
+        if (data.length === 0) {
+            alert("⚠️ No student data found to export!");
+            return;
+        }
+
+        // 2. Define the 7 Rubric Parts Explicitly
+        const rubricParts = ["Thilawa", "Tajweed", "Makhraj", "Sifa", "Fasaha", "Talaffuz", "Maqamat"];
+        
+        // 3. Construct CSV Header
+        // Basic Info Columns
+        let csv = "Serial,Reg No,Name,Institution Type,Gender,";
+
+        // Loop for 5 Judges Headers
+        for (let j = 1; j <= 5; j++) {
+            // Create 7 Columns for each Judge
+            rubricParts.forEach(part => {
+                csv += `J${j}-${part},`; // e.g., J1-Thilawa, J1-Tajweed...
+            });
+            // Add Judge Total
+            csv += `J${j}-TOTAL,`;
+        }
+        csv += "FINAL AVERAGE\n";
+
+        // 4. Construct Data Rows
+        data.forEach((s, idx) => {
+            let row = [];
+            
+            // Basic Info
+            row.push(
+                idx + 1, 
+                `"${s.reg || ''}"`, 
+                `"${s.name || ''}"`, 
+                `"${s.instType || s.institution || ''}"`, 
+                `"${s.gender || ''}"`
+            );
+
+            let grandTotal = 0;
+
+            // Loop 5 Judges
+            for (let j = 1; j <= 5; j++) {
+                let jKey = `Judge_${j}`;
+                let jTotal = 0;
+
+                // Loop the 7 Rubric Parts
+                rubricParts.forEach(part => {
+                    let mark = "0"; // Default to 0 if empty
+                    
+                    // Check if mark exists in detailedScores
+                    if (s.detailedScores && s.detailedScores[jKey] && s.detailedScores[jKey][part] !== undefined) {
+                        mark = s.detailedScores[jKey][part];
+                    }
+                    
+                    row.push(mark); // Add mark to column
+                    jTotal += parseFloat(mark || 0);
+                });
+
+                // Add Judge Total Column
+                row.push(jTotal.toFixed(2));
+                grandTotal += jTotal;
+            }
+
+            // Final Average
+            let finalAvg = (grandTotal / 5).toFixed(2);
+            row.push(finalAvg);
+
+            // Add row to CSV
+            csv += row.join(",") + "\n";
+        });
+
+        // 5. Download File
+        const fileName = `Rasfahi_Rubric_Matrix_7Parts_${new Date().toISOString().slice(0,10)}.csv`;
+        const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.download = fileName;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+
+    } catch (e) {
+        alert("Export Error: " + e.message);
+        console.error(e);
+    }
+}
 </script>
 </body>
 </html>
