@@ -2,275 +2,418 @@
 <html lang="dv" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>Tanzil-Standard Question Generator (V22 Verified)</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ޤުރްއާން ސުވާލު ބޭންކް (CSV Format Fixed)</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Thaana:wght@400;700&display=swap');
-        
-        body { font-family: "Noto Sans Thaana", "Segoe UI", Tahoma, sans-serif; text-align: center; padding: 30px; background: #fffde7; }
-        .container { background: white; padding: 40px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.15); max-width: 700px; margin: 0 auto; border-top: 5px solid #fbc02d; }
-        
-        h1 { color: #f57f17; margin-bottom: 5px; }
-        p { color: #555; font-size: 14px; margin-bottom: 25px; }
-        .note { background: #fff3e0; padding: 10px; border-radius: 5px; font-size: 12px; color: #e65100; margin-bottom: 20px; text-align: right; }
-
-        .control-group { margin-bottom: 20px; text-align: right; direction: rtl; }
-        label { font-weight: bold; display: block; margin-bottom: 8px; color: #333; }
-        
-        select { 
-            width: 100%; padding: 12px; font-size: 16px; border: 2px solid #fdd835; border-radius: 6px; 
-            font-family: "Noto Sans Thaana", sans-serif; background: #fff; cursor: pointer;
-        }
-
-        #btn { 
-            padding: 15px 40px; font-size: 18px; background: #fbc02d; color: black; border: none; 
-            border-radius: 6px; cursor: pointer; transition: 0.3s; width: 100%; font-weight: bold;
-        }
-        #btn:hover { background: #f9a825; }
-        #btn:disabled { background: #b0bec5; cursor: not-allowed; }
-
-        .progress { width: 100%; background-color: #cfd8dc; margin-top: 20px; height: 25px; border-radius: 15px; overflow: hidden; }
-        .bar { width: 0%; height: 100%; background-color: #fdd835; text-align: center; line-height: 25px; color: #000; font-size: 12px; transition: width 0.2s; font-weight: bold; }
-        
-        .log-box { 
-            margin-top: 15px; font-size: 12px; color: #333; font-family: monospace; direction: ltr; 
-            background: #f1f1f1; padding: 10px; border-radius: 5px; max-height: 100px; overflow-y: auto; text-align: left;
-        }
+        body { font-family: "Faruma", "MV Boli", sans-serif; background-color: #f4f4f9; padding: 20px; direction: rtl; }
+        .container { max-width: 800px; margin: 0 auto; background: white; padding: 30px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+        h1 { text-align: center; color: #2c3e50; margin-bottom: 30px; font-size: 24px; }
+        .form-group { margin-bottom: 20px; }
+        label { display: block; margin-bottom: 8px; font-weight: bold; }
+        select, input { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; font-size: 16px; box-sizing: border-box; }
+        button { background-color: #27ae60; color: white; padding: 15px 20px; border: none; border-radius: 5px; cursor: pointer; width: 100%; font-size: 18px; font-family: inherit; margin-top: 10px; }
+        button:hover { background-color: #219150; }
+        .row { display: flex; gap: 20px; flex-wrap: wrap; }
+        .col { flex: 1; min-width: 200px; }
+        #status { margin-top: 20px; padding: 15px; border-radius: 5px; text-align: center; display: none; font-weight: bold; }
+        .success { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .error { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .note { font-size: 13px; color: #666; margin-top: 5px; }
+        hr { border: 0; border-top: 1px solid #eee; margin: 20px 0; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1>Tanzil-Standard Generator (Strict)</h1>
-    <p>Calibrated for 15-Line Madani Mushaf (2000 Questions)</p>
-    
-    <div class="note">
-        ނޯޓް: މި ޖެނެރޭޓަރުން ހިސާބު ހަދާނީ މަދީނާ މުޞްޙަފުގެ (15 ފޮޅުވަތް) މިންގަނޑަށެވެ. 5 ފޮޅުވަތް ކަމަށްވާނަމަ، ކަށަވަރުންވެސް 5 ވަނަ ފޮޅުވަތް ހުރަސްކުރާނެއެވެ.
-    </div>
+    <h1>ޤުރްއާން ސުވާލު ބޭންކް ޖެނެރޭޓަރ</h1>
+    <p style="text-align:center; font-size:14px; color:#555;">(ސީ.އެސް.ވީ ފޯމެޓް: ID, ImageName, Book, Surah, Page, StartAyah, EndAyah)</p>
 
-    <div class="control-group">
-        <label>ބޭނުންވާ ފޮޅުވަތުގެ މިންވަރު (Select Strict Range):</label>
-        <select id="rangeSelect">
-            <option value="1-5">1 ފޮޅުވަތާއި 5 ފޮޅުވަތާ ދެމެދު</option>
-            <option value="5-6">5 ފޮޅުވަތާއި 6 ފޮޅުވަތާ ދެމެދު (Strict Min > 5)</option>
-            <option value="5-7">5 ފޮޅުވަތާއި 7 ފޮޅުވަތާ ދެމެދު (Strict Min > 5)</option>
-            <option value="6-8">6 ފޮޅުވަތާއި 8 ފޮޅުވަތާ ދެމެދު (Strict Min > 6)</option>
-            <option value="7-10">7 ފޮޅުވަތާއި 10 ފޮޅުވަތާ ދެމެދު (Strict Min > 7)</option>
-            <option value="10-15">10 ފޮޅުވަތާއި 15 ފޮޅުވަތާ ދެމެދު (Strict Min > 10)</option>
-            <option value="15-20">15 ފޮޅުވަތާއި 20 ފޮޅުވަތާ ދެމެދު (Min 1 Page)</option>
-            <option value="20-30">20 ފޮޅުވަތާއި 30 ފޮޅުވަތާ ދެމެދު (Min 1.4 Pages)</option>
+    <div class="form-group">
+        <label>ސުވާލު ނަގަން ބޭނުންވާ ގޮތް:</label>
+        <select id="selectionMode" onchange="toggleMode()">
+            <option value="juz">ފޮތުން ފޮތަށް (Juz Range)</option>
+            <option value="surah">ސޫރަތުން ސޫރަތަށް (Surah Range)</option>
         </select>
     </div>
 
-    <button id="btn" onclick="generateVerifiedCSV()">Generate 2000 Questions</button>
-
-    <div class="progress">
-        <div id="bar" class="bar">0%</div>
+    <div class="row" id="juzSelection">
+        <div class="col">
+            <label>ފަށާ ފޮތް:</label>
+            <select id="startJuz"></select>
+        </div>
+        <div class="col">
+            <label>ނިންމާ ފޮތް:</label>
+            <select id="endJuz"></select>
+        </div>
     </div>
-    <div id="status" class="log-box">Waiting to start...</div>
+
+    <div class="row" id="surahSelection" style="display:none;">
+        <div class="col">
+            <label>ފަށާ ސޫރަތް:</label>
+            <select id="startSurah"></select>
+        </div>
+        <div class="col">
+            <label>ނިންމާ ސޫރަތް:</label>
+            <select id="endSurah"></select>
+        </div>
+    </div>
+
+    <hr>
+
+    <div class="row">
+        <div class="col">
+            <label>ކިޔަވަންޖެހޭ މިންވަރު (ފޮޅުވަތް):</label>
+            <select id="lineCategory">
+                <option value="4-5">4 ފޮޅުވަތާއި 5 ފޮޅުވަތް</option>
+                <option value="5-6">5 ފޮޅުވަތާއި 6 ފޮޅުވަތް</option>
+                <option value="6-7">6 ފޮޅުވަތާއި 7 ފޮޅުވަތް</option>
+                <option value="7-8">7 ފޮޅުވަތާއި 8 ފޮޅުވަތް</option>
+                <option value="8-10">8 ފޮޅުވަތާއި 10 ފޮޅުވަތް</option>
+                <option value="10-15">10 ފޮޅުވަތާއި 15 ފޮޅުވަތް</option>
+            </select>
+        </div>
+        <div class="col">
+            <label>ޖުމްލަ ސުވާލު (Total Questions):</label>
+            <input type="number" id="totalQuestions" value="3000" min="1">
+        </div>
+    </div>
+    
+    <div class="form-group" style="margin-top:15px;">
+        <label>މިނިމަމް ސުވާލު (ކޮންމެ ފޮތަކުން):</label>
+        <input type="number" id="minPerJuz" value="60" readonly style="background:#f9f9f9; color:#555;">
+        <div class="note">* މުޅި ޤުރްއާނުން ނަގާނަމަ ކޮންމެ ފޮތަކުން މަދުވެގެން ނަގާނެ ޢަދަދު</div>
+    </div>
+
+    <div class="form-group">
+        <button onclick="generateCSV()">ސީ.އެސް.ވީ (CSV) ފައިލް ޑައުންލޯޑް ކުރައްވާ</button>
+    </div>
+
+    <div id="status"></div>
 </div>
 
 <script>
-    // --- SETTINGS ---
-    const TARGET_COUNT = 2000;
-    
-    // CALIBRATION FOR TANZIL/MADANI MUSHAF
-    // 1 Page = 15 Lines.
-    // Average Characters per Page ~ 850 (Standard Uthmani Script).
-    const AVG_PAGE_LEN = 850; 
+    // Quran Data with Page Numbers (Standard Madani Mushaf)
+    // format: {id, name, verses, juz, page} (Page is the starting page of the Surah)
+    const surahData = [
+        {id:1,name:"Al-Fatiha",verses:7,juz:1,page:1},
+        {id:2,name:"Al-Baqarah",verses:286,juz:1,page:2},
+        {id:3,name:"Ali 'Imran",verses:200,juz:3,page:50},
+        {id:4,name:"An-Nisa",verses:176,juz:4,page:77},
+        {id:5,name:"Al-Ma'idah",verses:120,juz:6,page:106},
+        {id:6,name:"Al-An'am",verses:165,juz:7,page:128},
+        {id:7,name:"Al-A'raf",verses:206,juz:8,page:151},
+        {id:8,name:"Al-Anfal",verses:75,juz:9,page:177},
+        {id:9,name:"At-Tawbah",verses:129,juz:10,page:187},
+        {id:10,name:"Yunus",verses:109,juz:11,page:208},
+        {id:11,name:"Hud",verses:123,juz:11,page:221},
+        {id:12,name:"Yusuf",verses:111,juz:12,page:235},
+        {id:13,name:"Ar-Ra'd",verses:43,juz:13,page:249},
+        {id:14,name:"Ibrahim",verses:52,juz:13,page:255},
+        {id:15,name:"Al-Hijr",verses:99,juz:14,page:262},
+        {id:16,name:"An-Nahl",verses:128,juz:14,page:267},
+        {id:17,name:"Al-Isra",verses:111,juz:15,page:282},
+        {id:18,name:"Al-Kahf",verses:110,juz:15,page:293},
+        {id:19,name:"Maryam",verses:98,juz:16,page:305},
+        {id:20,name:"Ta-Ha",verses:135,juz:16,page:312},
+        {id:21,name:"Al-Anbiya",verses:112,juz:17,page:322},
+        {id:22,name:"Al-Hajj",verses:78,juz:17,page:332},
+        {id:23,name:"Al-Mu'minun",verses:118,juz:18,page:342},
+        {id:24,name:"An-Nur",verses:64,juz:18,page:350},
+        {id:25,name:"Al-Furqan",verses:77,juz:18,page:359},
+        {id:26,name:"Ash-Shu'ara",verses:227,juz:19,page:367},
+        {id:27,name:"An-Naml",verses:93,juz:19,page:377},
+        {id:28,name:"Al-Qasas",verses:88,juz:20,page:385},
+        {id:29,name:"Al-Ankabut",verses:69,juz:20,page:396},
+        {id:30,name:"Ar-Rum",verses:60,juz:21,page:404},
+        {id:31,name:"Luqman",verses:34,juz:21,page:411},
+        {id:32,name:"As-Sajdah",verses:30,juz:21,page:415},
+        {id:33,name:"Al-Ahzab",verses:73,juz:21,page:418},
+        {id:34,name:"Saba",verses:54,juz:22,page:428},
+        {id:35,name:"Fatir",verses:45,juz:22,page:434},
+        {id:36,name:"Ya-Sin",verses:83,juz:22,page:440},
+        {id:37,name:"As-Saffat",verses:182,juz:23,page:446},
+        {id:38,name:"Sad",verses:88,juz:23,page:453},
+        {id:39,name:"Az-Zumar",verses:75,juz:23,page:458},
+        {id:40,name:"Ghafir",verses:85,juz:24,page:467},
+        {id:41,name:"Fussilat",verses:54,juz:24,page:477},
+        {id:42,name:"Ash-Shura",verses:53,juz:25,page:483},
+        {id:43,name:"Az-Zukhruf",verses:89,juz:25,page:489},
+        {id:44,name:"Ad-Dukhan",verses:59,juz:25,page:496},
+        {id:45,name:"Al-Jathiyah",verses:37,juz:25,page:499},
+        {id:46,name:"Al-Ahqaf",verses:35,juz:26,page:502},
+        {id:47,name:"Muhammad",verses:38,juz:26,page:507},
+        {id:48,name:"Al-Fath",verses:29,juz:26,page:511},
+        {id:49,name:"Al-Hujurat",verses:18,juz:26,page:515},
+        {id:50,name:"Qaf",verses:45,juz:26,page:518},
+        {id:51,name:"Adh-Dhariyat",verses:60,juz:26,page:520},
+        {id:52,name:"At-Tur",verses:49,juz:27,page:523},
+        {id:53,name:"An-Najm",verses:62,juz:27,page:526},
+        {id:54,name:"Al-Qamar",verses:55,juz:27,page:528},
+        {id:55,name:"Ar-Rahman",verses:78,juz:27,page:531},
+        {id:56,name:"Al-Waqi'ah",verses:96,juz:27,page:534},
+        {id:57,name:"Al-Hadid",verses:29,juz:27,page:537},
+        {id:58,name:"Al-Mujadila",verses:22,juz:28,page:542},
+        {id:59,name:"Al-Hashr",verses:24,juz:28,page:545},
+        {id:60,name:"Al-Mumtahanah",verses:13,juz:28,page:549},
+        {id:61,name:"As-Saff",verses:14,juz:28,page:551},
+        {id:62,name:"Al-Jumu'ah",verses:11,juz:28,page:553},
+        {id:63,name:"Al-Munafiqun",verses:11,juz:28,page:554},
+        {id:64,name:"At-Taghabun",verses:18,juz:28,page:556},
+        {id:65,name:"At-Talaq",verses:12,juz:28,page:558},
+        {id:66,name:"At-Tahrim",verses:12,juz:28,page:560},
+        {id:67,name:"Al-Mulk",verses:30,juz:29,page:562},
+        {id:68,name:"Al-Qalam",verses:52,juz:29,page:564},
+        {id:69,name:"Al-Haqqah",verses:52,juz:29,page:566},
+        {id:70,name:"Al-Ma'arij",verses:44,juz:29,page:568},
+        {id:71,name:"Nuh",verses:28,juz:29,page:570},
+        {id:72,name:"Al-Jinn",verses:28,juz:29,page:572},
+        {id:73,name:"Al-Muzzammil",verses:20,juz:29,page:574},
+        {id:74,name:"Al-Muddaththir",verses:56,juz:29,page:575},
+        {id:75,name:"Al-Qiyamah",verses:40,juz:29,page:577},
+        {id:76,name:"Al-Insan",verses:31,juz:29,page:578},
+        {id:77,name:"Al-Mursalat",verses:50,juz:29,page:580},
+        {id:78,name:"An-Naba",verses:40,juz:30,page:582},
+        {id:79,name:"An-Nazi'at",verses:46,juz:30,page:583},
+        {id:80,name:"'Abasa",verses:42,juz:30,page:585},
+        {id:81,name:"At-Takwir",verses:29,juz:30,page:586},
+        {id:82,name:"Al-Infitar",verses:19,juz:30,page:587},
+        {id:83,name:"Al-Mutaffifin",verses:36,juz:30,page:587},
+        {id:84,name:"Al-Inshiqaq",verses:25,juz:30,page:589},
+        {id:85,name:"Al-Buruj",verses:22,juz:30,page:590},
+        {id:86,name:"At-Tariq",verses:17,juz:30,page:591},
+        {id:87,name:"Al-A'la",verses:19,juz:30,page:591},
+        {id:88,name:"Al-Ghashiyah",verses:26,juz:30,page:592},
+        {id:89,name:"Al-Fajr",verses:30,juz:30,page:593},
+        {id:90,name:"Al-Balad",verses:20,juz:30,page:594},
+        {id:91,name:"Ash-Shams",verses:15,juz:30,page:595},
+        {id:92,name:"Al-Layl",verses:21,juz:30,page:595},
+        {id:93,name:"Ad-Duhaa",verses:11,juz:30,page:596},
+        {id:94,name:"Ash-Sharh",verses:8,juz:30,page:596},
+        {id:95,name:"At-Tin",verses:8,juz:30,page:597},
+        {id:96,name:"Al-Alaq",verses:19,juz:30,page:597},
+        {id:97,name:"Al-Qadr",verses:5,juz:30,page:598},
+        {id:98,name:"Al-Bayyinah",verses:8,juz:30,page:598},
+        {id:99,name:"Az-Zalzalah",verses:8,juz:30,page:599},
+        {id:100,name:"Al-Adiyat",verses:11,juz:30,page:599},
+        {id:101,name:"Al-Qari'ah",verses:11,juz:30,page:600},
+        {id:102,name:"At-Takathur",verses:8,juz:30,page:600},
+        {id:103,name:"Al-Asr",verses:3,juz:30,page:601},
+        {id:104,name:"Al-Humazah",verses:9,juz:30,page:601},
+        {id:105,name:"Al-Fil",verses:5,juz:30,page:601},
+        {id:106,name:"Quraysh",verses:4,juz:30,page:602},
+        {id:107,name:"Al-Ma'un",verses:7,juz:30,page:602},
+        {id:108,name:"Al-Kawthar",verses:3,juz:30,page:602},
+        {id:109,name:"Al-Kafirun",verses:6,juz:30,page:603},
+        {id:110,name:"An-Nasr",verses:3,juz:30,page:603},
+        {id:111,name:"Al-Masad",verses:5,juz:30,page:603},
+        {id:112,name:"Al-Ikhlas",verses:4,juz:30,page:604},
+        {id:113,name:"Al-Falaq",verses:5,juz:30,page:604},
+        {id:114,name:"An-Nas",verses:6,juz:30,page:604}
+    ];
 
-    // CALCULATED STRICT RATIOS (Math: Lines / 15)
-    // To be strict, we add a small buffer (+0.02) to the minimum to avoid "short" lines.
-    
-    const RANGES = {
-        // 1-5 Lines:
-        // Min: 1/15 = 0.06.
-        // Max: 5/15 = 0.33 (+ buffer = 0.35)
-        "1-5":   { min: 0.06, max: 0.35 }, 
+    window.onload = function() {
+        const startSurah = document.getElementById('startSurah');
+        const endSurah = document.getElementById('endSurah');
+        const startJuz = document.getElementById('startJuz');
+        const endJuz = document.getElementById('endJuz');
 
-        // 5-6 Lines:
-        // Min: 5/15 = 0.333. Set to 0.35 to ensure we are well INTO the 5th line.
-        // Max: 6.5/15 = 0.43 (Allowing half line overflow to finish ayah)
-        "5-6":   { min: 0.35, max: 0.43 }, 
+        // Populate Surahs
+        surahData.forEach(s => {
+            let option = new Option(`${s.id}. ${s.name}`, s.id);
+            startSurah.add(option.cloneNode(true));
+            endSurah.add(option.cloneNode(true));
+        });
+        endSurah.value = 114;
 
-        // 5-7 Lines:
-        // Min: 5/15 = 0.333 -> Set to 0.35
-        // Max: 7.5/15 = 0.50
-        "5-7":   { min: 0.35, max: 0.50 },
-
-        // 6-8 Lines:
-        // Min: 6/15 = 0.40 -> Set to 0.42 (Strict > 6)
-        // Max: 8.5/15 = 0.56
-        "6-8":   { min: 0.42, max: 0.56 },
-
-        // 7-10 Lines:
-        // Min: 7/15 = 0.466 -> Set to 0.48 (Strict > 7)
-        // Max: 10.5/15 = 0.70
-        "7-10":  { min: 0.48, max: 0.70 },
-
-        // 10-15 Lines (Full Page context):
-        // Min: 10/15 = 0.66 -> Set to 0.68
-        // Max: 15/15 = 1.0 -> Set to 1.10 (Allow full page + a bit)
-        "10-15": { min: 0.68, max: 1.10 },
-
-        // 15-20 Lines (1 to 1.3 Pages):
-        // Min: 15/15 = 1.0 -> Set to 1.02 (Must exceed 1 page slightly)
-        // Max: 20/15 = 1.33 -> Set to 1.40
-        "15-20": { min: 1.02, max: 1.40 },
-
-        // 20-30 Lines (1.3 to 2 Pages):
-        // Min: 20/15 = 1.33 -> Set to 1.35
-        // Max: 30/15 = 2.0 -> Set to 2.10
-        "20-30": { min: 1.35, max: 2.10 }
+        // Populate Juz
+        for(let i=1; i<=30; i++) {
+            let option = new Option(`ފޮތް ${i}`, i);
+            startJuz.add(option.cloneNode(true));
+            endJuz.add(option.cloneNode(true));
+        }
+        endJuz.value = 30;
     };
 
-    let allAyahsData = null;
-
-    async function generateVerifiedCSV() {
-        const btn = document.getElementById('btn');
-        const status = document.getElementById('status');
-        const bar = document.getElementById('bar');
-        const rangeKey = document.getElementById('rangeSelect').value;
-        const config = RANGES[rangeKey];
-
-        btn.disabled = true;
-        status.innerHTML = "Initializing Tanzil-Check...";
-        bar.style.width = "5%";
-
-        try {
-            // 1. Fetch WHOLE Quran (Once)
-            if(!allAyahsData) {
-                status.innerHTML = "Downloading Quran Text (Standard Uthmani)...";
-                let response = await fetch('https://api.alquran.cloud/v1/quran/quran-uthmani');
-                let json = await response.json();
-                
-                // Flatten data structure
-                allAyahsData = [];
-                json.data.surahs.forEach(surah => {
-                    surah.ayahs.forEach(ayah => {
-                        allAyahsData.push({
-                            textLen: ayah.text.length,
-                            juz: ayah.juz,
-                            surahNum: surah.number,
-                            surahName: surah.englishName,
-                            ayahNum: ayah.numberInSurah,
-                            page: ayah.page
-                        });
-                    });
-                });
-                status.innerHTML = `Quran Data Loaded! Calibrating to 15-line Grid...`;
-            }
-            
-            bar.style.width = "20%";
-
-            // 2. Scan for candidates (Sliding Window with STRICT Checks)
-            let candidates = [];
-            let totalAyahs = allAyahsData.length;
-            
-            status.innerHTML += "<br>Scanning... Enforcing STRICT Tanzil Alignment...";
-            
-            for(let i=0; i < totalAyahs; i++) {
-                let currentTxtLen = 0;
-                
-                // Look ahead
-                for(let j=i; j < totalAyahs; j++) {
-                    currentTxtLen += allAyahsData[j].textLen;
-                    
-                    // Current ratio (Lines calculated based on 850 char avg page)
-                    let ratio = currentTxtLen / AVG_PAGE_LEN;
-                    
-                    // CHECK 1: STRICT MINIMUM
-                    // We skip if the calculated length is less than the Minimum needed.
-                    // E.g. for "5-6", if ratio is 0.30 (4.5 lines), we SKIP adding to candidates
-                    // and continue the inner loop to add another ayah.
-                    if (ratio < config.min) {
-                        continue;
-                    }
-
-                    // CHECK 2: STRICT MAXIMUM
-                    // If we exceed the max lines allowed, we STOP looking ahead for this start point.
-                    if (ratio > config.max) {
-                        break; 
-                    }
-
-                    // CHECK 3: VALID CANDIDATE
-                    // If we are here, we are strictly between Min and Max.
-                    candidates.push({
-                        startIdx: i,
-                        endIdx: j
-                    });
-                }
-                
-                // UI Update
-                if(i % 1000 === 0) {
-                    let progress = 20 + Math.round((i / totalAyahs) * 60); 
-                    bar.style.width = progress + "%";
-                    status.innerHTML = `Scanning... Found ${candidates.length} verified segments.`;
-                    await new Promise(r => setTimeout(r, 1)); 
-                }
-            }
-
-            status.innerHTML += `<br>Scan Complete. Total Valid Candidates: ${candidates.length}`;
-            bar.style.width = "85%";
-
-            if(candidates.length < TARGET_COUNT) {
-                 status.innerHTML += `<br><span style='color:orange'>Note: Found ${candidates.length} candidates. Taking all available.</span>`;
-            }
-
-            // 3. Shuffle and Pick 2000
-            shuffleArray(candidates);
-            let finalSelection = candidates.slice(0, TARGET_COUNT);
-            
-            // 4. Generate CSV
-            let csvContent = "ID,ImageName,Book,Surah,Page,StartAyah,EndAyah\n";
-            let qID = 1;
-
-            finalSelection.forEach(item => {
-                let first = allAyahsData[item.startIdx];
-                let last = allAyahsData[item.endIdx];
-
-                // V22 Format
-                let imgName = String(first.page).padStart(3, '0') + ".png";
-                let juzStr = "Juz " + first.juz;
-                let surahStr = `${first.surahNum}. ${first.surahName}`;
-
-                let row = [
-                    qID++,
-                    imgName,
-                    juzStr,
-                    surahStr,
-                    first.page,
-                    first.ayahNum,
-                    last.ayahNum
-                ].join(",");
-                csvContent += row + "\n";
-            });
-
-            // 5. Download
-            bar.style.width = "100%";
-            const blob = new Blob(["\uFEFF"+csvContent], {type: 'text/csv;charset=utf-8;'});
-            const link = document.createElement("a");
-            link.href = URL.createObjectURL(blob);
-            link.download = `Rasfahi_TanzilSet_${rangeKey}.csv`;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            
-            status.innerHTML += `<br><strong style='color:green'>SUCCESS! Generated ${finalSelection.length} calibrated questions.</strong>`;
-            btn.disabled = false;
-
-        } catch (e) {
-            console.error(e);
-            status.innerHTML = `<span style='color:red'>Error: ${e.message}</span>`;
-            btn.disabled = false;
+    function toggleMode() {
+        const mode = document.getElementById('selectionMode').value;
+        if(mode === 'juz') {
+            document.getElementById('juzSelection').style.display = 'flex';
+            document.getElementById('surahSelection').style.display = 'none';
+        } else {
+            document.getElementById('juzSelection').style.display = 'none';
+            document.getElementById('surahSelection').style.display = 'flex';
         }
     }
 
-    // Fisher-Yates Shuffle
-    function shuffleArray(array) {
-        for (let i = array.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [array[i], array[j]] = [array[j], array[i]];
+    function getRandomInt(min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    // Heuristic to estimate page number of a specific Ayah
+    function estimatePage(surahObj, ayah) {
+        // Simple interpolation
+        // Find next surah page to know boundaries
+        let startPage = surahObj.page;
+        
+        // Handle last surah
+        if (surahObj.id === 114) return 604;
+        
+        // Find the next surah in data
+        let nextSurah = surahData.find(s => s.id === surahObj.id + 1);
+        let endPage = nextSurah ? nextSurah.page : 604;
+        
+        let totalPages = Math.max(1, endPage - startPage);
+        let ratio = ayah / surahObj.verses;
+        
+        // Calculate offset
+        let pageOffset = Math.floor(ratio * totalPages);
+        let finalPage = startPage + pageOffset;
+        
+        // Clamp
+        if (finalPage > 604) finalPage = 604;
+        return finalPage;
+    }
+
+    function generateCSV() {
+        const status = document.getElementById('status');
+        status.style.display = 'block';
+        status.className = '';
+        status.innerHTML = 'ކުޑަ ހިނދުކޮޅެއް...';
+
+        const mode = document.getElementById('selectionMode').value;
+        const totalNeeded = parseInt(document.getElementById('totalQuestions').value);
+        const lineCategory = document.getElementById('lineCategory').value;
+        const minLines = parseInt(lineCategory.split('-')[0]);
+        const maxLines = parseInt(lineCategory.split('-')[1]);
+        
+        let questions = [];
+
+        // Determine range
+        let jStart = parseInt(document.getElementById('startJuz').value);
+        let jEnd = parseInt(document.getElementById('endJuz').value);
+        let sStart = 1, sEnd = 114;
+
+        if (mode === 'surah') {
+            sStart = parseInt(document.getElementById('startSurah').value);
+            sEnd = parseInt(document.getElementById('endSurah').value);
+            // Ignore Juz selector in surah mode, but we keep jStart/jEnd for validation if needed
+            // Actually reset jStart/jEnd to cover full quran for logic
+            jStart = 1; jEnd = 30;
         }
+
+        let filteredSurahs = surahData.filter(s => {
+            if(mode === 'surah') return s.id >= sStart && s.id <= sEnd;
+            return true; // For Juz mode, we filter inside loop
+        });
+
+        // Tracking for distribution
+        let juzCounts = {};
+        for(let j=1; j<=30; j++) juzCounts[j] = 0;
+
+        let idCounter = 1;
+        let attempts = 0;
+
+        // 1. Minimum quota per Juz (Only in Juz mode or full quran)
+        if (mode === 'juz') {
+            for (let j = jStart; j <= jEnd; j++) {
+                while(juzCounts[j] < 60 && attempts < 100000) {
+                     // Pick a surah that is roughly in this Juz
+                     // Since surahs span juz, we use the `juz` property of surah (starting juz) as primary
+                     // or we allow slight overlap.
+                     let candidates = surahData.filter(s => s.juz === j); 
+                     
+                     // Fallback for empty candidates (rare, but some juz might be mid-surah)
+                     // If a Juz has no starting Surah (unlikely in this simplified list, except maybe short juz), 
+                     // we look for surahs that might cover it. 
+                     // Simplified: We use the `juz` property in data which marks the START juz.
+                     if(candidates.length > 0) {
+                         let s = candidates[getRandomInt(0, candidates.length - 1)];
+                         let q = generateQuestion(s, minLines, maxLines);
+                         if(q) {
+                             q.id = idCounter++;
+                             questions.push(q);
+                             juzCounts[j]++;
+                         }
+                     }
+                     attempts++;
+                }
+            }
+        }
+
+        // 2. Fill remainder
+        attempts = 0;
+        while (questions.length < totalNeeded && attempts < 200000) {
+            let s = null;
+            if (mode === 'surah') {
+                 s = filteredSurahs[getRandomInt(0, filteredSurahs.length - 1)];
+            } else {
+                 // Pick random juz within range, then random surah
+                 let targetJuz = getRandomInt(jStart, jEnd);
+                 let candidates = surahData.filter(x => x.juz === targetJuz);
+                 if (candidates.length > 0) {
+                     s = candidates[getRandomInt(0, candidates.length - 1)];
+                 }
+            }
+
+            if (s) {
+                let q = generateQuestion(s, minLines, maxLines);
+                if (q) {
+                    q.id = idCounter++;
+                    questions.push(q);
+                }
+            }
+            attempts++;
+        }
+
+        if(questions.length === 0) {
+            status.innerHTML = 'ސުވާލެއް ނުއުފެއްދުނު. ރޭންޖް ބޮޑުކުރައްވާ!';
+            status.className = 'error';
+            return;
+        }
+
+        downloadCSV(questions);
+        status.innerHTML = `ކާމިޔާބުކަމާއެކު ${questions.length} ސުވާލު އުފެއްދިއްޖެ!`;
+        status.className = 'success';
+    }
+
+    function generateQuestion(s, minL, maxL) {
+        let lines = getRandomInt(minL, maxL);
+        if(s.verses < lines) return null;
+
+        let startAyah = getRandomInt(1, s.verses - lines);
+        let endAyah = startAyah + lines; // Adjust logic if "lines" means Ayahs count
+        
+        let estimatedPageNum = estimatePage(s, startAyah);
+
+        return {
+            surah: `${s.id}. ${s.name}`,
+            page: estimatedPageNum,
+            start: startAyah,
+            end: endAyah,
+            juz: `Juz ${s.juz}`, // Format as "Juz 30"
+            image: `${estimatedPageNum}.png` // Format as "589.png"
+        };
+    }
+
+    function downloadCSV(data) {
+        // CSV Columns: ID, ImageName, Book, Surah, Page, StartAyah, EndAyah
+        let csvContent = "data:text/csv;charset=utf-8,";
+        csvContent += "ID,ImageName,Book,Surah,Page,StartAyah,EndAyah\n";
+
+        data.forEach(row => {
+            // Ensure no commas in data break CSV
+            let cleanSurah = row.surah.replace(',', ''); 
+            let rowString = `${row.id},${row.image},${row.juz},${cleanSurah},${row.page},${row.start},${row.end}`;
+            csvContent += rowString + "\n";
+        });
+
+        const encodedUri = encodeURI(csvContent);
+        const link = document.createElement("a");
+        link.setAttribute("href", encodedUri);
+        link.setAttribute("download", "Quran_Questions_Upload_Ready.csv");
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
     }
 </script>
 
