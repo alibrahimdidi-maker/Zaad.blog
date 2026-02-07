@@ -13759,187 +13759,23 @@ function downloadRubricMatrix() {
     }
 }
 // =========================================================================
-// ★ RASFAHI FINAL DYNAMIC SUITE (WORKS WITH DHIVEHI NAMES) ★
+// ★ SMART SCRIPT: READS YOUR RUBRIC SETTINGS AUTOMATICALLY ★
 // =========================================================================
 
-// --- 1. DUMMY DATA GENERATOR (Reads Your Exact Settings) ---
+// 1. Generate Dummy Data (Reads from judging.rubric)
 function generateDummyMasterSheet() {
     try {
-        if(typeof state === 'undefined') { alert("State Error! Refresh."); return; }
+        if(typeof state === 'undefined') { alert("State Error!"); return; }
         
         state.allStudents = []; 
         state.judging.savedResults = []; 
 
-        // ★ STEP 1: READ YOUR RUBRIC SETTINGS ★
-        let myRubric = [];
-        if (state.judging && state.judging.rubric && state.judging.rubric.length > 0) {
-            myRubric = state.judging.rubric; // This gets "ތިލާވަތު (Thilawa)" etc.
-        } else {
-            alert("⚠️ Rubric Settings not found! Please check your code.");
-            return;
-        }
+        // ★ THIS LINE READS YOUR SETTINGS AUTOMATICALLY ★
+        // It grabs "Thilawa", "Quality", etc. from the code you just edited.
+        let activeRubric = state.judging.rubric; 
 
-        const instTypes = ["School", "Office", "NGO", "University", "Private"];
-        const names = ["Ahmed", "Ali", "Hassan", "Ibrahim", "Fathimath", "Aishath"];
-
-        // Generate 500 Students
-        for (let i = 1; i <= 500; i++) {
-            let sObj = {
-                serial: i, reg: `REG-${1000 + i}`,
-                name: `${names[i % names.length]} ${i}`, 
-                instType: instTypes[i % instTypes.length],
-                institution: instTypes[i % instTypes.length],
-                group: "General", branch: "Balaiygen",
-                gender: (i%2==0)?"Female":"Male",
-                detailedScores: {}, scores: {}, finalScore: 0
-            };
-
-            let grandSum = 0;
-
-            // Loop 5 Judges
-            for (let j = 1; j <= 5; j++) {
-                let jKey = `Judge_${j}`;
-                sObj.detailedScores[jKey] = {}; 
-                let jTotal = 0;
-
-                // ★ STEP 2: SAVE DATA USING YOUR EXACT NAMES ★
-                myRubric.forEach(crit => {
-                    // Random Score
-                    let mark = parseFloat((Math.random() * crit.max).toFixed(1));
-                    
-                    // Saves as: sObj.detailedScores.Judge_1["ތިލާވަތު (Thilawa)"] = 25
-                    sObj.detailedScores[jKey][crit.name] = mark; 
-                    
-                    jTotal += mark;
-                });
-
-                sObj.scores[jKey] = parseFloat(jTotal.toFixed(2));
-                grandSum += jTotal;
-            }
-
-            sObj.finalScore = parseFloat((grandSum / 5).toFixed(2));
-            state.allStudents.push(sObj);
-            state.judging.savedResults.push(sObj);
-        }
-
-        saveToLocal();
-        alert(`✅ Generated Data successfully using your Rubric settings!`);
-
-    } catch (e) {
-        alert("Gen Error: " + e.message);
-    }
-}
-
-// --- 2. EXPORT MATRIX (Reads Your Exact Settings to Columns) ---
-function downloadRubricMatrix() {
-    try {
-        let data = state.allStudents.length > 0 ? state.allStudents : state.judging.savedResults;
-        if (!data || data.length === 0) { alert("⚠️ No Data! Click 'Generate Dummy Data' first."); return; }
-
-        // ★ STEP 1: GET RUBRIC NAMES AGAIN ★
-        let myRubricNames = [];
-        if (state.judging && state.judging.rubric) {
-            myRubricNames = state.judging.rubric.map(r => r.name);
-        }
-        
-        if (myRubricNames.length === 0) {
-            alert("Error: Rubric settings are empty.");
-            return;
-        }
-
-        // Build Header
-        let csv = "Serial,Reg No,Name,Institution Type,Gender,";
-        
-        // Loop 5 Judges
-        for (let j = 1; j <= 5; j++) {
-            myRubricNames.forEach(name => {
-                // Remove commas from name just to be safe for CSV
-                let cleanName = name.replace(/,/g, " ");
-                csv += `J${j}-[${cleanName}],`; 
-            });
-            csv += `J${j}-TOTAL,`;
-        }
-        csv += "FINAL AVERAGE\n";
-
-        // Build Rows
-        data.forEach((s, idx) => {
-            let row = [
-                idx + 1, `"${s.reg}"`, `"${s.name}"`, `"${s.instType}"`, `"${s.gender}"`
-            ];
-
-            let grandTotal = 0;
-            for (let j = 1; j <= 5; j++) {
-                let jKey = `Judge_${j}`;
-                let jTotalCalculated = 0;
-
-                // ★ STEP 2: LOOK FOR DATA USING EXACT NAMES ★
-                myRubricNames.forEach(name => {
-                    let val = "";
-                    if (s.detailedScores && s.detailedScores[jKey]) {
-                        // This looks for "ތިލާވަތު (Thilawa)" exactly
-                        if (s.detailedScores[jKey][name] !== undefined) {
-                            val = s.detailedScores[jKey][name];
-                        }
-                    }
-                    
-                    row.push(val); 
-                    if(val !== "" && !isNaN(val)) jTotalCalculated += parseFloat(val);
-                });
-
-                let displayTotal = jTotalCalculated > 0 ? jTotalCalculated.toFixed(2) : (s.scores[jKey] || "0.00");
-                row.push(displayTotal);
-                if(parseFloat(displayTotal)>0) grandTotal += parseFloat(displayTotal);
-            }
-            row.push((grandTotal/5).toFixed(2));
-            csv += row.join(",") + "\n";
-        });
-
-        // Download
-        const fileName = `Rasfahi_Full_Rubric_${new Date().toISOString().slice(0,10)}.csv`;
-        const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-        const link = document.createElement("a");
-        link.href = URL.createObjectURL(blob);
-        link.download = fileName;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-
-    } catch (e) {
-        alert("Export Error: " + e.message);
-    }
-}
-    rubric: [
-            { name: "Thilawa", max: 30 },
-            { name: "Tajweed", max: 20 },
-            { name: "Makhraj", max: 20 },
-            { name: "Sifa", max: 10 },
-            { name: "Fasaha", max: 10 },
-            { name: "Talaffuz", max: 5 },
-            { name: "Maqamat", max: 5 },
-            { name: "Quality", max: 5 }  // ★ NEW CATEGORY ADDED ★
-        ]
-    // =========================================================================
-// ★ UPDATED: ENGLISH KEYS ONLY + NEW 'QUALITY' CATEGORY SUPPORT ★
-// =========================================================================
-
-// --- 1. DUMMY DATA GENERATOR (Auto-reads new English Rubric) ---
-function generateDummyMasterSheet() {
-    try {
-        if(typeof state === 'undefined') { alert("State Error! Refresh."); return; }
-        
-        state.allStudents = []; 
-        state.judging.savedResults = []; 
-
-        // ★ Read the NEW Rubric from Settings (Thilawa, Tajweed, Quality...) ★
-        let myRubric = [];
-        if (state.judging && state.judging.rubric) {
-            myRubric = state.judging.rubric;
-        }
-
-        // Safety check
-        if (myRubric.length === 0) {
-            alert("⚠️ Rubric Not Found! Please update the 'rubric: []' section in your code first.");
-            return;
+        if (!activeRubric || activeRubric.length === 0) {
+            alert("⚠️ Rubric settings not found!"); return;
         }
 
         const instTypes = ["School", "Office", "NGO", "University", "Private"];
@@ -13963,8 +13799,8 @@ function generateDummyMasterSheet() {
                 sObj.detailedScores[jKey] = {}; 
                 let jTotal = 0;
 
-                // Loop through NEW Rubric (Thilawa... Quality)
-                myRubric.forEach(crit => {
+                // Loop through your settings
+                activeRubric.forEach(crit => {
                     let mark = parseFloat((Math.random() * crit.max).toFixed(1));
                     sObj.detailedScores[jKey][crit.name] = mark; 
                     jTotal += mark;
@@ -13980,60 +13816,43 @@ function generateDummyMasterSheet() {
         }
 
         saveToLocal();
-        alert(`✅ Generated Data with ${myRubric.length} Categories (Including Quality!)`);
+        alert(`✅ Generated Data for ${activeRubric.length} Categories (Including Quality!)`);
 
     } catch (e) {
         alert("Gen Error: " + e.message);
     }
 }
 
-// --- 2. EXPORT MATRIX (Auto-Detects English Keys) ---
+// 2. Export Matrix (Also reads from judging.rubric)
 function downloadRubricMatrix() {
     try {
         let data = state.allStudents.length > 0 ? state.allStudents : state.judging.savedResults;
-        if (!data || data.length === 0) { alert("⚠️ No Data! Click 'Generate Dummy Data' first."); return; }
+        if (!data || data.length === 0) { alert("⚠️ No Data!"); return; }
 
-        // Get Rubric Names (Thilawa, Tajweed, Quality...)
-        let myRubricNames = [];
-        if (state.judging && state.judging.rubric) {
-            myRubricNames = state.judging.rubric.map(r => r.name);
-        }
+        // ★ READ SETTINGS AGAIN ★
+        let rubricNames = state.judging.rubric.map(r => r.name);
 
-        if (myRubricNames.length === 0) {
-             alert("⚠️ Rubric Settings are empty.");
-             return;
-        }
-
-        // Build Header
+        // Header
         let csv = "Serial,Reg No,Name,Institution Type,Gender,";
-        
-        // Loop 5 Judges
         for (let j = 1; j <= 5; j++) {
-            myRubricNames.forEach(name => {
-                csv += `J${j}-${name},`; // E.g., J1-Quality
-            });
+            rubricNames.forEach(name => { csv += `J${j}-${name},`; });
             csv += `J${j}-TOTAL,`;
         }
         csv += "FINAL AVERAGE\n";
 
-        // Build Rows
+        // Rows
         data.forEach((s, idx) => {
-            let row = [
-                idx + 1, `"${s.reg}"`, `"${s.name}"`, `"${s.instType}"`, `"${s.gender}"`
-            ];
-
+            let row = [idx + 1, `"${s.reg}"`, `"${s.name}"`, `"${s.instType}"`, `"${s.gender}"`];
             let grandTotal = 0;
+            
             for (let j = 1; j <= 5; j++) {
                 let jKey = `Judge_${j}`;
                 let jTotalCalculated = 0;
 
-                myRubricNames.forEach(name => {
+                rubricNames.forEach(name => {
                     let val = "";
                     if (s.detailedScores && s.detailedScores[jKey]) {
-                        // Looks for exact English match (e.g. "Quality")
-                        if (s.detailedScores[jKey][name] !== undefined) {
-                            val = s.detailedScores[jKey][name];
-                        }
+                        val = s.detailedScores[jKey][name];
                     }
                     row.push(val); 
                     if(val !== "" && !isNaN(val)) jTotalCalculated += parseFloat(val);
@@ -14047,12 +13866,9 @@ function downloadRubricMatrix() {
             csv += row.join(",") + "\n";
         });
 
-        // Download
-        const fileName = `Rasfahi_English_Matrix_${new Date().toISOString().slice(0,10)}.csv`;
-        const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
         const link = document.createElement("a");
-        link.href = URL.createObjectURL(blob);
-        link.download = fileName;
+        link.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8;' }));
+        link.download = `Rasfahi_Final_Matrix.csv`;
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
