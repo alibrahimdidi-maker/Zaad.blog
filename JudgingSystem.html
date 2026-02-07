@@ -13104,15 +13104,16 @@ function generateDetailedRankedCSV() {
     
     alert("✅ 2000 Students Generated!\n1. File Download Started.\n2. Data Loaded into System for Reports.");
 }
-    // =========================================================================
-// ★ RASFAHI FINAL SUITE (INSTITUTION TYPE ONLY - V7) ★
+// =========================================================================
+// ★ RASFAHI ULTIMATE FINAL SUITE (FULL A3 DETAILS + ALL INST TYPES) ★
 // =========================================================================
 
-// --- HELPER: GET RUBRIC ---
+// --- 0. SAFETY HELPER: GET RUBRIC ---
 function getSafeRubricList() {
     if (typeof state !== 'undefined' && state.judging && state.judging.rubric && state.judging.rubric.length > 0) {
         return state.judging.rubric;
     }
+    // Default Fallback
     return [
         { name: "Thilawa", max: 30 }, { name: "Tajweed", max: 20 }, 
         { name: "Makhraj", max: 20 }, { name: "Sifa", max: 10 }, 
@@ -13120,15 +13121,15 @@ function getSafeRubricList() {
     ];
 }
 
-// --- 1. BLANK TEMPLATE (REMOVED SCHOOL NAME COLUMN) ---
+// --- 1. BLANK TEMPLATE GENERATOR (Inst Type Only) ---
 function downloadMasterCSVTemplate() {
     try {
         const criteria = getSafeRubricList(); 
 
-        // ★ HEADER: Removed 'Institution', Kept only 'Institution Type'
+        // HEADER: Inst Type included, Name removed
         let csv = "Serial No,Reg No,Age Group,Branch,Institution Type,Full Name,Gender,Address,ID Card,Contact,Parent Name,Parent Phone,Email,";
 
-        // Criteria Headers
+        // Criteria Headers (Just Averages for template placeholder)
         criteria.forEach(c => { csv += `${c.name} (AVG),`; });
 
         // Judge Headers
@@ -13138,7 +13139,6 @@ function downloadMasterCSVTemplate() {
 
         // Sample Row
         let row = [];
-        // Note: Col 5 is now "School" (Type), Name is gone.
         row.push("1", "REG-001", "Under 6", "Balaiygen", "School", "Student Name", "Male", "Male'", "AXXXXXX", "7770000", "Parent Name", "7770000", "email@test.com");
         
         // Blank Scores
@@ -13163,7 +13163,7 @@ function downloadMasterCSVTemplate() {
     }
 }
 
-// --- 2. DUMMY DATA GENERATOR (TYPE ONLY) ---
+// --- 2. DUMMY DATA GENERATOR (ALL INST TYPES & FULL DETAILS) ---
 function generateDummyMasterSheet() {
     try {
         if(typeof state === 'undefined') { alert("State Error! Refresh."); return; }
@@ -13172,23 +13172,26 @@ function generateDummyMasterSheet() {
 
         const criteriaList = getSafeRubricList(); 
 
-        // ★ HEADER
+        // ★ FULL DETAILED HEADER (Matches A3 Sheet columns)
         let csvContent = "Serial No,Reg No,Age Group,Branch,Institution Type,Full Name,Gender,Address,ID Card,Contact,Parent Name,Parent Phone,Email,";
         
-        criteriaList.forEach(c => csvContent += `${c.name} (AVG),`);
-        for(let j=1; j<=5; j++) csvContent += `Judge ${j} Total,`;
+        // Add Detailed Columns for Each Judge
+        for(let j=1; j<=5; j++) {
+            criteriaList.forEach(c => csvContent += `J${j}-${c.name},`);
+            csvContent += `J${j}-TOTAL,`;
+        }
         csvContent += "GRAND TOTAL,FINAL AVERAGE,RANK,REMARKS\n";
 
         const names = ["Ahmed", "Ali", "Hassan", "Ibrahim", "Fathimath", "Aishath", "Mariyam", "Zainab"];
-        const groups = ["Under 6", "Under 9", "Under 11", "Under 13", "Under 16", "General"];
+        const groups = ["Under 6", "Under 9", "Under 11", "Under 13", "Under 16", "Under 19", "General"];
         const branches = ["Balaiygen", "Nubalai"];
         
-        // ★ Only Types
-        const instTypes = ["School", "University", "Quran Class", "Private", "NGO", "Office"];
+        // ★ ALL INSTITUTION TYPES SUPPORTED
+        const instTypes = ["School", "Office", "NGO", "University", "Private", "Quran Class"];
 
         for (let i = 1; i <= 2000; i++) {
             const name = names[i % names.length];
-            const iType = instTypes[i % instTypes.length]; // Random Type
+            const iType = instTypes[i % instTypes.length]; // Cycle through all types
             
             let studentObj = {
                 serial: i, reg: `REG-${1000 + i}`,
@@ -13196,7 +13199,7 @@ function generateDummyMasterSheet() {
                 group: groups[i % groups.length], branch: branches[i % branches.length],
                 address: "Male'",
                 instType: iType, // Only Type
-                institution: iType, // Map institution to type for display compatibility
+                institution: iType, // Map institution to type for display compat
                 contact: "7770000", parent: "Parent", pPhone: "7770000", email: "test@mail.com",
                 
                 scores: {}, detailedScores: {}, finalScore: 0
@@ -13204,9 +13207,9 @@ function generateDummyMasterSheet() {
 
             let ability = Math.random() * (0.98 - 0.50) + 0.50; 
             let grandTotal = 0;
-            let catSums = {}; 
-            criteriaList.forEach(c => catSums[c.name] = 0);
+            let csvScoreString = "";
 
+            // Generate Scores for 5 Judges
             for (let j = 1; j <= 5; j++) {
                 let jKey = `Judge_${j}`;
                 let judgeTotal = 0;
@@ -13219,13 +13222,16 @@ function generateDummyMasterSheet() {
                     mark = parseFloat(mark.toFixed(2));
                     
                     studentObj.detailedScores[jKey][c.name] = mark;
-                    catSums[c.name] += mark; 
                     judgeTotal += mark;
+                    
+                    csvScoreString += `${mark},`; // Add detail to CSV
                 });
 
                 judgeTotal = parseFloat(judgeTotal.toFixed(2));
                 studentObj.scores[jKey] = judgeTotal;
                 grandTotal += judgeTotal;
+                
+                csvScoreString += `${judgeTotal},`; // Add Judge Total to CSV
             }
 
             studentObj.finalScore = parseFloat((grandTotal / 5).toFixed(2));
@@ -13233,21 +13239,11 @@ function generateDummyMasterSheet() {
             state.allStudents.push(studentObj);
             state.judging.savedResults.push(studentObj);
 
-            // --- BUILD ROW (Adjusted Index) ---
-            let row = [];
-            // 0:Serial, 1:Reg, 2:Group, 3:Branch, 4:TYPE, 5:Name, 6:Gender...
-            row.push(i, `"${studentObj.reg}"`, `"${studentObj.group}"`, `"${studentObj.branch}"`, `"${studentObj.instType}"`, `"${studentObj.name}"`, `"${studentObj.gender}"`, `"${studentObj.addr}"`, `"${studentObj.id}"`, `"${studentObj.contact}"`, `"${studentObj.parent}"`, `"${studentObj.pPhone}"`, `"${studentObj.email}"`);
+            // --- BUILD ROW ---
+            let rowStart = `${i},"${studentObj.reg}","${studentObj.group}","${studentObj.branch}","${studentObj.instType}","${studentObj.name}","${studentObj.gender}","${studentObj.addr}","${studentObj.id}","${studentObj.contact}","${studentObj.parent}","${studentObj.pPhone}","${studentObj.email}",`;
+            let rowEnd = `${grandTotal.toFixed(2)},${studentObj.finalScore},"",""`;
             
-            criteriaList.forEach(c => {
-                let avg = (catSums[c.name] / 5).toFixed(2);
-                row.push(avg);
-            });
-
-            for(let j=1; j<=5; j++) row.push(studentObj.scores[`Judge_${j}`]);
-
-            row.push(grandTotal.toFixed(2), studentObj.finalScore, "", ""); 
-
-            csvContent += row.join(",") + "\n";
+            csvContent += rowStart + csvScoreString + rowEnd + "\n";
         }
 
         saveToLocal();
@@ -13256,19 +13252,19 @@ function generateDummyMasterSheet() {
         const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
         const link = document.createElement("a");
         link.href = URL.createObjectURL(blob);
-        link.download = `Rasfahi_Dummy_TypesOnly.csv`;
+        link.download = `Rasfahi_Dummy_FullDetails.csv`;
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
         
-        alert("✅ Generated 2000 Students (Type Only)!");
+        alert("✅ Generated 2000 Students (All Types + Full Breakdown)!");
 
     } catch (e) {
         alert("Gen Error: " + e.message);
     }
 }
 
-// --- 3. EXPORT FULL MASTER (TYPE ONLY) ---
+// --- 3. EXPORT FULL MASTER (FULL DETAILS) ---
 function exportMasterResultSheet() {
     try {
         let sourceData = [];
@@ -13279,37 +13275,47 @@ function exportMasterResultSheet() {
 
         const criteriaList = getSafeRubricList();
         
+        // ★ FULL DETAILED HEADER
         let csv = "Serial No,Reg No,Age Group,Branch,Institution Type,Full Name,Gender,Address,ID Card,Contact,Parent Name,Parent Phone,Email,";
         
-        criteriaList.forEach(c => csv += `${c.name} (AVG),`);
-        for(let j=1; j<=5; j++) csv += `Judge ${j} Total,`;
+        // Loop Judges & Criteria
+        for(let j=1; j<=5; j++) {
+            criteriaList.forEach(c => csv += `J${j}-${c.name},`);
+            csv += `J${j}-TOTAL,`;
+        }
+
         csv += "GRAND TOTAL,FINAL AVERAGE,RANK,REMARKS\n";
 
         sourceData.sort((a, b) => (b.finalScore || 0) - (a.finalScore || 0));
 
         sourceData.forEach((s, idx) => {
             let row = [];
-            // Info Row (Removed Inst Name)
             row.push(idx + 1, `"${s.reg||''}"`, `"${s.group||''}"`, `"${s.branch||''}"`, `"${s.instType||s.institution||''}"`, `"${s.name||''}"`, `"${s.gender||''}"`, `"${s.address||''}"`, `"${s.id||''}"`, `"${s.phone||''}"`, `"${s.parent||''}"`, `"${s.parentPhone||''}"`, `"${s.email||''}"`);
 
-            criteriaList.forEach(c => {
-                let sum = 0; let count = 0;
-                if (s.detailedScores) {
-                    for (let jKey in s.detailedScores) {
-                        if (s.detailedScores[jKey][c.name] !== undefined) {
-                            sum += parseFloat(s.detailedScores[jKey][c.name]); count++;
-                        }
-                    }
-                }
-                let avg = count > 0 ? (sum / count).toFixed(2) : "-";
-                row.push(avg);
-            });
-
             let grandTotal = 0; let activeJudges = 0;
+
             for(let j=1; j<=5; j++) {
-                let val = (s.scores && s.scores[`Judge_${j}`]) ? s.scores[`Judge_${j}`] : "0";
-                row.push(val);
-                if(parseFloat(val) > 0) { grandTotal += parseFloat(val); activeJudges++; }
+                let jKey = `Judge_${j}`;
+                let jTotal = 0;
+
+                // Add Detailed Marks
+                criteriaList.forEach(c => {
+                    let mark = "";
+                    if(s.detailedScores && s.detailedScores[jKey] && s.detailedScores[jKey][c.name] !== undefined) {
+                        mark = s.detailedScores[jKey][c.name];
+                        jTotal += parseFloat(mark);
+                    }
+                    row.push(mark);
+                });
+
+                // Add Judge Total
+                // If calculated total from details is 0, check for saved manual total
+                if(jTotal === 0 && s.scores && s.scores[jKey]) {
+                    jTotal = parseFloat(s.scores[jKey]);
+                }
+                row.push(jTotal > 0 ? jTotal.toFixed(2) : "");
+                
+                if(jTotal > 0) { grandTotal += jTotal; activeJudges++; }
             }
 
             let finalAvg = s.finalScore || (activeJudges > 0 ? (grandTotal/activeJudges).toFixed(2) : 0);
@@ -13320,7 +13326,7 @@ function exportMasterResultSheet() {
         const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
         const link = document.createElement("a");
         link.href = URL.createObjectURL(blob);
-        link.download = `Rasfahi_Full_Report_TypeOnly.csv`;
+        link.download = `Rasfahi_Full_Report_Detailed_V7.csv`;
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
@@ -13329,7 +13335,7 @@ function exportMasterResultSheet() {
     }
 }
 
-// --- 4. BATCH LOADER (ADJUSTED INDICES) ---
+// --- 4. BATCH LOADER (UPDATED INDEX MAPPING) ---
 function loadStudentBatch() {
     const file = document.getElementById('batchCsv').files[0];
     if(!file) { alert("Please select the CSV file first!"); return; }
@@ -13345,34 +13351,25 @@ function loadStudentBatch() {
                 let rowRaw = rows[i].trim();
                 if(!rowRaw) continue;
                 const cols = rowRaw.match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g);
-                if(!cols || cols.length < 13) continue; // Min cols
+                if(!cols || cols.length < 13) continue; 
 
                 const clean = cols.map(c => c.replace(/^"|"$/g, '').trim());
                 
-                // ★ RE-MAPPED INDICES (INST NAME REMOVED)
-                // 0:Serial, 1:Reg, 2:Group, 3:Branch, 4:TYPE, 5:Name, 6:Gender, 7:Addr, 8:ID...
+                // ★ MAPPING UPDATED: Col 4 is Inst Type
                 const sObj = {
-                    serial: clean[0], 
-                    reg: clean[1], 
-                    group: clean[2], 
-                    branch: clean[3], 
-                    instType: clean[4], // ★ This is now Type
-                    institution: clean[4], // Map Type to Inst property for display compat
-                    name: clean[5], 
-                    gender: clean[6], 
-                    address: clean[7], 
-                    id: clean[8], 
-                    phone: clean[9], 
-                    parent: clean[10], 
-                    parentPhone: clean[11], 
-                    email: clean[12],
+                    serial: clean[0], reg: clean[1], group: clean[2], branch: clean[3],
+                    instType: clean[4], institution: clean[4], // Map type to both for compatibility
+                    name: clean[5], gender: clean[6], address: clean[7],
+                    id: clean[8], phone: clean[9], parent: clean[10], parentPhone: clean[11], email: clean[12],
                     timestamp: new Date().toISOString()
                 };
 
                 state.allStudents.push(sObj);
 
-                // Scores start after email (Index 12)
+                // Check Scores logic (Basic check)
                 if(clean.length > 20) { 
+                    // Assume last columns have scores, push to saved
+                    // For full detail import, more complex logic is needed, but this enables reporting
                     let finalAvgIndex = clean.length - 3; 
                     let finalScoreVal = parseFloat(clean[finalAvgIndex]);
                     
@@ -13396,14 +13393,14 @@ function loadStudentBatch() {
     r.readAsText(file);
 }
 
-// --- 5. A3 MANUAL SHEET (TYPE ONLY) ---
+// --- 5. A3 MANUAL SHEET (FULL BREAKDOWN V4) ---
 function downloadDetailedManualSheet() {
     try {
         const criteria = getSafeRubricList(); 
 
-        // Header without Institution Name
         let csv = "Serial No,Reg No,Age Group,Branch,Institution Type,Full Name,Gender,Address,ID Card,Contact,Parent Name,Parent Phone,Email,";
         
+        // ★ FULL DETAILED COLUMNS FOR A3
         for (let j = 1; j <= 5; j++) {
             criteria.forEach(c => { csv += `J${j}-${c.name} (${c.max}),`; });
             csv += `J${j}-TOTAL,`;
@@ -13415,34 +13412,34 @@ function downloadDetailedManualSheet() {
 
         students.forEach((s, index) => {
             let row = [];
-            // Row Data
             row.push(index + 1, `"${s.reg || ''}"`, `"${s.group || ''}"`, `"${s.branch || ''}"`, `"${s.instType || s.institution || ''}"`, `"${s.name || ''}"`, `"${s.gender || ''}"`, `"${s.address || s.addr || ''}"`, `"${s.id || ''}"`, `"${s.phone || ''}"`, `"${s.parent || ''}"`, `"${s.parentPhone || ''}"`, `"${s.email || ''}"`);
 
-            if (s.detailedScores) {
-                 for(let j=1; j<=5; j++) {
-                     let jKey = `Judge_${j}`; let jTotal = 0;
-                     criteria.forEach(c => {
-                         let val = "";
-                         if(s.detailedScores[jKey] && s.detailedScores[jKey][c.name]) {
-                             val = s.detailedScores[jKey][c.name]; jTotal += parseFloat(val);
-                         }
-                         row.push(val);
-                     });
-                     row.push(s.scores[jKey] || jTotal || "");
-                 }
-            } else {
-                for (let j = 1; j <= 5; j++) {
-                    criteria.forEach(() => row.push("")); 
-                    let jKey = `Judge_${j}`;
-                    row.push(s.scores ? (s.scores[jKey] || "") : "");
-                }
+            // Loop 5 Judges
+            for (let j = 1; j <= 5; j++) {
+                let jKey = `Judge_${j}`; 
+                let jTotal = 0;
+
+                // Fill Criteria Details (If available, else blank)
+                criteria.forEach(c => {
+                     let val = "";
+                     if(s.detailedScores && s.detailedScores[jKey] && s.detailedScores[jKey][c.name]) {
+                         val = s.detailedScores[jKey][c.name]; 
+                         jTotal += parseFloat(val);
+                     }
+                     row.push(val);
+                });
+
+                // Fallback for Manual Total
+                let displayTotal = jTotal > 0 ? jTotal : (s.scores ? (s.scores[jKey] || "") : "");
+                row.push(displayTotal);
             }
+            
             let finalAvg = s.finalScore || "";
             row.push("", finalAvg, "", "");
             csv += row.join(",") + "\n";
         });
 
-        const fileName = `Rasfahi_A3_Manual_TypeOnly.csv`;
+        const fileName = `Rasfahi_A3_Manual_FullDetails_V4.csv`;
         const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
         const link = document.createElement("a");
         link.href = URL.createObjectURL(blob);
