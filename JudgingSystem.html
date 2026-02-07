@@ -13877,6 +13877,228 @@ function downloadRubricMatrix() {
         alert("Export Error: " + e.message);
     }
 }
+    // =========================================================================
+// ★ FIX: 8-PART MATRIX EXPORT & DETAILED SAVING LOGIC ★
+// =========================================================================
+
+// 1. SAVE FUNCTION (UPDATED) - Stores detailed breakdown of all 8 parts
+// މިއީ ސެކްރެޓަރީ ޕެނަލްއިން ސޭވްކުރާއިރު، ހުރިހާ ބައެއްގެ މާކުސް ވަކިވަކިން ރައްކާކުރާ ފަންކްޝަނެވެ.
+function saveSecretaryScore() {
+    if(!state.judging.currentStudentObj) {
+        alert("Please select a student first! (ދަރިވަރަކު އިޚްތިޔާރުކުރައްވާ)");
+        return;
+    }
+
+    const judgeID = document.getElementById('secJudgeSelect').value; // e.g. "Judge_1"
+    const currentID = state.judging.currentStudentObj.id;
+    
+    // Calculate Details from Cards (Rubric)
+    let totalScore = 0;
+    let detailsObj = {}; // Stores { "Thilawa": 28, "Tajweed": 19... }
+
+    // Read from the rubric state (This automatically grabs your 8 parts)
+    if(state.judging.rubric && typeof secScores !== 'undefined') {
+        state.judging.rubric.forEach((r, idx) => {
+            // Calculate score for this category
+            // If secScores[idx] exists use it, otherwise assume Max
+            let val = 0;
+            if(secScores[idx]) {
+                val = secScores[idx].max - secScores[idx].deducted;
+            } else {
+                val = r.max; // Fallback
+            }
+            
+            // Save to details object using the Category Name as Key
+            detailsObj[r.name] = parseFloat(val.toFixed(2));
+            totalScore += val;
+        });
+    }
+    
+    totalScore = parseFloat(totalScore.toFixed(2));
+
+    // Update Master List (state.allStudents)
+    const sIdx = state.allStudents.findIndex(s => s.id === currentID);
+
+    if (sIdx > -1) {
+        // Initialize if empty
+        if (!state.allStudents[sIdx].scores) state.allStudents[sIdx].scores = {};
+        if (!state.allStudents[sIdx].detailedScores) state.allStudents[sIdx].detailedScores = {};
+
+        // A. Save Total Score
+        state.allStudents[sIdx].scores[judgeID] = totalScore;
+
+        // B. ★ SAVE DETAILED BREAKDOWN (The 8 Parts) ★
+        state.allStudents[sIdx].detailedScores[judgeID] = detailsObj; 
+
+        // C. Recalculate Final Average
+        let sum = 0; let count = 0;
+        for (let j in state.allStudents[sIdx].scores) {
+            let v = state.allStudents[sIdx].scores[j];
+            if(v > 0) { sum += v; count++; }
+        }
+        state.allStudents[sIdx].finalScore = count > 0 ? parseFloat((sum / count).toFixed(2)) : 0;
+        
+        // Also update savedResults array for safety
+        const savedIdx = state.judging.savedResults.findIndex(s => s.id === currentID);
+        if(savedIdx > -1) {
+            state.judging.savedResults[savedIdx] = state.allStudents[sIdx];
+        } else {
+            state.judging.savedResults.push(state.allStudents[sIdx]);
+        }
+    }
+
+    // Save & Feedback
+    saveToLocal();
+    if(typeof renderMasterTable === 'function') renderMasterTable();
+
+    const btn = document.querySelector('#secretaryPanel .btn-green');
+    if(btn) {
+        let old = btn.innerText;
+        btn.innerText = `✅ SAVED! (${totalScore})`;
+        btn.style.background = "white"; btn.style.color = "black";
+        setTimeout(() => { 
+            btn.innerText = "💾 SAVE & NEXT STUDENT ▶"; 
+            btn.style.background = ""; btn.style.color = ""; 
+        }, 1500);
+    }
+}
+
+// 2. EXPORT MATRIX FUNCTION (UPDATED) - Exports the 8 parts to CSV
+// މި ފަންކްޝަނުން، ސެޓިންގސްގައި އިންނަ ހުރިހާ ބައެއް (8 ބައި) ކޮންމެ ޖަޖަކަށް ވަކިން އެކްސްޕޯޓް ކުރާނެއެވެ.
+function downloadRubricMatrix() {
+    try {
+        // Data Source
+        let data = state.allStudents.length > 0 ? state.allStudents : state.judging.savedResults;
+        if (!data || data.length === 0) { alert("⚠️ No Data! Please save scores or generate dummy data first."); return; }
+
+        // ★ DYNAMICALLY GET CRITERIA NAMES (The 8 Parts) ★
+        // This ensures it matches whatever is in your settings
+        let rubricNames = [];
+        if(state.judging.rubric && state.judging.rubric.length > 0) {
+            rubricNames = state.judging.rubric.map(r => r.name);
+        } else {
+            // Fallback if settings empty
+            rubricNames = ["Thilawa", "Tajweed", "Makhraj", "Sifa", "Fasaha", "Talaffuz", "Maqamat", "Quality"];
+        }
+
+        // --- Build CSV Header ---
+        let csv = "Serial,Reg No,Name,Institution,Gender,";
+        
+        // Loop through 5 Judges
+        for (let j = 1; j <= 5; j++) {
+            rubricNames.forEach(name => { 
+                csv += `J${j}-${name},`; // E.g., J1-Thilawa, J1-Tajweed...
+            });
+            csv += `J${j}-TOTAL,`;
+        }
+        csv += "FINAL AVERAGE\n";
+
+        // --- Build Rows ---
+        data.forEach((s, idx) => {
+            let row = [
+                idx + 1, 
+                `"${s.reg || ''}"`, 
+                `"${s.name || ''}"`, 
+                `"${s.institution || s.instType || ''}"`, 
+                `"${s.gender || ''}"`
+            ];
+
+            let grandTotal = 0;
+            
+            // Loop Judges
+            for (let j = 1; j <= 5; j++) {
+                let jKey = `Judge_${j}`;
+                let jTotalCalculated = 0;
+
+                // Loop Criteria
+                rubricNames.forEach(name => {
+                    let val = "";
+                    // Check if detailed breakdown exists
+                    if (s.detailedScores && s.detailedScores[jKey] && s.detailedScores[jKey][name] !== undefined) {
+                        val = s.detailedScores[jKey][name];
+                    }
+                    
+                    row.push(val); // Add score to cell
+                    
+                    if(val !== "" && !isNaN(val)) jTotalCalculated += parseFloat(val);
+                });
+
+                // Judge Total Column
+                // Use calculated total if details exist, else fallback to simple total
+                let displayTotal = jTotalCalculated > 0 ? jTotalCalculated.toFixed(2) : (s.scores && s.scores[jKey] ? s.scores[jKey] : "0.00");
+                
+                row.push(displayTotal);
+                if(parseFloat(displayTotal) > 0) grandTotal += parseFloat(displayTotal);
+            }
+            
+            // Final Average
+            row.push((grandTotal / 5).toFixed(2));
+            csv += row.join(",") + "\n";
+        });
+
+        // --- Download ---
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8;' }));
+        link.download = `Rasfahi_8Part_Matrix_${new Date().toISOString().slice(0,10)}.csv`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+
+    } catch (e) {
+        alert("Export Error: " + e.message);
+    }
+}
+
+// 3. GENERATE DUMMY DATA (UPDATED) - Generates 8 parts for testing
+function generateDummyMasterSheet() {
+    try {
+        state.allStudents = []; 
+        state.judging.savedResults = []; 
+
+        // Get current rubric settings (8 parts)
+        const criteriaList = state.judging.rubric && state.judging.rubric.length > 0 
+                             ? state.judging.rubric 
+                             : [ {name:"Test1", max:10} ]; // Safety fallback
+
+        const names = ["Ahmed", "Ali", "Hassan", "Fathimath", "Aishath"];
+        
+        for (let i = 1; i <= 50; i++) { // Generate 50 students
+            let sObj = {
+                serial: i, reg: `REG-${1000 + i}`,
+                name: `${names[i % names.length]} ${i}`, 
+                id: `A000${i}`, gender: (i%2==0)?"Female":"Male",
+                group: "General", branch: "Balaiygen", institution: "School",
+                detailedScores: {}, scores: {}, finalScore: 0
+            };
+
+            let grandSum = 0;
+
+            for (let j = 1; j <= 5; j++) {
+                let jKey = `Judge_${j}`;
+                sObj.detailedScores[jKey] = {}; 
+                let jTotal = 0;
+
+                criteriaList.forEach(crit => {
+                    let mark = parseFloat((Math.random() * crit.max).toFixed(1));
+                    sObj.detailedScores[jKey][crit.name] = mark; 
+                    jTotal += mark;
+                });
+
+                sObj.scores[jKey] = parseFloat(jTotal.toFixed(2));
+                grandSum += jTotal;
+            }
+
+            sObj.finalScore = parseFloat((grandSum / 5).toFixed(2));
+            state.allStudents.push(sObj);
+            state.judging.savedResults.push(sObj);
+        }
+
+        saveToLocal();
+        alert(`✅ Generated Data based on your ${criteriaList.length} Rubric Parts!`);
+        renderMasterTable();
+
+    } catch (e) { alert("Gen Error: " + e.message); }
+}
 </script>
 </body>
 </html>
