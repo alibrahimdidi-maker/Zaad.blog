@@ -13758,32 +13758,31 @@ function downloadRubricMatrix() {
         alert("Export Error: " + e.message);
     }
 }
-    // =========================================================================
-// ★ FINAL SOLUTION: FORCE ENGLISH KEYS FOR PERFECT EXPORT ★
+// =========================================================================
+// ★ RASFAHI FINAL DYNAMIC SUITE (WORKS WITH DHIVEHI NAMES) ★
 // =========================================================================
 
-// 1. Define Standard Keys (To ensure Generator & Exporter match 100%)
-const STANDARD_KEYS = [
-    { id: "Thilawa", label: "ތިލާވަތު (Thilawa)" },
-    { id: "Tajweed", label: "ތަޖުވީދު (Tajweed)" },
-    { id: "Makhraj", label: "މަޚްރަޖް (Makhraj)" },
-    { id: "Sifa", label: "ޞިފަ (Sifa)" },
-    { id: "Fasaha", label: "ފަޞާޙާ (Fasaha)" },
-    { id: "Talaffuz", label: "ތަލައްފުޒް (Talaffuz)" },
-    { id: "Maqamat", label: "މަޤާމާތު (Maqamat)" }
-];
-
-// --- 2. GENERATE DATA (Using Simple IDs) ---
+// --- 1. DUMMY DATA GENERATOR (Reads Your Exact Settings) ---
 function generateDummyMasterSheet() {
     try {
-        if(typeof state === 'undefined') { alert("State Error!"); return; }
+        if(typeof state === 'undefined') { alert("State Error! Refresh."); return; }
         
         state.allStudents = []; 
         state.judging.savedResults = []; 
 
+        // ★ STEP 1: READ YOUR RUBRIC SETTINGS ★
+        let myRubric = [];
+        if (state.judging && state.judging.rubric && state.judging.rubric.length > 0) {
+            myRubric = state.judging.rubric; // This gets "ތިލާވަތު (Thilawa)" etc.
+        } else {
+            alert("⚠️ Rubric Settings not found! Please check your code.");
+            return;
+        }
+
         const instTypes = ["School", "Office", "NGO", "University", "Private"];
         const names = ["Ahmed", "Ali", "Hassan", "Ibrahim", "Fathimath", "Aishath"];
 
+        // Generate 500 Students
         for (let i = 1; i <= 500; i++) {
             let sObj = {
                 serial: i, reg: `REG-${1000 + i}`,
@@ -13792,24 +13791,24 @@ function generateDummyMasterSheet() {
                 institution: instTypes[i % instTypes.length],
                 group: "General", branch: "Balaiygen",
                 gender: (i%2==0)?"Female":"Male",
-                
                 detailedScores: {}, scores: {}, finalScore: 0
             };
 
             let grandSum = 0;
 
+            // Loop 5 Judges
             for (let j = 1; j <= 5; j++) {
                 let jKey = `Judge_${j}`;
                 sObj.detailedScores[jKey] = {}; 
                 let jTotal = 0;
 
-                // ★ FORCE SAVE USING SIMPLE IDS (Thilawa, Tajweed...) ★
-                STANDARD_KEYS.forEach(crit => {
-                    // Random Mark (0 to 10 for simplicity in dummy)
-                    let mark = parseFloat((Math.random() * 10).toFixed(1));
+                // ★ STEP 2: SAVE DATA USING YOUR EXACT NAMES ★
+                myRubric.forEach(crit => {
+                    // Random Score
+                    let mark = parseFloat((Math.random() * crit.max).toFixed(1));
                     
-                    // Save as "Thilawa" (Not the long Dhivehi string)
-                    sObj.detailedScores[jKey][crit.id] = mark; 
+                    // Saves as: sObj.detailedScores.Judge_1["ތިލާވަތު (Thilawa)"] = 25
+                    sObj.detailedScores[jKey][crit.name] = mark; 
                     
                     jTotal += mark;
                 });
@@ -13824,26 +13823,39 @@ function generateDummyMasterSheet() {
         }
 
         saveToLocal();
-        alert("✅ Generated Clean Data with English Keys (Thilawa, Tajweed...)");
+        alert(`✅ Generated Data successfully using your Rubric settings!`);
+
     } catch (e) {
         alert("Gen Error: " + e.message);
     }
 }
 
-// --- 3. EXPORT MATRIX (Looking for Simple IDs) ---
+// --- 2. EXPORT MATRIX (Reads Your Exact Settings to Columns) ---
 function downloadRubricMatrix() {
     try {
         let data = state.allStudents.length > 0 ? state.allStudents : state.judging.savedResults;
         if (!data || data.length === 0) { alert("⚠️ No Data! Click 'Generate Dummy Data' first."); return; }
 
+        // ★ STEP 1: GET RUBRIC NAMES AGAIN ★
+        let myRubricNames = [];
+        if (state.judging && state.judging.rubric) {
+            myRubricNames = state.judging.rubric.map(r => r.name);
+        }
+        
+        if (myRubricNames.length === 0) {
+            alert("Error: Rubric settings are empty.");
+            return;
+        }
+
         // Build Header
         let csv = "Serial,Reg No,Name,Institution Type,Gender,";
         
-        // Loop Judges
+        // Loop 5 Judges
         for (let j = 1; j <= 5; j++) {
-            STANDARD_KEYS.forEach(k => {
-                // Header can show the Dhivehi Label if you want
-                csv += `J${j}-${k.label},`; 
+            myRubricNames.forEach(name => {
+                // Remove commas from name just to be safe for CSV
+                let cleanName = name.replace(/,/g, " ");
+                csv += `J${j}-[${cleanName}],`; 
             });
             csv += `J${j}-TOTAL,`;
         }
@@ -13860,14 +13872,14 @@ function downloadRubricMatrix() {
                 let jKey = `Judge_${j}`;
                 let jTotalCalculated = 0;
 
-                STANDARD_KEYS.forEach(k => {
+                // ★ STEP 2: LOOK FOR DATA USING EXACT NAMES ★
+                myRubricNames.forEach(name => {
                     let val = "";
-                    // ★ LOOK FOR THE SIMPLE ID (Thilawa) ★
-                    if(s.detailedScores && s.detailedScores[jKey]) {
-                        // Check Exact ID
-                        if (s.detailedScores[jKey][k.id] !== undefined) val = s.detailedScores[jKey][k.id];
-                        // Fallback: Check Label
-                        else if (s.detailedScores[jKey][k.label] !== undefined) val = s.detailedScores[jKey][k.label];
+                    if (s.detailedScores && s.detailedScores[jKey]) {
+                        // This looks for "ތިލާވަތު (Thilawa)" exactly
+                        if (s.detailedScores[jKey][name] !== undefined) {
+                            val = s.detailedScores[jKey][name];
+                        }
                     }
                     
                     row.push(val); 
@@ -13883,9 +13895,11 @@ function downloadRubricMatrix() {
         });
 
         // Download
+        const fileName = `Rasfahi_Full_Rubric_${new Date().toISOString().slice(0,10)}.csv`;
+        const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
         const link = document.createElement("a");
-        link.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8;' }));
-        link.download = `Rasfahi_CLEAN_Matrix.csv`;
+        link.href = URL.createObjectURL(blob);
+        link.download = fileName;
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
