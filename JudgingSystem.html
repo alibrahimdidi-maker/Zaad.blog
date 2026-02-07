@@ -13622,6 +13622,278 @@ function exportMasterResultSheet() {
         alert("Export Error: " + e.message);
     }
 }
+    // =========================================================================
+// ★ FINAL SOLUTION: FORCE ENGLISH KEYS FOR PERFECT EXPORT ★
+// =========================================================================
+
+// 1. Define Standard Keys (To ensure Generator & Exporter match 100%)
+const STANDARD_KEYS = [
+    { id: "Thilawa", label: "ތިލާވަތު (Thilawa)" },
+    { id: "Tajweed", label: "ތަޖުވީދު (Tajweed)" },
+    { id: "Makhraj", label: "މަޚްރަޖް (Makhraj)" },
+    { id: "Sifa", label: "ޞިފަ (Sifa)" },
+    { id: "Fasaha", label: "ފަޞާޙާ (Fasaha)" },
+    { id: "Talaffuz", label: "ތަލައްފުޒް (Talaffuz)" },
+    { id: "Maqamat", label: "މަޤާމާތު (Maqamat)" }
+];
+
+// --- 2. GENERATE DATA (Using Simple IDs) ---
+function generateDummyMasterSheet() {
+    try {
+        if(typeof state === 'undefined') { alert("State Error!"); return; }
+        
+        state.allStudents = []; 
+        state.judging.savedResults = []; 
+
+        const instTypes = ["School", "Office", "NGO", "University", "Private"];
+        const names = ["Ahmed", "Ali", "Hassan", "Ibrahim", "Fathimath", "Aishath"];
+
+        for (let i = 1; i <= 500; i++) {
+            let sObj = {
+                serial: i, reg: `REG-${1000 + i}`,
+                name: `${names[i % names.length]} ${i}`, 
+                instType: instTypes[i % instTypes.length],
+                institution: instTypes[i % instTypes.length],
+                group: "General", branch: "Balaiygen",
+                gender: (i%2==0)?"Female":"Male",
+                
+                detailedScores: {}, scores: {}, finalScore: 0
+            };
+
+            let grandSum = 0;
+
+            for (let j = 1; j <= 5; j++) {
+                let jKey = `Judge_${j}`;
+                sObj.detailedScores[jKey] = {}; 
+                let jTotal = 0;
+
+                // ★ FORCE SAVE USING SIMPLE IDS (Thilawa, Tajweed...) ★
+                STANDARD_KEYS.forEach(crit => {
+                    // Random Mark (0 to 10 for simplicity in dummy)
+                    let mark = parseFloat((Math.random() * 10).toFixed(1));
+                    
+                    // Save as "Thilawa" (Not the long Dhivehi string)
+                    sObj.detailedScores[jKey][crit.id] = mark; 
+                    
+                    jTotal += mark;
+                });
+
+                sObj.scores[jKey] = parseFloat(jTotal.toFixed(2));
+                grandSum += jTotal;
+            }
+
+            sObj.finalScore = parseFloat((grandSum / 5).toFixed(2));
+            state.allStudents.push(sObj);
+            state.judging.savedResults.push(sObj);
+        }
+
+        saveToLocal();
+        alert("✅ Generated Clean Data with English Keys (Thilawa, Tajweed...)");
+    } catch (e) {
+        alert("Gen Error: " + e.message);
+    }
+}
+
+// --- 3. EXPORT MATRIX (Looking for Simple IDs) ---
+function downloadRubricMatrix() {
+    try {
+        let data = state.allStudents.length > 0 ? state.allStudents : state.judging.savedResults;
+        if (!data || data.length === 0) { alert("⚠️ No Data! Click 'Generate Dummy Data' first."); return; }
+
+        // Build Header
+        let csv = "Serial,Reg No,Name,Institution Type,Gender,";
+        
+        // Loop Judges
+        for (let j = 1; j <= 5; j++) {
+            STANDARD_KEYS.forEach(k => {
+                // Header can show the Dhivehi Label if you want
+                csv += `J${j}-${k.label},`; 
+            });
+            csv += `J${j}-TOTAL,`;
+        }
+        csv += "FINAL AVERAGE\n";
+
+        // Build Rows
+        data.forEach((s, idx) => {
+            let row = [
+                idx + 1, `"${s.reg}"`, `"${s.name}"`, `"${s.instType}"`, `"${s.gender}"`
+            ];
+
+            let grandTotal = 0;
+            for (let j = 1; j <= 5; j++) {
+                let jKey = `Judge_${j}`;
+                let jTotalCalculated = 0;
+
+                STANDARD_KEYS.forEach(k => {
+                    let val = "";
+                    // ★ LOOK FOR THE SIMPLE ID (Thilawa) ★
+                    if(s.detailedScores && s.detailedScores[jKey]) {
+                        // Check Exact ID
+                        if (s.detailedScores[jKey][k.id] !== undefined) val = s.detailedScores[jKey][k.id];
+                        // Fallback: Check Label
+                        else if (s.detailedScores[jKey][k.label] !== undefined) val = s.detailedScores[jKey][k.label];
+                    }
+                    
+                    row.push(val); 
+                    if(val !== "" && !isNaN(val)) jTotalCalculated += parseFloat(val);
+                });
+
+                let displayTotal = jTotalCalculated > 0 ? jTotalCalculated.toFixed(2) : (s.scores[jKey] || "0.00");
+                row.push(displayTotal);
+                if(parseFloat(displayTotal)>0) grandTotal += parseFloat(displayTotal);
+            }
+            row.push((grandTotal/5).toFixed(2));
+            csv += row.join(",") + "\n";
+        });
+
+        // Download
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8;' }));
+        link.download = `Rasfahi_CLEAN_Matrix.csv`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+
+    } catch (e) {
+        alert("Export Error: " + e.message);
+    }
+}
+    // =========================================================================
+// ★ FINAL SOLUTION: FORCE ENGLISH KEYS FOR PERFECT EXPORT ★
+// =========================================================================
+
+// 1. Define Standard Keys (To ensure Generator & Exporter match 100%)
+const STANDARD_KEYS = [
+    { id: "Thilawa", label: "ތިލާވަތު (Thilawa)" },
+    { id: "Tajweed", label: "ތަޖުވީދު (Tajweed)" },
+    { id: "Makhraj", label: "މަޚްރަޖް (Makhraj)" },
+    { id: "Sifa", label: "ޞިފަ (Sifa)" },
+    { id: "Fasaha", label: "ފަޞާޙާ (Fasaha)" },
+    { id: "Talaffuz", label: "ތަލައްފުޒް (Talaffuz)" },
+    { id: "Maqamat", label: "މަޤާމާތު (Maqamat)" }
+];
+
+// --- 2. GENERATE DATA (Using Simple IDs) ---
+function generateDummyMasterSheet() {
+    try {
+        if(typeof state === 'undefined') { alert("State Error!"); return; }
+        
+        state.allStudents = []; 
+        state.judging.savedResults = []; 
+
+        const instTypes = ["School", "Office", "NGO", "University", "Private"];
+        const names = ["Ahmed", "Ali", "Hassan", "Ibrahim", "Fathimath", "Aishath"];
+
+        for (let i = 1; i <= 500; i++) {
+            let sObj = {
+                serial: i, reg: `REG-${1000 + i}`,
+                name: `${names[i % names.length]} ${i}`, 
+                instType: instTypes[i % instTypes.length],
+                institution: instTypes[i % instTypes.length],
+                group: "General", branch: "Balaiygen",
+                gender: (i%2==0)?"Female":"Male",
+                
+                detailedScores: {}, scores: {}, finalScore: 0
+            };
+
+            let grandSum = 0;
+
+            for (let j = 1; j <= 5; j++) {
+                let jKey = `Judge_${j}`;
+                sObj.detailedScores[jKey] = {}; 
+                let jTotal = 0;
+
+                // ★ FORCE SAVE USING SIMPLE IDS (Thilawa, Tajweed...) ★
+                STANDARD_KEYS.forEach(crit => {
+                    // Random Mark (0 to 10 for simplicity in dummy)
+                    let mark = parseFloat((Math.random() * 10).toFixed(1));
+                    
+                    // Save as "Thilawa" (Not the long Dhivehi string)
+                    sObj.detailedScores[jKey][crit.id] = mark; 
+                    
+                    jTotal += mark;
+                });
+
+                sObj.scores[jKey] = parseFloat(jTotal.toFixed(2));
+                grandSum += jTotal;
+            }
+
+            sObj.finalScore = parseFloat((grandSum / 5).toFixed(2));
+            state.allStudents.push(sObj);
+            state.judging.savedResults.push(sObj);
+        }
+
+        saveToLocal();
+        alert("✅ Generated Clean Data with English Keys (Thilawa, Tajweed...)");
+    } catch (e) {
+        alert("Gen Error: " + e.message);
+    }
+}
+
+// --- 3. EXPORT MATRIX (Looking for Simple IDs) ---
+function downloadRubricMatrix() {
+    try {
+        let data = state.allStudents.length > 0 ? state.allStudents : state.judging.savedResults;
+        if (!data || data.length === 0) { alert("⚠️ No Data! Click 'Generate Dummy Data' first."); return; }
+
+        // Build Header
+        let csv = "Serial,Reg No,Name,Institution Type,Gender,";
+        
+        // Loop Judges
+        for (let j = 1; j <= 5; j++) {
+            STANDARD_KEYS.forEach(k => {
+                // Header can show the Dhivehi Label if you want
+                csv += `J${j}-${k.label},`; 
+            });
+            csv += `J${j}-TOTAL,`;
+        }
+        csv += "FINAL AVERAGE\n";
+
+        // Build Rows
+        data.forEach((s, idx) => {
+            let row = [
+                idx + 1, `"${s.reg}"`, `"${s.name}"`, `"${s.instType}"`, `"${s.gender}"`
+            ];
+
+            let grandTotal = 0;
+            for (let j = 1; j <= 5; j++) {
+                let jKey = `Judge_${j}`;
+                let jTotalCalculated = 0;
+
+                STANDARD_KEYS.forEach(k => {
+                    let val = "";
+                    // ★ LOOK FOR THE SIMPLE ID (Thilawa) ★
+                    if(s.detailedScores && s.detailedScores[jKey]) {
+                        // Check Exact ID
+                        if (s.detailedScores[jKey][k.id] !== undefined) val = s.detailedScores[jKey][k.id];
+                        // Fallback: Check Label
+                        else if (s.detailedScores[jKey][k.label] !== undefined) val = s.detailedScores[jKey][k.label];
+                    }
+                    
+                    row.push(val); 
+                    if(val !== "" && !isNaN(val)) jTotalCalculated += parseFloat(val);
+                });
+
+                let displayTotal = jTotalCalculated > 0 ? jTotalCalculated.toFixed(2) : (s.scores[jKey] || "0.00");
+                row.push(displayTotal);
+                if(parseFloat(displayTotal)>0) grandTotal += parseFloat(displayTotal);
+            }
+            row.push((grandTotal/5).toFixed(2));
+            csv += row.join(",") + "\n";
+        });
+
+        // Download
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8;' }));
+        link.download = `Rasfahi_CLEAN_Matrix.csv`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+
+    } catch (e) {
+        alert("Export Error: " + e.message);
+    }
+}
 </script>
 </body>
 </html>
