@@ -13415,130 +13415,174 @@ function downloadDetailedManualSheet() {
         alert("Sheet Error: " + e.message);
     }
 }
-    // --- 3. EXPORT MASTER RESULT SHEET (★ FIXED: FULL DETAILED BREAKDOWN ★) ---
-function exportMasterResultSheet() {
+// =========================================================================
+// ★ RASFAHI ULTIMATE DATA SUITE (V11 - AVERAGE BREAKDOWN & TOTALS) ★
+// =========================================================================
+
+// --- 0. SAFETY HELPER: GET RUBRIC ---
+function getSafeRubricList() {
+    if (typeof state !== 'undefined' && state.judging && state.judging.rubric && state.judging.rubric.length > 0) {
+        return state.judging.rubric;
+    }
+    return [
+        { name: "Thilawa", max: 30 }, { name: "Tajweed", max: 20 }, 
+        { name: "Makhraj", max: 20 }, { name: "Sifa", max: 10 }, 
+        { name: "Fasaha", max: 10 }, { name: "Talaffuz", max: 5 }, { name: "Maqamat", max: 5 }
+    ];
+}
+
+// --- 1. DUMMY DATA GENERATOR (ENSURING DETAILED SCORES EXIST) ---
+function generateDummyMasterSheet() {
     try {
-        // 1. Get Data Source (Prioritize allStudents, fallback to savedResults)
-        let sourceData = [];
-        if (state.allStudents && state.allStudents.length > 0) {
-            sourceData = [...state.allStudents];
-        } else if (state.judging.savedResults && state.judging.savedResults.length > 0) {
-            sourceData = [...state.judging.savedResults];
+        if(typeof state === 'undefined') { alert("State Error! Refresh."); return; }
+        state.allStudents = []; 
+        state.judging.savedResults = []; 
+
+        const criteriaList = getSafeRubricList(); 
+        const instTypes = ["School", "Office", "NGO", "University", "Private"];
+        const names = ["Ahmed", "Ali", "Hassan", "Ibrahim", "Fathimath", "Aishath", "Mariyam", "Zainab"];
+        const groups = ["Under 6", "Under 9", "Under 11", "Under 13", "Under 16", "Under 19", "General"];
+        const branches = ["Balaiygen", "Nubalai"];
+
+        for (let i = 1; i <= 2000; i++) {
+            const name = names[i % names.length];
+            const iType = instTypes[i % instTypes.length];
+            
+            let studentObj = {
+                serial: i, reg: `REG-${1000 + i}`,
+                name: `${name} ${i}`, id: `A000${i}`, gender: (i%2==0)?"Female":"Male",
+                group: groups[i % groups.length], branch: branches[i % branches.length],
+                address: "Male'", instType: iType, institution: iType, 
+                contact: "7770000", parent: "Parent", pPhone: "7770000", email: "test@mail.com",
+                scores: {}, detailedScores: {}, finalScore: 0
+            };
+
+            let ability = Math.random() * (0.95 - 0.60) + 0.60; 
+            let grandTotal = 0;
+
+            // Generate Scores for 5 Judges
+            for (let j = 1; j <= 5; j++) {
+                let jKey = `Judge_${j}`;
+                let judgeTotal = 0;
+                let variance = (Math.random() * 0.1) - 0.05; 
+                studentObj.detailedScores[jKey] = {};
+
+                criteriaList.forEach(c => {
+                    let mark = c.max * (ability + variance);
+                    mark = Math.max(0, Math.min(c.max, mark));
+                    mark = parseFloat(mark.toFixed(2));
+                    
+                    // ★ IMPORTANT: Saving detailed score explicitly
+                    studentObj.detailedScores[jKey][c.name] = mark;
+                    judgeTotal += mark;
+                });
+
+                studentObj.scores[jKey] = parseFloat(judgeTotal.toFixed(2));
+                grandTotal += judgeTotal;
+            }
+
+            studentObj.finalScore = parseFloat((grandTotal / 5).toFixed(2));
+            state.allStudents.push(studentObj);
+            state.judging.savedResults.push(studentObj);
         }
 
-        if (sourceData.length === 0) { 
-            alert("No data available to export! Please Generate or Load data first."); 
-            return; 
-        }
+        saveToLocal();
+        if(typeof renderMasterTable === 'function') renderMasterTable();
+        alert("✅ Generated 2000 Students with FULL DETAILED SCORES!");
+
+    } catch (e) { alert("Gen Error: " + e.message); }
+}
+
+// --- 2. EXPORT MASTER SHEET (★ THE FIX: CALCULATING AVERAGES ★) ---
+function exportMasterResultSheet() {
+    try {
+        let sourceData = state.allStudents.length > 0 ? state.allStudents : state.judging.savedResults;
+        if (!sourceData || sourceData.length === 0) { alert("No data to export! Generate Dummy Data first."); return; }
 
         const criteriaList = getSafeRubricList();
         
-        // 2. Build Header Columns
-        // Basic Info
+        // --- HEADER CONSTRUCTION ---
         let csv = "Serial No,Reg No,Age Group,Branch,Institution Type,Full Name,Gender,Address,ID Card,Contact,Parent Name,Parent Phone,Email,";
         
-        // Loop for 5 Judges Headers
-        for(let j=1; j<=5; j++) {
-            // Individual Criteria Headers (e.g., J1-Thilawa, J1-Tajweed)
-            criteriaList.forEach(c => { 
-                csv += `J${j}-${c.name},`; 
-            });
-            // Total Header for Judge
-            csv += `J${j}-TOTAL,`;
-        }
-        // Final Columns
-        csv += "GRAND TOTAL (Avg),FINAL SCORE,RANK,REMARKS\n";
+        // 1. Add Headers for AVERAGES (Thilawa Avg, Tajweed Avg...)
+        criteriaList.forEach(c => {
+            csv += `${c.name} (AVG),`;
+        });
 
-        // 3. Sort by Final Score (Highest First)
+        // 2. Add Headers for JUDGE TOTALS
+        for(let j=1; j<=5; j++) {
+            csv += `Judge ${j} Total,`;
+        }
+        
+        csv += "GRAND TOTAL,FINAL AVERAGE,RANK,REMARKS\n";
+
+        // Sort by Score
         sourceData.sort((a, b) => (b.finalScore || 0) - (a.finalScore || 0));
 
-        // 4. Build Data Rows
+        // --- ROW GENERATION ---
         sourceData.forEach((s, idx) => {
             let row = [];
             
-            // Push Basic Student Info
-            row.push(
-                idx + 1, 
-                `"${s.reg||''}"`, 
-                `"${s.group||''}"`, 
-                `"${s.branch||''}"`, 
-                `"${s.instType||s.institution||''}"`, 
-                `"${s.name||''}"`, 
-                `"${s.gender||''}"`, 
-                `"${s.address||''}"`, 
-                `"${s.id||''}"`, 
-                `"${s.phone||''}"`, 
-                `"${s.parent||''}"`, 
-                `"${s.parentPhone||''}"`, 
-                `"${s.email||''}"`
-            );
+            // Basic Info
+            row.push(idx + 1, `"${s.reg||''}"`, `"${s.group||''}"`, `"${s.branch||''}"`, `"${s.instType||s.institution||''}"`, `"${s.name||''}"`, `"${s.gender||''}"`, `"${s.address||''}"`, `"${s.id||''}"`, `"${s.phone||''}"`, `"${s.parent||''}"`, `"${s.parentPhone||''}"`, `"${s.email||''}"`);
 
-            let grandTotal = 0; 
-            let activeJudges = 0;
+            // ★ PART A: CALCULATE CRITERIA AVERAGES (The requested breakdown) ★
+            criteriaList.forEach(c => {
+                let sumCriteria = 0;
+                let validJudges = 0;
 
-            // Iterate through Judges 1 to 5
-            for(let j=1; j<=5; j++) {
-                let jKey = `Judge_${j}`; // Key used in data object
-                let jTotalCalculated = 0;
-                let hasDetails = false;
-
-                // --- INNER LOOP: GET INDIVIDUAL MARKS ---
-                criteriaList.forEach(c => {
-                    let mark = ""; // Default empty
-
-                    // Check if detailedScores exists and has the specific mark
-                    if (s.detailedScores && s.detailedScores[jKey] && s.detailedScores[jKey][c.name] !== undefined) {
-                        mark = s.detailedScores[jKey][c.name];
-                        // If mark is a number, add to total
-                        if(!isNaN(parseFloat(mark))) {
-                            jTotalCalculated += parseFloat(mark);
-                            hasDetails = true;
-                        }
+                // Loop through all 5 judges to find marks for this criteria (e.g. Thilawa)
+                for(let j=1; j<=5; j++) {
+                    let jKey = `Judge_${j}`;
+                    if(s.detailedScores && s.detailedScores[jKey] && s.detailedScores[jKey][c.name] !== undefined) {
+                        sumCriteria += parseFloat(s.detailedScores[jKey][c.name]);
+                        validJudges++;
                     }
-                    row.push(mark); // ★ Push the individual mark to CSV column
-                });
-
-                // --- GET JUDGE TOTAL ---
-                // If we found detailed marks, use the calculated total.
-                // If NO detailed marks (e.g. uploaded via CSV), try to use the saved total.
-                let finalJudgeTotal = 0;
-                
-                if (hasDetails) {
-                    finalJudgeTotal = jTotalCalculated;
-                } else if (s.scores && s.scores[jKey]) {
-                    finalJudgeTotal = parseFloat(s.scores[jKey]);
                 }
 
-                // Push Total Column
-                row.push(finalJudgeTotal > 0 ? finalJudgeTotal.toFixed(2) : "");
+                // Calculate Average for this criteria
+                let avgCriteria = validJudges > 0 ? (sumCriteria / validJudges).toFixed(2) : "0.00";
+                row.push(avgCriteria);
+            });
 
-                if (finalJudgeTotal > 0) { 
-                    grandTotal += finalJudgeTotal; 
-                    activeJudges++; 
+            // ★ PART B: JUDGE TOTALS ★
+            let grandTotal = 0;
+            let totalActiveJudges = 0;
+
+            for(let j=1; j<=5; j++) {
+                let jKey = `Judge_${j}`;
+                let jTotal = 0;
+
+                if(s.scores && s.scores[jKey]) {
+                    jTotal = parseFloat(s.scores[jKey]);
+                }
+                
+                row.push(jTotal > 0 ? jTotal.toFixed(2) : "");
+
+                if(jTotal > 0) {
+                    grandTotal += jTotal;
+                    totalActiveJudges++;
                 }
             }
 
-            // Final Average Calculation
-            let finalAvg = s.finalScore || (activeJudges > 0 ? (grandTotal/activeJudges).toFixed(2) : 0);
-            
+            // Final Calculations
+            let finalAvg = s.finalScore || (totalActiveJudges > 0 ? (grandTotal/totalActiveJudges).toFixed(2) : 0);
             row.push(grandTotal.toFixed(2), finalAvg, idx + 1, "");
             
-            // Join row array to CSV string
             csv += row.join(",") + "\n";
         });
 
-        // 5. Download File
+        // Download
         const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
         const link = document.createElement("a");
         link.href = URL.createObjectURL(blob);
-        link.download = `Rasfahi_Full_Detailed_Report_v2.csv`;
+        link.download = `Rasfahi_Full_Report_Averages_${new Date().toISOString().slice(0,10)}.csv`;
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
 
     } catch(e) {
         alert("Export Error: " + e.message);
-        console.error(e);
     }
 }
 </script>
