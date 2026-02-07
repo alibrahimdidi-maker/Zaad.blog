@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="dv" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ޤުރްއާން ޓެކްސްޓް ސުވާލު ޖެނެރޭޓަރ</title>
+    <style>
+        body { font-family: "Faruma", "MV Boli", "Amiri", sans-serif; background-color: #f4f4f9; padding: 20px; direction: rtl; }
+        .container { max-width: 800px; margin: 0 auto; background: white; padding: 30px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+        h1 { text-align: center; color: #2c3e50; margin-bottom: 20px; font-size: 24px; }
+        .form-group { margin-bottom: 20px; }
+        label { display: block; margin-bottom: 8px; font-weight: bold; }
+        select, input { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; font-size: 16px; box-sizing: border-box; }
+        button { background-color: #2980b9; color: white; padding: 15px 20px; border: none; border-radius: 5px; cursor: pointer; width: 100%; font-size: 18px; font-family: inherit; margin-top: 10px; }
+        button:disabled { background-color: #95a5a6; cursor: not-allowed; }
+        button:hover:not(:disabled) { background-color: #1a5276; }
+        .row { display: flex; gap: 20px; flex-wrap: wrap; }
+        .col { flex: 1; min-width: 200px; }
+        #status { margin-top: 20px; padding: 15px; border-radius: 5px; text-align: center; display: none; font-weight: bold; }
+        .loading { background-color: #fff3cd; color: #856404; border: 1px solid #ffeeba; }
+        .success { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .error { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .note { font-size: 13px; color: #666; margin-top: 5px; }
+        hr { border: 0; border-top: 1px solid #eee; margin: 20px 0; }
+        #dataStatus { text-align: center; margin-bottom: 20px; font-size: 14px; color: #e74c3c; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>ޤުރްއާން ޓެކްސްޓް ސުވާލު ޖެނެރޭޓަރ</h1>
+    <p style="text-align:center; font-size:14px; color:#555;">(ސީ.އެސް.ވީ ފޯމެޓް: ID, Juz, Page, Surah, Start, End, Text)</p>
+
+    <div id="dataStatus">⚠️ ޤުރްއާން ޑޭޓާ ޑައުންލޯޑް ވަނީ... މަޑުކޮށްލައްވާ!</div>
+
+    <div class="form-group">
+        <label>ސުވާލު ނަގަން ބޭނުންވާ ގޮތް:</label>
+        <select id="selectionMode" onchange="toggleMode()">
+            <option value="juz">ފޮތުން ފޮތަށް (Juz Range)</option>
+            <option value="surah">ސޫރަތުން ސޫރަތަށް (Surah Range)</option>
+        </select>
+    </div>
+
+    <div class="row" id="juzSelection">
+        <div class="col">
+            <label>ފަށާ ފޮތް:</label>
+            <select id="startJuz"></select>
+        </div>
+        <div class="col">
+            <label>ނިންމާ ފޮތް:</label>
+            <select id="endJuz"></select>
+        </div>
+    </div>
+
+    <div class="row" id="surahSelection" style="display:none;">
+        <div class="col">
+            <label>ފަށާ ސޫރަތް:</label>
+            <select id="startSurah"></select>
+        </div>
+        <div class="col">
+            <label>ނިންމާ ސޫރަތް:</label>
+            <select id="endSurah"></select>
+        </div>
+    </div>
+
+    <hr>
+
+    <div class="row">
+        <div class="col">
+            <label>ކިޔަވަންޖެހޭ މިންވަރު (އާޔަތުގެ ޢަދަދު):</label>
+            <select id="lineCategory">
+                <option value="4-5">4 އާޔަތާއި 5 އާޔަތް</option>
+                <option value="5-6">5 އާޔަތާއި 6 އާޔަތް</option>
+                <option value="6-7">6 އާޔަތާއި 7 އާޔަތް</option>
+                <option value="7-8">7 އާޔަތާއި 8 އާޔަތް</option>
+                <option value="8-10">8 އާޔަތާއި 10 އާޔަތް</option>
+                <option value="10-15">10 އާޔަތާއި 15 އާޔަތް</option>
+            </select>
+        </div>
+        <div class="col">
+            <label>ޖުމްލަ ސުވާލު (Total Questions):</label>
+            <input type="number" id="totalQuestions" value="3000" min="1">
+        </div>
+    </div>
+    
+    <div class="form-group" style="margin-top:15px;">
+        <label>މިނިމަމް ސުވާލު (ކޮންމެ ފޮތަކުން):</label>
+        <input type="number" id="minPerJuz" value="60" readonly style="background:#f9f9f9; color:#555;">
+    </div>
+
+    <div class="form-group">
+        <button id="genBtn" onclick="generateCSV()" disabled>ޑޭޓާ ލޯޑް ވަނީ...</button>
+    </div>
+
+    <div id="status"></div>
+</div>
+
+<script>
+    // Global variable to hold Quran Text
+    let fullQuran = [];
+    let surahMeta = []; // Will hold Names and Verse counts
+
+    // Standard Arabic Surah Names
+    const surahNamesAr = [
+        "الفاتحة", "البقرة", "آل عمران", "النساء", "المائدة", "الأنعام", "الأعراف", "الأنفال", "التوبة", "يونس",
+        "هود", "يوسف", "الرعد", "إبراهيم", "الحجر", "النحل", "الإسراء", "الكهف", "مريم", "طه",
+        "الأنبياء", "الحج", "المؤمنون", "النور", "الفرقان", "الشعراء", "النمل", "القصص", "العنكبوت", "الروم",
+        "لقمان", "السجدة", "الأحزاب", "سبأ", "فاطر", "يس", "الصافات", "ص", "الزمر", "غافر",
+        "فصلت", "الشورى", "الزخرف", "الدخان", "الجاثية", "الأحقاف", "محمد", "الفتح", "الحجرات", "ق",
+        "الذاريات", "الطور", "النجم", "القمر", "الرحمن", "الواقعة", "الحديد", "المجادلة", "الحشر", "الممتحنة",
+        "الصف", "الجمعة", "المنافقون", "التغابن", "الطلاق", "التحريم", "الملك", "القلم", "الحاقة", "المعارج",
+        "نوح", "الجن", "المزمل", "المدثر", "القيامة", "الإنسان", "المرسلات", "النبأ", "النازعات", "عبس",
+        "التكوير", "الإنفطار", "المطففين", "الإنشقاق", "البروج", "الطارق", "الأعلى", "الغاشية", "الفجر", "البلد",
+        "الشمس", "الليل", "الضحى", "الشرح", "التين", "العلق", "القدر", "البينة", "الزلزلة", "العاديات",
+        "القارعة", "التكاثر", "العصر", "الهمزة", "الفيل", "قريش", "الماعون", "الكوثر", "الكافرون", "النصر",
+        "المسد", "الإخلاص", "الفلق", "الناس"
+    ];
+
+    // Load Quran Data on Start
+    window.onload = async function() {
+        populateDropdowns();
+        await loadQuranData();
+    };
+
+    function populateDropdowns() {
+        const startSurah = document.getElementById('startSurah');
+        const endSurah = document.getElementById('endSurah');
+        const startJuz = document.getElementById('startJuz');
+        const endJuz = document.getElementById('endJuz');
+
+        surahNamesAr.forEach((name, index) => {
+            let id = index + 1;
+            let option = new Option(`${id}. ${name}`, id);
+            startSurah.add(option.cloneNode(true));
+            endSurah.add(option.cloneNode(true));
+        });
+        endSurah.value = 114;
+
+        for(let i=1; i<=30; i++) {
+            let option = new Option(`ފޮތް ${i}`, i);
+            startJuz.add(option.cloneNode(true));
+            endJuz.add(option.cloneNode(true));
+        }
+        endJuz.value = 30;
+    }
+
+    async function loadQuranData() {
+        const statusDiv = document.getElementById('dataStatus');
+        const btn = document.getElementById('genBtn');
+        
+        try {
+            // Fetching a minified Uthmani Quran JSON (approx 2MB)
+            // Using a reliable CDN for AlQuran Cloud data
+            const response = await fetch('https://api.alquran.cloud/v1/quran/quran-uthmani');
+            if (!response.ok) throw new Error("Network Error");
+            const data = await response.json();
+            
+            fullQuran = data.data.surahs;
+            
+            // Build metadata
+            surahMeta = fullQuran.map(s => ({
+                id: s.number,
+                name: s.name, // Usually "سُورَةُ ٱلْبَقَرَةِ" or similar
+                simpleName: surahNamesAr[s.number - 1],
+                verses: s.ayahs.length,
+                ayahs: s.ayahs // Array of objects {number, text, juz, etc}
+            }));
+
+            statusDiv.innerHTML = "✅ ޤުރްއާން ޑޭޓާ ލޯޑް ކުރެވިއްޖެ! (ސުވާލު އުފެއްދުމަށް ތައްޔާރު)";
+            statusDiv.style.color = "#27ae60";
+            btn.disabled = false;
+            btn.innerHTML = "ސީ.އެސް.ވީ (CSV) ފައިލް ޑައުންލޯޑް ކުރައްވާ";
+            btn.style.backgroundColor = "#27ae60";
+
+        } catch (error) {
+            console.error(error);
+            statusDiv.innerHTML = "❌ ޑޭޓާ ލޯޑް ނުކުރެވުނު. އިންޓަނެޓް ޗެކް ކުރެއްވުމަށްފަހު ރިފްރެޝް ކުރައްވާ.";
+        }
+    }
+
+    function toggleMode() {
+        const mode = document.getElementById('selectionMode').value;
+        if(mode === 'juz') {
+            document.getElementById('juzSelection').style.display = 'flex';
+            document.getElementById('surahSelection').style.display = 'none';
+        } else {
+            document.getElementById('juzSelection').style.display = 'none';
+            document.getElementById('surahSelection').style.display = 'flex';
+        }
+    }
+
+    function getRandomInt(min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    function generateCSV() {
+        const status = document.getElementById('status');
+        status.style.display = 'block';
+        status.className = 'loading';
+        status.innerHTML = 'ސުވާލުތައް އުފައްދަނީ... (މިކަމަށް ވަގުތުކޮޅެއް ނަގައިފާނެ)';
+
+        // Use setTimeout to allow UI to update
+        setTimeout(() => {
+            try {
+                processGeneration();
+            } catch (e) {
+                status.className = 'error';
+                status.innerHTML = 'މައްސަލައެއް ދިމާވެއްޖެ: ' + e.message;
+            }
+        }, 100);
+    }
+
+    function processGeneration() {
+        const mode = document.getElementById('selectionMode').value;
+        const totalNeeded = parseInt(document.getElementById('totalQuestions').value);
+        const lineCategory = document.getElementById('lineCategory').value;
+        const minLines = parseInt(lineCategory.split('-')[0]);
+        const maxLines = parseInt(lineCategory.split('-')[1]);
+        
+        let questions = [];
+
+        let jStart = parseInt(document.getElementById('startJuz').value);
+        let jEnd = parseInt(document.getElementById('endJuz').value);
+        let sStart = 1, sEnd = 114;
+
+        if (mode === 'surah') {
+            sStart = parseInt(document.getElementById('startSurah').value);
+            sEnd = parseInt(document.getElementById('endSurah').value);
+            jStart = 1; jEnd = 30; // Reset for logic
+        }
+
+        // Initialize counters for distribution
+        let juzCounts = {};
+        for(let j=1; j<=30; j++) juzCounts[j] = 0;
+
+        let idCounter = 1;
+        let attempts = 0;
+
+        // 1. Minimum quota per Juz (60) - Only relevant if filtering allows it
+        if (mode === 'juz') {
+            for (let j = jStart; j <= jEnd; j++) {
+                let safety = 0;
+                while(juzCounts[j] < 60 && safety < 5000) {
+                     let q = generateSingleQuestion(j, j, minLines, maxLines);
+                     if(q) {
+                         q.id = idCounter++;
+                         questions.push(q);
+                         juzCounts[j]++;
+                     }
+                     safety++;
+                }
+            }
+        }
+
+        // 2. Fill Remainder
+        attempts = 0;
+        while (questions.length < totalNeeded && attempts < 200000) {
+            let q = null;
+            if(mode === 'surah') {
+                // Pick random surah in range
+                let randId = getRandomInt(sStart, sEnd);
+                let sMeta = surahMeta.find(s => s.id === randId);
+                q = generateQuestionFromSurah(sMeta, minLines, maxLines);
+            } else {
+                // Pick random Juz in range
+                let targetJuz = getRandomInt(jStart, jEnd);
+                q = generateSingleQuestion(targetJuz, targetJuz, minLines, maxLines);
+            }
+
+            if(q) {
+                q.id = idCounter++;
+                questions.push(q);
+            }
+            attempts++;
+        }
+
+        if(questions.length === 0) {
+            const status = document.getElementById('status');
+            status.innerHTML = 'ސުވާލެއް ނުއުފެއްދުނު.';
+            status.className = 'error';
+            return;
+        }
+
+        downloadCSV(questions);
+        const status = document.getElementById('status');
+        status.innerHTML = `ކާމިޔާބުކަމާއެކު ${questions.length} ސުވާލު އުފެއްދިއްޖެ!`;
+        status.className = 'success';
+    }
+
+    function generateSingleQuestion(minJuz, maxJuz, minL, maxL) {
+        // Find candidate surahs that contain this Juz
+        // We look at ayahs data in surahMeta to find matching Juz
+        // To be efficient: pick a random surah, check if it has ayahs in this Juz
+        
+        let randSurahIdx = getRandomInt(0, 113);
+        let s = surahMeta[randSurahIdx];
+        
+        // Quick check if surah touches the juz range (Optimization)
+        // Note: For simplicity, we just check if any ayah in surah matches juz
+        // Since we have full data, let's filter potential start ayahs
+        
+        let potentialAyahs = s.ayahs.filter(a => a.juz >= minJuz && a.juz <= maxJuz);
+        
+        if (potentialAyahs.length === 0) return null; // Surah not in this juz
+
+        // Generate logic
+        let lines = getRandomInt(minL, maxL);
+        if (potentialAyahs.length < lines) return null; // Not enough ayahs in this juz section
+
+        // Pick a random start index from potentialAyahs
+        let startIdx = getRandomInt(0, potentialAyahs.length - lines);
+        let startAyahObj = potentialAyahs[startIdx];
+        
+        // Need to ensure the sequence is valid (consecutive)
+        // Verify subsequent ayahs exist
+        let startNum = startAyahObj.numberInSurah;
+        let endNum = startNum + lines; 
+
+        if (endNum > s.verses) return null;
+
+        // Construct Text
+        let textSegment = "";
+        for(let k=0; k<lines; k++) {
+            // Find the ayah in the main surah array to be safe
+            let ayah = s.ayahs[startNum - 1 + k]; 
+            textSegment += ayah.text;
+            // Add ayah marker if needed. The API text usually doesn't include the number symbol.
+            // We can add a generic separator or the unicode symbol
+            textSegment += " ۝ "; 
+        }
+
+        return {
+            juz: startAyahObj.juz,
+            surahId: s.id,
+            surahName: s.simpleName,
+            start: startNum,
+            end: endNum, // Inclusive range for user understanding? Usually ID-ID
+            text: textSegment,
+            page: startAyahObj.page // API provides page
+        };
+    }
+
+    function generateQuestionFromSurah(s, minL, maxL) {
+        let lines = getRandomInt(minL, maxL);
+        if(s.verses < lines) return null;
+
+        let startNum = getRandomInt(1, s.verses - lines);
+        let endNum = startNum + lines;
+
+        let textSegment = "";
+        let juz = 0;
+        let page = 0;
+
+        for(let k=0; k<lines; k++) {
+            let ayah = s.ayahs[startNum - 1 + k];
+            textSegment += ayah.text + " ۝ ";
+            if(k===0) {
+                juz = ayah.juz;
+                page = ayah.page;
+            }
+        }
+
+        return {
+            juz: juz,
+            surahId: s.id,
+            surahName: s.simpleName,
+            start: startNum,
+            end: endNum,
+            text: textSegment,
+            page: page
+        };
+    }
+
+    function downloadCSV(data) {
+        // Format: ID,Juz,Page,Surah,Start,End,Text
+        let csvContent = "data:text/csv;charset=utf-8,\uFEFF"; // BOM
+        csvContent += "ID,Juz,Page,Surah,Start,End,Text\n";
+
+        data.forEach(row => {
+            let formattedSurah = `${row.surahId}. ${row.surahName}`;
+            // Page is set to 0 based on user request/sample, but we have real page if needed.
+            // User sample showed "0".
+            let pageVal = 0; 
+            
+            // Clean text for CSV (escape quotes)
+            let cleanText = row.text.replace(/"/g, '""');
+            
+            let rowString = `${row.id},${row.juz},${pageVal},"${formattedSurah}",${row.start},${row.end},"${cleanText}"`;
+            csvContent += rowString + "\n";
+        });
+
+        const encodedUri = encodeURI(csvContent);
+        const link = document.createElement("a");
+        link.setAttribute("href", encodedUri);
+        link.setAttribute("download", "Quran_Text_Questions.csv");
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+</script>
+
+</body>
+</html>
