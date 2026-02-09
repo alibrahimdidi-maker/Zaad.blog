@@ -13929,7 +13929,14 @@ document.addEventListener('click', function() {
     // ނޯޓް: ފުލް ސްކްރީން ވެފައި ހުއްޓަސް، މި ކޯޑުން އޭގެން ނުނިކުންނާނެއެވެ.
     // ނުކުންނަވާނީ ކީބޯޑުން Esc ފިއްތަވައިގެންނެވެ.
 });
-
+// --- FULLSCREEN LOCK (NO EXIT ON CLICK) ---
+document.addEventListener('click', function(e) {
+    // ފުލް ސްކްރީން ވެފައި ނެތްނަމަ އެކަނި ވަންނާނެ
+    if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(() => {});
+    }
+    // މިތަނުގައި else ބައި ނެތުމުން، ދެވަނަ ފަހަރަށް ކްލިކް ކުރުމުން ނުނިކުމެވޭނެއެވެ.
+});
 </script>
 </body>
 </html>
