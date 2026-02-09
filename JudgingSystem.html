@@ -894,93 +894,75 @@
     </div>
 
     <div style="margin-bottom:5px;">
-    <small>Select Theme (Mushaf & Styles):</small>
-    <select id="exTheme" onchange="updateExtraScreen('theme', this.value)" style="width:100%; background:#000; color:#FFD700; border:1px solid #555;">
-        
-        <optgroup label="MUSHAF MADINAH (މުޞްޙަފް މަދީނާ ސްޓައިލް)">
-            <option value="mushaf_1" selected>1. Madinah Classic (Cream Paper)</option>
-            <option value="mushaf_2">2. Madinah Bright (Pure White)</option>
-            <option value="mushaf_3">3. Ancient Mushaf (Soft Yellow)</option>
-            <option value="mushaf_4">4. Islamic Frame (Minimal)</option>
-            <option value="mushaf_5">5. Madinah Green Border</option>
-        </optgroup>
-
-        <optgroup label="ROYAL GREEN (ގަދަ ފެހި)">
-            <option value="green_1">6. Emerald & Gold (Double)</option>
-            <option value="green_2">7. Deep Forest (Rounded)</option>
-            <option value="green_3">8. Islamic Pattern</option>
-            <option value="green_4">9. Green Velvet</option>
-            <option value="green_5">10. Neon Green Border</option>
-            <option value="green_6">11. Olive & Bronze</option>
-            <option value="green_7">12. Mint Royal</option>
-            <option value="green_8">13. Dark Moss (Square)</option>
-            <option value="green_9">14. Green Gradient</option>
-            <option value="green_10">15. Sultan's Green</option>
-        </optgroup>
-
-        <optgroup label="ROYAL BLUE (ގަދަ ނޫ)">
-            <option value="blue_1">16. Midnight Blue (Gold)</option>
-            <option value="blue_2">17. Ocean Deep (Silver)</option>
-            <option value="blue_3">18. Sapphire Box</option>
-            <option value="blue_4">19. Navy Presidential</option>
-            <option value="blue_5">20. Electric Blue Glow</option>
-            <option value="blue_6">21. Azure & White</option>
-            <option value="blue_7">22. Royal Teal</option>
-            <option value="blue_8">23. Blue Velvet</option>
-            <option value="blue_9">24. Night Sky</option>
-            <option value="blue_10">25. Blue Diamond</option>
-        </optgroup>
-
-        <optgroup label="PRESIDENTIAL RED (ޝާހީ ރަތް)">
-            <option value="red_1">26. Burgundy Gold</option>
-            <option value="red_2">27. Ruby Red (Rounded)</option>
-            <option value="red_3">28. Maroon Majestic</option>
-            <option value="red_4">29. Red Carpet</option>
-            <option value="red_5">30. Crimson Glow</option>
-            <option value="red_6">31. Blood Red & Black</option>
-            <option value="red_7">32. Rose Gold</option>
-            <option value="red_8">33. Red Square Classic</option>
-            <option value="red_9">34. Fire Gradient</option>
-            <option value="red_10">35. Imperial Red</option>
-        </optgroup>
-
-        <optgroup label="ONYX BLACK & GOLD (ކަޅާއި ރަން)">
-            <option value="black_1">36. Pure Black & Gold</option>
-            <option value="black_2">37. Onyx & Silver</option>
-            <option value="black_3">38. Matte Black</option>
-            <option value="black_4">39. Black Marble</option>
-            <option value="black_5">40. Golden Frame</option>
-            <option value="black_6">41. Dark Knight</option>
-            <option value="black_7">42. Luxury Carbon</option>
-            <option value="black_8">43. Black & Platinum</option>
-            <option value="black_9">44. Shadow Box</option>
-            <option value="black_10">45. Black Minimal</option>
-        </optgroup>
-
-        <optgroup label="SPECIAL MIX (މިކްސް)">
-            <option value="mix_1">46. Purple & Gold</option>
-            <option value="mix_2">47. White Gold (Clean)</option>
-            <option value="mix_3">48. Bronze Age</option>
-            <option value="mix_4">49. Copper Style</option>
-            <option value="mix_5">50. Pearl White</option>
-            <option value="mix_6">51. Sunset Royal</option>
-            <option value="mix_7">52. Lavender Mist</option>
-            <option value="mix_8">53. Chocolate & Gold</option>
-            <option value="mix_9">54. Gray Scale</option>
-            <option value="mix_10">55. Glass Morphism</option>
-        </optgroup>
-    </select>
-</div>
+        <small>Select Theme (50 Styles):</small>
+        <select id="exTheme" onchange="updateExtraScreen('theme', this.value)" style="width:100%; background:#000; color:#FFD700; border:1px solid #555;">
+            <optgroup label="ROYAL GREEN (ގަދަ ފެހި)">
+                <option value="green_1" selected>1. Emerald & Gold (Double)</option>
+                <option value="green_2">2. Deep Forest (Rounded)</option>
+                <option value="green_3">3. Islamic Pattern</option>
+                <option value="green_4">4. Green Velvet</option>
+                <option value="green_5">5. Neon Green Border</option>
+                <option value="green_6">6. Olive & Bronze</option>
+                <option value="green_7">7. Mint Royal</option>
+                <option value="green_8">8. Dark Moss (Square)</option>
+                <option value="green_9">9. Green Gradient</option>
+                <option value="green_10">10. Sultan's Green</option>
+            </optgroup>
+            <optgroup label="ROYAL BLUE (ގަދަ ނޫ)">
+                <option value="blue_1">11. Midnight Blue (Gold)</option>
+                <option value="blue_2">12. Ocean Deep (Silver)</option>
+                <option value="blue_3">13. Sapphire Box</option>
+                <option value="blue_4">14. Navy Presidential</option>
+                <option value="blue_5">15. Electric Blue Glow</option>
+                <option value="blue_6">16. Azure & White</option>
+                <option value="blue_7">17. Royal Teal</option>
+                <option value="blue_8">18. Blue Velvet</option>
+                <option value="blue_9">19. Night Sky</option>
+                <option value="blue_10">20. Blue Diamond</option>
+            </optgroup>
+            <optgroup label="PRESIDENTIAL RED (ޝާހީ ރަތް)">
+                <option value="red_1">21. Burgundy Gold</option>
+                <option value="red_2">22. Ruby Red (Rounded)</option>
+                <option value="red_3">23. Maroon Majestic</option>
+                <option value="red_4">24. Red Carpet</option>
+                <option value="red_5">25. Crimson Glow</option>
+                <option value="red_6">26. Blood Red & Black</option>
+                <option value="red_7">27. Rose Gold</option>
+                <option value="red_8">28. Red Square Classic</option>
+                <option value="red_9">29. Fire Gradient</option>
+                <option value="red_10">30. Imperial Red</option>
+            </optgroup>
+            <optgroup label="ONYX BLACK & GOLD (ކަޅާއި ރަން)">
+                <option value="black_1">31. Pure Black & Gold</option>
+                <option value="black_2">32. Onyx & Silver</option>
+                <option value="black_3">33. Matte Black</option>
+                <option value="black_4">34. Black Marble</option>
+                <option value="black_5">35. Golden Frame</option>
+                <option value="black_6">36. Dark Knight</option>
+                <option value="black_7">37. Luxury Carbon</option>
+                <option value="black_8">38. Black & Platinum</option>
+                <option value="black_9">39. Shadow Box</option>
+                <option value="black_10">40. Black Minimal</option>
+            </optgroup>
+            <optgroup label="SPECIAL MIX (މިކްސް)">
+                <option value="mix_1">41. Purple & Gold</option>
+                <option value="mix_2">42. White Gold (Clean)</option>
+                <option value="mix_3">43. Bronze Age</option>
+                <option value="mix_4">44. Copper Style</option>
+                <option value="mix_5">45. Pearl White</option>
+                <option value="mix_6">46. Sunset Royal</option>
+                <option value="mix_7">47. Lavender Mist</option>
+                <option value="mix_8">48. Chocolate & Gold</option>
+                <option value="mix_9">49. Gray Scale</option>
+                <option value="mix_10">50. Glass Morphism</option>
+            </optgroup>
+        </select>
+    </div>
 
     <div style="display:flex; align-items:center; gap:10px; margin-bottom:5px;">
-    <small>Text Color:</small>
-    <input type="color" id="exTextColor" value="#ffffff" oninput="updateExtraScreen('textColor', this.value)" style="flex:1; height:30px;">
-</div>
-
-<div style="display:flex; align-items:center; gap:10px; margin-bottom:5px;">
-    <small>BG Color:</small>
-    <input type="color" id="exBgColor" value="#FFFDD0" oninput="changeCustomBG(this.value)" style="flex:1; height:30px; cursor:pointer;">
-</div>
+        <small>Text Color:</small>
+        <input type="color" id="exTextColor" value="#ffffff" oninput="updateExtraScreen('textColor', this.value)" style="flex:1; height:30px;">
+    </div>
 
     <div class="control-row" style="margin-bottom:2px;">
         <label style="width:60px; font-size:10px;">Box W:</label>
@@ -1320,9 +1302,7 @@
         <div id="adminScoreMonitor" style="font-size:12px; color:#aaa; margin-top:5px;">Waiting for judges...</div>
         <button class="btn-green" id="btnFinalize" style="margin-top:5px;" onclick="finalizeStudentResult()">✅ Save Student Result</button>
     </div>
-<button class="btn-purple" style="width:100%; margin-top:5px; margin-bottom:10px; padding:12px; font-weight:bold; border:2px solid #d500f9; background: linear-gradient(to bottom, #4a148c, #000);" onclick="printBulkRubricMatrix()">
-        🖨️ ޕްރިންޓް ފުލް މެޓްރިކްސް (ALL JUDGES SHEET)
-    </button>
+
     <hr style="border-color:#333; margin:8px 0;">
 
     <label style="color:#FFD700;">1. Report Headers (ރިޕޯޓުގެ މަޢުލޫމާތު):</label>
@@ -13897,199 +13877,19 @@ function downloadRubricMatrix() {
         alert("Export Error: " + e.message);
     }
 }
-    
-    // --- BULK DETAILED MATRIX PRINT (ALL JUDGES & CRITERIA) ---
-function printBulkRubricMatrix() {
-    // 1. ޑޭޓާ ނެގުން
-    // މާސްޓަރ ލިސްޓް ނުވަތަ ސޭވްކޮށްފައިވާ ނަތީޖާ ލިސްޓް ނެގުން
-    let students = (state.allStudents && state.allStudents.length > 0) ? state.allStudents : state.judging.savedResults;
-
-    if (!students || students.length === 0) {
-        alert("މާކުސް ދީފައިވާ ދަރިވަރަކު ނެތެވެ. (No data found!)");
-        return;
-    }
-
-    // ރުބްރިކް (މާކުސްދޭ ބައިތައް) ނެގުން
-    const rubric = state.judging.rubric || [
-        {name:"Thilawa", max:30}, {name:"Tajweed", max:20}, 
-        {name:"Makhraj", max:20}, {name:"Sifa", max:10}, 
-        {name:"Fasaha", max:10}, {name:"Talaffuz", max:5}, {name:"Maqamat", max:5}
-    ];
-
-    // ހެޑަރ މަޢުލޫމާތު
-    const instName = document.getElementById('rptInstName').value || "ރަސްފަހި ޤުރްއާން މުބާރާތް";
-    const compName = document.getElementById('rptCompName').value || "މާކުސް ޝީޓް (ފުރިހަމަ ތަފްޞީލް)";
-
-    // 2. ޝީޓްތައް ތައްޔާރުކުރުން (HTML Loop)
-    let pagesHTML = "";
-
-    students.forEach((s, idx) => {
-        // Page Break Logic (ފަހު ޞަފްޙާ ނޫން ކޮންމެ ޞަފްޙާއެއްގެ ފަހަތަށް ޕޭޖް ބްރޭކް ލުން)
-        const breakStyle = (idx < students.length - 1) ? "page-break-after: always;" : "";
-
-        // ޓޭބަލްގެ ބޮޑުބައި (Body) ހެދުން
-        let tableRows = "";
-        let grandTotalSum = 0; // ދަރިވަރުގެ ޖުމްލަ
-
-        // ކޮންމެ ޖަޖެއްގެ ޖުމްލަ ބެލުމަށް
-        let judgeTotals = {1:0, 2:0, 3:0, 4:0, 5:0};
-
-        rubric.forEach(r => {
-            let rowCells = "";
-            let rowSum = 0; // މި ބައިގެ (މިސާލަކަށް ތިލާވަތުގެ) އެވްރެޖް ހޯދުމަށް
-            let activeJ = 0;
-
-            // Loop Judges 1 to 5
-            for(let j=1; j<=5; j++) {
-                let jKey = `Judge_${j}`;
-                let score = "-";
-                
-                // ޑީޓެއިލްޑް ސްކޯ އިންނަނަމަ ނަގާ
-                if(s.detailedScores && s.detailedScores[jKey] && s.detailedScores[jKey][r.name] !== undefined) {
-                    score = s.detailedScores[jKey][r.name];
-                    judgeTotals[j] += parseFloat(score); // ޖަޖުގެ ޖުމްލައަށް އިތުރުކުރޭ
-                    rowSum += parseFloat(score);
-                    activeJ++;
-                }
-                
-                rowCells += `<td>${score}</td>`;
-            }
-
-            // Calculate Average for this Row (Criteria)
-            let avg = activeJ > 0 ? (rowSum / activeJ).toFixed(2) : "-";
-
-            tableRows += `
-            <tr>
-                <td style="text-align:right; font-weight:bold;">${r.name} <span style="font-size:10px; color:#777;">(${r.max})</span></td>
-                ${rowCells}
-                <td style="background:#f0f0f0; font-weight:bold;">${avg}</td>
-            </tr>`;
+    document.addEventListener('click', function() {
+    if (!document.fullscreenElement) {
+        // ފުލް ސްކްރީން ނޫންނަމަ، ފުލް ސްކްރީން އަށް ބަދަލުކުރޭ
+        document.documentElement.requestFullscreen().catch(err => {
+            console.log(`Error attempting to enable full-screen mode: ${err.message} (${err.name})`);
         });
-
-        // ޖުމްލަ މާކުސް ރޯ (Total Row)
-        let totalRowCells = "";
-        let finalSum = 0;
-        let finalCount = 0;
-
-        for(let j=1; j<=5; j++) {
-            let val = judgeTotals[j];
-            let display = val > 0 ? val.toFixed(2) : "-";
-            totalRowCells += `<td style="font-weight:bold; color:#000;">${display}</td>`;
-            
-            if(val > 0) { finalSum += val; finalCount++; }
+    } else {
+        // ފުލް ސްކްރީން ވެފައިވާނަމަ، އޭގެން ނުކުމޭ
+        if (document.exitFullscreen) {
+            document.exitFullscreen();
         }
-
-        let finalAvg = s.finalScore || (finalCount > 0 ? (finalSum / finalCount).toFixed(2) : "0.00");
-
-        // Generate Single Sheet HTML
-        pagesHTML += `
-        <div class="sheet-page" style="${breakStyle}">
-            <div class="sheet-header">
-                <h1>${instName}</h1>
-                <h2>${compName}</h2>
-                <div style="margin-top:10px; border:1px solid #000; padding:10px; display:flex; justify-content:space-between; font-weight:bold; font-size:14px;">
-                    <span>ނަން: ${s.name}</span>
-                    <span>އައިޑީ: ${s.id}</span>
-                    <span>ގޮފި: ${s.branch} (${s.group})</span>
-                </div>
-            </div>
-
-            <table class="matrix-table">
-                <thead>
-                    <tr>
-                        <th width="25%">ބައިތައް (Criteria)</th>
-                        <th width="12%">Judge 1</th>
-                        <th width="12%">Judge 2</th>
-                        <th width="12%">Judge 3</th>
-                        <th width="12%">Judge 4</th>
-                        <th width="12%">Judge 5</th>
-                        <th width="15%">Average</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    ${tableRows}
-                    <tr style="background:#ddd;">
-                        <td style="text-align:right; font-weight:bold;">TOTAL</td>
-                        ${totalRowCells}
-                        <td style="font-size:18px; font-weight:bold; border:2px solid #000;">${finalAvg}</td>
-                    </tr>
-                </tbody>
-            </table>
-
-            <div class="footer-section">
-                <div class="sig-box">_________________<br>އިދާރީ މޭޒު</div>
-                <div class="sig-box">_________________<br>އިސް ފަނޑިޔާރު</div>
-            </div>
-            
-            <div style="text-align:center; font-size:10px; margin-top:20px; color:#aaa;">
-                System Generated Detailed Report - Serial: ${s.serial || idx+1}
-            </div>
-        </div>
-        `;
-    });
-
-    // 3. ވިންޑޯ ހުޅުވުން (Full HTML)
-    const fullHTML = `
-    <!DOCTYPE html>
-    <html lang="dv" dir="rtl">
-    <head>
-        <title>Full Mark Sheets</title>
-        <style>
-            @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Thaana:wght@400;700&display=swap');
-            @font-face { font-family: 'Faruuma'; src: local('Faruuma'), url('https://fonts.googleapis.com/earlyaccess/notosansthaana.css'); }
-            
-            body { 
-                font-family: 'Faruuma', 'Noto Sans Thaana', sans-serif; 
-                margin: 0; padding: 20px; background: #ccc; direction: rtl;
-            }
-            
-            .sheet-page {
-                background: white; width: 210mm; min-height: 297mm; 
-                padding: 40px; margin: 0 auto 20px auto; 
-                box-sizing: border-box; position: relative;
-            }
-
-            h1, h2 { text-align: center; margin: 5px 0; }
-            h1 { font-size: 24px; text-decoration: underline; }
-            h2 { font-size: 18px; color: #444; }
-
-            .matrix-table { 
-                width: 100%; border-collapse: collapse; margin-top: 30px; font-size: 13px; 
-            }
-            .matrix-table th { background: #333; color: #fff; padding: 8px; border: 1px solid #000; }
-            .matrix-table td { border: 1px solid #000; padding: 8px; text-align: center; }
-
-            .footer-section {
-                margin-top: 50px; display: flex; justify-content: space-around;
-            }
-            .sig-box { text-align: center; font-size: 12px; }
-
-            @media print {
-                body { background: none; padding: 0; }
-                .sheet-page { margin: 0; width: 100%; height: 100%; box-shadow: none; }
-                button { display: none; }
-            }
-        </style>
-    </head>
-    <body>
-        <button onclick="window.print()" style="position:fixed; top:0; left:0; width:100%; padding:15px; background:navy; color:white; font-size:20px; font-weight:bold; cursor:pointer; z-index:999;">
-            🖨️ CLICK TO PRINT / SAVE AS PDF
-        </button>
-        <br><br>
-        ${pagesHTML}
-    </body>
-    </html>
-    `;
-
-    const w = window.open("", "BulkMatrix", "width=1200,height=900");
-    w.document.write(fullHTML);
-    w.document.close();
-}
-    // މި ކޯޑުކޮޅު updateExtraScreen ފަންކްޝަންގެ ތެރެއަށް ލައްވާ
-// "element" އަކީ ތިބޭފުޅާގެ ސްކްރީން ނުވަތަ ޓެކްސްޓް ހުންނަ ޑިވް އެވެ.
-
-if (type === 'theme') {
-
+    }
+});
 </script>
 </body>
 </html>
