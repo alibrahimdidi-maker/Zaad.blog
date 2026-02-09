@@ -973,9 +973,14 @@
 </div>
 
     <div style="display:flex; align-items:center; gap:10px; margin-bottom:5px;">
-        <small>Text Color:</small>
-        <input type="color" id="exTextColor" value="#ffffff" oninput="updateExtraScreen('textColor', this.value)" style="flex:1; height:30px;">
-    </div>
+    <small>Text Color:</small>
+    <input type="color" id="exTextColor" value="#ffffff" oninput="updateExtraScreen('textColor', this.value)" style="flex:1; height:30px;">
+</div>
+
+<div style="display:flex; align-items:center; gap:10px; margin-bottom:5px;">
+    <small>BG Color:</small>
+    <input type="color" id="exBgColor" value="#FFFDD0" oninput="changeCustomBG(this.value)" style="flex:1; height:30px; cursor:pointer;">
+</div>
 
     <div class="control-row" style="margin-bottom:2px;">
         <label style="width:60px; font-size:10px;">Box W:</label>
@@ -14193,6 +14198,23 @@ if (type === 'theme') {
 // ↓↓↓ މި ބްރެކެޓްގެ މަތީގައި ކޯޑު އިންނަން ޖެހޭނެ ↓↓↓
 } 
 // ↑↑↑ މިއީ Function ނިމޭ ބްރެކެޓެވެ. މީގެ ތިރިއަށް ލައިގެން ނުވާނެއެވެ. ↑↑↑
+    // ==========================================
+// CUSTOM BACKGROUND COLOR FUNCTION
+// ==========================================
+
+function changeMyBackground(color) {
+    // ތިރީގައިވާ 'display_div_id' ގެ ބަދަލުގައި ތިބޭފުޅާގެ
+    // މައި ސްކްރީން ޑިވްގައި އިންނަ ID ލިޔުއްވާ!
+    // (updateExtraScreen ގެ ކުރީކޮޅުގައި var element = ... އޮންނަ ތަން ބައްލަވާ)
+    
+    var screen = document.getElementById('display_div_id'); 
+    
+    if (screen) {
+        screen.style.backgroundColor = color;
+    } else {
+        console.log("Error: Screen ID not found!");
+    }
+}
 </script>
 </body>
 </html>
