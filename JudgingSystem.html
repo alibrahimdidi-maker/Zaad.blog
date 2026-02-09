@@ -13941,6 +13941,196 @@ document.addEventListener('click', function() {
     // ނޯޓް: ފުލް ސްކްރީން ވެފައި ހުއްޓަސް، ދެވަނަ ފަހަރަށް ކްލިކް ކުރުމުން މިހާރު ނުނިކުންނާނެއެވެ.
     // ނުކުންނަވާނީ ކީބޯޑުން Esc ފިއްތަވައިގެންނެވެ.
 });
+    // --- GENERATE CONSOLIDATED RUBRIC PDF (5-7 JUDGES) ---
+function printConsolidatedRubricSheet() {
+    // 1. ޑޭޓާ ނެގުން
+    let students = state.allStudents.length > 0 ? state.allStudents : state.judging.savedResults;
+    
+    // ސޯޓް ކުރުން (ރޭންކް ތަރުތީބުން ނުވަތަ ރެޖިސްޓްރީ ތަރުތީބުން)
+    students.sort((a, b) => b.finalScore - a.finalScore);
+
+    if (!students || students.length === 0) {
+        alert("މާކުސް ޝީޓް ހެދުމަށް އެއްވެސް ޑޭޓާއެއް ނެތެވެ!");
+        return;
+    }
+
+    // 2. ރުބްރިކް (މާކުސް ދޭ ބައިތައް) ނެގުން
+    // ސެޓިންގްސްގައި ނެތްނަމަ ޑިފޯލްޓް ބައިތައް ނަގާނެ
+    const rubric = (state.judging.rubric && state.judging.rubric.length > 0) 
+                   ? state.judging.rubric 
+                   : [
+                       { name: "Thilawa", max: 30 }, 
+                       { name: "Tajweed", max: 20 }, 
+                       { name: "Makhraj", max: 20 }, 
+                       { name: "Sifa", max: 10 }, 
+                       { name: "Fasaha", max: 10 }, 
+                       { name: "Talaffuz", max: 5 }, 
+                       { name: "Maqamat", max: 5 }
+                   ];
+
+    // 3. ޖަޖުންގެ އަދަދު ކަނޑައެޅުން (މިސާލަކަށް 7)
+    const judgeCount = 7; 
+
+    // 4. HTML ބިނާކުރުން
+    let contentHtml = "";
+
+    students.forEach((s, idx) => {
+        // --- HEADER INFO ---
+        let headerInfo = `
+            <div class="sheet-header">
+                <h1>${document.getElementById('rptInstName').value || "Quran Competition"}</h1>
+                <h2>Consolidated Score Sheet (Detailed)</h2>
+                
+                <div class="meta-grid">
+                    <div><strong>Name:</strong> ${s.name}</div>
+                    <div><strong>Reg No:</strong> ${s.reg}</div>
+                    <div><strong>Rank:</strong> ${idx + 1}</div>
+                    <div><strong>Group:</strong> ${s.group}</div>
+                    <div><strong>Branch:</strong> ${s.branch}</div>
+                    <div><strong>Final Score:</strong> ${s.finalScore}</div>
+                </div>
+            </div>
+        `;
+
+        // --- TABLE HEADERS ---
+        let tableHeader = `
+            <tr>
+                <th style="width:150px; text-align:left;">Criteria (ބައިތައް)</th>
+                <th style="width:50px;">Max</th>
+        `;
+        
+        // ޖަޖުންގެ ނަންބަރުތައް ހެޑަރއަށް ލުން
+        for(let j=1; j<=judgeCount; j++) {
+            tableHeader += `<th>J-${j}</th>`;
+        }
+        tableHeader += `<th style="background:#e0f7fa;">AVG</th></tr>`;
+
+        // --- TABLE ROWS (CRITERIA SCORES) ---
+        let tableRows = "";
+        let totalMax = 0;
+        let judgeTotals = {}; // To store total per judge (J1 Total, J2 Total...)
+
+        // Initialize judge totals
+        for(let j=1; j<=judgeCount; j++) judgeTotals[`Judge_${j}`] = 0;
+
+        rubric.forEach(r => {
+            totalMax += r.max;
+            let row = `<tr>
+                        <td style="text-align:left; font-weight:bold;">${r.name}</td>
+                        <td style="font-weight:bold;">${r.max}</td>`;
+            
+            let criteriaSum = 0;
+            let activeJudgesForCrit = 0;
+
+            // Loop Judges Columns
+            for(let j=1; j<=judgeCount; j++) {
+                let jKey = `Judge_${j}`;
+                let score = "-";
+                
+                // ޑީޓެއިލްޑް ސްކޯރސް އިން ނެގުން
+                if(s.detailedScores && s.detailedScores[jKey] && s.detailedScores[jKey][r.name] !== undefined) {
+                    score = s.detailedScores[jKey][r.name];
+                    // Add to totals
+                    judgeTotals[jKey] += parseFloat(score);
+                    criteriaSum += parseFloat(score);
+                    activeJudgesForCrit++;
+                }
+                
+                row += `<td>${score}</td>`;
+            }
+
+            // Criteria Average
+            let cAvg = activeJudgesForCrit > 0 ? (criteriaSum / activeJudgesForCrit).toFixed(2) : "-";
+            row += `<td style="font-weight:bold; background:#e0f7fa;">${cAvg}</td></tr>`;
+            
+            tableRows += row;
+        });
+
+        // --- TOTALS ROW ---
+        let totalRow = `<tr style="background:#333; color:#fff; font-weight:bold;">
+                            <td style="text-align:right;">GRAND TOTAL</td>
+                            <td>${totalMax}</td>`;
+        
+        let grandSum = 0;
+        let activeJ = 0;
+
+        for(let j=1; j<=judgeCount; j++) {
+            let jKey = `Judge_${j}`;
+            let val = judgeTotals[jKey];
+            let display = val > 0 ? val.toFixed(2) : "-";
+            totalRow += `<td>${display}</td>`;
+
+            if(val > 0) { grandSum += val; activeJ++; }
+        }
+
+        let finalAvg = activeJ > 0 ? (grandSum / activeJ).toFixed(2) : "0.00";
+        totalRow += `<td style="background:#006064; color:#fff; font-size:16px;">${finalAvg}</td></tr>`;
+
+        // --- COMBINE PER STUDENT ---
+        contentHtml += `
+            <div class="page">
+                ${headerInfo}
+                <table>
+                    <thead>${tableHeader}</thead>
+                    <tbody>${tableRows}${totalRow}</tbody>
+                </table>
+                <div class="footer-note">
+                    System Generated Report | Rasfahi V26.0
+                </div>
+            </div>
+        `;
+    });
+
+    // 5. ޕްރިންޓް ވިންޑޯ ހުޅުވުން
+    const w = window.open("", "ConsolidatedRubric", "width=1200,height=900");
+    w.document.write(`
+        <!DOCTYPE html>
+        <html dir="rtl" lang="dv">
+        <head>
+            <title>Detailed Judge Rubrics</title>
+            <style>
+                @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Thaana:wght@400;700&display=swap');
+                body { font-family: 'Noto Sans Thaana', sans-serif; background: #ccc; margin: 0; padding: 20px; }
+                
+                .page {
+                    background: white; width: 297mm; min-height: 210mm; /* A4 Landscape */
+                    padding: 20px; margin: 0 auto 20px auto;
+                    box-shadow: 0 0 10px rgba(0,0,0,0.2); page-break-after: always;
+                    box-sizing: border-box; display: flex; flex-direction: column;
+                }
+                
+                .sheet-header { text-align: center; border-bottom: 2px solid #000; padding-bottom: 10px; margin-bottom: 10px; }
+                h1 { margin: 0; font-size: 24px; }
+                h2 { margin: 5px 0; font-size: 18px; color: #555; }
+
+                .meta-grid {
+                    display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;
+                    background: #f0f0f0; padding: 10px; border: 1px solid #999; margin-top: 10px;
+                    font-size: 14px; text-align: left; direction: ltr; /* English text alignment */
+                }
+
+                table { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 10px; direction: ltr; }
+                th, td { border: 1px solid #444; padding: 8px; text-align: center; }
+                th { background: #eee; }
+
+                .footer-note { margin-top: auto; text-align: center; font-size: 10px; color: #aaa; padding-top: 20px; }
+
+                @media print {
+                    body { background: none; padding: 0; }
+                    .page { margin: 0; box-shadow: none; width: 100%; height: 100%; }
+                    button { display: none; }
+                    @page { size: A4 landscape; margin: 10mm; }
+                }
+            </style>
+        </head>
+        <body>
+            <button onclick="window.print()" style="position:fixed; top:20px; left:20px; padding:15px; background:navy; color:white; font-size:18px; cursor:pointer; z-index:999;">🖨️ SAVE AS PDF</button>
+            ${contentHtml}
+        </body>
+        </html>
+    `);
+    w.document.close();
+}
 </script>
 </body>
 </html>
