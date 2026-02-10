@@ -14789,40 +14789,30 @@ function generateDetailedRankedCSV() {
     w.document.write(html);
     w.document.close();
 }
-    // ========================================================
+// ========================================================
 // ★ MULTI-JUDGE SYSTEM PATCH (V26 COMPLETE) ★
 // ========================================================
 
-// 1. ޖަޖުންގެ ވިންޑޯތައް ރައްކާކުރާނެ އޮބްޖެކްޓް
 state.windows.judgeWindows = {};
 
-// 2. ވަކިވަކި ޖަޖުންގެ ސްކްރީން ހުޅުވާ ފަންކްޝަން
 window.openJudgeSpecific = function(id) {
     const judgeID = `Judge_${id}`;
     const nameInput = document.getElementById('jName' + id);
-    // ޖަޖުގެ ނަމެއް ޖަހާފައިވާނަމަ އެ ނަން، ނޫންނަމަ Judge 1, Judge 2...
     const judgeDisplayName = (nameInput && nameInput.value) ? nameInput.value : `JUDGE ${id}`;
 
-    // ވިންޑޯ ހުޅުވުން
     let w = window.open("", judgeID, "width=1000,height=800");
-    
     if (w) {
         w.document.open();
-        // ވިންޑޯގެ އެތެރޭގައި ޖަޖުގެ ނަން ދެއްކުމަށްޓަކައި މާކިންގ ޓެމްޕްލޭޓް ފޮނުވުން
         w.document.write(getTemplate(false, judgeDisplayName)); 
         w.document.close();
-        
-        w.judgeID = judgeID; // ވިންޑޯގެ އެތެރޭގައި ID ރައްކާކުރުން
+        w.judgeID = judgeID; 
         state.windows.judgeWindows[judgeID] = w;
-
-        // ޑޭޓާ ސައިންކް ކުރުން
         setTimeout(() => syncWindows(), 1000);
     } else {
-        alert("Pop-ups are blocked! Please allow them to open judge screens.");
+        alert("Pop-ups are blocked!");
     }
 };
 
-// 3. ހުރިހާ ޖަޖުންގެ ސްކްރީން އެއްފަހަރާ ލައްޕާލުން
 window.closeAllJudges = function() {
     for (let key in state.windows.judgeWindows) {
         if (state.windows.judgeWindows[key] && !state.windows.judgeWindows[key].closed) {
@@ -14830,57 +14820,35 @@ window.closeAllJudges = function() {
         }
     }
     state.windows.judgeWindows = {};
-    state.judging.liveScores = {}; // މާކްސްތައްވެސް ރީސެޓްކޮށްލުން
+    state.judging.liveScores = {}; 
     updateAdminScoreMonitor();
 };
 
-// 4. ޖަޖުން ފޮނުވާ މާކްސްތައް އެޑްމިންއަށް ލިބޭނެ ގޮތް ހެދުން
 window.submitJudgeScore = function(judgeID, score) {
     if (!state.judging.liveScores) state.judging.liveScores = {};
-    
-    // މާކްސް ރައްކާކުރުން
     state.judging.liveScores[judgeID] = parseFloat(score);
-    
-    // އެޑްމިން މޮނިޓަރު އަޕްޑޭޓްކުރުން
     updateAdminScoreMonitor();
 };
 
-// 5. އެޑްމިން ޕެނަލްގައި މާކްސްތައް ދައްކާ ފަންކްޝަން
 window.updateAdminScoreMonitor = function() {
     const monitor = document.getElementById('adminScoreMonitor');
     if (!monitor) return;
-
-    let txt = "";
-    let total = 0;
-    let count = 0;
-
-    // ލިބިފައިވާ ހުރިހާ މާކްސްއެއް އެއްކުރުން
+    let txt = ""; let total = 0; let count = 0;
     for (let id in state.judging.liveScores) {
         let sc = state.judging.liveScores[id];
         txt += `<span style="border:1px solid #444; padding:2px 8px; border-radius:4px; margin:0 5px;">
                 <b style="color:#FFD700;">${id.replace('_',' ')}:</b> ${sc}</span>`;
-        total += sc;
-        count++;
+        total += sc; count++;
     }
-
     if (count > 0) {
         let avg = (total / count).toFixed(2);
         txt += `<div style="margin-top:10px; font-size:22px; border-top:1px dashed #555; pt:5px;">
                 AVERAGE: <b style="color:#fff;">${avg}</b></div>`;
-    } else {
-        txt = "Waiting for judge submissions...";
-    }
-
+    } else { txt = "Waiting for judge submissions..."; }
     monitor.innerHTML = txt;
 };
 
-// 6. SYNC WINDOWS (ހުރިހާ ޖަޖުންގެ ވިންޑޯއަށް އެއްފަހަރާ ޑޭޓާ ފޮނުވުން)
-// މިއީ މިހާރު ހުރި syncWindows ފަންކްޝަންގެ ބަދަލުގައި ހިންގާނެ އެއްޗެއް
-const originalSyncWindows = syncWindows;
 window.syncWindows = function() {
-    // އަސްލު ފަންކްޝަން ހިންގާލުން (ދަރިވަރު ސްކްރީނަށް)
-    if (typeof originalSyncWindows === "function") originalSyncWindows();
-
     const packet = {
         slots: state.session.slots,
         activeIndex: state.session.activeIndex,
@@ -14888,20 +14856,40 @@ window.syncWindows = function() {
         light: state.session.light,
         grid: state.grid,
         readingMode: state.readingMode,
-        currentLang: currentLang,
         judging: state.judging
     };
-
-    // ހުރިހާ ޖަޖުންގެ ވިންޑޯތަކަށް ޑޭޓާ ފޮނުވުން
     for (let key in state.windows.judgeWindows) {
         let w = state.windows.judgeWindows[key];
-        if (w && !w.closed && w.updateState) {
-            w.updateState(packet);
-        }
+        if (w && !w.closed && w.updateState) w.updateState(packet);
     }
 };
 
+// --- GET TEMPLATE ބައިގެ ތެރޭގައި އިންނަންޖެހޭ ފަންކްޝަން ---
+function getTemplate(isCeremony, judgeDisplayName) {
+    return `
+        <html>
+        <body>
+            <script>
+                window.submitFinalScore = function() {
+                    if(confirm("Submit Score?")) {
+                        const score = calculateTotal();
+                        const jID = window.judgeID || "Judge";
+                        if(window.opener) {
+                            window.opener.submitJudgeScore(jID, score);
+                            const btn = document.querySelector('.judge-submit-btn');
+                            if(btn) {
+                                btn.innerText = "✅ SUBMITTED (" + score + ")";
+                                btn.disabled = true;
+                                btn.style.background = "#2e7d32";
+                                btn.style.color = "#fff";
+                            }
+                        }
+                    }
+                };
+            </script>
+        </body>
+        </html>
+    `; // <-- ބެކްޓިކް މިތަނުގައި އިންނަންވާނެ
+}
+
 console.log("Multi-Judge logic loaded successfully.");
-</script>
-</body>
-</html>
