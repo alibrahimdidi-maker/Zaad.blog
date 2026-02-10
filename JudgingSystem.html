@@ -14436,6 +14436,91 @@ function saveSecretaryScore() {
         }, 1500);
     }
 }
+    // މި ފަންކްޝަނަކީ ދަރިވަރުގެ ރިޕޯޓް (Detailed Report) ގެ HTML ޓޭބަލް އުފައްދާ ފަންކްޝަނެވެ.
+function generateDetailedReportHTML(student) {
+    
+    // 1. ރުބްރިކް (Rubric) ނެތްނަމަ ހުއްޓުވުން
+    if (!state.judging.rubric) return "<p>No rubric found.</p>";
+
+    // 2. ޓޭބަލްގެ ބޮލު (Header) ހެދުން: Category | Judge 1 | Judge 2 | ... | Average
+    let html = `
+    <table border="1" style="width:100%; border-collapse: collapse; text-align: center;">
+        <thead>
+            <tr style="background-color: #f2f2f2;">
+                <th style="padding: 8px; text-align: left;">ބައިތައް (Criteria)</th>`;
+
+    // ޖަޖުންގެ ނަންތައް ހެޑަރ އަށް ލުން (Judge 1, Judge 2, Judge 3...)
+    const judges = ["Judge_1", "Judge_2", "Judge_3"]; // މިތަން ބޭނުންވާ ވަރަކަށް ބަދަލުކުރެވިދާނެ
+    
+    judges.forEach(jID => {
+        html += `<th style="padding: 8px;">${jID.replace('_', ' ')}</th>`;
+    });
+
+    // އެވްރެޖް ކޮލަމް
+    html += `<th style="padding: 8px;">އެވްރެޖް</th>
+            </tr>
+        </thead>
+        <tbody>`;
+
+    // 3. ރުބްރިކްގެ ބައިތަކަށް ލޫޕް ޖަހައިގެން މާކުސް ނެގުން
+    // student.detailedScores ގައި ޑޭޓާ ހުރިތޯ ބެލުން
+    const details = student.detailedScores || {};
+
+    state.judging.rubric.forEach(criteria => {
+        const criteriaName = criteria.name; // e.g., "Thilawa"
+        
+        html += `<tr>
+                    <td style="padding: 8px; text-align: left; font-weight:bold;">${criteriaName}</td>`;
+
+        let rowSum = 0;
+        let rowCount = 0;
+
+        // ކޮންމެ ޖަޖެއްގެ އަތުން މި ބަޔަށް (e.g. Thilawa) ދީފައިވާ މާކުސް ހޯދުން
+        judges.forEach(jID => {
+            let score = "-"; // ޑޭޓާ ނެތްނަމަ ދައްކާނީ -
+            
+            // ★ މުހިންމު ބައި: Detailed Scores ތެރެއިން މާކުސް ނެގުން ★
+            if (details[jID] && details[jID][criteriaName] !== undefined) {
+                score = details[jID][criteriaName];
+                
+                // އެވްރެޖް ހެދުމަށްޓަކައި އެއްކުރުން
+                rowSum += score;
+                rowCount++;
+            }
+
+            html += `<td style="padding: 8px;">${score}</td>`;
+        });
+
+        // މި ބައިގެ (Row) އެވްރެޖް ހިސާބުކުރުން
+        const rowAvg = rowCount > 0 ? (rowSum / rowCount).toFixed(2) : "0.00";
+        
+        html += `<td style="padding: 8px; font-weight:bold;">${rowAvg}</td>
+                 </tr>`;
+    });
+
+    // 4. ފަހު ޖުމްލަ (Grand Total)
+    html += `<tr style="background-color: #e0e0e0; font-weight: bold;">
+                <td style="padding: 8px; text-align: right;">ޖުމްލަ:</td>`;
+    
+    // ޖަޖުންގެ ޖުމްލަ މާކުސްތައް ދެއްކުން
+    let finalSum = 0;
+    let finalCount = 0;
+
+    judges.forEach(jID => {
+        let total = (student.scores && student.scores[jID]) ? student.scores[jID] : 0;
+        if(total > 0) { finalSum += total; finalCount++; }
+        html += `<td style="padding: 8px;">${total}</td>`;
+    });
+
+    // ފައިނަލް އެވްރެޖް
+    const finalAvg = finalCount > 0 ? (finalSum / finalCount).toFixed(2) : "0.00";
+    html += `<td style="padding: 8px; font-size: 1.2em;">${finalAvg}</td>
+             </tr>`;
+
+    html += `</tbody></table>`;
+    
+    return html;
+}
 </script>
 </body>
 </html>
