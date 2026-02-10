@@ -13902,29 +13902,7 @@ function downloadRubricMatrix() {
         alert("Export Error: " + e.message);
     }
 }
-// --- CLICK TO ENTER FULLSCREEN ONLY (NO EXIT) ---
-document.addEventListener('click', function() {
-    // ޗެކް ކުރަނީ މިވަގުތު ފުލް ސްކްރީންގައި ނެތް ނަމަ އެކަނި
-    if (!document.fullscreenElement) {
-        document.documentElement.requestFullscreen().catch(err => {
-            console.log(`Error attempting to enable full-screen mode: ${err.message} (${err.name})`);
-        });
-    }
-    // ނޯޓް: ފުލް ސްކްރީން ވެފައި ހުއްޓަސް، މި ކޯޑުން އޭގެން ނުނިކުންނާނެއެވެ.
-    // ނުކުންނަވާނީ ކީބޯޑުން Esc ފިއްތަވައިގެންނެވެ.
-});
-    // --- CLICK TO ENTER FULLSCREEN ONLY (NO EXIT) ---
-// މިއީ ހަމައެކަނި ފުލްސްކްރީން ކުރުމަށް. ކްލިކް ކޮށްގެން ނުނިކުމެވޭނެ.
-document.addEventListener('click', function() {
-    // ޗެކް ކުރަނީ މިވަގުތު ފުލް ސްކްރީންގައި ނެތް ނަމަ އެކަނި
-    if (!document.fullscreenElement) {
-        document.documentElement.requestFullscreen().catch(err => {
-            console.log(`Error: ${err.message}`);
-        });
-    }
-    // ނޯޓް: ފުލް ސްކްރީން ވެފައި ހުއްޓަސް، ދެވަނަ ފަހަރަށް ކްލިކް ކުރުމުން މިހާރު ނުނިކުންނާނެއެވެ.
-    // ނުކުންނަވާނީ ކީބޯޑުން Esc ފިއްތަވައިގެންނެވެ.
-});
+
     // --- GENERATE CONSOLIDATED RUBRIC PDF (5-7 JUDGES) ---
 function printConsolidatedRubricSheet() {
     // 1. ޑޭޓާ ނެގުން
