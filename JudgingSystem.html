@@ -718,6 +718,30 @@ button,
     padding: 8px;
 }
 .btn-orange:hover { background: #ff6d00; }
+        /* --- MULTI-JUDGE MATRIX MODAL --- */
+#matrixModal {
+    display: none; 
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.95); z-index: 10000;
+    justify-content: center; align-items: center; flex-direction: column;
+}
+.matrix-container {
+    background: #111; border: 2px solid #FFD700; padding: 20px;
+    width: 95%; height: 90%; overflow-y: auto; border-radius: 8px;
+    box-shadow: 0 0 50px rgba(212,175,55,0.2);
+}
+.matrix-table { width: 100%; border-collapse: collapse; color: #fff; }
+.matrix-table th { 
+    position: sticky; top: 0; background: #222; 
+    padding: 10px; border: 1px solid #444; color: #FFD700; z-index: 2;
+}
+.matrix-table td { border: 1px solid #333; padding: 5px; text-align: center; }
+.matrix-input {
+    width: 100%; background: #000; border: none; color: #00e676; 
+    text-align: center; font-weight: bold; font-size: 16px; padding: 8px;
+}
+.matrix-input:focus { background: #002200; outline: 1px solid #00e676; }
+.matrix-total { color: #FFD700; font-weight: bold; font-size: 18px; }
 </style>
 </head>
 
@@ -14773,6 +14797,157 @@ function generateDetailedRankedCSV() {
     const w = window.open("", "_blank", "width=1200,height=800");
     w.document.write(html);
     w.document.close();
+}
+    // --- 5-JUDGE MATRIX ENTRY SYSTEM ---
+
+// 1. Open the Matrix Window
+function openMatrixInput() {
+    if(!state.judging.currentStudentObj) {
+        alert("Please select a student first!"); return;
+    }
+
+    // Create Modal HTML dynamically if not exists
+    if(!document.getElementById('matrixModal')) {
+        const div = document.createElement('div');
+        div.id = 'matrixModal';
+        div.innerHTML = `
+            <div class="matrix-container">
+                <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
+                    <h2 style="color:#FFD700; margin:0;">🖐️ 5-Judge Simultaneous Entry</h2>
+                    <button class="btn-red" onclick="closeMatrixInput()">✖ CLOSE</button>
+                </div>
+                <div id="matrixGridArea"></div>
+                <div style="margin-top:10px; text-align:right;">
+                    <button class="btn-green" style="padding:15px 30px;" onclick="saveMatrixScores()">💾 SAVE ALL & FINISH</button>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(div);
+    }
+
+    renderMatrixTable();
+    document.getElementById('matrixModal').style.display = 'flex';
+}
+
+function closeMatrixInput() {
+    document.getElementById('matrixModal').style.display = 'none';
+}
+
+// 2. Render the Grid
+function renderMatrixTable() {
+    const rubric = state.judging.rubric;
+    const area = document.getElementById('matrixGridArea');
+    
+    let html = `<table class="matrix-table">
+        <thead>
+            <tr>
+                <th style="width:200px; text-align:left;">Criteria / Max</th>`;
+    
+    // Columns for 5 Judges
+    for(let j=1; j<=5; j++) html += `<th>Judge ${j}</th>`;
+    
+    html += `</tr></thead><tbody>`;
+
+    // Rows for Rubric
+    rubric.forEach((r, rIdx) => {
+        html += `<tr>
+            <td style="text-align:left; font-weight:bold; color:#ccc;">
+                ${r.name} <span style="color:#666; font-size:11px;">(${r.max})</span>
+            </td>`;
+        
+        for(let j=1; j<=5; j++) {
+            // Check if score exists
+            let val = "";
+            let sID = state.judging.currentStudentObj.id;
+            // Try to find existing value in memory (detailedScores)
+            // This part requires complex mapping, for now let's keep inputs blank or 0
+            // If you want to load saved data, you'd access state.allStudents here.
+            
+            html += `<td>
+                <input type="number" class="matrix-input j-${j}" 
+                       data-judge="${j}" data-criteria="${r.name}" data-max="${r.max}"
+                       placeholder="-" oninput="calcMatrixTotal(${j})">
+            </td>`;
+        }
+        html += `</tr>`;
+    });
+
+    // Total Row
+    html += `<tr style="background:#1a1a1a;">
+                <td style="text-align:right; font-weight:bold;">TOTAL:</td>`;
+    for(let j=1; j<=5; j++) {
+        html += `<td><div id="mTotal_${j}" class="matrix-total">0.00</div></td>`;
+    }
+    html += `</tr></tbody></table>`;
+
+    area.innerHTML = html;
+}
+
+// 3. Auto Calculate Totals per Column
+window.calcMatrixTotal = function(jNum) {
+    const inputs = document.querySelectorAll(`.matrix-input.j-${jNum}`);
+    let sum = 0;
+    inputs.forEach(inp => {
+        let v = parseFloat(inp.value);
+        let max = parseFloat(inp.dataset.max);
+        if(!isNaN(v)) {
+            // Auto cap at max
+            if(v > max) { v = max; inp.value = max; inp.style.color = "red"; } 
+            else { inp.style.color = "#00e676"; }
+            sum += v;
+        }
+    });
+    document.getElementById(`mTotal_${jNum}`).innerText = sum.toFixed(2);
+}
+
+// 4. Save Logic (Connects to Master System)
+window.saveMatrixScores = function() {
+    const sIdx = state.allStudents.findIndex(s => s.id === state.judging.currentStudentObj.id);
+    if(sIdx === -1) return;
+
+    if(!state.allStudents[sIdx].scores) state.allStudents[sIdx].scores = {};
+    if(!state.allStudents[sIdx].detailedScores) state.allStudents[sIdx].detailedScores = {};
+
+    let grandTotal = 0;
+    let activeJudges = 0;
+
+    // Loop through 5 Judges
+    for(let j=1; j<=5; j++) {
+        let jTotal = 0;
+        let hasScore = false;
+        let details = {};
+
+        const inputs = document.querySelectorAll(`.matrix-input.j-${j}`);
+        inputs.forEach(inp => {
+            let v = parseFloat(inp.value);
+            if(!isNaN(v)) {
+                jTotal += v;
+                details[inp.dataset.criteria] = v; // Save breakdown
+                hasScore = true;
+            }
+        });
+
+        if(hasScore) {
+            let jKey = `Judge_${j}`;
+            jTotal = parseFloat(jTotal.toFixed(2));
+            
+            // Save to Master Data
+            state.allStudents[sIdx].scores[jKey] = jTotal;
+            state.allStudents[sIdx].detailedScores[jKey] = details;
+
+            grandTotal += jTotal;
+            activeJudges++;
+        }
+    }
+
+    // Calculate Final Average
+    state.allStudents[sIdx].finalScore = activeJudges > 0 ? parseFloat((grandTotal / activeJudges).toFixed(2)) : 0;
+
+    // Save & Close
+    saveToLocal();
+    if(typeof renderMasterTable === 'function') renderMasterTable();
+    closeMatrixInput();
+    alert(`✅ Saved Successfully! Average: ${state.allStudents[sIdx].finalScore}`);
 }
 </script>
 </body>
