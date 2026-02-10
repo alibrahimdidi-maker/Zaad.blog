@@ -14521,24 +14521,26 @@ function generateDetailedReportHTML(student) {
     
     return html;
 }
-    // --- PREVENT FULL SCREEN ON CLICK ---
-// މިއިން ސްކްރީނަށް ފިތައިގެން ފުލްސްކްރީން ވުން ހުއްޓުވާނެއެވެ.
+// --- DISABLE FULLSCREEN GLOBALLY (މިބައި އެންމެ މައްޗަށް ލައްވާ) ---
 
-document.addEventListener('click', function(e) {
-    // ފުލް ސްކްރީން ކުރަން އުޅޭނަމަ އެކަން ހުއްޓުވުން
-    // ނޯޓް: މިއީ ހަމައެކަނި ބޮޑީއަށް ކްލިކް ކޮށްގެން ވާނަމަ އެކަން ހުއްޓުވާނެ ކޯޑެކެވެ.
-}, false);
+// 1. ބްރައުޒާގެ ފުލް ސްކްރީން ފަންކްޝަންތައް "މަރާލުން"
+// މީގެ ސަބަބުން ކޮންމެ ތަނަކަށް ފިއްތިޔަސް ފުލް ސްކްރީން ނުވާނެއެވެ.
+Element.prototype.requestFullscreen = function() {};
+Element.prototype.webkitRequestFullscreen = function() {};
+Element.prototype.mozRequestFullScreen = function() {};
+Element.prototype.msRequestFullscreen = function() {};
 
-// ޑަބަލް ކްލިކް އިން ވާނަމަ ހުއްޓުވުން
-document.addEventListener('dblclick', function(e) {
-    e.stopPropagation();
-    // e.preventDefault(); // މީގެ ސަބަބުން ބައެއް އެހެން ކަންކަމަށް ހުރަސް އެޅިދާނެތީ ބަލައިގެން ބޭނުންކުރޭ
-}, true);
-
-// ޚާއްޞަ ފަންކްޝަނެއް ހަދާފައި އިންނަމަ އެކަން ހުއްޓުވުން
-// ތިބޭފުޅާގެ ކޯޑުގައި toggleFullScreen ކިޔާ ފަންކްޝަނެއް އިންނަމަ، 
-// އެ ފަންކްޝަން ހުސްކޮށްލުމަށް ތިރީގައިވާ ލައިން ބޭނުންކުރައްވާ:
-window.toggleFullScreen = function() { console.log("Full screen disabled"); };
+// 2. ޚާއްޞަކޮށް ބޮޑީ (Body) ގައި ކްލިކް އިވެންޓެއް އިންނަމަ އެކަން ހުއްޓުވުން
+document.addEventListener("DOMContentLoaded", function() {
+    // ބޮޑީގައި onclick އިންނަމަ އެބައި ހުސްކޮށްލުން
+    document.body.onclick = null;
+    
+    // މުޅި ޑޮކިއުމަންޓްގެ ކްލިކްތައް މޮނީޓަރކޮށް ފުލްސްކްރީން ރިކުއެސްޓްތައް ހުއްޓުވުން
+    window.addEventListener('click', function(e) {
+        // މިތަނުގައި އިތުރު ކަމެއް ކުރާކަށް ނުޖެހޭނެ، 
+        // ސަބަބަކީ މަތީގައި ފަންކްޝަންތައް ވަނީ ހުއްޓުވާފައި.
+    }, true);
+});
 </script>
 </body>
 </html>
