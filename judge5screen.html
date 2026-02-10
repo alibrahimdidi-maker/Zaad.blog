@@ -14886,6 +14886,119 @@ function getTemplate(isCeremony, judgeDisplayName) {
                         }
                     }
                 };
+                // ========================================================
+// ★ RASFAHI V26 ULTIMATE PATCH (BULK UPDATE) ★
+// ========================================================
+
+// 1. STATE & WINDOW MANAGEMENT
+state.windows.judgeWindows = {};
+if (!state.judging.liveScores) state.judging.liveScores = {};
+if (!state.extra.customBorderData) state.extra.customBorderData = null;
+
+// 2. MULTI-JUDGE: OPEN SPECIFIC JUDGE SCREEN
+window.openJudgeSpecific = function(id) {
+    const judgeID = `Judge_${id}`;
+    const nameInput = document.getElementById('jName' + id);
+    const judgeDisplayName = (nameInput && nameInput.value) ? nameInput.value : `JUDGE ${id}`;
+
+    // ވިންޑޯ ހުޅުވުން
+    let w = window.open("", judgeID, "width=1000,height=800");
+    if (w) {
+        w.document.open();
+        // ތިބާގެ އަސްލު getTemplate ބޭނުންކޮށްގެން ސްކްރީން ބިނާކުރުން
+        w.document.write(getTemplate(false, judgeDisplayName)); 
+        w.document.close();
+        w.judgeID = judgeID;
+        state.windows.judgeWindows[judgeID] = w;
+
+        // ޑޭޓާ ސައިންކް ކުރުން
+        setTimeout(() => syncWindows(), 1000);
+    } else {
+        alert("Pop-ups are blocked! Please allow them to open judge screens.");
+    }
+};
+
+// 3. MULTI-JUDGE: CLOSE ALL JUDGE SCREENS
+window.closeAllJudges = function() {
+    for (let key in state.windows.judgeWindows) {
+        if (state.windows.judgeWindows[key] && !state.windows.judgeWindows[key].closed) {
+            state.windows.judgeWindows[key].close();
+        }
+    }
+    state.windows.judgeWindows = {};
+    state.judging.liveScores = {}; 
+    updateAdminScoreMonitor();
+};
+
+// 4. SCORING: RECEIVE & CALCULATE AVERAGE
+window.submitJudgeScore = function(judgeID, score) {
+    state.judging.liveScores[judgeID] = parseFloat(score);
+    updateAdminScoreMonitor();
+};
+
+window.updateAdminScoreMonitor = function() {
+    const monitor = document.getElementById('adminScoreMonitor');
+    if (!monitor) return;
+
+    let txt = ""; let total = 0; let count = 0;
+    for (let id in state.judging.liveScores) {
+        let sc = state.judging.liveScores[id];
+        txt += `<span style="border:1px solid #444; background:#111; padding:4px 10px; border-radius:4px; margin:3px; display:inline-block;">
+                <b style="color:#FFD700;">${id.replace('_',' ')}:</b> ${sc}</span>`;
+        total += sc;
+        count++;
+    }
+
+    if (count > 0) {
+        let avg = (total / count).toFixed(2);
+        txt += `<div style="margin-top:10px; font-size:20px; border-top:1px dashed #555; padding-top:5px;">
+                AVERAGE SCORE: <b style="color:#00e676;">${avg}</b></div>`;
+    } else {
+        txt = "Waiting for judge submissions...";
+    }
+    monitor.innerHTML = txt;
+};
+
+// 5. CUSTOM FRAME: LOAD BORDER IMAGE
+window.loadExtraCustomBorder = function(input) {
+    const file = input.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        state.extra.customBorderData = e.target.result;
+        console.log("Custom Border Loaded!");
+        if (typeof syncExtraScreen === "function") syncExtraScreen();
+    };
+    reader.readAsDataURL(file);
+};
+
+window.clearExtraCustomBorder = function() {
+    state.extra.customBorderData = null;
+    const fileInput = document.getElementById('exCustomBorderFile');
+    if(fileInput) fileInput.value = "";
+    if (typeof syncExtraScreen === "function") syncExtraScreen();
+};
+
+// 6. SYNC OVERRIDE: ENSURE DATA FLOWS TO ALL WINDOWS
+const originalSyncWindows = syncWindows;
+window.syncWindows = function() {
+    if (typeof originalSyncWindows === "function") originalSyncWindows();
+
+    // ޖަޖުންގެ ހުރިހާ ވިންޑޯއަކަށް ޑޭޓާ ފޮނުވުން
+    for (let key in state.windows.judgeWindows) {
+        let w = state.windows.judgeWindows[key];
+        if (w && !w.closed && w.updateState) {
+            // ތިބާގެ packet އޮނިގަނޑާ އެއްގޮތަށް ޑޭޓާ ފޮނުވުން
+            w.updateState({
+                judging: state.judging,
+                session: state.session,
+                currentLang: typeof currentLang !== 'undefined' ? currentLang : 'dv'
+            });
+        }
+    }
+};
+
+console.log("Rasfahi V26 Patches Applied Successfully.");
             </script>
         </body>
         </html>
