@@ -15355,6 +15355,149 @@ window.calcMatrixTotal = function(jNum) {
     const totalEl = document.getElementById(`mTotal_${jNum}`);
     if(totalEl) totalEl.innerText = sum.toFixed(2);
 }
+    // --- FIXED SAVE LOGIC: FORCE OVERWRITE MASTER DATA ---
+window.saveMatrixScores = function() {
+    // 1. Find the student in the master list
+    const currentID = state.judging.currentStudentObj.id;
+    const sIdx = state.allStudents.findIndex(s => s.id === currentID);
+    
+    if(sIdx === -1) { alert("Error: Student not found in memory."); return; }
+
+    // Ensure storage objects exist
+    if(!state.allStudents[sIdx].scores) state.allStudents[sIdx].scores = {};
+    if(!state.allStudents[sIdx].detailedScores) state.allStudents[sIdx].detailedScores = {};
+
+    let grandTotal = 0;
+    let activeJudges = 0;
+
+    // 2. Loop through all 5 Judges
+    for(let j=1; j<=5; j++) {
+        let jTotal = 0;
+        let hasData = false;
+        let details = {}; // Object to store criteria breakdown (Thilawa: 10, etc)
+
+        // Select all inputs for this specific judge column from the screen
+        const inputs = document.querySelectorAll(`.matrix-input.j-col-${j}`);
+        
+        inputs.forEach(inp => {
+            let val = parseFloat(inp.value);
+            // If input is empty or NaN, treat as 0
+            if(isNaN(val)) val = 0;
+            
+            // If the field isn't empty string, we consider it "graded"
+            if(inp.value.trim() !== "") hasData = true;
+
+            jTotal += val;
+            
+            // Save breakdown text
+            if(inp.dataset.criteria) {
+                details[inp.dataset.criteria] = val;
+            }
+        });
+
+        let jKey = `Judge_${j}`;
+        jTotal = parseFloat(jTotal.toFixed(2));
+
+        // 3. Save to Master List
+        if (hasData) {
+            state.allStudents[sIdx].scores[jKey] = jTotal;
+            state.allStudents[sIdx].detailedScores[jKey] = details;
+            
+            // Also update the "Live Judging" memory for other screens
+            state.judging.liveScores[jKey] = jTotal;
+
+            grandTotal += jTotal;
+            activeJudges++;
+        } else {
+            // If input was blank, ensure it saves as 0, NOT 100
+            state.allStudents[sIdx].scores[jKey] = 0;
+            state.allStudents[sIdx].detailedScores[jKey] = {};
+        }
+    }
+
+    // 4. Calculate Final Average
+    // Avoid division by zero
+    let finalAvg = 0;
+    if (activeJudges > 0) {
+        finalAvg = parseFloat((grandTotal / activeJudges).toFixed(2));
+    }
+    
+    state.allStudents[sIdx].finalScore = finalAvg;
+
+    // 5. Save & Update UI
+    saveToLocal();
+    if(typeof renderMasterTable === 'function') renderMasterTable();
+
+    // Visual Feedback
+    const status = document.getElementById('saveStatus');
+    if(status) {
+        status.style.display = 'inline';
+        status.innerText = `✅ Saved! (Avg: ${finalAvg})`;
+        setTimeout(() => { status.style.display = 'none'; }, 2000);
+    }
+    
+    // Optional: Close window after save
+    // closeMatrixInput(); 
+}
+    // --- FIXED TABLE RENDER: PREVENT "100" DEFAULT ---
+function renderMasterTable() {
+    const fBranch = document.getElementById('filterBranch').value;
+    const fGroup = document.getElementById('filterGroup').value;
+    const tbody = document.getElementById('masterTableBody');
+    
+    tbody.innerHTML = '';
+
+    // Filter Logic
+    let displayList = state.allStudents.filter(s => {
+        return (fBranch === "" || s.branch === fBranch) && 
+               (fGroup === "" || s.group === fGroup);
+    });
+
+    // Sort by Rank
+    displayList.sort((a,b) => (b.finalScore || 0) - (a.finalScore || 0));
+
+    document.getElementById('tableCount').innerText = displayList.length;
+
+    displayList.forEach((s, idx) => {
+        let row = document.createElement('tr');
+        // Highlight if active
+        if(state.judging.currentStudentObj && s.id === state.judging.currentStudentObj.id) {
+            row.classList.add('selected-row');
+        }
+
+        let rank = (s.finalScore > 0) ? (idx + 1) : "-";
+
+        // Helper to safely get score
+        const getScore = (key) => {
+            if (s.scores && s.scores[key] !== undefined && s.scores[key] !== null) {
+                return s.scores[key];
+            }
+            return '-'; // Return dash if no score
+        };
+
+        row.innerHTML = `
+            <td>${idx + 1}</td>
+            <td>${s.reg || ''}</td>
+            <td style="text-align:left; font-weight:bold;">${s.name}</td>
+            <td>${s.id}</td>
+            <td>${s.branch}</td>
+            <td>${s.group}</td>
+            <td style="text-align:left;">${s.institution || s.inst || ''}</td>
+            
+            <td>${getScore('Judge_1')}</td>
+            <td>${getScore('Judge_2')}</td>
+            <td>${getScore('Judge_3')}</td>
+            <td>${getScore('Judge_4')}</td>
+            <td>${getScore('Judge_5')}</td>
+            
+            <td style="font-weight:bold; color:#00e676;">${s.finalScore || '-'}</td>
+            <td style="color:#FFD700;">${rank}</td>
+        `;
+
+        row.onclick = () => selectStudentForGrading(s);
+        tbody.appendChild(row);
+    });
+}
 </script>
 </body>
 </html>
