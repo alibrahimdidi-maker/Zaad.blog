@@ -14521,7 +14521,26 @@ function generateDetailedReportHTML(student) {
     
     return html;
 }
+// --- FORCE REMOVE FULLSCREEN TRIGGERS ---
+// މި ކޯޑު ލާނީ ފައިލްގެ އެންމެ ތިރިއަށެވެ.
 
+window.addEventListener("load", function() {
+    // 1. ބޮޑީ ޓެގްގައި އިންނަ ކްލިކް އިވެންޓްތައް ފޮހެލުން
+    if (document.body) {
+        document.body.removeAttribute("onclick");
+        document.body.removeAttribute("ondblclick");
+    }
+
+    // 2. މުޅި ޕޭޖްގައި އިންނަ ކްލިކް އިވެންޓްތައް ފޮހެލުން
+    if (document.documentElement) {
+        document.documentElement.removeAttribute("onclick");
+    }
+
+    // 3. toggleFullScreen ކިޔާ ފަންކްޝަނެއް އިންނަމަ އެ ހުސްކޮށްލުން
+    // (މިއީ ވަރަށް ގިނަ ޕްރޮގްރާމްތަކުގައި ބޭނުންކުރާ ނަމެކެވެ)
+    window.toggleFullScreen = function() { console.log("Fullscreen disabled by user."); };
+    window.requestFullscreen = function() {}; 
+});
 </script>
 </body>
 </html>
