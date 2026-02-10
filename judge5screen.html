@@ -1161,21 +1161,30 @@ button,
 
                 <button class="btn-red" onclick="clearCache()" style="font-size:10px; margin-bottom:10px;">🧹 Purge Memory (Clear Cache)</button>
 
-                <label data-translate="lblStudent">1. ދަރިވަރު ސްކްރީން:</label>
-                <button onclick="openScreen('student')" class="btn-purple" data-translate="btnLaunchStudent">🖥️ Student Screen (Launch)</button>
+  <label data-translate="lblStudent">1. ދަރިވަރު ސްކްރީން:</label>
+<button onclick="openScreen('student')" class="btn-purple" data-translate="btnLaunchStudent">🖥️ Student Screen (Launch)</button>
 
-                <label data-translate="lblJudge">2. ޖަޖުންގެ ސްކްރީން (Manual Entry):</label>
-   <div style="display:flex; gap:5px;">
-        <select id="targetJudgeSelect" style="width:50%;">
-            <option value="1">Judge 1</option>
-            <option value="2">Judge 2</option>
-            <option value="3">Judge 3</option>
-            <option value="4">Judge 4</option>
-            <option value="5">Judge 5</option>
-            <option value="6">Judge 6</option>
-            <option value="7">Judge 7</option>
-        </select>
-        
+<label data-translate="lblJudge">2. ޖަޖުންގެ ސްކްރީންތައް (Launch 5 Screens):</label>
+
+<div style="margin-top: 5px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px;">
+    <button onclick="openJudgeSpecific(1)" class="btn-blue" style="font-size: 11px; padding: 8px;">Judge 1 🖥️</button>
+    <button onclick="openJudgeSpecific(2)" class="btn-blue" style="font-size: 11px; padding: 8px;">Judge 2 🖥️</button>
+    <button onclick="openJudgeSpecific(3)" class="btn-blue" style="font-size: 11px; padding: 8px;">Judge 3 🖥️</button>
+    <button onclick="openJudgeSpecific(4)" class="btn-blue" style="font-size: 11px; padding: 8px;">Judge 4 🖥️</button>
+    <button onclick="openJudgeSpecific(5)" class="btn-blue" style="font-size: 11px; padding: 8px;">Judge 5 🖥️</button>
+    <button onclick="closeAllJudges()" class="btn-red" style="font-size: 11px; padding: 8px;">Close All ❌</button>
+</div>
+
+<div style="margin-top:10px; padding:8px; border:1px dashed #334455; background:#000; border-radius: 4px;">
+    <small style="color:#aaa; display:block; margin-bottom:5px;">Set Judge Names (Optional):</small>
+    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:5px;">
+        <input type="text" id="jName1" placeholder="J1 Name" style="font-size: 11px; padding: 4px; background: #111; color: white; border: 1px solid #444;">
+        <input type="text" id="jName2" placeholder="J2 Name" style="font-size: 11px; padding: 4px; background: #111; color: white; border: 1px solid #444;">
+        <input type="text" id="jName3" placeholder="J3 Name" style="font-size: 11px; padding: 4px; background: #111; color: white; border: 1px solid #444;">
+        <input type="text" id="jName4" placeholder="J4 Name" style="font-size: 11px; padding: 4px; background: #111; color: white; border: 1px solid #444;">
+        <input type="text" id="jName5" placeholder="J5 Name" style="font-size: 11px; padding: 4px; background: #111; color: white; border: 1px solid #444;">
+    </div>
+</div>
         <button onclick="openSingleJudge()" class="btn-blue" data-translate="btnLaunchJudges">
             Open Screen 🖥️
         </button>
