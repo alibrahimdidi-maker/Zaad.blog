@@ -14952,6 +14952,310 @@ window.saveMatrixScores = function() {
     closeMatrixInput();
     alert(`✅ Saved Successfully! Average: ${state.allStudents[sIdx].finalScore}`);
 }
+    // --- 5-JUDGE MATRIX ENTRY SYSTEM (FIXED & UPDATED V2) ---
+
+// 1. Open the Matrix Window (With Student Header)
+function openMatrixInput() {
+    if(!state.judging.currentStudentObj) {
+        alert("Please select a student first! (ދަރިވަރަކު އިޚްތިޔާރުކުރައްވާ)"); return;
+    }
+
+    const s = state.judging.currentStudentObj;
+
+    // Create Modal HTML dynamically if not exists or needs update
+    const modalID = 'matrixModal';
+    let modal = document.getElementById(modalID);
+    
+    if(modal) modal.remove(); // Remove old to refresh header logic
+
+    modal = document.createElement('div');
+    modal.id = modalID;
+    modal.innerHTML = `
+        <div class="matrix-container">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; border-bottom:1px solid #333; padding-bottom:10px;">
+                <h2 style="color:#FFD700; margin:0; font-family:'Faruuma';">🖐️ 5 ޖަޖުންގެ މާކުސް (Matrix Entry)</h2>
+                <div>
+                    <button class="btn-blue" onclick="printMatrixCurrentStudent()">🖨️ Print Sheet</button>
+                    <button class="btn-red" onclick="closeMatrixInput()">✖ CLOSE</button>
+                </div>
+            </div>
+
+            <div style="background:#001a00; border:1px solid #00e676; padding:10px; border-radius:6px; margin-bottom:15px; display:grid; grid-template-columns: 2fr 1fr 1fr; gap:10px; font-size:13px; color:#fff;">
+                <div>
+                    <div style="color:#aaa; font-size:11px;">Name & Reg:</div>
+                    <strong style="font-size:16px; color:#FFD700;">${s.name}</strong> <br>
+                    <span style="color:#00e676;">${s.reg || '-'}</span> | ${s.id || '-'}
+                </div>
+                <div>
+                    <div style="color:#aaa; font-size:11px;">Category:</div>
+                    <strong>${s.branch}</strong> - ${s.group} <br>
+                    ${s.institution || s.inst || 'Private'}
+                </div>
+                <div>
+                    <div style="color:#aaa; font-size:11px;">Address:</div>
+                    ${s.address || '-'}
+                </div>
+            </div>
+
+            <div id="matrixGridArea"></div>
+
+            <div style="margin-top:10px; text-align:right;">
+                <span id="saveStatus" style="color:#00e676; margin-right:10px; font-weight:bold; display:none;">✅ Saved!</span>
+                <button class="btn-green" style="padding:15px 40px; font-size:16px;" onclick="saveMatrixScores()">
+                    💾 SAVE ALL SCORES
+                </button>
+            </div>
+        </div>
+    `;
+    document.body.appendChild(modal);
+
+    renderMatrixTable();
+    document.getElementById(modalID).style.display = 'flex';
+}
+
+function closeMatrixInput() {
+    const m = document.getElementById('matrixModal');
+    if(m) m.style.display = 'none';
+}
+
+// 2. Render the Grid (FIXED JUDGE 1 LOGIC)
+function renderMatrixTable() {
+    const rubric = state.judging.rubric;
+    const area = document.getElementById('matrixGridArea');
+    const s = state.judging.currentStudentObj;
+    
+    // Check if there are saved detailed scores to pre-fill
+    // Structure: s.detailedScores['Judge_1']['Thilawa']
+    
+    let html = `<table class="matrix-table" style="width:100%; border-collapse:collapse; color:#fff;">
+        <thead>
+            <tr>
+                <th style="width:250px; text-align:left; background:#222; color:#FFD700; padding:10px; border:1px solid #444;">Criteria (ބައިތައް)</th>`;
+    
+    // Columns for 5 Judges
+    for(let j=1; j<=5; j++) html += `<th style="background:#111; border:1px solid #444; color:#aaa;">Judge ${j}</th>`;
+    
+    html += `</tr></thead><tbody>`;
+
+    // Rows for Rubric
+    rubric.forEach((r, rIdx) => {
+        html += `<tr>
+            <td style="text-align:left; font-weight:bold; padding:8px; border:1px solid #333; color:#eee;">
+                ${r.name} <span style="float:right; color:#666; font-size:11px;">(/ ${r.max})</span>
+            </td>`;
+        
+        for(let j=1; j<=5; j++) {
+            let jKey = `Judge_${j}`;
+            let val = "";
+
+            // Pre-fill if data exists
+            if (s.detailedScores && s.detailedScores[jKey] && s.detailedScores[jKey][r.name] !== undefined) {
+                val = s.detailedScores[jKey][r.name];
+            }
+
+            html += `<td style="border:1px solid #333; padding:0;">
+                <input type="number" class="matrix-input j-col-${j}" 
+                       data-judge="${j}" data-criteria="${r.name}" data-max="${r.max}"
+                       step="0.5" min="0" max="${r.max}"
+                       value="${val}"
+                       style="width:100%; height:40px; background:#000; border:none; color:#00e676; text-align:center; font-weight:bold; font-size:16px;"
+                       onfocus="this.select()"
+                       oninput="calcMatrixTotal(${j})">
+            </td>`;
+        }
+        html += `</tr>`;
+    });
+
+    // Total Row
+    html += `<tr style="background:#1a1a1a; height:50px;">
+                <td style="text-align:right; font-weight:bold; padding-right:10px;">TOTAL:</td>`;
+    for(let j=1; j<=5; j++) {
+        // Pre-calc total if exists
+        let preTotal = (s.scores && s.scores[`Judge_${j}`]) ? s.scores[`Judge_${j}`] : "0.00";
+        html += `<td style="text-align:center; font-weight:bold; color:#FFD700; font-size:18px; border:1px solid #444;">
+                    <span id="mTotal_${j}">${preTotal}</span>
+                 </td>`;
+    }
+    html += `</tr></tbody></table>`;
+
+    area.innerHTML = html;
+}
+
+// 3. Auto Calculate Totals per Column (FIXED)
+window.calcMatrixTotal = function(jNum) {
+    // Select inputs specifically by the class 'j-col-X'
+    const inputs = document.querySelectorAll(`.matrix-input.j-col-${jNum}`);
+    let sum = 0;
+    
+    inputs.forEach(inp => {
+        let v = parseFloat(inp.value);
+        let max = parseFloat(inp.dataset.max);
+        
+        if(!isNaN(v)) {
+            // Validation: Don't allow higher than max
+            if(v > max) { 
+                v = max; 
+                inp.value = max; 
+                inp.style.backgroundColor = "#330000"; // Warn color
+            } else {
+                inp.style.backgroundColor = "#000"; // Normal
+            }
+            sum += v;
+        }
+    });
+    
+    // Update the total display for this judge
+    document.getElementById(`mTotal_${jNum}`).innerText = sum.toFixed(2);
+}
+
+// 4. Save Logic (Updates Master List & Detailed Scores)
+window.saveMatrixScores = function() {
+    const currentID = state.judging.currentStudentObj.id;
+    const sIdx = state.allStudents.findIndex(s => s.id === currentID);
+    
+    if(sIdx === -1) { alert("Error: Student not found in memory."); return; }
+
+    // Init storage if missing
+    if(!state.allStudents[sIdx].scores) state.allStudents[sIdx].scores = {};
+    if(!state.allStudents[sIdx].detailedScores) state.allStudents[sIdx].detailedScores = {};
+
+    let grandTotal = 0;
+    let activeJudges = 0;
+
+    // Loop through 5 Judges
+    for(let j=1; j<=5; j++) {
+        let jTotal = 0;
+        let hasScore = false;
+        let details = {}; // Store breakdown for this judge
+
+        // Select all inputs for this judge column
+        const inputs = document.querySelectorAll(`.matrix-input.j-col-${j}`);
+        
+        inputs.forEach(inp => {
+            let v = parseFloat(inp.value);
+            // Only save if it's a number (empty means no score for that criteria)
+            if(!isNaN(v)) {
+                jTotal += v;
+                details[inp.dataset.criteria] = v; // Save: { "Thilawa": 28 }
+                hasScore = true;
+            }
+        });
+
+        let jKey = `Judge_${j}`;
+
+        if(hasScore) {
+            jTotal = parseFloat(jTotal.toFixed(2));
+            
+            // Save Totals
+            state.allStudents[sIdx].scores[jKey] = jTotal;
+            state.judging.liveScores[jKey] = jTotal; // Update live tracking
+
+            // Save Details (CRITICAL for Printing/Editing later)
+            state.allStudents[sIdx].detailedScores[jKey] = details;
+
+            grandTotal += jTotal;
+            activeJudges++;
+        } else {
+            // If completely empty, reset this judge
+            state.allStudents[sIdx].scores[jKey] = 0;
+            state.allStudents[sIdx].detailedScores[jKey] = {};
+        }
+    }
+
+    // Calculate Final Average
+    state.allStudents[sIdx].finalScore = activeJudges > 0 ? parseFloat((grandTotal / activeJudges).toFixed(2)) : 0;
+
+    // Save to LocalStorage
+    saveToLocal();
+    if(typeof renderMasterTable === 'function') renderMasterTable();
+
+    // Feedback
+    const status = document.getElementById('saveStatus');
+    status.style.display = 'inline';
+    status.innerText = `✅ Saved! (Avg: ${state.allStudents[sIdx].finalScore})`;
+    setTimeout(() => { status.style.display = 'none'; }, 2000);
+}
+
+// 5. PRINT FUNCTION (Generate PDF for Current Student)
+function printMatrixCurrentStudent() {
+    const s = state.judging.currentStudentObj;
+    if(!s) return;
+
+    // Get current values from the inputs (what's on screen right now)
+    // We construct a temporary object to print
+    let printData = { ...s, tempScores: {} };
+    
+    // Get Rubric Headers
+    const rubric = state.judging.rubric;
+    let tableRows = "";
+    
+    // Build Table Rows
+    rubric.forEach((r, rIdx) => {
+        tableRows += `<tr><td style="text-align:left; font-weight:bold;">${r.name} (${r.max})</td>`;
+        for(let j=1; j<=5; j++) {
+            // Find input value
+            const inp = document.querySelector(`.matrix-input.j-col-${j}[data-criteria="${r.name}"]`);
+            let val = inp ? inp.value : "";
+            tableRows += `<td>${val}</td>`;
+        }
+        tableRows += `</tr>`;
+    });
+
+    // Build Totals Row
+    let totalRow = `<tr style="background:#eee; font-weight:bold;"><td>TOTAL</td>`;
+    for(let j=1; j<=5; j++) {
+        let tot = document.getElementById(`mTotal_${j}`).innerText;
+        totalRow += `<td>${tot}</td>`;
+    }
+    totalRow += `</tr>`;
+
+    // HTML Structure for Print Window
+    const html = `
+    <html>
+    <head>
+        <title>Score Sheet - ${s.name}</title>
+        <style>
+            body { font-family: sans-serif; padding: 20px; direction: rtl; }
+            .header { text-align: center; border-bottom: 2px solid #000; padding-bottom: 10px; margin-bottom: 20px; }
+            .info-box { border: 1px solid #000; padding: 10px; margin-bottom: 20px; display:flex; justify-content: space-between; font-weight:bold; font-size:14px; }
+            table { width: 100%; border-collapse: collapse; text-align: center; font-size: 13px; direction: ltr; }
+            th, td { border: 1px solid #000; padding: 8px; }
+            th { background: #ccc; }
+            @media print { button { display:none; } }
+        </style>
+    </head>
+    <body>
+        <button onclick="window.print()" style="margin-bottom:10px; font-size:20px; padding:10px;">🖨️ Print</button>
+        <div class="header">
+            <h2>${document.getElementById('rptInstName').value || "Quran Competition"}</h2>
+            <h3>Score Sheet</h3>
+        </div>
+        <div class="info-box">
+            <div>ނަން: ${s.name}</div>
+            <div>ރެޖިސްޓްރީ: ${s.reg}</div>
+            <div>ގޮފި: ${s.branch}</div>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th style="width:200px; text-align:left;">Criteria</th>
+                    <th>Judge 1</th><th>Judge 2</th><th>Judge 3</th><th>Judge 4</th><th>Judge 5</th>
+                </tr>
+            </thead>
+            <tbody>
+                ${tableRows}
+                ${totalRow}
+            </tbody>
+        </table>
+        <div style="margin-top:20px; font-size:12px; color:#555;">Generated on ${new Date().toLocaleString()}</div>
+    </body>
+    </html>
+    `;
+
+    const w = window.open("", "_blank", "width=900,height=800");
+    w.document.write(html);
+    w.document.close();
+}
 </script>
 </body>
 </html>
