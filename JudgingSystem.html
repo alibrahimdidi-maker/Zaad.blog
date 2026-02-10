@@ -14695,6 +14695,149 @@ function generateDetailedRankedCSV() {
     
     alert("✅ 2000 Students Generated!\nFile matches your uploaded format perfectly.");
 }
+    function printFullRubricBreakdown() {
+    // 1. ޑޭޓާ ފިލްޓަރކޮށް ތަރުތީބުކުރުން
+    // ރިޕޯޓް ފިލްޓަރތަކުން ހުރިހާ ދަރިވަރުން ނަގައި، އެވްރެޖް މާކުހަށް ބަލައި ސޯޓްކުރުން
+    let list = getFilteredResults(); 
+    
+    if(list.length === 0) { 
+        alert("މި ކެޓަގަރީގައި އެއްވެސް ދަރިވަރަކު ނެތެވެ!"); 
+        return; 
+    }
+
+    // 2. ހެޑަރ މަޢުލޫމާތު ނެގުން
+    const instName = document.getElementById('rptInstName').value || "މުއައްސަސާގެ ނަން";
+    const compName = document.getElementById('rptCompName').value || "ޤުރުއާން މުބާރާތް";
+    const bSel = document.getElementById('rptFilterBranch');
+    const branchTxt = bSel.options[bSel.selectedIndex].text;
+    const gSel = document.getElementById('rptFilterGroup');
+    const groupTxt = gSel.options[gSel.selectedIndex].text;
+
+    // 3. HTML ބިނާކުރުން
+    const customFontCSS = state.fontData ? `@font-face { font-family: 'Faruuma'; src: url('${state.fontData}'); }` : '';
+
+    let html = `
+    <!DOCTYPE html>
+    <html dir="rtl" lang="dv">
+    <head>
+        <title>Full Student Rubric Report</title>
+        <style>
+            ${customFontCSS}
+            @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Thaana:wght@400;700&display=swap');
+            
+            body { 
+                font-family: 'Faruuma', 'Noto Sans Thaana', sans-serif !important; 
+                padding: 30px; background: white; direction: rtl;
+            }
+            .header-info { text-align: center; margin-bottom: 20px; }
+            .header-info h1 { margin: 0; font-size: 26px; text-decoration: underline; }
+            .header-info h2 { margin: 5px 0; font-size: 18px; color: #333; }
+            
+            .stats-bar { 
+                display: flex; justify-content: space-between; 
+                border: 2px solid #000; padding: 10px; margin-bottom: 20px;
+                background: #f1f1f1; font-weight: bold; font-size: 13px;
+            }
+
+            table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+            th, td { 
+                border: 1px solid #000; padding: 8px; text-align: center; 
+                font-size: 12px; word-wrap: break-word;
+            }
+            th { background: #ddd; font-weight: bold; }
+            
+            /* ކުލަ ކޯޑިންގ (ތިބާ ބޭނުންވި ގޮތަށް) */
+            .top3 { background-color: #d4edda !important; font-weight: bold; } /* ފެހި ކުލަ (ގަދަ 3) */
+            .top5 { background-color: #e2e3e5 !important; } /* އަޅި ކުލަ (ގަދަ 5) */
+            
+            .footer-sig { margin-top: 50px; display: flex; justify-content: space-around; }
+            .sig-box { text-align: center; width: 180px; border-top: 1px dotted #000; padding-top: 5px; font-size: 12px; }
+
+            @media print {
+                @page { size: A4 landscape; margin: 10mm; }
+                button { display: none; }
+                body { -webkit-print-color-adjust: exact; }
+            }
+        </style>
+    </head>
+    <body>
+        <button onclick="window.print()" style="padding:10px 20px; background:#4a148c; color:white; border:none; cursor:pointer; margin-bottom:10px; font-weight:bold; border-radius:5px;">🖨️ PRINT REPORT</button>
+
+        <div class="header-info">
+            <h1>${instName}</h1>
+            <h2>${compName}</h2>
+            <div style="font-weight:bold;">ދަރިވަރުންގެ ނަތީޖާ ތަފްޞީލު (Detailed Rubric Sheet)</div>
+        </div>
+
+        <div class="stats-bar">
+            <span>ގޮފި: ${branchTxt}</span>
+            <span>ޢުމުރުފުރާ: ${groupTxt}</span>
+            <span>ތާރީޚް: ${new Date().toLocaleDateString()}</span>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th style="width:30px;">#</th>
+                    <th style="width:70px;">Reg No</th>
+                    <th style="width:150px;">ދަރިވަރުގެ ނަން</th>
+                    <th style="width:80px;">އައިޑީ</th>
+                    <th>J-1</th>
+                    <th>J-2</th>
+                    <th>J-3</th>
+                    <th>J-4</th>
+                    <th>J-5</th>
+                    <th style="background:#ccc;">ޖުމްލަ</th>
+                    <th style="background:#eee;">އެވްރެޖް</th>
+                    <th style="width:40px; background:#bbb;">ވަނަ</th>
+                </tr>
+            </thead>
+            <tbody>
+                ${list.map((s, i) => {
+                    let rank = i + 1;
+                    let rowClass = "";
+                    if(rank <= 3) rowClass = "top3";
+                    else if(rank <= 5) rowClass = "top5";
+
+                    let j1 = s.scores?.Judge_1 || 0;
+                    let j2 = s.scores?.Judge_2 || 0;
+                    let j3 = s.scores?.Judge_3 || 0;
+                    let j4 = s.scores?.Judge_4 || 0;
+                    let j5 = s.scores?.Judge_5 || 0;
+
+                    let totalSum = (parseFloat(j1) + parseFloat(j2) + parseFloat(j3) + parseFloat(j4) + parseFloat(j5)).toFixed(2);
+
+                    return `
+                    <tr class="${rowClass}">
+                        <td>${rank}</td>
+                        <td>${s.reg || '-'}</td>
+                        <td style="text-align:right; padding-right:8px;">${s.name}</td>
+                        <td>${s.id}</td>
+                        <td>${j1}</td>
+                        <td>${j2}</td>
+                        <td>${j3}</td>
+                        <td>${j4}</td>
+                        <td>${j5}</td>
+                        <td style="font-weight:bold;">${totalSum}</td>
+                        <td style="font-weight:bold; font-size:14px;">${s.finalScore}</td>
+                        <td>${rank}</td>
+                    </tr>`;
+                }).join('')}
+            </tbody>
+        </table>
+
+        <div class="footer-sig">
+            <div class="sig-box">އިސް ފަނޑިޔާރުގެ ސޮއި</div>
+            <div class="sig-box">އެޑްމިން / ކޮމިޓީ</div>
+            <div class="sig-box">ތައްގަނޑު</div>
+        </div>
+    </body>
+    </html>`;
+
+    const w = window.open("", "_blank", "width=1200,height=800");
+    w.document.write(html);
+    w.document.close();
+}
 </script>
 </body>
 </html>
