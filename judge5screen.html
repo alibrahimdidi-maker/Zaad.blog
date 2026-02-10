@@ -1367,16 +1367,22 @@ button,
                 <button class="btn-gold" style="margin-top:5px; font-size:11px;" onclick="syncWindows()">🔄 Update Judges Screens</button>
             </div>
 
-            <div class="panel" style="border:1px solid #00acc1; box-shadow:inset 0 0 10px rgba(0,172,193,0.1);">
+  <div class="panel" style="border:1px solid #00acc1; box-shadow:inset 0 0 10px rgba(0,172,193,0.1);">
     <h2 style="color:#00e5ff;">8. ނަތީޖާ & ރިޕޯޓް (Advanced Reports)</h2>
 
-    <div style="background:#002200; padding:10px; border-radius:4px; margin-bottom:10px;">
-        <h4 style="margin:0; color:#fff;">Current Session Scores:</h4>
-        <div id="adminScoreMonitor" style="font-size:12px; color:#aaa; margin-top:5px;">Waiting for judges...</div>
-        <button class="btn-green" id="btnFinalize" style="margin-top:5px;" onclick="finalizeStudentResult()">✅ Save Student Result</button>
+    <div class="panel" style="border: 2px solid #00e676; margin-bottom: 15px; background: rgba(0,230,118,0.05);">
+        <h2 style="color:#00e676; border-bottom: 1px dashed #00e676;">📊 Live Scores (5 Judges Monitor)</h2>
+        
+        <div id="adminScoreMonitor" style="background:#000; padding:15px; color:#00e676; font-family:monospace; font-size:18px; border:1px solid #333; text-align:center; border-radius:4px; min-height:40px;">
+            Waiting for judge submissions...
+        </div>
+
+        <button class="btn-green" id="btnFinalize" style="margin-top:10px; width:100%; padding:15px; font-size:18px; font-weight:bold;" onclick="finalizeStudentResult()">
+            ✅ Save Student Result
+        </button>
     </div>
 
-    <hr style="border-color:#333; margin:8px 0;">
+    <hr style="border-color:#333; margin:15px 0;">
 
     <label style="color:#FFD700;">1. Report Headers (ރިޕޯޓުގެ މަޢުލޫމާތު):</label>
     <input type="text" id="rptInstName" placeholder="Institution Name (e.g. Madharusathul Arabiyya)">
@@ -14783,6 +14789,119 @@ function generateDetailedRankedCSV() {
     w.document.write(html);
     w.document.close();
 }
+    // ========================================================
+// ★ MULTI-JUDGE SYSTEM PATCH (V26 COMPLETE) ★
+// ========================================================
+
+// 1. ޖަޖުންގެ ވިންޑޯތައް ރައްކާކުރާނެ އޮބްޖެކްޓް
+state.windows.judgeWindows = {};
+
+// 2. ވަކިވަކި ޖަޖުންގެ ސްކްރީން ހުޅުވާ ފަންކްޝަން
+window.openJudgeSpecific = function(id) {
+    const judgeID = `Judge_${id}`;
+    const nameInput = document.getElementById('jName' + id);
+    // ޖަޖުގެ ނަމެއް ޖަހާފައިވާނަމަ އެ ނަން، ނޫންނަމަ Judge 1, Judge 2...
+    const judgeDisplayName = (nameInput && nameInput.value) ? nameInput.value : `JUDGE ${id}`;
+
+    // ވިންޑޯ ހުޅުވުން
+    let w = window.open("", judgeID, "width=1000,height=800");
+    
+    if (w) {
+        w.document.open();
+        // ވިންޑޯގެ އެތެރޭގައި ޖަޖުގެ ނަން ދެއްކުމަށްޓަކައި މާކިންގ ޓެމްޕްލޭޓް ފޮނުވުން
+        w.document.write(getTemplate(false, judgeDisplayName)); 
+        w.document.close();
+        
+        w.judgeID = judgeID; // ވިންޑޯގެ އެތެރޭގައި ID ރައްކާކުރުން
+        state.windows.judgeWindows[judgeID] = w;
+
+        // ޑޭޓާ ސައިންކް ކުރުން
+        setTimeout(() => syncWindows(), 1000);
+    } else {
+        alert("Pop-ups are blocked! Please allow them to open judge screens.");
+    }
+};
+
+// 3. ހުރިހާ ޖަޖުންގެ ސްކްރީން އެއްފަހަރާ ލައްޕާލުން
+window.closeAllJudges = function() {
+    for (let key in state.windows.judgeWindows) {
+        if (state.windows.judgeWindows[key] && !state.windows.judgeWindows[key].closed) {
+            state.windows.judgeWindows[key].close();
+        }
+    }
+    state.windows.judgeWindows = {};
+    state.judging.liveScores = {}; // މާކްސްތައްވެސް ރީސެޓްކޮށްލުން
+    updateAdminScoreMonitor();
+};
+
+// 4. ޖަޖުން ފޮނުވާ މާކްސްތައް އެޑްމިންއަށް ލިބޭނެ ގޮތް ހެދުން
+window.submitJudgeScore = function(judgeID, score) {
+    if (!state.judging.liveScores) state.judging.liveScores = {};
+    
+    // މާކްސް ރައްކާކުރުން
+    state.judging.liveScores[judgeID] = parseFloat(score);
+    
+    // އެޑްމިން މޮނިޓަރު އަޕްޑޭޓްކުރުން
+    updateAdminScoreMonitor();
+};
+
+// 5. އެޑްމިން ޕެނަލްގައި މާކްސްތައް ދައްކާ ފަންކްޝަން
+window.updateAdminScoreMonitor = function() {
+    const monitor = document.getElementById('adminScoreMonitor');
+    if (!monitor) return;
+
+    let txt = "";
+    let total = 0;
+    let count = 0;
+
+    // ލިބިފައިވާ ހުރިހާ މާކްސްއެއް އެއްކުރުން
+    for (let id in state.judging.liveScores) {
+        let sc = state.judging.liveScores[id];
+        txt += `<span style="border:1px solid #444; padding:2px 8px; border-radius:4px; margin:0 5px;">
+                <b style="color:#FFD700;">${id.replace('_',' ')}:</b> ${sc}</span>`;
+        total += sc;
+        count++;
+    }
+
+    if (count > 0) {
+        let avg = (total / count).toFixed(2);
+        txt += `<div style="margin-top:10px; font-size:22px; border-top:1px dashed #555; pt:5px;">
+                AVERAGE: <b style="color:#fff;">${avg}</b></div>`;
+    } else {
+        txt = "Waiting for judge submissions...";
+    }
+
+    monitor.innerHTML = txt;
+};
+
+// 6. SYNC WINDOWS (ހުރިހާ ޖަޖުންގެ ވިންޑޯއަށް އެއްފަހަރާ ޑޭޓާ ފޮނުވުން)
+// މިއީ މިހާރު ހުރި syncWindows ފަންކްޝަންގެ ބަދަލުގައި ހިންގާނެ އެއްޗެއް
+const originalSyncWindows = syncWindows;
+window.syncWindows = function() {
+    // އަސްލު ފަންކްޝަން ހިންގާލުން (ދަރިވަރު ސްކްރީނަށް)
+    if (typeof originalSyncWindows === "function") originalSyncWindows();
+
+    const packet = {
+        slots: state.session.slots,
+        activeIndex: state.session.activeIndex,
+        phase: state.session.phase,
+        light: state.session.light,
+        grid: state.grid,
+        readingMode: state.readingMode,
+        currentLang: currentLang,
+        judging: state.judging
+    };
+
+    // ހުރިހާ ޖަޖުންގެ ވިންޑޯތަކަށް ޑޭޓާ ފޮނުވުން
+    for (let key in state.windows.judgeWindows) {
+        let w = state.windows.judgeWindows[key];
+        if (w && !w.closed && w.updateState) {
+            w.updateState(packet);
+        }
+    }
+};
+
+console.log("Multi-Judge logic loaded successfully.");
 </script>
 </body>
 </html>
