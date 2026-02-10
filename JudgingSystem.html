@@ -14348,90 +14348,218 @@ function printFullRubricBreakdown() {
     `);
     w.document.close();
 }
-// --- FIXED SAVE FUNCTION: SAVES DETAILED BREAKDOWN (CRITICAL FIX) ---
-function saveSecretaryScore() {
-    // 1. ދަރިވަރަކު ނެތްނަމަ ހުއްޓުވުން
-    if(!state.judging.currentStudentObj) {
-        alert("Please select a student first! (ދަރިވަރަކު އިޚްތިޔާރުކުރައްވާ)");
+// --- ULTIMATE PRINT FUNCTION: ROBUST DATA FETCHING ---
+function printFullRubricBreakdown() {
+    // 1. ޑޭޓާ ނެގުން (Data Source)
+    // މާސްޓަރ ލިސްޓަށް އިސްކަންދޭނެ، ނެތްނަމަ ސޭވްޑް ރިޒަލްޓްސް ނަގާނެ
+    let students = (state.allStudents && state.allStudents.length > 0) 
+                   ? state.allStudents 
+                   : state.judging.savedResults;
+    
+    // ފައިނަލް ސްކޯ އިން ސޯޓް ކުރުން
+    students.sort((a, b) => (b.finalScore || 0) - (a.finalScore || 0));
+
+    if (!students || students.length === 0) {
+        alert("ރިޕޯޓް ހެދުމަށް އެއްވެސް ޑޭޓާއެއް ނެތެވެ!");
         return;
     }
 
-    const judgeID = document.getElementById('secJudgeSelect').value; // e.g. "Judge_1"
-    const currentID = state.judging.currentStudentObj.id;
-    
-    // 2. ކާޑުތަކުން ވަކިވަކި މާކުސްތައް ނެގުން (CRITICAL STEP)
-    let totalScore = 0;
-    let detailsObj = {}; // މި ތަނަށް އެޅޭނީ: { "Thilawa": 29, "Tajweed": 19... }
+    // 2. ރުބްރިކް ސެޓިންގްސް ނެގުން (System Settings)
+    // މިހާރު ސިސްޓަމްގައި އިން ނަންތައް ބޭނުންކުރާނީ
+    const rubric = (state.judging.rubric && state.judging.rubric.length > 0) 
+                   ? state.judging.rubric 
+                   : [ // Fallback defaults just in case
+                       { name: "Thilawa", max: 30 }, 
+                       { name: "Tajweed", max: 20 }, 
+                       { name: "Makhraj", max: 20 }, 
+                       { name: "Sifa", max: 10 }, 
+                       { name: "Fasaha", max: 10 }, 
+                       { name: "Talaffuz", max: 5 }, 
+                       { name: "Maqamat", max: 5 }
+                   ];
 
-    // ރުބްރިކްގައިވާ ހުރިހާ ބައެއްގެ މާކުސް ވަކިވަކިން ނަގައި ރައްކާކުރުން
-    if(state.judging.rubric && typeof secScores !== 'undefined') {
-        state.judging.rubric.forEach((r, idx) => {
-            // ކޮންމެ ބައެއްގެ މާކުސް ވަކިން ހިސާބުކުރުން (Max - Deducted)
-            const val = secScores[idx].max - secScores[idx].deducted;
-            
-            // ޑީޓެއިލްސް އޮބްޖެކްޓަށް ނަން (e.g. "Thilawa") އާއެކު ލުން
-            detailsObj[r.name] = parseFloat(val.toFixed(2));
-            
-            totalScore += val;
-        });
-    } else {
-        totalScore = 0;
-    }
-    
-    totalScore = parseFloat(totalScore.toFixed(2));
+    const judgeCount = 5; // Fixed to 5 Judges
+    let contentHtml = "";
 
-    // 3. ލައިވް މެމަރީ (Live Judge View) އަޕްޑޭޓްކުރުން
-    if (!state.judging.liveScores) state.judging.liveScores = {};
-    state.judging.liveScores[judgeID] = totalScore;
+    // 3. ކޮންމެ ކުއްޖަކަށް ލޫޕް ހިންގުން
+    students.forEach((s, idx) => {
+        // --- Header Info ---
+        let headerInfo = `
+            <div class="sheet-header">
+                <h1>${document.getElementById('rptInstName').value || "Quran Competition"}</h1>
+                <h2>ޖަޖުންގެ މާކުސްތަކުގެ ތަފްޞީލު (Detailed Breakdown)</h2>
+                
+                <div class="meta-grid">
+                    <div><strong>ނަން:</strong> ${s.name}</div>
+                    <div><strong>ރެޖިސްޓްރީ:</strong> ${s.reg || '-'}</div>
+                    <div><strong>ރޭންކް:</strong> ${idx + 1}</div>
+                    <div><strong>ގޮފި:</strong> ${s.branch || '-'}</div>
+                    <div><strong>ޢުމުރު:</strong> ${s.group || '-'}</div>
+                    <div><strong>ޖުމްލަ:</strong> ${s.finalScore || '0.00'}</div>
+                </div>
+            </div>
+        `;
 
-    // 4. ★ މާސްޓަރ ލިސްޓަށް ތަފްޞީލު ސޭވްކުރުން (THE FIX) ★
-    // މިބައި އިތުރުކުރުމުން ރިޕޯޓްތަކުގެ ކޮލަމްތަކަށް ޑޭޓާ އަރާނެއެވެ.
-    
-    const sIdx = state.allStudents.findIndex(s => s.id === currentID);
-
-    if (sIdx > -1) {
-        // A. ޖުމްލަ މާކުސް ސޭވްކުރުން
-        if (!state.allStudents[sIdx].scores) state.allStudents[sIdx].scores = {};
-        state.allStudents[sIdx].scores[judgeID] = totalScore;
-
-        // B. ★ ވަކިވަކި ބައިތަކުގެ މާކުސް ސޭވްކުރުން ★
-        // މިބައި ނެތިއްޔާ ކޮލަމްތަކަށް ޑޭޓާއެއް ނާރާނެއެވެ.
-        if (!state.allStudents[sIdx].detailedScores) state.allStudents[sIdx].detailedScores = {};
+        // --- Table Headers ---
+        let tableHeader = `
+            <tr>
+                <th style="width:200px; text-align:left;">Criteria (ބައިތައް)</th>
+                <th style="width:60px;">Max</th>`;
         
-        // ޖަޖު އައިޑީ އަށް ނިސްބަތްކޮށް ތަފްޞީލު ސޭވްކުރުން
-        state.allStudents[sIdx].detailedScores[judgeID] = detailsObj; 
-
-        // C. ފައިނަލް އެވްރެޖް ވަގުތުން އަޕްޑޭޓް ކުރުން
-        let sum = 0; let count = 0;
-        for (let j in state.allStudents[sIdx].scores) {
-            let v = state.allStudents[sIdx].scores[j];
-            if(v > 0) { sum += v; count++; }
+        for(let j=1; j<=judgeCount; j++) {
+            tableHeader += `<th>Judge ${j}</th>`;
         }
-        state.allStudents[sIdx].finalScore = count > 0 ? parseFloat((sum / count).toFixed(2)) : 0;
-    }
+        tableHeader += `<th style="background:#e0f7fa;">AVG</th></tr>`;
 
-    // 5. ސޭވްކޮށް ރިފްރެޝް ކުރުން
-    saveToLocal(); 
-    
-    // ތިރީގައި އިންނަ ޓޭބަލް ރިފްރެޝް ކުރުން
-    if(typeof renderMasterTable === 'function') {
-        renderMasterTable(); 
-    }
-
-    // 6. ވިޝުއަލް ފީޑްބެކް (ބަޓަންއަށް)
-    const saveBtn = document.querySelector('#secretaryPanel .btn-green') || document.getElementById('btnSaveNext');
-    if(saveBtn) {
-        const oldTxt = saveBtn.innerText;
-        saveBtn.innerText = `✅ SAVED! (${totalScore})`;
-        saveBtn.style.background = "#fff";
-        saveBtn.style.color = "#000";
+        // --- Table Rows (The Critical Part) ---
+        let tableRows = "";
+        let totalMax = 0;
         
-        setTimeout(() => {
-            saveBtn.innerText = oldTxt;
-            saveBtn.style.background = ""; 
-            saveBtn.style.color = "";
-        }, 1500);
-    }
+        // ޖަޖުންގެ ޖުމްލަ ހިސާބުކުރަން
+        let judgeColTotals = [0,0,0,0,0,0]; // Index 1-5 used
+
+        rubric.forEach(r => {
+            totalMax += r.max;
+            let row = `<tr>
+                        <td style="text-align:left; font-weight:bold; font-family:'Faruuma'; font-size:15px;">${r.name}</td>
+                        <td style="font-weight:bold;">${r.max}</td>`;
+            
+            let criteriaSum = 0;
+            let activeJudgesForCrit = 0;
+
+            // 5 ޖަޖުންނަށް ލޫޕް ހިންގުން
+            for(let j=1; j<=judgeCount; j++) {
+                let jKey = `Judge_${j}`;
+                let displayScore = "-";
+                let rawScore = 0;
+
+                // ★ DEBUGGING & FETCHING LOGIC ★
+                // 1. Check detailedScores exists
+                if (s.detailedScores && s.detailedScores[jKey]) {
+                    // 2. Try Exact Name Match
+                    if (s.detailedScores[jKey][r.name] !== undefined) {
+                        rawScore = parseFloat(s.detailedScores[jKey][r.name]);
+                        displayScore = rawScore;
+                    } 
+                    // 3. Try Case-Insensitive Match (Safety Net)
+                    else {
+                        let keys = Object.keys(s.detailedScores[jKey]);
+                        let match = keys.find(k => k.toLowerCase().trim() === r.name.toLowerCase().trim());
+                        if (match) {
+                            rawScore = parseFloat(s.detailedScores[jKey][match]);
+                            displayScore = rawScore;
+                        }
+                    }
+                }
+
+                // Add to calculations if it's a number
+                if (displayScore !== "-") {
+                    judgeColTotals[j] += rawScore;
+                    criteriaSum += rawScore;
+                    activeJudgesForCrit++;
+                }
+                
+                row += `<td>${displayScore}</td>`;
+            }
+
+            // Row Average
+            let cAvg = activeJudgesForCrit > 0 ? (criteriaSum / activeJudgesForCrit).toFixed(2) : "-";
+            row += `<td style="font-weight:bold; background:#e0f7fa;">${cAvg}</td></tr>`;
+            
+            tableRows += row;
+        });
+
+        // --- Totals Row ---
+        let totalRow = `<tr style="background:#333; color:#fff; font-weight:bold;">
+                            <td style="text-align:right;">GRAND TOTAL</td>
+                            <td>${totalMax}</td>`;
+        
+        let grandSumOfTotals = 0;
+        let activeJudgeCount = 0;
+
+        for(let j=1; j<=judgeCount; j++) {
+            let colTotal = judgeColTotals[j];
+            
+            // Fallback: If Breakdown is 0, check if manual Total exists (Compatibility mode)
+            if (colTotal === 0 && s.scores && s.scores[`Judge_${j}`]) {
+                colTotal = parseFloat(s.scores[`Judge_${j}`]);
+            }
+
+            let showVal = colTotal > 0 ? colTotal.toFixed(2) : "-";
+            totalRow += `<td>${showVal}</td>`;
+
+            if(colTotal > 0) {
+                grandSumOfTotals += colTotal;
+                activeJudgeCount++;
+            }
+        }
+
+        let finalAvgCalc = activeJudgeCount > 0 ? (grandSumOfTotals / activeJudgeCount).toFixed(2) : "0.00";
+        totalRow += `<td style="background:#006064; color:#fff; font-size:18px;">${finalAvgCalc}</td></tr>`;
+
+        // --- Combine ---
+        contentHtml += `
+            <div class="page">
+                ${headerInfo}
+                <table>
+                    <thead>${tableHeader}</thead>
+                    <tbody>${tableRows}${totalRow}</tbody>
+                </table>
+                <div class="footer-note">Rasfahi Judge V26.0 - Detailed Report</div>
+            </div>
+        `;
+    });
+
+    // 5. Print Window
+    const w = window.open("", "FullReport", "width=1200,height=900");
+    w.document.write(`
+        <!DOCTYPE html>
+        <html dir="rtl" lang="dv">
+        <head>
+            <title>Student Detailed Report</title>
+            <style>
+                @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Thaana:wght@400;700&display=swap');
+                @font-face { font-family: 'Faruuma'; src: local('Faruuma'), url('https://fonts.googleapis.com/earlyaccess/notosansthaana.css'); }
+                
+                body { font-family: 'Faruuma', 'Noto Sans Thaana', sans-serif; background: #ccc; margin: 0; padding: 20px; }
+                
+                .page {
+                    background: white; width: 297mm; min-height: 210mm; 
+                    padding: 40px; margin: 0 auto 20px auto;
+                    box-shadow: 0 0 10px rgba(0,0,0,0.2); page-break-after: always;
+                    box-sizing: border-box; display: flex; flex-direction: column;
+                }
+                .sheet-header { text-align: center; border-bottom: 2px double #000; padding-bottom: 10px; margin-bottom: 20px; }
+                h1 { margin: 0; font-size: 26px; text-decoration: underline; }
+                h2 { margin: 5px 0; font-size: 20px; color: #444; }
+
+                .meta-grid {
+                    display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;
+                    background: #f0f0f0; padding: 15px; border: 1px solid #999; margin-top: 15px;
+                    font-size: 15px; text-align: right; direction: rtl;
+                }
+
+                table { width: 100%; border-collapse: collapse; font-size: 14px; margin-top: 20px; direction: ltr; }
+                th, td { border: 1px solid #444; padding: 10px; text-align: center; }
+                th { background: #eee; font-size:15px; }
+
+                .footer-note { margin-top: auto; text-align: center; font-size: 10px; color: #aaa; padding-top: 20px; }
+
+                @media print {
+                    body { background: none; padding: 0; }
+                    .page { margin: 0; box-shadow: none; width: 100%; height: 100%; }
+                    button { display: none; }
+                    @page { size: A4 landscape; margin: 10mm; }
+                }
+            </style>
+        </head>
+        <body>
+            <button onclick="window.print()" style="position:fixed; top:20px; left:20px; padding:15px; background:navy; color:white; font-size:18px; cursor:pointer; z-index:999;">🖨️ PRINT REPORT</button>
+            ${contentHtml}
+        </body>
+        </html>
+    `);
+    w.document.close();
 }
 </script>
 </body>
