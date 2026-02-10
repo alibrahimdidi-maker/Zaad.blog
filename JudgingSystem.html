@@ -11105,19 +11105,7 @@ function openJudgeMirror() {
         </div>
 
         <script>
-            // --- FULLSCREEN CLICK HANDLER ---
-            document.addEventListener('click', function() {
-                if (!document.fullscreenElement) {
-                    document.documentElement.requestFullscreen().catch(err => {
-                        console.log("Error attempting to enable full-screen mode: " + err.message);
-                    });
-                } else {
-                    if (document.exitFullscreen) {
-                        document.exitFullscreen();
-                    }
-                }
-            });
-
+           
             window.opener.initExtra(window); // Sync immediately
 
             function updateView(d) {
