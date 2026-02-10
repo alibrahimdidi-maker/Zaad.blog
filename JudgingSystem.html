@@ -10387,11 +10387,7 @@ function openExtraScreen() {
             </div>
         </div>
         <script>
-            document.addEventListener('click', function() {
-                if (!document.fullscreenElement) document.documentElement.requestFullscreen().catch(e => console.log(e));
-                else if (document.exitFullscreen) document.exitFullscreen();
-            });
-
+            
             window.opener.initExtra(window);
 
             function renderGrid(taken) {
