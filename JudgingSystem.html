@@ -1394,23 +1394,18 @@ button,
         <button class="btn-cyan" onclick="generateAdvancedReport('top5')">🏆 Top 5</button>
         <button class="btn-purple" onclick="generateAdvancedReport('all')">📄 Full List</button>
     </div>
-        <button class="btn-green" onclick="exportMasterResultSheet()" style="padding: 10px 15px; flex: 1; min-width: 200px;">
-            📥 Export FULL CSV
-        </button>
 
-        <button class="btn-cyan" onclick="downloadDetailedManualSheet()" style="background:#00bcd4; color:black; padding: 10px 15px; border: none; border-radius: 4px; flex: 1; min-width: 200px;">
-            📊 A3 Manual Sheet
-        </button>
+<button class="btn-green" onclick="exportMasterResultSheet()">📥 Export FULL Master CSV</button>
 
-        <button onclick="printMasterScoreSheet5Judges()" style="background-color: #007bff; color: white; padding: 10px 15px; border: none; cursor: pointer; border-radius: 4px; flex: 1; min-width: 200px;">
-            🖨️ Print 5-Judge Master
-        </button>
-
-    <button class="btn-purple" onclick="printFullRubricBreakdown()" style="width:100%; margin-top: 10px; padding: 12px; border: 2px solid #6f42c1; background-color: #6f42c1; color: white; font-weight:bold; border-radius: 4px; cursor: pointer;">
-        📑 PRINT FULL STUDENT RUBRIC (DETAILED BREAKDOWN)
-    </button>
-
-</div>
+<button class="btn-cyan" style="margin-top:5px; background:#00bcd4; color:black;" onclick="downloadDetailedManualSheet()">
+    📊 A3 Manual Master Sheet (5 Judges)
+</button>
+                <button onclick="printMasterScoreSheet5Judges()" style="background-color: #007bff; color: white; padding: 10px 20px; border: none; cursor: pointer; font-size: 16px; border-radius: 5px;">
+    🖨️ Print 5-Judge Master Sheet
+</button>
+                <button class="btn-purple" style="width:100%; margin-top:5px; border: 2px solid #fff; font-weight:bold;" onclick="printFullRubricBreakdown()">
+    📑 PRINT FULL STUDENT RUBRIC (DETAILED)
+</button>
 <hr style="border-color:#333; margin:8px 0;">
 <label style="color:#FFD700; font-family:'Faruuma';">★ ސެޝަން މެނޭޖްމަންޓް (ނޯޓިސް ބޯޑު & ޖަޖް ޝީޓް):</label>
 
@@ -14649,7 +14644,6 @@ function generateDetailedReportHTML(student) {
     printWin.document.write(htmlContent);
     printWin.document.close();
 }
-
 </script>
 </body>
 </html>
