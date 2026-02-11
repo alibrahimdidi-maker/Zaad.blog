@@ -16490,6 +16490,110 @@ window.saveMatrixScores = function() {
         setTimeout(() => { status.style.display = 'none'; }, 2000);
     }
 }
+    // ===============================================================
+// ★ FINAL UPDATE: SAVE + SYNC + REFRESH TABLE IMMEDIATELY ★
+// ===============================================================
+
+window.saveMatrixScores = function() {
+    // 1. Check Active Student
+    if(!state.judging.currentStudentObj) { 
+        alert("Student not found!"); return; 
+    }
+    
+    const currentID = state.judging.currentStudentObj.id;
+    const sIdx = state.allStudents.findIndex(s => s.id === currentID);
+    
+    if(sIdx === -1) { alert("Critical Error: Student Index Missing."); return; }
+
+    // Init storage if missing
+    if(!state.allStudents[sIdx].scores) state.allStudents[sIdx].scores = {};
+    if(!state.allStudents[sIdx].detailedScores) state.allStudents[sIdx].detailedScores = {};
+
+    let grandTotal = 0;
+    let activeJudges = 0;
+    
+    // Get the currently selected Judge ID on the Main Screen
+    const mainScreenJudge = document.getElementById('secJudgeSelect').value; 
+
+    // 2. Loop through all 5 Judges
+    for(let j=1; j<=5; j++) {
+        let jTotal = 0;
+        let hasData = false;
+        let details = {}; 
+
+        const inputs = document.querySelectorAll(`.matrix-input.j-col-${j}`);
+        
+        inputs.forEach((inp, idx) => {
+            let v = parseFloat(inp.value);
+            let max = parseFloat(inp.dataset.max);
+            
+            if(isNaN(v)) v = 0;
+            if(inp.value.trim() !== "") hasData = true;
+
+            jTotal += v;
+            
+            if(inp.dataset.criteria) {
+                details[inp.dataset.criteria] = v;
+            }
+
+            // ★ SYNC LOGIC: Update Main Screen inputs for the active judge
+            let jKey = `Judge_${j}`;
+            if (jKey === mainScreenJudge && typeof secScores !== 'undefined') {
+                let deduction = max - v;
+                if(secScores[idx]) {
+                    secScores[idx].deducted = parseFloat(deduction.toFixed(2));
+                }
+                // Update Main Screen Cards visual
+                const cardScoreEl = document.getElementById(`secScore_${idx}`);
+                const cardDedEl = document.getElementById(`secDedInfo_${idx}`);
+                if(cardScoreEl) cardScoreEl.innerText = v;
+                if(cardDedEl) cardDedEl.innerText = deduction > 0 ? `(-${deduction.toFixed(2)})` : "";
+            }
+        });
+
+        let jKey = `Judge_${j}`;
+        jTotal = parseFloat(jTotal.toFixed(2));
+
+        // 3. Save to Master List
+        if (hasData) {
+            state.allStudents[sIdx].scores[jKey] = jTotal;
+            state.allStudents[sIdx].detailedScores[jKey] = details;
+            state.judging.liveScores[jKey] = jTotal; // Sync Live Memory
+
+            grandTotal += jTotal;
+            activeJudges++;
+        } else {
+            state.allStudents[sIdx].scores[jKey] = 0;
+            state.allStudents[sIdx].detailedScores[jKey] = {};
+        }
+    }
+
+    // 4. Calculate Final Average
+    let finalAvg = activeJudges > 0 ? (grandTotal / activeJudges).toFixed(2) : 0;
+    state.allStudents[sIdx].finalScore = parseFloat(finalAvg);
+
+    // Update Big Total Display on Main Screen
+    if(typeof calculateSecTotal === 'function') {
+        calculateSecTotal(); 
+    }
+
+    // 5. Save to Browser Memory
+    saveToLocal();
+
+    // ★ CRITICAL UPDATE: REFRESH MASTER TABLE IMMEDIATELY ★
+    // This line forces the main table to redraw with the new scores
+    if(typeof renderMasterTable === 'function') {
+        renderMasterTable(); 
+    }
+
+    // 6. Visual Feedback
+    const status = document.getElementById('saveStatus');
+    if(status) {
+        status.style.display = 'inline';
+        status.innerText = `✅ Saved! (Avg: ${finalAvg})`;
+        setTimeout(() => { status.style.display = 'none'; }, 2000);
+    }
+}
 </script>
 </body>
 </html>
