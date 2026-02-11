@@ -1175,13 +1175,17 @@ button,
             </div>
 
             <div class="panel">
-                <h2 data-translate="screens">3. ސްކްރީން & ކޮންފިގަރޭޝަން</h2>
+    <h2 data-translate="screens">3. ސްކްރީން & ކޮންފިގަރޭޝަން</h2>
                 
-                <div style="display:flex; gap:5px; margin-bottom:10px;">
-                    <button class="btn-blue" onclick="saveConfig()">💾 SAVE Config</button>
-                    <button class="btn-orange" onclick="document.getElementById('loadConf').click()">📂 LOAD Config</button>
-                    <input type="file" id="loadConf" accept=".json" class="hidden" onchange="loadConfig(this)">
-                </div>
+    <div style="display:flex; gap:5px; margin-bottom:10px;">
+        <button class="btn-blue" onclick="saveConfig()">💾 SAVE Config</button>
+        <button class="btn-orange" onclick="document.getElementById('loadConf').click()">📂 LOAD Config</button>
+        <input type="file" id="loadConf" accept=".json" class="hidden" onchange="loadConfig(this)">
+        
+        <button onclick="openStarScreen()" class="btn-blue" style="background: linear-gradient(to bottom, #001a33, #000d1a); border-color: #00e676;">
+            ⭐ STAR SCREEN
+        </button>
+    </div>
 
                 <button class="btn-red" onclick="clearCache()" style="font-size:10px; margin-bottom:10px;">🧹 Purge Memory (Clear Cache)</button>
 
@@ -16661,6 +16665,107 @@ function openMatrixInput() {
 
     renderMatrixTable();
     document.getElementById(modalID).style.display = 'flex';
+}
+    // --- STAR RATING SCREEN LOGIC ---
+state.windows.starScreen = null;
+
+function openStarScreen() {
+    const html = `
+    <!DOCTYPE html>
+    <html lang="dv">
+    <head>
+        <style>
+            body { 
+                margin: 0; overflow: hidden; 
+                background: radial-gradient(circle, #001a33, #000); 
+                height: 100vh; width: 100vw;
+                display: flex; flex-direction: column; align-items: center; justify-content: center;
+                color: #fff; font-family: sans-serif;
+            }
+            #starContainer { 
+                display: flex; gap: 20px; justify-content: center; align-items: center; 
+                min-height: 200px;
+            }
+            .star {
+                font-size: 15vw; color: #333; /* Default empty color */
+                text-shadow: 0 0 20px rgba(0,0,0,0.5);
+                transition: all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+                transform: scale(0.5); opacity: 0;
+            }
+            .star.active {
+                color: #FFD700; /* Gold color */
+                text-shadow: 0 0 50px #FFD700, 0 0 100px #FFD700;
+                transform: scale(1); opacity: 1;
+            }
+            #scoreText {
+                margin-top: 30px; font-size: 4vw; font-weight: bold; 
+                color: rgba(255,255,255,0.8); font-family: 'Segoe UI', sans-serif;
+                opacity: 0; transition: 1s;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="starContainer">
+            <div class="star" id="s1">★</div>
+            <div class="star" id="s2">★</div>
+            <div class="star" id="s3">★</div>
+            <div class="star" id="s4">★</div>
+            <div class="star" id="s5">★</div>
+        </div>
+        <div id="scoreText">AVERAGE: <span id="val">0.00</span></div>
+
+        <script>
+            function updateStars(score) {
+                const stars = [
+                    { id: 's1', min: 75 },
+                    { id: 's2', min: 80 },
+                    { id: 's3', min: 85 },
+                    { id: 's4', min: 90 },
+                    { id: 's5', min: 95 }
+                ];
+
+                document.getElementById('val').innerText = score.toFixed(2);
+                document.getElementById('scoreText').style.opacity = score >= 75 ? "1" : "0";
+
+                stars.forEach((s, idx) => {
+                    const el = document.getElementById(s.id);
+                    if (score >= s.min) {
+                        setTimeout(() => { el.classList.add('active'); }, idx * 200);
+                    } else {
+                        el.classList.remove('active');
+                    }
+                });
+            }
+
+            // Listen for reset
+            window.resetView = () => {
+                document.querySelectorAll('.star').forEach(s => s.classList.remove('active'));
+                document.getElementById('scoreText').style.opacity = "0";
+            };
+        </script>
+    </body>
+    </html>`;
+
+    state.windows.starScreen = window.open("", "StarScreen", "width=1000,height=700");
+    state.windows.starScreen.document.write(html);
+    state.windows.starScreen.document.close();
+}
+
+// މާކުސް ސޭވްކުރާ ވަގުތު ސްޓަރ އަރުވަން މި ފަންކްޝަން ބޭނުންކުރާނެ
+function syncStarRating(score) {
+    if (state.windows.starScreen && !state.windows.starScreen.closed) {
+        state.windows.starScreen.updateStars(parseFloat(score));
+    }
+}
+// މިބައި އިންނާނީ finalizeStudentResult ފަންކްޝަންގެ އެތެރޭގައި
+// finalScore ހިސާބުކޮށް ނިމޭ ހިސާބުގައި
+
+// ސްޓަރ ސްކްރީން އަޕްޑޭޓްކުރުން
+syncStarRating(finalScore);
+
+// އަދި resetStudentSession ފަންކްޝަންގެ ތެރެއަށް މިބައި ލައްވާލާށެވެ
+if (state.windows.starScreen && !state.windows.starScreen.closed) {
+    state.windows.starScreen.resetView();
 }
 </script>
 </body>
