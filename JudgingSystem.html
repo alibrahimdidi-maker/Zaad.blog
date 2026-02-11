@@ -16373,7 +16373,123 @@ function printMatrixCurrentStudent() {
     w.document.write(html);
     w.document.close();
 }
+// ===============================================================
+// ★ FINAL FIX: MATRIX TO MAIN SCREEN SYNC (SOLVES 100 BUG) ★
+// ===============================================================
 
+window.saveMatrixScores = function() {
+    // 1. Check Active Student
+    if(!state.judging.currentStudentObj) { 
+        alert("Student not found!"); return; 
+    }
+    
+    const currentID = state.judging.currentStudentObj.id;
+    const sIdx = state.allStudents.findIndex(s => s.id === currentID);
+    
+    if(sIdx === -1) { alert("Critical Error: Student Index Missing."); return; }
+
+    // Init storage if missing
+    if(!state.allStudents[sIdx].scores) state.allStudents[sIdx].scores = {};
+    if(!state.allStudents[sIdx].detailedScores) state.allStudents[sIdx].detailedScores = {};
+
+    let grandTotal = 0;
+    let activeJudges = 0;
+    
+    // ★ CRITICAL: Get the currently selected Judge on Main Screen to Sync
+    const mainScreenJudge = document.getElementById('secJudgeSelect').value; // e.g. "Judge_1"
+
+    // 2. Loop through all 5 Judges
+    for(let j=1; j<=5; j++) {
+        let jTotal = 0;
+        let hasData = false;
+        let details = {}; // Store breakdown
+
+        // Select inputs for this judge column
+        const inputs = document.querySelectorAll(`.matrix-input.j-col-${j}`);
+        
+        inputs.forEach((inp, idx) => {
+            let val = parseFloat(inp.value);
+            let max = parseFloat(inp.dataset.max);
+            
+            // If NaN (empty), treat as 0
+            if(isNaN(val)) val = 0;
+            
+            // Check if user actually typed something (for active judge count)
+            if(inp.value.trim() !== "") hasData = true;
+
+            jTotal += val;
+            
+            // Save Detail text
+            if(inp.dataset.criteria) {
+                details[inp.dataset.criteria] = val;
+            }
+
+            // ★ SYNC LOGIC: If this column matches the Main Screen Judge (e.g. Judge 1)
+            // We must update the "Secretary Panel" deductions immediately.
+            let jKey = `Judge_${j}`;
+            if (jKey === mainScreenJudge && typeof secScores !== 'undefined') {
+                // Calculate Deduction: Max - Given
+                // e.g. If Max 30, Given 28 => Deduction is 2
+                let deduction = max - val;
+                
+                // Update the memory used by buttons
+                if(secScores[idx]) {
+                    secScores[idx].deducted = parseFloat(deduction.toFixed(2));
+                }
+                
+                // Update Visual Text on Main Screen Cards/Table
+                // Card Score (Big Number)
+                const cardScoreEl = document.getElementById(`secScore_${idx}`);
+                if(cardScoreEl) cardScoreEl.innerText = val;
+                
+                // Card Deduction (Small Red Number)
+                const cardDedEl = document.getElementById(`secDedInfo_${idx}`);
+                if(cardDedEl) cardDedEl.innerText = deduction > 0 ? `(-${deduction.toFixed(2)})` : "";
+            }
+        });
+
+        let jKey = `Judge_${j}`;
+        jTotal = parseFloat(jTotal.toFixed(2));
+
+        // 3. Save to Master List
+        if (hasData) {
+            state.allStudents[sIdx].scores[jKey] = jTotal;
+            state.allStudents[sIdx].detailedScores[jKey] = details;
+            
+            // Sync Live Memory
+            state.judging.liveScores[jKey] = jTotal;
+
+            grandTotal += jTotal;
+            activeJudges++;
+        } else {
+            // Force 0 if empty
+            state.allStudents[sIdx].scores[jKey] = 0;
+            state.allStudents[sIdx].detailedScores[jKey] = {};
+        }
+    }
+
+    // 4. Calculate Final Average & Update Main Total
+    let finalAvg = activeJudges > 0 ? (grandTotal / activeJudges).toFixed(2) : 0;
+    state.allStudents[sIdx].finalScore = parseFloat(finalAvg);
+
+    // ★ FORCE UPDATE THE BIG TOTAL DISPLAY ON MAIN SCREEN ★
+    // This looks at the secScores we just updated above
+    if(typeof calculateSecTotal === 'function') {
+        calculateSecTotal(); 
+    }
+
+    // 5. Save & Refresh Table
+    saveToLocal();
+    if(typeof renderMasterTable === 'function') renderMasterTable();
+
+    // 6. Visual Feedback
+    const status = document.getElementById('saveStatus');
+    if(status) {
+        status.style.display = 'inline';
+        status.innerText = `✅ SAVED! (Avg: ${finalAvg})`;
+        setTimeout(() => { status.style.display = 'none'; }, 2000);
+    }
+}
 </script>
 </body>
 </html>
