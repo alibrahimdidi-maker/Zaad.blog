@@ -16756,6 +16756,16 @@ function syncStarRating(score) {
         state.windows.starScreen.updateStars(parseFloat(score));
     }
 }
+// މިބައި އިންނާނީ finalizeStudentResult ފަންކްޝަންގެ އެތެރޭގައި
+// finalScore ހިސާބުކޮށް ނިމޭ ހިސާބުގައި
+
+// ސްޓަރ ސްކްރީން އަޕްޑޭޓްކުރުން
+syncStarRating(finalScore);
+
+// އަދި resetStudentSession ފަންކްޝަންގެ ތެރެއަށް މިބައި ލައްވާލާށެވެ
+if (state.windows.starScreen && !state.windows.starScreen.closed) {
+    state.windows.starScreen.resetView();
+}
 </script>
 </body>
 </html>
