@@ -16742,10 +16742,7 @@ function openStarScreen() {
                 document.querySelectorAll('.star').forEach(s => s.classList.remove('active'));
                 document.getElementById('scoreText').style.opacity = "0";
             };
-        </script>
-    </body>
-    </html>`;
-
+        
     state.windows.starScreen = window.open("", "StarScreen", "width=1000,height=700");
     state.windows.starScreen.document.write(html);
     state.windows.starScreen.document.close();
