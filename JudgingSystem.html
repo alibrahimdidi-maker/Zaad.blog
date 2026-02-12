@@ -16944,6 +16944,79 @@ resetExtraSession = function() {
     if(oldResetExtra) oldResetExtra();
     if (state.windows.starScreen && !state.windows.starScreen.closed) state.windows.starScreen.resetStars();
 };
+    // ===============================================================
+// ★ FINAL FIX: SYNC EXTRA SCREEN (ޝާހީ ސްކްރީން) TO JUDGE MIRROR ★
+// ===============================================================
+
+// 1. ޝާހީ ސްކްރީންގެ ކޮންޓްރޯލްތަކަށް ސިންކް ފަންކްޝަން ގުޅުވާލުން
+function syncExtraToJudges() {
+    if (state.windows.judgeMirror && !state.windows.judgeMirror.closed) {
+        // ޝާހީ ސްކްރީންގައި މިވަގުތު ހުރި ކުއްޖާގެ ކިޔެވުން ނެގުން
+        const currentQ = state.extra.selection[state.extra.currentIndex];
+        
+        const packet = {
+            phase: state.extra.phase, // 'grid' ނުވަތަ 'reading'
+            currentIdx: state.extra.currentIndex,
+            selection: state.extra.selection,
+            // ޝާހީ ސްކްރީންގެ އާޔަތް ޓެކްސްޓް މިތަނުން ފޮނުވާނީ
+            ayahText: currentQ ? currentQ.text : "", 
+            surahName: currentQ ? currentQ.surah : "-",
+            ayahRange: currentQ ? (currentQ.start + " - " + currentQ.end) : "-",
+            juzName: currentQ ? currentQ.juz : "-"
+        };
+
+        // ޖަޖުންގެ ވިންޑޯއަށް ފޮނުވާލުން
+        state.windows.judgeMirror.updateJudgeMirrorFromExtra(packet);
+    }
+}
+
+// 2. ޖަޖުންގެ ސްކްރީންގެ HTML/JS އަޕްޑޭޓްކުރުން (އާޔަތް ފެންނަގޮތަށް)
+// މިއީ openJudgeMirror ފަންކްޝަންގެ ތެރޭގައި އޮންނަ 'mirrorHtml' ބަދަލުކޮށްލާނެ ބައެއް
+const originalOpenJudgeMirror = openJudgeMirror;
+openJudgeMirror = function() {
+    originalOpenJudgeMirror(); // ކުރިން ހުރި ވިންޑޯ ހުޅުވާނެ
+    
+    // ވިންޑޯ ހުޅުވުނުތޯ ބަލާފައި އާޔަތް ފެންނަ ލޮޖިކް އޭގެ ތެރެއަށް ލުން
+    setTimeout(() => {
+        if(state.windows.judgeMirror) {
+            const scriptInMirror = `
+                window.updateJudgeMirrorFromExtra = function(d) {
+                    const msg = document.getElementById('statusMsg');
+                    const qText = document.getElementById('quranText'); // ޖަޖުންގެ ވިންޑޯގައި ހުންނަ ޓެކްސްޓް ބައި
+                    const sName = document.getElementById('sName');
+                    const aNo = document.getElementById('aNo');
+                    
+                    if (d.phase === 'grid') {
+                        if(qText) qText.style.display = 'none';
+                        msg.style.display = 'block';
+                        msg.innerText = "ދަރިވަރު ސުވާލު ނަގަނީ...";
+                    } else if (d.phase === 'reading') {
+                        msg.style.display = 'none';
+                        if(qText) {
+                            qText.style.display = 'block';
+                            qText.innerText = d.ayahText; // ޝާހީ ސްކްރީނުން އަންނަ އާޔަތް
+                            qText.style.fontSize = '3.5vw';
+                            qText.style.color = '#000'; // ޖަޖުންނަށް ފެންނާނީ ހުދު ބެކްގްރައުންޑްގައި ކަޅު އަކުރުން
+                        }
+                        sName.innerText = d.surahName;
+                        aNo.innerText = d.ayahRange;
+                    }
+                };
+            `;
+            const scriptTag = state.windows.judgeMirror.document.createElement('script');
+            scriptTag.text = scriptInMirror;
+            state.windows.judgeMirror.document.body.appendChild(scriptTag);
+        }
+    }, 1000);
+};
+
+// 3. ޝާހީ ސްކްރީންގެ ހުރިހާ ބަދަލެއް އޮޓޯއިން ޖަޖުންނަށް ފޮނުވުން
+// މިބައި ބަހައްޓާނީ syncExtraScreen() ފަންކްޝަންގެ ތެރޭގައެވެ.
+const oldSyncExtraScreen = syncExtraScreen;
+syncExtraScreen = function(forceMode) {
+    if(oldSyncExtraScreen) oldSyncExtraScreen(forceMode); // ކުރިން ހުރި ސިންކް މަސައްކަތް ކުރާނެ
+    syncExtraToJudges(); // ޖަޖުންގެ ސްކްރީނަށްވެސް ފޮނުވާނެ
+};
 </script>
 </body>
 </html>
