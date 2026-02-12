@@ -16780,6 +16780,139 @@ setInterval(() => {
         }
     }
 }, 2000);
+    // ===============================================================
+// ★ JUDGE MONITOR FIX: SHOW ONLY PNG IMAGE (STRICT VIEW) ★
+// ===============================================================
+
+function openJudgeMirror() {
+    if(state.windows.judgeMirror) state.windows.judgeMirror.close();
+
+    const mirrorHtml = `
+    <!DOCTYPE html>
+    <html lang="dv" dir="rtl">
+    <head>
+        <meta charset="UTF-8">
+        <title>Judge Monitor - PNG View</title>
+        <style>
+            body { margin: 0; padding: 0; background: #000d1a; color: #fff; font-family: sans-serif; overflow: hidden; height: 100vh; width: 100vw; }
+            .header { background: #001a33; padding: 10px; text-align: center; border-bottom: 2px solid #D4AF37; font-size: 20px; color: #D4AF37; font-weight: bold; }
+            
+            #contentArea { 
+                display: flex; flex-direction: column; align-items: center; justify-content: center; 
+                height: calc(100vh - 120px); padding: 20px; box-sizing: border-box; 
+            }
+
+            /* އާޔަތުގެ ފޮޓޯ ފެންނަ ގޮޅި */
+            #qImage {
+                max-width: 95%; max-height: 90%;
+                background: #fff; /* ފޮޓޯގެ ބެކްގްރައުންޑް ހުދުކޮށް */
+                border: 8px double #D4AF37; border-radius: 10px;
+                display: none; 
+                box-shadow: 0 0 40px #000;
+                object-fit: contain;
+            }
+
+            #statusMsg { font-size: 35px; color: #00e676; text-align: center; }
+            
+            #infoBar { 
+                position: fixed; bottom: 0; width: 100%; 
+                background: #001a33; padding: 12px; 
+                display: flex; justify-content: space-around;
+                font-size: 18px; color: #FFD700; border-top: 2px solid #D4AF37; 
+            }
+            .info-item { border-right: 1px solid #334455; padding: 0 15px; flex: 1; text-align: center; }
+            .info-item:last-child { border-right: none; }
+            .label { font-size: 12px; color: #888; display: block; }
+        </style>
+    </head>
+    <body>
+        <div class="header">ފަނޑިޔާރުންގެ މޮނިޓަރ (އާޔަތުގެ ފޮޓޯ)</div>
+        
+        <div id="contentArea">
+            <div id="statusMsg">މަޑުކޮށްލައްވާ...</div>
+            <img id="qImage" src=""> </div>
+
+        <div id="infoBar">
+            <div class="info-item"><span class="label">Question</span><span id="qID">-</span></div>
+            <div class="info-item"><span class="label">Surah</span><span id="sName">-</span></div>
+            <div class="info-item"><span class="label">Ayah</span><span id="aNo">-</span></div>
+            <div class="info-item"><span class="label">Page</span><span id="pNo">-</span></div>
+            <div class="info-item"><span class="label">Juz</span><span id="jNo">-</span></div>
+        </div>
+
+        <script>
+            window.updateJudgeMirrorFromExtra = function(d) {
+                const msg = document.getElementById('statusMsg');
+                const img = document.getElementById('qImage');
+                
+                if (d.phase === 'grid') {
+                    img.style.display = 'none';
+                    msg.style.display = 'block';
+                    msg.innerText = "ދަރިވަރު ސުވާލު ނަގަނީ...";
+                    ['qID','sName','aNo','pNo','jNo'].forEach(id => document.getElementById(id).innerText = "-");
+                } 
+                else if (d.phase === 'reading') {
+                    msg.style.display = 'none';
+                    if(d.imageUrl) {
+                        img.src = d.imageUrl;
+                        img.style.display = 'block';
+                    } else {
+                        msg.style.display = 'block';
+                        msg.innerText = "ފޮޓޯ ފެންނާކަށް ނެތް!";
+                    }
+                    
+                    document.getElementById('qID').innerText = d.questionID || "-";
+                    document.getElementById('sName').innerText = d.surahName || "-";
+                    document.getElementById('aNo').innerText = d.ayahRange || "-";
+                    document.getElementById('pNo').innerText = d.pageNo || "-";
+                    document.getElementById('jNo').innerText = d.juzName || "-";
+                }
+                else {
+                    img.style.display = 'none';
+                    msg.style.display = 'block';
+                    msg.innerText = "މަޑުކޮށްލައްވާ...";
+                }
+            };
+        <\/script>
+    </body>
+    </html>`;
+
+    state.windows.judgeMirror = window.open("", "JudgeMirror", "width=1280,height=800");
+    if (state.windows.judgeMirror) {
+        state.windows.judgeMirror.document.open();
+        state.windows.judgeMirror.document.write(mirrorHtml);
+        state.windows.judgeMirror.document.close();
+    }
+}
+
+// 2. ފޮޓޯގެ ލިންކާއެކު ޖަޖުންގެ މޮނިޓަރަށް ޑޭޓާ ފޮނުވާ ފަންކްޝަން
+function syncExtraToJudges() {
+    if (state.windows.judgeMirror && !state.windows.judgeMirror.closed) {
+        const currentQ = state.extra.selection[state.extra.currentIndex];
+        
+        if(!currentQ) {
+             state.windows.judgeMirror.updateJudgeMirrorFromExtra({ phase: state.extra.phase });
+             return;
+        }
+
+        // ސިސްޓަމްގައި ހުރި ފޮޓޯ ފޯލްޑަރއިން ފޮޓޯ ހޯދުން
+        let imgUrl = resolveImage(currentQ.imgRaw); 
+
+        const packet = {
+            phase: state.extra.phase,
+            questionID: currentQ.id,
+            imageUrl: imgUrl,              // ★ ފޮޓޯގެ ލިންކް މި ފޮނުވަނީ
+            surahName: currentQ.surah,
+            ayahRange: currentQ.start + " - " + currentQ.end,
+            pageNo: currentQ.page || "-",
+            juzName: currentQ.juz || "-"
+        };
+
+        if(state.windows.judgeMirror.updateJudgeMirrorFromExtra) {
+            state.windows.judgeMirror.updateJudgeMirrorFromExtra(packet);
+        }
+    }
+}
 </script>
 </body>
 </html>
