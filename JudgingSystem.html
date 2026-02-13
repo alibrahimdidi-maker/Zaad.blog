@@ -17212,63 +17212,37 @@ function recalcMatrixJudgeTotal(jNum) {
     inputs.forEach(inp => { if(inp.value !== "") { sum += parseFloat(inp.value); active = true; } });
     document.getElementById(`mTotal_${jNum}`).innerText = active ? sum.toFixed(2) : "0.00";
 }
-// ===============================================================
-// ★ JUDGE MIRROR TO ADMIN PANEL SYNC (V14) ★
-// ===============================================================
+// --- FORCE SYNC LOGIC ---
 
-// ޖަޖް ސްކްރީނަށް އާޔަތް ފޮނުވާ ކޮންމެ ފަހަރަކު އެޑްމިން ގޮޅިއަށްވެސް އެ ބަދަލު ގެނައުން
-function updateJudgeMirrorFromExtra(packet) {
-    const liveBox = document.getElementById('mainLiveQuranBox');
-    const statusLabel = document.getElementById('liveStatusLabel');
-
-    if (!liveBox) return;
-
-    // 1. އާޔަތުގެ ޓެކްސްޓް އަޕްޑޭޓްކުރުން
-    if (packet.settings && packet.settings.mode === 'hifz') {
-        liveBox.innerHTML = `
-            <div style="color:#FFD700; border:1px dashed #555; padding:10px; font-size: 1.2vw; margin-bottom: 15px;">
-                ޙިފްޡު މޯޑް: ދަރިވަރަށް އާޔަތް ނުފެންނާނެ
-            </div>
-            <div style="font-size: 3vw;">${packet.ayahText}</div>`;
-    } else {
-        liveBox.innerText = packet.ayahText;
-    }
-
-    // 2. ސްޓޭޓަސް ލޭބަލް އަޕްޑޭޓްކުރުން
-    if (statusLabel) {
-        statusLabel.innerText = "MIRROR SYNC: " + packet.surahName + " (" + packet.ayahRange + ")";
-    }
-
-    // 3. ޖަޖް ސްކްރީން ހުޅުވާފައި ހުރިނަމަ އެއަށްވެސް ފޮނުވުން
-    if (state.windows.judgeMirror && !state.windows.judgeMirror.closed) {
-        if (state.windows.judgeMirror.updateJudgeMirrorFromExtra) {
-            state.windows.judgeMirror.updateJudgeMirrorFromExtra(packet);
-        }
-    }
-}
-
-// ސިސްޓަމްގެ އެހެން ފަންކްޝަންތަކުން މި އައު ސިންކް ބޭނުންކުރާ ގޮތަށް ހެދުން
-window.syncExtraToJudges = function() {
-    const currentQ = state.extra.selection[state.extra.currentIndex];
-    if (currentQ) {
-        const packet = {
-            phase: state.extra.phase,
-            currentIdx: state.extra.currentIndex,
-            ayahText: currentQ.text,
-            surahName: currentQ.surah,
-            ayahRange: currentQ.start + " - " + currentQ.end,
-            juzName: currentQ.juz,
-            settings: state.extra.settings
-        };
-        updateJudgeMirrorFromExtra(packet);
-    }
+// 1. ޝާހީ ސްކްރީނުން އާޔަތް ބަދަލުކުރާ ފަންކްޝަންތަކާ ގުޅުވާލުން
+const originalNextAyah = typeof nextAyah === 'function' ? nextAyah : null;
+window.nextAyah = function() {
+    if(originalNextAyah) originalNextAyah();
+    syncExtraToJudges(); // ވަގުތުން އެޑްމިން ގޮޅި އަޕްޑޭޓްކުރުން
 };
 
-// ޖަޖް ސްކްރީން ހުޅުވޭ ވަގުތު މި ފަންކްޝަން އެ ވިންޑޯގައި އިންތޯ ޗެކްކުރުން
+const originalPrevAyah = typeof prevAyah === 'function' ? prevAyah : null;
+window.prevAyah = function() {
+    if(originalPrevAyah) originalPrevAyah();
+    syncExtraToJudges();
+};
+
+const originalSelectQuestion = typeof selectQuestion === 'function' ? selectQuestion : null;
+window.selectQuestion = function(idx) {
+    if(originalSelectQuestion) originalSelectQuestion(idx);
+    syncExtraToJudges();
+};
+
+// 2. ސިސްޓަމްގެ ސްޓޭޓް ބަދަލުވޭތޯ ބަލައި އަޕްޑޭޓްކުރުން (Observer)
+// މި ބައިން ކޮންމެ 500 މިލިސިކުންތަކުން އެޑްމިން ގޮޅީގައި އާޔަތް އިންތޯ ޗެކްކުރާނެ
 setInterval(() => {
-    if (state.extra.selection && state.extra.selection[state.extra.currentIndex]) {
-        const liveBox = document.getElementById('mainLiveQuranBox');
-        if (liveBox && (liveBox.innerText.includes("ދަރިވަރު") || liveBox.innerText === "")) {
+    const liveBox = document.getElementById('mainLiveQuranBox');
+    if (liveBox && state.extra.selection && state.extra.selection[state.extra.currentIndex]) {
+        const currentAyah = state.extra.selection[state.extra.currentIndex].text;
+        
+        // ގޮޅީގައި އާޔަތް ނެތްނަމަ ނުވަތަ ބަދަލުވެފައިވާނަމަ އަޕްޑޭޓްކުރުން
+        if (liveBox.innerText === "ދަރިވަރު ކިޔަވަން ފެށުމުން އާޔަތް މިތަނުން ފެންނާނެއެވެ." || 
+            liveBox.innerText === "ދަރިވަރު ސުވާލު ނަގަނީ...") {
             syncExtraToJudges();
         }
     }
