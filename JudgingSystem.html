@@ -16969,43 +16969,63 @@ window.saveMatrixScores = function() {
         }, 1000);
     }
 }
-// --- JUDGE 1 TOTAL REFLECTION FIX ---
-// މިއީ ސޭވްކުރާ ވަގުތު ޖަޖް 1 ގެ މާކުސް 100 އަށް ބަދަލުވިޔަ ނުދިނުމަށް ބޭނުންކުރާ ބައެއް
+// ===============================================================
+// ★ FINAL SYNC FIX: MATRIX JUDGE 1 <-> MAIN SECRETARY PANEL ★
+// ===============================================================
 
-const originalSaveMatrix = saveMatrixScores;
-window.saveMatrixScores = function() {
-    // 1. މެޓްރިކްސް ޓޭބަލުން ޖަޖް 1 ގެ މިވަގުތުގެ ޖުމްލަ ނެގުން
-    const j1TotalElement = document.getElementById('mTotal_1');
-    if (j1TotalElement && state.judging.currentStudentObj) {
-        let actualJ1Total = parseFloat(j1TotalElement.innerText);
-        let jKey = 'Judge_1';
-        
-        // 2. ސިސްޓަމްގެ މެމޮރީގައިވާ 100 ފޮހެލާފައި، ޙަޤީޤީ ޖުމްލަ ލުން
-        state.judging.liveScores[jKey] = actualJ1Total;
-        
-        // 3. މާސްޓަރ ލިސްޓުގެ ތެރޭގައިވެސް މި އަދަދު އަޕްޑޭޓްކުރުން
-        const sID = state.judging.currentStudentObj.id;
-        const sIdx = state.allStudents.findIndex(s => s.id === sID);
-        if (sIdx > -1) {
-            if(!state.allStudents[sIdx].scores) state.allStudents[sIdx].scores = {};
-            state.allStudents[sIdx].scores[jKey] = actualJ1Total;
+// މެޓްރިކްސްގައި ޖަޖް 1 ގެ މާކުސް ކަނޑާއިރު މެއިން ރުބްރިކަށް އެ ބަދަލު ފޮނުވުން
+const originalApplyMatrixDeduction = applyMatrixDeduction;
+window.applyMatrixDeduction = function(jNum, rIdx, amount, maxVal) {
+    // 1. މެޓްރިކްސްގައި ކުރާ ޑިޑަކްޝަން ހިންގުން
+    originalApplyMatrixDeduction(jNum, rIdx, amount, maxVal);
+    
+    // 2. ބަދަލުކުރީ ޖަޖް 1 ނަމަ، މެއިން އެޑްމިންގެ ރުބްރިކް ކާޑުތަކަށް އެ ބަދަލު ސިންކްކުރުން
+    const currentJudgeOnMain = document.getElementById('secJudgeSelect').value;
+    if (jNum === 1 && currentJudgeOnMain === 'Judge_1') {
+        const matrixInput = document.getElementById(`inp_${jNum}_${rIdx}`);
+        if (matrixInput && typeof secScores !== 'undefined') {
+            let newVal = parseFloat(matrixInput.value);
+            let deduction = maxVal - newVal;
+            
+            // މެއިން ޕެނަލްގެ މެމޮރީ އަޕްޑޭޓްކުރުން
+            if (secScores[rIdx]) {
+                secScores[rIdx].deducted = parseFloat(deduction.toFixed(2));
+            }
+            
+            // މެއިން ޕެނަލްގެ ވިޝުއަލް އަޕްޑޭޓްކުރުން
+            const mainScoreEl = document.getElementById(`secScore_${rIdx}`);
+            const mainDedEl = document.getElementById(`secDedInfo_${rIdx}`);
+            if (mainScoreEl) mainScoreEl.innerText = newVal.toFixed(2);
+            if (mainDedEl) mainDedEl.innerText = deduction > 0 ? `(-${deduction.toFixed(2)})` : "";
+            
+            // މެއިން ޕެނަލްގެ ޖުމްލަ މާކުސް އަލުން ހިސާބުކުރުން
+            calculateSecTotal();
         }
     }
-
-    // 4. އަސްލު ސޭވް ފަންކްޝަން ހިންގުން
-    originalSaveMatrix();
-    
-    // 5. ވަގުތުން މެއިން އެޑްމިން ޓޭބަލް ރިފްރެޝްކުރުން
-    if(typeof renderMasterTable === 'function') renderMasterTable();
 };
 
-// މެޓްރިކްސް ހުޅުވާއިރު ޖަޖް 1 ގެ ޖުމްލަ އޮޓޯއިން އަލުން ހިސާބުކުރުން
-const originalOpenMatrix = openMatrixInput;
-window.openMatrixInput = function() {
-    originalOpenMatrix();
-    setTimeout(() => {
-        if(typeof calcMatrixTotal === 'function') calcMatrixTotal(1);
-    }, 100);
+// މެޓްރިކްސް ސޭވްކުރާއިރު މައި ސިސްޓަމަށް ޖަޖް 1 ގެ މާކުސް މަޖުބޫރުކުރުވުން
+const originalSaveMatrixScores = saveMatrixScores;
+window.saveMatrixScores = function() {
+    const j1TotalEl = document.getElementById('mTotal_1');
+    if (j1TotalEl && state.judging.currentStudentObj) {
+        let actualJ1Total = parseFloat(j1TotalEl.innerText);
+        
+        // ލައިވް ސްކޯ އާއި މާސްޓަރ ލިސްޓް އަޕްޑޭޓްކުރުން
+        state.judging.liveScores['Judge_1'] = actualJ1Total;
+        
+        const sIdx = state.allStudents.findIndex(s => s.id === state.judging.currentStudentObj.id);
+        if (sIdx > -1) {
+            if(!state.allStudents[sIdx].scores) state.allStudents[sIdx].scores = {};
+            state.allStudents[sIdx].scores['Judge_1'] = actualJ1Total;
+        }
+    }
+    
+    // އަސްލު ސޭވް ފަންކްޝަން ހިންގުން
+    originalSaveMatrixScores();
+    
+    // ވަގުތުން ޓޭބަލް ރިފްރެޝްކުރުން
+    if(typeof renderMasterTable === 'function') renderMasterTable();
 };
 </script>
 </body>
