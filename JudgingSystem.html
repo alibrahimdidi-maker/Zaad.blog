@@ -1758,40 +1758,34 @@ button,
             </div>
         </div>
 
-<div class="sec-control-area" style="display: flex; gap: 10px; flex: 1; overflow: hidden; margin-top: 10px;">
+<div class="sec-control-area" style="display: flex; gap: 15px; flex: 1; overflow: hidden; margin-top: 10px;">
+    
+    <div class="sec-left-box" style="width: 140px; background: #151b22; padding: 10px; border: 1px solid #334455; border-radius: 8px; display: flex; flex-direction: column; justify-content: center; align-items: center;">
         
-        <div class="sec-left-box" style="width: 220px; background: #151b22; padding: 10px; border: 1px solid #334455; border-radius: 6px; display: flex; flex-direction: column;">
-            <button class="btn-orange" style="width:100%; margin-bottom:5px; font-weight:bold;" onclick="openMatrixInput()">
-                🖐️ 5 JUDGE MATRIX
-            </button>
-            <label style="color:#FFD700; font-size:11px; margin-top:0;">Judge Setting:</label>
-            <select id="secJudgeSelect" style="background:#000; color:#fff; border:1px solid #555; width:100%; padding:8px; margin-bottom:10px; font-weight:bold;">
-                <option value="Judge_1">Judge 1</option>
-                <option value="Judge_2">Judge 2</option>
-                <option value="Judge_3">Judge 3</option>
-                <option value="Judge_4">Judge 4</option>
-                <option value="Judge_5">Judge 5</option>
-            </select>
-            <div style="flex:1; display:flex; flex-direction:column; justify-content:center; align-items:center; background:#000; border:1px dashed #333; border-radius:4px;">
-                <div style="font-size:10px; color:#666; text-transform:uppercase;">Current Total</div>
-                <div id="secTotalDisplay" style="font-size:36px; color:#00e676; font-weight:bold; font-family:sans-serif;">0.00</div>
-            </div>
-            <button id="btnSaveNext" class="btn-green" style="width:100%; padding:15px; margin-top:10px; font-weight:bold;" onclick="saveAndNext()">
-                💾 SAVE & NEXT
-            </button>
-        </div>
+        <button class="btn-orange" style="width:100%; height: 100%; font-weight:bold; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 15px; border-radius: 6px;" onclick="openMatrixInput()">
+            <span style="font-size: 40px;">🖐️</span>
+            <span style="font-size: 14px; letter-spacing: 1px;">JUDGE<br>MATRIX</span>
+        </button>
+        
+    </div>
 
-        <div class="sec-table-wrapper" style="flex: 1; background: #000; border: 2px solid #FFD700; border-radius: 8px; display: flex; flex-direction: column; overflow: hidden;">
-            <div style="background: #111; color: #FFD700; padding: 5px 15px; font-size: 11px; border-bottom: 1px solid #333; display: flex; justify-content: space-between;">
-                <span>LIVE QURAN VIEW (ޝާހީ ސްކްރީން)</span>
-                <span id="liveStatusLabel" style="color: #00e676;">WAITING...</span>
+    <div class="sec-table-wrapper" style="flex: 1; background: #000; border: 2px solid #FFD700; border-radius: 10px; display: flex; flex-direction: column; overflow: hidden; box-shadow: inset 0 0 20px rgba(255, 215, 0, 0.1);">
+        
+        <div style="background: #111; color: #FFD700; padding: 10px 20px; font-size: 12px; border-bottom: 1px solid #222; display: flex; justify-content: space-between; align-items: center; font-family: sans-serif;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <div style="width: 8px; height: 8px; background: #00e676; border-radius: 50%; box-shadow: 0 0 8px #00e676;"></div>
+                <span style="font-weight: bold; text-transform: uppercase; letter-spacing: 1px;">Live Quran Feed</span>
             </div>
-            <div id="mainLiveQuranBox" style="flex: 1; display: flex; align-items: center; justify-content: center; text-align: center; color: #fff; font-size: 2.2vw; line-height: 1.8; padding: 20px; overflow-y: auto; direction: rtl; font-family: 'Amiri', serif; white-space: pre-wrap;">
-                ދަރިވަރު ސުވާލު ނެގުމުން އާޔަތް މިތަނުން ފެންނާނެއެވެ.
-            </div>
+            <span id="liveStatusLabel" style="color: #00e676; font-weight: bold; font-family: monospace;">SYSTEM READY</span>
+        </div>
+        
+        <div id="mainLiveQuranBox" style="flex: 1; display: flex; align-items: center; justify-content: center; text-align: center; color: #fff; font-size: 3.2vw; line-height: 1.6; padding: 40px; overflow-y: auto; direction: rtl; font-family: 'Amiri', serif; white-space: pre-wrap; text-shadow: 0 4px 8px rgba(0,0,0,0.7);">
+            ދަރިވަރު ކިޔަވަން ފެށުމުން އާޔަތް މިތަނުން ފެންނާނެއެވެ.
         </div>
 
     </div>
+
+</div>
     </div>
 <div id="masterViewPanel">
     <div class="ms-filter-bar">
