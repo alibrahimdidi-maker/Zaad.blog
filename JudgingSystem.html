@@ -17425,60 +17425,73 @@ function loadStudentBatch() {
     
     const r = new FileReader();
     r.onload = e => {
-        const rows = e.target.result.split('\n');
-        state.allStudents = []; 
-        state.judging.savedResults = []; 
+        try {
+            const rows = e.target.result.split('\n');
+            state.allStudents = []; 
+            state.judging.savedResults = []; 
 
-        // CSV Header ބަރި ނަގައިގެން ކޮލަމްތައް ހުރި ތަރުތީބު ބަލާލުން
-        const headers = rows[0].split(',').map(h => h.replace(/^"|"$/g, '').trim());
-        
-        // މާކުސް ހުރި ކޮލަމްތަކުގެ އިންޑެކްސް ހޯދުން
-        const j1Idx = headers.indexOf("Judge 1 Total");
-        const j2Idx = headers.indexOf("Judge 2 Total");
-        const j3Idx = headers.indexOf("Judge 3 Total");
-        const j4Idx = headers.indexOf("Judge 4 Total");
-        const j5Idx = headers.indexOf("Judge 5 Total");
-        const avgIdx = headers.indexOf("FINAL AVERAGE");
-
-        for(let i = 1; i < rows.length; i++) {
-            let rowRaw = rows[i].trim();
-            if(!rowRaw) continue;
-
-            const clean = rowRaw.split(',').map(c => c.replace(/^"|"$/g, '').trim());
-            if(clean.length < 9) continue;
-
-            // ދަރިވަރުގެ އަސާސީ މައުލޫމާތު
-            const sObj = {
-                serial: clean[0], reg: clean[1], group: clean[2], branch: clean[3],
-                institution: clean[4], name: clean[5], gender: clean[6], address: clean[7],
-                id: clean[8], phone: clean[9],
-                scores: {}, 
-                finalScore: 0
-            };
-
-            // ★ ފައިލުން މާކުސްތައް ނަގައިގެން ސެޓްކުރުން
-            if(j1Idx !== -1) sObj.scores['Judge_1'] = parseFloat(clean[j1Idx]) || 0;
-            if(j2Idx !== -1) sObj.scores['Judge_2'] = parseFloat(clean[j2Idx]) || 0;
-            if(j3Idx !== -1) sObj.scores['Judge_3'] = parseFloat(clean[j3Idx]) || 0;
-            if(j4Idx !== -1) sObj.scores['Judge_4'] = parseFloat(clean[j4Idx]) || 0;
-            if(j5Idx !== -1) sObj.scores['Judge_5'] = parseFloat(clean[j5Idx]) || 0;
+            // CSV Header ބަރި ނަގައިގެން ކޮލަމްތައް ހުރި ތަރުތީބު ބަލާލުން
+            const headers = rows[0].split(',').map(h => h.replace(/^"|"$/g, '').trim());
             
-            if(avgIdx !== -1) sObj.finalScore = parseFloat(clean[avgIdx]) || 0;
+            // ތިޔަ ފޮނުއްވި ފައިލްގައި ހުރި ސީދާ ނަންތަކަށް އިންޑެކްސް ހޯދުން
+            const j1Idx = headers.indexOf("Judge 1 Total");
+            const j2Idx = headers.indexOf("Judge 2 Total");
+            const j3Idx = headers.indexOf("Judge 3 Total");
+            const j4Idx = headers.indexOf("Judge 4 Total");
+            const j5Idx = headers.indexOf("Judge 5 Total");
+            const avgIdx = headers.indexOf("FINAL AVERAGE");
 
-            // މާކުސް ދީފައިވާ ކުއްޖެއްނަމަ ރިޕޯޓް ލިސްޓަށްވެސް އިތުރުކުރުން
-            if(sObj.finalScore > 0) {
-                state.judging.savedResults.push(sObj);
+            for(let i = 1; i < rows.length; i++) {
+                let rowRaw = rows[i].trim();
+                if(!rowRaw) continue;
+
+                // ކޮމާ އިން ވަކިކުރާއިރު ކޯޓޭޝަން މާކްސްގެ އެތެރޭގައި ހުންނަ ކޮމާއަށް ބަލައިގެން ރަނގަޅަށް ސްޕްލިޓްކުރުން
+                const clean = rowRaw.match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g).map(c => c.replace(/^"|"$/g, '').trim());
+                
+                if(clean.length < 9) continue;
+
+                const sObj = {
+                    serial: clean[0], 
+                    reg: clean[1], 
+                    group: clean[2], 
+                    branch: clean[3],
+                    institution: clean[4], 
+                    name: clean[5], 
+                    gender: clean[6], 
+                    address: clean[7],
+                    id: clean[8],
+                    scores: {}, 
+                    finalScore: 0
+                };
+
+                // ★ ފައިލުން މާކުސްތައް ނަގައިގެން ސެޓްކުރުން (ތިޔަ ފައިލްގެ ކޮލަމްތަކާ އެއްގޮތަށް)
+                if(j1Idx !== -1 && clean[j1Idx]) sObj.scores['Judge_1'] = parseFloat(clean[j1Idx]) || 0;
+                if(j2Idx !== -1 && clean[j2Idx]) sObj.scores['Judge_2'] = parseFloat(clean[j2Idx]) || 0;
+                if(j3Idx !== -1 && clean[j3Idx]) sObj.scores['Judge_3'] = parseFloat(clean[j3Idx]) || 0;
+                if(j4Idx !== -1 && clean[j4Idx]) sObj.scores['Judge_4'] = parseFloat(clean[j4Idx]) || 0;
+                if(j5Idx !== -1 && clean[j5Idx]) sObj.scores['Judge_5'] = parseFloat(clean[j5Idx]) || 0;
+                
+                if(avgIdx !== -1 && clean[avgIdx]) {
+                    sObj.finalScore = parseFloat(clean[avgIdx]) || 0;
+                }
+
+                // މާކުސް ދީފައިވާ ކުއްޖެއްނަމަ ސޭވްޑް ރިޒަލްޓްސް ތެރެއަށް ލުން
+                if(sObj.finalScore > 0) {
+                    state.judging.savedResults.push(sObj);
+                }
+
+                state.allStudents.push(sObj);
             }
-
-            state.allStudents.push(sObj);
+            
+            populateStudentSelector(); // ސާޗް ލިސްޓް އަޕްޑޭޓްކުރުން
+            renderMasterTable();      // ތިރީގައިވާ ބޮޑު ޓޭބަލް އަޕްޑޭޓްކުރުން
+            saveToLocal();            // ބްރައުޒާގައި މި ޑޭޓާ ރައްކާކުރުން
+            
+            alert(`✅ Loaded ${state.allStudents.length} students.\nMarks found and synced.`);
+        } catch(err) { 
+            console.error(err);
+            alert("Error parsing CSV: " + err.message); 
         }
-        
-        // ސްކްރީން އަޕްޑޭޓްކުރުން
-        populateStudentSelector(); // ސާޗް ލިސްޓަށް
-        renderMasterTable();      // ތިރީގައިވާ ބޮޑު ޓޭބަލަށް
-        saveToLocal();            // ބްރައުޒާ މެމޮރީއަށް
-        
-        alert(`✅ Loaded ${state.allStudents.length} students.\nPrevious marks are now visible in the table.`);
     };
     r.readAsText(file);
 }
