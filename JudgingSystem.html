@@ -17280,7 +17280,7 @@ window.setFullMarks = function(j, rIdx, max) {
 function renderSecretaryRubric() {
     if (!document.getElementById('rubricGrid')) return; 
 }
-// --- LIVE SYNC FIX FOR ADMIN QURAN BOX (V4 - FIXED HEADER & ALIGNMENT) ---
+// --- LIVE SYNC FIX FOR ADMIN QURAN BOX (V5 - COMPACT HEADER & NO HORIZONTAL SCROLL) ---
 
 const originalSyncExtra = syncExtraScreen;
 window.syncExtraScreen = function(forceMode) {
@@ -17292,11 +17292,12 @@ window.syncExtraScreen = function(forceMode) {
 
     if (!liveBox) return;
 
-    // ގޮޅީގެ މައިގަނޑު ސްޓައިލްތައް
+    // ގޮޅީގެ މައިގަނޑު ސެޓިންގްސް
     liveBox.style.display = "block"; 
     liveBox.style.textAlign = "center";
     liveBox.style.overflowY = "auto"; 
-    liveBox.style.padding = "0"; // ޕެޑިންގް ކުޑަކުރުން
+    liveBox.style.overflowX = "hidden"; // ކަނާތުން ވާތަށް ސްކްރޯލްވުން ހުއްޓުވުން
+    liveBox.style.padding = "0";
 
     if (state.extra.phase === 'grid') {
         liveBox.innerHTML = `<div style="padding:40px; font-size:18px; color:#aaa;">ދަރިވަރު ސުވާލު ނަންބަރު ނަގަނީ...</div>`;
@@ -17307,18 +17308,23 @@ window.syncExtraScreen = function(forceMode) {
         if(statusLabel) statusLabel.innerText = "READY";
     }
     else if (state.extra.phase === 'reading' && currentQ) {
-        // ޗީފް ޖަޖަށް ފަސޭހަވާނެހެން ޑިޒައިން ކުރުން
+        // ބެނާ ކުޑަކޮށް، ޓެކްސްޓް މަތިން ފެށޭގޮތަށް
         liveBox.innerHTML = `
-            <div style="background: #111; padding: 10px; border-bottom: 2px solid #FFD700; margin-bottom: 15px;">
-                <span style="font-family: 'Cinzel', serif; color: #FFD700; font-size: 14px; letter-spacing: 1px;">
-                    QUESTION: ${state.extra.currentIndex + 1} | 
+            <div style="background: #111; padding: 5px 10px; border-bottom: 1px solid #FFD700; width: 100%; box-sizing: border-box; display: flex; justify-content: center; gap: 15px; align-items: center;">
+                <span style="font-family: 'Cinzel', serif; color: #FFD700; font-size: 12px; font-weight: bold;">
+                    Q: ${state.extra.currentIndex + 1}
                 </span>
-                <span style="font-family: 'Faruuma', sans-serif; color: #fff; font-size: 16px;">
-                    ${currentQ.surah} (Ayah: ${currentQ.start} - ${currentQ.end})
+                <span style="color: #555;">|</span>
+                <span style="font-family: 'Faruuma', sans-serif; color: #fff; font-size: 13px;">
+                    ${currentQ.surah} (${currentQ.start} - ${currentQ.end})
+                </span>
+                <span style="color: #555;">|</span>
+                <span style="font-family: 'Faruuma', sans-serif; color: #aaa; font-size: 12px;">
+                    Juz: ${currentQ.juz}
                 </span>
             </div>
 
-            <div style="padding: 0 20px 30px 20px; font-size: 25px; line-height: 2.0; direction: rtl; color: #fff; word-wrap: break-word;">
+            <div style="padding: 20px; font-size: 25px; line-height: 1.8; direction: rtl; color: #fff; word-wrap: break-word; text-align: center;">
                 ${currentQ.text}
             </div>
         `;
@@ -17330,7 +17336,7 @@ window.syncExtraScreen = function(forceMode) {
     }
 };
 
-// ސިންކް ފަންކްޝަންތައް (ކުރިން ހުރި ގޮތަށް)
+// ސިންކް ފަންކްޝަންތައް ކުރިން ހުރި ގޮތަށް
 const originalExtraGridClick = extraGridClick;
 window.extraGridClick = function(num) {
     if (typeof originalExtraGridClick === 'function') originalExtraGridClick(num);
