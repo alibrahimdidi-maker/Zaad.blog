@@ -17419,7 +17419,86 @@ if (state.extra.phase === 'reading' && currentQ) {
     `;
     liveBox.scrollTop = 0;
 }
+// --- NEW UNIVERSAL BATCH LOADER (FIXED SYNC ISSUE) ---
+function loadStudentBatch() {
+    const file = document.getElementById('batchCsv').files[0];
+    if(!file) { alert("Please select the CSV file first!"); return; }
+    
+    const r = new FileReader();
+    r.onload = e => {
+        try {
+            const rows = e.target.result.split('\n');
+            state.allStudents = []; 
+            state.judging.savedResults = []; // Saved ލިސްޓުވެސް އަލުން ފުރާނީ ފައިލުން
 
+            for(let i = 1; i < rows.length; i++) {
+                let rowRaw = rows[i].trim();
+                if(!rowRaw) continue;
+
+                // CSV columns split (Handling quotes correctly)
+                const clean = rowRaw.match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g).map(c => c.replace(/^"|"$/g, '').trim());
+                
+                if(clean.length < 13) continue;
+
+                // ދަރިވަރުގެ އޮބްޖެކްޓް ހެދުން
+                const sObj = {
+                    serial: clean[0], reg: clean[1], group: clean[2], branch: clean[3],
+                    institution: clean[4], name: clean[5], gender: clean[6], address: clean[7],
+                    id: clean[8], phone: clean[9], parent: clean[10], parentPhone: clean[11], email: clean[12],
+                    scores: {}, 
+                    detailedScores: {}, 
+                    finalScore: 0
+                };
+
+                // ★ ފައިލްގައި ހުރި ޖަޖުންގެ މާކުސްތައް ސޮފްޓްވެއަރގެ މެމޮރީއަށް ލުން ★
+                // ޖަޖުންގެ މާކުސް ހުންނާނީ ކޮލަމް 16 އިން ފެށިގެން (J1 Total: 16, J2: 17, J3: 18, J4: 19, J5: 20)
+                let hasMarks = false;
+                for(let j = 1; j <= 5; j++) {
+                    let markIndex = 15 + j; // Correct index for Judge Totals
+                    let jMark = parseFloat(clean[markIndex]);
+
+                    if(!isNaN(jMark) && jMark > 0) {
+                        let jKey = `Judge_${j}`;
+                        sObj.scores[jKey] = jMark;
+                        
+                        // މުހިންމު: އެޑްމިން ޕެނަލްއަށް މާކުސް ދެއްކުމަށްޓަކައި detailedScores އަށްވެސް މި އަދަދު ލުން
+                        sObj.detailedScores[jKey] = { "Total From File": jMark };
+                        hasMarks = true;
+                    }
+                }
+                
+                // ފައިނަލް އެވްރެޖް (ކޮލަމް 22)
+                let savedAvg = parseFloat(clean[22]);
+                if(!isNaN(savedAvg) && savedAvg > 0) {
+                    sObj.finalScore = savedAvg;
+                } else if(hasMarks) {
+                    // އެވްރެޖް ނެތްނަމަ ޖަޖުންގެ މާކުހުން ހިސާބުކުރުން
+                    let sum = 0; let count = 0;
+                    for(let k in sObj.scores) { sum += sObj.scores[k]; count++; }
+                    sObj.finalScore = count > 0 ? (sum/count).toFixed(2) : 0;
+                }
+
+                // މާކުސް ދީފައިވާ ކުދިން ސީދާ 'Saved Results' ލިސްޓަށް ބަދަލުކުރުން
+                if(sObj.finalScore > 0) {
+                    state.judging.savedResults.push(sObj);
+                }
+
+                state.allStudents.push(sObj);
+            }
+            
+            // ސްކްރީންތައް އަޕްޑޭޓްކުރުން
+            populateStudentSelector(); 
+            renderMasterTable();      
+            saveToLocal(); 
+            
+            alert(`✅ ކާމިޔާބު! ${state.allStudents.length} ދަރިވަރުންގެ މަޢުލޫމާތާއި ކުރީގެ މާކުސްތައް ލޯޑުވެއްޖެ.`);
+        } catch(err) { 
+            console.error(err);
+            alert("Error: ފައިލް ކިޔުމުގައި މައްސަލައެއް ދިމާވެއްޖެ."); 
+        }
+    };
+    r.readAsText(file);
+}
 </script>
 </body>
 </html>
