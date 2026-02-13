@@ -17419,7 +17419,69 @@ if (state.extra.phase === 'reading' && currentQ) {
     `;
     liveBox.scrollTop = 0;
 }
+function loadStudentBatch() {
+    const file = document.getElementById('batchCsv').files[0];
+    if(!file) { alert("Please select the CSV file first!"); return; }
+    
+    const r = new FileReader();
+    r.onload = e => {
+        try {
+            const rows = e.target.result.split('\n');
+            state.allStudents = []; 
+            state.judging.savedResults = []; 
 
+            for(let i = 1; i < rows.length; i++) {
+                let rowRaw = rows[i].trim();
+                if(!rowRaw) continue;
+
+                const clean = rowRaw.match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g).map(c => c.replace(/^"|"$/g, '').trim());
+                if(!clean || clean.length < 13) continue;
+
+                const sObj = {
+                    serial: clean[0], reg: clean[1], group: clean[2], branch: clean[3],
+                    institution: clean[4], name: clean[5], gender: clean[6], address: clean[7],
+                    id: clean[8],
+                    scores: {}, 
+                    detailedScores: {}, // މިއީ މުހިންމު ބައި
+                    finalScore: 0
+                };
+
+                // ★ ފައިލުން މާކުސްތައް ނެގުން (ކޮލަމް 16 އިން 20 އަށް)
+                for(let j = 1; j <= 5; j++) {
+                    let markIndex = 15 + j; // Index for J1-J5 Totals
+                    let jMark = parseFloat(clean[markIndex]);
+
+                    if(!isNaN(jMark) && jMark > 0) {
+                        let jKey = `Judge_${j}`;
+                        sObj.scores[jKey] = jMark;
+
+                        // ★ މިއީ "Magic" ބައި: 
+                        // ވަކިވަކި ބައިތަކުގެ މާކުސް ފައިލްގައި ނެތަސް، ޖުމްލަ މާކުސް "Thilawa" ބަޔަށް އަޅާލަނީ
+                        // އޭރުން އެޑްމިން ޕެނަލް ހުޅުވާއިރު 0 ގެ ބަދަލުގައި ކުރީގެ މާކުސް ފެންނާނެ
+                        sObj.detailedScores[jKey] = { "Thilawa": jMark };
+                    }
+                }
+                
+                let avg = parseFloat(clean[22]);
+                if(!isNaN(avg) && avg > 0) {
+                    sObj.finalScore = avg;
+                    state.judging.savedResults.push(sObj);
+                }
+                state.allStudents.push(sObj);
+            }
+            
+            populateStudentSelector(); 
+            renderMasterTable();      
+            saveToLocal(); 
+            
+            alert(`✅ ކާމިޔާބު! ${state.allStudents.length} ކުދިންގެ ޑޭޓާ ކުރީގެ މާކުސްތަކާއެކު ސިންކްވެއްޖެ.`);
+        } catch(err) { 
+            console.error(err);
+            alert("Error: ފައިލް ފޯމެޓް މައްސަލައެއް އެބައުޅޭ."); 
+        }
+    };
+    r.readAsText(file);
+}
 </script>
 </body>
 </html>
