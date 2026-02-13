@@ -17280,7 +17280,7 @@ window.setFullMarks = function(j, rIdx, max) {
 function renderSecretaryRubric() {
     if (!document.getElementById('rubricGrid')) return; 
 }
-// --- LIVE SYNC FIX FOR ADMIN QURAN BOX (ADJUSTED FONT SIZE) ---
+// --- LIVE SYNC FIX FOR ADMIN QURAN BOX (V3 - TOP ALIGNED & SCROLLABLE) ---
 
 const originalSyncExtra = syncExtraScreen;
 window.syncExtraScreen = function(forceMode) {
@@ -17292,41 +17292,48 @@ window.syncExtraScreen = function(forceMode) {
 
     if (!liveBox) return;
 
+    // ސްޓައިލްތައް ރަނގަޅުކުރުން: މަތިން ފެށޭގޮތަށް އަދި ސްކްރޯލްވާގޮތަށް
+    liveBox.style.display = "block"; // Flex ގެ ބަދަލުގައި Block ބޭނުންކުރުން މަތިން ފެށުމަށް
+    liveBox.style.textAlign = "center";
+    liveBox.style.overflowY = "auto"; 
+    liveBox.style.padding = "15px";
+
     if (state.extra.phase === 'grid') {
-        liveBox.style.fontSize = "1.5vw"; // ގްރިޑް މޯޑުގައި ކުޑަ ސައިޒެއް
+        liveBox.style.fontSize = "18px";
         liveBox.innerText = "ދަރިވަރު ސުވާލު ނަންބަރު ނަގަނީ...";
         if(statusLabel) statusLabel.innerText = "SELECTING...";
     } 
     else if (state.extra.phase === 'ready') {
-        liveBox.style.fontSize = "1.8vw";
+        liveBox.style.fontSize = "20px";
         liveBox.innerText = "ސުވާލު ނަގައި ނިމިއްޖެ. ފަށަން ތައްޔާރު!";
         if(statusLabel) statusLabel.innerText = "READY";
     }
     else if (state.extra.phase === 'reading' && currentQ) {
-        // ކިޔަވާ ވަގުތު ފޮންޓް ސައިޒް ގޮޅިއަށް ފެތޭވަރަށް ކުޑަކުރުން
-        liveBox.style.fontSize = "2.2vw"; 
-        liveBox.style.lineHeight = "1.5";
-        liveBox.style.padding = "20px";
+        // ޗީފް ޖަޖަށް ފަސޭހައިން ކިޔާލެވޭނެ ސައިޒު
+        liveBox.style.fontSize = "25px"; 
+        liveBox.style.lineHeight = "1.8";
 
         liveBox.innerHTML = `
-            <div style="font-size: 1.1vw; color: #FFD700; margin-bottom: 8px; font-family: 'Faruuma', sans-serif; border-bottom: 1px solid #333; padding-bottom: 5px; width: 100%;">
+            <div style="font-size: 16px; color: #FFD700; margin-bottom: 15px; font-family: 'Faruuma', sans-serif; border-bottom: 1px solid #444; padding-bottom: 10px; position: sticky; top: 0; background: #000; z-index: 5;">
                 ${currentQ.surah} (Ayah: ${currentQ.start} - ${currentQ.end}) | Juz: ${currentQ.juz}
             </div>
-            <div style="width: 100%; word-wrap: break-word;">${currentQ.text}</div>
+            <div style="width: 100%; direction: rtl; padding-bottom: 20px;">${currentQ.text}</div>
         `;
         
+        // އާޔަތް ބަދަލުވާއިރު ސްކްރޯލް އެންމެ މައްޗަށް ގެންދިއުން
+        liveBox.scrollTop = 0;
+
         if(statusLabel) statusLabel.innerText = "LIVE: " + currentQ.surah;
     }
 };
 
-// ގްރިޑް ކްލިކް ސިންކް
+// ސިންކް ފަންކްޝަންތައް (ކުރިން ހުރި ގޮތަށް)
 const originalExtraGridClick = extraGridClick;
 window.extraGridClick = function(num) {
     if (typeof originalExtraGridClick === 'function') originalExtraGridClick(num);
     syncExtraScreen();
 };
 
-// Next/Prev ސިންކް
 const originalExtraNextQ = extraNextQ;
 window.extraNextQ = function() {
     if (typeof originalExtraNextQ === 'function') originalExtraNextQ();
