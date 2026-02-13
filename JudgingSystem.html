@@ -17280,41 +17280,68 @@ window.setFullMarks = function(j, rIdx, max) {
 function renderSecretaryRubric() {
     if (!document.getElementById('rubricGrid')) return; 
 }
-// --- FORCE SYNC LOGIC ---
+// --- LIVE SYNC FIX FOR ADMIN QURAN BOX ---
 
-// 1. ޝާހީ ސްކްރީނުން އާޔަތް ބަދަލުކުރާ ފަންކްޝަންތަކާ ގުޅުވާލުން
-const originalNextAyah = typeof nextAyah === 'function' ? nextAyah : null;
-window.nextAyah = function() {
-    if(originalNextAyah) originalNextAyah();
-    syncExtraToJudges(); // ވަގުތުން އެޑްމިން ގޮޅި އަޕްޑޭޓްކުރުން
-};
-
-const originalPrevAyah = typeof prevAyah === 'function' ? prevAyah : null;
-window.prevAyah = function() {
-    if(originalPrevAyah) originalPrevAyah();
-    syncExtraToJudges();
-};
-
-const originalSelectQuestion = typeof selectQuestion === 'function' ? selectQuestion : null;
-window.selectQuestion = function(idx) {
-    if(originalSelectQuestion) originalSelectQuestion(idx);
-    syncExtraToJudges();
-};
-
-// 2. ސިސްޓަމްގެ ސްޓޭޓް ބަދަލުވޭތޯ ބަލައި އަޕްޑޭޓްކުރުން (Observer)
-// މި ބައިން ކޮންމެ 500 މިލިސިކުންތަކުން އެޑްމިން ގޮޅީގައި އާޔަތް އިންތޯ ޗެކްކުރާނެ
-setInterval(() => {
+// 1. ދަރިވަރު ސުވާލު ނެގުމުން ނުވަތަ އާޔަތް ބަދަލުވުމުން އެޑްމިން ގޮޅިއަށް ފޮނުވުން
+const originalSyncExtra = syncExtraScreen;
+window.syncExtraScreen = function(forceMode) {
+    // އަސްލު ފަންކްޝަން ހިންގުން (ދަރިވަރުގެ ސްކްރީން އަޕްޑޭޓްކުރަން)
+    if (typeof originalSyncExtra === 'function') originalSyncExtra(forceMode);
+    
+    // އެޑްމިންގެ ލައިވް ގޮޅި (mainLiveQuranBox) އަޕްޑޭޓްކުރުން
     const liveBox = document.getElementById('mainLiveQuranBox');
-    if (liveBox && state.extra.selection && state.extra.selection[state.extra.currentIndex]) {
-        const currentAyah = state.extra.selection[state.extra.currentIndex].text;
-        
-        // ގޮޅީގައި އާޔަތް ނެތްނަމަ ނުވަތަ ބަދަލުވެފައިވާނަމަ އަޕްޑޭޓްކުރުން
-        if (liveBox.innerText === "ދަރިވަރު ކިޔަވަން ފެށުމުން އާޔަތް މިތަނުން ފެންނާނެއެވެ." || 
-            liveBox.innerText === "ދަރިވަރު ސުވާލު ނަގަނީ...") {
-            syncExtraToJudges();
-        }
+    const statusLabel = document.getElementById('liveStatusLabel');
+    
+    // މިހާރު ކިޔަވާ ސުވާލުގެ ޑޭޓާ ނެގުން
+    const currentQ = state.extra.selection[state.extra.currentIndex];
+
+    if (state.extra.phase === 'grid') {
+        if(liveBox) liveBox.innerText = "ދަރިވަރު ސުވާލު ނަންބަރު ނަގަނީ...";
+        if(statusLabel) statusLabel.innerText = "SELECTING...";
+    } 
+    else if (state.extra.phase === 'ready') {
+        if(liveBox) liveBox.innerText = "ސުވާލު ނަގައި ނިމިއްޖެ. ފަށަން ތައްޔާރު!";
+        if(statusLabel) statusLabel.innerText = "READY";
     }
-}, 1000);
+    else if (state.extra.phase === 'reading' && currentQ) {
+        if(liveBox) {
+            // އެޑްމިން އަށް އަބަދުވެސް އާޔަތް ފެންނާނެ (ނުބަލާ ކިޔެވިޔަސް)
+            liveBox.innerHTML = `
+                <div style="font-size: 0.4em; color: #FFD700; margin-bottom: 10px; font-family: 'Faruuma', sans-serif;">
+                    ${currentQ.surah} (Ayah: ${currentQ.start} - ${currentQ.end})
+                </div>
+                <div style="line-height: 1.6;">${currentQ.text}</div>
+            `;
+        }
+        if(statusLabel) statusLabel.innerText = "LIVE: " + currentQ.surah;
+    }
+};
+
+// 2. ދަރިވަރުގެ ގްރިޑުން ނަންބަރަކަށް ފިއްތާލާ ވަގުތުވެސް އެޑްމިން ގޮޅި އަޕްޑޭޓްކުރުން
+const originalExtraGridClick = extraGridClick;
+window.extraGridClick = function(num) {
+    if (typeof originalExtraGridClick === 'function') originalExtraGridClick(num);
+    syncExtraScreen(); // ވަގުތުން އެޑްމިން އަށް އެނގުން
+};
+
+// 3. 'Next' ނުވަތަ 'Prev' އަށް ފިއްތާއިރުވެސް ސިންކްކުރުން
+const originalExtraNextQ = extraNextQ;
+window.extraNextQ = function() {
+    if (typeof originalExtraNextQ === 'function') originalExtraNextQ();
+    syncExtraScreen();
+};
+
+const originalExtraPrevQ = extraPrevQ;
+window.extraPrevQ = function() {
+    if (typeof originalExtraPrevQ === 'function') originalExtraPrevQ();
+    syncExtraScreen();
+};
+
+// ސޮފްޓްވެއަރ ހުޅުވޭއިރު އެޑްމިން ގޮޅި ރެޑީކޮށްލުން
+document.addEventListener('DOMContentLoaded', () => {
+    const liveBox = document.getElementById('mainLiveQuranBox');
+    if(liveBox) liveBox.innerText = "ދަރިވަރު ކިޔަވަން ފެށުމުން އާޔަތް މިތަނުން ފެންނާނެއެވެ.";
+});
 </script>
 </body>
 </html>
