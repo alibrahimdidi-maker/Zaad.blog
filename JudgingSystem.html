@@ -17400,6 +17400,78 @@ window.extraPrevQ = function() {
     if (typeof originalExtraPrevQ === 'function') originalExtraPrevQ();
     syncExtraScreen();
 };
+/* މި ބައި ހޯއްދަވާފައި ބަދަލުކޮށްލައްވާ */
+if (state.extra.phase === 'reading' && currentQ) {
+    liveBox.innerHTML = `
+        <div style="background: #111; padding: 5px 10px; border-bottom: 1px solid #FFD700; width: 100%; box-sizing: border-box; display: flex; justify-content: center; gap: 15px; align-items: center; height: 35px;">
+            <span style="font-family: 'Cinzel', serif; color: #FFD700; font-size: 11px; font-weight: bold;">
+                Q: ${state.extra.currentIndex + 1}
+            </span>
+            <span style="color: #555;">|</span>
+            <span style="font-family: 'Faruuma', sans-serif; color: #fff; font-size: 12px;">
+                ${currentQ.surah} (${currentQ.start} - ${currentQ.end})
+            </span>
+        </div>
+
+        <div style="flex: 1; display: flex; align-items: center; justify-content: center; padding: 20px; font-size: 45px; line-height: 2.2; direction: rtl; color: #fff; text-align: center; font-family: 'Amiri', serif; width: 100%;">
+            ${currentQ.text}
+        </div>
+    `;
+    liveBox.scrollTop = 0;
+}
+    function loadStudentBatch() {
+    const file = document.getElementById('batchCsv').files[0];
+    if(!file) { alert("Select CSV!"); return; }
+    const r = new FileReader();
+    r.onload = e => {
+        try {
+            const rows = e.target.result.split('\n');
+            state.allStudents = []; 
+            state.judging.savedResults = []; 
+            
+            for(let i=1; i<rows.length; i++) {
+                let rowRaw = rows[i].trim();
+                if(!rowRaw) continue;
+                const clean = rowRaw.split(',').map(c => c.replace(/^"|"$/g, '').trim());
+
+                if(clean.length < 9) continue;
+
+                const sObj = {
+                    serial: clean[0], reg: clean[1], group: clean[2], branch: clean[3],
+                    instType: clean[4], institution: clean[4], 
+                    name: clean[5], gender: clean[6], address: clean[7],
+                    id: clean[8], phone: clean[9], parent: clean[10], parentPhone: clean[11], email: clean[12],
+                    scores: {}, detailedScores: {}, finalScore: 0
+                };
+
+                // ★ ކުރީގެ މާކުސްތައް ފައިލްގައި ހުރިނަމަ (Column 13 އިން ފެށިގެން) އެ ޑޭޓާ ނެގުން
+                // މިއީ ފައިލްގައި މާކުސް ހުރިތޯ ބަލާ ލޮޖިކް
+                let finalScoreIdx = clean.length - 3; // ފަހަތުން 3 ވަނަ ކޮލަމަކީ AVG ކަމަށް ބަލައި
+                let existingAvg = parseFloat(clean[finalScoreIdx]);
+
+                if(!isNaN(existingAvg) && existingAvg > 0) {
+                    sObj.finalScore = existingAvg;
+                    // ޖަޖުންގެ މާކުސްތައް އަލުން ސެޓްކުރުން
+                    for(let j=1; j<=5; j++) {
+                        let judgeTotalIdx = 13 + (j * 8) - 1; // މިއީ ތިބާގެ CSV ގެ ތަރުތީބުން ޖަޖުންގެ ޖުމްލަ މާކުސް ހުރި ގޮޅި
+                        if(clean[judgeTotalIdx]) {
+                            sObj.scores[`Judge_${j}`] = parseFloat(clean[judgeTotalIdx]);
+                        }
+                    }
+                    state.judging.savedResults.push(sObj);
+                }
+
+                state.allStudents.push(sObj);
+            }
+            populateStudentSelector();
+            renderMasterTable(); // ޓޭބަލް ރިފްރެޝްކުރުން
+            saveToLocal();
+            alert(`✅ Loaded ${state.allStudents.length} students with their marks.`);
+        } catch(err) { alert("Error: " + err.message); }
+    };
+    r.readAsText(file);
+}
+
 
 </script>
 </body>
