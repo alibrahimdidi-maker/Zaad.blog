@@ -17213,108 +17213,58 @@ function recalcMatrixJudgeTotal(jNum) {
     document.getElementById(`mTotal_${jNum}`).innerText = active ? sum.toFixed(2) : "0.00";
 }
     // ===============================================================
-// ★ NEW ADDITIONS: LIVE QURAN VIEW & MATRIX SYNC (V13) ★
+// ★ THE "UNBREAKABLE" SYNC: LOCALSTORAGE OBSERVER (V15) ★
 // ===============================================================
 
-// 1. SYNC EXTRA SCREEN TO MAIN ADMIN LIVE VIEW (ރުބްރިކްގެ ބަދަލުގައި އާޔަތް ފެންނަ ބައި)
-function syncExtraToJudges() {
-    const currentQ = state.extra.selection[state.extra.currentIndex];
+// 1. މެއިން އެޑްމިން ގޮޅިއަށް އާޔަތް ލާނެ މައިގަނޑު ފަންކްޝަން
+function forceUpdateAdminLiveBox() {
     const liveBox = document.getElementById('mainLiveQuranBox');
     const statusLabel = document.getElementById('liveStatusLabel');
-
-    if(!currentQ) {
-        if(liveBox) liveBox.innerText = "ދަރިވަރު ސުވާލު ނަގަނީ...";
-        if(statusLabel) statusLabel.innerText = "SELECTING...";
-        return;
-    }
-
-    // މެއިން އެޑްމިންގެ ގޮޅިއަށް އާޔަތް ލުން
-    if(liveBox) {
-        if(state.extra.settings.mode === 'hifz') {
-            liveBox.innerHTML = `
-                <div style="color:#FFD700; border:1px dashed #555; padding:10px; font-size: 1.5vw;">
-                    ޙިފްޡު މޯޑް: ދަރިވަރަށް އާޔަތެއް ނުފެންނާނެ
-                </div>
-                <div style="margin-top:15px; opacity:0.8;">${currentQ.text}</div>`;
-        } else {
-            liveBox.innerText = currentQ.text;
-        }
-    }
-    if(statusLabel) statusLabel.innerText = "READING: " + currentQ.surah;
-
-    // ޖަޖުންގެ މޮނިޓަރަށްވެސް ޑޭޓާ ފޮނުވުން
-    if (state.windows.judgeMirror && !state.windows.judgeMirror.closed) {
-        const packet = {
-            phase: state.extra.phase,
-            currentIdx: state.extra.currentIndex,
-            ayahText: currentQ.text,
-            surahName: currentQ.surah,
-            ayahRange: currentQ.start + " - " + currentQ.end,
-            juzName: currentQ.juz,
-            settings: state.extra.settings
-        };
-        if(state.windows.judgeMirror.updateJudgeMirrorFromExtra) {
-            state.windows.judgeMirror.updateJudgeMirrorFromExtra(packet);
-        }
-    }
-}
-
-// 2. DASH CLICK FOR FULL MARKS (މެޓްރިކްސް ތެރެއިން ޑޭޝް އަށް ފިއްތާލުމުން ފުލް މާކުސް އަރާގޮތް ހެދުން)
-window.setFullMarks = function(j, rIdx, max) {
-    const inp = document.getElementById(`inp_${j}_${rIdx}`);
-    const disp = document.getElementById(`mScore_${j}_${rIdx}`);
-    const cell = document.getElementById(`cell_${j}_${rIdx}`);
     
-    if(!inp || !disp) return;
+    if (!liveBox) return;
 
-    inp.value = max.toFixed(2);
-    disp.innerText = max.toFixed(2);
-    if(cell) cell.style.background = "rgba(0,230,118,0.1)"; // ފެހި ކުލަ
-    
-    // ޖުމްލަ މާކުސް އަލުން ހިސާބުކުރުން
-    if(typeof recalcMatrixJudgeTotal === 'function') recalcMatrixJudgeTotal(j);
-};
-
-// 3. RENDER SECRETARY RUBRIC (ރުބްރިކް ބައި ނެތްކަން ޔަގީންކުރުން)
-// މެއިން އެޑްމިން އިން ރުބްރިކް ގްރިޑް ނެގުމުން އެރަރއެއް ނައުމަށްޓަކައި
-function renderSecretaryRubric() {
-    if (!document.getElementById('rubricGrid')) return; 
-}
-// --- FORCE SYNC LOGIC ---
-
-// 1. ޝާހީ ސްކްރީނުން އާޔަތް ބަދަލުކުރާ ފަންކްޝަންތަކާ ގުޅުވާލުން
-const originalNextAyah = typeof nextAyah === 'function' ? nextAyah : null;
-window.nextAyah = function() {
-    if(originalNextAyah) originalNextAyah();
-    syncExtraToJudges(); // ވަގުތުން އެޑްމިން ގޮޅި އަޕްޑޭޓްކުރުން
-};
-
-const originalPrevAyah = typeof prevAyah === 'function' ? prevAyah : null;
-window.prevAyah = function() {
-    if(originalPrevAyah) originalPrevAyah();
-    syncExtraToJudges();
-};
-
-const originalSelectQuestion = typeof selectQuestion === 'function' ? selectQuestion : null;
-window.selectQuestion = function(idx) {
-    if(originalSelectQuestion) originalSelectQuestion(idx);
-    syncExtraToJudges();
-};
-
-// 2. ސިސްޓަމްގެ ސްޓޭޓް ބަދަލުވޭތޯ ބަލައި އަޕްޑޭޓްކުރުން (Observer)
-// މި ބައިން ކޮންމެ 500 މިލިސިކުންތަކުން އެޑްމިން ގޮޅީގައި އާޔަތް އިންތޯ ޗެކްކުރާނެ
-setInterval(() => {
-    const liveBox = document.getElementById('mainLiveQuranBox');
-    if (liveBox && state.extra.selection && state.extra.selection[state.extra.currentIndex]) {
-        const currentAyah = state.extra.selection[state.extra.currentIndex].text;
+    // ސިސްޓަމްގެ 'state' އިން މިވަގުތުގެ އާޔަތް ނެގުން
+    if (state && state.extra && state.extra.selection) {
+        const currentQ = state.extra.selection[state.extra.currentIndex];
         
-        // ގޮޅީގައި އާޔަތް ނެތްނަމަ ނުވަތަ ބަދަލުވެފައިވާނަމަ އަޕްޑޭޓްކުރުން
-        if (liveBox.innerText === "ދަރިވަރު ކިޔަވަން ފެށުމުން އާޔަތް މިތަނުން ފެންނާނެއެވެ." || 
-            liveBox.innerText === "ދަރިވަރު ސުވާލު ނަގަނީ...") {
-            syncExtraToJudges();
+        if (currentQ) {
+            // ލިޔުންކޮޅު ގޮޅިއަށް ލުން
+            if (state.extra.settings && state.extra.settings.mode === 'hifz') {
+                liveBox.innerHTML = `
+                    <div style="color:#FFD700; border:1px dashed #555; padding:10px; font-size: 1.2vw; margin-bottom: 15px;">
+                        ޙިފްޡު މޯޑް: ދަރިވަރަށް އާޔަތް ނުފެންނާނެ
+                    </div>
+                    <div style="font-size: 3vw;">${currentQ.text}</div>`;
+            } else {
+                liveBox.innerText = currentQ.text;
+            }
+            
+            // ސްޓޭޓަސް އަޕްޑޭޓްކުރުން
+            if (statusLabel) {
+                statusLabel.innerText = "LIVE: " + (currentQ.surah || "Surah");
+            }
         }
     }
-}, 1000);
+}
+
+// 2. ބިޑި އެޅުވުން: ކޮންމެ 500 މިލިސިކުންތަކުން އަމިއްލައަށް ޗެކްކުރުން (Polling)
+// މިއީ އެއްވެސް ފަންކްޝަނަކުން ސިގްނަލް ނުދިނަސް މަސައްކަތް ކުރާނެ ގޮތެވެ.
+setInterval(forceUpdateAdminLiveBox, 500);
+
+// 3. ޖަޖް މިރަރ ފަންކްޝަން އޯވަރައިޑް ކުރުން (މަޖުބޫރުން)
+const originalSync = window.syncExtraToJudges;
+window.syncExtraToJudges = function() {
+    if (typeof originalSync === 'function') originalSync();
+    forceUpdateAdminLiveBox();
+};
+
+// 4. ލޯކަލް ސްޓޯރޭޖަށް ބަދަލެއް އަތުވެއްޖެނަމަ އަޕްޑޭޓްކުރުން
+window.addEventListener('storage', (event) => {
+    forceUpdateAdminLiveBox();
+});
+
+// 5. ޕޭޖް ލޯޑްވާއިރު އެއްފަހަރު ހިންގާލުން
+document.addEventListener('DOMContentLoaded', forceUpdateAdminLiveBox);
 </script>
 </body>
 </html>
