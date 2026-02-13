@@ -17212,59 +17212,67 @@ function recalcMatrixJudgeTotal(jNum) {
     inputs.forEach(inp => { if(inp.value !== "") { sum += parseFloat(inp.value); active = true; } });
     document.getElementById(`mTotal_${jNum}`).innerText = active ? sum.toFixed(2) : "0.00";
 }
-    // ===============================================================
-// ★ THE "UNBREAKABLE" SYNC: LOCALSTORAGE OBSERVER (V15) ★
+// ===============================================================
+// ★ JUDGE MIRROR TO ADMIN PANEL SYNC (V14) ★
 // ===============================================================
 
-// 1. މެއިން އެޑްމިން ގޮޅިއަށް އާޔަތް ލާނެ މައިގަނޑު ފަންކްޝަން
-function forceUpdateAdminLiveBox() {
+// ޖަޖް ސްކްރީނަށް އާޔަތް ފޮނުވާ ކޮންމެ ފަހަރަކު އެޑްމިން ގޮޅިއަށްވެސް އެ ބަދަލު ގެނައުން
+function updateJudgeMirrorFromExtra(packet) {
     const liveBox = document.getElementById('mainLiveQuranBox');
     const statusLabel = document.getElementById('liveStatusLabel');
-    
+
     if (!liveBox) return;
 
-    // ސިސްޓަމްގެ 'state' އިން މިވަގުތުގެ އާޔަތް ނެގުން
-    if (state && state.extra && state.extra.selection) {
-        const currentQ = state.extra.selection[state.extra.currentIndex];
-        
-        if (currentQ) {
-            // ލިޔުންކޮޅު ގޮޅިއަށް ލުން
-            if (state.extra.settings && state.extra.settings.mode === 'hifz') {
-                liveBox.innerHTML = `
-                    <div style="color:#FFD700; border:1px dashed #555; padding:10px; font-size: 1.2vw; margin-bottom: 15px;">
-                        ޙިފްޡު މޯޑް: ދަރިވަރަށް އާޔަތް ނުފެންނާނެ
-                    </div>
-                    <div style="font-size: 3vw;">${currentQ.text}</div>`;
-            } else {
-                liveBox.innerText = currentQ.text;
-            }
-            
-            // ސްޓޭޓަސް އަޕްޑޭޓްކުރުން
-            if (statusLabel) {
-                statusLabel.innerText = "LIVE: " + (currentQ.surah || "Surah");
-            }
+    // 1. އާޔަތުގެ ޓެކްސްޓް އަޕްޑޭޓްކުރުން
+    if (packet.settings && packet.settings.mode === 'hifz') {
+        liveBox.innerHTML = `
+            <div style="color:#FFD700; border:1px dashed #555; padding:10px; font-size: 1.2vw; margin-bottom: 15px;">
+                ޙިފްޡު މޯޑް: ދަރިވަރަށް އާޔަތް ނުފެންނާނެ
+            </div>
+            <div style="font-size: 3vw;">${packet.ayahText}</div>`;
+    } else {
+        liveBox.innerText = packet.ayahText;
+    }
+
+    // 2. ސްޓޭޓަސް ލޭބަލް އަޕްޑޭޓްކުރުން
+    if (statusLabel) {
+        statusLabel.innerText = "MIRROR SYNC: " + packet.surahName + " (" + packet.ayahRange + ")";
+    }
+
+    // 3. ޖަޖް ސްކްރީން ހުޅުވާފައި ހުރިނަމަ އެއަށްވެސް ފޮނުވުން
+    if (state.windows.judgeMirror && !state.windows.judgeMirror.closed) {
+        if (state.windows.judgeMirror.updateJudgeMirrorFromExtra) {
+            state.windows.judgeMirror.updateJudgeMirrorFromExtra(packet);
         }
     }
 }
 
-// 2. ބިޑި އެޅުވުން: ކޮންމެ 500 މިލިސިކުންތަކުން އަމިއްލައަށް ޗެކްކުރުން (Polling)
-// މިއީ އެއްވެސް ފަންކްޝަނަކުން ސިގްނަލް ނުދިނަސް މަސައްކަތް ކުރާނެ ގޮތެވެ.
-setInterval(forceUpdateAdminLiveBox, 500);
-
-// 3. ޖަޖް މިރަރ ފަންކްޝަން އޯވަރައިޑް ކުރުން (މަޖުބޫރުން)
-const originalSync = window.syncExtraToJudges;
+// ސިސްޓަމްގެ އެހެން ފަންކްޝަންތަކުން މި އައު ސިންކް ބޭނުންކުރާ ގޮތަށް ހެދުން
 window.syncExtraToJudges = function() {
-    if (typeof originalSync === 'function') originalSync();
-    forceUpdateAdminLiveBox();
+    const currentQ = state.extra.selection[state.extra.currentIndex];
+    if (currentQ) {
+        const packet = {
+            phase: state.extra.phase,
+            currentIdx: state.extra.currentIndex,
+            ayahText: currentQ.text,
+            surahName: currentQ.surah,
+            ayahRange: currentQ.start + " - " + currentQ.end,
+            juzName: currentQ.juz,
+            settings: state.extra.settings
+        };
+        updateJudgeMirrorFromExtra(packet);
+    }
 };
 
-// 4. ލޯކަލް ސްޓޯރޭޖަށް ބަދަލެއް އަތުވެއްޖެނަމަ އަޕްޑޭޓްކުރުން
-window.addEventListener('storage', (event) => {
-    forceUpdateAdminLiveBox();
-});
-
-// 5. ޕޭޖް ލޯޑްވާއިރު އެއްފަހަރު ހިންގާލުން
-document.addEventListener('DOMContentLoaded', forceUpdateAdminLiveBox);
+// ޖަޖް ސްކްރީން ހުޅުވޭ ވަގުތު މި ފަންކްޝަން އެ ވިންޑޯގައި އިންތޯ ޗެކްކުރުން
+setInterval(() => {
+    if (state.extra.selection && state.extra.selection[state.extra.currentIndex]) {
+        const liveBox = document.getElementById('mainLiveQuranBox');
+        if (liveBox && (liveBox.innerText.includes("ދަރިވަރު") || liveBox.innerText === "")) {
+            syncExtraToJudges();
+        }
+    }
+}, 1000);
 </script>
 </body>
 </html>
