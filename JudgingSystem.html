@@ -18029,7 +18029,98 @@ setInterval(() => {
         }
     }
 }, 1000);
+// --- UNIVERSAL CSV LOADER (FIXED & SYNCED) ---
+function loadStudentBatch() {
+    // Check both input fields
+    const file1 = document.getElementById('batchCsv')?.files[0];
+    const file2 = document.getElementById('masterSheetInput')?.files[0];
+    const file = file1 || file2;
 
+    if(!file) { alert("Please select a CSV file first!"); return; }
+    
+    const r = new FileReader();
+    r.onload = e => {
+        try {
+            const result = e.target.result;
+            const rows = result.split(/\r?\n/);
+            if(rows.length < 2) return;
+
+            // Header mapping (Case insensitive)
+            const headers = rows[0].split(',').map(h => h.replace(/^"|"$/g, '').trim().toLowerCase());
+            
+            const col = {
+                reg: headers.indexOf("reg no"),
+                name: headers.indexOf("full name"),
+                group: headers.indexOf("age group"),
+                branch: headers.indexOf("branch"),
+                inst: headers.indexOf("institution type"),
+                id: headers.indexOf("id card"),
+                gender: headers.indexOf("gender"),
+                j1: headers.indexOf("judge 1 total"),
+                j2: headers.indexOf("judge 2 total"),
+                j3: headers.indexOf("judge 3 total"),
+                j4: headers.indexOf("judge 4 total"),
+                j5: headers.indexOf("judge 5 total"),
+                avg: headers.indexOf("final average")
+            };
+
+            state.allStudents = []; 
+            state.judging.savedResults = []; 
+
+            for(let i = 1; i < rows.length; i++) {
+                let rowRaw = rows[i].trim();
+                if(!rowRaw) continue;
+
+                // Smart split to handle commas inside quotes
+                const cols = rowRaw.match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g);
+                if(!cols || cols.length < 5) continue;
+
+                const clean = cols.map(c => c.replace(/^"|"$/g, '').trim());
+
+                const sObj = {
+                    id: col.id > -1 ? clean[col.id] : "ID-"+i,
+                    reg: col.reg > -1 ? clean[col.reg] : "",
+                    name: col.name > -1 ? clean[col.name] : "",
+                    group: col.group > -1 ? clean[col.group] : "",
+                    branch: col.branch > -1 ? clean[col.branch] : "",
+                    institution: col.inst > -1 ? clean[col.inst] : "",
+                    gender: col.id > -1 ? clean[col.gender] : "",
+                    scores: {}, 
+                    detailedScores: {},
+                    finalScore: 0
+                };
+
+                // Sync scores if present in CSV
+                if(col.j1 > -1 && clean[col.j1]) sObj.scores['Judge_1'] = parseFloat(clean[col.j1]);
+                if(col.j2 > -1 && clean[col.j2]) sObj.scores['Judge_2'] = parseFloat(clean[col.j2]);
+                if(col.j3 > -1 && clean[col.j3]) sObj.scores['Judge_3'] = parseFloat(clean[col.j3]);
+                if(col.j4 > -1 && clean[col.j4]) sObj.scores['Judge_4'] = parseFloat(clean[col.j4]);
+                if(col.j5 > -1 && clean[col.j5]) sObj.scores['Judge_5'] = parseFloat(clean[col.j5]);
+                
+                if(col.avg > -1 && clean[col.avg]) {
+                    sObj.finalScore = parseFloat(clean[col.avg]);
+                }
+
+                state.allStudents.push(sObj);
+                if(sObj.finalScore > 0) state.judging.savedResults.push(sObj);
+            }
+            
+            // Refresh All UI Elements
+            if(typeof populateStudentSelector === 'function') populateStudentSelector(); 
+            if(typeof renderMasterTable === 'function') renderMasterTable();      
+            saveToLocal(); 
+            
+            alert(`✅ ކާމިޔާބު! ${state.allStudents.length} ދަރިވަރުންގެ މަޢުލޫމާތާއި މާކުސްތައް ސިންކްވެއްޖެ.`);
+        } catch(err) { 
+            console.error(err);
+            alert("Error: ފައިލް ކިޔުމުގައި މައްސަލައެއް ދިމާވެއްޖެ."); 
+        }
+    };
+    r.readAsText(file);
+}
+
+// Ensure the master view button also triggers this function
+document.getElementById('masterSheetInput').onchange = loadStudentBatch;
 </script>
 </body>
 </html>
