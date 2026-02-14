@@ -17680,6 +17680,159 @@ function recalcMatrixJudgeTotal(jNum) {
     const totalVal = active ? sum.toFixed(2) : "0.00";
     document.getElementById(`mTotal_${jNum}`).innerText = totalVal;
 }
+    // --- ULTIMATE 2000 STUDENTS DUMMY GENERATOR (MASTER SYNC) ---
+function generateDetailedRankedCSV() {
+    // 1. މާކުސް ދޭ ބައިތައް (Rubric Criteria)
+    const criteriaList = [
+        { name: "Thilawa", max: 30 }, 
+        { name: "Tajweed", max: 20 }, 
+        { name: "Makhraj", max: 20 }, 
+        { name: "Sifa", max: 10 }, 
+        { name: "Fasaha", max: 10 }, 
+        { name: "Talaffuz", max: 5 }, 
+        { name: "Maqamat", max: 5 }
+    ];
+
+    // 2. CSV Header ބިނާކުރުން
+    let headers = [
+        "Serial No", "Reg No", "Age Group", "Branch", "Institution Type", 
+        "Full Name", "Gender", "Address", "ID Card", "Contact", 
+        "Parent Name", "Parent Phone", "Email"
+    ];
+
+    // ކޮންމެ ޖަޖެއްގެ ވަކިވަކި ބައިތަކުގެ ހެޑަރ އިތުރުކުރުން (J1-Thilawa, J1-Tajweed...)
+    for (let j = 1; j <= 5; j++) {
+        criteriaList.forEach(c => {
+            headers.push(`J${j}-${c.name}`);
+        });
+        headers.push(`Judge ${j} Total`);
+    }
+
+    // ފަހު ނަތީޖާގެ ހެޑަރތައް
+    headers.push("GRAND TOTAL", "FINAL AVERAGE", "RANK", "REMARKS");
+
+    // 3. ރެންޑަމް ޑޭޓާ ޕޫލް (Data Pools)
+    const namesM = ["Ahmed", "Mohamed", "Ali", "Ibrahim", "Hassan", "Abdulla", "Hussain", "Ismail", "Yusuf", "Musa"];
+    const namesF = ["Fathimath", "Aishath", "Mariyam", "Aminath", "Zainab", "Hawwa", "Khadheeja", "Shifa", "Yumna"];
+    const lastNames = ["Rasheed", "Nazeer", "Fayaz", "Manik", "Didi", "Saeed", "Zahir", "Riza", "Nasir", "Waheed"];
+    const instTypes = ["School", "Office", "NGO", "University", "Private"];
+    const islands = ["Male'", "Hulhumale'", "Villingili", "Addu City", "Fuvahmulah", "Kulhudhuffushi"];
+    const groups = ["Under 6", "Under 9", "Under 11", "Under 13", "Under 16", "Under 19", "General"];
+    const branches = ["Balaiygen", "Nubalai"];
+
+    let allStudentsData = []; 
+
+    // 4. 2000 ދަރިވަރުން އުފެއްދުން
+    for (let i = 1; i <= 2000; i++) {
+        const isFem = Math.random() > 0.5;
+        const name = isFem ? namesF[i % namesF.length] : namesM[i % namesM.length];
+        const lName = lastNames[i % lastNames.length];
+        const iType = instTypes[i % instTypes.length];
+        
+        let studentObj = {
+            serial: i,
+            reg: `REG-${1000 + i}`,
+            group: groups[i % groups.length],
+            branch: branches[i % branches.length],
+            inst: iType,
+            name: `${name} ${lName} ${i}`,
+            gender: isFem ? "Female" : "Male",
+            addr: islands[i % islands.length],
+            id: `A${Math.floor(100000 + Math.random() * 900000)}`,
+            contact: "777" + (1000 + i),
+            parent: "Parent of " + name,
+            pPhone: "999" + (1000 + i),
+            email: "std" + i + "@example.com",
+            detailedScores: {}, // Breakdown for each judge
+            scores: {},         // Totals for each judge
+            finalScore: 0
+        };
+
+        let totalForAllJudges = 0;
+        let judgesPresent = 5; // ޑަމީގައި ހުރިހާ ޖަޖުން މާކުސް ދޭގޮތަށް
+        let studentAbility = Math.random() * (0.98 - 0.55) + 0.55; // ދަރިވަރުގެ ފެންވަރު (55% - 98%)
+
+        for (let j = 1; j <= 5; j++) {
+            let jKey = `Judge_${j}`;
+            let judgeSum = 0;
+            let variance = (Math.random() * 0.08) - 0.04; // ޖަޖުންގެ މެދުގައި ހުންނަ ތަފާތު
+            studentObj.detailedScores[jKey] = {};
+
+            criteriaList.forEach(c => {
+                let mark = c.max * (studentAbility + variance);
+                mark = Math.max(0, Math.min(c.max, mark)); // ކެޕް ކުރުން
+                mark = parseFloat(mark.toFixed(2));
+                
+                studentObj.detailedScores[jKey][c.name] = mark;
+                judgeSum += mark;
+            });
+
+            judgeSum = parseFloat(judgeSum.toFixed(2));
+            studentObj.scores[jKey] = judgeSum;
+            totalForAllJudges += judgeSum;
+        }
+
+        studentObj.finalScore = parseFloat((totalForAllJudges / 5).toFixed(2));
+        allStudentsData.push(studentObj);
+    }
+
+    // 5. ރޭންކް ކުރުން (Rank Students)
+    allStudentsData.sort((a, b) => b.finalScore - a.finalScore);
+
+    // 6. CSV ބިނާކުރުން (Building Rows)
+    let csvRows = [];
+    csvRows.push(headers.join(",")); // Add Header row
+
+    allStudentsData.forEach((s, index) => {
+        let rank = index + 1;
+        let remarks = "";
+        if (rank <= 3) remarks = "🏆 Top 3 Winner";
+        else if (rank <= 10) remarks = "🎖️ Top 10 Distinction";
+        else if (s.finalScore >= 75) remarks = "Passed";
+
+        let row = [
+            rank, `"${s.reg}"`, `"${s.group}"`, `"${s.branch}"`, `"${s.inst}"`, 
+            `"${s.name}"`, `"${s.gender}"`, `"${s.addr}"`, `"${s.id}"`, 
+            `"${s.contact}"`, `"${s.parent}"`, `"${s.pPhone}"`, `"${s.email}"`
+        ];
+
+        // ޖަޖުންގެ މާކުސްތައް ރޯއަށް އިތުރުކުރުން
+        for (let j = 1; j <= 5; j++) {
+            let jKey = `Judge_${j}`;
+            criteriaList.forEach(c => {
+                row.push(s.detailedScores[jKey][c.name]);
+            });
+            row.push(s.scores[jKey]);
+        }
+
+        // ފަހު ޖުމްލަތައް
+        let grandTotal = (s.finalScore * 5).toFixed(2);
+        row.push(grandTotal, s.finalScore, rank, `"${remarks}"`);
+
+        csvRows.push(row.join(","));
+    });
+
+    // 7. ސިސްޓަމަށް ލޯޑުކުރުން (Load into System Memory)
+    state.allStudents = allStudentsData;
+    state.judging.savedResults = allStudentsData;
+    saveToLocal();
+    if(typeof renderMasterTable === 'function') renderMasterTable();
+
+    // 8. ފައިލް ޑައުންލޯޑް ކުރުން
+    const csvString = csvRows.join("\n");
+    const blob = new Blob([csvString], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement("a");
+    const url = URL.createObjectURL(blob);
+    const dateStr = new Date().toISOString().split('T')[0];
+    
+    link.setAttribute("href", url);
+    link.setAttribute("download", `Rasfahi_Full_Dummy_2000_${dateStr}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    
+    alert("✅ 2000 Students Generated & Downloaded!\nCheck your downloads folder.");
+}
 </script>
 </body>
 </html>
