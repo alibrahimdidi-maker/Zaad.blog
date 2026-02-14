@@ -18029,94 +18029,91 @@ setInterval(() => {
         }
     }
 }, 1000);
-function loadStudentBatch() {
-    const file = document.getElementById('batchCsv').files[0] || document.getElementById('masterSheetInput').files[0];
-    if(!file) { alert("Please select a CSV file first!"); return; }
-    
-    const r = new FileReader();
-    r.onload = e => {
-        try {
-            const rows = e.target.result.split('\n');
-            if(rows.length < 2) return;
+function generateDetailedRankedCSV() {
+    // 1. މާކުސް ދޭ ބައިތައް (ތަރުތީބުން)
+    const criteriaList = [
+        { name: "Thilawa", max: 30 }, 
+        { name: "Tajweed", max: 20 }, 
+        { name: "Makhraj", max: 20 }, 
+        { name: "Sifa", max: 10 }, 
+        { name: "Fasaha", max: 10 }, 
+        { name: "Talaffuz", max: 5 }, 
+        { name: "Maqamat", max: 5 }
+    ];
 
-            // 1. ހެޑަރތައް ނަގައި، އޭގެ ނަމަށް ބަލައިގެން އިންޑެކްސް ހޯދުން
-            const headers = rows[0].split(',').map(h => h.replace(/^"|"$/g, '').trim().toLowerCase());
-            
-            // ކޮލަމްގެ ނަމަށް ބަލައިގެން އޭގެ މަޤާމު ދެނެގަތުން
-            const findCol = (name) => headers.findIndex(h => h.includes(name.toLowerCase()));
+    // 2. CSV ހެޑަރތައް (މެއިން ސޮފްޓްވެއަރއަށް ކިޔޭނެ ތަރުތީބުން)
+    let headers = [
+        "Reg No", "Full Name", "Age Group", "Branch", "Institution Type", 
+        "ID Card", "Gender", "Address", "Judge 1 Total", "Judge 2 Total", 
+        "Judge 3 Total", "Judge 4 Total", "Judge 5 Total", "Final Average"
+    ];
 
-            const idx = {
-                reg: findCol("reg no"),
-                name: findCol("full name"),
-                group: findCol("age group"),
-                branch: findCol("branch"),
-                inst: findCol("institution type"),
-                id: findCol("id card"),
-                gender: findCol("gender"),
-                address: findCol("address"),
-                j1: findCol("judge 1 total"),
-                j2: findCol("judge 2 total"),
-                j3: findCol("judge 3 total"),
-                j4: findCol("judge 4 total"),
-                j5: findCol("judge 5 total"),
-                avg: findCol("final average")
-            };
+    let csvContent = headers.join(",") + "\n";
 
-            state.allStudents = []; 
-            state.judging.savedResults = []; 
+    // ޑޭޓާ ޕޫލްސް
+    const names = ["Ahmed", "Ali", "Hassan", "Ibrahim", "Fathimath", "Aishath", "Mariyam", "Zainab"];
+    const groups = ["Under 6", "Under 9", "Under 11", "Under 13", "Under 16", "Under 19", "General"];
+    const branches = ["Balaiygen", "Nubalai"];
+    const insts = ["School", "Office", "NGO", "University", "Private"];
 
-            for(let i = 1; i < rows.length; i++) {
-                let rowRaw = rows[i].trim();
-                if(!rowRaw) continue;
+    // 3. 2000 ކުދިން ޖެނެރޭޓްކުރުން
+    for (let i = 1; i <= 2000; i++) {
+        const studentName = names[i % names.length] + " " + i;
+        const regNo = "REG-" + (1000 + i);
+        const group = groups[i % groups.length];
+        const branch = branches[i % branches.length];
+        const inst = insts[i % insts.length];
+        
+        let grandTotal = 0;
+        let judgeScores = [];
+        let skillLevel = Math.random() * (0.95 - 0.60) + 0.60;
 
-                // ކޮމާ އާއި ކޯޓްސް (Quotes) ރަނގަޅަށް ހޭންޑްލްކުރުން
-                const cols = rowRaw.match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g);
-                if(!cols) continue;
-                const clean = cols.map(c => c.replace(/^"|"$/g, '').trim());
-                
-                // ދަރިވަރުގެ މަޢުލޫމާތު އޮބްޖެކްޓް ހެދުން
-                const sObj = {
-                    reg: idx.reg > -1 ? clean[idx.reg] : "",
-                    name: idx.name > -1 ? clean[idx.name] : "",
-                    group: idx.group > -1 ? clean[idx.group] : "",
-                    branch: idx.branch > -1 ? clean[idx.branch] : "",
-                    institution: idx.inst > -1 ? clean[idx.inst] : "",
-                    id: idx.id > -1 ? clean[idx.id] : "ID-"+i,
-                    gender: idx.gender > -1 ? clean[idx.gender] : "",
-                    address: idx.address > -1 ? clean[idx.address] : "",
-                    scores: {}, 
-                    detailedScores: {},
-                    finalScore: 0
-                };
-
-                // ޖަޖުންގެ ޖުމްލަ މާކުސްތައް ހުރިނަމަ ސިންކްކުރުން
-                if(idx.j1 > -1 && clean[idx.j1]) sObj.scores['Judge_1'] = parseFloat(clean[idx.j1]);
-                if(idx.j2 > -1 && clean[idx.j2]) sObj.scores['Judge_2'] = parseFloat(clean[idx.j2]);
-                if(idx.j3 > -1 && clean[idx.j3]) sObj.scores['Judge_3'] = parseFloat(clean[idx.j3]);
-                if(idx.j4 > -1 && clean[idx.j4]) sObj.scores['Judge_4'] = parseFloat(clean[idx.j4]);
-                if(idx.j5 > -1 && clean[idx.j5]) sObj.scores['Judge_5'] = parseFloat(clean[idx.j5]);
-                
-                // ފައިނަލް އެވްރެޖް ހުރިނަމަ އެ ނެގުން
-                if(idx.avg > -1 && clean[idx.avg]) {
-                    sObj.finalScore = parseFloat(clean[idx.avg]);
-                    if(sObj.finalScore > 0) state.judging.savedResults.push(sObj);
-                }
-
-                state.allStudents.push(sObj);
-            }
-            
-            // UI އަޕްޑޭޓްކުރުން
-            if(typeof populateStudentSelector === 'function') populateStudentSelector(); 
-            if(typeof renderMasterTable === 'function') renderMasterTable();       
-            saveToLocal(); 
-            
-            alert(`✅ ކާމިޔާބު! ${state.allStudents.length} ދަރިވަރުންގެ މަޢުލޫމާތު ހެޑަރތަކާ އެއްގޮތަށް ސިންކްވެއްޖެ.`);
-        } catch(err) { 
-            console.error(err);
-            alert("Error: CSV ފައިލްގެ ފޯމެޓް ދިމައެއް ނުވޭ. 'Full Name' އަދި 'Reg No' ފަދަ ހެޑަރތައް ފައިލްގައި ހުރިތޯ ޔަޤީންކުރައްވާ."); 
+        for (let j = 1; j <= 5; j++) {
+            let jTotal = 0;
+            let variance = (Math.random() * 0.1) - 0.05;
+            criteriaList.forEach(c => {
+                let m = Math.max(0, Math.min(c.max, c.max * (skillLevel + variance)));
+                jTotal += m;
+            });
+            let fixedJTotal = parseFloat(jTotal.toFixed(2));
+            judgeScores.push(fixedJTotal);
+            grandTotal += fixedJTotal;
         }
-    };
-    r.readAsText(file);
+
+        let finalAvg = parseFloat((grandTotal / 5).toFixed(2));
+
+        // ރޯ އެތުރުން
+        let row = [
+            `"${regNo}"`,
+            `"${studentName}"`,
+            `"${group}"`,
+            `"${branch}"`,
+            `"${inst}"`,
+            `"A${100000+i}"`,
+            `"${(i%2==0)?'Female':'Male'}"`,
+            `"Male' City"`,
+            judgeScores[0],
+            judgeScores[1],
+            judgeScores[2],
+            judgeScores[3],
+            judgeScores[4],
+            finalAvg
+        ];
+
+        csvContent += row.join(",") + "\n";
+    }
+
+    // 4. ޑައުންލޯޑް ލޮޖިކް (ސާފު ނަމެއްގައި)
+    const blob = new Blob(["\ufeff" + csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement("a");
+    const url = URL.createObjectURL(blob);
+    
+    // ފައިލްގެ ނަމުން ބޭކާރު ނަންބަރުތައް އުނިކޮށް ސާދާކޮށްލުން
+    link.setAttribute("href", url);
+    link.setAttribute("download", "Rasfahi_Master_List.csv");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
 }
 </script>
 </body>
