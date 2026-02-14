@@ -17565,6 +17565,152 @@ function exportFullMasterSheet() {
 
 // 3. RE-LINKING: އެހެން ފަންކްޝަންތައް މިއާ ގުޅުވާލުން
 document.getElementById('masterSheetInput').onchange = loadStudentBatch;
+    // =========================================================================
+// ★ ADDRESS SYNC ENHANCEMENT (V16) ★
+// =========================================================================
+
+// 1. UPDATED MASTER LOADER (Address Sync ހިމަނައިގެން)
+function loadStudentBatch() {
+    const file = document.getElementById('batchCsv').files[0] || document.getElementById('masterSheetInput').files[0];
+    if(!file) { alert("Please select a CSV file!"); return; }
+    
+    const r = new FileReader();
+    r.onload = e => {
+        try {
+            const rows = e.target.result.split('\n');
+            if(rows.length < 2) return;
+
+            const rawHeaders = rows[0].split(',').map(h => h.replace(/^"|"$/g, '').trim().toLowerCase());
+            
+            // ކޮލަމްތައް ހުރި ދިމާ ހޯދުން
+            const col = {
+                reg: rawHeaders.indexOf("reg no"),
+                name: rawHeaders.indexOf("full name"),
+                group: rawHeaders.indexOf("age group"),
+                branch: rawHeaders.indexOf("branch"),
+                inst: rawHeaders.indexOf("institution type"),
+                id: rawHeaders.indexOf("id card"),
+                gender: rawHeaders.indexOf("gender"),
+                addr: rawHeaders.indexOf("address"), // ★ މިބައި އިތުރުކުރީ
+                avg: rawHeaders.indexOf("final average")
+            };
+
+            const rubric = state.judging.rubric;
+            state.allStudents = []; 
+            state.judging.savedResults = []; 
+
+            for(let i = 1; i < rows.length; i++) {
+                let rowRaw = rows[i].trim();
+                if(!rowRaw) continue;
+                const cols = rowRaw.match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g).map(c => c.replace(/^"|"$/g, '').trim());
+                
+                const sObj = {
+                    id: col.id > -1 ? cols[col.id] : "ID-"+i,
+                    reg: col.reg > -1 ? cols[col.reg] : "",
+                    name: col.name > -1 ? cols[col.name] : "",
+                    group: col.group > -1 ? cols[col.group] : "",
+                    branch: col.branch > -1 ? cols[col.branch] : "",
+                    institution: col.inst > -1 ? cols[col.inst] : "",
+                    gender: col.gender > -1 ? cols[col.gender] : "",
+                    address: col.addr > -1 ? cols[col.addr] : "", // ★ އެޑްރެސް ނެގުން
+                    scores: {}, 
+                    detailedScores: {},
+                    finalScore: 0
+                };
+
+                // ޖަޖުންގެ މާކުސްތައް ސިންކްކުރުން
+                let grandSum = 0;
+                let activeJudges = 0;
+                for (let j = 1; j <= 5; j++) {
+                    let jKey = `Judge_${j}`;
+                    let jTotalIdx = rawHeaders.indexOf(`judge ${j} total`);
+                    if (jTotalIdx > -1 && cols[jTotalIdx]) {
+                        let jTotalVal = parseFloat(cols[jTotalIdx]);
+                        if (!isNaN(jTotalVal) && jTotalVal > 0) {
+                            sObj.scores[jKey] = jTotalVal;
+                            grandSum += jTotalVal;
+                            activeJudges++;
+                            sObj.detailedScores[jKey] = {};
+                            rubric.forEach(r => {
+                                let critHeader = `j${j}-${r.name}`.toLowerCase();
+                                let critIdx = rawHeaders.findIndex(h => h.includes(critHeader));
+                                if (critIdx > -1 && cols[critIdx]) {
+                                    sObj.detailedScores[jKey][r.name] = parseFloat(cols[critIdx]);
+                                }
+                            });
+                        }
+                    }
+                }
+
+                if (col.avg > -1 && cols[col.avg]) {
+                    sObj.finalScore = parseFloat(cols[col.avg]);
+                } else if (activeJudges > 0) {
+                    sObj.finalScore = parseFloat((grandSum / activeJudges).toFixed(2));
+                }
+
+                state.allStudents.push(sObj);
+                if (sObj.finalScore > 0) state.judging.savedResults.push(sObj);
+            }
+            
+            if(typeof populateStudentSelector === 'function') populateStudentSelector(); 
+            if(typeof renderMasterTable === 'function') renderMasterTable();      
+            saveToLocal(); 
+            alert(`✅ ސިންކް ކާމިޔާބު! އެޑްރެހާއެކު ${state.allStudents.length} ދަރިވަރުންގެ މަޢުލޫމާތު ލޯޑުވެއްޖެ.`);
+        } catch(err) { alert("Error: CSV ފައިލްގެ ފޯމެޓް ދިމައެއް ނުވޭ."); }
+    };
+    r.readAsText(file);
+}
+
+// 2. UPDATED UNIVERSAL EXPORTER (Address ކޮލަމް ހިމަނައިގެން)
+function exportFullMasterSheet() {
+    let sourceData = (state.allStudents && state.allStudents.length > 0) ? [...state.allStudents] : [...state.judging.savedResults];
+    if (sourceData.length === 0) { alert("No data to export!"); return; }
+
+    const rubric = state.judging.rubric;
+    let csv = "Serial No,Reg No,Age Group,Branch,Institution Type,Full Name,Gender,Address,ID Card,Contact,Parent Name,Parent Phone,Email,";
+    
+    for (let j = 1; j <= 5; j++) {
+        rubric.forEach(r => { csv += `J${j}-${r.name},`; });
+        csv += `Judge ${j} Total,`;
+    }
+    csv += "GRAND TOTAL,FINAL AVERAGE,RANK,REMARKS\n";
+
+    sourceData.sort((a, b) => (b.finalScore || 0) - (a.finalScore || 0));
+
+    sourceData.forEach((s, idx) => {
+        let row = [
+            idx + 1, `"${s.reg || ''}"`, `"${s.group || ''}"`, `"${s.branch || ''}"`,
+            `"${s.institution || s.instType || ''}"`, `"${s.name || ''}"`, `"${s.gender || ''}"`,
+            `"${s.address || ''}"`, // ★ އެޑްރެސް ކޮލަމް
+            `"${s.id || ''}"`, `"${s.phone || ''}"`, `"${s.parent || ''}"`,
+            `"${s.parentPhone || ''}"`, `"${s.email || ''}"`
+        ];
+
+        let grandSum = 0;
+        let activeJudges = 0;
+        for (let j = 1; j <= 5; j++) {
+            let jKey = `Judge_${j}`;
+            let jTotalCalc = 0;
+            rubric.forEach(r => {
+                let m = (s.detailedScores && s.detailedScores[jKey]) ? s.detailedScores[jKey][r.name] : "";
+                row.push(m);
+                if (m !== "" && !isNaN(m)) jTotalCalc += parseFloat(m);
+            });
+            let fJTotal = (s.scores && s.scores[jKey]) ? s.scores[jKey] : (jTotalCalc > 0 ? jTotalCalc.toFixed(2) : "");
+            row.push(fJTotal);
+            if (fJTotal !== "" && !isNaN(fJTotal)) { grandSum += parseFloat(fJTotal); activeJudges++; }
+        }
+
+        let fAvg = s.finalScore || (activeJudges > 0 ? (grandSum / activeJudges).toFixed(2) : "");
+        row.push(grandSum.toFixed(2), fAvg, idx + 1, "");
+        csv += row.join(",") + "\n";
+    });
+
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8;' }));
+    link.download = `Rasfahi_Final_Master_Complete.csv`;
+    link.click();
+}
 </script>
 </body>
 </html>
