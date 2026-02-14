@@ -15,7 +15,7 @@
 
     <div class="card">
         <h1>🤖 Rasfahi Master Generator</h1>
-        <p>މި ބަޓަނަށް ފިއްތާލުމުން 2000 ދަރިވަރުންގެ ފުރިހަމަ ޑޭޓާ ހިމެނޭ CSV ފައިލެއް ޑައުންލޯޑްވާނެއެވެ.</p>
+        <p>މި ބަޓަނަށް ފިއްތާލުމުން 2000 ދަރިވަރުންގެ ފުރިހަމަ ޑޭޓާ (މުއައްސަސާ ހިމެނޭހެން) CSV ފައިލެއް ޑައުންލޯޑްވާނެއެވެ.</p>
         <br>
         <button onclick="generateTheBigCSV()">2000 ދަރިވަރުންގެ ޑޭޓާ ޖެނެރޭޓް ކުރޭ</button>
         <div class="info" id="status">މިހާރު އޮތީ ތައްޔާރަށް.</div>
@@ -56,7 +56,13 @@
             const lastNames = ["Rasheed", "Nazeer", "Fayaz", "Manik", "Didi", "Saeed", "Zahir", "Riza", "Nasir", "Waheed"];
             const groups = ["Under 6", "Under 9", "Under 11", "Under 13", "Under 16", "Under 19", "General"];
             const branches = ["Balaiygen", "Nubalai"];
-            const insts = ["School", "Office", "NGO", "University", "Private"];
+            
+            // މުއައްސަސާތަކުގެ ލިސްޓު
+            const institutions = [
+                "Arabiyya School", "Iskandhar School", "Majeedhiyya School", "Aminiya School", 
+                "Jamaluddin School", "Kalaafaanu School", "Thaajuddin School", "Ghiyasuddin School",
+                "Villa College", "Cyryx College", "MNU", "IUM", "Private Candidate", "Al-Noor Quran Class"
+            ];
 
             // 3. Generating 2000 Records
             let tempData = [];
@@ -67,7 +73,7 @@
                     reg: "REG-" + (1000 + i),
                     group: groups[i % groups.length],
                     branch: branches[i % branches.length],
-                    inst: insts[i % insts.length],
+                    inst: institutions[i % institutions.length], // މުއައްސަސާ އެސައިންކުރުން
                     name: names[i % names.length] + " " + lastNames[i % lastNames.length] + " " + i,
                     gender: (i % 2 === 0) ? "Female" : "Male",
                     addr: "Island-" + (i % 50),
@@ -87,6 +93,7 @@
                     criteria.forEach(c => {
                         let mark = parseFloat((c.max * (ability + variance)).toFixed(2));
                         if (mark > c.max) mark = c.max;
+                        if (mark < 0) mark = 0;
                         student.judgeScores.push(mark);
                         jSum += mark;
                     });
@@ -106,21 +113,37 @@
                 let rank = idx + 1;
                 let remarks = rank <= 10 ? "Distinction" : "Passed";
                 let row = [
-                    rank, `"${s.reg}"`, `"${s.group}"`, `"${s.branch}"`, `"${s.inst}"`, 
-                    `"${s.name}"`, `"${s.gender}"`, `"${s.addr}"`, `"${s.id}"`, 
-                    `"${s.phone}"`, `"${s.parent}"`, `"${s.pPhone}"`, `"${s.email}"`,
+                    rank, 
+                    `"${s.reg}"`, 
+                    `"${s.group}"`, 
+                    `"${s.branch}"`, 
+                    `"${s.inst}"`, // މުއައްސަސާގެ ނަން މިތަނަށް
+                    `"${s.name}"`, 
+                    `"${s.gender}"`, 
+                    `"${s.addr}"`, 
+                    `"${s.id}"`, 
+                    `"${s.phone}"`, 
+                    `"${s.parent}"`, 
+                    `"${s.pPhone}"`, 
+                    `"${s.email}"`,
                     ...s.judgeScores,
-                    s.grandTotal, s.avg, rank, `"${remarks}"`
+                    s.grandTotal, 
+                    s.avg, 
+                    rank, 
+                    `"${remarks}"`
                 ];
                 rows.push(row.join(","));
             });
 
             // 6. Trigger Download
             const blob = new Blob([rows.join("\n")], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
             const link = document.createElement("a");
-            link.href = URL.createObjectURL(blob);
-            link.download = "Rasfahi_Ultimate_2000_Dummy.csv";
+            link.href = url;
+            link.download = "Rasfahi_Master_2000_With_Institutions.csv";
+            document.body.appendChild(link);
             link.click();
+            document.body.removeChild(link);
 
             status.innerText = "✅ Downloaded Successfully!";
         }
