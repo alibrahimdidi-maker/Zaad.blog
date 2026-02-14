@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="dv" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>Rasfahi 2000 Dummy Generator</title>
+    <style>
+        body { font-family: sans-serif; background: #001a33; color: white; text-align: center; padding: 50px; }
+        .card { background: #000d1a; padding: 30px; border-radius: 15px; border: 2px solid #D4AF37; display: inline-block; box-shadow: 0 0 20px rgba(212,175,55,0.3); }
+        button { background: linear-gradient(to bottom, #D4AF37, #aa8c2c); border: none; padding: 15px 30px; font-size: 18px; font-weight: bold; border-radius: 5px; cursor: pointer; color: black; }
+        button:hover { filter: brightness(1.2); }
+        .info { margin-top: 20px; color: #aaa; font-size: 14px; }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <h1>🤖 Rasfahi Master Generator</h1>
+        <p>މި ބަޓަނަށް ފިއްތާލުމުން 2000 ދަރިވަރުންގެ ފުރިހަމަ ޑޭޓާ ހިމެނޭ CSV ފައިލެއް ޑައުންލޯޑްވާނެއެވެ.</p>
+        <br>
+        <button onclick="generateTheBigCSV()">2000 ދަރިވަރުންގެ ޑޭޓާ ޖެނެރޭޓް ކުރޭ</button>
+        <div class="info" id="status">މިހާރު އޮތީ ތައްޔާރަށް.</div>
+    </div>
+
+    <script>
+        function generateTheBigCSV() {
+            const status = document.getElementById('status');
+            status.innerText = "Generating... Please wait.";
+
+            const criteria = [
+                { name: "Thilawa", max: 30 },
+                { name: "Tajweed", max: 20 },
+                { name: "Makhraj", max: 20 },
+                { name: "Sifa", max: 10 },
+                { name: "Fasaha", max: 10 },
+                { name: "Talaffuz", max: 5 },
+                { name: "Maqamat", max: 5 }
+            ];
+
+            // 1. Build Headers
+            let headers = [
+                "Serial No", "Reg No", "Age Group", "Branch", "Institution", 
+                "Full Name", "Gender", "Address", "ID Card", "Contact", 
+                "Parent Name", "Parent Phone", "Email"
+            ];
+
+            for (let j = 1; j <= 5; j++) {
+                criteria.forEach(c => headers.push(`J${j}-${c.name}`));
+                headers.push(`Judge ${j} Total`);
+            }
+            headers.push("GRAND TOTAL", "FINAL AVERAGE", "RANK", "REMARKS");
+
+            let rows = [headers.join(",")];
+
+            // 2. Data Pools
+            const names = ["Ahmed", "Ali", "Mohamed", "Ibrahim", "Fathimath", "Aishath", "Mariyam", "Zainab", "Hawwa", "Abdulla"];
+            const lastNames = ["Rasheed", "Nazeer", "Fayaz", "Manik", "Didi", "Saeed", "Zahir", "Riza", "Nasir", "Waheed"];
+            const groups = ["Under 6", "Under 9", "Under 11", "Under 13", "Under 16", "Under 19", "General"];
+            const branches = ["Balaiygen", "Nubalai"];
+            const insts = ["School", "Office", "NGO", "University", "Private"];
+
+            // 3. Generating 2000 Records
+            let tempData = [];
+            for (let i = 1; i <= 2000; i++) {
+                let ability = 0.55 + (Math.random() * 0.43); // Realistic ability range
+                let student = {
+                    serial: i,
+                    reg: "REG-" + (1000 + i),
+                    group: groups[i % groups.length],
+                    branch: branches[i % branches.length],
+                    inst: insts[i % insts.length],
+                    name: names[i % names.length] + " " + lastNames[i % lastNames.length] + " " + i,
+                    gender: (i % 2 === 0) ? "Female" : "Male",
+                    addr: "Island-" + (i % 50),
+                    id: "A" + (100000 + i),
+                    phone: "77" + (10000 + i),
+                    parent: "Parent " + i,
+                    pPhone: "99" + (10000 + i),
+                    email: "student" + i + "@test.com",
+                    judgeScores: [],
+                    totalScore: 0
+                };
+
+                let grandSum = 0;
+                for (let j = 1; j <= 5; j++) {
+                    let jSum = 0;
+                    let variance = (Math.random() * 0.06) - 0.03;
+                    criteria.forEach(c => {
+                        let mark = parseFloat((c.max * (ability + variance)).toFixed(2));
+                        if (mark > c.max) mark = c.max;
+                        student.judgeScores.push(mark);
+                        jSum += mark;
+                    });
+                    student.judgeScores.push(jSum.toFixed(2)); // Judge Total
+                    grandSum += jSum;
+                }
+                student.avg = (grandSum / 5).toFixed(2);
+                student.grandTotal = grandSum.toFixed(2);
+                tempData.push(student);
+            }
+
+            // 4. Sort for Rank
+            tempData.sort((a, b) => b.avg - a.avg);
+
+            // 5. Convert to CSV format
+            tempData.forEach((s, idx) => {
+                let rank = idx + 1;
+                let remarks = rank <= 10 ? "Distinction" : "Passed";
+                let row = [
+                    rank, `"${s.reg}"`, `"${s.group}"`, `"${s.branch}"`, `"${s.inst}"`, 
+                    `"${s.name}"`, `"${s.gender}"`, `"${s.addr}"`, `"${s.id}"`, 
+                    `"${s.phone}"`, `"${s.parent}"`, `"${s.pPhone}"`, `"${s.email}"`,
+                    ...s.judgeScores,
+                    s.grandTotal, s.avg, rank, `"${remarks}"`
+                ];
+                rows.push(row.join(","));
+            });
+
+            // 6. Trigger Download
+            const blob = new Blob([rows.join("\n")], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = "Rasfahi_Ultimate_2000_Dummy.csv";
+            link.click();
+
+            status.innerText = "✅ Downloaded Successfully!";
+        }
+    </script>
+</body>
+</html>
