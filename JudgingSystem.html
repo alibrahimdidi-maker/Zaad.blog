@@ -17402,6 +17402,81 @@ function generateUniversalCSV(filename) {
     link.click();
     document.body.removeChild(link);
 }
+    function loadStudentBatch() {
+    const file = document.getElementById('batchCsv').files[0];
+    if(!file) { alert("Please select the CSV file first!"); return; }
+    
+    const r = new FileReader();
+    r.onload = e => {
+        try {
+            const rows = e.target.result.split('\n');
+            state.allStudents = []; 
+            state.judging.savedResults = []; // Saved ލިސްޓުވެސް އަލުން ފުރާނީ ފައިލުން
+
+            for(let i = 1; i < rows.length; i++) {
+                let rowRaw = rows[i].trim();
+                if(!rowRaw) continue;
+
+                // CSV columns split (Handling quotes correctly)
+                const clean = rowRaw.match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g).map(c => c.replace(/^"|"$/g, '').trim());
+                if(clean.length < 13) continue;
+
+                const sObj = {
+                    serial: clean[0], reg: clean[1], group: clean[2], branch: clean[3],
+                    institution: clean[4], name: clean[5], gender: clean[6], address: clean[7],
+                    id: clean[8], phone: clean[9], parent: clean[10], parentPhone: clean[11], email: clean[12],
+                    scores: {}, 
+                    detailedScores: {}, 
+                    finalScore: 0
+                };
+
+                // ★ މާކުސްތައް ހުރިތޯ ޗެކްކުރުން (ކޮލަމް 16 އިން 20 އަށް ޖަޖުންގެ ޓޯޓަލް)
+                let hasMarks = false;
+                for(let j = 1; j <= 5; j++) {
+                    let markIndex = 15 + j; 
+                    let jMark = parseFloat(clean[markIndex]);
+
+                    if(!isNaN(jMark) && jMark > 0) {
+                        let jKey = `Judge_${j}`;
+                        sObj.scores[jKey] = jMark;
+                        // ދިމާނުވާ މައްސަލަ ޙައްލުކުރުމަށްޓަކައި detailedScores އަށް ވެލިއުއެއް ލުން
+                        sObj.detailedScores[jKey] = { "Imported": jMark };
+                        hasMarks = true;
+                    }
+                }
+                
+                // އެވްރެޖް މާކުސް (ކޮލަމް 22)
+                let savedAvg = parseFloat(clean[22]);
+                if(!isNaN(savedAvg) && savedAvg > 0) {
+                    sObj.finalScore = savedAvg;
+                } else if(hasMarks) {
+                    // އެވްރެޖް ނެތް ނަމަ ޖަޖުންގެ މާކުހުން ހިސާބުކުރުން
+                    let sum = 0; let count = 0;
+                    for(let k in sObj.scores) { sum += sObj.scores[k]; count++; }
+                    sObj.finalScore = count > 0 ? (sum/count).toFixed(2) : 0;
+                }
+
+                // ★ މާކުސް ހުރި ދަރިވަރުން 'Saved Results' ލިސްޓަށް ލުން
+                if(sObj.finalScore > 0) {
+                    state.judging.savedResults.push(sObj);
+                }
+
+                state.allStudents.push(sObj);
+            }
+            
+            populateStudentSelector(); 
+            if(typeof renderMasterTable === 'function') renderMasterTable(); 
+            if(typeof refreshLiveMasterTable === 'function') refreshLiveMasterTable();     
+            saveToLocal(); 
+            
+            alert(`✅ ކާމިޔާބު! ${state.allStudents.length} ދަރިވަރުން ލޯޑުވެއްޖެ. މާކުސް ދީފައިވާ ކުދިންގެ މާކުސް މިހާރު ފެންނާނެ.`);
+        } catch(err) { 
+            console.error(err);
+            alert("Error: ފައިލް ކިޔުމުގައި މައްސަލައެއް ދިމާވެއްޖެ."); 
+        }
+    };
+    r.readAsText(file);
+}
 </script>
 </body>
 </html>
