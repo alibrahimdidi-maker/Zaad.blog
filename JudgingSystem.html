@@ -17685,6 +17685,175 @@ function openSampleGenerator() {
     // މި ފަންކްޝަނުން 'SampleListGenerator.html' ފައިލް އައު ޓެބެއްގައި ހުޅުވައިދޭނެ
     window.open('SampleListGenerator.html', '_blank');
 }
+    // ============================================================
+// ★ STAR RATING & WAITING ROOM SYSTEM (INTEGRATED) ★
+// ============================================================
+
+// 1. ފަންކްޝަން: ސްޓާރ ސްކްރީން ހުޅުވުން
+function openStarScreen() {
+    const starHtml = `
+    <!DOCTYPE html>
+    <html lang="dv" dir="rtl">
+    <head>
+        <meta charset="UTF-8">
+        <title>Rasfahi Star View</title>
+        <style>
+            @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Thaana:wght@400;700&family=Cinzel:wght@700&display=swap');
+            body { 
+                margin: 0; overflow: hidden; 
+                background: radial-gradient(circle at center, #001a33, #000); 
+                height: 100vh; width: 100vw; 
+                display: flex; flex-direction: column; align-items: center; justify-content: center; 
+                color: #fff; font-family: 'Noto Sans Thaana', sans-serif; 
+            }
+            
+            /* ދަރިވަރުގެ މަޢުލޫމާތު ބައި */
+            #studentDisplay { text-align: center; margin-bottom: 30px; transition: 0.5s; }
+            #regNo { font-size: 3vw; color: #FFD700; font-family: sans-serif; margin-bottom: 10px; opacity: 0.8; letter-spacing: 2px; }
+            #stdName { font-size: 6vw; font-weight: bold; text-shadow: 0 0 30px rgba(255,255,255,0.4); }
+
+            /* ތަރިތައް ހުންނަ ބައި */
+            #starContainer { display: flex; gap: 20px; justify-content: center; min-height: 250px; margin-top: 20px; }
+            
+            .star { 
+                font-size: 15vw; color: #FFD700; 
+                text-shadow: 0 0 40px #FFD700; 
+                transform: scale(0); opacity: 0; 
+                transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+                display: none;
+            }
+
+            /* ތަރި ފިޔަޖެހުމުގެ އެނިމޭޝަން (Pulse) */
+            .star.active { 
+                display: block; transform: scale(1); opacity: 1; 
+                animation: pulse 2s infinite ease-in-out;
+            }
+
+            @keyframes pulse {
+                0% { text-shadow: 0 0 30px #FFD700; transform: scale(1); }
+                50% { text-shadow: 0 0 60px #FFD700, 0 0 100px rgba(255,215,0,0.8); transform: scale(1.1); }
+                100% { text-shadow: 0 0 30px #FFD700; transform: scale(1); }
+            }
+
+            /* ގްރޭޑް ލިޔުންކޮޅު */
+            #gradeText { 
+                margin-top: 30px; font-size: 5vw; font-weight: bold; 
+                color: #FFD700; opacity: 0; transition: 1s; 
+                text-transform: uppercase; font-family: 'Cinzel', serif;
+                letter-spacing: 5px;
+            }
+        </style>
+    </head>
+    <body onclick="document.documentElement.requestFullscreen()">
+        <div id="studentDisplay">
+            <div id="regNo">READY</div>
+            <div id="stdName">Welcome to Rasfahi</div>
+        </div>
+        <div id="starContainer">
+            <div class="star" id="st1">★</div>
+            <div class="star" id="st2">★</div>
+            <div class="star" id="st3">★</div>
+            <div class="star" id="st4">★</div>
+            <div class="star" id="st5">★</div>
+        </div>
+        <div id="gradeText"></div>
+
+        <script>
+            let currentActiveID = "";
+            let starsShown = false;
+
+            // މައި ސޮފްޓްވެއަރއިން ޑޭޓާ އަޕްޑޭޓްކުރާ ފަންކްޝަން
+            window.updateStars = function(data) {
+                const regEl = document.getElementById('regNo');
+                const nameEl = document.getElementById('stdName');
+                const gradeEl = document.getElementById('gradeText');
+                
+                // 1. އައު ދަރިވަރަކު ސިލެކްޓްވުން
+                if (currentActiveID !== data.id) {
+                    currentActiveID = data.id;
+                    starsShown = false;
+                    
+                    regEl.innerText = data.reg ? data.reg : "";
+                    nameEl.innerText = data.name || "Waiting...";
+                    
+                    // ތަރިތަކާއި ގްރޭޑް ފޮރުވާލުން
+                    resetStars();
+                    gradeEl.style.opacity = "0";
+                }
+
+                // 2. މާކުސް ލިބިފައިވާނަމަ ތަރިތައް ދެއްކުން (75 އަށްވުރެ މަތިނަމަ)
+                if (data.score >= 75 && !starsShown) {
+                    starsShown = true;
+                    animateStars(data.score);
+                }
+            };
+
+            function animateStars(score) {
+                const levels = [75, 80, 85, 90, 95];
+                const gradeEl = document.getElementById('gradeText');
+                
+                levels.forEach((min, idx) => {
+                    setTimeout(() => {
+                        if (score >= min) {
+                            const el = document.getElementById('st' + (idx+1));
+                            el.style.display = 'block';
+                            setTimeout(() => el.classList.add('active'), 50);
+                        }
+                    }, idx * 400);
+                });
+
+                // ގްރޭޑް ނަން ކަނޑައެޅުން
+                if (score >= 95) gradeEl.innerText = "Elite";
+                else if (score >= 90) gradeEl.innerText = "Distinction";
+                else if (score >= 85) gradeEl.innerText = "Merit";
+                else if (score >= 80) gradeEl.innerText = "Promising";
+                else gradeEl.innerText = "Qualified";
+                
+                setTimeout(() => { gradeEl.style.opacity = "1"; }, 2500);
+            }
+
+            function resetStars() {
+                document.querySelectorAll('.star').forEach(s => {
+                    s.classList.remove('active');
+                    s.style.display = 'none';
+                });
+            }
+        <\/script>
+    </body>
+    </html>`;
+
+    state.windows.starScreen = window.open("", "StarScreen", "width=1280,height=800");
+    state.windows.starScreen.document.write(starHtml);
+    state.windows.starScreen.document.close();
+}
+
+// 2. އޮޓޯ ސިންކްރޮނައިޒޭޝަން (ކޮންމެ ސިކުންތަކު ޗެކްކުރާނެ)
+setInterval(() => {
+    if (state.windows.starScreen && !state.windows.starScreen.closed) {
+        const s = state.judging.currentStudentObj;
+        
+        // ދަރިވަރަކު ސިލެކްޓްވެފައި ނެތްނަމަ އެއްވެސް ކަމެއް ނުކުރާނެ
+        if (!s) return;
+
+        // ޖަޖުންގެ މާކުސްތައް އެވްރެޖްކުރުން
+        let sum = 0; let count = 0;
+        for(let j in state.judging.liveScores) {
+            let val = parseFloat(state.judging.liveScores[j]);
+            if(!isNaN(val) && val > 0) { sum += val; count++; }
+        }
+        let avg = count > 0 ? (sum / count) : 0;
+
+        // ސްޓާރ ސްކްރީނަށް ޑޭޓާ ފޮނުވުން
+        if (state.windows.starScreen.updateStars) {
+            state.windows.starScreen.updateStars({
+                id: s.id, // Unique ID for comparison
+                name: s.name,
+                reg: s.reg,
+                score: avg
+            });
+        }
+    }
+}, 1000);
 </script>
 </body>
 </html>
