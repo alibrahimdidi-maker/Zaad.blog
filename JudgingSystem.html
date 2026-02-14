@@ -18029,7 +18029,70 @@ setInterval(() => {
         }
     }
 }, 1000);
+function loadStudentBatch() {
+    const fileInput = document.getElementById('batchCsv');
+    const file = fileInput.files[0];
+    if(!file) { alert("Please select a CSV file first!"); return; }
+    
+    const r = new FileReader();
+    r.onload = function(e) {
+        try {
+            const content = e.target.result;
+            const rows = content.split(/\r?\n/);
+            if(rows.length < 2) return;
 
+            // ހެޑަރތައް ނަގައި ސާފުކުރުން
+            const headers = rows[0].split(',').map(h => h.replace(/^"|"$/g, '').trim().toLowerCase());
+            
+            // ކޮލަމްތައް ހުރި ތަން ހޯދުން (Smart Matching)
+            const regIdx = headers.findIndex(h => h.includes("reg"));
+            const nameIdx = headers.findIndex(h => h.includes("name"));
+            const groupIdx = headers.findIndex(h => h.includes("group"));
+            const branchIdx = headers.findIndex(h => h.includes("branch"));
+            const instIdx = headers.findIndex(h => h.includes("inst") || h.includes("school") || h.includes("office") || h.includes("މުއައްސަސާ"));
+            const idIdx = headers.findIndex(h => h.includes("id"));
+            const genderIdx = headers.findIndex(h => h.includes("gender"));
+
+            // މައި ލިސްޓު ހުސްކޮށްލުން
+            state.allStudents = []; 
+
+            for(let i = 1; i < rows.length; i++) {
+                if(!rows[i].trim()) continue;
+
+                // ސީއެސްވީގެ ކޮންމެ ރޯއެއް ކޮލަމްތަކަށް ވަކިކުރުން
+                const cols = rows[i].split(',').map(c => c.replace(/^"|"$/g, '').trim());
+                
+                if(cols.length < 2) continue;
+
+                const sObj = {
+                    reg: regIdx > -1 ? cols[regIdx] : "",
+                    name: nameIdx > -1 ? cols[nameIdx] : "",
+                    group: groupIdx > -1 ? cols[groupIdx] : "",
+                    branch: branchIdx > -1 ? cols[branchIdx] : "",
+                    // މުއައްސަސާ ފެނިއްޖެނަމަ އެ ނަން، ނޫނީ 'Private'
+                    institution: instIdx > -1 ? cols[instIdx] : "Private",
+                    id: idIdx > -1 ? cols[idIdx] : "",
+                    gender: genderIdx > -1 ? cols[genderIdx] : "",
+                    scores: {},
+                    finalScore: 0
+                };
+                
+                state.allStudents.push(sObj);
+            }
+            
+            // ސްކްރީން އަޕްޑޭޓްކުރާ ފަންކްޝަންތައް ގޮވާލުން
+            if(typeof populateStudentSelector === 'function') populateStudentSelector();
+            if(typeof renderMasterTable === 'function') renderMasterTable();
+            if(typeof saveToLocal === 'function') saveToLocal();
+            
+            alert("✅ " + state.allStudents.length + " Students loaded with Institutions!");
+        } catch(err) {
+            console.error(err);
+            alert("Error: " + err.message);
+        }
+    };
+    r.readAsText(file, 'UTF-8'); 
+}
 </script>
 </body>
 </html>
