@@ -17307,6 +17307,101 @@ function recalcMatrixJudgeTotal(jNum) {
     };
     r.readAsText(file);
 }
+    // --- 1. UNIVERSAL MASTER CSV EXPORTER (COMBINED ENGINE) ---
+function exportFullMasterSheet() {
+    generateUniversalCSV("Rasfahi_Master_Data_Full.csv");
+}
+
+function downloadRubricMatrix() {
+    generateUniversalCSV("Rasfahi_7Part_Matrix_Report.csv");
+}
+
+// --- 2. THE CORE ENGINE (މި ބައިން ހުރިހާ ފައިލެއް އެއް ފޯމެޓަކަށް ހަދާނެ) ---
+function generateUniversalCSV(filename) {
+    let sourceData = (state.allStudents && state.allStudents.length > 0) ? [...state.allStudents] : [...state.judging.savedResults];
+    
+    if (sourceData.length === 0) {
+        alert("No data found to export!");
+        return;
+    }
+
+    // ރުބްރިކް ބައިތައް (Thilawa, Tajweed etc.)
+    const rubric = state.judging.rubric;
+
+    // A. ހެޑަރތައް އަތުރާލުން (ސީދާ އިމްޕޯޓް ކުރަން ބޭނުންވާ ތަރުތީބުން)
+    let csv = "Serial No,Reg No,Age Group,Branch,Institution Type,Full Name,Gender,Address,ID Card,Contact,Parent Name,Parent Phone,Email,";
+    
+    // 5 ޖަޖުންގެ ބައިތަކާއި ޖުމްލަ މާކުސް ހެޑަރއަށް ލުން
+    for (let j = 1; j <= 5; j++) {
+        rubric.forEach(r => {
+            csv += `J${j}-${r.name},`; // ވަކިވަކި ބައިތައް (e.g. J1-Thilawa)
+        });
+        csv += `Judge ${j} Total,`; // ޖަޖުގެ ޖުމްލަ
+    }
+    csv += "GRAND TOTAL,FINAL AVERAGE,RANK,REMARKS\n";
+
+    // B. ޑޭޓާ ސޯޓްކުރުން (Rank Order)
+    sourceData.sort((a, b) => (b.finalScore || 0) - (a.finalScore || 0));
+
+    // C. ކޮންމެ ދަރިވަރެއްގެ ރޯ (Row) ބިނާކުރުން
+    sourceData.forEach((s, idx) => {
+        let row = [
+            idx + 1, // Serial No
+            `"${s.reg || ''}"`,
+            `"${s.group || ''}"`,
+            `"${s.branch || ''}"`,
+            `"${s.institution || s.instType || s.inst || ''}"`,
+            `"${s.name || ''}"`,
+            `"${s.gender || ''}"`,
+            `"${s.address || ''}"`,
+            `"${s.id || ''}"`,
+            `"${s.phone || s.contact || ''}"`,
+            `"${s.parent || ''}"`,
+            `"${s.parentPhone || ''}"`,
+            `"${s.email || ''}"`
+        ];
+
+        let grandSum = 0;
+        let activeJudges = 0;
+
+        // 5 ޖަޖުންގެ މާކުސްތައް ނެގުން
+        for (let j = 1; j <= 5; j++) {
+            let jKey = `Judge_${j}`;
+            let jTotalCalc = 0;
+            
+            // ވަކިވަކި ބައިތަކުގެ މާކުސް (Thilawa, Tajweed...)
+            rubric.forEach(r => {
+                let mark = (s.detailedScores && s.detailedScores[jKey]) ? s.detailedScores[jKey][r.name] : "";
+                row.push(mark);
+                if (mark !== "" && !isNaN(mark)) jTotalCalc += parseFloat(mark);
+            });
+
+            // ޖަޖުގެ ޖުމްލަ (Detailed ނެތްނަމަ ސޭވްކުރި Total ބޭނުންކުރުން)
+            let finalJTotal = (s.scores && s.scores[jKey]) ? s.scores[jKey] : (jTotalCalc > 0 ? jTotalCalc.toFixed(2) : "");
+            row.push(finalJTotal);
+            
+            if (finalJTotal !== "" && !isNaN(finalJTotal)) {
+                grandSum += parseFloat(finalJTotal);
+                activeJudges++;
+            }
+        }
+
+        // އެވްރެޖް ހިސާބުކުރުން
+        let finalAvg = s.finalScore || (activeJudges > 0 ? (grandSum / activeJudges).toFixed(2) : "");
+        
+        row.push(grandSum.toFixed(2), finalAvg, idx + 1, ""); // Rank and Remarks
+        csv += row.join(",") + "\n";
+    });
+
+    // D. ފައިލް ޑައުންލޯޑް ކުރުން
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+}
 </script>
 </body>
 </html>
