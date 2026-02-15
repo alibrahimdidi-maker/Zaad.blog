@@ -18145,22 +18145,22 @@ function loadStudentBatch() {
                 return headers.findIndex(h => names.some(name => h === name.toLowerCase()));
             };
 
-            // މިތަނުގައި Institution ގެ އެކި ނަންތަކަށް ބަލާނެ
             const idx = {
                 reg: findCol(["reg no", "registration"]),
                 name: findCol(["full name", "name"]),
                 group: findCol(["age group", "group"]),
                 branch: findCol(["branch"]),
-                inst: findCol(["institution type", "institution", "inst"]), // ★ ގިނަ ނަންތަކަކަށް ޗެކްކުރޭ
+                inst: findCol(["institution type", "institution", "inst"]),
                 id: findCol(["id card", "id"]),
                 gender: findCol(["gender"]),
                 address: findCol(["address"]),
-                j1: findCol(["judge 1 total"]),
-                j2: findCol(["judge 2 total"]),
-                j3: findCol(["judge 3 total"]),
-                j4: findCol(["judge 4 total"]),
-                j5: findCol(["judge 5 total"]),
-                avg: findCol(["final average", "average"])
+                // ޖަޖުންގެ ޓޯޓަލް ކޮލަމްތައް ހޯދުން
+                j1: findCol(["judge 1 total", "j1-total"]),
+                j2: findCol(["judge 2 total", "j2-total"]),
+                j3: findCol(["judge 3 total", "j3-total"]),
+                j4: findCol(["judge 4 total", "j4-total"]),
+                j5: findCol(["judge 5 total", "j5-total"]),
+                avg: findCol(["final average", "average", "avg"])
             };
 
             state.allStudents = []; 
@@ -18188,19 +18188,26 @@ function loadStudentBatch() {
                     name: idx.name > -1 ? (clean[idx.name] || "") : "", 
                     group: idx.group > -1 ? (clean[idx.group] || "") : "",
                     branch: idx.branch > -1 ? (clean[idx.branch] || "") : "",
-                    institution: idx.inst > -1 ? (clean[idx.inst] || "") : "", // ★ މުއައްސަސާ ނެގުން
+                    institution: idx.inst > -1 ? (clean[idx.inst] || "") : "",
                     id: idx.id > -1 ? (clean[idx.id] || "") : "ID-"+i,
                     gender: idx.gender > -1 ? (clean[idx.gender] || "") : "",
                     address: idx.address > -1 ? (clean[idx.address] || "") : "",
-                    scores: {}, 
+                    scores: {}, // މާކުސްތައް ރައްކާކުރާނެ ތަން
                     finalScore: idx.avg > -1 ? parseFloat(clean[idx.avg]) || 0 : 0
                 };
+
+                // ★ ޖަޖުންގެ މާކުސްތައް އޮބްޖެކްޓަށް ލުން ★
+                if (idx.j1 > -1) sObj.scores['Judge_1'] = clean[idx.j1] || "0.00";
+                if (idx.j2 > -1) sObj.scores['Judge_2'] = clean[idx.j2] || "0.00";
+                if (idx.j3 > -1) sObj.scores['Judge_3'] = clean[idx.j3] || "0.00";
+                if (idx.j4 > -1) sObj.scores['Judge_4'] = clean[idx.j4] || "0.00";
+                if (idx.j5 > -1) sObj.scores['Judge_5'] = clean[idx.j5] || "0.00";
 
                 state.allStudents.push(sObj);
             }
             
             if(typeof renderMasterTable === 'function') renderMasterTable(); 
-            alert(`✅ ${state.allStudents.length} ދަރިވަރުން ލޯޑުވެއްޖެ.`);
+            alert(`✅ ${state.allStudents.length} ދަރިވަރުން ޖަޖުންގެ މާކުސްތަކާއެކު ލޯޑުވެއްޖެ.`);
         } catch(err) { console.error(err); alert("Error loading data."); }
     };
     r.readAsText(file);
@@ -18226,21 +18233,28 @@ function loadStudentBatch() {
         let row = document.createElement('tr');
         if(state.judging.currentStudentObj && s.id === state.judging.currentStudentObj.id) row.classList.add('selected-row');
 
+        // މާކުސް ނެތްނަމަ ޑޭޝް ޖެހުން
+        const j1 = s.scores['Judge_1'] || "-";
+        const j2 = s.scores['Judge_2'] || "-";
+        const j3 = s.scores['Judge_3'] || "-";
+        const j4 = s.scores['Judge_4'] || "-";
+        const j5 = s.scores['Judge_5'] || "-";
+
         row.innerHTML = `
             <td>${idx + 1}</td>
             <td style="font-size:11px;">${s.reg || ''}</td>
             <td style="text-align:left; font-weight:bold;">${s.name}</td>
-            <td>${s.id || ''}</td>
+            <td style="font-size:11px;">${s.id || ''}</td>
             <td>${s.branch || ''}</td>
             <td>${s.group || ''}</td>
             <td style="text-align:left; color:#00e676;">${s.institution || '-'}</td>
-            <td class="col-mark">${s.scores['Judge_1'] || '-'}</td>
-            <td class="col-mark">${s.scores['Judge_2'] || '-'}</td>
-            <td class="col-mark">${s.scores['Judge_3'] || '-'}</td>
-            <td class="col-mark">${s.scores['Judge_4'] || '-'}</td>
-            <td class="col-mark">${s.scores['Judge_5'] || '-'}</td>
-            <td class="col-final">${s.finalScore || '0.00'}</td>
-            <td style="color:#FFD700;">${s.finalScore > 0 ? idx + 1 : '-'}</td>
+            <td class="col-mark">${j1}</td>
+            <td class="col-mark">${j2}</td>
+            <td class="col-mark">${j3}</td>
+            <td class="col-mark">${j4}</td>
+            <td class="col-mark">${j5}</td>
+            <td class="col-final" style="font-weight:bold; color:#00e676;">${parseFloat(s.finalScore).toFixed(2)}</td>
+            <td style="color:#FFD700; font-weight:bold;">${s.finalScore > 0 ? idx + 1 : '-'}</td>
         `;
         row.onclick = () => selectStudentForGrading(s);
         tbody.appendChild(row);
